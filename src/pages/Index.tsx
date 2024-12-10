@@ -1,11 +1,56 @@
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedHotels } from "@/components/FeaturedHotels";
 import { Button } from "@/components/ui/button";
-import { Bot } from "lucide-react";
+import { Bot, Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
+
+const menuItems = [
+  { title: "Destinations", href: "/destinations" },
+  { title: "Traveler Reviews", href: "/reviews" },
+  { title: "Contact Us", href: "/contact" },
+];
 
 const Index = () => {
   return (
     <div className="min-h-screen">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <Link to="/" className="text-xl font-display font-bold text-secondary">
+            AllergyFree Travel
+          </Link>
+          
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <nav className="flex flex-col gap-4 mt-8">
+                {menuItems.map((item) => (
+                  <Link
+                    key={item.title}
+                    to={item.href}
+                    className={cn(
+                      "text-lg font-medium transition-colors hover:text-secondary"
+                    )}
+                  >
+                    {item.title}
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
         {/* Background Image */}
