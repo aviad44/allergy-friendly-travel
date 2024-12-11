@@ -109,20 +109,14 @@ const Index = () => {
 
       {/* GPT Assistant */}
       <section className="py-20 px-4 bg-secondary/5">
-        <div className="container max-w-6xl mx-auto text-center">
-          <h2 className="font-display text-3xl md:text-4xl mb-6">
+        <div className="container max-w-6xl mx-auto">
+          <h2 className="font-display text-3xl md:text-4xl mb-6 text-center">
             Need Personalized Recommendations?
           </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground mb-12 text-center max-w-2xl mx-auto">
             Our AI assistant can help you find the perfect hotel based on your specific needs and allergies.
           </p>
-          <Button 
-            size="lg" 
-            className="bg-secondary hover:bg-secondary/90 transform hover:scale-105 transition-all duration-300"
-          >
-            <Bot className="mr-2 h-5 w-5" />
-            Chat with our AI Assistant
-          </Button>
+          <ChatInterface />
         </div>
       </section>
     </div>
