@@ -95,7 +95,7 @@ export const ChatInterface = () => {
         <form onSubmit={handleApiKeySubmit} className="p-4 border-b">
           <div className="space-y-2">
             <label htmlFor="apiKey" className="text-sm font-medium">
-              Enter your OpenAI API key to start chatting
+              Enter your OpenAI API key to get personalized allergy-friendly hotel recommendations
             </label>
             <div className="flex gap-2">
               <Input
@@ -138,7 +138,7 @@ export const ChatInterface = () => {
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about allergy-friendly travel recommendations..."
+            placeholder="Ask me to help find hotels that accommodate your specific allergies..."
             className="min-h-[80px]"
           />
           <Button type="submit" disabled={isLoading}>
