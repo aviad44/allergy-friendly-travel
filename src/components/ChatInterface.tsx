@@ -19,7 +19,7 @@ export const ChatInterface = () => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMessage = { role: "user", content: input.trim() };
+    const userMessage: Message = { role: "user", content: input.trim() };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
@@ -32,7 +32,7 @@ export const ChatInterface = () => {
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "gpt-4o",
+          model: "gpt-4",
           messages: [...messages, userMessage],
         }),
       });
@@ -40,7 +40,7 @@ export const ChatInterface = () => {
       if (!response.ok) throw new Error("Failed to get response");
 
       const data = await response.json();
-      const assistantMessage = {
+      const assistantMessage: Message = {
         role: "assistant",
         content: data.choices[0].message.content,
       };

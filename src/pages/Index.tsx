@@ -2,13 +2,10 @@ import { SearchBar } from "@/components/SearchBar";
 import { FeaturedHotels } from "@/components/FeaturedHotels";
 import { Button } from "@/components/ui/button";
 import { Bot, Menu, MapPin, Star, Shield } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { ChatInterface } from "@/components/ChatInterface";
 
 const menuItems = [
   { title: "Destinations", href: "/destinations", icon: MapPin },
