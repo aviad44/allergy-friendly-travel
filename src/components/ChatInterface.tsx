@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bot, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
 
 interface Message {
   role: "user" | "assistant";
@@ -13,11 +14,38 @@ export const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState("");
   const { toast } = useToast();
+
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem("openai_api_key");
+    if (savedApiKey) {
+      setApiKey(savedApiKey);
+    }
+  }, []);
+
+  const handleApiKeySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (apiKey.trim()) {
+      localStorage.setItem("openai_api_key", apiKey.trim());
+      toast({
+        title: "Success",
+        description: "API key has been saved",
+      });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
+    if (!apiKey) {
+      toast({
+        title: "Error",
+        description: "Please enter your OpenAI API key first",
+        variant: "destructive",
+      });
+      return;
+    }
 
     const userMessage: Message = { role: "user", content: input.trim() };
     setMessages((prev) => [...prev, userMessage]);
@@ -29,10 +57,10 @@ export const ChatInterface = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: "gpt-4",
+          model: "gpt-4o",
           messages: [...messages, userMessage],
         }),
       });
@@ -62,6 +90,27 @@ export const ChatInterface = () => {
         <Bot className="h-5 w-5 text-primary" />
         <h2 className="font-semibold">Travel Assistant</h2>
       </div>
+
+      {!apiKey && (
+        <form onSubmit={handleApiKeySubmit} className="p-4 border-b">
+          <div className="space-y-2">
+            <label htmlFor="apiKey" className="text-sm font-medium">
+              Enter your OpenAI API key to start chatting
+            </label>
+            <div className="flex gap-2">
+              <Input
+                id="apiKey"
+                type="password"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="sk-..."
+                className="flex-1"
+              />
+              <Button type="submit">Save Key</Button>
+            </div>
+          </div>
+        </form>
+      )}
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (
