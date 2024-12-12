@@ -29,8 +29,8 @@ export const ChatInterface = () => {
     if (apiKey.trim()) {
       localStorage.setItem("openai_api_key", apiKey.trim());
       toast({
-        title: "Success",
-        description: "API key has been saved",
+        title: "הצלחה",
+        description: "המפתח נשמר בהצלחה",
       });
     }
   };
@@ -40,8 +40,8 @@ export const ChatInterface = () => {
     if (!input.trim()) return;
     if (!apiKey) {
       toast({
-        title: "Error",
-        description: "Please enter your OpenAI API key first",
+        title: "שגיאה",
+        description: "אנא הכנס מפתח API של OpenAI",
         variant: "destructive",
       });
       return;
@@ -80,8 +80,8 @@ export const ChatInterface = () => {
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to get response from AI assistant",
+        title: "שגיאה",
+        description: error instanceof Error ? error.message : "שגיאה בקבלת תשובה מהאסיסטנט",
         variant: "destructive",
       });
     } finally {
@@ -93,14 +93,14 @@ export const ChatInterface = () => {
     <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto border rounded-lg shadow-lg">
       <div className="flex items-center gap-2 p-4 border-b bg-secondary/5">
         <Bot className="h-5 w-5 text-primary" />
-        <h2 className="font-semibold">Travel Assistant</h2>
+        <h2 className="font-semibold">אסיסטנט חכם</h2>
       </div>
 
       {!apiKey && (
         <form onSubmit={handleApiKeySubmit} className="p-4 border-b">
           <div className="space-y-2">
             <label htmlFor="apiKey" className="text-sm font-medium">
-              Enter your OpenAI API key to get personalized allergy-friendly hotel recommendations
+              הכנס את מפתח ה-API של OpenAI כדי להתחיל
             </label>
             <div className="flex gap-2">
               <Input
@@ -109,9 +109,10 @@ export const ChatInterface = () => {
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="sk-..."
-                className="flex-1"
+                className="flex-1 text-right"
+                dir="rtl"
               />
-              <Button type="submit">Save Key</Button>
+              <Button type="submit">שמור מפתח</Button>
             </div>
           </div>
         </form>
@@ -122,7 +123,7 @@ export const ChatInterface = () => {
           <div
             key={index}
             className={`flex ${
-              message.role === "user" ? "justify-end" : "justify-start"
+              message.role === "user" ? "justify-start" : "justify-end"
             }`}
           >
             <div
@@ -131,6 +132,7 @@ export const ChatInterface = () => {
                   ? "bg-primary text-primary-foreground"
                   : "bg-muted"
               }`}
+              dir="rtl"
             >
               {message.content}
             </div>
@@ -140,15 +142,16 @@ export const ChatInterface = () => {
 
       <form onSubmit={handleSubmit} className="p-4 border-t">
         <div className="flex gap-2">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask me to help find hotels that accommodate your specific allergies..."
-            className="min-h-[80px]"
-          />
           <Button type="submit" disabled={isLoading}>
             <Send className="h-4 w-4" />
           </Button>
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="שאל אותי כל שאלה..."
+            className="min-h-[80px] text-right"
+            dir="rtl"
+          />
         </div>
       </form>
     </div>
