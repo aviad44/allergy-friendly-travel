@@ -60,12 +60,17 @@ export const ChatInterface = () => {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: "gpt-4o",
+          model: "gpt-4",
           messages: [...messages, userMessage],
+          temperature: 0.7,
+          max_tokens: 1000,
         }),
       });
 
-      if (!response.ok) throw new Error("Failed to get response");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || "Failed to get response");
+      }
 
       const data = await response.json();
       const assistantMessage: Message = {
@@ -76,7 +81,7 @@ export const ChatInterface = () => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to get response from AI assistant",
+        description: error instanceof Error ? error.message : "Failed to get response from AI assistant",
         variant: "destructive",
       });
     } finally {
