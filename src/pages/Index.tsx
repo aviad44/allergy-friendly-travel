@@ -95,7 +95,7 @@ const Index = () => {
       <section className="py-20 px-4 bg-white">
         <div className="container max-w-6xl mx-auto">
           <h2 className="font-display text-3xl md:text-4xl mb-4 text-center">
-            Featured Allergy-Friendly Hotels
+            Allergy Friendly Destinations Best Hotels
           </h2>
           <p className="text-lg text-muted-foreground mb-12 text-center max-w-2xl mx-auto">
             Carefully selected accommodations with proven track records in allergy management
