@@ -23,7 +23,7 @@ const Index = () => {
             to="/" 
             className="text-2xl font-display font-bold text-secondary hover:text-secondary/90 transition-colors"
           >
-            AllergyFree Travel
+            Allergy Free Travel
           </Link>
           
           <Sheet>
