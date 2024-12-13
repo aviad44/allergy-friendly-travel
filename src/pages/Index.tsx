@@ -76,9 +76,9 @@ const Index = () => {
         {/* Content Overlay */}
         <div className="relative z-10 container max-w-6xl mx-auto px-4 text-center">
           <div className="bg-white/10 backdrop-blur-lg p-8 md:p-12 rounded-2xl border border-white/20 shadow-2xl animate-fadeIn">
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mb-6 text-white leading-tight">
+            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mb-6 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent leading-tight">
               Find Your Perfect
-              <span className="block mt-2 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent font-bold animate-pulse">
+              <span className="block mt-2">
                 Allergy-Friendly
               </span>
               Hotel
