@@ -71,14 +71,17 @@ const Index = () => {
         />
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70" />
         
         {/* Content Overlay */}
         <div className="relative z-10 container max-w-6xl mx-auto px-4 text-center">
           <div className="bg-white/10 backdrop-blur-lg p-8 md:p-12 rounded-2xl border border-white/20 shadow-2xl animate-fadeIn">
             <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mb-6 text-white leading-tight">
-              Find Your Perfect <br />
-              <span className="text-primary font-bold">Allergy-Friendly</span> Hotel
+              Find Your Perfect
+              <span className="block mt-2 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent font-bold animate-pulse">
+                Allergy-Friendly
+              </span>
+              Hotel
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
               Discover accommodations that cater to your specific needs and enjoy worry-free travels. 
