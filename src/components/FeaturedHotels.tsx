@@ -37,8 +37,8 @@ export const FeaturedHotels = () => {
             />
           </div>
           <div className="p-4">
-            <h3 className="font-display text-xl mb-1">{hotel.name}</h3>
-            <p className="text-muted-foreground mb-2">{hotel.location}</p>
+            <h3 className="font-display text-xl mb-1">Paris is Heaven on earth</h3>
+            <a href="#" className="text-primary hover:text-primary/80 mb-2 block">Read</a>
             <div className="flex flex-wrap gap-2">
               {hotel.allergies.map((allergy) => (
                 <span
