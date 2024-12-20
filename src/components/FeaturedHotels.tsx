@@ -5,7 +5,7 @@ const FEATURED_HOTELS = [
     id: 1,
     name: "Le Petit Palace",
     location: "Paris, France",
-    image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a",
+    image: "https://images.unsplash.com/photo-1501854140801-50d01698950b",
     allergies: ["Gluten", "Dairy", "Nuts"],
   },
   {
@@ -37,7 +37,7 @@ export const FeaturedHotels = () => {
             />
           </div>
           <div className="p-4">
-            <h3 className="font-display text-xl mb-1">Paris is Heaven on earth</h3>
+            <h3 className="font-display text-xl mb-1">Greek Islands - best summer vacation</h3>
             <a href="#" className="text-primary hover:text-primary/80 mb-2 block">Read</a>
             <div className="flex flex-wrap gap-2">
               {hotel.allergies.map((allergy) => (
