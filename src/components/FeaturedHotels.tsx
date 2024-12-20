@@ -3,9 +3,9 @@ import { Card } from "@/components/ui/card";
 const FEATURED_HOTELS = [
   {
     id: 1,
-    name: "The Allergy-Safe Resort",
-    location: "Maldives",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+    name: "Le Petit Palace",
+    location: "Paris, France",
+    image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a",
     allergies: ["Gluten", "Dairy", "Nuts"],
   },
   {
