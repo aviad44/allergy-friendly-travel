@@ -18,7 +18,7 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <Link 
             to="/" 
             className="text-2xl font-display font-bold text-secondary hover:text-secondary/90 transition-colors"
