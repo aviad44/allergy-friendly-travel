@@ -53,7 +53,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 3,
       name: "Four Seasons George V",
-      image: "https://press.fourseasons.com/paris/hotel-images/exterior-views-2/",
+      image: "https://www.fourseasons.com/alt/img-opt/~70.1530.0,0000-157,5000-3000,0000-1687,5000/publish/content/dam/fourseasons/images/web/PAR/PAR_599_original.jpg",
       description: "Four Seasons George V provides comprehensive allergy management protocols and child-friendly menus adapted to various dietary restrictions.",
       allergies: ["Gluten", "Dairy", "Nuts"],
       rating: 4.8,
@@ -70,7 +70,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 4,
       name: "Novotel Paris Centre Tour Eiffel",
-      image: "https://all.accor.com/media/display/hotels/novotel-paris-centre-tour-eiffel.jpg",
+      image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/2c/ec/93/novotel-paris-centre.jpg",
       description: "Novotel Paris Centre Tour Eiffel maintains standard allergy protocols across all their dining and accommodation facilities.",
       allergies: ["Gluten", "Dairy"],
       rating: 4.5,

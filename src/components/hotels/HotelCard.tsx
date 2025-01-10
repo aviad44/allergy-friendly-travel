@@ -36,12 +36,12 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="relative aspect-[4/3] md:aspect-auto">
+        <div className="relative w-full h-[300px]">
           <img
             src={hotel.image}
             alt={hotel.name}
             className="object-cover w-full h-full"
-            style={{ aspectRatio: "4/3" }}
+            loading="lazy"
           />
         </div>
         <div className="p-6 md:col-span-2">
