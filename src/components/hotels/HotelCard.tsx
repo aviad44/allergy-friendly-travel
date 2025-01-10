@@ -48,7 +48,7 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
           <div className="flex justify-between items-start mb-4">
             <h4 className="font-display text-2xl">{hotel.name}</h4>
             <div className="flex items-center bg-yellow-50 px-2 py-1 rounded-full">
-              <Star className="h-4 w-4 text-yellow-400 ml-1" />
+              <Star className="h-4 w-4 text-yellow-400 mr-1" />
               <span className="font-medium">{hotel.rating}</span>
             </div>
           </div>
@@ -56,11 +56,11 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
           
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h5 className="font-medium mb-2">תכונות מרכזיות</h5>
+              <h5 className="font-medium mb-2">Key Features</h5>
               <ul className="space-y-2">
                 {hotel.features.map((feature, index) => (
                   <li key={index} className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-primary ml-2 shrink-0" />
+                    <Check className="h-4 w-4 text-primary mr-2 shrink-0" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -74,19 +74,19 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
                 key={allergy}
                 className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
               >
-                מטבח ללא {allergy}
+                {allergy}-free kitchen
               </span>
             ))}
           </div>
 
           <div className="flex justify-between items-center mt-6">
             <span className="text-sm text-muted-foreground inline-flex items-center">
-              טווח מחירים: {hotel.priceRange}
+              Price Range: {hotel.priceRange}
             </span>
             <Button variant="default" size="sm" asChild>
               <a href={bookingUrls[hotel.name as keyof typeof bookingUrls]} target="_blank" rel="noopener noreferrer">
-                הזמנה ב-Booking.com
-                <ExternalLink className="h-4 w-4 mr-2" />
+                Book on Booking.com
+                <ExternalLink className="h-4 w-4 ml-2" />
               </a>
             </Button>
           </div>
