@@ -66,25 +66,6 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
                 ))}
               </ul>
             </div>
-            
-            <div>
-              <h5 className="font-medium mb-2">Guest Reviews</h5>
-              <div className="space-y-3">
-                {hotel.reviews.map((review, index) => (
-                  <div key={index} className="text-sm bg-muted/50 p-3 rounded-lg">
-                    <div className="flex items-center mb-1">
-                      <div className="flex">
-                        {[...Array(review.rating)].map((_, i) => (
-                          <Star key={i} className="h-3 w-3 text-yellow-400" />
-                        ))}
-                      </div>
-                      <span className="ml-2 font-medium">{review.author}</span>
-                    </div>
-                    <p className="text-muted-foreground">{review.text}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
           <div className="flex flex-wrap gap-2 mt-4 mb-4">
@@ -99,21 +80,15 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
           </div>
 
           <div className="flex justify-between items-center mt-6">
-            <span className="text-muted-foreground">{hotel.priceRange}</span>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" asChild>
-                <a href={hotel.website} target="_blank" rel="noopener noreferrer">
-                  Hotel Website
-                  <ExternalLink className="h-4 w-4 ml-2" />
-                </a>
-              </Button>
-              <Button variant="default" size="sm" asChild>
-                <a href={bookingUrls[hotel.name as keyof typeof bookingUrls]} target="_blank" rel="noopener noreferrer">
-                  Book on Booking.com
-                  <ExternalLink className="h-4 w-4 ml-2" />
-                </a>
-              </Button>
-            </div>
+            <span className="text-sm text-muted-foreground inline-flex items-center">
+              Price Range: {hotel.priceRange}
+            </span>
+            <Button variant="default" size="sm" asChild>
+              <a href={bookingUrls[hotel.name as keyof typeof bookingUrls]} target="_blank" rel="noopener noreferrer">
+                Book on Booking.com
+                <ExternalLink className="h-4 w-4 ml-2" />
+              </a>
+            </Button>
           </div>
         </div>
       </div>
