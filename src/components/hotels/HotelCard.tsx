@@ -36,19 +36,19 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="relative aspect-[4/3] md:aspect-auto group">
+        <div className="relative aspect-[4/3] md:aspect-auto">
           <img
             src={hotel.image}
             alt={hotel.name}
-            className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+            className="object-cover w-full h-full"
+            style={{ aspectRatio: "4/3" }}
           />
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
         <div className="p-6 md:col-span-2">
           <div className="flex justify-between items-start mb-4">
             <h4 className="font-display text-2xl">{hotel.name}</h4>
             <div className="flex items-center bg-yellow-50 px-2 py-1 rounded-full">
-              <Star className="h-4 w-4 text-yellow-400 mr-1" />
+              <Star className="h-4 w-4 text-yellow-400 ml-1" />
               <span className="font-medium">{hotel.rating}</span>
             </div>
           </div>
@@ -56,11 +56,11 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
           
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h5 className="font-medium mb-2">Key Features</h5>
+              <h5 className="font-medium mb-2">תכונות מרכזיות</h5>
               <ul className="space-y-2">
                 {hotel.features.map((feature, index) => (
                   <li key={index} className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-primary mr-2 shrink-0" />
+                    <Check className="h-4 w-4 text-primary ml-2 shrink-0" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -74,19 +74,19 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
                 key={allergy}
                 className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
               >
-                {allergy}-free kitchen
+                מטבח ללא {allergy}
               </span>
             ))}
           </div>
 
           <div className="flex justify-between items-center mt-6">
             <span className="text-sm text-muted-foreground inline-flex items-center">
-              Price Range: {hotel.priceRange}
+              טווח מחירים: {hotel.priceRange}
             </span>
             <Button variant="default" size="sm" asChild>
               <a href={bookingUrls[hotel.name as keyof typeof bookingUrls]} target="_blank" rel="noopener noreferrer">
-                Book on Booking.com
-                <ExternalLink className="h-4 w-4 ml-2" />
+                הזמנה ב-Booking.com
+                <ExternalLink className="h-4 w-4 mr-2" />
               </a>
             </Button>
           </div>

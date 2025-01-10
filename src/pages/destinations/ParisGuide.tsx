@@ -10,68 +10,72 @@ const RECOMMENDED_HOTELS = {
     {
       id: 1,
       name: "Le Bristol Paris",
-      image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80",
-      description: "Le Bristol Paris offers dedicated allergy-friendly dining options with separate kitchen facilities and strict protocols for food preparation.",
-      allergies: ["Gluten", "Dairy", "Nuts"],
+      image: "https://www.oetkercollection.com/media/41686/le-bristol-paris-facade.jpg",
+      description: "Le Bristol Paris מציע אפשרויות אירוח המותאמות במיוחד לאורחים עם אלרגיות למזון, כולל מטבח נפרד ופרוטוקולים קפדניים להכנת המזון.",
+      allergies: ["גלוטן", "חלב", "אגוזים"],
       rating: 4.9,
       priceRange: "€€€€",
       website: "https://www.oetkercollection.com/hotels/le-bristol-paris/",
       features: [
-        "Dedicated allergy-friendly kitchen",
-        "Pre-arrival allergy consultation",
-        "24/7 medical assistance",
-        "Custom menu planning"
-      ]
+        "מטבח ייעודי לאוכל ללא אלרגנים",
+        "ייעוץ אלרגיות לפני ההגעה",
+        "סיוע רפואי 24/7",
+        "תכנון תפריט מותאם אישית"
+      ],
+      reviews: []
     },
     {
       id: 2,
       name: "Ritz Paris",
-      image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80",
-      description: "The Ritz Paris maintains strict protocols for allergen management and offers personalized dining experiences with advance notice.",
-      allergies: ["Gluten", "Dairy"],
+      image: "https://www.ritzparis.com/sites/default/files/styles/1440x656/public/images/home_0.jpg",
+      description: "מלון Ritz Paris מקפיד על פרוטוקולים מחמירים לניהול אלרגנים ומציע חוויות קולינריות מותאמות אישית בהתראה מראש.",
+      allergies: ["גלוטן", "חלב"],
       rating: 4.8,
       priceRange: "€€€€",
       website: "https://www.ritzparis.com",
       features: [
-        "Allergen-free dining options",
-        "Medical staff on premises",
-        "Personalized meal preparation",
-        "Strict cross-contamination protocols"
-      ]
+        "אפשרויות אוכל ללא אלרגנים",
+        "צוות רפואי במקום",
+        "הכנת ארוחות בהתאמה אישית",
+        "פרוטוקולים למניעת זיהום צולב"
+      ],
+      reviews: []
     }
   ],
   families: [
     {
       id: 3,
       name: "Four Seasons George V",
-      image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
-      description: "Four Seasons George V provides comprehensive allergy management protocols and dedicated children's menus that accommodate various dietary restrictions.",
-      allergies: ["Gluten", "Dairy", "Nuts"],
+      image: "https://www.fourseasons.com/paris/landing/homepage-hero-1.jpg",
+      description: "Four Seasons George V מספק פרוטוקולים מקיפים לניהול אלרגיות ותפריטי ילדים המותאמים להגבלות תזונתיות שונות.",
+      allergies: ["גלוטן", "חלב", "אגוזים"],
       rating: 4.8,
       priceRange: "€€€€",
       website: "https://www.fourseasons.com/paris/",
       features: [
-        "Dedicated allergy-friendly menus",
-        "In-house medical support",
-        "Allergen-free room preparation",
-        "Staff trained in allergy protocols"
-      ]
+        "תפריטים ייעודיים ללא אלרגנים",
+        "תמיכה רפואית במקום",
+        "הכנת חדר ללא אלרגנים",
+        "צוות מיומן בפרוטוקולי אלרגיה"
+      ],
+      reviews: []
     },
     {
       id: 4,
       name: "Novotel Paris Centre Tour Eiffel",
-      image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=800&q=80",
-      description: "Novotel Paris Centre Tour Eiffel offers standardized allergy protocols across all their dining facilities and accommodations.",
-      allergies: ["Gluten", "Dairy"],
+      image: "https://www.novotelparis.com/wp-content/uploads/2019/01/novotel-paris-centre-tour-eiffel-exterior.jpg",
+      description: "Novotel Paris Centre Tour Eiffel מציע פרוטוקולים סטנדרטיים לאלרגיות בכל מתקני האוכל והאירוח שלהם.",
+      allergies: ["גלוטן", "חלב"],
       rating: 4.5,
       priceRange: "€€€",
       website: "https://novotel.accor.com/paris",
       features: [
-        "Allergen-free menu options",
-        "Staff trained in allergy awareness",
-        "Clear allergen labeling",
-        "Medical assistance available"
-      ]
+        "אפשרויות תפריט ללא אלרגנים",
+        "צוות מודע לאלרגיות",
+        "סימון אלרגנים ברור",
+        "סיוע רפואי זמין"
+      ],
+      reviews: []
     }
   ]
 };
@@ -83,8 +87,8 @@ const ParisGuide = () => {
         {/* Navigation */}
         <Link to="/">
           <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Destinations
+            <ArrowLeft className="h-4 w-4 ml-2" />
+            חזרה ליעדים
           </Button>
         </Link>
 
@@ -92,45 +96,45 @@ const ParisGuide = () => {
         <div className="relative h-[60vh] rounded-xl overflow-hidden mb-12">
           <img
             src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1920&q=80"
-            alt="Paris cityscape"
+            alt="נוף פריז"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           <div className="absolute bottom-0 p-8 text-white">
-            <h1 className="font-display text-5xl md:text-6xl mb-4">Paris</h1>
-            <p className="text-xl max-w-2xl">A comprehensive guide to allergy-friendly dining and accommodation in the City of Light</p>
+            <h1 className="font-display text-5xl md:text-6xl mb-4">פריז</h1>
+            <p className="text-xl max-w-2xl">מדריך מקיף לאירוח ואוכל ידידותי לאלרגיות בעיר האורות</p>
           </div>
         </div>
 
         {/* Article Content */}
         <article className="prose prose-lg max-w-none mb-16">
-          <h2 className="font-display text-3xl mb-6">Dining Safely in Paris</h2>
+          <h2 className="font-display text-3xl mb-6">אכילה בטוחה בפריז</h2>
           
-          <div className="float-right ml-6 mb-6 w-1/3">
+          <div className="float-right mr-6 mb-6 w-1/3">
             <img
               src="https://images.unsplash.com/photo-1551887196-72e32bfc7bf3?auto=format&fit=crop&w=800&q=80"
-              alt="Parisian café"
+              alt="בית קפה פריזאי"
               className="rounded-lg shadow-lg"
             />
-            <p className="text-sm text-muted-foreground mt-2 text-center">Modern Parisian restaurants are increasingly accommodating dietary restrictions</p>
+            <p className="text-sm text-muted-foreground mt-2 text-center">מסעדות פריזאיות מודרניות מתאימות את עצמן יותר ויותר להגבלות תזונתיות</p>
           </div>
 
           <p>
-            Paris has evolved significantly in recent years to accommodate diners with food allergies. 
-            The city's top establishments now pride themselves on their ability to provide safe, 
-            allergen-free dining experiences without compromising on the renowned French culinary excellence.
+            פריז התפתחה משמעותית בשנים האחרונות בכל הנוגע לאירוח סועדים עם אלרגיות למזון.
+            המוסדות המובילים בעיר כעת גאים ביכולתם לספק חוויות קולינריות בטוחות וללא אלרגנים,
+            מבלי להתפשר על המצוינות הקולינרית הצרפתית המפורסמת.
           </p>
         </article>
 
         {/* Hotel Sections */}
         <HotelSection
-          title="Romantic Hotels for Couples"
+          title="מלונות רומנטיים לזוגות"
           type="couples"
           hotels={RECOMMENDED_HOTELS.couples}
         />
 
         <HotelSection
-          title="Family-Friendly Hotels"
+          title="מלונות ידידותיים למשפחות"
           type="families"
           hotels={RECOMMENDED_HOTELS.families}
         />
