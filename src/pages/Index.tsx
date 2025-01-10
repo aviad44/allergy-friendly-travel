@@ -1,5 +1,5 @@
 import { SearchBar } from "@/components/SearchBar";
-import { FeaturedHotels } from "@/components/FeaturedHotels";
+import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
 import { Bot, Menu, MapPin, Star, Shield } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -94,16 +94,16 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Hotels */}
+      {/* Featured Destinations Section */}
       <section className="py-20 px-4 bg-white">
         <div className="container max-w-6xl mx-auto">
           <h2 className="font-display text-3xl md:text-4xl mb-4 text-center">
-            Allergy Friendly Destinations Best Hotels
+            Popular Allergy-Friendly Destinations
           </h2>
           <p className="text-lg text-muted-foreground mb-12 text-center max-w-2xl mx-auto">
-            Carefully selected accommodations with proven track records in allergy management
+            Explore our curated selection of cities with excellent allergy-aware accommodations
           </p>
-          <FeaturedHotels />
+          <FeaturedDestinations />
         </div>
       </section>
 
