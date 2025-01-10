@@ -36,11 +36,11 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="relative w-full h-[300px]">
+        <div className="relative h-[300px] md:h-full min-h-[300px]">
           <img
             src={hotel.image}
             alt={hotel.name}
-            className="object-cover w-full h-full"
+            className="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
           />
         </div>

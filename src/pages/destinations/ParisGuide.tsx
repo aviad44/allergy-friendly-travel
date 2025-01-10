@@ -17,7 +17,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 1,
       name: "Le Bristol Paris",
-      image: "https://www.oetkercollection.com/media/41686/le-bristol-paris-facade.jpg",
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
       description: "Le Bristol Paris offers specialized accommodations for guests with food allergies, including dedicated kitchen facilities and strict food preparation protocols.",
       allergies: ["Gluten", "Dairy", "Nuts"],
       rating: 4.9,
@@ -34,7 +34,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 2,
       name: "Ritz Paris",
-      image: "https://www.ritzparis.com/sites/default/files/styles/1440x656/public/images/home_0.jpg",
+      image: "https://images.unsplash.com/photo-1602088113235-229c19758e9f?auto=format&fit=crop&w=1200&q=80",
       description: "The Ritz Paris maintains strict allergen protocols and offers personalized culinary experiences with advance notice.",
       allergies: ["Gluten", "Dairy"],
       rating: 4.8,
@@ -53,7 +53,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 3,
       name: "Four Seasons George V",
-      image: "https://www.fourseasons.com/alt/img-opt/~70.1530.0,0000-157,5000-3000,0000-1687,5000/publish/content/dam/fourseasons/images/web/PAR/PAR_599_original.jpg",
+      image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80",
       description: "Four Seasons George V provides comprehensive allergy management protocols and child-friendly menus adapted to various dietary restrictions.",
       allergies: ["Gluten", "Dairy", "Nuts"],
       rating: 4.8,
@@ -70,7 +70,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 4,
       name: "Novotel Paris Centre Tour Eiffel",
-      image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/2c/ec/93/novotel-paris-centre.jpg",
+      image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1200&q=80",
       description: "Novotel Paris Centre Tour Eiffel maintains standard allergy protocols across all their dining and accommodation facilities.",
       allergies: ["Gluten", "Dairy"],
       rating: 4.5,
