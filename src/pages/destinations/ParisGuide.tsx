@@ -11,8 +11,8 @@ const RECOMMENDED_HOTELS = {
       id: 1,
       name: "Le Bristol Paris",
       image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80",
-      description: "Romantic luxury hotel with Michelin-starred restaurant featuring dedicated allergy-friendly kitchen and personalized menu planning.",
-      allergies: ["Gluten", "Dairy", "Nuts", "Shellfish"],
+      description: "Le Bristol Paris offers dedicated allergy-friendly dining options with separate kitchen facilities and strict protocols for food preparation.",
+      allergies: ["Gluten", "Dairy", "Nuts"],
       rating: 4.9,
       priceRange: "€€€€",
       website: "https://www.oetkercollection.com/hotels/le-bristol-paris/",
@@ -21,46 +21,22 @@ const RECOMMENDED_HOTELS = {
         "Pre-arrival allergy consultation",
         "24/7 medical assistance",
         "Custom menu planning"
-      ],
-      reviews: [
-        {
-          author: "Sarah M.",
-          rating: 5,
-          text: "Perfect for a romantic getaway. The chef personally discussed our dietary needs and created amazing gluten-free dishes."
-        },
-        {
-          author: "David L.",
-          rating: 5,
-          text: "Incredible attention to detail with allergen-free romantic dinners. The perfect anniversary celebration."
-        }
       ]
     },
     {
       id: 2,
       name: "Ritz Paris",
-      image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=800&q=80",
-      description: "Iconic luxury hotel offering intimate dining experiences with specialized allergen-free menus for couples.",
-      allergies: ["Gluten", "Dairy", "Soy"],
+      image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80",
+      description: "The Ritz Paris maintains strict protocols for allergen management and offers personalized dining experiences with advance notice.",
+      allergies: ["Gluten", "Dairy"],
       rating: 4.8,
       priceRange: "€€€€",
       website: "https://www.ritzparis.com",
       features: [
-        "Private dining experiences",
-        "Allergen-free room service",
-        "Romantic atmosphere",
-        "Customized menus"
-      ],
-      reviews: [
-        {
-          author: "James R.",
-          rating: 5,
-          text: "They made our honeymoon special with allergen-free champagne and customized romantic dinners."
-        },
-        {
-          author: "Marie C.",
-          rating: 4,
-          text: "Beautiful romantic setting with excellent attention to food allergies."
-        }
+        "Allergen-free dining options",
+        "Medical staff on premises",
+        "Personalized meal preparation",
+        "Strict cross-contamination protocols"
       ]
     }
   ],
@@ -68,57 +44,33 @@ const RECOMMENDED_HOTELS = {
     {
       id: 3,
       name: "Four Seasons George V",
-      image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
-      description: "Family-friendly luxury hotel with dedicated children's programs and comprehensive allergy management.",
-      allergies: ["Gluten", "Dairy", "Soy", "Eggs"],
+      image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
+      description: "Four Seasons George V provides comprehensive allergy management protocols and dedicated children's menus that accommodate various dietary restrictions.",
+      allergies: ["Gluten", "Dairy", "Nuts"],
       rating: 4.8,
       priceRange: "€€€€",
       website: "https://www.fourseasons.com/paris/",
       features: [
-        "Kids' allergy-aware menu",
-        "Family cooking classes",
-        "In-house nutritionist",
-        "Child-friendly facilities"
-      ],
-      reviews: [
-        {
-          author: "Emma R.",
-          rating: 5,
-          text: "Perfect for families with allergies. They had special kids' menus and activities that considered all our dietary needs."
-        },
-        {
-          author: "Michael P.",
-          rating: 4,
-          text: "Great family atmosphere with excellent allergy protocols for children."
-        }
+        "Dedicated allergy-friendly menus",
+        "In-house medical support",
+        "Allergen-free room preparation",
+        "Staff trained in allergy protocols"
       ]
     },
     {
       id: 4,
       name: "Novotel Paris Centre Tour Eiffel",
-      image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
-      description: "Modern family hotel with allergen-free kids' corner and special family rooms.",
-      allergies: ["Gluten", "Nuts", "Dairy"],
+      image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=800&q=80",
+      description: "Novotel Paris Centre Tour Eiffel offers standardized allergy protocols across all their dining facilities and accommodations.",
+      allergies: ["Gluten", "Dairy"],
       rating: 4.5,
       priceRange: "€€€",
       website: "https://novotel.accor.com/paris",
       features: [
-        "Family-sized rooms",
-        "Kids eat free program",
-        "Allergen-free playroom",
-        "Family entertainment"
-      ],
-      reviews: [
-        {
-          author: "Thomas K.",
-          rating: 4,
-          text: "Great for families with food allergies. The kids' menu was extensive and safe."
-        },
-        {
-          author: "Lisa M.",
-          rating: 5,
-          text: "Perfect location and excellent handling of our children's multiple allergies."
-        }
+        "Allergen-free menu options",
+        "Staff trained in allergy awareness",
+        "Clear allergen labeling",
+        "Medical assistance available"
       ]
     }
   ]
