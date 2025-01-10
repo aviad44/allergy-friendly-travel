@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Star, MapPin, Shield, ExternalLink, Utensils, Check, Clock, Heart, Users, BookOpen } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import HotelSection from "@/components/hotels/HotelSection";
+import AllergiesTable from "@/components/language/AllergiesTable";
+import UsefulInfo from "@/components/hotels/UsefulInfo";
 
 const RECOMMENDED_HOTELS = {
   couples: [
@@ -167,277 +168,26 @@ const ParisGuide = () => {
             The city's top establishments now pride themselves on their ability to provide safe, 
             allergen-free dining experiences without compromising on the renowned French culinary excellence.
           </p>
-
-          <div className="my-8 p-6 bg-primary/5 rounded-lg">
-            <h4 className="font-display text-xl mb-4">Essential French Phrases for Allergy Communication</h4>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>English</TableHead>
-                  <TableHead>French</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>"I have a food allergy"</TableCell>
-                  <TableCell>"J'ai une allergie alimentaire"</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>"Is this dish gluten-free?"</TableCell>
-                  <TableCell>"Est-ce que ce plat est sans gluten?"</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>"Does this contain nuts?"</TableCell>
-                  <TableCell>"Est-ce que ça contient des noix?"</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Romantic Hotels Section */}
-          <h3 className="font-display text-2xl mt-12 mb-6 flex items-center gap-2">
-            <Heart className="h-6 w-6 text-primary" />
-            Romantic Hotels for Couples
-          </h3>
-          
-          <div className="space-y-8 mb-16">
-            {RECOMMENDED_HOTELS.couples.map((hotel) => (
-              <Card key={hotel.id} className="overflow-hidden">
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="relative aspect-[4/3] md:aspect-auto">
-                    <img
-                      src={hotel.image}
-                      alt={hotel.name}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <div className="p-6 md:col-span-2">
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="font-display text-2xl">{hotel.name}</h4>
-                      <div className="flex items-center">
-                        <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                        <span>{hotel.rating}</span>
-                      </div>
-                    </div>
-                    <p className="text-muted-foreground mb-4">{hotel.description}</p>
-                    
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <h5 className="font-medium mb-2">Key Features</h5>
-                        <ul className="space-y-2">
-                          {hotel.features.map((feature, index) => (
-                            <li key={index} className="flex items-center text-sm">
-                              <Check className="h-4 w-4 text-primary mr-2" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      
-                      <div>
-                        <h5 className="font-medium mb-2">Guest Reviews</h5>
-                        <div className="space-y-3">
-                          {hotel.reviews.map((review, index) => (
-                            <div key={index} className="text-sm">
-                              <div className="flex items-center mb-1">
-                                <div className="flex">
-                                  {[...Array(review.rating)].map((_, i) => (
-                                    <Star key={i} className="h-3 w-3 text-yellow-400" />
-                                  ))}
-                                </div>
-                                <span className="ml-2 font-medium">{review.author}</span>
-                              </div>
-                              <p className="text-muted-foreground">{review.text}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mt-4 mb-4">
-                      {hotel.allergies.map((allergy) => (
-                        <span
-                          key={allergy}
-                          className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
-                        >
-                          {allergy}-free kitchen
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex justify-between items-center mt-6">
-                      <span className="text-muted-foreground">{hotel.priceRange}</span>
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={hotel.website} target="_blank" rel="noopener noreferrer">
-                          Visit Website
-                          <ExternalLink className="h-4 w-4 ml-2" />
-                        </a>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-
-          {/* Family Hotels Section */}
-          <h3 className="font-display text-2xl mt-12 mb-6 flex items-center gap-2">
-            <Users className="h-6 w-6 text-primary" />
-            Family-Friendly Hotels
-          </h3>
-          
-          <div className="space-y-8 mb-16">
-            {RECOMMENDED_HOTELS.families.map((hotel) => (
-              <Card key={hotel.id} className="overflow-hidden">
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="relative aspect-[4/3] md:aspect-auto">
-                    <img
-                      src={hotel.image}
-                      alt={hotel.name}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <div className="p-6 md:col-span-2">
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="font-display text-2xl">{hotel.name}</h4>
-                      <div className="flex items-center">
-                        <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                        <span>{hotel.rating}</span>
-                      </div>
-                    </div>
-                    <p className="text-muted-foreground mb-4">{hotel.description}</p>
-                    
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <h5 className="font-medium mb-2">Key Features</h5>
-                        <ul className="space-y-2">
-                          {hotel.features.map((feature, index) => (
-                            <li key={index} className="flex items-center text-sm">
-                              <Check className="h-4 w-4 text-primary mr-2" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      
-                      <div>
-                        <h5 className="font-medium mb-2">Guest Reviews</h5>
-                        <div className="space-y-3">
-                          {hotel.reviews.map((review, index) => (
-                            <div key={index} className="text-sm">
-                              <div className="flex items-center mb-1">
-                                <div className="flex">
-                                  {[...Array(review.rating)].map((_, i) => (
-                                    <Star key={i} className="h-3 w-3 text-yellow-400" />
-                                  ))}
-                                </div>
-                                <span className="ml-2 font-medium">{review.author}</span>
-                              </div>
-                              <p className="text-muted-foreground">{review.text}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mt-4 mb-4">
-                      {hotel.allergies.map((allergy) => (
-                        <span
-                          key={allergy}
-                          className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
-                        >
-                          {allergy}-free kitchen
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex justify-between items-center mt-6">
-                      <span className="text-muted-foreground">{hotel.priceRange}</span>
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={hotel.website} target="_blank" rel="noopener noreferrer">
-                          Visit Website
-                          <ExternalLink className="h-4 w-4 ml-2" />
-                        </a>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
         </article>
 
-        {/* Additional Information */}
-        <div className="bg-muted rounded-xl p-8">
-          <h3 className="font-display text-2xl mb-6">Useful Information</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="flex items-start">
-              <Utensils className="h-5 w-5 mr-3 text-primary mt-1" />
-              <div>
-                <h4 className="font-medium mb-2">Restaurant Reservations</h4>
-                <p className="text-muted-foreground">Most high-end restaurants require advance notice for allergy accommodations. Book at least 48 hours ahead.</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <Shield className="h-5 w-5 mr-3 text-primary mt-1" />
-              <div>
-                <h4 className="font-medium mb-2">Medical Support</h4>
-                <p className="text-muted-foreground">All listed hotels have partnerships with nearby medical facilities and can assist in emergencies.</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <Clock className="h-5 w-5 mr-3 text-primary mt-1" />
-              <div>
-                <h4 className="font-medium mb-2">Best Time to Visit</h4>
-                <p className="text-muted-foreground">Spring and fall offer the best dining experiences with fresh, seasonal ingredients.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Hotel Sections */}
+        <HotelSection
+          title="Romantic Hotels for Couples"
+          type="couples"
+          hotels={RECOMMENDED_HOTELS.couples}
+        />
 
-        {/* French-English Allergy Dictionary */}
-        <div className="mt-16 bg-muted rounded-xl p-8">
-          <h3 className="font-display text-2xl mb-6 flex items-center gap-2">
-            <BookOpen className="h-6 w-6 text-primary" />
-            French-English Allergy Dictionary
-          </h3>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>English</TableHead>
-                <TableHead>French</TableHead>
-                <TableHead>Pronunciation</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell>"I have a food allergy"</TableCell>
-                <TableCell>"J'ai une allergie alimentaire"</TableCell>
-                <TableCell>"Zhay oon ah-lehr-zhee ah-lee-mahn-tehr"</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>"Is this dish gluten-free?"</TableCell>
-                <TableCell>"Est-ce que ce plat est sans gluten?"</TableCell>
-                <TableCell>"Ess-kuh suh plah ay sahn gloo-tahn?"</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>"Does this contain nuts?"</TableCell>
-                <TableCell>"Est-ce que ça contient des noix?"</TableCell>
-                <TableCell>"Ess-kuh sah kohn-tyahn day nwah?"</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>"I'm allergic to..."</TableCell>
-                <TableCell>"Je suis allergique à..."</TableCell>
-                <TableCell>"Zhuh swee ah-lehr-zheek ah..."</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>"Can you prepare this without..."</TableCell>
-                <TableCell>"Pouvez-vous préparer ça sans..."</TableCell>
-                <TableCell>"Poo-vay voo pray-pah-ray sah sahn..."</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </div>
+        <HotelSection
+          title="Family-Friendly Hotels"
+          type="families"
+          hotels={RECOMMENDED_HOTELS.families}
+        />
+
+        {/* Additional Information */}
+        <UsefulInfo />
+
+        {/* French-English Dictionary */}
+        <AllergiesTable />
       </div>
     </div>
   );
