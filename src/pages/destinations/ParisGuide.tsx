@@ -2,66 +2,126 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Star, MapPin, Shield, ExternalLink, Utensils, Check, Clock } from "lucide-react";
+import { ArrowLeft, Star, MapPin, Shield, ExternalLink, Utensils, Check, Clock, Heart, Users } from "lucide-react";
 
-const RECOMMENDED_HOTELS = [
-  {
-    id: 1,
-    name: "Le Bristol Paris",
-    image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80",
-    description: "Michelin-starred restaurant with dedicated allergy-friendly kitchen and personalized menu planning.",
-    allergies: ["Gluten", "Dairy", "Nuts", "Shellfish"],
-    rating: 4.9,
-    priceRange: "€€€€",
-    website: "https://www.oetkercollection.com/hotels/le-bristol-paris/",
-    features: [
-      "Dedicated allergy-friendly kitchen",
-      "Pre-arrival allergy consultation",
-      "24/7 medical assistance",
-      "Custom menu planning"
-    ],
-    reviews: [
-      {
-        author: "Sarah M.",
-        rating: 5,
-        text: "As someone with celiac disease, I was amazed by their attention to detail. The chef personally discussed my dietary needs."
-      },
-      {
-        author: "David L.",
-        rating: 5,
-        text: "Their nut-free kitchen protocols are impressive. First time I felt completely safe dining at a luxury hotel."
-      }
-    ]
-  },
-  {
-    id: 2,
-    name: "Four Seasons George V",
-    image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
-    description: "Expert in handling multiple food allergies with three Michelin-starred restaurants offering allergen-free menus.",
-    allergies: ["Gluten", "Dairy", "Soy", "Eggs"],
-    rating: 4.8,
-    priceRange: "€€€€",
-    website: "https://www.fourseasons.com/paris/",
-    features: [
-      "Allergen-free room service menu",
-      "Cross-contamination prevention protocols",
-      "In-house nutritionist",
-      "Labeled ingredient lists"
-    ],
-    reviews: [
-      {
-        author: "Emma R.",
-        rating: 5,
-        text: "The staff's knowledge about cross-contamination was exceptional. They made my dairy-free stay absolutely wonderful."
-      },
-      {
-        author: "Michael P.",
-        rating: 4,
-        text: "Great gluten-free options at all restaurants. They even prepared special bread for breakfast."
-      }
-    ]
-  }
-];
+const RECOMMENDED_HOTELS = {
+  couples: [
+    {
+      id: 1,
+      name: "Le Bristol Paris",
+      image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80",
+      description: "Romantic luxury hotel with Michelin-starred restaurant featuring dedicated allergy-friendly kitchen and personalized menu planning.",
+      allergies: ["Gluten", "Dairy", "Nuts", "Shellfish"],
+      rating: 4.9,
+      priceRange: "€€€€",
+      website: "https://www.oetkercollection.com/hotels/le-bristol-paris/",
+      features: [
+        "Dedicated allergy-friendly kitchen",
+        "Pre-arrival allergy consultation",
+        "24/7 medical assistance",
+        "Custom menu planning"
+      ],
+      reviews: [
+        {
+          author: "Sarah M.",
+          rating: 5,
+          text: "Perfect for a romantic getaway. The chef personally discussed our dietary needs and created amazing gluten-free dishes."
+        },
+        {
+          author: "David L.",
+          rating: 5,
+          text: "Incredible attention to detail with allergen-free romantic dinners. The perfect anniversary celebration."
+        }
+      ]
+    },
+    {
+      id: 2,
+      name: "Ritz Paris",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
+      description: "Iconic luxury hotel offering intimate dining experiences with specialized allergen-free menus for couples.",
+      allergies: ["Gluten", "Dairy", "Soy"],
+      rating: 4.8,
+      priceRange: "€€€€",
+      website: "https://www.ritzparis.com",
+      features: [
+        "Private dining experiences",
+        "Allergen-free room service",
+        "Romantic atmosphere",
+        "Customized menus"
+      ],
+      reviews: [
+        {
+          author: "James R.",
+          rating: 5,
+          text: "They made our honeymoon special with allergen-free champagne and customized romantic dinners."
+        },
+        {
+          author: "Marie C.",
+          rating: 4,
+          text: "Beautiful romantic setting with excellent attention to food allergies."
+        }
+      ]
+    }
+  ],
+  families: [
+    {
+      id: 3,
+      name: "Four Seasons George V",
+      image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+      description: "Family-friendly luxury hotel with dedicated children's programs and comprehensive allergy management.",
+      allergies: ["Gluten", "Dairy", "Soy", "Eggs"],
+      rating: 4.8,
+      priceRange: "€€€€",
+      website: "https://www.fourseasons.com/paris/",
+      features: [
+        "Kids' allergy-aware menu",
+        "Family cooking classes",
+        "In-house nutritionist",
+        "Child-friendly facilities"
+      ],
+      reviews: [
+        {
+          author: "Emma R.",
+          rating: 5,
+          text: "Perfect for families with allergies. They had special kids' menus and activities that considered all our dietary needs."
+        },
+        {
+          author: "Michael P.",
+          rating: 4,
+          text: "Great family atmosphere with excellent allergy protocols for children."
+        }
+      ]
+    },
+    {
+      id: 4,
+      name: "Novotel Paris Centre Tour Eiffel",
+      image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?auto=format&fit=crop&w=800&q=80",
+      description: "Modern family hotel with allergen-free kids' corner and special family rooms.",
+      allergies: ["Gluten", "Nuts", "Dairy"],
+      rating: 4.5,
+      priceRange: "€€€",
+      website: "https://novotel.accor.com/paris",
+      features: [
+        "Family-sized rooms",
+        "Kids eat free program",
+        "Allergen-free playroom",
+        "Family entertainment"
+      ],
+      reviews: [
+        {
+          author: "Thomas K.",
+          rating: 4,
+          text: "Great for families with food allergies. The kids' menu was extensive and safe."
+        },
+        {
+          author: "Lisa M.",
+          rating: 5,
+          text: "Perfect location and excellent handling of our children's multiple allergies."
+        }
+      ]
+    }
+  ]
+};
 
 const ParisGuide = () => {
   return (
@@ -108,13 +168,6 @@ const ParisGuide = () => {
             allergen-free dining experiences without compromising on the renowned French culinary excellence.
           </p>
 
-          <p>
-            Many restaurants now maintain separate preparation areas for allergen-free dishes, 
-            and staff receive specialized training in handling food allergies. It's recommended 
-            to call ahead and discuss your specific needs, as most establishments will gladly 
-            accommodate with advance notice.
-          </p>
-
           <div className="my-8 p-6 bg-primary/5 rounded-lg">
             <h4 className="font-display text-xl mb-4">Essential French Phrases for Allergy Communication</h4>
             <Table>
@@ -141,89 +194,178 @@ const ParisGuide = () => {
             </Table>
           </div>
 
-          <h3 className="font-display text-2xl mt-12 mb-6">Allergy-Friendly Luxury Hotels</h3>
-        </article>
-
-        {/* Recommended Hotels */}
-        <div className="space-y-8 mb-16">
-          {RECOMMENDED_HOTELS.map((hotel) => (
-            <Card key={hotel.id} className="overflow-hidden">
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="relative aspect-[4/3] md:aspect-auto">
-                  <img
-                    src={hotel.image}
-                    alt={hotel.name}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-6 md:col-span-2">
-                  <div className="flex justify-between items-start mb-4">
-                    <h4 className="font-display text-2xl">{hotel.name}</h4>
-                    <div className="flex items-center">
-                      <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                      <span>{hotel.rating}</span>
-                    </div>
+          {/* Romantic Hotels Section */}
+          <h3 className="font-display text-2xl mt-12 mb-6 flex items-center gap-2">
+            <Heart className="h-6 w-6 text-primary" />
+            Romantic Hotels for Couples
+          </h3>
+          
+          <div className="space-y-8 mb-16">
+            {RECOMMENDED_HOTELS.couples.map((hotel) => (
+              <Card key={hotel.id} className="overflow-hidden">
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="relative aspect-[4/3] md:aspect-auto">
+                    <img
+                      src={hotel.image}
+                      alt={hotel.name}
+                      className="object-cover w-full h-full"
+                    />
                   </div>
-                  <p className="text-muted-foreground mb-4">{hotel.description}</p>
-                  
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="font-medium mb-2">Key Features</h5>
-                      <ul className="space-y-2">
-                        {hotel.features.map((feature, index) => (
-                          <li key={index} className="flex items-center text-sm">
-                            <Check className="h-4 w-4 text-primary mr-2" />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h5 className="font-medium mb-2">Guest Reviews</h5>
-                      <div className="space-y-3">
-                        {hotel.reviews.map((review, index) => (
-                          <div key={index} className="text-sm">
-                            <div className="flex items-center mb-1">
-                              <div className="flex">
-                                {[...Array(review.rating)].map((_, i) => (
-                                  <Star key={i} className="h-3 w-3 text-yellow-400" />
-                                ))}
-                              </div>
-                              <span className="ml-2 font-medium">{review.author}</span>
-                            </div>
-                            <p className="text-muted-foreground">{review.text}</p>
-                          </div>
-                        ))}
+                  <div className="p-6 md:col-span-2">
+                    <div className="flex justify-between items-start mb-4">
+                      <h4 className="font-display text-2xl">{hotel.name}</h4>
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 text-yellow-400 mr-1" />
+                        <span>{hotel.rating}</span>
                       </div>
                     </div>
-                  </div>
+                    <p className="text-muted-foreground mb-4">{hotel.description}</p>
+                    
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <h5 className="font-medium mb-2">Key Features</h5>
+                        <ul className="space-y-2">
+                          {hotel.features.map((feature, index) => (
+                            <li key={index} className="flex items-center text-sm">
+                              <Check className="h-4 w-4 text-primary mr-2" />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      
+                      <div>
+                        <h5 className="font-medium mb-2">Guest Reviews</h5>
+                        <div className="space-y-3">
+                          {hotel.reviews.map((review, index) => (
+                            <div key={index} className="text-sm">
+                              <div className="flex items-center mb-1">
+                                <div className="flex">
+                                  {[...Array(review.rating)].map((_, i) => (
+                                    <Star key={i} className="h-3 w-3 text-yellow-400" />
+                                  ))}
+                                </div>
+                                <span className="ml-2 font-medium">{review.author}</span>
+                              </div>
+                              <p className="text-muted-foreground">{review.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
 
-                  <div className="flex flex-wrap gap-2 mt-4 mb-4">
-                    {hotel.allergies.map((allergy) => (
-                      <span
-                        key={allergy}
-                        className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
-                      >
-                        {allergy}-free kitchen
-                      </span>
-                    ))}
-                  </div>
+                    <div className="flex flex-wrap gap-2 mt-4 mb-4">
+                      {hotel.allergies.map((allergy) => (
+                        <span
+                          key={allergy}
+                          className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
+                        >
+                          {allergy}-free kitchen
+                        </span>
+                      ))}
+                    </div>
 
-                  <div className="flex justify-between items-center mt-6">
-                    <span className="text-muted-foreground">{hotel.priceRange}</span>
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={hotel.website} target="_blank" rel="noopener noreferrer">
-                        Visit Website
-                        <ExternalLink className="h-4 w-4 ml-2" />
-                      </a>
-                    </Button>
+                    <div className="flex justify-between items-center mt-6">
+                      <span className="text-muted-foreground">{hotel.priceRange}</span>
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={hotel.website} target="_blank" rel="noopener noreferrer">
+                          Visit Website
+                          <ExternalLink className="h-4 w-4 ml-2" />
+                        </a>
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
-          ))}
-        </div>
+              </Card>
+            ))}
+          </div>
+
+          {/* Family Hotels Section */}
+          <h3 className="font-display text-2xl mt-12 mb-6 flex items-center gap-2">
+            <Users className="h-6 w-6 text-primary" />
+            Family-Friendly Hotels
+          </h3>
+          
+          <div className="space-y-8 mb-16">
+            {RECOMMENDED_HOTELS.families.map((hotel) => (
+              <Card key={hotel.id} className="overflow-hidden">
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="relative aspect-[4/3] md:aspect-auto">
+                    <img
+                      src={hotel.image}
+                      alt={hotel.name}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                  <div className="p-6 md:col-span-2">
+                    <div className="flex justify-between items-start mb-4">
+                      <h4 className="font-display text-2xl">{hotel.name}</h4>
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 text-yellow-400 mr-1" />
+                        <span>{hotel.rating}</span>
+                      </div>
+                    </div>
+                    <p className="text-muted-foreground mb-4">{hotel.description}</p>
+                    
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <h5 className="font-medium mb-2">Key Features</h5>
+                        <ul className="space-y-2">
+                          {hotel.features.map((feature, index) => (
+                            <li key={index} className="flex items-center text-sm">
+                              <Check className="h-4 w-4 text-primary mr-2" />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      
+                      <div>
+                        <h5 className="font-medium mb-2">Guest Reviews</h5>
+                        <div className="space-y-3">
+                          {hotel.reviews.map((review, index) => (
+                            <div key={index} className="text-sm">
+                              <div className="flex items-center mb-1">
+                                <div className="flex">
+                                  {[...Array(review.rating)].map((_, i) => (
+                                    <Star key={i} className="h-3 w-3 text-yellow-400" />
+                                  ))}
+                                </div>
+                                <span className="ml-2 font-medium">{review.author}</span>
+                              </div>
+                              <p className="text-muted-foreground">{review.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mt-4 mb-4">
+                      {hotel.allergies.map((allergy) => (
+                        <span
+                          key={allergy}
+                          className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
+                        >
+                          {allergy}-free kitchen
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex justify-between items-center mt-6">
+                      <span className="text-muted-foreground">{hotel.priceRange}</span>
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={hotel.website} target="_blank" rel="noopener noreferrer">
+                          Visit Website
+                          <ExternalLink className="h-4 w-4 ml-2" />
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </article>
 
         {/* Additional Information */}
         <div className="bg-muted rounded-xl p-8">
