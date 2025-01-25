@@ -17,7 +17,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 1,
       name: "Le Bristol Paris",
-      image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/13/8e/3c/le-bristol-paris.jpg",
+      image: "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png",
       description: "Le Bristol Paris offers specialized accommodations for guests with food allergies, including dedicated kitchen facilities and strict food preparation protocols.",
       allergies: ["Gluten", "Dairy", "Nuts"],
       rating: 4.9,
