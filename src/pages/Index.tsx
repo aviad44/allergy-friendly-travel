@@ -1,7 +1,8 @@
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
-import { Bot, Menu, MapPin, Star, Shield, Info, HelpCircle } from "lucide-react";
+import { MapPin, Star, Shield, Info, HelpCircle, Menu } from "lucide-react";
+import type { LucideIcon } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
@@ -10,7 +11,7 @@ import { HOME_CONTENT } from "@/constants/home";
 import { lazy, Suspense } from "react";
 
 // Lazy load the chat interface
-const LazyChat = lazy(() => import("@/components/ChatInterface"));
+const LazyChat = lazy(() => import("@/components/ChatInterface").then(module => ({ default: module.ChatInterface })));
 
 const Index = () => {
   return (
@@ -40,7 +41,14 @@ const Index = () => {
             <SheetContent>
               <nav className="flex flex-col gap-4 mt-8">
                 {HOME_CONTENT.navigation.menu.items.map((item) => {
-                  const Icon = eval(item.icon) as LucideIcon;
+                  const Icon = {
+                    MapPin,
+                    Star,
+                    Shield,
+                    Info,
+                    HelpCircle
+                  }[item.icon as keyof typeof icons];
+
                   return (
                     <Link
                       key={item.title}
