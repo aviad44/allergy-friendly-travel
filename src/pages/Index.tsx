@@ -2,15 +2,15 @@ import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
 import { Bot, Menu, MapPin, Star, Shield, Info, HelpCircle } from "lucide-react";
-import type { LucideIcon } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { ChatInterface } from "@/components/ChatInterface";
 import { HOME_CONTENT } from "@/constants/home";
+import { lazy, Suspense } from "react";
 
 // Lazy load the chat interface
-const ChatInterface = lazy(() => import("@/components/ChatInterface"));
+const LazyChat = lazy(() => import("@/components/ChatInterface"));
 
 const Index = () => {
   return (
@@ -128,7 +128,7 @@ const Index = () => {
               <div className="animate-pulse">Loading chat interface...</div>
             </div>
           }>
-            <ChatInterface />
+            <LazyChat />
           </Suspense>
         </div>
       </section>
