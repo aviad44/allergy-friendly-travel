@@ -10,9 +10,7 @@ import { lazy, Suspense } from "react";
 import { HOME_CONTENT } from "@/constants/home";
 
 // Lazy load the chat interface
-const ChatInterface = lazy(() => import("@/components/ChatInterface").then(module => ({ 
-  default: module.ChatInterface 
-})));
+const ChatInterface = lazy(() => import("@/components/ChatInterface"));
 
 const Index = () => {
   return (

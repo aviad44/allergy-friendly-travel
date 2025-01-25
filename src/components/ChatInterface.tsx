@@ -10,7 +10,7 @@ interface Message {
   content: string;
 }
 
-export const ChatInterface = () => {
+const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -158,5 +158,4 @@ export const ChatInterface = () => {
   );
 };
 
-export { ChatInterface };
 export default ChatInterface;
