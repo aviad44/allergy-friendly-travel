@@ -34,7 +34,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 2,
       name: "Ritz Paris",
-      image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/7c/ca/f5/ritz-paris.jpg",
+      image: "https://www.ritzparis.com/sites/default/files/styles/1920x1080/public/images/card_list/homepage-ritz-paris_1.jpg",
       description: "The Ritz Paris maintains strict allergen protocols and offers personalized culinary experiences with advance notice.",
       allergies: ["Gluten", "Dairy"],
       rating: 4.8,
@@ -53,7 +53,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 3,
       name: "Four Seasons George V",
-      image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/d3/c0/9c/four-seasons-hotel-george.jpg",
+      image: "https://www.fourseasons.com/alt/img-opt/~80.930.0,0000-157,5000-3000,0000-1687,5000/publish/content/dam/fourseasons/images/web/PAR/PAR_1423_original.jpg",
       description: "Four Seasons George V provides comprehensive allergy management protocols and child-friendly menus adapted to various dietary restrictions.",
       allergies: ["Gluten", "Dairy", "Nuts"],
       rating: 4.8,
@@ -70,7 +70,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 4,
       name: "Novotel Paris Centre Tour Eiffel",
-      image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/2c/ec/93/novotel-paris-centre.jpg",
+      image: "https://all.accor.com/media/display/private/hotels/1409/1409_1.jpg",
       description: "Novotel Paris Centre Tour Eiffel maintains standard allergy protocols across all their dining and accommodation facilities.",
       allergies: ["Gluten", "Dairy"],
       rating: 4.5,
