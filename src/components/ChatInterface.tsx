@@ -157,3 +157,6 @@ export const ChatInterface = () => {
     </div>
   );
 };
+
+export { ChatInterface };
+export default ChatInterface;
