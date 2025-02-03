@@ -2,11 +2,9 @@ import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
 import { MapPin, Star, Shield, Info, HelpCircle, Menu } from "lucide-react";
-import type { LucideIcon } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import { ChatInterface } from "@/components/ChatInterface";
 import { HOME_CONTENT } from "@/constants/home";
 import { lazy, Suspense } from "react";
 
@@ -70,39 +68,41 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with optimized loading */}
         <picture>
           <source
-            srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=80"
+            srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90"
             type="image/webp"
           />
           <img
-            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=80"
+            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90"
             alt=""
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover brightness-90"
             loading="eager"
             fetchPriority="high"
           />
         </picture>
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/70" />
         
         {/* Content Overlay */}
         <div className="relative z-10 container max-w-6xl mx-auto px-4 text-center">
-          <div className="bg-white/10 backdrop-blur-lg p-8 md:p-12 rounded-2xl border border-white/20 shadow-2xl animate-fadeIn">
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mb-6 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent leading-tight">
+          <div className="bg-black/40 p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
+            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mb-8 text-white leading-tight">
               {HOME_CONTENT.hero.title.line1}
-              <span className="block mt-2">
+              <span className="block mt-2 text-primary">
                 {HOME_CONTENT.hero.title.line2}
               </span>
-              {HOME_CONTENT.hero.title.line3}
+              <span className="text-accent">
+                {HOME_CONTENT.hero.title.line3}
+              </span>
             </h1>
-            <p className="text-lg md:text-xl text-white mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-white mb-12 max-w-3xl mx-auto leading-relaxed font-light">
               {HOME_CONTENT.hero.description}
             </p>
-            <div className="bg-white/95 dark:bg-gray-900/95 p-6 rounded-xl shadow-lg">
+            <div className="bg-white/95 dark:bg-gray-900/95 p-6 rounded-xl shadow-lg transform hover:scale-[1.01] transition-all duration-300 border border-primary/20">
               <SearchBar />
             </div>
           </div>
