@@ -12,6 +12,15 @@ import { lazy, Suspense } from "react";
 const LazyChat = lazy(() => import("@/components/ChatInterface").then(module => ({ default: module.ChatInterface })));
 
 const Index = () => {
+  // Create an icon mapping object
+  const iconComponents = {
+    MapPin,
+    Star,
+    Shield,
+    Info,
+    HelpCircle
+  };
+
   return (
     <div className="min-h-screen">
       {/* Navigation */}
@@ -39,13 +48,7 @@ const Index = () => {
             <SheetContent>
               <nav className="flex flex-col gap-4 mt-8">
                 {HOME_CONTENT.navigation.menu.items.map((item) => {
-                  const Icon = {
-                    MapPin,
-                    Star,
-                    Shield,
-                    Info,
-                    HelpCircle
-                  }[item.icon as keyof typeof icons];
+                  const Icon = iconComponents[item.icon as keyof typeof iconComponents];
 
                   return (
                     <Link
