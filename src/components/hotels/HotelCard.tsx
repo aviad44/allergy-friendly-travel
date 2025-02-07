@@ -41,8 +41,10 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
           <img
             src={hotel.image}
             alt={hotel.name}
-            className="absolute inset-0 w-full h-full object-cover"
-            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-500"
+            loading="eager"
+            decoding="sync"
+            draggable="false"
           />
         </div>
         <div className="absolute top-4 right-4">
