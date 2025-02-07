@@ -13,12 +13,31 @@ serve(async (req) => {
   }
 
   try {
-    const { messages } = await req.json();
-    console.log('Received messages:', messages); // Debug log
+    // Check if OpenAI API key exists
+    console.log('OPENAI_API_KEY status:', Deno.env.get('OPENAI_API_KEY') ? 'Exists' : 'Missing');
+
+    // Safely parse request body
+    let requestData;
+    try {
+      requestData = await req.json();
+      console.log('Parsed request data:', requestData);
+    } catch (err) {
+      console.error('Failed to parse request JSON:', err);
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON format in request body' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { messages } = requestData;
+    console.log('Messages extracted from request:', messages);
 
     if (!messages || !Array.isArray(messages)) {
+      console.error('Invalid messages format received:', messages);
       throw new Error('Invalid messages format');
     }
+
+    console.log('Preparing OpenAI API request with messages:', messages);
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -42,14 +61,15 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('OpenAI API Error:', errorData);
+      console.error('OpenAI API Error Response:', errorData);
       throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
     }
 
     const data = await response.json();
-    console.log('OpenAI API Response:', data);
+    console.log('OpenAI API Success Response:', data);
 
     if (!data.choices?.[0]?.message?.content) {
+      console.error('Invalid response format from OpenAI:', data);
       throw new Error('Invalid response format from OpenAI API');
     }
 
