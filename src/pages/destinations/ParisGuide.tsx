@@ -145,7 +145,7 @@ const ParisGuide = () => {
 
         {/* Article Content */}
         <article className="prose prose-lg max-w-none mb-16">
-          <h2 className="font-display text-3xl mb-6">Safe Dining in Paris</h2>
+          <h2 className="font-display text-3xl mb-6">Safe and Allergy-Friendly Stays in Paris</h2>
           <p>
             Paris has made significant strides in recent years in accommodating travelers with food allergies. Many of the city's top hotels now prioritize allergy-friendly accommodations, offering safe, allergen-free dining options without compromising on the high standards of French hospitality and cuisine. From dedicated allergy-aware kitchens to customizable meal plans, these hotels ensure a worry-free stay for guests with dietary restrictions.
           </p>
