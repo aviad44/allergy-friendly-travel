@@ -22,7 +22,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         messages: [
           {
             role: 'system',
@@ -34,6 +34,12 @@ serve(async (req) => {
     });
 
     const data = await response.json();
+    console.log('OpenAI API Response:', data); // Add logging to help debug
+    
+    if (!data.choices || !data.choices[0]) {
+      throw new Error('Invalid response from OpenAI API');
+    }
+
     const assistantMessage = data.choices[0].message.content;
 
     return new Response(
@@ -51,3 +57,4 @@ serve(async (req) => {
     );
   }
 });
+
