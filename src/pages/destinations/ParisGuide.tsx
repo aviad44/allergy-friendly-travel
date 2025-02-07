@@ -139,7 +139,7 @@ const ParisGuide = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           <div className="absolute bottom-0 p-8 text-white">
             <h1 className="font-display text-5xl md:text-6xl mb-4">Paris</h1>
-            <p className="text-xl max-w-2xl">A comprehensive guide to allergy-friendly dining and accommodation in the City of Light</p>
+            <p className="text-xl max-w-2xl">A Comprehensive Guide to Allergy-Friendly Hotels and Dining in the City of Light</p>
           </div>
         </div>
 
