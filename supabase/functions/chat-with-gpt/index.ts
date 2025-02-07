@@ -14,6 +14,11 @@ serve(async (req) => {
 
   try {
     const { messages } = await req.json();
+    console.log('Received messages:', messages); // Debug log
+
+    if (!messages || !Array.isArray(messages)) {
+      throw new Error('Invalid messages format');
+    }
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -30,20 +35,26 @@ serve(async (req) => {
           },
           ...messages
         ],
+        temperature: 0.7,
+        max_tokens: 500,
       }),
     });
 
-    const data = await response.json();
-    console.log('OpenAI API Response:', data); // Add logging to help debug
-    
-    if (!data.choices || !data.choices[0]) {
-      throw new Error('Invalid response from OpenAI API');
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('OpenAI API Error:', errorData);
+      throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
     }
 
-    const assistantMessage = data.choices[0].message.content;
+    const data = await response.json();
+    console.log('OpenAI API Response:', data);
+
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error('Invalid response format from OpenAI API');
+    }
 
     return new Response(
-      JSON.stringify({ message: assistantMessage }),
+      JSON.stringify({ message: data.choices[0].message.content }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
@@ -57,4 +68,3 @@ serve(async (req) => {
     );
   }
 });
-
