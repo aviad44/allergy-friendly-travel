@@ -5,6 +5,7 @@ import { ArrowLeft, Globe } from "lucide-react";
 import HotelSection from "@/components/hotels/HotelSection";
 import AllergiesTable from "@/components/language/AllergiesTable";
 import UsefulInfo from "@/components/hotels/UsefulInfo";
+import { ParisChatAssistant } from "@/components/ParisChatAssistant";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -141,6 +142,12 @@ const ParisGuide = () => {
             <h1 className="font-display text-5xl md:text-6xl mb-4">Paris</h1>
             <p className="text-xl max-w-2xl">A Comprehensive Guide to Allergy-Friendly Hotels and Dining in the City of Light</p>
           </div>
+        </div>
+
+        {/* Chat Assistant */}
+        <div className="mb-16">
+          <h2 className="font-display text-3xl mb-6">שאל את האסיסטנט</h2>
+          <ParisChatAssistant />
         </div>
 
         {/* Article Content */}
