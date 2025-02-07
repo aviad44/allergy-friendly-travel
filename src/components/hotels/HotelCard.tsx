@@ -1,3 +1,4 @@
+
 import { Star, Check, ExternalLink } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,8 +36,8 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <div className="grid md:grid-cols-3 gap-6">
-        <div className="relative h-[300px] md:h-full min-h-[300px]">
+      <div className="relative">
+        <div className="aspect-[21/9] relative">
           <img
             src={hotel.image}
             alt={hotel.name}
@@ -44,52 +45,54 @@ const HotelCard = ({ hotel }: HotelCardProps) => {
             loading="lazy"
           />
         </div>
-        <div className="p-6 md:col-span-2">
-          <div className="flex justify-between items-start mb-4">
-            <h4 className="font-display text-2xl">{hotel.name}</h4>
-            <div className="flex items-center bg-yellow-50 px-2 py-1 rounded-full">
-              <Star className="h-4 w-4 text-yellow-400 mr-1" />
-              <span className="font-medium">{hotel.rating}</span>
-            </div>
+        <div className="absolute top-4 right-4">
+          <div className="flex items-center bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-full">
+            <Star className="h-4 w-4 text-yellow-400 mr-1" />
+            <span className="font-medium text-white">{hotel.rating}</span>
           </div>
-          <p className="text-muted-foreground mb-4">{hotel.description}</p>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h5 className="font-medium mb-2">Key Features</h5>
-              <ul className="space-y-2">
-                {hotel.features.map((feature, index) => (
-                  <li key={index} className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-primary mr-2 shrink-0" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        </div>
+      </div>
+      <div className="p-6">
+        <div className="mb-4">
+          <h4 className="font-display text-2xl mb-2">{hotel.name}</h4>
+          <p className="text-muted-foreground">{hotel.description}</p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <h5 className="font-medium mb-2">Key Features</h5>
+            <ul className="space-y-2">
+              {hotel.features.map((feature, index) => (
+                <li key={index} className="flex items-center text-sm">
+                  <Check className="h-4 w-4 text-primary mr-2 shrink-0" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
           </div>
+        </div>
 
-          <div className="flex flex-wrap gap-2 mt-4 mb-4">
-            {hotel.allergies.map((allergy) => (
-              <span
-                key={allergy}
-                className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
-              >
-                {allergy}-free kitchen
-              </span>
-            ))}
-          </div>
-
-          <div className="flex justify-between items-center mt-6">
-            <span className="text-sm text-muted-foreground inline-flex items-center">
-              Price Range: {hotel.priceRange}
+        <div className="flex flex-wrap gap-2 mt-4 mb-4">
+          {hotel.allergies.map((allergy) => (
+            <span
+              key={allergy}
+              className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
+            >
+              {allergy}-free kitchen
             </span>
-            <Button variant="default" size="sm" asChild>
-              <a href={bookingUrls[hotel.name as keyof typeof bookingUrls]} target="_blank" rel="noopener noreferrer">
-                Book on Booking.com
-                <ExternalLink className="h-4 w-4 ml-2" />
-              </a>
-            </Button>
-          </div>
+          ))}
+        </div>
+
+        <div className="flex justify-between items-center mt-6">
+          <span className="text-sm text-muted-foreground inline-flex items-center">
+            Price Range: {hotel.priceRange}
+          </span>
+          <Button variant="default" size="sm" asChild>
+            <a href={bookingUrls[hotel.name as keyof typeof bookingUrls]} target="_blank" rel="noopener noreferrer">
+              Book on Booking.com
+              <ExternalLink className="h-4 w-4 ml-2" />
+            </a>
+          </Button>
         </div>
       </div>
     </Card>

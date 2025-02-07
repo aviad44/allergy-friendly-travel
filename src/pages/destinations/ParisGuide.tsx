@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Globe } from "lucide-react";
@@ -145,16 +146,6 @@ const ParisGuide = () => {
         {/* Article Content */}
         <article className="prose prose-lg max-w-none mb-16">
           <h2 className="font-display text-3xl mb-6">Safe Dining in Paris</h2>
-          
-          <div className="float-right ml-6 mb-6 w-1/3">
-            <img
-              src="https://images.unsplash.com/photo-1551887196-72e32bfc7bf3?auto=format&fit=crop&w=800&q=80"
-              alt="Parisian cafe"
-              className="rounded-lg shadow-lg"
-            />
-            <p className="text-sm text-muted-foreground mt-2 text-center">Modern Parisian restaurants are increasingly accommodating dietary restrictions</p>
-          </div>
-
           <p>
             Paris has evolved significantly in recent years when it comes to accommodating diners with food allergies.
             The city's leading establishments now take pride in their ability to provide safe, allergen-free dining experiences
