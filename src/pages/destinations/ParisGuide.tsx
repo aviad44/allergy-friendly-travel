@@ -18,7 +18,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 1,
       name: "Le Bristol Paris",
-      image: "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png",
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2000&q=80",
       description: "Le Bristol Paris offers specialized accommodations for guests with food allergies, including dedicated kitchen facilities and strict food preparation protocols.",
       allergies: ["Gluten", "Dairy", "Nuts"],
       rating: 4.9,
@@ -35,7 +35,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 2,
       name: "Ritz Paris",
-      image: "https://www.ritzparis.com/sites/default/files/styles/1920x1080/public/images/card_list/homepage-ritz-paris_1.jpg",
+      image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=2000&q=80",
       description: "The Ritz Paris maintains strict allergen protocols and offers personalized culinary experiences with advance notice.",
       allergies: ["Gluten", "Dairy"],
       rating: 4.8,
@@ -54,7 +54,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 3,
       name: "Four Seasons George V",
-      image: "https://www.fourseasons.com/alt/img-opt/~80.930.0,0000-157,5000-3000,0000-1687,5000/publish/content/dam/fourseasons/images/web/PAR/PAR_1423_original.jpg",
+      image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2000&q=80",
       description: "Four Seasons George V provides comprehensive allergy management protocols and child-friendly menus adapted to various dietary restrictions.",
       allergies: ["Gluten", "Dairy", "Nuts"],
       rating: 4.8,
@@ -71,7 +71,7 @@ const RECOMMENDED_HOTELS = {
     {
       id: 4,
       name: "Novotel Paris Centre Tour Eiffel",
-      image: "https://all.accor.com/media/display/private/hotels/1409/1409_1.jpg",
+      image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=2000&q=80",
       description: "Novotel Paris Centre Tour Eiffel maintains standard allergy protocols across all their dining and accommodation facilities.",
       allergies: ["Gluten", "Dairy"],
       rating: 4.5,
@@ -132,7 +132,7 @@ const ParisGuide = () => {
         {/* Hero Section */}
         <div className="relative h-[60vh] rounded-xl overflow-hidden mb-12">
           <img
-            src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1920&q=80"
+            src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=80"
             alt="Paris cityscape"
             className="w-full h-full object-cover"
           />
@@ -147,9 +147,7 @@ const ParisGuide = () => {
         <article className="prose prose-lg max-w-none mb-16">
           <h2 className="font-display text-3xl mb-6">Safe Dining in Paris</h2>
           <p>
-            Paris has evolved significantly in recent years when it comes to accommodating diners with food allergies.
-            The city's leading establishments now take pride in their ability to provide safe, allergen-free dining experiences
-            without compromising on the renowned French culinary excellence.
+            Paris has made significant strides in recent years in accommodating travelers with food allergies. Many of the city's top hotels now prioritize allergy-friendly accommodations, offering safe, allergen-free dining options without compromising on the high standards of French hospitality and cuisine. From dedicated allergy-aware kitchens to customizable meal plans, these hotels ensure a worry-free stay for guests with dietary restrictions.
           </p>
         </article>
 
