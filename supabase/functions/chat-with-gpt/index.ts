@@ -26,7 +26,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'אתה אסיסטנט מומחה למלונות בפריז שעוזר למשתמשים למצוא מלונות מתאימים בהתאם לצרכים שלהם, במיוחד בנוגע לאלרגיות ומגבלות תזונתיות. תן תשובות קצרות וממוקדות בעברית.'
+            content: 'You are an expert hotel assistant helping users find hotels that match their needs, especially regarding allergies and dietary restrictions. Give short and focused answers in English.'
           },
           ...messages
         ],
@@ -41,6 +41,7 @@ serve(async (req) => {
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
+    console.error('Error in chat-with-gpt function:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { 

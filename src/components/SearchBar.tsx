@@ -15,8 +15,8 @@ export const SearchBar = () => {
   const handleSearch = async () => {
     if (!destination || !allergies) {
       toast({
-        title: "נא למלא את כל השדות",
-        description: "אנא הזן יעד ופרטי אלרגיות כדי שנוכל לעזור לך למצוא את המלון המתאים",
+        title: "Please fill all fields",
+        description: "Please enter both destination and allergy details so we can help you find the right hotel",
         variant: "destructive",
       });
       return;
@@ -30,7 +30,7 @@ export const SearchBar = () => {
           messages: [
             {
               role: 'user',
-              content: `אני מחפש מלון ב${destination} שמתאים לאנשים עם אלרגיה ל${allergies}. אנא המלץ לי על מלון מתאים והסבר למה הוא מתאים במיוחד לאלרגיות שציינתי.`
+              content: `I'm looking for a hotel in ${destination} that's suitable for people with ${allergies} allergies. Please recommend a hotel and explain why it's particularly suitable for the allergies I mentioned.`
             }
           ]
         }
@@ -39,7 +39,7 @@ export const SearchBar = () => {
       if (error) throw error;
 
       toast({
-        title: "המלצת מלון",
+        title: "Hotel Recommendation",
         description: data.message,
         duration: 10000,
       });
@@ -47,8 +47,8 @@ export const SearchBar = () => {
     } catch (error) {
       console.error('Error:', error);
       toast({
-        title: "שגיאה בחיפוש",
-        description: "מצטערים, לא הצלחנו לבצע את החיפוש. אנא נסו שוב מאוחר יותר.",
+        title: "Search Error",
+        description: "Sorry, we couldn't complete the search. Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -60,20 +60,18 @@ export const SearchBar = () => {
     <div className="flex flex-col md:flex-row gap-4 w-full max-w-3xl mx-auto">
       <div className="flex-1">
         <Input 
-          placeholder="הכנס יעד" 
-          className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors text-right"
+          placeholder="Enter destination" 
+          className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
-          dir="rtl"
         />
       </div>
       <div className="flex-1">
         <Input 
-          placeholder="סוג האלרגיות" 
-          className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors text-right"
+          placeholder="Type of allergies" 
+          className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
           value={allergies}
           onChange={(e) => setAllergies(e.target.value)}
-          dir="rtl"
         />
       </div>
       <Button 
@@ -82,7 +80,7 @@ export const SearchBar = () => {
         disabled={isSearching}
       >
         <Search className="mr-2 h-5 w-5" />
-        {isSearching ? "מחפש..." : "חפש עכשיו"}
+        {isSearching ? "Searching..." : "Search Now"}
       </Button>
     </div>
   );
