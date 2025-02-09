@@ -8,41 +8,31 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Check if OpenAI API key exists
-    console.log('OPENAI_API_KEY status:', Deno.env.get('OPENAI_API_KEY') ? 'Exists' : 'Missing');
-
-    // Safely parse request body
-    let requestData;
-    try {
-      requestData = await req.json();
-      console.log('Parsed request data:', requestData);
-    } catch (err) {
-      console.error('Failed to parse request JSON:', err);
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON format in request body' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openAIApiKey) {
+      console.error('OpenAI API key is missing');
+      throw new Error('OpenAI API key is not configured');
     }
 
-    const { messages } = requestData;
-    console.log('Messages extracted from request:', messages);
-
+    // Parse request body
+    const { messages } = await req.json();
     if (!messages || !Array.isArray(messages)) {
-      console.error('Invalid messages format received:', messages);
-      throw new Error('Invalid messages format');
+      console.error('Invalid messages format:', messages);
+      throw new Error('Invalid request format: messages array is required');
     }
 
-    console.log('Preparing OpenAI API request with messages:', messages);
+    console.log('Processing request with messages:', messages);
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -50,7 +40,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'You are an expert hotel assistant helping users find hotels that match their needs, especially regarding allergies and dietary restrictions. Give short and focused answers in English.'
+            content: 'אתה עוזר מומחה למלונות שעוזר למשתמשים למצוא מלונות שמתאימים לצרכים שלהם, במיוחד בכל הקשור לאלרגיות והגבלות תזונתיות. תן תשובות קצרות וממוקדות.'
           },
           ...messages
         ],
@@ -61,26 +51,25 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('OpenAI API Error Response:', errorData);
+      console.error('OpenAI API Error:', errorData);
       throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
     }
 
     const data = await response.json();
-    console.log('OpenAI API Success Response:', data);
-
-    if (!data.choices?.[0]?.message?.content) {
-      console.error('Invalid response format from OpenAI:', data);
-      throw new Error('Invalid response format from OpenAI API');
-    }
+    console.log('OpenAI API Response:', data);
 
     return new Response(
       JSON.stringify({ message: data.choices[0].message.content }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
+
   } catch (error) {
     console.error('Error in chat-with-gpt function:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error instanceof Error ? error.message : 'An unexpected error occurred',
+        details: error instanceof Error ? error.stack : undefined
+      }),
       { 
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
