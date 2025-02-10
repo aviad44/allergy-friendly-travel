@@ -31,7 +31,10 @@ export const ParisChatAssistant = () => {
         body: { messages: [...messages, userMessage] }
       });
 
-      if (functionError) throw functionError;
+      if (functionError) {
+        console.error('Function error:', functionError);
+        throw functionError;
+      }
 
       const assistantMessage: Message = {
         role: "assistant",
@@ -40,6 +43,7 @@ export const ParisChatAssistant = () => {
       
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
+      console.error('Chat error:', error);
       toast({
         title: "שגיאה",
         description: error instanceof Error ? error.message : "שגיאה בקבלת תשובה מהאסיסטנט",
