@@ -1,3 +1,4 @@
+
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -6,10 +7,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { HOME_CONTENT } from "@/constants/home";
-import { lazy, Suspense } from "react";
-
-// Lazy load the chat interface
-const LazyChat = lazy(() => import("@/components/ChatInterface").then(module => ({ default: module.ChatInterface })));
 
 const Index = () => {
   // Create an icon mapping object
@@ -122,25 +119,6 @@ const Index = () => {
             {HOME_CONTENT.featured.description}
           </p>
           <FeaturedDestinations />
-        </div>
-      </section>
-
-      {/* GPT Assistant */}
-      <section className="py-20 px-4 bg-secondary/5 dark:bg-gray-800">
-        <div className="container max-w-6xl mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl mb-6 text-center dark:text-white">
-            {HOME_CONTENT.assistant.title}
-          </h2>
-          <p className="text-lg text-muted-foreground mb-12 text-center max-w-2xl mx-auto">
-            {HOME_CONTENT.assistant.description}
-          </p>
-          <Suspense fallback={
-            <div className="flex items-center justify-center h-[600px] bg-white/50 dark:bg-gray-900/50 rounded-lg">
-              <div className="animate-pulse">Loading chat interface...</div>
-            </div>
-          }>
-            <LazyChat />
-          </Suspense>
         </div>
       </section>
     </div>
