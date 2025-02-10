@@ -27,18 +27,25 @@ export const ParisChatAssistant = () => {
     setIsLoading(true);
 
     try {
-      const { data: functionData, error: functionError } = await supabase.functions.invoke('chat-with-gpt', {
+      console.log('Sending message to chat-with-gpt function:', userMessage);
+      
+      const { data, error } = await supabase.functions.invoke('chat-with-gpt', {
         body: { messages: [...messages, userMessage] }
       });
 
-      if (functionError) {
-        console.error('Function error:', functionError);
-        throw functionError;
+      console.log('Response from chat-with-gpt:', { data, error });
+
+      if (error) {
+        throw error;
+      }
+
+      if (!data?.message) {
+        throw new Error('No response received from assistant');
       }
 
       const assistantMessage: Message = {
         role: "assistant",
-        content: functionData.message,
+        content: data.message,
       };
       
       setMessages((prev) => [...prev, assistantMessage]);
@@ -55,7 +62,7 @@ export const ParisChatAssistant = () => {
   };
 
   return (
-    <div className="flex flex-col h-[400px] w-full max-w-2xl mx-auto border rounded-lg shadow-lg bg-white">
+    <div className="flex flex-col h-[400px] w-full max-w-2xl mx-auto border rounded-lg shadow-lg bg-white dark:bg-gray-900">
       <div className="flex items-center gap-2 p-4 border-b">
         <Bot className="h-5 w-5 text-primary" />
         <h2 className="font-semibold">אסיסטנט פריז</h2>
@@ -66,7 +73,7 @@ export const ParisChatAssistant = () => {
           <div
             key={index}
             className={`flex ${
-              message.role === "user" ? "justify-start" : "justify-end"
+              message.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
             <div
