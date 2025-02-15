@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { HOME_CONTENT } from "@/constants/home";
 import { ParisChatAssistant } from "@/components/ParisChatAssistant";
+
 const Index = () => {
   // Create an icon mapping object
   const iconComponents = {
@@ -16,7 +17,9 @@ const Index = () => {
     Info,
     HelpCircle
   };
-  return <div className="min-h-screen">
+
+  return (
+    <div className="min-h-screen">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b shadow-sm">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
@@ -49,8 +52,17 @@ const Index = () => {
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with optimized loading */}
         <picture>
-          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90" type="image/webp" />
-          <img src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90" alt="" className="absolute inset-0 w-full h-full object-cover brightness-90" loading="eager" fetchPriority="high" />
+          <source
+            srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90"
+            type="image/webp"
+          />
+          <img
+            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90"
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover brightness-90"
+            loading="eager"
+            fetchPriority="high"
+          />
         </picture>
         
         {/* Gradient Overlay */}
@@ -59,12 +71,10 @@ const Index = () => {
         {/* Content Overlay */}
         <div className="relative z-10 container max-w-6xl mx-auto px-4 text-center">
           <div className="bg-black/40 p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mb-8 leading-tight text-amber-200">
-              {HOME_CONTENT.hero.title.line1}
-              <span className="block mt-2 text-primary text-amber-200">
-                {HOME_CONTENT.hero.title.line2}
-              </span>
-              <span className="text-accent text-amber-200">
+            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mb-8 leading-tight text-amber-200">
+              {HOME_CONTENT.hero.title.line1}{' '}
+              {HOME_CONTENT.hero.title.line2}
+              <span className="block mt-2 text-amber-200">
                 {HOME_CONTENT.hero.title.line3}
               </span>
             </h1>
@@ -103,6 +113,8 @@ const Index = () => {
           <ParisChatAssistant />
         </div>
       </section>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
