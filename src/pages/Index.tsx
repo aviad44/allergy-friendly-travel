@@ -59,12 +59,12 @@ const Index = () => {
         {/* Content Overlay */}
         <div className="relative z-10 container max-w-6xl mx-auto px-4 text-center">
           <div className="bg-black/40 p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mb-8 leading-tight text-orange-400">
+            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mb-8 leading-tight text-amber-200">
               {HOME_CONTENT.hero.title.line1}
-              <span className="block mt-2 text-primary text-[#af6e2c]">
+              <span className="block mt-2 text-primary text-amber-200">
                 {HOME_CONTENT.hero.title.line2}
               </span>
-              <span className="text-accent">
+              <span className="text-accent text-amber-200">
                 {HOME_CONTENT.hero.title.line3}
               </span>
             </h1>
