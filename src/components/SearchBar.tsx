@@ -17,8 +17,8 @@ export const SearchBar = () => {
   const handleSearch = async () => {
     if (!destination || !allergies) {
       toast({
-        title: "אנא מלא את כל השדות",
-        description: "יש להזין את היעד ואת פרטי האלרגיה כדי שנוכל לעזור לך למצוא את המלון המתאים",
+        title: "Please fill in all fields",
+        description: "Enter both destination and allergy details to help you find the right hotel",
         variant: "destructive",
       });
       return;
@@ -38,8 +38,8 @@ export const SearchBar = () => {
     } catch (error) {
       console.error('Error:', error);
       toast({
-        title: "שגיאה בחיפוש",
-        description: "מצטערים, לא הצלחנו להשלים את החיפוש. אנא נסה שוב מאוחר יותר.",
+        title: "Search Error",
+        description: "Sorry, we couldn't complete the search. Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -52,20 +52,18 @@ export const SearchBar = () => {
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1">
           <Input 
-            placeholder="הכנס יעד" 
-            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors text-right"
+            placeholder="Enter destination" 
+            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
-            dir="rtl"
           />
         </div>
         <div className="flex-1">
           <Input 
-            placeholder="סוג האלרגיה" 
-            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors text-right"
+            placeholder="Type of allergy" 
+            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
             value={allergies}
             onChange={(e) => setAllergies(e.target.value)}
-            dir="rtl"
           />
         </div>
         <Sheet>
@@ -76,21 +74,21 @@ export const SearchBar = () => {
               disabled={isSearching}
             >
               <Search className="mr-2 h-5 w-5" />
-              {isSearching ? "מחפש..." : "חפש עכשיו"}
+              {isSearching ? "Searching..." : "Search Now"}
             </Button>
           </SheetTrigger>
           <SheetContent className="w-full sm:max-w-2xl" side="bottom">
             <SheetHeader>
-              <SheetTitle className="text-right">המלצת מלון מותאמת אישית</SheetTitle>
+              <SheetTitle>Personalized Hotel Recommendation</SheetTitle>
             </SheetHeader>
-            <div className="mt-4 text-right" dir="rtl">
+            <div className="mt-4">
               {recommendation ? (
                 <div className="prose prose-lg max-w-none">
                   {recommendation}
                 </div>
               ) : (
                 <p className="text-muted-foreground">
-                  {isSearching ? "מחפש המלצות מותאמות אישית..." : "לחץ על כפתור החיפוש לקבלת המלצות"}
+                  {isSearching ? "Searching for personalized recommendations..." : "Click the search button to get recommendations"}
                 </p>
               )}
             </div>

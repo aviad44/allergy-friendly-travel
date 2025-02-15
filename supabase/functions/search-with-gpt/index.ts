@@ -38,12 +38,12 @@ serve(async (req) => {
             - Room cleaning protocols
             - Air filtration systems
             - Staff training for allergy awareness
-            Your responses should be in Hebrew and be concise but informative.`
+            Be concise but informative. Provide the response in English.`
           },
           {
             role: 'user',
-            content: `אני מחפש מלון ב-${destination} שמתאים לאנשים עם ${allergies}. 
-            אנא המלץ על מלון והסבר מדוע הוא מתאים במיוחד לאלרגיות שציינתי.`
+            content: `I'm looking for a hotel in ${destination} that's suitable for people with ${allergies}. 
+            Please recommend a hotel and explain why it's particularly suitable for the allergies I mentioned.`
           }
         ],
         temperature: 0.7,
