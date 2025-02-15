@@ -32,7 +32,14 @@ export const SearchBar = () => {
         body: { destination, allergies }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase Function Error:', error);
+        throw error;
+      }
+
+      if (!data?.recommendation) {
+        throw new Error('No recommendation received from the AI');
+      }
 
       setRecommendation(data.recommendation);
     } catch (error) {
