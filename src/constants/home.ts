@@ -1,3 +1,4 @@
+
 export const HOME_CONTENT = {
   navigation: {
     brand: "Allergy Free Travel",

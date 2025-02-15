@@ -1,3 +1,4 @@
+
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -72,10 +73,9 @@ const Index = () => {
         <div className="relative z-10 container max-w-6xl mx-auto px-4 text-center">
           <div className="bg-black/40 p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
             <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mb-8 leading-tight text-amber-200">
-              {HOME_CONTENT.hero.title.line1}{' '}
-              {HOME_CONTENT.hero.title.line2}
-              <span className="block mt-2 text-amber-200">
-                {HOME_CONTENT.hero.title.line3}
+              {HOME_CONTENT.hero.title.line1}
+              <span className="block mt-2">
+                {HOME_CONTENT.hero.title.line2} {HOME_CONTENT.hero.title.line3}
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-white mb-12 max-w-3xl mx-auto leading-relaxed font-light">
