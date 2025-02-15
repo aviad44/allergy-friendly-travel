@@ -78,9 +78,9 @@ const Index = () => {
                 {HOME_CONTENT.hero.title.line2} {HOME_CONTENT.hero.title.line3}
               </span>
             </h1>
-            <p className="font-display text-2xl md:text-3xl lg:text-4xl text-amber-200 mb-12 max-w-3xl mx-auto leading-relaxed">
+            <h2 className="font-display text-xl md:text-2xl lg:text-3xl text-white mb-12 max-w-3xl mx-auto leading-relaxed">
               {HOME_CONTENT.hero.description}
-            </p>
+            </h2>
             <div className="bg-white/95 dark:bg-gray-900/95 p-6 rounded-xl shadow-lg transform hover:scale-[1.01] transition-all duration-300 border border-primary/20">
               <SearchBar />
             </div>
