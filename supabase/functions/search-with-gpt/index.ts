@@ -19,6 +19,7 @@ serve(async (req) => {
     }
 
     const { destination, allergies } = await req.json();
+    console.log('Received search request for:', { destination, allergies });
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -27,7 +28,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
@@ -54,7 +55,7 @@ serve(async (req) => {
     if (!response.ok) {
       const error = await response.json();
       console.error('OpenAI API Error:', error);
-      throw new Error('Failed to get hotel recommendations');
+      throw new Error(error.error?.message || 'Failed to get hotel recommendations');
     }
 
     const data = await response.json();
@@ -68,7 +69,10 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in search-with-gpt function:', error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'An unexpected error occurred' }),
+      JSON.stringify({ 
+        error: error instanceof Error ? error.message : 'An unexpected error occurred',
+        details: error instanceof Error ? error.stack : undefined
+      }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
