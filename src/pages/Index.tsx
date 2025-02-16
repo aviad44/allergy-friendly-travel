@@ -68,12 +68,12 @@ const Index = () => {
         {/* Background Image with optimized loading */}
         <picture>
           <source
-            srcSet="/lovable-uploads/eb673256-8043-4928-997e-7c44e973aa84.png"
-            type="image/png"
+            srcSet="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3"
+            type="image/webp"
           />
           <img
-            src="/lovable-uploads/eb673256-8043-4928-997e-7c44e973aa84.png"
-            alt=""
+            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3"
+            alt="Luxurious resort infinity pool overlooking tropical scenery"
             className="absolute inset-0 w-full h-full object-cover"
             loading="eager"
             fetchPriority="high"
