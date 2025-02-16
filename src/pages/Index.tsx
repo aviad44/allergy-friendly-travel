@@ -1,4 +1,3 @@
-
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,6 @@ import { HOME_CONTENT } from "@/constants/home";
 import { ParisChatAssistant } from "@/components/ParisChatAssistant";
 
 const Index = () => {
-  // Create an icon mapping object
   const iconComponents = {
     MapPin,
     Star,
@@ -54,24 +52,24 @@ const Index = () => {
         {/* Background Image with optimized loading */}
         <picture>
           <source
-            srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90"
+            srcSet="https://images.unsplash.com/photo-1439337153520-7082a56a81f4?fm=webp&q=90"
             type="image/webp"
           />
           <img
-            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90"
+            src="https://images.unsplash.com/photo-1439337153520-7082a56a81f4?q=90"
             alt=""
-            className="absolute inset-0 w-full h-full object-cover brightness-90"
+            className="absolute inset-0 w-full h-full object-cover brightness-110"
             loading="eager"
             fetchPriority="high"
           />
         </picture>
         
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/70" />
+        {/* Gradient Overlay - עדכנתי את השקיפות להיות פחות כהה */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/50" />
         
         {/* Content Overlay */}
         <div className="relative z-10 container max-w-6xl mx-auto px-4 text-center">
-          <div className="bg-black/40 p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
+          <div className="bg-black/30 p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
             <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mb-8 leading-tight text-amber-200">
               {HOME_CONTENT.hero.title.line1}
               <span className="block mt-2">
