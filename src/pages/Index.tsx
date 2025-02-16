@@ -80,9 +80,6 @@ const Index = () => {
             <h2 className="font-display text-xl md:text-2xl lg:text-3xl text-white mb-12 max-w-3xl mx-auto leading-relaxed">
               {HOME_CONTENT.hero.description}
             </h2>
-            <div className="bg-white/95 dark:bg-gray-900/95 p-6 rounded-xl shadow-lg transform hover:scale-[1.01] transition-all duration-300 border border-primary/20">
-              <SearchBar />
-            </div>
           </div>
         </div>
       </section>
