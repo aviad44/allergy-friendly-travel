@@ -1,3 +1,4 @@
+
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -52,19 +53,19 @@ const Index = () => {
         {/* Background Image with optimized loading */}
         <picture>
           <source
-            srcSet="https://images.unsplash.com/photo-1439337153520-7082a56a81f4?fm=webp&q=90"
+            srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90"
             type="image/webp"
           />
           <img
-            src="https://images.unsplash.com/photo-1439337153520-7082a56a81f4?q=90"
+            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90"
             alt=""
-            className="absolute inset-0 w-full h-full object-cover brightness-110"
+            className="absolute inset-0 w-full h-full object-cover brightness-125"
             loading="eager"
             fetchPriority="high"
           />
         </picture>
         
-        {/* Gradient Overlay - עדכנתי את השקיפות להיות פחות כהה */}
+        {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/50" />
         
         {/* Content Overlay */}
