@@ -68,13 +68,13 @@ const Index = () => {
         {/* Background Image with optimized loading */}
         <picture>
           <source
-            srcSet="https://images.unsplash.com/photo-1455587734955-081b22074882?fm=webp&q=90"
-            type="image/webp"
+            srcSet="/lovable-uploads/eb673256-8043-4928-997e-7c44e973aa84.png"
+            type="image/png"
           />
           <img
-            src="https://images.unsplash.com/photo-1455587734955-081b22074882?q=90"
+            src="/lovable-uploads/eb673256-8043-4928-997e-7c44e973aa84.png"
             alt=""
-            className="absolute inset-0 w-full h-full object-cover brightness-125"
+            className="absolute inset-0 w-full h-full object-cover"
             loading="eager"
             fetchPriority="high"
           />
