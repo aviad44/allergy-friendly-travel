@@ -33,13 +33,29 @@ const Index = () => {
               </Button>
             </SheetTrigger>
             <SheetContent>
-              <nav className="flex flex-col gap-4 mt-8">
+              <nav className="flex flex-col gap-6 mt-12">
                 {HOME_CONTENT.navigation.menu.items.map(item => {
                 const Icon = iconComponents[item.icon as keyof typeof iconComponents];
-                return <Link key={item.title} to={item.href} className={cn("flex items-center gap-3 text-lg font-medium p-2 rounded-lg transition-colors hover:bg-secondary/10 hover:text-secondary dark:hover:bg-white/10 dark:hover:text-white")} aria-label={`Navigate to ${item.title}`}>
-                      <Icon className="h-5 w-5" aria-hidden="true" />
+                return (
+                  <Link 
+                    key={item.title} 
+                    to={item.href} 
+                    className={cn(
+                      "flex items-center gap-4 p-4 rounded-lg transition-colors",
+                      "hover:bg-secondary/5 dark:hover:bg-white/5",
+                      "border border-transparent hover:border-secondary/10 dark:hover:border-white/10",
+                      "group"
+                    )}
+                    aria-label={`Navigate to ${item.title}`}
+                  >
+                    <div className="p-2 rounded-lg bg-secondary/5 dark:bg-white/5 group-hover:bg-secondary/10 dark:group-hover:bg-white/10 transition-colors">
+                      <Icon className="h-6 w-6 text-secondary dark:text-white" aria-hidden="true" />
+                    </div>
+                    <span className="text-xl font-display font-medium text-gray-800 dark:text-white group-hover:text-secondary dark:group-hover:text-white/90">
                       {item.title}
-                    </Link>;
+                    </span>
+                  </Link>
+                );
               })}
               </nav>
             </SheetContent>
