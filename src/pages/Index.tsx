@@ -7,7 +7,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { HOME_CONTENT } from "@/constants/home";
-import { ParisChatAssistant } from "@/components/ParisChatAssistant";
 
 const Index = () => {
   const iconComponents = {
@@ -80,6 +79,9 @@ const Index = () => {
             <h2 className="font-display text-xl md:text-2xl lg:text-3xl text-white mb-12 max-w-3xl mx-auto leading-relaxed">
               {HOME_CONTENT.hero.description}
             </h2>
+            <div className="bg-white/95 dark:bg-gray-900/95 p-6 rounded-xl shadow-lg transform hover:scale-[1.01] transition-all duration-300 border border-primary/20">
+              <SearchBar />
+            </div>
           </div>
         </div>
       </section>
@@ -94,19 +96,6 @@ const Index = () => {
             {HOME_CONTENT.featured.description}
           </p>
           <FeaturedDestinations />
-        </div>
-      </section>
-
-      {/* Chat Assistant Section */}
-      <section className="py-20 px-4 bg-secondary/5 dark:bg-gray-800">
-        <div className="container max-w-6xl mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl mb-6 text-center dark:text-white">
-            שוחח עם האסיסטנט שלנו
-          </h2>
-          <p className="text-lg text-muted-foreground mb-12 text-center max-w-2xl mx-auto">
-            שאל שאלות על מלונות בפריז וקבל תשובות מותאמות אישית
-          </p>
-          <ParisChatAssistant />
         </div>
       </section>
     </div>
