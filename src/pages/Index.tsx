@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { HOME_CONTENT } from "@/constants/home";
+import { ParisChatAssistant } from "@/components/ParisChatAssistant";
 
 const Index = () => {
   const iconComponents = {
@@ -33,29 +34,13 @@ const Index = () => {
               </Button>
             </SheetTrigger>
             <SheetContent>
-              <nav className="flex flex-col gap-6 mt-12">
+              <nav className="flex flex-col gap-4 mt-8">
                 {HOME_CONTENT.navigation.menu.items.map(item => {
                 const Icon = iconComponents[item.icon as keyof typeof iconComponents];
-                return (
-                  <Link 
-                    key={item.title} 
-                    to={item.href} 
-                    className={cn(
-                      "flex items-center gap-4 p-4 rounded-lg transition-colors",
-                      "hover:bg-secondary/5 dark:hover:bg-white/5",
-                      "border border-transparent hover:border-secondary/10 dark:hover:border-white/10",
-                      "group"
-                    )}
-                    aria-label={`Navigate to ${item.title}`}
-                  >
-                    <div className="p-2 rounded-lg bg-secondary/5 dark:bg-white/5 group-hover:bg-secondary/10 dark:group-hover:bg-white/10 transition-colors">
-                      <Icon className="h-6 w-6 text-secondary dark:text-white" aria-hidden="true" />
-                    </div>
-                    <span className="text-xl font-display font-medium text-gray-800 dark:text-white group-hover:text-secondary dark:group-hover:text-white/90">
+                return <Link key={item.title} to={item.href} className={cn("flex items-center gap-3 text-lg font-medium p-2 rounded-lg transition-colors hover:bg-secondary/10 hover:text-secondary dark:hover:bg-white/10 dark:hover:text-white")} aria-label={`Navigate to ${item.title}`}>
+                      <Icon className="h-5 w-5" aria-hidden="true" />
                       {item.title}
-                    </span>
-                  </Link>
-                );
+                    </Link>;
               })}
               </nav>
             </SheetContent>
@@ -68,13 +53,13 @@ const Index = () => {
         {/* Background Image with optimized loading */}
         <picture>
           <source
-            srcSet="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3"
+            srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90"
             type="image/webp"
           />
           <img
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3"
-            alt="Luxurious resort infinity pool overlooking tropical scenery"
-            className="absolute inset-0 w-full h-full object-cover"
+            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90"
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover brightness-125"
             loading="eager"
             fetchPriority="high"
           />
@@ -112,6 +97,19 @@ const Index = () => {
             {HOME_CONTENT.featured.description}
           </p>
           <FeaturedDestinations />
+        </div>
+      </section>
+
+      {/* Chat Assistant Section */}
+      <section className="py-20 px-4 bg-secondary/5 dark:bg-gray-800">
+        <div className="container max-w-6xl mx-auto">
+          <h2 className="font-display text-3xl md:text-4xl mb-6 text-center dark:text-white">
+            שוחח עם האסיסטנט שלנו
+          </h2>
+          <p className="text-lg text-muted-foreground mb-12 text-center max-w-2xl mx-auto">
+            שאל שאלות על מלונות בפריז וקבל תשובות מותאמות אישית
+          </p>
+          <ParisChatAssistant />
         </div>
       </section>
     </div>

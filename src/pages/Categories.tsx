@@ -1,4 +1,3 @@
-
 import { MapPin, Star, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -8,27 +7,24 @@ const categories = [
     description: "Discover allergy-friendly hotels and resorts across the globe",
     icon: MapPin,
     href: "/destinations",
-    color: "bg-gradient-to-br from-primary/10 to-primary/20",
+    color: "bg-primary/10",
     iconColor: "text-primary",
-    borderColor: "border-primary/20",
   },
   {
     title: "Traveler Reviews",
     description: "Read authentic experiences from fellow allergy-conscious travelers",
     icon: Star,
     href: "/reviews",
-    color: "bg-gradient-to-br from-secondary/10 to-secondary/20",
+    color: "bg-secondary/10",
     iconColor: "text-secondary",
-    borderColor: "border-secondary/20",
   },
   {
     title: "Contact Us",
     description: "Get in touch with our team for personalized assistance",
     icon: Shield,
     href: "/contact",
-    color: "bg-gradient-to-br from-accent/10 to-accent/20",
+    color: "bg-accent/10",
     iconColor: "text-accent",
-    borderColor: "border-accent/20",
   },
 ];
 
@@ -63,7 +59,7 @@ const Categories = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 px-4">
       <div className="container max-w-6xl mx-auto">
-        <h1 className="font-display text-4xl md:text-5xl mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+        <h1 className="font-display text-4xl md:text-5xl mb-6 text-center">
           Our Services
         </h1>
         <p className="text-lg text-muted-foreground mb-12 text-center max-w-2xl mx-auto">
@@ -77,14 +73,13 @@ const Categories = () => {
               <Link
                 key={category.title}
                 to={category.href}
-                className={`${category.color} p-8 rounded-2xl transition-all duration-300 hover:scale-105 group border ${category.borderColor} hover:shadow-xl relative overflow-hidden`}
+                className={`${category.color} p-6 rounded-xl transition-all duration-300 hover:scale-105 group`}
               >
-                <div className={`${category.iconColor} mb-6 transition-transform group-hover:scale-110`}>
-                  <Icon className="h-10 w-10" />
+                <div className={`${category.iconColor} mb-4`}>
+                  <Icon className="h-8 w-8" />
                 </div>
-                <h3 className="text-2xl font-display font-semibold mb-3">{category.title}</h3>
+                <h3 className="text-xl font-semibold mb-2">{category.title}</h3>
                 <p className="text-muted-foreground">{category.description}</p>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </Link>
             )
           })}
@@ -92,27 +87,27 @@ const Categories = () => {
 
         {/* Destinations Articles Grid */}
         <div className="mt-16">
-          <h2 className="font-display text-3xl md:text-4xl mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          <h2 className="font-display text-3xl md:text-4xl mb-8 text-center">
             Featured Destinations
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {destinationArticles.map((article) => (
               <div 
                 key={article.id}
-                className="group rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-primary/10 hover:border-primary/20 bg-gradient-to-b from-white to-primary/5 dark:from-gray-900 dark:to-primary/10"
+                className="group rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
               >
                 <div className="aspect-w-16 aspect-h-9 relative overflow-hidden">
                   <img
                     src={article.image}
                     alt={article.title}
-                    className="object-cover w-full h-48 group-hover:scale-110 transition-transform duration-500"
+                    className="object-cover w-full h-48 group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <div className="p-6">
-                  <h3 className="font-display font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
+                <div className="p-4">
+                  <h3 className="font-semibold text-lg mb-1 line-clamp-1">
                     {article.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground text-sm line-clamp-1">
                     {article.description}
                   </p>
                 </div>
