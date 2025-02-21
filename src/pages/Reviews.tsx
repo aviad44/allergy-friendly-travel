@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Star, Home, Send, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -41,6 +40,63 @@ const translations = {
       description: "Your review has been added successfully"
     }
   },
+  fr: {
+    title: "Avis des Voyageurs",
+    subtitle: "Partagez votre expérience et aidez d'autres voyageurs",
+    addReview: "Ajouter un Avis",
+    rating: "Note",
+    placeholder: "Partagez votre expérience...",
+    submit: "Envoyer l'Avis",
+    recentReviews: "Avis Récents",
+    writtenBy: "Écrit par",
+    guest: "Invité",
+    error: {
+      rating: "Veuillez sélectionner une note",
+      text: "Veuillez écrire un avis d'au moins 10 caractères"
+    },
+    success: {
+      title: "Merci!",
+      description: "Votre avis a été ajouté avec succès"
+    }
+  },
+  es: {
+    title: "Reseñas de Viajeros",
+    subtitle: "Comparte tu experiencia y ayuda a otros viajeros",
+    addReview: "Añadir Reseña",
+    rating: "Puntuación",
+    placeholder: "Comparte tu experiencia...",
+    submit: "Enviar Reseña",
+    recentReviews: "Reseñas Recientes",
+    writtenBy: "Escrito por",
+    guest: "Invitado",
+    error: {
+      rating: "Por favor selecciona una puntuación",
+      text: "Por favor escribe una reseña de al menos 10 caracteres"
+    },
+    success: {
+      title: "¡Gracias!",
+      description: "Tu reseña ha sido añadida con éxito"
+    }
+  },
+  de: {
+    title: "Reisebewertungen",
+    subtitle: "Teilen Sie Ihre Erfahrung und helfen Sie anderen Reisenden",
+    addReview: "Bewertung Hinzufügen",
+    rating: "Bewertung",
+    placeholder: "Teilen Sie Ihre Erfahrung...",
+    submit: "Bewertung Absenden",
+    recentReviews: "Aktuelle Bewertungen",
+    writtenBy: "Geschrieben von",
+    guest: "Gast",
+    error: {
+      rating: "Bitte wählen Sie eine Bewertung",
+      text: "Bitte schreiben Sie eine Bewertung von mindestens 10 Zeichen"
+    },
+    success: {
+      title: "Danke!",
+      description: "Ihre Bewertung wurde erfolgreich hinzugefügt"
+    }
+  },
   he: {
     title: "ביקורות מטיילים",
     subtitle: "שתף את החוויה שלך ועזור למטיילים אחרים",
@@ -64,6 +120,9 @@ const translations = {
 
 const languages = [
   { code: 'en', name: 'English' },
+  { code: 'fr', name: 'Français' },
+  { code: 'es', name: 'Español' },
+  { code: 'de', name: 'Deutsch' },
   { code: 'he', name: 'עברית' }
 ];
 
@@ -72,7 +131,7 @@ type LanguageCode = keyof typeof translations;
 const Reviews = () => {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
-  const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('he');
+  const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
   const [reviews, setReviews] = useState<Review[]>([
     {
       id: 1,
