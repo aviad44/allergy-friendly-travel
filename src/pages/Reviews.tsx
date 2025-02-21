@@ -1,11 +1,17 @@
 
 import { useState } from "react";
-import { Star, Home, Send } from "lucide-react";
+import { Star, Home, Send, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { MainMenu } from "@/components/MainMenu";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Review {
   id: number;
@@ -15,9 +21,58 @@ interface Review {
   author: string;
 }
 
+const translations = {
+  en: {
+    title: "Traveler Reviews",
+    subtitle: "Share your experience and help other travelers",
+    addReview: "Add Review",
+    rating: "Rating",
+    placeholder: "Share your experience...",
+    submit: "Submit Review",
+    recentReviews: "Recent Reviews",
+    writtenBy: "Written by",
+    guest: "Guest",
+    error: {
+      rating: "Please select a rating",
+      text: "Please write a review of at least 10 characters"
+    },
+    success: {
+      title: "Thank you!",
+      description: "Your review has been added successfully"
+    }
+  },
+  he: {
+    title: "ביקורות מטיילים",
+    subtitle: "שתף את החוויה שלך ועזור למטיילים אחרים",
+    addReview: "הוסף ביקורת",
+    rating: "דירוג",
+    placeholder: "שתף את החוויה שלך...",
+    submit: "שלח ביקורת",
+    recentReviews: "ביקורות אחרונות",
+    writtenBy: "נכתב על ידי",
+    guest: "אורח",
+    error: {
+      rating: "אנא בחר דירוג כוכבים",
+      text: "אנא כתוב ביקורת של לפחות 10 תווים"
+    },
+    success: {
+      title: "תודה!",
+      description: "הביקורת שלך נוספה בהצלחה"
+    }
+  }
+};
+
+const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'he', name: 'עברית' }
+];
+
+type LanguageCode = keyof typeof translations;
+
 const Reviews = () => {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
+  const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('he');
   const [reviews, setReviews] = useState<Review[]>([
     {
       id: 1,
@@ -35,6 +90,7 @@ const Reviews = () => {
     }
   ]);
   const { toast } = useToast();
+  const t = translations[currentLanguage];
 
   const handleRatingClick = (value: number) => {
     setRating(value);
@@ -43,8 +99,8 @@ const Reviews = () => {
   const handleSubmitReview = () => {
     if (rating === 0) {
       toast({
-        title: "שגיאה",
-        description: "אנא בחר דירוג כוכבים",
+        title: t.error.rating,
+        description: "",
         variant: "destructive"
       });
       return;
@@ -52,8 +108,8 @@ const Reviews = () => {
 
     if (reviewText.trim().length < 10) {
       toast({
-        title: "שגיאה",
-        description: "אנא כתוב ביקורת של לפחות 10 תווים",
+        title: t.error.text,
+        description: "",
         variant: "destructive"
       });
       return;
@@ -64,7 +120,7 @@ const Reviews = () => {
       rating,
       text: reviewText,
       date: new Date().toISOString().split('T')[0],
-      author: "אורח"
+      author: t.guest
     };
 
     setReviews([newReview, ...reviews]);
@@ -72,8 +128,8 @@ const Reviews = () => {
     setReviewText("");
 
     toast({
-      title: "תודה!",
-      description: "הביקורת שלך נוספה בהצלחה",
+      title: t.success.title,
+      description: t.success.description,
     });
   };
 
@@ -90,26 +146,46 @@ const Reviews = () => {
                 Home
               </Button>
             </Link>
-            <MainMenu />
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm">
+                    <Globe className="h-4 w-4 mr-2" />
+                    {languages.find(lang => lang.code === currentLanguage)?.name}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {languages.map((language) => (
+                    <DropdownMenuItem
+                      key={language.code}
+                      onClick={() => setCurrentLanguage(language.code as LanguageCode)}
+                    >
+                      {language.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <MainMenu />
+            </div>
           </div>
 
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-display font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              ביקורות מטיילים
+              {t.title}
             </h1>
             <p className="text-lg text-muted-foreground">
-              שתף את החוויה שלך ועזור למטיילים אחרים
+              {t.subtitle}
             </p>
           </div>
 
           {/* Add Review Form */}
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12 border border-white/20 shadow-lg transition-all hover:shadow-xl">
-            <h2 className="text-2xl font-semibold mb-6 text-right">הוסף ביקורת</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-right">{t.addReview}</h2>
             
             {/* Star Rating */}
             <div className="flex items-center gap-3 mb-6 justify-end">
-              <span className="text-sm text-muted-foreground">דירוג:</span>
+              <span className="text-sm text-muted-foreground">{t.rating}:</span>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((value) => (
                   <button
@@ -132,9 +208,9 @@ const Reviews = () => {
               <Textarea
                 value={reviewText}
                 onChange={(e) => setReviewText(e.target.value)}
-                placeholder="שתף את החוויה שלך..."
+                placeholder={t.placeholder}
                 className="min-h-[120px] bg-white/5 border-white/10 focus:border-primary/50 transition-all"
-                dir="rtl"
+                dir={currentLanguage === 'he' ? 'rtl' : 'ltr'}
               />
             </div>
 
@@ -144,14 +220,14 @@ const Reviews = () => {
                 className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
               >
                 <Send className="h-4 w-4 ml-2" />
-                שלח ביקורת
+                {t.submit}
               </Button>
             </div>
           </div>
 
           {/* Reviews List */}
           <div className="space-y-6">
-            <h2 className="text-2xl font-semibold mb-8 text-right">ביקורות אחרונות</h2>
+            <h2 className="text-2xl font-semibold mb-8 text-right">{t.recentReviews}</h2>
             {reviews.map((review) => (
               <div
                 key={review.id}
@@ -172,7 +248,7 @@ const Reviews = () => {
                 </div>
                 <p className="mb-4 text-right text-lg leading-relaxed">{review.text}</p>
                 <p className="text-sm text-muted-foreground text-right">
-                  נכתב על ידי: <span className="text-primary">{review.author}</span>
+                  {t.writtenBy}: <span className="text-primary">{review.author}</span>
                 </p>
               </div>
             ))}
