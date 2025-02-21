@@ -1,18 +1,10 @@
 import { useState, useEffect } from "react";
-import { Home, Globe, ArrowLeft } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { MainMenu } from "@/components/MainMenu";
+import { DestinationHero } from "./DestinationHero";
+import { DestinationNavigation } from "./DestinationNavigation";
+import { LanguageTable } from "./LanguageTable";
 import { HotelCard } from "@/components/hotels/HotelCard";
 import { TravelTips } from "@/components/hotels/TravelTips";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { LanguageCode, languages, destinations, DestinationId } from "@/types/reviews";
+import { LanguageCode, destinations, DestinationId } from "@/types/reviews";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -149,8 +141,6 @@ const destinationData = {
 
 export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
-  const navigate = useNavigate();
-
   const destination = destinations.find(d => d.id === destinationId);
   const isRTL = currentLanguage === 'he';
   const content = destinationData[destinationId as keyof typeof destinationData];
@@ -193,59 +183,14 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Image with Gradient Overlay */}
-      <div 
-        className="h-[50vh] bg-cover bg-center relative"
-        style={{
-          backgroundImage: `url(https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80)`,
-          backgroundPosition: '50% 65%'
-        }}
-        role="img"
-        aria-label={`Scenic view of ${destination.name}`}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
-      </div>
+      <DestinationHero destination={destination} />
 
-      {/* Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl -mt-20 relative z-10">
-        {/* Navigation */}
-        <nav className="flex justify-between items-center mb-8" aria-label="Main navigation">
-          <div className="flex gap-2">
-            <Button variant="ghost" onClick={() => navigate('/destinations')} className="bg-background/80 backdrop-blur-sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Destinations
-            </Button>
-            <Link to="/">
-              <Button variant="ghost" className="bg-background/80 backdrop-blur-sm">
-                <Home className="h-4 w-4 mr-2" />
-                Home
-              </Button>
-            </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="bg-background/80 backdrop-blur-sm">
-                  <Globe className="h-4 w-4 mr-2" />
-                  {languages.find(lang => lang.code === currentLanguage)?.name}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {languages.map((language) => (
-                  <DropdownMenuItem
-                    key={language.code}
-                    onClick={() => setCurrentLanguage(language.code)}
-                  >
-                    {language.name}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <MainMenu />
-          </div>
-        </nav>
+        <DestinationNavigation 
+          currentLanguage={currentLanguage}
+          setCurrentLanguage={setCurrentLanguage}
+        />
 
-        {/* Main Content */}
         <article className="space-y-12">
           <header className="text-left space-y-4">
             <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">
@@ -259,40 +204,19 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             </p>
           </header>
 
-          {/* Hotels List */}
           <section aria-label="Hotels List" className="space-y-6">
             {content.hotels.map((hotel, index) => (
               <HotelCard key={index} {...hotel} />
             ))}
           </section>
 
-          {/* Travel Tips */}
           <TravelTips />
 
-          {/* Language Tips Table */}
-          <section aria-label={`${destination.name} Language Tips`} className="bg-muted rounded-xl p-6 mt-16">
-            <h3 className="text-xl font-display font-bold mb-4">Essential Phrases for Travelers with Allergies</h3>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    {content.languageTable.headers.map((header, index) => (
-                      <TableHead key={index} className="w-1/3">{header}</TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {content.languageTable.rows.map((row, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="font-medium">{row.original}</TableCell>
-                      <TableCell className="italic">{row.translation}</TableCell>
-                      <TableCell className="text-muted-foreground">{row.pronunciation}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </section>
+          <LanguageTable 
+            headers={content.languageTable.headers}
+            rows={content.languageTable.rows}
+            destinationName={destination.name}
+          />
         </article>
       </main>
     </div>
