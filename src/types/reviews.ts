@@ -39,7 +39,7 @@ export const destinations = [
     id: 'crete',
     name: 'Crete',
     country: 'Greece',
-    image: 'lovable-uploads/2832ce17-babc-4c43-a399-6dcd62aeae3f.png',
+    image: 'lovable-uploads/f29c31c6-959c-44bf-b2de-47aa52e897d5.png',
     description: 'Allergy-Friendly Accommodations in Crete',
     subtitle: 'Experience Greek hospitality with peace of mind'
   },
