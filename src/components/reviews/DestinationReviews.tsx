@@ -108,9 +108,10 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     <div className="min-h-screen bg-background">
       {/* Hero Image with Gradient Overlay */}
       <div 
-        className="h-[50vh] bg-cover bg-bottom relative"
+        className="h-[50vh] bg-cover bg-center relative"
         style={{
-          backgroundImage: `url(https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80)`
+          backgroundImage: `url(https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80)`,
+          backgroundPosition: '50% 65%'
         }}
         role="img"
         aria-label={`Scenic view of ${destination.name}`}
