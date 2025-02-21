@@ -40,7 +40,7 @@ export const DestinationReviews = ({ destinationId }: DestinationReviewsProps) =
 
   useEffect(() => {
     if (!destination) {
-      navigate('/reviews');
+      navigate('/destinations');
       return;
     }
     fetchReviews();
@@ -144,60 +144,60 @@ export const DestinationReviews = ({ destinationId }: DestinationReviewsProps) =
   return (
     <div className="min-h-screen bg-background">
       <div 
-        className="h-[30vh] bg-cover bg-center relative"
+        className="h-[50vh] bg-cover bg-center relative flex items-center justify-center"
         style={{
           backgroundImage: `url(https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80)`
         }}
       >
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative z-10 container mx-auto px-4 text-center text-white">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6">
+            {destination.description}
+          </h1>
+          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-200">
+            {destination.subtitle}
+          </p>
+        </div>
       </div>
-      <div className="relative -mt-10 z-10">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex gap-2">
-              <Button variant="ghost" onClick={() => navigate('/destinations')} className="hover:bg-white/10 transition-colors">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back
+
+      <div className="container mx-auto px-4 py-8 max-w-4xl -mt-10 relative z-20">
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex gap-2">
+            <Button variant="ghost" onClick={() => navigate('/destinations')} className="hover:bg-white/10 transition-colors">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <Link to="/">
+              <Button variant="ghost" className="hover:bg-white/10 transition-colors">
+                <Home className="h-4 w-4 mr-2" />
+                Home
               </Button>
-              <Link to="/">
-                <Button variant="ghost" className="hover:bg-white/10 transition-colors">
-                  <Home className="h-4 w-4 mr-2" />
-                  Home
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <Globe className="h-4 w-4 mr-2" />
+                  {languages.find(lang => lang.code === currentLanguage)?.name}
                 </Button>
-              </Link>
-            </div>
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm">
-                    <Globe className="h-4 w-4 mr-2" />
-                    {languages.find(lang => lang.code === currentLanguage)?.name}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {languages.map((language) => (
-                    <DropdownMenuItem
-                      key={language.code}
-                      onClick={() => setCurrentLanguage(language.code)}
-                    >
-                      {language.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <MainMenu />
-            </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {languages.map((language) => (
+                  <DropdownMenuItem
+                    key={language.code}
+                    onClick={() => setCurrentLanguage(language.code)}
+                  >
+                    {language.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <MainMenu />
           </div>
+        </div>
 
-          <div className={`text-center mb-12 ${textAlignment}`}>
-            <h1 className="text-4xl font-display font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              {`${destination.name}, ${destination.country}`}
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              {t.subtitle}
-            </p>
-          </div>
-
+        <div className="space-y-8">
           <ReviewForm
             rating={rating}
             reviewText={reviewText}
