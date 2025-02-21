@@ -68,27 +68,27 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Image */}
+      {/* Hero Image with Gradient Overlay */}
       <div 
-        className="h-[60vh] bg-cover bg-center relative"
+        className="h-[40vh] bg-cover bg-center relative"
         style={{
           backgroundImage: `url(https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80)`
         }}
       >
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-4xl -mt-20 relative z-10">
         {/* Navigation */}
-        <div className="flex justify-between items-center mb-12">
+        <div className="flex justify-between items-center mb-8">
           <div className="flex gap-2">
-            <Button variant="ghost" onClick={() => navigate('/destinations')}>
+            <Button variant="ghost" onClick={() => navigate('/destinations')} className="bg-background/80 backdrop-blur-sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Destinations
             </Button>
             <Link to="/">
-              <Button variant="ghost">
+              <Button variant="ghost" className="bg-background/80 backdrop-blur-sm">
                 <Home className="h-4 w-4 mr-2" />
                 Home
               </Button>
@@ -97,7 +97,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="bg-background/80 backdrop-blur-sm">
                   <Globe className="h-4 w-4 mr-2" />
                   {languages.find(lang => lang.code === currentLanguage)?.name}
                 </Button>
@@ -119,20 +119,20 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
         {/* Main Content */}
         <div className="space-y-12">
-          <div className="text-center space-y-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold">
+          <div className="text-left space-y-4">
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">
               {destination.description}
             </h1>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-display text-muted-foreground">
+            <h2 className="text-xl md:text-2xl font-display text-muted-foreground">
               {destination.subtitle}
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-base text-muted-foreground max-w-3xl leading-relaxed">
               Paris is a dream destination, but for travelers with food allergies, choosing the right hotel is essential for a safe and stress-free stay. Below is a list of the best allergy-friendly hotels in Paris, featuring real guest reviews, detailed information, and direct booking links to ensure your comfort.
             </p>
           </div>
 
           {/* Hotels List */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             {hotels.map((hotel, index) => (
               <HotelCard key={index} {...hotel} />
             ))}
@@ -142,34 +142,36 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           <TravelTips />
 
           {/* Translation Table */}
-          <div className="bg-muted rounded-xl p-8 mt-16">
-            <h3 className="text-2xl font-display font-bold mb-6">Essential Allergy-Related French Phrases</h3>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>English</TableHead>
-                  <TableHead>French</TableHead>
-                  <TableHead>Pronunciation</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>"I have a food allergy"</TableCell>
-                  <TableCell>"J'ai une allergie alimentaire"</TableCell>
-                  <TableCell>"Zhay oon ah-lehr-zhee ah-lee-mahn-tehr"</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>"Is this dish gluten-free?"</TableCell>
-                  <TableCell>"Est-ce que ce plat est sans gluten?"</TableCell>
-                  <TableCell>"Ess-kuh suh plah ay sahn gloo-tahn?"</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>"Does this contain nuts?"</TableCell>
-                  <TableCell>"Est-ce que ça contient des noix?"</TableCell>
-                  <TableCell>"Ess-kuh sah kohn-tyahn day nwah?"</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+          <div className="bg-muted rounded-xl p-6 mt-16">
+            <h3 className="text-xl font-display font-bold mb-4">Essential Allergy-Related French Phrases</h3>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-1/3">English</TableHead>
+                    <TableHead className="w-1/3">French</TableHead>
+                    <TableHead className="w-1/3">Pronunciation</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-medium">"I have a food allergy"</TableCell>
+                    <TableCell className="italic">"J'ai une allergie alimentaire"</TableCell>
+                    <TableCell className="text-muted-foreground">"Zhay oon ah-lehr-zhee ah-lee-mahn-tehr"</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">"Is this dish gluten-free?"</TableCell>
+                    <TableCell className="italic">"Est-ce que ce plat est sans gluten?"</TableCell>
+                    <TableCell className="text-muted-foreground">"Ess-kuh suh plah ay sahn gloo-tahn?"</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">"Does this contain nuts?"</TableCell>
+                    <TableCell className="italic">"Est-ce que ça contient des noix?"</TableCell>
+                    <TableCell className="text-muted-foreground">"Ess-kuh sah kohn-tyahn day nwah?"</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </div>
