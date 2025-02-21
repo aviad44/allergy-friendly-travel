@@ -12,11 +12,31 @@ interface HotelCardProps {
 }
 
 export const HotelCard = ({ name, address, features, description, quote, bookingUrl }: HotelCardProps) => {
-  // Add UTM parameters to booking URL if it's a Booking.com URL
-  const getEnhancedBookingUrl = (url: string) => {
+  const getEnhancedBookingUrl = (url: string, hotelName: string) => {
     if (url.includes('booking.com')) {
+      // Extract hotel location from the URL (gr, fr, etc.)
+      const countryCode = url.match(/hotel\/(..)\//)?.[1] || '';
+      
+      // Clean the hotel name for the UTM content
+      const cleanHotelName = hotelName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric chars with hyphens
+        .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+      
+      // Get the destination from the URL
+      const destination = url.includes('/gr/') ? 'crete' : 
+                         url.includes('/fr/') ? 'paris' :
+                         url.includes('/gb/') ? 'london' :
+                         url.includes('/es/') ? 'barcelona' :
+                         url.includes('/cy/') ? 'ayia-napa' : 'other';
+
+      // Construct the enhanced URL
       const baseUrl = url.split('?')[0];
-      return `${baseUrl}.he.html?aid=2165599&label=allergy-friendly&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_content=stella-island`;
+      return `${baseUrl}.he.html?aid=2165599&label=allergy-friendly` +
+             `&utm_source=allergy-friendly-hotels` +
+             `&utm_medium=referral` +
+             `&utm_campaign=${destination}-hotels` +
+             `&utm_content=${cleanHotelName}`;
     }
     return url;
   };
@@ -46,7 +66,7 @@ export const HotelCard = ({ name, address, features, description, quote, booking
       </CardContent>
       <CardFooter>
         <Button asChild>
-          <a href={getEnhancedBookingUrl(bookingUrl)} target="_blank" rel="noopener noreferrer">
+          <a href={getEnhancedBookingUrl(bookingUrl, name)} target="_blank" rel="noopener noreferrer">
             Book Now
           </a>
         </Button>
