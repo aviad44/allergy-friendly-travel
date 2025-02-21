@@ -1,5 +1,6 @@
-import { MapPin, Star, Shield } from "lucide-react";
+import { MapPin, Star, Shield, Home } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const categories = [
   {
@@ -59,6 +60,15 @@ const Categories = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 px-4">
       <div className="container max-w-6xl mx-auto">
+        <div className="mb-6">
+          <Link to="/">
+            <Button variant="ghost" className="hover:bg-secondary/10">
+              <Home className="h-4 w-4 mr-2" />
+              חזרה לעמוד הבית
+            </Button>
+          </Link>
+        </div>
+
         <h1 className="font-display text-4xl md:text-5xl mb-6 text-center">
           Our Services
         </h1>
@@ -85,7 +95,6 @@ const Categories = () => {
           })}
         </div>
 
-        {/* Destinations Articles Grid */}
         <div className="mt-16">
           <h2 className="font-display text-3xl md:text-4xl mb-8 text-center">
             Featured Destinations

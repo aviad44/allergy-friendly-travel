@@ -1,6 +1,7 @@
+
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Globe } from "lucide-react";
+import { ArrowLeft, Globe, Home } from "lucide-react";
 import HotelSection from "@/components/hotels/HotelSection";
 import AllergiesTable from "@/components/language/AllergiesTable";
 import UsefulInfo from "@/components/hotels/UsefulInfo";
@@ -101,12 +102,20 @@ const ParisGuide = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-5xl">
         <div className="flex justify-between items-center mb-6">
-          <Link to="/">
-            <Button variant="ghost">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Destinations
-            </Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link to="/">
+              <Button variant="ghost">
+                <Home className="h-4 w-4 mr-2" />
+                עמוד הבית
+              </Button>
+            </Link>
+            <Link to="/destinations">
+              <Button variant="ghost">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                חזרה ליעדים
+              </Button>
+            </Link>
+          </div>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
