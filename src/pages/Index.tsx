@@ -1,11 +1,9 @@
-
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
-import { MapPin, Star, Shield, Info, HelpCircle, Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
+import { MapPin, Star, Shield, Info, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { MainMenu } from "@/components/MainMenu";
 import { HOME_CONTENT } from "@/constants/home";
 
 const Index = () => {
@@ -26,24 +24,7 @@ const Index = () => {
             {HOME_CONTENT.navigation.brand}
           </Link>
           
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="hover:bg-secondary/10 dark:hover:bg-white/10" aria-label={HOME_CONTENT.navigation.menu.label}>
-                <Menu className="h-6 w-6" aria-hidden="true" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <nav className="flex flex-col gap-4 mt-8">
-                {HOME_CONTENT.navigation.menu.items.map(item => {
-                const Icon = iconComponents[item.icon as keyof typeof iconComponents];
-                return <Link key={item.title} to={item.href} className={cn("flex items-center gap-3 text-lg font-medium p-2 rounded-lg transition-colors hover:bg-secondary/10 hover:text-secondary dark:hover:bg-white/10 dark:hover:text-white")} aria-label={`Navigate to ${item.title}`}>
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                      {item.title}
-                    </Link>;
-              })}
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <MainMenu />
         </div>
       </nav>
 

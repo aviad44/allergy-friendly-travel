@@ -1,8 +1,8 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Globe, Home } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
+import { MainMenu } from "@/components/MainMenu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,24 +73,27 @@ const Destinations = () => {
               </Link>
             </div>
             
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Globe className="h-4 w-4 mr-2" />
-                  {languages.find(lang => lang.code === currentLanguage)?.name}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {languages.map((language) => (
-                  <DropdownMenuItem
-                    key={language.code}
-                    onClick={() => setCurrentLanguage(language.code)}
-                  >
-                    {language.name}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Globe className="h-4 w-4 mr-2" />
+                    {languages.find(lang => lang.code === currentLanguage)?.name}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {languages.map((language) => (
+                    <DropdownMenuItem
+                      key={language.code}
+                      onClick={() => setCurrentLanguage(language.code)}
+                    >
+                      {language.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <MainMenu />
+            </div>
           </div>
 
           {/* Search Section */}
