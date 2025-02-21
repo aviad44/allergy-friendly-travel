@@ -83,66 +83,67 @@ const destinationData = {
   london: {
     hotels: [
       {
-        name: "1. The Langham London – Premier Allergy-Conscious Luxury",
-        address: "1C Portland Place, Westminster, London W1B 1JA",
-        features: ["⭐ 5-star luxury", "🍽️ Dedicated allergen menus", "🏰 Historic property"],
-        description: "The Langham sets the standard for allergy-conscious luxury hotels in London. Their Roux at The Landau restaurant offers detailed allergen menus and their staff receives specialized training in handling dietary requirements.",
-        quote: "The attention to detail regarding my food allergies was exceptional. The chef personally came to discuss my dietary needs!",
-        bookingUrl: "https://www.booking.com/hotel/gb/langham.en.html"
+        name: "1. The Cavendish London – Exceptional Allergy-Aware Service",
+        address: "81 Jermyn Street, Mayfair, London SW1Y 6JF",
+        features: ["⭐ 4-star hotel", "🍽️ Allergy-conscious menus", "🏰 Prime Mayfair location"],
+        description: "Located in prestigious Mayfair, The Cavendish London offers exceptional service for allergy-conscious guests with specially trained staff and customized dining options.",
+        quote: "I was impressed with the staff's attention to my dietary needs. Highly recommended!",
+        bookingUrl: "https://www.booking.com/hotel/gb/cavendish-london.en-gb.html?utm_source=Allergy-friendly-hotels"
       },
       {
-        name: "2. Park Plaza Westminster Bridge – Central Location & Allergy-Friendly Dining",
-        address: "200 Westminster Bridge Road, London SE1 7UT",
-        features: ["⭐ 4-star hotel", "🎡 Near London Eye", "🏛️ Views of Parliament"],
-        description: "Perfectly located with views of Big Ben, this hotel offers comprehensive allergen information and dedicated gluten-free options in all their restaurants.",
-        quote: "They took my allergies very seriously and even had a separate preparation area for gluten-free meals.",
-        bookingUrl: "https://www.booking.com/hotel/gb/park-plaza-westminster-bridge-london.en.html"
+        name: "2. The Langham, London – Luxury Allergy-Safe Haven",
+        address: "1C Portland Place, Marylebone, London W1B 1JA",
+        features: ["⭐ 5-star luxury", "🛏️ Allergy-free bedding", "🍽️ Gluten-free dining"],
+        description: "A pioneer in luxury hospitality, The Langham offers comprehensive allergy-friendly services including specialized bedding and a dedicated gluten-free kitchen.",
+        quote: "They ensured a 100% gluten-free dining experience. Fantastic service!",
+        bookingUrl: "https://www.booking.com/hotel/gb/langham-london.en-gb.html?utm_source=Allergy-friendly-hotels"
       },
       {
-        name: "3. The Montcalm Royal London House",
-        address: "22-25 Finsbury Square, London EC2A 1DX",
-        features: ["⭐ 5-star boutique", "🌟 Modern luxury", "🍽️ Allergy-trained chefs"],
-        description: "A contemporary luxury hotel that excels in accommodating dietary restrictions. Their kitchen staff is specifically trained in allergy awareness and cross-contamination prevention.",
-        quote: "As someone with celiac disease, I felt completely safe dining here. The staff was knowledgeable and attentive.",
-        bookingUrl: "https://www.booking.com/hotel/gb/the-montcalm-royal-london-house.en.html"
+        name: "3. Hyatt Regency London – The Churchill",
+        address: "30 Portman Square, Marylebone, London W1H 7BH",
+        features: ["⭐ 4-star hotel", "🍽️ Tailored meal plans", "🏰 Central location"],
+        description: "The Hyatt Regency Churchill takes pride in its comprehensive allergy management program, offering personalized meal plans and allergy-friendly rooms.",
+        quote: "The staff handled my nut allergy with great care. A safe and enjoyable stay!",
+        bookingUrl: "https://www.booking.com/hotel/gb/hyatt-regency-churchill.en-gb.html?utm_source=Allergy-friendly-hotels"
       },
       {
-        name: "4. Novotel London Bridge – Family-Friendly & Allergy-Aware",
-        address: "53-61 Southwark Bridge Road, London SE1 9HH",
-        features: ["⭐ 4-star hotel", "👨‍👩‍👧‍👦 Family-friendly", "🏙️ Central location"],
-        quote: "Perfect for families with allergies! They had plenty of safe options for my children and were very accommodating.",
-        bookingUrl: "https://www.booking.com/hotel/gb/novotel-london-bridge.en.html"
+        name: "4. St. Pancras Renaissance Hotel London",
+        address: "Euston Road, Kings Cross, London NW1 2AR",
+        features: ["⭐ 5-star hotel", "🛏️ Hypoallergenic bedding", "🚉 Connected to St Pancras"],
+        description: "This historic hotel combines Victorian grandeur with modern allergy-awareness, featuring hypoallergenic rooms and comprehensive allergen-free dining options.",
+        quote: "They took my dairy allergy seriously and provided amazing meal options!",
+        bookingUrl: "https://www.booking.com/hotel/gb/st-pancras-renaissance.en-gb.html?utm_source=Allergy-friendly-hotels"
       },
       {
-        name: "5. CitizenM Tower of London – Modern & Allergen-Conscious",
-        address: "40 Trinity Square, London EC3N 4DJ",
-        features: ["⭐ 4-star hotel", "🏰 Tower views", "💻 Tech-savvy"],
-        description: "A modern hotel offering clear allergen information and flexible dining options. Their innovative approach extends to dietary requirements with comprehensive digital menus.",
-        quote: "They made managing my allergies so easy with their clear labeling system and helpful staff!",
-        bookingUrl: "https://www.booking.com/hotel/gb/citizenm-tower-of-london.en.html"
+        name: "5. Radisson Blu Edwardian Mercer Street",
+        address: "20 Mercer Street, Covent Garden, London WC2H 9HD",
+        features: ["⭐ 4-star hotel", "🍳 Allergen-free breakfast", "🎭 Covent Garden location"],
+        description: "Located in vibrant Covent Garden, this hotel excels in allergy-friendly hospitality with trained culinary staff and comprehensive allergen information.",
+        quote: "Staff were extremely knowledgeable about food allergies. I felt completely safe!",
+        bookingUrl: "https://www.booking.com/hotel/gb/radisson-blu-mercer-street.en-gb.html?utm_source=Allergy-friendly-hotels"
       }
     ],
     languageTable: {
-      headers: ["Common Phrase", "How to Say It", "When to Use"],
+      headers: ["Common Phrase", "When to Use", "Staff Response"],
       rows: [
         {
-          original: "I have a food allergy",
-          translation: "I have a severe allergy to [allergen]",
-          pronunciation: "Be specific about your allergen"
+          original: "I have severe allergies to [specify allergen]",
+          translation: "When checking in or dining",
+          pronunciation: "Staff will note your allergies and inform all departments"
         },
         {
-          original: "Is this gluten-free?",
-          translation: "Does this contain any gluten?",
-          pronunciation: "When checking menu items"
+          original: "Is this meal prepared in a separate area?",
+          translation: "When ordering at restaurants",
+          pronunciation: "Kitchen can confirm preparation methods"
         },
         {
-          original: "Cross-contamination",
-          translation: "Please ensure no cross-contamination",
-          pronunciation: "When ordering at restaurants"
+          original: "Do you have an ingredient list available?",
+          translation: "Before ordering any food",
+          pronunciation: "All venues must provide allergen information by law"
         }
       ]
     },
-    intro: "London's diverse culinary scene can be navigated safely with the right preparation. These hotels understand the importance of catering to guests with food allergies and provide excellent accommodations and dining options. From luxury establishments to modern boutique hotels, here are London's top allergy-friendly places to stay."
+    intro: "Finding the right hotel as a food-sensitive traveler can be stressful. London offers excellent allergy-friendly hotels with hypoallergenic rooms, dedicated dining options, and well-trained staff to ensure a safe stay. Here's our curated selection of London's most accommodating hotels for allergy sufferers."
   }
 };
 
