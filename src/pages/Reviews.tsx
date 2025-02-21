@@ -1,10 +1,12 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Star, Home, Send, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { MainMenu } from "@/components/MainMenu";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,11 +15,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface Review {
-  id: number;
+  id: string;
   rating: number;
   text: string;
-  date: string;
-  author: string;
+  created_at: string;
+  author_name: string;
+  language: string;
 }
 
 const translations = {
@@ -132,34 +135,40 @@ const Reviews = () => {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
-  const [reviews, setReviews] = useState<Review[]>([
-    {
-      id: 1,
-      rating: 5,
-      text: "המלון היה נהדר והתחשב מאוד בצרכים שלי. המטבח הכין לי ארוחות מיוחדות בלי גלוטן.",
-      date: "2024-03-20",
-      author: "דניאל כהן"
-    },
-    {
-      id: 2,
-      rating: 4,
-      text: "שירות מעולה, צוות מקצועי שהבין את הרגישויות שלי לאגוזים.",
-      date: "2024-03-19",
-      author: "רותם לוי"
-    }
-  ]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const t = translations[currentLanguage];
 
-  const handleRatingClick = (value: number) => {
-    setRating(value);
+  useEffect(() => {
+    fetchReviews();
+  }, [currentLanguage]);
+
+  const fetchReviews = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('language', currentLanguage.toLowerCase())
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setReviews(data || []);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      toast({
+        title: "Error loading reviews",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = async () => {
     if (rating === 0) {
       toast({
         title: t.error.rating,
-        description: "",
         variant: "destructive"
       });
       return;
@@ -168,28 +177,49 @@ const Reviews = () => {
     if (reviewText.trim().length < 10) {
       toast({
         title: t.error.text,
-        description: "",
         variant: "destructive"
       });
       return;
     }
 
-    const newReview: Review = {
-      id: reviews.length + 1,
-      rating,
-      text: reviewText,
-      date: new Date().toISOString().split('T')[0],
-      author: t.guest
-    };
+    try {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      
+      if (userError) throw userError;
 
-    setReviews([newReview, ...reviews]);
-    setRating(0);
-    setReviewText("");
+      const newReview = {
+        rating,
+        text: reviewText,
+        language: currentLanguage.toLowerCase(),
+        author_name: userData?.user?.email?.split('@')[0] || t.guest,
+        user_id: userData?.user?.id
+      };
 
-    toast({
-      title: t.success.title,
-      description: t.success.description,
-    });
+      const { error } = await supabase
+        .from('reviews')
+        .insert(newReview);
+
+      if (error) throw error;
+
+      setRating(0);
+      setReviewText("");
+      fetchReviews();
+
+      toast({
+        title: t.success.title,
+        description: t.success.description,
+      });
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      toast({
+        title: "Error submitting review",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleRatingClick = (value: number) => {
+    setRating(value);
   };
 
   return (
@@ -287,30 +317,38 @@ const Reviews = () => {
           {/* Reviews List */}
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold mb-8 text-right">{t.recentReviews}</h2>
-            {reviews.map((review) => (
-              <div
-                key={review.id}
-                className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10 shadow-md hover:shadow-lg transition-all"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-sm text-muted-foreground">{review.date}</span>
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, index) => (
-                      <Star
-                        key={index}
-                        className={`h-5 w-5 ${
-                          index < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                        }`}
-                      />
-                    ))}
+            {isLoading ? (
+              <div className="text-center">Loading reviews...</div>
+            ) : reviews.length === 0 ? (
+              <div className="text-center text-muted-foreground">No reviews yet</div>
+            ) : (
+              reviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10 shadow-md hover:shadow-lg transition-all"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="text-sm text-muted-foreground">
+                      {new Date(review.created_at).toLocaleDateString()}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, index) => (
+                        <Star
+                          key={index}
+                          className={`h-5 w-5 ${
+                            index < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
                   </div>
+                  <p className="mb-4 text-right text-lg leading-relaxed">{review.text}</p>
+                  <p className="text-sm text-muted-foreground text-right">
+                    {t.writtenBy}: <span className="text-primary">{review.author_name}</span>
+                  </p>
                 </div>
-                <p className="mb-4 text-right text-lg leading-relaxed">{review.text}</p>
-                <p className="text-sm text-muted-foreground text-right">
-                  {t.writtenBy}: <span className="text-primary">{review.author}</span>
-                </p>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
