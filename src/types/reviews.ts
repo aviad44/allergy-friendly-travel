@@ -62,3 +62,21 @@ export const destinations = [
 ] as const;
 
 export type DestinationId = (typeof destinations)[number]['id'];
+
+// Re-add types and constants needed by other components
+export interface Review {
+  id: string;
+  rating: number;
+  text: string;
+  created_at: string;
+  author_name: string;
+  language: string;
+  destination?: string;
+  traveler_type?: TravelerType;
+}
+
+export type TravelerType = 'family' | 'couple' | 'solo' | 'friends';
+export type SortOption = 'newest' | 'oldest' | 'highestRated' | 'lowestRated';
+
+export const travelerTypes = ['family', 'couple', 'solo', 'friends'] as const;
+export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
