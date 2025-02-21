@@ -46,6 +46,7 @@ const hotels = [
     name: "4. Le Bristol Paris – A Five-Star Experience for Allergy-Conscious Travelers",
     address: "112 Rue du Faubourg Saint-Honoré, 75008 Paris, France",
     features: ["⭐ 5-star hotel", "💎 Luxury shopping district", "🏊 Rooftop pool & Michelin-star dining"],
+    description: "Le Bristol Paris is one of the finest hotels in Paris, with hypoallergenic rooms and an award-winning restaurant, Epicure, that accommodates all dietary needs.",
     bookingUrl: "https://www.booking.com/hotel/fr/le-bristol-paris.en.html"
   },
   {
@@ -70,7 +71,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     <div className="min-h-screen bg-background">
       {/* Hero Image with Gradient Overlay */}
       <div 
-        className="h-[40vh] bg-cover bg-center relative"
+        className="h-[50vh] bg-cover bg-bottom relative"
         style={{
           backgroundImage: `url(https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80)`
         }}
