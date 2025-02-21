@@ -6,11 +6,15 @@ interface DestinationHeroProps {
 }
 
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
+  const imageUrl = destination.image.startsWith('photo-') 
+    ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80`
+    : `/${destination.image}`;
+
   return (
     <div 
       className="h-[50vh] bg-cover bg-center relative"
       style={{
-        backgroundImage: `url(https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80)`,
+        backgroundImage: `url(${imageUrl})`,
         backgroundPosition: '50% 65%'
       }}
       role="img"
