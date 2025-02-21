@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Globe, Home } from "lucide-react";
@@ -106,13 +105,13 @@ const ParisGuide = () => {
             <Link to="/">
               <Button variant="ghost">
                 <Home className="h-4 w-4 mr-2" />
-                עמוד הבית
+                Home
               </Button>
             </Link>
             <Link to="/destinations">
               <Button variant="ghost">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                חזרה ליעדים
+                Back to Destinations
               </Button>
             </Link>
           </div>
@@ -137,7 +136,6 @@ const ParisGuide = () => {
           </DropdownMenu>
         </div>
 
-        {/* Hero Section */}
         <div className="relative h-[60vh] rounded-xl overflow-hidden mb-12">
           <img
             src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=80"
@@ -151,7 +149,6 @@ const ParisGuide = () => {
           </div>
         </div>
 
-        {/* Article Content */}
         <article className="prose prose-lg max-w-none mb-16">
           <h2 className="font-display text-3xl mb-6">Safe and Allergy-Friendly Stays in Paris</h2>
           <p>
@@ -159,7 +156,6 @@ const ParisGuide = () => {
           </p>
         </article>
 
-        {/* Hotel Sections */}
         <HotelSection
           title="Romantic Hotels for Couples"
           type="couples"
@@ -172,10 +168,8 @@ const ParisGuide = () => {
           hotels={RECOMMENDED_HOTELS.families}
         />
 
-        {/* Additional Information */}
         <UsefulInfo />
 
-        {/* French-English Dictionary */}
         <AllergiesTable />
       </div>
     </div>

@@ -1,3 +1,4 @@
+
 import { MapPin, Star, Shield, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -64,7 +65,7 @@ const Categories = () => {
           <Link to="/">
             <Button variant="ghost" className="hover:bg-secondary/10">
               <Home className="h-4 w-4 mr-2" />
-              חזרה לעמוד הבית
+              Home
             </Button>
           </Link>
         </div>
