@@ -153,7 +153,7 @@ const destinationData = {
         features: ["⭐ 5-star resort", "🛏️ Allergy-free bedding", "👨‍🍳 Dedicated kitchen"],
         description: "A luxury adults-only resort featuring personalized meal plans and a dedicated allergy-friendly kitchen to ensure safe dining.",
         quote: "They customized my meals to be completely nut-free. Amazing service!",
-        bookingUrl: "https://www.booking.com/hotel/gr/stella-island-resort.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=hersonissos&utm_content=stella-island"
+        bookingUrl: "https://www.booking.com/hotel/gr/stella-island-luxury-resort-spa.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=hersonissos&utm_content=stella-island"
       },
       {
         name: "3. Creta Maris Beach Resort – Family Paradise",
@@ -169,7 +169,7 @@ const destinationData = {
         features: ["⭐ 5-star luxury", "🍽️ Custom dining", "🏖️ Beachfront"],
         description: "A luxury family resort offering allergy-sensitive dining options and hypoallergenic rooms with stunning sea views.",
         quote: "A perfect choice for travelers with food allergies. The chef prepared meals specifically for my needs.",
-        bookingUrl: "https://www.booking.com/hotel/gr/blue-palace.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=elounda&utm_content=blue-palace"
+        bookingUrl: "https://www.booking.com/hotel/gr/blue-palace-elounda.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=elounda&utm_content=blue-palace"
       },
       {
         name: "5. Aquila Rithymna Beach – Family-Friendly Haven",
