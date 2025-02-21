@@ -16,9 +16,9 @@ const menuItems = [
     href: "/destinations"
   },
   {
-    title: "Categories",
+    title: "Traveler Reviews",
     icon: Star,
-    href: "/categories"
+    href: "/reviews"
   },
   {
     title: "Contact",
