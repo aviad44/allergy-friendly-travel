@@ -19,7 +19,7 @@ const destinationData = {
         features: ["⭐ 5-star hotel", "🏛️ Central location near the Louvre", "🍽️ Allergy-aware fine dining"],
         description: "Le Meurice is one of Paris's most iconic luxury hotels, offering personalized allergy-friendly service. The in-house Michelin-starred restaurant, led by chef Alain Ducasse, accommodates special dietary needs with great attention to detail.",
         quote: "Le Meurice is by far the nicest hotel I've ever stayed at—the fanciest and kindest staff! Absolutely recommend to anyone staying in Paris. The staff goes above and beyond!",
-        bookingUrl: "https://www.booking.com/hotel/fr/le-meurice.html?aid=2165599&label=allergy-friendly"
+        bookingUrl: "https://www.booking.com/hotel/fr/le-meurice.html?aid=2165599&label=gen173nr-1DCAEoggI46AdIM1gEaKIBiAEBmAEJuAEXyAEM2AED6AEBiAIBqAIDuALJ7PrqBsACAdICJGZmZDJjMTgwLTdhYzktNDkwMi04NDM3LTI5MGQyYjJkODU4ZdgCBOACAQ&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=paris-hotels&utm_content=le-meurice"
       },
       {
         name: "2. Hotel Novotel Paris les Halles – Central Location & Allergy-Sensitive Dining",
@@ -80,7 +80,7 @@ const destinationData = {
         features: ["⭐ 4-star hotel", "🍽️ Allergy-conscious menus", "🏰 Prime Mayfair location"],
         description: "Located in prestigious Mayfair, The Cavendish London offers exceptional service for allergy-conscious guests with specially trained staff and customized dining options.",
         quote: "I was impressed with the staff's attention to my dietary needs. Highly recommended!",
-        bookingUrl: "https://www.booking.com/searchresults.html?aid=2165599&selected_currency=USD&ss=The+Cavendish+London&src=hotel&src_elem=sb&checkin=2024-03-01&checkout=2024-03-02&group_adults=2&no_rooms=1&group_children=0"
+        bookingUrl: "https://www.booking.com/hotel/gb/cavendish-london.html?aid=2165599&label=gen173nr-1DCAEoggI46AdIM1gEaKIBiAEBmAEJuAEXyAEM2AED6AEBiAIBqAIDuALJ7PrqBsACAdICJGZmZDJjMTgwLTdhYzktNDkwMi04NDM3LTI5MGQyYjJkODU4ZdgCBOACAQ&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=london-hotels&utm_content=cavendish-london"
       },
       {
         name: "2. The Langham, London – Luxury Allergy-Safe Haven",
@@ -88,7 +88,7 @@ const destinationData = {
         features: ["⭐ 5-star luxury", "🛏️ Allergy-free bedding", "🍽️ Gluten-free dining"],
         description: "A pioneer in luxury hospitality, The Langham offers comprehensive allergy-friendly services including specialized bedding and a dedicated gluten-free kitchen.",
         quote: "They ensured a 100% gluten-free dining experience. Fantastic service!",
-        bookingUrl: "https://www.booking.com/searchresults.html?aid=2165599&selected_currency=USD&ss=The+Langham+London&src=hotel&src_elem=sb&checkin=2024-03-01&checkout=2024-03-02&group_adults=2&no_rooms=1&group_children=0"
+        bookingUrl: "https://www.booking.com/hotel/gb/the-langham-london.html?aid=2165599&label=gen173nr-1DCAEoggI46AdIM1gEaKIBiAEBmAEJuAEXyAEM2AED6AEBiAIBqAIDuALJ7PrqBsACAdICJGZmZDJjMTgwLTdhYzktNDkwMi04NDM3LTI5MGQyYjJkODU4ZdgCBOACAQ&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=london-hotels&utm_content=langham-london"
       },
       {
         name: "3. Hyatt Regency London – The Churchill",
@@ -96,7 +96,7 @@ const destinationData = {
         features: ["⭐ 4-star hotel", "🍽️ Tailored meal plans", "🏰 Central location"],
         description: "The Hyatt Regency Churchill takes pride in its comprehensive allergy management program, offering personalized meal plans and allergy-friendly rooms.",
         quote: "The staff handled my nut allergy with great care. A safe and enjoyable stay!",
-        bookingUrl: "https://www.booking.com/searchresults.html?aid=2165599&selected_currency=USD&ss=Hyatt+Regency+London+The+Churchill&src=hotel&src_elem=sb&checkin=2024-03-01&checkout=2024-03-02&group_adults=2&no_rooms=1&group_children=0"
+        bookingUrl: "https://www.booking.com/hotel/gb/hyatt-regency-london-churchill.html?aid=2165599&label=gen173nr-1DCAEoggI46AdIM1gEaKIBiAEBmAEJuAEXyAEM2AED6AEBiAIBqAIDuALJ7PrqBsACAdICJGZmZDJjMTgwLTdhYzktNDkwMi04NDM3LTI5MGQyYjJkODU4ZdgCBOACAQ&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=london-hotels&utm_content=hyatt-churchill"
       },
       {
         name: "4. St. Pancras Renaissance Hotel London",
@@ -104,7 +104,7 @@ const destinationData = {
         features: ["⭐ 5-star hotel", "🛏️ Hypoallergenic bedding", "🚉 Connected to St Pancras"],
         description: "This historic hotel combines Victorian grandeur with modern allergy-awareness, featuring hypoallergenic rooms and comprehensive allergen-free dining options.",
         quote: "They took my dairy allergy seriously and provided amazing meal options!",
-        bookingUrl: "https://www.booking.com/searchresults.html?aid=2165599&selected_currency=USD&ss=St+Pancras+Renaissance+Hotel+London&src=hotel&src_elem=sb&checkin=2024-03-01&checkout=2024-03-02&group_adults=2&no_rooms=1&group_children=0"
+        bookingUrl: "https://www.booking.com/hotel/gb/renaissance-st-pancras.html?aid=2165599&label=gen173nr-1DCAEoggI46AdIM1gEaKIBiAEBmAEJuAEXyAEM2AED6AEBiAIBqAIDuALJ7PrqBsACAdICJGZmZDJjMTgwLTdhYzktNDkwMi04NDM3LTI5MGQyYjJkODU4ZdgCBOACAQ&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=london-hotels&utm_content=st-pancras"
       },
       {
         name: "5. Radisson Blu Edwardian Mercer Street",
@@ -112,7 +112,7 @@ const destinationData = {
         features: ["⭐ 4-star hotel", "🍳 Allergen-free breakfast", "🎭 Covent Garden location"],
         description: "Located in vibrant Covent Garden, this hotel excels in allergy-friendly hospitality with trained culinary staff and comprehensive allergen information.",
         quote: "Staff were extremely knowledgeable about food allergies. I felt completely safe!",
-        bookingUrl: "https://www.booking.com/searchresults.html?aid=2165599&selected_currency=USD&ss=Radisson+Blu+Edwardian+Mercer+Street&src=hotel&src_elem=sb&checkin=2024-03-01&checkout=2024-03-02&group_adults=2&no_rooms=1&group_children=0"
+        bookingUrl: "https://www.booking.com/hotel/gb/radisson-edwardian-mercer-street.html?aid=2165599&label=gen173nr-1DCAEoggI46AdIM1gEaKIBiAEBmAEJuAEXyAEM2AED6AEBiAIBqAIDuALJ7PrqBsACAdICJGZmZDJjMTgwLTdhYzktNDkwMi04NDM3LTI5MGQyYjJkODU4ZdgCBOACAQ&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=london-hotels&utm_content=radisson-mercer"
       }
     ],
     languageTable: {
