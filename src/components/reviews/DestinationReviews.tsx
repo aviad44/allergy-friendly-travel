@@ -136,6 +136,71 @@ const destinationData = {
       ]
     },
     intro: "Paris is a dream destination, but for travelers with food allergies, choosing the right hotel is essential for a safe and stress-free stay. Below is a list of the best allergy-friendly hotels in Paris, featuring real guest reviews, detailed information, and direct booking links to ensure your comfort."
+  },
+  crete: {
+    hotels: [
+      {
+        name: "1. Domes Noruz Chania – Adults Only Luxury",
+        address: "Chania, Crete, Greece",
+        features: ["⭐ 5-star luxury", "🍽️ Allergen-free dining", "🌿 Fragrance-free rooms"],
+        description: "An adults-only sanctuary offering hypoallergenic rooms and allergen-free dining options in a stunning beachfront setting.",
+        quote: "Staff were incredibly attentive to my gluten and dairy allergy. A fantastic experience!",
+        bookingUrl: "https://www.booking.com/hotel/gr/domes-noruz-chania.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=chania&utm_content=domes-noruz"
+      },
+      {
+        name: "2. Stella Island Luxury Resort & Spa – Adults Only Haven",
+        address: "Hersonissos, Crete, Greece",
+        features: ["⭐ 5-star resort", "🛏️ Allergy-free bedding", "👨‍🍳 Dedicated kitchen"],
+        description: "A luxury adults-only resort featuring personalized meal plans and a dedicated allergy-friendly kitchen to ensure safe dining.",
+        quote: "They customized my meals to be completely nut-free. Amazing service!",
+        bookingUrl: "https://www.booking.com/hotel/gr/stella-island-resort.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=hersonissos&utm_content=stella-island"
+      },
+      {
+        name: "3. Creta Maris Beach Resort – Family Paradise",
+        address: "Hersonissos, Crete, Greece",
+        features: ["⭐ 4-star resort", "🍽️ Safe buffet options", "👶 Family-friendly"],
+        description: "A family-friendly resort offering hypoallergenic rooms and a dedicated allergy-safe buffet with clear allergen labeling.",
+        quote: "The hotel provided an allergy-friendly buffet with clear labeling. I felt completely safe!",
+        bookingUrl: "https://www.booking.com/hotel/gr/creta-maris.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=hersonissos&utm_content=creta-maris"
+      },
+      {
+        name: "4. Blue Palace Elounda – Luxury Family Resort",
+        address: "Elounda, Crete, Greece",
+        features: ["⭐ 5-star luxury", "🍽️ Custom dining", "🏖️ Beachfront"],
+        description: "A luxury family resort offering allergy-sensitive dining options and hypoallergenic rooms with stunning sea views.",
+        quote: "A perfect choice for travelers with food allergies. The chef prepared meals specifically for my needs.",
+        bookingUrl: "https://www.booking.com/hotel/gr/blue-palace.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=elounda&utm_content=blue-palace"
+      },
+      {
+        name: "5. Aquila Rithymna Beach – Family-Friendly Haven",
+        address: "Rethymno, Crete, Greece",
+        features: ["⭐ 4-star resort", "👶 Kids menu", "🛏️ Allergy-free rooms"],
+        description: "A perfect family resort with allergy-free bedding and special allergy-safe kids' menu in a non-smoking environment.",
+        quote: "Great place for families with allergies. They accommodated my child's nut allergy perfectly!",
+        bookingUrl: "https://www.booking.com/hotel/gr/aquila-rithymna-beach.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=rethymno&utm_content=aquila-rithymna"
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Greek", "When to Use"],
+      rows: [
+        {
+          original: "I have a food allergy",
+          translation: "Έχω αλλεργία στο φαγητό",
+          pronunciation: "When checking in or dining"
+        },
+        {
+          original: "Does this contain [allergen]?",
+          translation: "Περιέχει [αλλεργιογόνο]?",
+          pronunciation: "Before ordering any food"
+        },
+        {
+          original: "Is this meal prepared separately?",
+          translation: "Αυτό το γεύμα ετοιμάζεται ξεχωριστά?",
+          pronunciation: "When ordering at restaurants"
+        }
+      ]
+    },
+    intro: "Traveling with food allergies in Crete can be challenging, but many hotels now offer excellent allergy-friendly accommodations with hypoallergenic rooms and special dietary options. From adults-only luxury resorts to family-friendly beach hotels, here's our curated selection of Crete's most accommodating hotels for allergy sufferers."
   }
 };
 
