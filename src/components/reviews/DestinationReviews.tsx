@@ -5,12 +5,68 @@ import { LanguageTable } from "./LanguageTable";
 import { HotelCard } from "@/components/hotels/HotelCard";
 import { TravelTips } from "@/components/hotels/TravelTips";
 import { LanguageCode, destinations, DestinationId } from "@/types/reviews";
+import { Separator } from "@/components/ui/separator";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
 }
 
 const destinationData = {
+  crete: {
+    intro: "Traveling with food allergies can be challenging, but Crete offers a variety of allergy-friendly accommodations with hypoallergenic rooms and special dietary options to ensure a worry-free stay. Whether you need a hotel with allergen-free dining, dust-mite-proof bedding, or staff trained in food sensitivities, Crete has options for you.",
+    hotels: [
+      {
+        name: "1. Domes Noruz Chania – Adults Only Luxury",
+        address: "Chania, Crete, Greece",
+        features: ["⭐ 5-star hotel", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌿 Fragrance-free environment"],
+        description: "An adults-only sanctuary offering hypoallergenic rooms and allergen-free dining options in a stunning beachfront setting.",
+        quote: "Staff were incredibly attentive to my gluten and dairy allergy. A fantastic experience!",
+        bookingUrl: "https://www.booking.com/hotel/gr/domes-noruz-chania.html"
+      },
+      {
+        name: "2. Stella Island Luxury Resort & Spa – Adults Only Haven",
+        address: "Hersonissos, Crete, Greece",
+        features: ["⭐ 5-star resort", "🛏️ Allergy-free bedding", "👨‍🍳 Dedicated kitchen", "🍽️ Personalized meal plans"],
+        description: "A luxury adults-only resort featuring personalized meal plans and a dedicated allergy-friendly kitchen to ensure safe dining.",
+        quote: "They customized my meals to be completely nut-free. Amazing service!",
+        bookingUrl: "https://www.booking.com/hotel/gr/stella-island-luxury-resort-spa.html"
+      },
+      {
+        name: "3. Creta Maris Beach Resort – Family Paradise",
+        address: "Hersonissos, Crete, Greece",
+        features: ["⭐ 4-star resort", "🍽️ Safe buffet options", "👶 Family-friendly", "👨‍🍳 Trained staff"],
+        description: "A family-friendly resort offering hypoallergenic rooms and a dedicated allergy-safe buffet with clear allergen labeling.",
+        quote: "The hotel provided an allergy-friendly buffet with clear labeling. I felt completely safe!",
+        bookingUrl: "https://www.booking.com/hotel/gr/creta-maris.html"
+      },
+      {
+        name: "4. Blue Palace Elounda – Luxury Family Resort",
+        address: "Elounda, Crete, Greece",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-sensitive dining", "🛏️ Hypoallergenic rooms", "🌿 Dust-free environment"],
+        description: "A luxury family resort offering allergy-sensitive dining options and hypoallergenic rooms with stunning sea views.",
+        quote: "A perfect choice for travelers with food allergies. The chef prepared meals specifically for my needs.",
+        bookingUrl: "https://www.booking.com/hotel/gr/blue-palace-elounda.html"
+      },
+      {
+        name: "5. Aquila Rithymna Beach – Family-Friendly Haven",
+        address: "Rethymno, Crete, Greece",
+        features: ["⭐ 4-star resort", "👶 Kids menu", "🛏️ Allergy-free rooms", "🚭 Non-smoking"],
+        description: "A perfect family resort with allergy-free bedding and special allergy-safe kids' menu in a non-smoking environment.",
+        quote: "Great place for families with allergies. They accommodated my child's nut allergy perfectly!",
+        bookingUrl: "https://www.booking.com/hotel/gr/aquila-rithymna-beach.html"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there allergy-friendly hotels near Heraklion Airport?",
+        answer: "Yes! Aquila Atlantis Hotel offers hypoallergenic rooms and allergy-safe dining near the airport."
+      },
+      {
+        question: "What features should I look for in an allergy-friendly hotel?",
+        answer: "Key features include hypoallergenic rooms, staff trained in food allergies, fragrance-free environments, and clear food labeling in dining areas."
+      }
+    ]
+  },
   london: {
     hotels: [
       {
@@ -201,6 +257,22 @@ const destinationData = {
       ]
     },
     intro: "Traveling with food allergies in Crete can be challenging, but many hotels now offer excellent allergy-friendly accommodations with hypoallergenic rooms and special dietary options. From adults-only luxury resorts to family-friendly beach hotels, here's our curated selection of Crete's most accommodating hotels for allergy sufferers."
+  },
+  barcelona: {
+    hotels: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    },
+    intro: ""
+  },
+  "ayia-napa": {
+    hotels: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    },
+    intro: ""
   }
 };
 
@@ -212,37 +284,45 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
   useEffect(() => {
     if (destination) {
-      document.title = `Allergy-Friendly Hotels in ${destination.name} | Safe Travel Guide`;
+      document.title = `Best Allergy-Friendly Hotels in ${destination.name} | Hypoallergenic Stays & Dining`;
       
       const metaDescription = document.querySelector('meta[name="description"]');
       if (metaDescription) {
         metaDescription.setAttribute("content", 
-          `Find the best allergy-friendly hotels in ${destination.name}. Comprehensive guide with reviews, safe dining options, and essential tips for travelers with food allergies.`
+          `Find the best allergy-friendly hotels in ${destination.name}. Enjoy safe stays with hypoallergenic rooms, allergy-conscious dining, and top-rated services for food-sensitive travelers.`
         );
       }
 
-      const schema = {
-        "@context": "https://schema.org",
-        "@type": "TravelGuide",
-        "name": `Allergy-Friendly Hotels Guide - ${destination.name}`,
-        "description": `Complete guide to allergy-friendly accommodations in ${destination.name}, including luxury and budget-friendly options.`,
-        "about": {
-          "@type": "TouristDestination",
-          "name": destination.name,
-          "description": destination.description
+      // Add OpenGraph meta tags
+      const ogTags = {
+        "og:title": `Top Allergy-Friendly Hotels in ${destination.name}`,
+        "og:description": `Discover ${destination.name}'s best hotels for allergy-conscious travelers. Hypoallergenic rooms, safe dining, and expert recommendations for a worry-free stay.`,
+        "og:image": "/og-image.png",
+        "og:url": `https://www.allergyfriendlyhotels.com/${destinationId}`,
+      };
+
+      Object.entries(ogTags).forEach(([property, content]) => {
+        let metaTag = document.querySelector(`meta[property="${property}"]`);
+        if (!metaTag) {
+          metaTag = document.createElement('meta');
+          metaTag.setAttribute('property', property);
+          document.head.appendChild(metaTag);
         }
-      };
+        metaTag.setAttribute('content', content);
+      });
 
-      const scriptTag = document.createElement('script');
-      scriptTag.type = 'application/ld+json';
-      scriptTag.text = JSON.stringify(schema);
-      document.head.appendChild(scriptTag);
-
-      return () => {
-        document.head.removeChild(scriptTag);
-      };
+      // Add keywords meta tag
+      let keywordsTag = document.querySelector('meta[name="keywords"]');
+      if (!keywordsTag) {
+        keywordsTag = document.createElement('meta');
+        keywordsTag.setAttribute('name', 'keywords');
+        document.head.appendChild(keywordsTag);
+      }
+      keywordsTag.setAttribute('content', 
+        `allergy-friendly hotels ${destination.name}, hypoallergenic stays ${destination.name}, best hotels for allergies, safe dining ${destination.name}, food allergy-friendly hotels ${destination.name}`
+      );
     }
-  }, [destination]);
+  }, [destination, destinationId]);
 
   if (!destination || !content) return null;
 
@@ -264,15 +344,32 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             <h2 className="text-xl md:text-2xl font-display text-muted-foreground">
               {destination.subtitle}
             </h2>
-            <p className="text-base text-muted-foreground max-w-3xl leading-relaxed">
-              {content.intro}
-            </p>
+            
+            <section className="mt-8">
+              <h2 className="text-2xl font-display font-semibold mb-4">Why Choose an Allergy-Friendly Hotel in {destination.name}?</h2>
+              <p className="text-base text-muted-foreground max-w-3xl leading-relaxed">
+                {content.intro}
+              </p>
+            </section>
           </header>
 
-          <section aria-label="Hotels List" className="space-y-6">
+          <section className="space-y-6" aria-label="Hotels List">
+            <h2 className="text-2xl font-display font-semibold">Top Allergy-Friendly Hotels in {destination.name}</h2>
             {content.hotels.map((hotel, index) => (
               <HotelCard key={index} {...hotel} />
             ))}
+          </section>
+
+          <section className="space-y-6">
+            <h2 className="text-2xl font-display font-semibold">FAQs: Allergy-Friendly Hotels in {destination.name}</h2>
+            <div className="space-y-4">
+              {content.faqs.map((faq, index) => (
+                <div key={index} className="space-y-2">
+                  <h3 className="text-lg font-semibold">{faq.question}</h3>
+                  <p className="text-muted-foreground">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
           </section>
 
           <TravelTips />
