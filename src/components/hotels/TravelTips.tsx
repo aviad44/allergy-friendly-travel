@@ -22,7 +22,7 @@ export const TravelTips = () => {
               <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
               <span>{tip}</span>
             </li>
-          )ul>
+          ))}
         </ul>
       </CardContent>
     </Card>
