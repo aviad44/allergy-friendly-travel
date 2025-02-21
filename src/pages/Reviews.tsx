@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Star, Home, Send, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -138,6 +137,10 @@ const Reviews = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+
+  // Add text direction helper
+  const isRTL = currentLanguage === 'he';
+  const textAlignment = isRTL ? 'text-right' : 'text-left';
   const t = translations[currentLanguage];
 
   useEffect(() => {
@@ -259,7 +262,7 @@ const Reviews = () => {
           </div>
 
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className={`text-center mb-12 ${textAlignment}`}>
             <h1 className="text-4xl font-display font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t.title}
             </h1>
@@ -269,11 +272,11 @@ const Reviews = () => {
           </div>
 
           {/* Add Review Form */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12 border border-white/20 shadow-lg transition-all hover:shadow-xl">
-            <h2 className="text-2xl font-semibold mb-6 text-right">{t.addReview}</h2>
+          <div className={`bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12 border border-white/20 shadow-lg transition-all hover:shadow-xl ${textAlignment}`}>
+            <h2 className="text-2xl font-semibold mb-6">{t.addReview}</h2>
             
             {/* Star Rating */}
-            <div className="flex items-center gap-3 mb-6 justify-end">
+            <div className={`flex items-center gap-3 mb-6 ${isRTL ? 'justify-end' : 'justify-start'}`}>
               <span className="text-sm text-muted-foreground">{t.rating}:</span>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((value) => (
@@ -299,16 +302,16 @@ const Reviews = () => {
                 onChange={(e) => setReviewText(e.target.value)}
                 placeholder={t.placeholder}
                 className="min-h-[120px] bg-white/5 border-white/10 focus:border-primary/50 transition-all"
-                dir={currentLanguage === 'he' ? 'rtl' : 'ltr'}
+                dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
 
-            <div className="flex justify-end">
+            <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'}`}>
               <Button
                 onClick={handleSubmitReview}
                 className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
               >
-                <Send className="h-4 w-4 ml-2" />
+                <Send className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                 {t.submit}
               </Button>
             </div>
@@ -316,7 +319,7 @@ const Reviews = () => {
 
           {/* Reviews List */}
           <div className="space-y-6">
-            <h2 className="text-2xl font-semibold mb-8 text-right">{t.recentReviews}</h2>
+            <h2 className={`text-2xl font-semibold mb-8 ${textAlignment}`}>{t.recentReviews}</h2>
             {isLoading ? (
               <div className="text-center">Loading reviews...</div>
             ) : reviews.length === 0 ? (
@@ -327,7 +330,7 @@ const Reviews = () => {
                   key={review.id}
                   className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10 shadow-md hover:shadow-lg transition-all"
                 >
-                  <div className="flex justify-between items-start mb-4">
+                  <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} justify-between items-start mb-4`}>
                     <span className="text-sm text-muted-foreground">
                       {new Date(review.created_at).toLocaleDateString()}
                     </span>
@@ -342,8 +345,8 @@ const Reviews = () => {
                       ))}
                     </div>
                   </div>
-                  <p className="mb-4 text-right text-lg leading-relaxed">{review.text}</p>
-                  <p className="text-sm text-muted-foreground text-right">
+                  <p className={`mb-4 text-lg leading-relaxed ${textAlignment}`}>{review.text}</p>
+                  <p className={`text-sm text-muted-foreground ${textAlignment}`}>
                     {t.writtenBy}: <span className="text-primary">{review.author_name}</span>
                   </p>
                 </div>
