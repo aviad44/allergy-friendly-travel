@@ -1,13 +1,3 @@
-export interface Review {
-  id: string;
-  rating: number;
-  text: string;
-  created_at: string;
-  author_name: string;
-  language: string;
-  destination?: string;
-  traveler_type?: TravelerType;
-}
 
 export type LanguageCode = 'en' | 'fr' | 'es' | 'de' | 'he';
 
@@ -71,9 +61,4 @@ export const destinations = [
   }
 ] as const;
 
-export type TravelerType = 'family' | 'couple' | 'solo' | 'friends';
-export type SortOption = 'newest' | 'oldest' | 'highestRated' | 'lowestRated';
 export type DestinationId = (typeof destinations)[number]['id'];
-
-export const travelerTypes = ['family', 'couple', 'solo', 'friends'] as const;
-export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
