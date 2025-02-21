@@ -4,6 +4,8 @@ import { Home, Globe, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MainMenu } from "@/components/MainMenu";
+import { HotelCard } from "@/components/hotels/HotelCard";
+import { TravelTips } from "@/components/hotels/TravelTips";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,11 +14,48 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LanguageCode, languages, destinations, DestinationId } from "@/types/reviews";
-import { translations } from "@/pages/translations";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
 }
+
+const hotels = [
+  {
+    name: "1. Le Meurice – Luxury & Personalized Allergy-Friendly Service",
+    address: "1 Rue de Rivoli, 75001 Paris, France",
+    features: ["⭐ 5-star hotel", "🏛️ Central location near the Louvre", "🍽️ Allergy-aware fine dining"],
+    description: "Le Meurice is one of Paris's most iconic luxury hotels, offering personalized allergy-friendly service. The in-house Michelin-starred restaurant, led by chef Alain Ducasse, accommodates special dietary needs with great attention to detail.",
+    quote: "Le Meurice is by far the nicest hotel I've ever stayed at—the fanciest and kindest staff! Absolutely recommend to anyone staying in Paris. The staff goes above and beyond!",
+    bookingUrl: "https://www.booking.com/hotel/fr/le-meurice.en.html"
+  },
+  {
+    name: "2. Hotel Novotel Paris les Halles – Central Location & Allergy-Sensitive Dining",
+    address: "8 Place Marguerite de Navarre, 75001 Paris, France",
+    features: ["⭐ 4-star hotel", "🚇 Near Châtelet-Les Halles station", "🏙️ Walkable to Louvre & Notre-Dame"],
+    quote: "Staff was very helpful in making inquiries at local restaurants regarding food allergy management. It was reassuring to know they understood my dietary restrictions!",
+    bookingUrl: "https://www.booking.com/hotel/fr/novotel-paris-les-halles.en.html"
+  },
+  {
+    name: "3. Hôtel Edouard 7 – Boutique Hotel with Personalized Allergy Support",
+    address: "39 Avenue de l'Opéra, 75002 Paris, France",
+    features: ["⭐ 4-star hotel", "🎭 Near Opéra Garnier", "🏛️ Short walk to Place Vendôme"],
+    quote: "They went above and beyond—even bought a large mini refrigerator for our room and went to the market for us, texting me photos of labels and using only those safe foods to cook for us!",
+    bookingUrl: "https://www.booking.com/hotel/fr/edouard-7-paris-opera.en.html"
+  },
+  {
+    name: "4. Le Bristol Paris – A Five-Star Experience for Allergy-Conscious Travelers",
+    address: "112 Rue du Faubourg Saint-Honoré, 75008 Paris, France",
+    features: ["⭐ 5-star hotel", "💎 Luxury shopping district", "🏊 Rooftop pool & Michelin-star dining"],
+    bookingUrl: "https://www.booking.com/hotel/fr/le-bristol-paris.en.html"
+  },
+  {
+    name: "5. Hotel Malte Astotel – Budget-Friendly & Allergy-Safe Comfort",
+    address: "63 Rue de Richelieu, 75002 Paris, France",
+    features: ["⭐ 4-star hotel", "🏙️ Close to the Louvre", "🍽️ Allergy-friendly breakfast"],
+    quote: "I can't thank the staff at Hotel Malte enough for their sensitivity towards my allergies. They made sure my breakfast was completely safe for me, and I felt much more comfortable knowing they understood my needs.",
+    bookingUrl: "https://www.booking.com/hotel/fr/malte-opera-astotel.en.html"
+  }
+];
 
 export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
@@ -24,7 +63,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
   const destination = destinations.find(d => d.id === destinationId);
   const isRTL = currentLanguage === 'he';
-  const textAlignment = isRTL ? 'text-right' : 'text-left';
 
   if (!destination) return null;
 
@@ -36,7 +74,9 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
         style={{
           backgroundImage: `url(https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80)`
         }}
-      />
+      >
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
 
       {/* Content */}
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -78,7 +118,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
         </div>
 
         {/* Main Content */}
-        <div className={`space-y-12 ${textAlignment}`}>
+        <div className="space-y-12">
           <div className="text-center space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold">
               {destination.description}
@@ -86,59 +126,50 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-display text-muted-foreground">
               {destination.subtitle}
             </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Paris is a dream destination, but for travelers with food allergies, choosing the right hotel is essential for a safe and stress-free stay. Below is a list of the best allergy-friendly hotels in Paris, featuring real guest reviews, detailed information, and direct booking links to ensure your comfort.
+            </p>
           </div>
 
-          {/* Hotel Information */}
-          <div className="prose prose-lg max-w-none">
-            <p className="text-lg text-muted-foreground">
-              Paris is a dream destination, but for travelers with food allergies, choosing the right hotel is essential for a safe and stress-free stay. Our curated list features the best allergy-friendly hotels, complete with real guest reviews and detailed information to ensure your comfort.
-            </p>
+          {/* Hotels List */}
+          <div className="space-y-8">
+            {hotels.map((hotel, index) => (
+              <HotelCard key={index} {...hotel} />
+            ))}
+          </div>
 
-            <div className="mt-8 space-y-12">
-              {/* Le Meurice */}
-              <div className="bg-card rounded-lg p-6 shadow-sm">
-                <h3 className="text-2xl font-display font-bold mb-4">1. Le Meurice – Luxury & Personalized Allergy-Friendly Service</h3>
-                <p className="mb-2"><strong>📍 Address:</strong> 1 Rue de Rivoli, 75001 Paris, France</p>
-                <p className="mb-4"><strong>⭐ 5-star hotel</strong> | 🏛️ Central location near the Louvre | 🍽️ Allergy-aware fine dining</p>
-                <p className="mb-4">Le Meurice is one of Paris's most iconic luxury hotels, offering personalized allergy-friendly service. The in-house Michelin-starred restaurant, led by chef Alain Ducasse, accommodates special dietary needs with great attention to detail.</p>
-                <Button asChild>
-                  <a href="https://www.booking.com/hotel/fr/le-meurice.en.html" target="_blank" rel="noopener noreferrer">
-                    Book Le Meurice
-                  </a>
-                </Button>
-              </div>
+          {/* Travel Tips */}
+          <TravelTips />
 
-              {/* Translation Table */}
-              <div className="bg-muted rounded-xl p-8 mt-16">
-                <h3 className="text-2xl font-display font-bold mb-6">Essential Allergy-Related French Phrases</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>English</TableHead>
-                      <TableHead>French</TableHead>
-                      <TableHead>Pronunciation</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>"I have a food allergy"</TableCell>
-                      <TableCell>"J'ai une allergie alimentaire"</TableCell>
-                      <TableCell>"Zhay oon ah-lehr-zhee ah-lee-mahn-tehr"</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>"Is this dish gluten-free?"</TableCell>
-                      <TableCell>"Est-ce que ce plat est sans gluten?"</TableCell>
-                      <TableCell>"Ess-kuh suh plah ay sahn gloo-tahn?"</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>"Does this contain nuts?"</TableCell>
-                      <TableCell>"Est-ce que ça contient des noix?"</TableCell>
-                      <TableCell>"Ess-kuh sah kohn-tyahn day nwah?"</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
+          {/* Translation Table */}
+          <div className="bg-muted rounded-xl p-8 mt-16">
+            <h3 className="text-2xl font-display font-bold mb-6">Essential Allergy-Related French Phrases</h3>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>English</TableHead>
+                  <TableHead>French</TableHead>
+                  <TableHead>Pronunciation</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell>"I have a food allergy"</TableCell>
+                  <TableCell>"J'ai une allergie alimentaire"</TableCell>
+                  <TableCell>"Zhay oon ah-lehr-zhee ah-lee-mahn-tehr"</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>"Is this dish gluten-free?"</TableCell>
+                  <TableCell>"Est-ce que ce plat est sans gluten?"</TableCell>
+                  <TableCell>"Ess-kuh suh plah ay sahn gloo-tahn?"</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>"Does this contain nuts?"</TableCell>
+                  <TableCell>"Est-ce que ça contient des noix?"</TableCell>
+                  <TableCell>"Ess-kuh sah kohn-tyahn day nwah?"</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
           </div>
         </div>
       </div>
