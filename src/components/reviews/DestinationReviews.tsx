@@ -4,14 +4,14 @@ import { DestinationNavigation } from "./DestinationNavigation";
 import { LanguageTable } from "./LanguageTable";
 import { HotelCard } from "@/components/hotels/HotelCard";
 import { TravelTips } from "@/components/hotels/TravelTips";
-import { LanguageCode, destinations, DestinationId } from "@/types/reviews";
+import { LanguageCode, destinations, DestinationId, DestinationContent } from "@/types/reviews";
 import { Separator } from "@/components/ui/separator";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
 }
 
-const destinationData = {
+const destinationData: Record<DestinationId, DestinationContent> = {
   crete: {
     intro: "Traveling with food allergies can be challenging, but Crete offers a variety of allergy-friendly accommodations with hypoallergenic rooms and special dietary options to ensure a worry-free stay. Whether you need a hotel with allergen-free dining, dust-mite-proof bedding, or staff trained in food sensitivities, Crete has options for you.",
     hotels: [
@@ -65,7 +65,89 @@ const destinationData = {
         question: "What features should I look for in an allergy-friendly hotel?",
         answer: "Key features include hypoallergenic rooms, staff trained in food allergies, fragrance-free environments, and clear food labeling in dining areas."
       }
-    ]
+    ],
+    languageTable: {
+      headers: ["English", "Greek", "When to Use"],
+      rows: [
+        {
+          original: "I have a food allergy",
+          translation: "Έχω αλλεργία στο φαγητό",
+          pronunciation: "When checking in or dining"
+        },
+        {
+          original: "Does this contain [allergen]?",
+          translation: "Περιέχει [αλλεργιογόνο]?",
+          pronunciation: "Before ordering any food"
+        },
+        {
+          original: "Is this meal prepared separately?",
+          translation: "Αυτό το γεύμα ετοιμάζεται ξεχωριστά?",
+          pronunciation: "When ordering at restaurants"
+        }
+      ]
+    }
+  },
+  paris: {
+    hotels: [
+      {
+        name: "1. Le Meurice – Luxury & Personalized Allergy-Friendly Service",
+        address: "1 Rue de Rivoli, 75001 Paris, France",
+        features: ["⭐ 5-star hotel", "🏛️ Central location near the Louvre", "🍽️ Allergy-aware fine dining"],
+        description: "Le Meurice is one of Paris's most iconic luxury hotels, offering personalized allergy-friendly service. The in-house Michelin-starred restaurant, led by chef Alain Ducasse, accommodates special dietary needs with great attention to detail.",
+        quote: "Le Meurice is by far the nicest hotel I've ever stayed at—the fanciest and kindest staff! Absolutely recommend to anyone staying in Paris. The staff goes above and beyond!",
+        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/le-meurice.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=paris-hotels&utm_term=luxury&utm_content=le-meurice")
+      },
+      {
+        name: "2. Hotel Novotel Paris les Halles – Central Location & Allergy-Sensitive Dining",
+        address: "8 Place Marguerite de Navarre, 75001 Paris, France",
+        features: ["⭐ 4-star hotel", "🚇 Near Châtelet-Les Halles station", "🏙️ Walkable to Louvre & Notre-Dame"],
+        quote: "Staff was very helpful in making inquiries at local restaurants regarding food allergy management. It was reassuring to know they understood my dietary restrictions!",
+        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/novotel-paris-les-halles.html?aid=2165599&label=allergy-friendly")
+      },
+      {
+        name: "3. Hôtel Edouard 7 – Boutique Hotel with Personalized Allergy Support",
+        address: "39 Avenue de l'Opéra, 75002 Paris, France",
+        features: ["⭐ 4-star hotel", "🎭 Near Opéra Garnier", "🏛️ Short walk to Place Vendôme"],
+        quote: "They went above and beyond—even bought a large mini refrigerator for our room and went to the market for us, texting me photos of labels and using only those safe foods to cook for us!",
+        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/edouard-7-paris-opera.html?aid=2165599&label=allergy-friendly")
+      },
+      {
+        name: "4. Le Bristol Paris – A Five-Star Experience for Allergy-Conscious Travelers",
+        address: "112 Rue du Faubourg Saint-Honoré, 75008 Paris, France",
+        features: ["⭐ 5-star hotel", "💎 Luxury shopping district", "🏊 Rooftop pool & Michelin-star dining"],
+        description: "Le Bristol Paris is one of the finest hotels in Paris, with hypoallergenic rooms and an award-winning restaurant, Epicure, that accommodates all dietary needs.",
+        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/le-bristol-paris.html?aid=2165599&label=allergy-friendly")
+      },
+      {
+        name: "5. Hotel Malte Astotel – Budget-Friendly & Allergy-Safe Comfort",
+        address: "63 Rue de Richelieu, 75002 Paris, France",
+        features: ["⭐ 4-star hotel", "🏙️ Close to the Louvre", "🍽️ Allergy-friendly breakfast"],
+        quote: "I can't thank the staff at Hotel Malte enough for their sensitivity towards my allergies. They made sure my breakfast was completely safe for me, and I felt much more comfortable knowing they understood my needs.",
+        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/malte-opera-astotel.html?aid=2165599&label=allergy-friendly")
+      }
+    ],
+    languageTable: {
+      headers: ["English", "French", "Pronunciation"],
+      rows: [
+        {
+          original: "I have a food allergy",
+          translation: "J'ai une allergie alimentaire",
+          pronunciation: "Zhay oon ah-lehr-zhee ah-lee-mahn-tehr"
+        },
+        {
+          original: "Is this dish gluten-free?",
+          translation: "Est-ce que ce plat est sans gluten?",
+          pronunciation: "Ess-kuh suh plah ay sahn gloo-tahn?"
+        },
+        {
+          original: "Does this contain nuts?",
+          translation: "Est-ce que ça contient des noix?",
+          pronunciation: "Ess-kuh sah kohn-tyahn day nwah?"
+        }
+      ]
+    },
+    intro: "Paris is a dream destination, but for travelers with food allergies, choosing the right hotel is essential for a safe and stress-free stay. Below is a list of the best allergy-friendly hotels in Paris, featuring real guest reviews, detailed information, and direct booking links to ensure your comfort.",
+    faqs: []
   },
   london: {
     hotels: [
@@ -130,149 +212,20 @@ const destinationData = {
         }
       ]
     },
-    intro: "Finding the right hotel as a food-sensitive traveler can be stressful. London offers excellent allergy-friendly hotels with hypoallergenic rooms, dedicated dining options, and well-trained staff to ensure a safe stay. Here's our curated selection of London's most accommodating hotels for allergy sufferers."
-  },
-  paris: {
-    hotels: [
-      {
-        name: "1. Le Meurice – Luxury & Personalized Allergy-Friendly Service",
-        address: "1 Rue de Rivoli, 75001 Paris, France",
-        features: ["⭐ 5-star hotel", "🏛️ Central location near the Louvre", "🍽️ Allergy-aware fine dining"],
-        description: "Le Meurice is one of Paris's most iconic luxury hotels, offering personalized allergy-friendly service. The in-house Michelin-starred restaurant, led by chef Alain Ducasse, accommodates special dietary needs with great attention to detail.",
-        quote: "Le Meurice is by far the nicest hotel I've ever stayed at—the fanciest and kindest staff! Absolutely recommend to anyone staying in Paris. The staff goes above and beyond!",
-        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/le-meurice.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=paris-hotels&utm_term=luxury&utm_content=le-meurice")
-      },
-      {
-        name: "2. Hotel Novotel Paris les Halles – Central Location & Allergy-Sensitive Dining",
-        address: "8 Place Marguerite de Navarre, 75001 Paris, France",
-        features: ["⭐ 4-star hotel", "🚇 Near Châtelet-Les Halles station", "🏙️ Walkable to Louvre & Notre-Dame"],
-        quote: "Staff was very helpful in making inquiries at local restaurants regarding food allergy management. It was reassuring to know they understood my dietary restrictions!",
-        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/novotel-paris-les-halles.html?aid=2165599&label=allergy-friendly")
-      },
-      {
-        name: "3. Hôtel Edouard 7 – Boutique Hotel with Personalized Allergy Support",
-        address: "39 Avenue de l'Opéra, 75002 Paris, France",
-        features: ["⭐ 4-star hotel", "🎭 Near Opéra Garnier", "🏛️ Short walk to Place Vendôme"],
-        quote: "They went above and beyond—even bought a large mini refrigerator for our room and went to the market for us, texting me photos of labels and using only those safe foods to cook for us!",
-        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/edouard-7-paris-opera.html?aid=2165599&label=allergy-friendly")
-      },
-      {
-        name: "4. Le Bristol Paris – A Five-Star Experience for Allergy-Conscious Travelers",
-        address: "112 Rue du Faubourg Saint-Honoré, 75008 Paris, France",
-        features: ["⭐ 5-star hotel", "💎 Luxury shopping district", "🏊 Rooftop pool & Michelin-star dining"],
-        description: "Le Bristol Paris is one of the finest hotels in Paris, with hypoallergenic rooms and an award-winning restaurant, Epicure, that accommodates all dietary needs.",
-        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/le-bristol-paris.html?aid=2165599&label=allergy-friendly")
-      },
-      {
-        name: "5. Hotel Malte Astotel – Budget-Friendly & Allergy-Safe Comfort",
-        address: "63 Rue de Richelieu, 75002 Paris, France",
-        features: ["⭐ 4-star hotel", "🏙️ Close to the Louvre", "🍽️ Allergy-friendly breakfast"],
-        quote: "I can't thank the staff at Hotel Malte enough for their sensitivity towards my allergies. They made sure my breakfast was completely safe for me, and I felt much more comfortable knowing they understood my needs.",
-        bookingUrl: encodeURI("https://www.booking.com/hotel/fr/malte-opera-astotel.html?aid=2165599&label=allergy-friendly")
-      }
-    ],
-    languageTable: {
-      headers: ["English", "French", "Pronunciation"],
-      rows: [
-        {
-          original: "I have a food allergy",
-          translation: "J'ai une allergie alimentaire",
-          pronunciation: "Zhay oon ah-lehr-zhee ah-lee-mahn-tehr"
-        },
-        {
-          original: "Is this dish gluten-free?",
-          translation: "Est-ce que ce plat est sans gluten?",
-          pronunciation: "Ess-kuh suh plah ay sahn gloo-tahn?"
-        },
-        {
-          original: "Does this contain nuts?",
-          translation: "Est-ce que ça contient des noix?",
-          pronunciation: "Ess-kuh sah kohn-tyahn day nwah?"
-        }
-      ]
-    },
-    intro: "Paris is a dream destination, but for travelers with food allergies, choosing the right hotel is essential for a safe and stress-free stay. Below is a list of the best allergy-friendly hotels in Paris, featuring real guest reviews, detailed information, and direct booking links to ensure your comfort."
-  },
-  crete: {
-    hotels: [
-      {
-        name: "1. Domes Noruz Chania – Adults Only Luxury",
-        address: "Chania, Crete, Greece",
-        features: ["⭐ 5-star luxury", "🍽️ Allergen-free dining", "🌿 Fragrance-free rooms"],
-        description: "An adults-only sanctuary offering hypoallergenic rooms and allergen-free dining options in a stunning beachfront setting.",
-        quote: "Staff were incredibly attentive to my gluten and dairy allergy. A fantastic experience!",
-        bookingUrl: "https://www.booking.com/hotel/gr/domes-noruz-chania.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=chania&utm_content=domes-noruz"
-      },
-      {
-        name: "2. Stella Island Luxury Resort & Spa – Adults Only Haven",
-        address: "Hersonissos, Crete, Greece",
-        features: ["⭐ 5-star resort", "🛏️ Allergy-free bedding", "👨‍🍳 Dedicated kitchen"],
-        description: "A luxury adults-only resort featuring personalized meal plans and a dedicated allergy-friendly kitchen to ensure safe dining.",
-        quote: "They customized my meals to be completely nut-free. Amazing service!",
-        bookingUrl: "https://www.booking.com/hotel/gr/stella-island-luxury-resort-spa.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=hersonissos&utm_content=stella-island"
-      },
-      {
-        name: "3. Creta Maris Beach Resort – Family Paradise",
-        address: "Hersonissos, Crete, Greece",
-        features: ["⭐ 4-star resort", "🍽️ Safe buffet options", "👶 Family-friendly"],
-        description: "A family-friendly resort offering hypoallergenic rooms and a dedicated allergy-safe buffet with clear allergen labeling.",
-        quote: "The hotel provided an allergy-friendly buffet with clear labeling. I felt completely safe!",
-        bookingUrl: "https://www.booking.com/hotel/gr/creta-maris.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=hersonissos&utm_content=creta-maris"
-      },
-      {
-        name: "4. Blue Palace Elounda – Luxury Family Resort",
-        address: "Elounda, Crete, Greece",
-        features: ["⭐ 5-star luxury", "🍽️ Custom dining", "🏖️ Beachfront"],
-        description: "A luxury family resort offering allergy-sensitive dining options and hypoallergenic rooms with stunning sea views.",
-        quote: "A perfect choice for travelers with food allergies. The chef prepared meals specifically for my needs.",
-        bookingUrl: "https://www.booking.com/hotel/gr/blue-palace-elounda.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=elounda&utm_content=blue-palace"
-      },
-      {
-        name: "5. Aquila Rithymna Beach – Family-Friendly Haven",
-        address: "Rethymno, Crete, Greece",
-        features: ["⭐ 4-star resort", "👶 Kids menu", "🛏️ Allergy-free rooms"],
-        description: "A perfect family resort with allergy-free bedding and special allergy-safe kids' menu in a non-smoking environment.",
-        quote: "Great place for families with allergies. They accommodated my child's nut allergy perfectly!",
-        bookingUrl: "https://www.booking.com/hotel/gr/aquila-rithymna-beach.html?utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_term=rethymno&utm_content=aquila-rithymna"
-      }
-    ],
-    languageTable: {
-      headers: ["English", "Greek", "When to Use"],
-      rows: [
-        {
-          original: "I have a food allergy",
-          translation: "Έχω αλλεργία στο φαγητό",
-          pronunciation: "When checking in or dining"
-        },
-        {
-          original: "Does this contain [allergen]?",
-          translation: "Περιέχει [αλλεργιογόνο]?",
-          pronunciation: "Before ordering any food"
-        },
-        {
-          original: "Is this meal prepared separately?",
-          translation: "Αυτό το γεύμα ετοιμάζεται ξεχωριστά?",
-          pronunciation: "When ordering at restaurants"
-        }
-      ]
-    },
-    intro: "Traveling with food allergies in Crete can be challenging, but many hotels now offer excellent allergy-friendly accommodations with hypoallergenic rooms and special dietary options. From adults-only luxury resorts to family-friendly beach hotels, here's our curated selection of Crete's most accommodating hotels for allergy sufferers."
+    intro: "Finding the right hotel as a food-sensitive traveler can be stressful. London offers excellent allergy-friendly hotels with hypoallergenic rooms, dedicated dining options, and well-trained staff to ensure a safe stay. Here's our curated selection of London's most accommodating hotels for allergy sufferers.",
+    faqs: []
   },
   barcelona: {
+    intro: "",
     hotels: [],
-    languageTable: {
-      headers: [],
-      rows: []
-    },
-    intro: ""
+    languageTable: { headers: [], rows: [] },
+    faqs: []
   },
   "ayia-napa": {
+    intro: "",
     hotels: [],
-    languageTable: {
-      headers: [],
-      rows: []
-    },
-    intro: ""
+    languageTable: { headers: [], rows: [] },
+    faqs: []
   }
 };
 
@@ -280,7 +233,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
   const destination = destinations.find(d => d.id === destinationId);
   const isRTL = currentLanguage === 'he';
-  const content = destinationData[destinationId as keyof typeof destinationData];
+  const content = destinationData[destinationId];
 
   useEffect(() => {
     if (destination) {
@@ -293,12 +246,11 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
         );
       }
 
-      // Add OpenGraph meta tags
       const ogTags = {
         "og:title": `Top Allergy-Friendly Hotels in ${destination.name}`,
         "og:description": `Discover ${destination.name}'s best hotels for allergy-conscious travelers. Hypoallergenic rooms, safe dining, and expert recommendations for a worry-free stay.`,
         "og:image": "/og-image.png",
-        "og:url": `https://www.allergyfriendlyhotels.com/${destinationId}`,
+        "og:url": `https://www.allergyfriendlyhotels.com/${destinationId}`
       };
 
       Object.entries(ogTags).forEach(([property, content]) => {
@@ -311,7 +263,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
         metaTag.setAttribute('content', content);
       });
 
-      // Add keywords meta tag
       let keywordsTag = document.querySelector('meta[name="keywords"]');
       if (!keywordsTag) {
         keywordsTag = document.createElement('meta');

@@ -18,6 +18,32 @@ export interface Destination {
   subtitle: string;
 }
 
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
+export interface DestinationContent {
+  intro: string;
+  hotels: {
+    name: string;
+    address: string;
+    features: string[];
+    description: string;
+    quote: string;
+    bookingUrl: string;
+  }[];
+  languageTable: {
+    headers: string[];
+    rows: {
+      original: string;
+      translation: string;
+      pronunciation: string;
+    }[];
+  };
+  faqs: FAQ[];
+}
+
 export const destinations = [
   { 
     id: 'paris',
