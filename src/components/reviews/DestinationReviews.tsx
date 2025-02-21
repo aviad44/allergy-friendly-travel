@@ -35,7 +35,7 @@ const destinationData = {
         features: ["⭐ 4-star hotel", "🍽️ Tailored meal plans", "🏰 Central location"],
         description: "The Hyatt Regency Churchill takes pride in its comprehensive allergy management program, offering personalized meal plans and allergy-friendly rooms.",
         quote: "The staff handled my nut allergy with great care. A safe and enjoyable stay!",
-        bookingUrl: "https://www.booking.com/hotel/gb/hyatt-regency-london-the-churchill.he.html?aid=304142&label=gen173nr-1FCAsoUEIeaHlhdHQtcmVnZW5jeS1sb25kb24tY2h1cmNoaWxsSDNYBGhqiAEBmAEOuAEXyAEM2AEB6AEB-AEDiAIBqAIDuAKM5eG9BsACAdICJDM1YmUyNTJiLTk3ZGMtNDY5Zi05Y2JmLWIwMjRhOWQxZGNkOdgCBeACAQ&checkin=2025-08-20&checkout=2025-08-26&dist=0&group_adults=2&group_children=0&no_rooms=1&room1=A%2CA&sb_price_type=total&type=total&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=london-hotels&utm_term=central&utm_content=hyatt-churchill"
+        bookingUrl: "https://www.booking.com/hotel/gb/hyatt-regency-london-churchill.he.html?aid=304142&label=gen173nr-1FCAsoUEIQaHlhdHQtcmVnZW5jeS1sb25kb24SFWNodXJjaGlsbC1tYXJibGUtYXJjaFgEaGqIAQGYAQ64ARfIAQzYAQHoAQH4AQyIAgGoAgO4AuXq4b0GwAIB0gIkZmZkMmMxODAtN2FjOS00OTAyLTg0MzctMjkwZDJiMmQ4NThh2AIE4AIA&checkin=2025-08-20&checkout=2025-08-26&dist=0&group_adults=2&group_children=0&no_rooms=1&room1=A%2CA&sb_price_type=total&type=total&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=london-hotels&utm_term=central&utm_content=hyatt-churchill"
       },
       {
         name: "4. St. Pancras Renaissance Hotel London",
