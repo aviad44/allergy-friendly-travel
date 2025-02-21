@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Home, Globe, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -65,6 +65,43 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const destination = destinations.find(d => d.id === destinationId);
   const isRTL = currentLanguage === 'he';
 
+  useEffect(() => {
+    if (destination) {
+      // עדכון תגיות מטא דינמיות
+      document.title = `Allergy-Friendly Hotels in ${destination.name} | Safe Travel Guide`;
+      
+      // עדכון תיאור מטא
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute("content", 
+          `Find the best allergy-friendly hotels in ${destination.name}. Comprehensive guide with reviews, safe dining options, and essential tips for travelers with food allergies.`
+        );
+      }
+
+      // הוספת schema.org markup
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "TravelGuide",
+        "name": `Allergy-Friendly Hotels Guide - ${destination.name}`,
+        "description": `Complete guide to allergy-friendly accommodations in ${destination.name}, including luxury and budget-friendly options.`,
+        "about": {
+          "@type": "TouristDestination",
+          "name": destination.name,
+          "description": destination.description
+        }
+      };
+
+      const scriptTag = document.createElement('script');
+      scriptTag.type = 'application/ld+json';
+      scriptTag.text = JSON.stringify(schema);
+      document.head.appendChild(scriptTag);
+
+      return () => {
+        document.head.removeChild(scriptTag);
+      };
+    }
+  }, [destination]);
+
   if (!destination) return null;
 
   return (
@@ -75,14 +112,16 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
         style={{
           backgroundImage: `url(https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80)`
         }}
+        role="img"
+        aria-label={`Scenic view of ${destination.name}`}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl -mt-20 relative z-10">
+      <main className="container mx-auto px-4 py-8 max-w-4xl -mt-20 relative z-10">
         {/* Navigation */}
-        <div className="flex justify-between items-center mb-8">
+        <nav className="flex justify-between items-center mb-8" aria-label="Main navigation">
           <div className="flex gap-2">
             <Button variant="ghost" onClick={() => navigate('/destinations')} className="bg-background/80 backdrop-blur-sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -116,11 +155,11 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             </DropdownMenu>
             <MainMenu />
           </div>
-        </div>
+        </nav>
 
         {/* Main Content */}
-        <div className="space-y-12">
-          <div className="text-left space-y-4">
+        <article className="space-y-12">
+          <header className="text-left space-y-4">
             <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">
               {destination.description}
             </h1>
@@ -130,20 +169,20 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             <p className="text-base text-muted-foreground max-w-3xl leading-relaxed">
               Paris is a dream destination, but for travelers with food allergies, choosing the right hotel is essential for a safe and stress-free stay. Below is a list of the best allergy-friendly hotels in Paris, featuring real guest reviews, detailed information, and direct booking links to ensure your comfort.
             </p>
-          </div>
+          </header>
 
           {/* Hotels List */}
-          <div className="space-y-6">
+          <section aria-label="Hotels List" className="space-y-6">
             {hotels.map((hotel, index) => (
               <HotelCard key={index} {...hotel} />
             ))}
-          </div>
+          </section>
 
           {/* Travel Tips */}
           <TravelTips />
 
           {/* Translation Table */}
-          <div className="bg-muted rounded-xl p-6 mt-16">
+          <section aria-label="French Phrases" className="bg-muted rounded-xl p-6 mt-16">
             <h3 className="text-xl font-display font-bold mb-4">Essential Allergy-Related French Phrases</h3>
             <div className="overflow-x-auto">
               <Table>
@@ -173,9 +212,9 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                 </TableBody>
               </Table>
             </div>
-          </div>
-        </div>
-      </div>
+          </section>
+        </article>
+      </main>
     </div>
   );
 };
