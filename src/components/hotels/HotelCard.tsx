@@ -12,6 +12,15 @@ interface HotelCardProps {
 }
 
 export const HotelCard = ({ name, address, features, description, quote, bookingUrl }: HotelCardProps) => {
+  // Add UTM parameters to booking URL if it's a Booking.com URL
+  const getEnhancedBookingUrl = (url: string) => {
+    if (url.includes('booking.com')) {
+      const baseUrl = url.split('?')[0];
+      return `${baseUrl}.he.html?aid=2165599&label=allergy-friendly&utm_source=allergy-friendly-hotels&utm_medium=referral&utm_campaign=crete-hotels&utm_content=stella-island`;
+    }
+    return url;
+  };
+
   return (
     <Card className="mb-8">
       <CardHeader>
@@ -37,7 +46,7 @@ export const HotelCard = ({ name, address, features, description, quote, booking
       </CardContent>
       <CardFooter>
         <Button asChild>
-          <a href={bookingUrl} target="_blank" rel="noopener noreferrer">
+          <a href={getEnhancedBookingUrl(bookingUrl)} target="_blank" rel="noopener noreferrer">
             Book Now
           </a>
         </Button>
