@@ -20,14 +20,14 @@ export const languages = [
   { code: 'he' as const, name: 'עברית' }
 ] as const;
 
-type Destination = {
+export interface Destination {
   id: string;
   name: string;
   country: string;
   image: string;
-};
+}
 
-export const destinations: readonly Destination[] = [
+export const destinations = [
   { id: 'paris', name: 'Paris', country: 'France', image: 'photo-1502602898657-3e91760cbb34' },
   { id: 'london', name: 'London', country: 'United Kingdom', image: 'photo-1513635269975-59663e0ac1ad' },
   { id: 'crete', name: 'Crete', country: 'Greece', image: 'photo-1482938289607-e9573fc25ebb' },
@@ -40,3 +40,4 @@ export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] a
 
 export type TravelerType = typeof travelerTypes[number];
 export type SortOption = typeof sortOptions[number];
+export type DestinationId = typeof destinations[number]['id'];

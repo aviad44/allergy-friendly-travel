@@ -15,11 +15,11 @@ import {
 import { ReviewForm } from "./ReviewForm";
 import { ReviewFilters } from "./ReviewFilters";
 import { ReviewCard } from "./ReviewCard";
-import { Review, LanguageCode, languages, destinations } from "@/types/reviews";
+import { Review, LanguageCode, languages, destinations, DestinationId, SortOption } from "@/types/reviews";
 import { translations } from "@/pages/translations";
 
 interface DestinationReviewsProps {
-  destinationId: string;
+  destinationId: DestinationId;
 }
 
 export const DestinationReviews = ({ destinationId }: DestinationReviewsProps) => {
@@ -28,8 +28,8 @@ export const DestinationReviews = ({ destinationId }: DestinationReviewsProps) =
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTravelerType, setSelectedTravelerType] = useState<string>('all');
-  const [sortBy, setSortBy] = useState('newest');
+  const [selectedTravelerType, setSelectedTravelerType] = useState('all');
+  const [sortBy, setSortBy] = useState<SortOption>('newest');
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -155,7 +155,7 @@ export const DestinationReviews = ({ destinationId }: DestinationReviewsProps) =
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="flex justify-between items-center mb-8">
             <div className="flex gap-2">
-              <Button variant="ghost" onClick={() => navigate('/reviews')} className="hover:bg-white/10 transition-colors">
+              <Button variant="ghost" onClick={() => navigate('/destinations')} className="hover:bg-white/10 transition-colors">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
@@ -178,7 +178,7 @@ export const DestinationReviews = ({ destinationId }: DestinationReviewsProps) =
                   {languages.map((language) => (
                     <DropdownMenuItem
                       key={language.code}
-                      onClick={() => setCurrentLanguage(language.code as LanguageCode)}
+                      onClick={() => setCurrentLanguage(language.code)}
                     >
                       {language.name}
                     </DropdownMenuItem>
@@ -218,7 +218,7 @@ export const DestinationReviews = ({ destinationId }: DestinationReviewsProps) =
               sortBy={sortBy}
               onDestinationChange={() => {}}
               onTravelerTypeChange={setSelectedTravelerType}
-              onSortChange={setSortBy}
+              onSortChange={(value) => setSortBy(value as SortOption)}
               textAlignment={textAlignment}
               translations={t}
               hideDestinationFilter
