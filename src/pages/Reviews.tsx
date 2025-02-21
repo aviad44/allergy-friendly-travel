@@ -20,6 +20,8 @@ interface Review {
   created_at: string;
   author_name: string;
   language: string;
+  destination?: string;
+  traveler_type?: 'family' | 'couple' | 'solo' | 'friends';
 }
 
 const translations = {
@@ -40,6 +42,22 @@ const translations = {
     success: {
       title: "Thank you!",
       description: "Your review has been added successfully"
+    },
+    filter: {
+      title: "Filter Reviews",
+      destination: "Destination",
+      all: "All Destinations",
+      travelerType: "Traveler Type",
+      sortBy: "Sort By",
+      newest: "Newest First",
+      oldest: "Oldest First",
+      highestRated: "Highest Rated",
+      lowestRated: "Lowest Rated",
+      family: "Family",
+      couple: "Couple",
+      solo: "Solo",
+      friends: "Friends",
+      allTypes: "All Types"
     }
   },
   fr: {
@@ -59,6 +77,22 @@ const translations = {
     success: {
       title: "Merci!",
       description: "Votre avis a été ajouté avec succès"
+    },
+    filter: {
+      title: "Filtrer les Avis",
+      destination: "Destination",
+      all: "Toutes les Destinations",
+      travelerType: "Type de Voyageur",
+      sortBy: "Trier Par",
+      newest: "Plus Récents",
+      oldest: "Plus Anciens",
+      highestRated: "Mieux Notés",
+      lowestRated: "Moins Bien Notés",
+      family: "Famille",
+      couple: "Couple",
+      solo: "Solo",
+      friends: "Amis",
+      allTypes: "Tous les Types"
     }
   },
   es: {
@@ -78,6 +112,22 @@ const translations = {
     success: {
       title: "¡Gracias!",
       description: "Tu reseña ha sido añadida con éxito"
+    },
+    filter: {
+      title: "Filtrar Reseñas",
+      destination: "Destino",
+      all: "Todos los Destinos",
+      travelerType: "Tipo de Viajero",
+      sortBy: "Ordenar Por",
+      newest: "Más Recientes",
+      oldest: "Más Antiguos",
+      highestRated: "Mejor Valorados",
+      lowestRated: "Peor Valorados",
+      family: "Familia",
+      couple: "Pareja",
+      solo: "Solo",
+      friends: "Amigos",
+      allTypes: "Todos los Tipos"
     }
   },
   de: {
@@ -97,6 +147,22 @@ const translations = {
     success: {
       title: "Danke!",
       description: "Ihre Bewertung wurde erfolgreich hinzugefügt"
+    },
+    filter: {
+      title: "Bewertungen Filtern",
+      destination: "Reiseziel",
+      all: "Alle Reiseziele",
+      travelerType: "Reisetyp",
+      sortBy: "Sortieren Nach",
+      newest: "Neueste zuerst",
+      oldest: "Älteste zuerst",
+      highestRated: "Beste Bewertung",
+      lowestRated: "Schlechteste Bewertung",
+      family: "Familie",
+      couple: "Paar",
+      solo: "Alleinreisend",
+      friends: "Freunde",
+      allTypes: "Alle Typen"
     }
   },
   he: {
@@ -116,17 +182,29 @@ const translations = {
     success: {
       title: "תודה!",
       description: "הביקורת שלך נוספה בהצלחה"
+    },
+    filter: {
+      title: "סינון ביקורות",
+      destination: "יעד",
+      all: "כל היעדים",
+      travelerType: "סוג מטייל",
+      sortBy: "מיין לפי",
+      newest: "החדש ביותר",
+      oldest: "הישן ביותר",
+      highestRated: "הדירוג הגבוה ביותר",
+      lowestRated: "הדירוג הנמוך ביותר",
+      family: "משפחה",
+      couple: "זוג",
+      solo: "לבד",
+      friends: "חברים",
+      allTypes: "כל הסוגים"
     }
   }
 };
 
-const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'fr', name: 'Français' },
-  { code: 'es', name: 'Español' },
-  { code: 'de', name: 'Deutsch' },
-  { code: 'he', name: 'עברית' }
-];
+const destinations = ['Paris', 'London', 'Rome', 'Barcelona', 'Amsterdam'];
+const travelerTypes = ['family', 'couple', 'solo', 'friends'] as const;
+const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
 
 type LanguageCode = keyof typeof translations;
 
@@ -137,6 +215,9 @@ const Reviews = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const [selectedDestination, setSelectedDestination] = useState<string>('all');
+  const [selectedTravelerType, setSelectedTravelerType] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<typeof sortOptions[number]>('newest');
 
   const isRTL = currentLanguage === 'he';
   const textAlignment = isRTL ? 'text-right' : 'text-left';
@@ -217,6 +298,35 @@ const Reviews = () => {
 
   const handleRatingClick = (value: number) => {
     setRating(value);
+  };
+
+  const filterAndSortReviews = (reviews: Review[]) => {
+    let filtered = [...reviews];
+
+    // Filter by destination
+    if (selectedDestination !== 'all') {
+      filtered = filtered.filter(review => review.destination === selectedDestination);
+    }
+
+    // Filter by traveler type
+    if (selectedTravelerType !== 'all') {
+      filtered = filtered.filter(review => review.traveler_type === selectedTravelerType);
+    }
+
+    // Sort reviews
+    return filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'oldest':
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case 'highestRated':
+          return b.rating - a.rating;
+        case 'lowestRated':
+          return a.rating - b.rating;
+        case 'newest':
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
   };
 
   return (
@@ -308,12 +418,62 @@ const Reviews = () => {
 
           <div className="space-y-6">
             <h2 className={`text-2xl font-semibold mb-8 ${textAlignment}`}>{t.recentReviews}</h2>
+            
+            <div className={`bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10 mb-8 ${textAlignment}`}>
+              <h3 className="text-lg font-semibold mb-4">{t.filter.title}</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Destination Filter */}
+                <div>
+                  <label className="block text-sm mb-2">{t.filter.destination}</label>
+                  <select
+                    value={selectedDestination}
+                    onChange={(e) => setSelectedDestination(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-md p-2"
+                  >
+                    <option value="all">{t.filter.all}</option>
+                    {destinations.map(dest => (
+                      <option key={dest} value={dest}>{dest}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Traveler Type Filter */}
+                <div>
+                  <label className="block text-sm mb-2">{t.filter.travelerType}</label>
+                  <select
+                    value={selectedTravelerType}
+                    onChange={(e) => setSelectedTravelerType(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-md p-2"
+                  >
+                    <option value="all">{t.filter.allTypes}</option>
+                    {travelerTypes.map(type => (
+                      <option key={type} value={type}>{t.filter[type]}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Sort Options */}
+                <div>
+                  <label className="block text-sm mb-2">{t.filter.sortBy}</label>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as typeof sortOptions[number])}
+                    className="w-full bg-white/5 border border-white/10 rounded-md p-2"
+                  >
+                    {sortOptions.map(option => (
+                      <option key={option} value={option}>{t.filter[option]}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
             {isLoading ? (
               <div className="text-center">Loading reviews...</div>
             ) : reviews.length === 0 ? (
               <div className="text-center text-muted-foreground">No reviews yet</div>
             ) : (
-              reviews.map((review) => (
+              filterAndSortReviews(reviews).map((review) => (
                 <div
                   key={review.id}
                   className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10 shadow-md hover:shadow-lg transition-all"
