@@ -138,7 +138,6 @@ const Reviews = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  // Add text direction helper
   const isRTL = currentLanguage === 'he';
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   const t = translations[currentLanguage];
@@ -186,16 +185,11 @@ const Reviews = () => {
     }
 
     try {
-      const { data: userData, error: userError } = await supabase.auth.getUser();
-      
-      if (userError) throw userError;
-
       const newReview = {
         rating,
         text: reviewText,
         language: currentLanguage.toLowerCase(),
-        author_name: userData?.user?.email?.split('@')[0] || t.guest,
-        user_id: userData?.user?.id
+        author_name: t.guest
       };
 
       const { error } = await supabase
@@ -230,7 +224,6 @@ const Reviews = () => {
       <div className="hero-gradient absolute inset-0 z-0" />
       <div className="relative z-10">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
-          {/* Navigation */}
           <div className="flex justify-between items-center mb-8">
             <Link to="/">
               <Button variant="ghost" className="hover:bg-white/10 transition-colors">
@@ -261,7 +254,6 @@ const Reviews = () => {
             </div>
           </div>
 
-          {/* Header */}
           <div className={`text-center mb-12 ${textAlignment}`}>
             <h1 className="text-4xl font-display font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t.title}
@@ -271,11 +263,9 @@ const Reviews = () => {
             </p>
           </div>
 
-          {/* Add Review Form */}
           <div className={`bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12 border border-white/20 shadow-lg transition-all hover:shadow-xl ${textAlignment}`}>
             <h2 className="text-2xl font-semibold mb-6">{t.addReview}</h2>
             
-            {/* Star Rating */}
             <div className={`flex items-center gap-3 mb-6 ${isRTL ? 'justify-end' : 'justify-start'}`}>
               <span className="text-sm text-muted-foreground">{t.rating}:</span>
               <div className="flex gap-2">
@@ -295,7 +285,6 @@ const Reviews = () => {
               </div>
             </div>
 
-            {/* Review Text */}
             <div className="mb-6">
               <Textarea
                 value={reviewText}
@@ -317,7 +306,6 @@ const Reviews = () => {
             </div>
           </div>
 
-          {/* Reviews List */}
           <div className="space-y-6">
             <h2 className={`text-2xl font-semibold mb-8 ${textAlignment}`}>{t.recentReviews}</h2>
             {isLoading ? (
