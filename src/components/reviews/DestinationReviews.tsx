@@ -151,11 +151,14 @@ export const DestinationReviews = ({ destinationId }: DestinationReviewsProps) =
       >
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative z-10 container mx-auto px-4 text-center text-white">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-4">
             {destination.description}
           </h1>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-200">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-display font-medium mb-6">
             {destination.subtitle}
+          </h2>
+          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-200">
+            Paris is a dream destination, but for travelers with food allergies, choosing the right hotel is essential for a safe and stress-free stay. Our curated list features the best allergy-friendly hotels, complete with real guest reviews and detailed information to ensure your comfort.
           </p>
         </div>
       </div>

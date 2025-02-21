@@ -1,4 +1,3 @@
-
 export interface Review {
   id: string;
   rating: number;
@@ -13,12 +12,12 @@ export interface Review {
 export type LanguageCode = 'en' | 'fr' | 'es' | 'de' | 'he';
 
 export const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'fr', name: 'Français' },
-  { code: 'es', name: 'Español' },
-  { code: 'de', name: 'Deutsch' },
-  { code: 'he', name: 'עברית' }
-] as const;
+  { code: 'en' as const, name: 'English' },
+  { code: 'fr' as const, name: 'Français' },
+  { code: 'es' as const, name: 'Español' },
+  { code: 'de' as const, name: 'Deutsch' },
+  { code: 'he' as const, name: 'עברית' }
+];
 
 export interface Destination {
   id: string;
@@ -35,8 +34,8 @@ export const destinations = [
     name: 'Paris',
     country: 'France',
     image: 'photo-1502602898657-3e91760cbb34',
-    description: 'The Best Allergy-Friendly Hotels in Paris: Safe & Comfortable Stays for Food-Sensitive Travelers',
-    subtitle: 'Paris is a dream destination, but for travelers with food allergies, choosing the right hotel is essential for a safe and stress-free stay. Our curated list features the best allergy-friendly hotels, complete with real guest reviews and detailed information to ensure your comfort.'
+    description: 'The Best Allergy-Friendly Hotels in Paris',
+    subtitle: 'Safe & Comfortable Stays for Food-Sensitive Travelers'
   },
   { 
     id: 'london',
@@ -74,7 +73,7 @@ export const destinations = [
 
 export type TravelerType = 'family' | 'couple' | 'solo' | 'friends';
 export type SortOption = 'newest' | 'oldest' | 'highestRated' | 'lowestRated';
-export type DestinationId = typeof destinations[number]['id'];
+export type DestinationId = (typeof destinations)[number]['id'];
 
 export const travelerTypes = ['family', 'couple', 'solo', 'friends'] as const;
 export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
