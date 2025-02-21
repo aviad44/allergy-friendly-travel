@@ -19,35 +19,35 @@ const destinationData = {
         features: ["⭐ 5-star hotel", "🏛️ Central location near the Louvre", "🍽️ Allergy-aware fine dining"],
         description: "Le Meurice is one of Paris's most iconic luxury hotels, offering personalized allergy-friendly service. The in-house Michelin-starred restaurant, led by chef Alain Ducasse, accommodates special dietary needs with great attention to detail.",
         quote: "Le Meurice is by far the nicest hotel I've ever stayed at—the fanciest and kindest staff! Absolutely recommend to anyone staying in Paris. The staff goes above and beyond!",
-        bookingUrl: "https://www.booking.com/hotel/fr/le-meurice.fr.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/fr/le-meurice.html?aid=2165599&label=allergy-friendly"
       },
       {
         name: "2. Hotel Novotel Paris les Halles – Central Location & Allergy-Sensitive Dining",
         address: "8 Place Marguerite de Navarre, 75001 Paris, France",
         features: ["⭐ 4-star hotel", "🚇 Near Châtelet-Les Halles station", "🏙️ Walkable to Louvre & Notre-Dame"],
         quote: "Staff was very helpful in making inquiries at local restaurants regarding food allergy management. It was reassuring to know they understood my dietary restrictions!",
-        bookingUrl: "https://www.booking.com/hotel/fr/novotel-paris-les-halles.fr.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/fr/novotel-paris-les-halles.html?aid=2165599&label=allergy-friendly"
       },
       {
         name: "3. Hôtel Edouard 7 – Boutique Hotel with Personalized Allergy Support",
         address: "39 Avenue de l'Opéra, 75002 Paris, France",
         features: ["⭐ 4-star hotel", "🎭 Near Opéra Garnier", "🏛️ Short walk to Place Vendôme"],
         quote: "They went above and beyond—even bought a large mini refrigerator for our room and went to the market for us, texting me photos of labels and using only those safe foods to cook for us!",
-        bookingUrl: "https://www.booking.com/hotel/fr/edouard-7-paris-opera.fr.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/fr/edouard-7-paris-opera.html?aid=2165599&label=allergy-friendly"
       },
       {
         name: "4. Le Bristol Paris – A Five-Star Experience for Allergy-Conscious Travelers",
         address: "112 Rue du Faubourg Saint-Honoré, 75008 Paris, France",
         features: ["⭐ 5-star hotel", "💎 Luxury shopping district", "🏊 Rooftop pool & Michelin-star dining"],
         description: "Le Bristol Paris is one of the finest hotels in Paris, with hypoallergenic rooms and an award-winning restaurant, Epicure, that accommodates all dietary needs.",
-        bookingUrl: "https://www.booking.com/hotel/fr/le-bristol-paris.fr.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/fr/le-bristol-paris.html?aid=2165599&label=allergy-friendly"
       },
       {
         name: "5. Hotel Malte Astotel – Budget-Friendly & Allergy-Safe Comfort",
         address: "63 Rue de Richelieu, 75002 Paris, France",
         features: ["⭐ 4-star hotel", "🏙️ Close to the Louvre", "🍽️ Allergy-friendly breakfast"],
         quote: "I can't thank the staff at Hotel Malte enough for their sensitivity towards my allergies. They made sure my breakfast was completely safe for me, and I felt much more comfortable knowing they understood my needs.",
-        bookingUrl: "https://www.booking.com/hotel/fr/malte-opera-astotel.fr.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/fr/malte-opera-astotel.html?aid=2165599&label=allergy-friendly"
       }
     ],
     languageTable: {
@@ -80,7 +80,7 @@ const destinationData = {
         features: ["⭐ 4-star hotel", "🍽️ Allergy-conscious menus", "🏰 Prime Mayfair location"],
         description: "Located in prestigious Mayfair, The Cavendish London offers exceptional service for allergy-conscious guests with specially trained staff and customized dining options.",
         quote: "I was impressed with the staff's attention to my dietary needs. Highly recommended!",
-        bookingUrl: "https://www.booking.com/hotel/gb/cavendish-london.en-gb.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/gb/cavendish-london.en-gb.html?aid=2165599&label=allergy-friendly"
       },
       {
         name: "2. The Langham, London – Luxury Allergy-Safe Haven",
@@ -88,7 +88,7 @@ const destinationData = {
         features: ["⭐ 5-star luxury", "🛏️ Allergy-free bedding", "🍽️ Gluten-free dining"],
         description: "A pioneer in luxury hospitality, The Langham offers comprehensive allergy-friendly services including specialized bedding and a dedicated gluten-free kitchen.",
         quote: "They ensured a 100% gluten-free dining experience. Fantastic service!",
-        bookingUrl: "https://www.booking.com/hotel/gb/the-langham-london.en-gb.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/gb/the-langham-london.en-gb.html?aid=2165599&label=allergy-friendly"
       },
       {
         name: "3. Hyatt Regency London – The Churchill",
@@ -96,7 +96,7 @@ const destinationData = {
         features: ["⭐ 4-star hotel", "🍽️ Tailored meal plans", "🏰 Central location"],
         description: "The Hyatt Regency Churchill takes pride in its comprehensive allergy management program, offering personalized meal plans and allergy-friendly rooms.",
         quote: "The staff handled my nut allergy with great care. A safe and enjoyable stay!",
-        bookingUrl: "https://www.booking.com/hotel/gb/hyatt-regency-london-the-churchill.en-gb.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/gb/hyatt-regency-london-the-churchill.en-gb.html?aid=2165599&label=allergy-friendly"
       },
       {
         name: "4. St. Pancras Renaissance Hotel London",
@@ -104,7 +104,7 @@ const destinationData = {
         features: ["⭐ 5-star hotel", "🛏️ Hypoallergenic bedding", "🚉 Connected to St Pancras"],
         description: "This historic hotel combines Victorian grandeur with modern allergy-awareness, featuring hypoallergenic rooms and comprehensive allergen-free dining options.",
         quote: "They took my dairy allergy seriously and provided amazing meal options!",
-        bookingUrl: "https://www.booking.com/hotel/gb/renaissance-st-pancras.en-gb.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/gb/renaissance-st-pancras.en-gb.html?aid=2165599&label=allergy-friendly"
       },
       {
         name: "5. Radisson Blu Edwardian Mercer Street",
@@ -112,7 +112,7 @@ const destinationData = {
         features: ["⭐ 4-star hotel", "🍳 Allergen-free breakfast", "🎭 Covent Garden location"],
         description: "Located in vibrant Covent Garden, this hotel excels in allergy-friendly hospitality with trained culinary staff and comprehensive allergen information.",
         quote: "Staff were extremely knowledgeable about food allergies. I felt completely safe!",
-        bookingUrl: "https://www.booking.com/hotel/gb/radisson-edwardian-mercer-street.en-gb.html?aid=2165599"
+        bookingUrl: "https://www.booking.com/hotel/gb/radisson-edwardian-mercer-street.en-gb.html?aid=2165599&label=allergy-friendly"
       }
     ],
     languageTable: {
