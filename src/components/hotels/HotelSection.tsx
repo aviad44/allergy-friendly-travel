@@ -11,6 +11,7 @@ interface Hotel {
   rating: number;
   reviews: number;
   allergyInfo: string;
+  bookingUrl: string;
 }
 
 interface HotelSectionProps {
@@ -30,6 +31,7 @@ const HotelSection: React.FC<HotelSectionProps> = ({ hotels }) => {
             `📍 ${hotel.city}`,
             hotel.allergyInfo
           ]}
+          bookingUrl={hotel.bookingUrl}
         />
       ))}
     </div>
