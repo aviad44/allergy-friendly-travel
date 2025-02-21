@@ -88,7 +88,7 @@ const destinationData = {
         features: ["⭐ 5-star luxury", "🛏️ Allergy-free bedding", "🍽️ Gluten-free dining"],
         description: "A pioneer in luxury hospitality, The Langham offers comprehensive allergy-friendly services including specialized bedding and a dedicated gluten-free kitchen.",
         quote: "They ensured a 100% gluten-free dining experience. Fantastic service!",
-        bookingUrl: "https://www.booking.com/hotel/gb/langham-london.en-gb.html?aid=2165599&utm_source=allergy_friendly_hotels&utm_medium=referral&utm_campaign=london_hotels"
+        bookingUrl: "https://www.booking.com/hotel/gb/the-langham-london.en-gb.html?aid=2165599&utm_source=allergy_friendly_hotels&utm_medium=referral&utm_campaign=london_hotels"
       },
       {
         name: "3. Hyatt Regency London – The Churchill",
@@ -96,7 +96,7 @@ const destinationData = {
         features: ["⭐ 4-star hotel", "🍽️ Tailored meal plans", "🏰 Central location"],
         description: "The Hyatt Regency Churchill takes pride in its comprehensive allergy management program, offering personalized meal plans and allergy-friendly rooms.",
         quote: "The staff handled my nut allergy with great care. A safe and enjoyable stay!",
-        bookingUrl: "https://www.booking.com/hotel/gb/hyatt-regency-churchill.en-gb.html?aid=2165599&utm_source=allergy_friendly_hotels&utm_medium=referral&utm_campaign=london_hotels"
+        bookingUrl: "https://www.booking.com/hotel/gb/hyatt-regency-london-the-churchill.en-gb.html?aid=2165599&utm_source=allergy_friendly_hotels&utm_medium=referral&utm_campaign=london_hotels"
       },
       {
         name: "4. St. Pancras Renaissance Hotel London",
@@ -104,7 +104,7 @@ const destinationData = {
         features: ["⭐ 5-star hotel", "🛏️ Hypoallergenic bedding", "🚉 Connected to St Pancras"],
         description: "This historic hotel combines Victorian grandeur with modern allergy-awareness, featuring hypoallergenic rooms and comprehensive allergen-free dining options.",
         quote: "They took my dairy allergy seriously and provided amazing meal options!",
-        bookingUrl: "https://www.booking.com/hotel/gb/st-pancras-renaissance.en-gb.html?aid=2165599&utm_source=allergy_friendly_hotels&utm_medium=referral&utm_campaign=london_hotels"
+        bookingUrl: "https://www.booking.com/hotel/gb/renaissance-st-pancras.en-gb.html?aid=2165599&utm_source=allergy_friendly_hotels&utm_medium=referral&utm_campaign=london_hotels"
       },
       {
         name: "5. Radisson Blu Edwardian Mercer Street",
@@ -112,7 +112,7 @@ const destinationData = {
         features: ["⭐ 4-star hotel", "🍳 Allergen-free breakfast", "🎭 Covent Garden location"],
         description: "Located in vibrant Covent Garden, this hotel excels in allergy-friendly hospitality with trained culinary staff and comprehensive allergen information.",
         quote: "Staff were extremely knowledgeable about food allergies. I felt completely safe!",
-        bookingUrl: "https://www.booking.com/hotel/gb/radisson-blu-mercer-street.en-gb.html?aid=2165599&utm_source=allergy_friendly_hotels&utm_medium=referral&utm_campaign=london_hotels"
+        bookingUrl: "https://www.booking.com/hotel/gb/radisson-edwardian-mercer-street.en-gb.html?aid=2165599&utm_source=allergy_friendly_hotels&utm_medium=referral&utm_campaign=london_hotels"
       }
     ],
     languageTable: {
