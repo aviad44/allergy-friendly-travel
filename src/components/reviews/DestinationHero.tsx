@@ -8,7 +8,9 @@ interface DestinationHeroProps {
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   const imageUrl = destination.image.startsWith('photo-') 
     ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80`
-    : `/${destination.image}`;
+    : destination.image.startsWith('public/') 
+      ? destination.image.replace('public/', '/')
+      : `/${destination.image}`;
 
   return (
     <div 
