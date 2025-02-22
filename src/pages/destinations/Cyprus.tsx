@@ -17,7 +17,7 @@ export default function CyprusReviews() {
       <div 
         className="h-[50vh] w-full bg-cover bg-center relative"
         style={{
-          backgroundImage: `url(https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=2000&q=80)`,
+          backgroundImage: `url(/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png)`,
           backgroundPosition: 'center'
         }}
       >

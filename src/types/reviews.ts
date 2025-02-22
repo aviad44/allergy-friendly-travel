@@ -72,7 +72,7 @@ export const destinations = [
     id: 'cyprus',
     name: 'Cyprus',
     country: 'Cyprus',
-    image: 'photo-1472396961693-142e6e269027',
+    image: 'lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png',
     description: 'Best Allergy-Friendly Hotels in Cyprus',
     subtitle: 'Safe & Comfortable Stays Across the Island'
   },

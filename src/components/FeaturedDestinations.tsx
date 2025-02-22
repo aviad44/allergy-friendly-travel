@@ -25,7 +25,7 @@ const FEATURED_DESTINATIONS = [
     id: 3,
     name: "Cyprus",
     country: "Cyprus",
-    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=800&q=80",
+    image: "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png",
     description: "Mediterranean cuisine adapted for your needs",
     commonAllergies: ["Gluten", "Nuts"],
     href: "/destinations/cyprus"
