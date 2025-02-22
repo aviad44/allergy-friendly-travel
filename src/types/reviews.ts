@@ -75,6 +75,22 @@ export const destinations = [
     image: 'photo-1472396961693-142e6e269027',
     description: 'Best Allergy-Friendly Hotels in Cyprus',
     subtitle: 'Safe & Comfortable Stays Across the Island'
+  },
+  { 
+    id: 'barcelona',
+    name: 'Barcelona',
+    country: 'Spain',
+    image: 'photo-barcelona',
+    description: 'Allergy-Friendly Hotels in Barcelona',
+    subtitle: 'Safe Mediterranean Stays in Catalonia'
+  },
+  { 
+    id: 'ayia-napa',
+    name: 'Ayia Napa',
+    country: 'Cyprus',
+    image: 'photo-ayia-napa',
+    description: 'Allergy-Friendly Hotels in Ayia Napa',
+    subtitle: 'Safe Stays in Cyprus\'s Popular Resort Town'
   }
 ] as const;
 
@@ -101,7 +117,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         name: "Hotel Lutetia",
         address: "Saint-Germain-des-Prés, Paris",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergy-safe buffet", "👨‍🍳 Trained staff"],
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-safe buffet", "👨‍🍳 Trained staff"],
         description: "Left Bank landmark offering comprehensive allergy-friendly services including a dedicated safe buffet.",
         quote: "The hotel provided an allergy-friendly buffet with clear labeling. I felt completely safe!",
         bookingUrl: "https://www.hotellutetia.com"
@@ -339,6 +355,108 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         question: "What features should I look for in an allergy-friendly hotel in Cyprus?",
         answer: "Look for hotels that offer hypoallergenic rooms, staff trained in food allergies, clear food labeling, and the ability to accommodate special dietary requirements. Many luxury hotels in Cyprus also provide dedicated allergy-friendly kitchens and customized meal plans."
+      }
+    ]
+  },
+  'barcelona': {
+    intro: "Barcelona offers a unique blend of Mediterranean hospitality and modern amenities, making it an ideal destination for travelers with allergies. Our carefully selected hotels understand the importance of accommodating dietary restrictions while providing an authentic Spanish experience.",
+    hotels: [
+      {
+        name: "Hotel Sant Joan",
+        address: "Carrer de Sant Joan, Barcelona",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌸 Fragrance-free"],
+        description: "Historic hotel in Barcelona offering comprehensive allergy management and specialized dining options.",
+        quote: "They ensured my gluten-free meals were 100% safe. The best allergy-friendly hotel experience!",
+        bookingUrl: "https://www.hotel-sant-joan.com"
+      },
+      {
+        name: "Hotel El Born",
+        address: "Carrer de Llorenç Batlló, Barcelona",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe buffet", "👨‍🍳 Trained staff"],
+        description: "Modern hotel with stunning views offering comprehensive allergy-safe dining and accommodations.",
+        quote: "The allergy-friendly buffet made my stay so much easier. Amazing experience!",
+        bookingUrl: "https://www.hotel-el-born.com"
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Spanish", "When to Use"],
+      rows: [
+        {
+          original: "I have food allergies",
+          translation: "Tengo alergias alimentarias",
+          pronunciation: "When checking in"
+        },
+        {
+          original: "Is this allergen-free?",
+          translation: "¿Es sin alérgenos?",
+          pronunciation: "At restaurants"
+        },
+        {
+          original: "I need special bedding",
+          translation: "Necesito cama especial",
+          pronunciation: "At the hotel"
+        }
+      ]
+    },
+    faqs: [
+      {
+        question: "Are there allergy-friendly hotels near Barcelona Airport?",
+        answer: "Yes! Several hotels near Barcelona Airport offer allergy-friendly rooms and dining options. The staff at these establishments are trained to handle various dietary restrictions and allergies."
+      },
+      {
+        question: "What features should I look for in an allergy-friendly hotel in Barcelona?",
+        answer: "Look for hotels that offer hypoallergenic rooms, staff trained in food allergies, clear food labeling, and the ability to accommodate special dietary requirements. Many luxury hotels in Barcelona also provide dedicated allergy-friendly kitchens and customized meal plans."
+      }
+    ]
+  },
+  'ayia-napa': {
+    intro: "Ayia Napa offers a unique blend of Mediterranean hospitality and modern amenities, making it an ideal destination for travelers with allergies. Our carefully selected hotels understand the importance of accommodating dietary restrictions while providing an authentic Greek experience.",
+    hotels: [
+      {
+        name: "Hotel Ayia Napa",
+        address: "Ayia Napa, Cyprus",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌸 Fragrance-free"],
+        description: "Historic hotel in Ayia Napa offering comprehensive allergy management and specialized dining options.",
+        quote: "They ensured my gluten-free meals were 100% safe. The best allergy-friendly hotel experience!",
+        bookingUrl: "https://www.hotel-ayia-napa.com"
+      },
+      {
+        name: "Hotel El Nido",
+        address: "Ayia Napa, Cyprus",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe buffet", "👨‍🍳 Trained staff"],
+        description: "Modern hotel with stunning views offering comprehensive allergy-safe dining and accommodations.",
+        quote: "The allergy-friendly buffet made my stay so much easier. Amazing experience!",
+        bookingUrl: "https://www.hotel-el-nido.com"
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Greek", "When to Use"],
+      rows: [
+        {
+          original: "I have food allergies",
+          translation: "Έχω τροφικές αλλεργίες",
+          pronunciation: "When checking in"
+        },
+        {
+          original: "Is this allergen-free?",
+          translation: "Είναι χωρίς αλλεργιογόνα;",
+          pronunciation: "At restaurants"
+        },
+        {
+          original: "I need special bedding",
+          translation: "Χρειάζομαι ειδικά κλινοσκεπάσματα",
+          pronunciation: "At the hotel"
+        }
+      ]
+    },
+    faqs: [
+      {
+        question: "Are there allergy-friendly hotels near Ayia Napa Airport?",
+        answer: "Yes! Several hotels near Ayia Napa Airport offer allergy-friendly rooms and dining options. The staff at these establishments are trained to handle various dietary restrictions and allergies."
+      },
+      {
+        question: "What features should I look for in an allergy-friendly hotel in Ayia Napa?",
+        answer: "Look for hotels that offer hypoallergenic rooms, staff trained in food allergies, clear food labeling, and the ability to accommodate special dietary requirements. Many luxury hotels in Ayia Napa also provide dedicated allergy-friendly kitchens and customized meal plans."
       }
     ]
   }

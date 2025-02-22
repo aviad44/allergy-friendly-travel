@@ -39,19 +39,19 @@ const destinationArticles = [
   },
   {
     id: 3,
-    title: "New York City Guide",
-    description: "Navigate the Big Apple with food allergies and dietary restrictions",
-    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=2000&q=80",
-    href: "/destinations/new-york",
-    tags: ["Dairy-Free", "Kosher"]
+    title: "Cyprus Guide",
+    description: "Find the best allergy-friendly hotels and dining options across the island",
+    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=2000&q=80",
+    href: "/destinations/cyprus",
+    tags: ["Dairy-Free", "Gluten-Free"]
   },
   {
     id: 4,
-    title: "Tokyo Guide",
-    description: "Find allergy-safe dining and accommodation options in Japan's capital",
-    image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=2000&q=80",
-    href: "/destinations/tokyo",
-    tags: ["Gluten-Free", "Seafood-Free"]
+    title: "Crete Guide",
+    description: "Experience Greek hospitality with peace of mind",
+    image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=2000&q=80",
+    href: "/destinations/crete",
+    tags: ["Gluten-Free", "Mediterranean"]
   }
 ];
 

@@ -23,12 +23,12 @@ const FEATURED_DESTINATIONS = [
   },
   {
     id: 3,
-    name: "Crete",
-    country: "Greece",
-    image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80",
+    name: "Cyprus",
+    country: "Cyprus",
+    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=800&q=80",
     description: "Mediterranean cuisine adapted for your needs",
     commonAllergies: ["Gluten", "Nuts"],
-    href: "/destinations/crete"
+    href: "/destinations/cyprus"
   },
 ];
 
