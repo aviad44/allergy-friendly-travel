@@ -20,6 +20,8 @@ export default function CyprusReviews() {
           backgroundImage: `url(/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png)`,
           backgroundPosition: 'center'
         }}
+        role="img"
+        aria-label="WaterWorld Themed Waterpark in Ayia Napa, Cyprus - Popular allergy-friendly tourist destination featuring safe dining options and family activities"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
       </div>

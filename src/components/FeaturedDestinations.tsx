@@ -41,7 +41,10 @@ export const FeaturedDestinations = () => {
             <div className="relative aspect-[16/10] overflow-hidden">
               <img
                 src={destination.image}
-                alt={destination.name}
+                alt={destination.name === "Cyprus" 
+                  ? "WaterWorld Themed Waterpark in Ayia Napa, Cyprus - Best allergy-friendly destination for family vacations"
+                  : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`
+                }
                 className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
