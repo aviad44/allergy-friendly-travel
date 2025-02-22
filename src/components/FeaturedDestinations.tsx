@@ -6,7 +6,7 @@ const FEATURED_DESTINATIONS = [
     id: 1,
     name: "Paris",
     country: "France",
-    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1551038247-3d9af20df552?auto=format&fit=crop&w=800&q=80",
     description: "Discover allergy-friendly luxury in the City of Light",
     commonAllergies: ["Gluten", "Dairy", "Nuts"],
     href: "/destinations/paris"
@@ -15,7 +15,7 @@ const FEATURED_DESTINATIONS = [
     id: 2,
     name: "London",
     country: "United Kingdom",
-    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1460574283810-2aab119d8511?auto=format&fit=crop&w=800&q=80",
     description: "Experience safe dining in Britain's capital",
     commonAllergies: ["Dairy", "Seafood"],
     href: "/destinations/london"

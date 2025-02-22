@@ -5,7 +5,7 @@ export const languages = [
   { code: 'fr' as const, name: 'Français' },
   { code: 'es' as const, name: 'Español' },
   { code: 'de' as const, name: 'Deutsch' },
-  { code: 'he' as const, name: 'עברי��' }
+  { code: 'he' as const, name: 'עברי���' }
 ];
 
 export interface Destination {
@@ -48,7 +48,7 @@ export const destinations = [
     id: 'paris',
     name: 'Paris',
     country: 'France',
-    image: 'photo-1502602898657-3e91760cbb34',
+    image: 'photo-1551038247-3d9af20df552',
     description: 'The Best Allergy-Friendly Hotels in Paris',
     subtitle: 'Safe & Comfortable Stays for Food-Sensitive Travelers'
   },
@@ -56,7 +56,7 @@ export const destinations = [
     id: 'london',
     name: 'London',
     country: 'United Kingdom',
-    image: 'photo-1513635269975-59663e0ac1ad',
+    image: 'photo-1460574283810-2aab119d8511',
     description: 'London\'s Most Accommodating Hotels for Allergy Sufferers',
     subtitle: 'Discover comfortable and safe stays in the heart of London'
   },
