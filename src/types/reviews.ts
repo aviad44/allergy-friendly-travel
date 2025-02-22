@@ -109,7 +109,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         name: "Hotel Lutetia",
         address: "Saint-Germain-des-Prés, Paris",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergy-safe buffet", "👨‍🍳 Trained staff"],
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergy-safe buffet", "👨��🍳 Trained staff"],
         description: "Left Bank landmark offering comprehensive allergy-friendly services including a dedicated safe buffet.",
         quote: "The hotel provided an allergy-friendly buffet with clear labeling. I felt completely safe!",
         bookingUrl: "https://www.booking.com/hotel/fr/hotel-lutetia.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=ParisHotels"
@@ -155,31 +155,47 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
     ]
   },
   'london': {
-    intro: "London offers excellent accommodations for allergy-sensitive travelers, with many hotels providing specialized services and amenities.",
+    intro: "Traveling with food allergies can be challenging, but London offers a variety of allergy-friendly accommodations with hypoallergenic rooms and special dietary options to ensure a worry-free stay. Whether you need a hotel with allergen-free dining, dust-mite-proof bedding, or staff trained in food sensitivities, London has options for you.",
     hotels: [
       {
         name: "The Langham",
-        address: "1C Portland Place, London W1B 1JA",
-        features: ["⭐ 5-star luxury", "🍽️ Allergen-free options", "🛏️ Hypoallergenic rooms"],
-        description: "Historic luxury hotel with modern allergy-aware amenities and dedicated dining options.",
-        quote: "Outstanding attention to dietary requirements with excellent service.",
-        bookingUrl: "https://www.booking.com/hotel/gb/langham-london.html"
+        address: "Marylebone, London",
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Personalized dining", "🍽️ Dedicated kitchen"],
+        description: "Luxury hotel in Marylebone offering comprehensive allergy-friendly amenities and personalized service.",
+        quote: "Incredible attention to allergy safety! The staff was highly knowledgeable about food sensitivities.",
+        bookingUrl: "https://www.booking.com/hotel/gb/the-langham.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
       },
       {
-        name: "The Dorchester",
-        address: "53 Park Lane, London W1K 1QA",
-        features: ["⭐ 5-star luxury", "👨‍🍳 Specialist chefs", "🏥 Medical support"],
-        description: "Iconic London hotel offering comprehensive allergy management and personalized dining.",
-        quote: "The chef created a special menu addressing all my allergies!",
-        bookingUrl: "https://www.booking.com/hotel/gb/the-dorchester.html"
+        name: "The Connaught",
+        address: "Mayfair, London",
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic suites", "🌿 Organic dining", "🌸 Fragrance-free"],
+        description: "Prestigious Mayfair hotel with specialized allergy-friendly services and organic dining options.",
+        quote: "Everything was carefully managed for my allergies. I felt completely safe and relaxed.",
+        bookingUrl: "https://www.booking.com/hotel/gb/the-connaught.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
+      },
+      {
+        name: "Claridge's",
+        address: "Mayfair, London",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌸 Fragrance-free"],
+        description: "Historic Mayfair hotel offering comprehensive allergy management and specialized dining options.",
+        quote: "They ensured my gluten-free meals were 100% safe. The best allergy-friendly hotel experience!",
+        bookingUrl: "https://www.booking.com/hotel/gb/claridges.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
       },
       {
         name: "Shangri-La The Shard",
-        address: "31 St Thomas Street, London SE1 9QU",
-        features: ["⭐ 5-star luxury", "🌿 Air filtration", "🍽️ Personalized menus"],
-        description: "Modern luxury hotel with state-of-the-art allergy management and stunning views.",
-        quote: "They handled my multiple food allergies perfectly.",
-        bookingUrl: "https://www.booking.com/hotel/gb/shangri-la-at-the-shard-london.html"
+        address: "London Bridge, London",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe buffet", "👨‍🍳 Trained staff"],
+        description: "Modern luxury hotel with stunning views offering comprehensive allergy-safe dining and accommodations.",
+        quote: "The hotel provided an allergy-friendly menu with clear labeling. I felt completely safe dining here!",
+        bookingUrl: "https://www.booking.com/hotel/gb/shangri-la-the-shard.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
+      },
+      {
+        name: "The Ritz London",
+        address: "Piccadilly, London",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free", "👨‍🍳 Allergy-sensitive dining"],
+        description: "Iconic London hotel offering comprehensive allergy management and specialized dining services.",
+        quote: "Perfect for travelers with food allergies. The chef prepared meals specifically for my needs.",
+        bookingUrl: "https://www.booking.com/hotel/gb/the-ritz.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
       }
     ],
     languageTable: {
@@ -204,12 +220,12 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
     },
     faqs: [
       {
-        question: "Do London hotels provide allergy cards?",
-        answer: "Yes, many luxury hotels in London provide allergy cards in multiple languages to help communicate your needs."
+        question: "Are there allergy-friendly hotels near Heathrow Airport?",
+        answer: "Yes! Hilton London Heathrow Airport offers hypoallergenic rooms and allergy-safe dining near the airport."
       },
       {
-        question: "Are there hotels with air purification systems?",
-        answer: "Several London hotels, especially luxury properties, have installed advanced air purification systems."
+        question: "What features should I look for in an allergy-friendly hotel?",
+        answer: "Key features include hypoallergenic rooms, staff trained in food allergies, fragrance-free environments, and clear food labeling in dining areas."
       }
     ]
   },
