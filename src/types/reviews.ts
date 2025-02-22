@@ -88,61 +88,69 @@ export const destinations = [
 
 export const destinationData: Record<DestinationId, DestinationContent> = {
   'paris': {
-    intro: "Discover the allergy-friendly side of Paris with our curated selection of hotels that cater to various dietary requirements and sensitivities.",
+    intro: "Traveling with food allergies can be challenging, but Paris offers a variety of allergy-friendly accommodations with hypoallergenic rooms and special dietary options to ensure a worry-free stay. Whether you need a hotel with allergen-free dining, dust-mite-proof bedding, or staff trained in food sensitivities, Paris has options for you.",
     hotels: [
       {
         name: "Le Meurice",
-        address: "228 Rue de Rivoli, 75001 Paris, France",
-        features: ["⭐ 5-star luxury", "🍽️ Allergy-aware dining", "🛏️ Hypoallergenic rooms"],
-        description: "Luxury hotel with dedicated allergy-friendly dining options and specially prepared rooms.",
-        quote: "Exceptional attention to dietary requirements with personalized service.",
-        bookingUrl: "https://www.booking.com/hotel/fr/meurice-paris.html"
+        address: "1st Arrondissement, Paris",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌿 Fragrance-free"],
+        description: "Luxury hotel in the heart of Paris offering comprehensive allergy-friendly amenities.",
+        quote: "They took my nut allergy very seriously and ensured all meals were completely safe for me!",
+        bookingUrl: "https://www.booking.com/hotel/fr/le-meurice.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=ParisHotels"
       },
       {
-        name: "Four Seasons Hotel George V",
-        address: "31 Avenue George V, 75008 Paris, France",
-        features: ["⭐ 5-star luxury", "👨‍🍳 Dedicated allergen-free kitchen", "🏥 On-call allergist"],
-        description: "Iconic Parisian hotel offering exceptional allergy-friendly services and medical support.",
-        quote: "The chef prepared a completely allergen-free menu that was absolutely delicious!",
-        bookingUrl: "https://www.booking.com/hotel/fr/four-seasons-george-v-paris.html"
+        name: "Hôtel de Crillon",
+        address: "Place de la Concorde, Paris",
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Dedicated kitchen", "📝 Custom meal plans"],
+        description: "Historic luxury hotel with specialized allergy-friendly services and personalized dining options.",
+        quote: "A dream for allergy sufferers! Their staff was so knowledgeable about food sensitivities.",
+        bookingUrl: "https://www.booking.com/hotel/fr/hotel-de-crillon.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=ParisHotels"
       },
       {
-        name: "Mandarin Oriental Paris",
-        address: "251 Rue Saint-Honoré, 75001 Paris, France",
-        features: ["⭐ 5-star luxury", "🌿 Air purification", "🍽️ Custom meal plans"],
-        description: "Modern luxury hotel with comprehensive allergy management systems and personalized dining options.",
-        quote: "They took my allergies seriously and made my stay worry-free.",
-        bookingUrl: "https://www.booking.com/hotel/fr/mandarin-oriental-paris.html"
+        name: "Hotel Lutetia",
+        address: "Saint-Germain-des-Prés, Paris",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergy-safe buffet", "👨‍🍳 Trained staff"],
+        description: "Left Bank landmark offering comprehensive allergy-friendly services including a dedicated safe buffet.",
+        quote: "The hotel provided an allergy-friendly buffet with clear labeling. I felt completely safe!",
+        bookingUrl: "https://www.booking.com/hotel/fr/hotel-lutetia.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=ParisHotels"
+      },
+      {
+        name: "Le Bristol Paris",
+        address: "8th Arrondissement, Paris",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free environment", "👨‍🍳 Allergy-sensitive dining"],
+        description: "Prestigious hotel offering comprehensive allergy management and specialized dining options.",
+        quote: "A perfect choice for travelers with food allergies. The chef prepared meals specifically for my needs.",
+        bookingUrl: "https://www.booking.com/hotel/fr/le-bristol.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=ParisHotels"
       }
     ],
     languageTable: {
       headers: ["English", "French", "When to Use"],
       rows: [
         {
-          original: "I have a food allergy",
-          translation: "J'ai une allergie alimentaire",
+          original: "I have food allergies",
+          translation: "J'ai des allergies alimentaires",
           pronunciation: "When checking in"
         },
         {
-          original: "Is this gluten-free?",
-          translation: "Est-ce sans gluten?",
-          pronunciation: "When ordering food"
+          original: "Is this allergen-free?",
+          translation: "Est-ce sans allergènes?",
+          pronunciation: "At restaurants"
         },
         {
-          original: "Does this contain nuts?",
-          translation: "Est-ce que ça contient des noix?",
-          pronunciation: "At restaurants"
+          original: "I need special bedding",
+          translation: "J'ai besoin de literie spéciale",
+          pronunciation: "At the hotel"
         }
       ]
     },
     faqs: [
       {
-        question: "Do Paris hotels accommodate special dietary requirements?",
-        answer: "Yes, many luxury hotels in Paris have dedicated allergen-free kitchens and can accommodate various dietary restrictions."
+        question: "Are there allergy-friendly hotels near Charles de Gaulle Airport?",
+        answer: "Yes! Pullman Paris Roissy CDG Airport offers hypoallergenic rooms and allergy-safe dining near the airport."
       },
       {
-        question: "Can I find gluten-free options in Paris hotels?",
-        answer: "Absolutely! Most high-end hotels in Paris offer extensive gluten-free menus and can provide safe dining options."
+        question: "What features should I look for in an allergy-friendly hotel?",
+        answer: "Key features include hypoallergenic rooms, staff trained in food allergies, fragrance-free environments, and clear food labeling in dining areas."
       }
     ]
   },
@@ -273,7 +281,6 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
 
 export type DestinationId = (typeof destinations)[number]['id'];
 
-// Re-add types and constants needed by other components
 export interface Review {
   id: string;
   rating: number;
