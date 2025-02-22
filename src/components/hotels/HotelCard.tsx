@@ -12,26 +12,9 @@ interface HotelCardProps {
 }
 
 export const HotelCard = ({ name, address, features, description, quote, bookingUrl }: HotelCardProps) => {
-  const getEnhancedBookingUrl = (url: string, hotelName: string) => {
+  const getSimpleBookingUrl = (url: string) => {
     if (url.includes('booking.com')) {
-      const countryCode = url.match(/hotel\/(..)\//)?.[1] || '';
-      const cleanHotelName = hotelName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
-      
-      const destination = url.includes('/gr/') ? 'crete' : 
-                         url.includes('/fr/') ? 'paris' :
-                         url.includes('/gb/') ? 'london' :
-                         url.includes('/es/') ? 'barcelona' :
-                         url.includes('/cy/') ? 'ayia-napa' : 'other';
-
-      const baseUrl = url.split('?')[0];
-      return `${baseUrl}.he.html?aid=2165599&label=allergy-friendly` +
-             `&utm_source=allergy-friendly-hotels` +
-             `&utm_medium=referral` +
-             `&utm_campaign=${destination}-hotels` +
-             `&utm_content=${cleanHotelName}`;
+      return url.split('?')[0];
     }
     return url;
   };
@@ -70,7 +53,7 @@ export const HotelCard = ({ name, address, features, description, quote, booking
           className="w-full sm:w-auto transition-all duration-300 hover:scale-105"
         >
           <a 
-            href={getEnhancedBookingUrl(bookingUrl, name)} 
+            href={getSimpleBookingUrl(bookingUrl)} 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center justify-center"
