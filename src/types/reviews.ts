@@ -1,4 +1,3 @@
-
 export type LanguageCode = 'en' | 'fr' | 'es' | 'de' | 'he';
 
 export const languages = [
@@ -16,11 +15,6 @@ export interface Destination {
   image: string;
   description: string;
   subtitle: string;
-}
-
-export interface FAQ {
-  question: string;
-  answer: string;
 }
 
 export interface DestinationContent {
@@ -86,6 +80,91 @@ export const destinations = [
     subtitle: 'Enjoy the Mediterranean paradise worry-free'
   }
 ] as const;
+
+export const destinationData: Record<DestinationId, DestinationContent> = {
+  'crete': {
+    intro: "Crete offers a unique blend of Mediterranean hospitality and modern amenities, making it an ideal destination for travelers with allergies. Our carefully selected hotels understand the importance of accommodating dietary restrictions while providing an authentic Greek experience.",
+    hotels: [
+      {
+        name: "Blue Palace Resort & Spa",
+        address: "Plaka, Elounda, Crete, 72053, Greece",
+        features: ["Gluten-free kitchen", "Allergen-free rooms", "24/7 medical assistance", "Customized meal plans"],
+        description: "Luxury resort offering comprehensive allergy-friendly services with stunning views of the Mediterranean.",
+        quote: "They took excellent care of my gluten allergy, even preparing special Greek pastries I could eat!",
+        bookingUrl: "#"
+      },
+      {
+        name: "Domes of Elounda",
+        address: "Tsifliki, Elounda, Crete, 72053, Greece",
+        features: ["Dedicated allergy-friendly restaurant", "Anti-allergic bedding", "Air purification systems"],
+        description: "Family-friendly resort with specialized attention to dietary requirements and environmental allergies.",
+        quote: "The staff went above and beyond to ensure our son's nut allergy was properly handled.",
+        bookingUrl: "#"
+      }
+    ],
+    languageTable: {
+      headers: ["Greek", "English", "Pronunciation"],
+      rows: [
+        {
+          original: "Έχω αλλεργία",
+          translation: "I have an allergy",
+          pronunciation: "Echo allergia"
+        },
+        {
+          original: "Χωρίς γλουτένη",
+          translation: "Gluten-free",
+          pronunciation: "Horis glouteni"
+        }
+      ]
+    },
+    faqs: [
+      {
+        question: "Do Cretan hotels accommodate gluten-free diets?",
+        answer: "Yes, many hotels in Crete offer extensive gluten-free options, incorporating local ingredients and traditional recipes adapted for celiac guests."
+      },
+      {
+        question: "Is it easy to find allergy-friendly restaurants near hotels in Crete?",
+        answer: "Most major hotels in Crete have partnerships with local restaurants that can accommodate various dietary restrictions, and hotel concierges can provide recommendations."
+      }
+    ]
+  },
+  'paris': {
+    intro: "",
+    hotels: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    },
+    faqs: []
+  },
+  'london': {
+    intro: "",
+    hotels: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    },
+    faqs: []
+  },
+  'barcelona': {
+    intro: "",
+    hotels: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    },
+    faqs: []
+  },
+  'ayia-napa': {
+    intro: "",
+    hotels: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    },
+    faqs: []
+  }
+};
 
 export type DestinationId = (typeof destinations)[number]['id'];
 
