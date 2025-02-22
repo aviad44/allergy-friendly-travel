@@ -5,7 +5,7 @@ export const languages = [
   { code: 'fr' as const, name: 'Français' },
   { code: 'es' as const, name: 'Español' },
   { code: 'de' as const, name: 'Deutsch' },
-  { code: 'he' as const, name: 'עברית' }
+  { code: 'he' as const, name: 'עברי��' }
 ];
 
 export interface Destination {
@@ -96,7 +96,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌿 Fragrance-free"],
         description: "Luxury hotel in the heart of Paris offering comprehensive allergy-friendly amenities.",
         quote: "They took my nut allergy very seriously and ensured all meals were completely safe for me!",
-        bookingUrl: "https://www.booking.com/hotel/fr/le-meurice.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=ParisHotels"
+        bookingUrl: "https://www.dorchestercollection.com/en/paris/le-meurice/"
       },
       {
         name: "Hôtel de Crillon",
@@ -104,15 +104,15 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Dedicated kitchen", "📝 Custom meal plans"],
         description: "Historic luxury hotel with specialized allergy-friendly services and personalized dining options.",
         quote: "A dream for allergy sufferers! Their staff was so knowledgeable about food sensitivities.",
-        bookingUrl: "https://www.booking.com/hotel/fr/hotel-de-crillon.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=ParisHotels"
+        bookingUrl: "https://www.rosewoodhotels.com/en/hotel-de-crillon"
       },
       {
         name: "Hotel Lutetia",
         address: "Saint-Germain-des-Prés, Paris",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergy-safe buffet", "👨��🍳 Trained staff"],
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergy-safe buffet", "👨‍🍳 Trained staff"],
         description: "Left Bank landmark offering comprehensive allergy-friendly services including a dedicated safe buffet.",
         quote: "The hotel provided an allergy-friendly buffet with clear labeling. I felt completely safe!",
-        bookingUrl: "https://www.booking.com/hotel/fr/hotel-lutetia.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=ParisHotels"
+        bookingUrl: "https://www.hotellutetia.com"
       },
       {
         name: "Le Bristol Paris",
@@ -120,7 +120,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free environment", "👨‍🍳 Allergy-sensitive dining"],
         description: "Prestigious hotel offering comprehensive allergy management and specialized dining options.",
         quote: "A perfect choice for travelers with food allergies. The chef prepared meals specifically for my needs.",
-        bookingUrl: "https://www.booking.com/hotel/fr/le-bristol.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=ParisHotels"
+        bookingUrl: "https://www.oetkercollection.com/hotels/le-bristol-paris/"
       }
     ],
     languageTable: {
@@ -163,7 +163,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Personalized dining", "🍽️ Dedicated kitchen"],
         description: "Luxury hotel in Marylebone offering comprehensive allergy-friendly amenities and personalized service.",
         quote: "Incredible attention to allergy safety! The staff was highly knowledgeable about food sensitivities.",
-        bookingUrl: "https://www.booking.com/hotel/gb/the-langham.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
+        bookingUrl: "https://www.langhamhotels.com/en/the-langham/london/"
       },
       {
         name: "The Connaught",
@@ -171,7 +171,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic suites", "🌿 Organic dining", "🌸 Fragrance-free"],
         description: "Prestigious Mayfair hotel with specialized allergy-friendly services and organic dining options.",
         quote: "Everything was carefully managed for my allergies. I felt completely safe and relaxed.",
-        bookingUrl: "https://www.booking.com/hotel/gb/the-connaught.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
+        bookingUrl: "https://www.the-connaught.co.uk"
       },
       {
         name: "Claridge's",
@@ -179,7 +179,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌸 Fragrance-free"],
         description: "Historic Mayfair hotel offering comprehensive allergy management and specialized dining options.",
         quote: "They ensured my gluten-free meals were 100% safe. The best allergy-friendly hotel experience!",
-        bookingUrl: "https://www.booking.com/hotel/gb/claridges.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
+        bookingUrl: "https://www.claridges.co.uk"
       },
       {
         name: "Shangri-La The Shard",
@@ -187,7 +187,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe buffet", "👨‍🍳 Trained staff"],
         description: "Modern luxury hotel with stunning views offering comprehensive allergy-safe dining and accommodations.",
         quote: "The hotel provided an allergy-friendly menu with clear labeling. I felt completely safe dining here!",
-        bookingUrl: "https://www.booking.com/hotel/gb/shangri-la-the-shard.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
+        bookingUrl: "https://www.shangri-la.com/london/shangrila/"
       },
       {
         name: "The Ritz London",
@@ -195,7 +195,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free", "👨‍🍳 Allergy-sensitive dining"],
         description: "Iconic London hotel offering comprehensive allergy management and specialized dining services.",
         quote: "Perfect for travelers with food allergies. The chef prepared meals specifically for my needs.",
-        bookingUrl: "https://www.booking.com/hotel/gb/the-ritz.en-gb.html?utm_source=AllergyFriendlyHotels&utm_medium=referral&utm_campaign=LondonHotels"
+        bookingUrl: "https://www.theritzlondon.com"
       }
     ],
     languageTable: {
