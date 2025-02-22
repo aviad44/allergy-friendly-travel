@@ -1,3 +1,4 @@
+
 export type LanguageCode = 'en' | 'fr' | 'es' | 'de' | 'he';
 
 export const languages = [
@@ -15,6 +16,11 @@ export interface Destination {
   image: string;
   description: string;
   subtitle: string;
+}
+
+interface FAQ {
+  question: string;
+  answer: string;
 }
 
 export interface DestinationContent {

@@ -10,11 +10,11 @@ import Categories from '@/pages/Categories';
 import Reviews from '@/pages/Reviews';
 import Destinations from '@/pages/destinations';
 import LePetitPalace from '@/pages/hotels/LePetitPalace';
-import ParisReviews from '@/pages/destinations/ParisReviews';
-import LondonReviews from '@/pages/destinations/LondonReviews';
-import CreteReviews from '@/pages/destinations/CreteReviews';
-import BarcelonaReviews from '@/pages/destinations/BarcelonaReviews';
-import AyiaNapaReviews from '@/pages/destinations/AyiaNapaReviews';
+import Paris from '@/pages/destinations/Paris';
+import London from '@/pages/destinations/London';
+import Crete from '@/pages/destinations/Crete';
+import Barcelona from '@/pages/destinations/Barcelona';
+import AyiaNapa from '@/pages/destinations/AyiaNapa';
 
 const queryClient = new QueryClient();
 
@@ -30,11 +30,11 @@ function App() {
             <Route path="/categories" element={<Categories />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/destinations" element={<Destinations />} />
-            <Route path="/destinations/paris" element={<ParisReviews />} />
-            <Route path="/destinations/london" element={<LondonReviews />} />
-            <Route path="/destinations/crete" element={<CreteReviews />} />
-            <Route path="/destinations/barcelona" element={<BarcelonaReviews />} />
-            <Route path="/destinations/ayia-napa" element={<AyiaNapaReviews />} />
+            <Route path="/destinations/paris" element={<Paris />} />
+            <Route path="/destinations/london" element={<London />} />
+            <Route path="/destinations/crete" element={<Crete />} />
+            <Route path="/destinations/barcelona" element={<Barcelona />} />
+            <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
             <Route path="/hotels/le-petit-palace" element={<LePetitPalace />} />
           </Routes>
         </BrowserRouter>
