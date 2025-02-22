@@ -69,20 +69,12 @@ export const destinations = [
     subtitle: 'Experience Greek hospitality with peace of mind'
   },
   { 
-    id: 'barcelona',
-    name: 'Barcelona',
-    country: 'Spain',
-    image: 'photo-1501854140801-50d01698950b',
-    description: 'Barcelona\'s Top Hotels for Dietary Requirements',
-    subtitle: 'Safe and comfortable stays in the Catalan capital'
-  },
-  { 
-    id: 'ayia-napa',
-    name: 'Ayia Napa',
+    id: 'cyprus',
+    name: 'Cyprus',
     country: 'Cyprus',
     image: 'photo-1472396961693-142e6e269027',
-    description: 'Ayia Napa\'s Allergy-Conscious Resorts',
-    subtitle: 'Enjoy the Mediterranean paradise worry-free'
+    description: 'Best Allergy-Friendly Hotels in Cyprus',
+    subtitle: 'Safe & Comfortable Stays Across the Island'
   }
 ] as const;
 
@@ -275,23 +267,80 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       }
     ]
   },
-  'barcelona': {
-    intro: "",
-    hotels: [],
+  'cyprus': {
+    intro: "Cyprus offers a variety of allergy-friendly accommodations with hypoallergenic rooms and special dietary options. Whether you need a hotel with allergen-free dining, dust-mite-proof bedding, or staff trained in food sensitivities, Cyprus has options for you.",
+    hotels: [
+      {
+        name: "Annabelle Hotel",
+        address: "Paphos, Cyprus",
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Personalized dining", "🍽️ Dedicated kitchen"],
+        description: "Luxury hotel in Paphos offering comprehensive allergy-friendly amenities and personalized dining options.",
+        quote: "Their gluten-free options were outstanding, and staff was very accommodating.",
+        bookingUrl: "https://www.annabelle.com.cy"
+      },
+      {
+        name: "Almyra Hotel",
+        address: "Paphos, Cyprus",
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic rooms", "🌿 Organic dining", "🌸 Fragrance-free"],
+        description: "Prestigious Paphos hotel with specialized allergy-friendly services and organic dining options.",
+        quote: "Loved how they handled my nut allergy. Highly recommend!",
+        bookingUrl: "https://www.almyra.com"
+      },
+      {
+        name: "Amathus Beach Hotel",
+        address: "Limassol, Cyprus",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌸 Fragrance-free"],
+        description: "Family-focused luxury hotel offering comprehensive allergy management and specialized dining services.",
+        quote: "The chef prepared special meals for my child with multiple allergies. Exceptional service!",
+        bookingUrl: "https://www.amathuslimassol.com"
+      },
+      {
+        name: "Four Seasons Hotel",
+        address: "Limassol, Cyprus",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe buffet", "👨‍🍳 Trained staff"],
+        description: "Modern luxury hotel offering comprehensive allergy-safe dining and accommodations.",
+        quote: "The allergy-friendly buffet made my stay so much easier. Amazing experience!",
+        bookingUrl: "https://www.fourseasons.com/cyprus"
+      },
+      {
+        name: "Grecian Bay Hotel",
+        address: "Ayia Napa, Cyprus",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free", "👨‍🍳 Allergy-sensitive dining"],
+        description: "Perfect beachfront resort for families with comprehensive allergy management services.",
+        quote: "Perfect for families with allergies. They took great care of our dietary needs.",
+        bookingUrl: "https://www.grecianbay.com"
+      }
+    ],
     languageTable: {
-      headers: [],
-      rows: []
+      headers: ["English", "Greek", "When to Use"],
+      rows: [
+        {
+          original: "I have food allergies",
+          translation: "Έχω τροφικές αλλεργίες",
+          pronunciation: "When checking in"
+        },
+        {
+          original: "Is this allergen-free?",
+          translation: "Είναι χωρίς αλλεργιογόνα;",
+          pronunciation: "At restaurants"
+        },
+        {
+          original: "I need special bedding",
+          translation: "Χρειάζομαι ειδικά κλινοσκεπάσματα",
+          pronunciation: "At the hotel"
+        }
+      ]
     },
-    faqs: []
-  },
-  'ayia-napa': {
-    intro: "",
-    hotels: [],
-    languageTable: {
-      headers: [],
-      rows: []
-    },
-    faqs: []
+    faqs: [
+      {
+        question: "Are there allergy-friendly hotels near Larnaca Airport?",
+        answer: "Yes, several hotels near Larnaca Airport offer allergy-friendly rooms and dining options. The staff at these establishments are trained to handle various dietary restrictions and allergies."
+      },
+      {
+        question: "What features should I look for in an allergy-friendly hotel in Cyprus?",
+        answer: "Look for hotels that offer hypoallergenic rooms, staff trained in food allergies, clear food labeling, and the ability to accommodate special dietary requirements. Many luxury hotels in Cyprus also provide dedicated allergy-friendly kitchens and customized meal plans."
+      }
+    ]
   }
 };
 

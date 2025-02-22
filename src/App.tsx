@@ -15,6 +15,7 @@ import London from '@/pages/destinations/London';
 import Crete from '@/pages/destinations/Crete';
 import Barcelona from '@/pages/destinations/Barcelona';
 import AyiaNapa from '@/pages/destinations/AyiaNapa';
+import Cyprus from '@/pages/destinations/Cyprus';
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/destinations/crete" element={<Crete />} />
             <Route path="/destinations/barcelona" element={<Barcelona />} />
             <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
+            <Route path="/destinations/cyprus" element={<Cyprus />} />
             <Route path="/hotels/le-petit-palace" element={<LePetitPalace />} />
           </Routes>
         </BrowserRouter>
