@@ -1,14 +1,10 @@
-import type { Config } from "tailwindcss";
+
+import { type Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
   darkMode: ["class"],
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
-  prefix: "",
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     container: {
       center: true,
@@ -18,6 +14,15 @@ export default {
       },
     },
     extend: {
+      keyframes: {
+        "hero-zoom": {
+          "0%": { transform: "scale(1.1)" },
+          "100%": { transform: "scale(1)" },
+        },
+      },
+      animation: {
+        "hero-zoom": "hero-zoom 1.5s ease-out forwards",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -25,20 +30,24 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#2DD4BF",
-          foreground: "#FFFFFF",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#1E40AF",
-          foreground: "#FFFFFF",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
-        accent: {
-          DEFAULT: "#FB923C",
-          foreground: "#FFFFFF",
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -49,20 +58,16 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        display: ["Playfair Display", "serif"],
-      },
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-      },
-      animation: {
-        fadeIn: "fadeIn 0.5s ease-in-out",
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+        display: ["var(--font-display)", ...fontFamily.sans],
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: ["tailwindcss-animate"],
 } satisfies Config;
