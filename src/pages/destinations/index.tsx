@@ -52,6 +52,14 @@ const destinationArticles = [
     image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=2000&q=80",
     href: "/destinations/crete",
     tags: ["Gluten-Free", "Mediterranean"]
+  },
+  {
+    id: 5,
+    title: "Abu Dhabi Guide",
+    description: "Luxury stays with world-class allergy accommodations in the UAE capital",
+    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=2000&q=80",
+    href: "/destinations/abu-dhabi",
+    tags: ["Luxury", "Family-Friendly", "Allergy-Safe"]
   }
 ];
 

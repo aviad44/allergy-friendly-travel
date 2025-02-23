@@ -52,13 +52,13 @@ const FEATURED_DESTINATIONS = [
   },
   {
     id: 6,
-    name: "Ayia Napa",
-    country: "Cyprus",
-    image: "https://images.unsplash.com/photo-1597500498220-8b44f2c9d4d7?auto=format&fit=crop&w=800&q=80",
-    description: "Family-friendly beaches and safe dining options",
+    name: "Abu Dhabi",
+    country: "United Arab Emirates",
+    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=800&q=80",
+    description: "Luxurious stays with world-class allergy care",
     commonAllergies: ["Gluten", "Dairy"],
-    href: "/destinations/ayia-napa"
-  },
+    href: "/destinations/abu-dhabi"
+  }
 ];
 
 export const FeaturedDestinations = () => {

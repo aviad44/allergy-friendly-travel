@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { destinations, DestinationId } from "@/types/reviews";
@@ -10,7 +11,7 @@ const RELATED_DESTINATIONS: Record<DestinationId, DestinationId[]> = {
   'crete': ['cyprus'],
   'barcelona': ['paris'],
   'ayia-napa': ['cyprus'],
-  'abu-dhabi': ['dubai'] // Ready for when Dubai is added
+  'abu-dhabi': [] // Currently no related destinations until Dubai is added
 };
 
 interface RelatedDestinationsProps {
