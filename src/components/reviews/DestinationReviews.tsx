@@ -5,6 +5,7 @@ import { DestinationNavigation } from "./DestinationNavigation";
 import { LanguageTable } from "./LanguageTable";
 import { HotelCard } from "@/components/hotels/HotelCard";
 import { TravelTips } from "@/components/hotels/TravelTips";
+import { RelatedDestinations } from "./RelatedDestinations";
 import { LanguageCode, destinations, DestinationId, destinationData } from "@/types/reviews";
 import { Separator } from "@/components/ui/separator";
 
@@ -98,6 +99,8 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
               />
             </div>
           )}
+
+          <RelatedDestinations currentDestinationId={destinationId} />
         </article>
       </main>
     </div>
