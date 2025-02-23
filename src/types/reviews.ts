@@ -91,6 +91,14 @@ export const destinations = [
     image: 'photo-ayia-napa',
     description: 'Allergy-Friendly Hotels in Ayia Napa',
     subtitle: 'Safe Stays in Cyprus\'s Popular Resort Town'
+  },
+  {
+    id: 'abu-dhabi',
+    name: 'Abu Dhabi',
+    country: 'United Arab Emirates',
+    image: 'photo-1487958449943-2429e8be8625',
+    description: 'Allergy-Friendly Hotels in Abu Dhabi – The Ultimate Guide',
+    subtitle: 'Finding Safe and Comfortable Stays for Allergy Sufferers'
   }
 ] as const;
 
@@ -457,6 +465,73 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         question: "What features should I look for in an allergy-friendly hotel in Ayia Napa?",
         answer: "Look for hotels that offer hypoallergenic rooms, staff trained in food allergies, clear food labeling, and the ability to accommodate special dietary requirements. Many luxury hotels in Ayia Napa also provide dedicated allergy-friendly kitchens and customized meal plans."
+      }
+    ]
+  },
+  'abu-dhabi': {
+    intro: "Abu Dhabi, the capital of the United Arab Emirates, offers world-class hospitality with luxurious hotels and personalized services. For travelers with food allergies, selecting the right hotel can make a significant difference in ensuring a stress-free stay. In this guide, we highlight the best allergy-friendly hotels in Abu Dhabi, categorized for couples and families, along with real guest reviews from allergy sufferers.",
+    hotels: [
+      {
+        name: "Emirates Palace Mandarin Oriental",
+        address: "West Corniche Road, Abu Dhabi",
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic rooms", "👨‍🍳 Dedicated kitchen", "🍽️ Allergen-free dining"],
+        description: "Luxurious hotel offering customizable menus including gluten-free, dairy-free, and nut-free options with highly trained kitchen staff.",
+        quote: "The staff was incredibly accommodating with my nut allergy. The chefs went above and beyond to ensure my meals were safe.",
+        bookingUrl: "https://www.mandarinoriental.com/abu-dhabi/emirates-palace/"
+      },
+      {
+        name: "The St. Regis Abu Dhabi",
+        address: "Nation Towers, Abu Dhabi",
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic bedding", "🍽️ Allergen-free dining", "📝 Custom meal plans"],
+        description: "Prestigious hotel with extensive allergen-free meal options and customized dining experiences.",
+        quote: "I have celiac disease, and I was pleasantly surprised by the level of care and understanding shown by the hotel staff.",
+        bookingUrl: "https://www.marriott.com/hotels/travel/auhxr-the-st-regis-abu-dhabi/"
+      },
+      {
+        name: "Saadiyat Rotana Resort & Villas",
+        address: "Saadiyat Island, Abu Dhabi",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe dining", "🏊‍♂️ Clean pools"],
+        description: "Family-focused resort offering several on-site restaurants with allergen-free dishes and safe environments for children.",
+        quote: "Our child has multiple food allergies, and the hotel staff took every precaution to make our stay worry-free.",
+        bookingUrl: "https://www.rotana.com/rotanahotelandresorts/unitedarabemirates/abudhabi/saadiyatrotanaresortandvillas"
+      },
+      {
+        name: "Rixos Premium Saadiyat Island",
+        address: "Saadiyat Island, Abu Dhabi",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🏊‍♂️ Advanced filtration", "👨‍🍳 Trained staff"],
+        description: "All-inclusive resort with personalized catering services and advanced pool filtration systems.",
+        quote: "I felt at ease knowing the hotel had a clear allergy policy and that staff understood my needs.",
+        bookingUrl: "https://saadiyatisland.rixos.com/"
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Arabic", "When to Use"],
+      rows: [
+        {
+          original: "I have food allergies",
+          translation: "لدي حساسية من الطعام",
+          pronunciation: "When checking in"
+        },
+        {
+          original: "Is this allergen-free?",
+          translation: "هل هذا خالي من مسببات الحساسية؟",
+          pronunciation: "At restaurants"
+        },
+        {
+          original: "I need special meals",
+          translation: "أحتاج إلى وجبات خاصة",
+          pronunciation: "For room service"
+        }
+      ]
+    },
+    faqs: [
+      {
+        question: "Do Abu Dhabi hotels accommodate special dietary requirements?",
+        answer: "Yes, luxury hotels in Abu Dhabi are well-equipped to handle various dietary restrictions and allergies, with trained staff and dedicated facilities."
+      },
+      {
+        question: "What should I prepare before my stay in Abu Dhabi?",
+        answer: "Notify the hotel in advance about your allergies, consider carrying Arabic allergy translation cards, and speak directly with the chef about your dietary needs."
       }
     ]
   }
