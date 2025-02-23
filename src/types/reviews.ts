@@ -92,11 +92,11 @@ export const destinations = [
     description: 'Allergy-Friendly Hotels in Ayia Napa',
     subtitle: 'Safe Stays in Cyprus\'s Popular Resort Town'
   },
-  {
+  { 
     id: 'abu-dhabi',
     name: 'Abu Dhabi',
     country: 'United Arab Emirates',
-    image: 'photo-1487958449943-2429e8be8625',
+    image: 'photo-1472396961693-142e6e269027',
     description: 'Allergy-Friendly Hotels in Abu Dhabi – The Ultimate Guide',
     subtitle: 'Finding Safe and Comfortable Stays for Allergy Sufferers'
   }
@@ -329,7 +329,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         name: "Grecian Bay Hotel",
         address: "Ayia Napa, Cyprus",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free", "👨‍🍳 Allergy-sensitive dining"],
+        features: ["⭐ 5-star luxury", "👨‍👩‍����‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free", "👨‍🍳 Allergy-sensitive dining"],
         description: "Perfect beachfront resort for families with comprehensive allergy management services.",
         quote: "Perfect for families with allergies. They took great care of our dietary needs.",
         bookingUrl: "https://www.grecianbay.com"
