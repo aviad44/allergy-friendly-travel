@@ -23,6 +23,13 @@ export const RelatedDestinations = ({ currentDestinationId }: RelatedDestination
 
   if (relatedDestinations.length === 0) return null;
 
+  const getImageUrl = (imagePath: string) => {
+    if (imagePath.startsWith('photo-')) {
+      return `https://images.unsplash.com/photo-${imagePath.replace('photo-', '')}?auto=format&fit=crop&w=800&q=80`;
+    }
+    return imagePath.startsWith('lovable-uploads/') ? `/${imagePath}` : `/${imagePath}`;
+  };
+
   return (
     <section className="mt-12 space-y-6">
       <h2 className="text-xl sm:text-2xl font-display font-semibold">
@@ -34,7 +41,7 @@ export const RelatedDestinations = ({ currentDestinationId }: RelatedDestination
             <Card className="overflow-hidden group cursor-pointer hover:shadow-lg transition-shadow duration-300">
               <div className="relative aspect-[16/9] overflow-hidden">
                 <img
-                  src={destination.image}
+                  src={getImageUrl(destination.image)}
                   alt={`${destination.name}, ${destination.country} - Related allergy-friendly travel destination`}
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                 />
