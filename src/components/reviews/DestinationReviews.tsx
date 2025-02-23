@@ -44,8 +44,8 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           setCurrentLanguage={setCurrentLanguage}
         />
 
-        <article className="space-y-8 md:space-y-12">
-          <header className="text-left space-y-4">
+        <article className="space-y-8 md:space-y-12 text-left">
+          <header className="space-y-4">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
               {destination.description}
             </h1>
@@ -63,6 +63,8 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             </section>
           </header>
 
+          <Separator />
+
           <section className="space-y-4 md:space-y-6" aria-label="Hotels List">
             <h2 className="text-xl sm:text-2xl font-display font-semibold">
               Top Allergy-Friendly Hotels in {destination.name}
@@ -74,6 +76,8 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             </div>
           </section>
 
+          <Separator />
+
           <section className="space-y-4 md:space-y-6">
             <h2 className="text-xl sm:text-2xl font-display font-semibold">
               FAQs: Allergy-Friendly Hotels in {destination.name}
@@ -81,8 +85,12 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             <div className="grid gap-4 md:gap-6">
               {content.faqs.map((faq, index) => (
                 <div key={index} className="space-y-2">
-                  <h3 className="text-base sm:text-lg font-semibold">{faq.question}</h3>
-                  <p className="text-sm sm:text-base text-muted-foreground">{faq.answer}</p>
+                  <h3 className="text-base sm:text-lg font-semibold">
+                    {faq.question}
+                  </h3>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    {faq.answer}
+                  </p>
                 </div>
               ))}
             </div>
