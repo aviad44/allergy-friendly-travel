@@ -17,7 +17,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       className="h-[50vh] bg-cover bg-center relative"
       style={{
         backgroundImage: `url(${imageUrl})`,
-        backgroundPosition: '50% 75%'  // Changed from 65% to 75% to show more of the image
+        backgroundPosition: '50% 85%'  // Changed from 75% to 85% to show more of the bridge
       }}
       role="img"
       aria-label={`Scenic view of ${destination.name}`}
