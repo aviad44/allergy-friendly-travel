@@ -35,7 +35,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   if (!destination || !content) return null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" role="main">
       <DestinationHero destination={destination} />
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10">
@@ -46,49 +46,96 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
         <article className="space-y-8 md:space-y-12 text-left">
           <header className="space-y-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
+            <h1 
+              className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground"
+              tabIndex={0}
+            >
               {destination.description}
             </h1>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground">
+            <h2 
+              className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground"
+              tabIndex={0}
+            >
               {destination.subtitle}
             </h2>
             
-            <section className="mt-6 md:mt-8">
-              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4">
+            <section className="mt-6 md:mt-8" aria-labelledby="why-choose-heading">
+              <h2 
+                id="why-choose-heading"
+                className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4"
+                tabIndex={0}
+              >
                 Why Choose an Allergy-Friendly Hotel in {destination.name}?
               </h2>
-              <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
+              <p 
+                className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed"
+                tabIndex={0}
+              >
                 {content.intro}
               </p>
             </section>
           </header>
 
-          <Separator />
+          <Separator role="separator" />
 
-          <section className="space-y-4 md:space-y-6" aria-label="Hotels List">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold">
+          <section 
+            className="space-y-4 md:space-y-6" 
+            aria-labelledby="hotels-heading"
+          >
+            <h2 
+              id="hotels-heading"
+              className="text-xl sm:text-2xl font-display font-semibold"
+              tabIndex={0}
+            >
               Top Allergy-Friendly Hotels in {destination.name}
             </h2>
-            <div className="grid gap-6 md:gap-8">
+            <div 
+              className="grid gap-6 md:gap-8"
+              role="list"
+              aria-label={`Hotels in ${destination.name}`}
+            >
               {content.hotels.map((hotel, index) => (
-                <HotelCard key={index} {...hotel} />
+                <div key={index} role="listitem">
+                  <HotelCard {...hotel} />
+                </div>
               ))}
             </div>
           </section>
 
-          <Separator />
+          <Separator role="separator" />
 
-          <section className="space-y-4 md:space-y-6">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold">
+          <section 
+            className="space-y-4 md:space-y-6"
+            aria-labelledby="faq-heading"
+          >
+            <h2 
+              id="faq-heading"
+              className="text-xl sm:text-2xl font-display font-semibold"
+              tabIndex={0}
+            >
               FAQs: Allergy-Friendly Hotels in {destination.name}
             </h2>
-            <div className="grid gap-4 md:gap-6">
+            <div 
+              className="grid gap-4 md:gap-6"
+              role="list"
+              aria-label="Frequently Asked Questions"
+            >
               {content.faqs.map((faq, index) => (
-                <div key={index} className="space-y-2">
-                  <h3 className="text-base sm:text-lg font-semibold">
+                <div 
+                  key={index} 
+                  className="space-y-2"
+                  role="listitem"
+                >
+                  <h3 
+                    className="text-base sm:text-lg font-semibold"
+                    tabIndex={0}
+                  >
                     {faq.question}
                   </h3>
-                  <p className="text-sm sm:text-base text-muted-foreground">
+                  <p 
+                    className="text-sm sm:text-base text-muted-foreground"
+                    tabIndex={0}
+                  >
                     {faq.answer}
                   </p>
                 </div>

@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -21,10 +22,35 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  /* Improve focus visibility */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary ring-2 ring-primary ring-offset-2;
+  }
+
+  /* Improve color contrast */
+  .text-muted-foreground {
+    @apply text-gray-600;
+  }
+
+  /* Ensure minimum text contrast */
+  p, span, a, button {
+    @apply text-current leading-relaxed;
+  }
+
+  /* Improve link accessibility */
+  a:not([class]) {
+    @apply underline underline-offset-4 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary;
   }
 }
 
 .hero-gradient {
   background: linear-gradient(to right, rgba(45, 212, 191, 0.1), rgba(30, 64, 175, 0.1));
+}
+
+/* Skip to main content link */
+.skip-to-main-content {
+  @apply sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-background focus:text-foreground focus:rounded-md focus:shadow-lg;
 }

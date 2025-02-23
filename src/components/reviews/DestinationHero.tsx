@@ -15,16 +15,21 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   return (
     <div 
       className="h-[50vh] relative overflow-hidden"
-      role="img"
-      aria-label={`Scenic view of ${destination.name}`}
+      role="banner"
+      aria-label={`Hero image of ${destination.name}`}
     >
       <div 
         className="absolute inset-0 bg-center bg-cover animate-hero-zoom"
         style={{
           backgroundImage: `url(${imageUrl})`,
         }}
+        role="img"
+        aria-label={`Scenic view of ${destination.name}`}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+      <div 
+        className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" 
+        aria-hidden="true"
+      />
     </div>
   );
 };
