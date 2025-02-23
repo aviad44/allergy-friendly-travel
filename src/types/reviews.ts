@@ -96,7 +96,7 @@ export const destinations = [
     id: 'abu-dhabi',
     name: 'Abu Dhabi',
     country: 'United Arab Emirates',
-    image: 'photo-1472396961693-142e6e269027',
+    image: 'photo-1512632578888-169bbbc64f33',
     description: 'Allergy-Friendly Hotels in Abu Dhabi – The Ultimate Guide',
     subtitle: 'Finding Safe and Comfortable Stays for Allergy Sufferers'
   }
@@ -117,7 +117,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         name: "Hôtel de Crillon",
         address: "Place de la Concorde, Paris",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Dedicated kitchen", "📝 Custom meal plans"],
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏�� Allergy-free bedding", "👨‍🍳 Dedicated kitchen", "📝 Custom meal plans"],
         description: "Historic luxury hotel with specialized allergy-friendly services and personalized dining options.",
         quote: "A dream for allergy sufferers! Their staff was so knowledgeable about food sensitivities.",
         bookingUrl: "https://www.rosewoodhotels.com/en/hotel-de-crillon"
@@ -329,7 +329,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         name: "Grecian Bay Hotel",
         address: "Ayia Napa, Cyprus",
-        features: ["⭐ 5-star luxury", "👨‍👩‍����‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free", "👨‍🍳 Allergy-sensitive dining"],
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free", "👨‍🍳 Allergy-sensitive dining"],
         description: "Perfect beachfront resort for families with comprehensive allergy management services.",
         quote: "Perfect for families with allergies. They took great care of our dietary needs.",
         bookingUrl: "https://www.grecianbay.com"

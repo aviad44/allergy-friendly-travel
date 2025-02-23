@@ -54,7 +54,7 @@ const FEATURED_DESTINATIONS = [
     id: 6,
     name: "Abu Dhabi",
     country: "United Arab Emirates",
-    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=800&q=80",
     description: "Luxurious stays with world-class allergy care",
     commonAllergies: ["Gluten", "Dairy"],
     href: "/destinations/abu-dhabi"
