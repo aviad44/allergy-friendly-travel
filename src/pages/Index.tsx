@@ -1,3 +1,4 @@
+
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { MapPin, Star, Shield, Info, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MainMenu } from "@/components/MainMenu";
 import { HOME_CONTENT } from "@/constants/home";
+
 const Index = () => {
   const iconComponents = {
     MapPin,
@@ -13,11 +15,12 @@ const Index = () => {
     Info,
     HelpCircle
   };
+
   return <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-700/90 backdrop-blur-md border-b border-gray-600 shadow-sm">
-        <div className="container mx-auto px-4 py-2 flex justify-between items-center bg-green-50">
-          <Link to="/" aria-label="Return to homepage" className="text-2xl font-display font-bold text-yelloow hover:text-white/90 transition-colors">
+        <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+          <Link to="/" aria-label="Return to homepage" className="text-2xl font-display font-bold text-white hover:text-white/90 transition-colors">
             {HOME_CONTENT.navigation.brand}
           </Link>
           
@@ -69,4 +72,5 @@ const Index = () => {
       </section>
     </div>;
 };
+
 export default Index;
