@@ -13,36 +13,66 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
+    --primary: 210 40% 96.1%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 84% 4.9%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
     --radius: 0.5rem;
   }
 
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
   }
 
-  /* Improve focus visibility */
+  /* Remove default focus styles */
+  *:focus {
+    outline: none;
+  }
+
+  /* Subtle focus styles for keyboard navigation only */
   *:focus-visible {
-    @apply outline-2 outline-offset-2 outline-primary ring-2 ring-primary ring-offset-2;
+    @apply ring-1 ring-primary ring-offset-1;
   }
 
-  /* Improve color contrast */
-  .text-muted-foreground {
-    @apply text-gray-600;
-  }
-
-  /* Ensure minimum text contrast */
+  /* Reset text styling */
   p, span, a, button {
-    @apply text-current leading-relaxed;
+    @apply text-current;
   }
 
-  /* Improve link accessibility */
+  /* Remove default link styling */
   a:not([class]) {
-    @apply underline underline-offset-4 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary;
+    @apply no-underline hover:text-primary/90;
   }
 }
 
@@ -50,7 +80,8 @@
   background: linear-gradient(to right, rgba(45, 212, 191, 0.1), rgba(30, 64, 175, 0.1));
 }
 
-/* Skip to main content link */
+/* Optional skip link - hidden by default */
 .skip-to-main-content {
-  @apply sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-background focus:text-foreground focus:rounded-md focus:shadow-lg;
+  @apply sr-only;
 }
+
