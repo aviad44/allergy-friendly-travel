@@ -1,5 +1,5 @@
 
-import { Search, Star, ShieldCheck, ChefHat, AirVent, GraduationCap, X } from "lucide-react";
+import { Search, Star, ShieldCheck, ChefHat, AirVent, GraduationCap, X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -65,8 +65,10 @@ export const SearchBar = () => {
         if (currentHotel.name) {
           hotels.push(currentHotel);
         }
+        const [name, url] = line.split('|').map(part => part.trim());
         currentHotel = {
-          name: line.replace(/\d+\.\s+/, '').trim(),
+          name: name.replace(/\d+\.\s+/, '').trim(),
+          url: url,
           features: []
         };
       } else if (line.startsWith('-')) {
@@ -136,6 +138,17 @@ export const SearchBar = () => {
                       <div className="flex items-center gap-2 mb-2">
                         <Star className="h-5 w-5 text-primary" />
                         <h4 className="text-xl font-semibold">{hotel.name}</h4>
+                        {hotel.url && (
+                          <a 
+                            href={hotel.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-primary hover:underline ml-2"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            Book Now
+                          </a>
+                        )}
                       </div>
                       <div className="space-y-2">
                         {hotel.features.map((feature, idx) => (
