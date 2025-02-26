@@ -18,7 +18,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-900/90 backdrop-blur-md border-b border-gray-800 shadow-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-700/90 backdrop-blur-md border-b border-gray-600 shadow-sm">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <Link to="/" className="text-2xl font-display font-bold text-white hover:text-white/90 transition-colors" aria-label="Return to homepage">
             {HOME_CONTENT.navigation.brand}
