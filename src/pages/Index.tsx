@@ -1,4 +1,3 @@
-
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b shadow-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b shadow-sm">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <Link to="/" className="text-2xl font-display font-bold text-secondary hover:text-secondary/90 transition-colors" aria-label="Return to homepage">
             {HOME_CONTENT.navigation.brand}
