@@ -1,11 +1,12 @@
 
-import { Search } from "lucide-react";
+import { Search, Star, ShieldCheck, ChefHat, AirVent, GraduationCap, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Card } from "@/components/ui/card";
 
 export const SearchBar = () => {
   const [destination, setDestination] = useState("");
@@ -54,6 +55,27 @@ export const SearchBar = () => {
     }
   };
 
+  const formatRecommendation = (text: string) => {
+    // Extract hotel name and location from the first line
+    const firstLine = text.split('\n')[0];
+    const hotelInfo = firstLine.match(/\*\*(.*?)\*\*/) || [];
+    const hotelName = hotelInfo[1] || "Recommended Hotel";
+
+    // Split the recommendation into sections based on numbered points
+    const sections = text.split(/\d\.\s\*\*/).filter(Boolean);
+
+    return {
+      hotelName,
+      sections: sections.map(section => {
+        const [title, ...content] = section.split('**:');
+        return {
+          title: title.trim(),
+          content: content.join('**:').trim()
+        };
+      })
+    };
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col md:flex-row gap-4">
@@ -85,17 +107,58 @@ export const SearchBar = () => {
             </Button>
           </SheetTrigger>
           <SheetContent className="w-full sm:max-w-2xl" side="bottom">
-            <SheetHeader>
-              <SheetTitle>Personalized Hotel Recommendation</SheetTitle>
-            </SheetHeader>
-            <div className="mt-4">
+            <div className="flex justify-between items-center">
+              <SheetHeader>
+                <SheetTitle className="text-2xl font-display">Personalized Hotel Recommendation</SheetTitle>
+              </SheetHeader>
+              <SheetClose asChild>
+                <Button variant="ghost" size="icon">
+                  <X className="h-4 w-4" />
+                </Button>
+              </SheetClose>
+            </div>
+            <div className="mt-6">
               {recommendation ? (
-                <div className="prose prose-lg max-w-none">
-                  {recommendation}
-                </div>
+                <Card className="p-6 space-y-6">
+                  {(() => {
+                    const { hotelName, sections } = formatRecommendation(recommendation);
+                    const icons = {
+                      'Kitchen Facilities & Food Preparation': <ChefHat className="h-5 w-5 text-primary" />,
+                      'Room Cleaning Protocols': <ShieldCheck className="h-5 w-5 text-primary" />,
+                      'Air Filtration Systems': <AirVent className="h-5 w-5 text-primary" />,
+                      'Staff Training for Allergy Awareness': <GraduationCap className="h-5 w-5 text-primary" />
+                    };
+
+                    return (
+                      <>
+                        <div className="flex items-center gap-2 border-b pb-4">
+                          <Star className="h-6 w-6 text-primary" />
+                          <h3 className="text-xl font-semibold">{hotelName}</h3>
+                        </div>
+                        <div className="grid gap-6 md:grid-cols-2">
+                          {sections.map((section, index) => (
+                            <div key={index} className="space-y-2">
+                              <div className="flex items-center gap-2">
+                                {icons[section.title as keyof typeof icons]}
+                                <h4 className="font-medium">{section.title}</h4>
+                              </div>
+                              <p className="text-muted-foreground text-sm leading-relaxed">
+                                {section.content}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    );
+                  })()}
+                </Card>
               ) : (
-                <p className="text-muted-foreground">
-                  {isSearching ? "Searching for personalized recommendations..." : "Click the search button to get recommendations"}
+                <p className="text-muted-foreground text-center py-8">
+                  {isSearching ? (
+                    "Finding the perfect hotel for your needs..."
+                  ) : (
+                    "Enter your destination and allergy details to get personalized recommendations"
+                  )}
                 </p>
               )}
             </div>
