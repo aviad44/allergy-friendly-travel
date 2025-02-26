@@ -40,18 +40,18 @@ const Index = () => {
           <img
             src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90"
             alt=""
-            className="absolute inset-0 w-full h-full object-cover brightness-125"
+            className="absolute inset-0 w-full h-full object-cover brightness-110"
             loading="eager"
             fetchPriority="high"
           />
         </picture>
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60" />
         
         {/* Content Overlay */}
         <div className="relative z-10 container max-w-6xl mx-auto px-4 text-center">
-          <div className="bg-black/30 backdrop-blur-sm p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
+          <div className="bg-black/40 backdrop-blur-sm p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
             <h1 className="font-display text-4xl md:text-6xl lg:text-7xl mb-8 leading-tight text-amber-200">
               {HOME_CONTENT.hero.title.line1}
               <span className="block mt-2">
@@ -61,7 +61,7 @@ const Index = () => {
             <h2 className="font-display text-xl md:text-2xl lg:text-3xl text-white mb-12 max-w-3xl mx-auto leading-relaxed">
               {HOME_CONTENT.hero.description}
             </h2>
-            <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl transform hover:scale-[1.01] transition-all duration-300 border border-white/40 hover:border-white/60">
+            <div className="bg-white/85 backdrop-blur-md p-8 rounded-2xl shadow-xl transform hover:scale-[1.01] transition-all duration-300 border border-white/40 hover:border-white/60">
               <SearchBar />
             </div>
           </div>
