@@ -28,34 +28,7 @@ export const SearchBar = () => {
     setIsSearching(true);
     setRecommendation("");
 
-    // Temporary: Using sample data instead of API call
-    setTimeout(() => {
-      const sampleRecommendation = `
-1. Hotel Four Seasons ${destination}
-- Dedicated gluten-free kitchen area
-- Trained staff for handling ${allergies} allergies
-- Special menu available 24/7
-- High-standard cleaning protocols
-
-2. Hilton ${destination}
-- Certified allergy-friendly rooms
-- Advanced air filtration system
-- Medical staff on call
-- Personalized meal planning
-
-3. Ritz Carlton ${destination}
-- Specialized kitchen equipment
-- Daily deep cleaning procedures
-- Staff trained in allergy awareness
-- 24/7 room service with allergy options
-      `;
-      
-      setRecommendation(sampleRecommendation);
-      setIsSearching(false);
-    }, 1500);
-
-    // Commented out the actual API call for now
-    /*try {
+    try {
       const { data, error } = await supabase.functions.invoke('search-with-gpt', {
         body: { destination, allergies }
       });
@@ -79,7 +52,7 @@ export const SearchBar = () => {
       });
     } finally {
       setIsSearching(false);
-    }*/
+    }
   };
 
   const formatRecommendations = (text: string) => {

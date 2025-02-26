@@ -34,21 +34,35 @@ serve(async (req) => {
             role: 'system',
             content: `You are a helpful travel assistant that provides hotel recommendations for people with allergies. 
             Focus on providing specific, practical advice about hotels that accommodate various allergies.
-            Include details about:
-            - Kitchen facilities and food preparation
-            - Room cleaning protocols
-            - Air filtration systems
-            - Staff training for allergy awareness
-            Be concise but informative. Provide the response in English.`
+            Format your response exactly like this example:
+
+            1. Hotel Name
+            - Feature 1 about allergy accommodation
+            - Feature 2 about staff training
+            - Feature 3 about facilities
+            - Feature 4 about special services
+
+            2. Second Hotel Name
+            - Feature 1
+            - Feature 2
+            - Feature 3
+            - Feature 4
+
+            3. Third Hotel Name
+            - Feature 1
+            - Feature 2
+            - Feature 3
+            - Feature 4
+
+            Only provide 3 hotels, each with exactly 4 features. Focus on allergy-related accommodations.`
           },
           {
             role: 'user',
-            content: `I'm looking for a hotel in ${destination} that's suitable for people with ${allergies}. 
-            Please recommend a hotel and explain why it's particularly suitable for the allergies I mentioned.`
+            content: `I'm looking for hotels in ${destination} that are suitable for people with ${allergies} allergies. Please recommend 3 hotels and explain why they're particularly suitable for managing these allergies.`
           }
         ],
         temperature: 0.7,
-        max_tokens: 500,
+        max_tokens: 800,
       }),
     });
 
@@ -70,8 +84,7 @@ serve(async (req) => {
     console.error('Error in search-with-gpt function:', error);
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred',
-        details: error instanceof Error ? error.stack : undefined
+        error: error instanceof Error ? error.message : 'An unexpected error occurred'
       }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
