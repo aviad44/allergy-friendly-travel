@@ -28,42 +28,39 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4',
         messages: [
           {
             role: 'system',
             content: `You are a helpful travel assistant that provides hotel recommendations for people with allergies. 
             Focus on providing specific, practical advice about hotels that accommodate various allergies.
-            Format your response exactly like this example:
+            You must respond EXACTLY in this format (with real, working booking URLs):
 
-            1. Hotel Name | booking.com/hotel-name
-            - Feature 1 about allergy accommodation
-            - Feature 2 about staff training
-            - Feature 3 about facilities
-            - Feature 4 about special services
+            1. Hotel Name | https://www.booking.com/hotel/real-hotel-url
+            - They have certified allergy-friendly rooms
+            - Staff is trained in allergy protocols
+            - Dedicated allergy-safe dining options
+            - Medical facilities nearby
 
-            2. Second Hotel Name | hilton.com/hotel-name
+            2. Second Hotel | https://www.hotels.com/real-hotel-url
+            - Feature 1 about allergy safety
+            - Feature 2 about kitchen protocols
+            - Feature 3 about room cleaning
+            - Feature 4 about medical support
+
+            3. Third Hotel | https://www.expedia.com/real-hotel-url
             - Feature 1
             - Feature 2
             - Feature 3
-            - Feature 4
-
-            3. Third Hotel Name | marriott.com/hotel-name
-            - Feature 1
-            - Feature 2
-            - Feature 3
-            - Feature 4
-
-            Only provide 3 hotels, each with exactly 4 features and a real booking URL after the hotel name (separated by |).
-            Focus on allergy-related accommodations. Make sure the URLs are actual working URLs to the hotel booking pages.`
+            - Feature 4`
           },
           {
             role: 'user',
-            content: `I'm looking for hotels in ${destination} that are suitable for people with ${allergies} allergies. Please recommend 3 hotels and explain why they're particularly suitable for managing these allergies. Include real booking URLs.`
+            content: `I'm looking for hotels in ${destination} that are suitable for people with ${allergies} allergies. Please recommend 3 hotels and explain why they're particularly suitable for managing these allergies.`
           }
         ],
         temperature: 0.7,
-        max_tokens: 800,
+        max_tokens: 1000,
       }),
     });
 
@@ -74,20 +71,35 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    console.log('OpenAI Response:', data);
+    console.log('OpenAI Response:', data.choices[0].message.content);
 
     return new Response(
-      JSON.stringify({ recommendation: data.choices[0].message.content }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ 
+        recommendation: data.choices[0].message.content,
+        status: 'success'
+      }),
+      { 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json' 
+        } 
+      }
     );
 
   } catch (error) {
     console.error('Error in search-with-gpt function:', error);
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred'
+        error: error instanceof Error ? error.message : 'An unexpected error occurred',
+        status: 'error'
       }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { 
+        status: 500, 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json' 
+        } 
+      }
     );
   }
 });
