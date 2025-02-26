@@ -1,5 +1,5 @@
 
-import { Search, Star, ShieldCheck, ChefHat, AirVent, GraduationCap, X } from "lucide-react";
+import { Search, Star, ShieldCheck, ChefHat, AirVent, GraduationCap, X, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export const SearchBar = () => {
   const [destination, setDestination] = useState("");
@@ -18,8 +19,8 @@ export const SearchBar = () => {
   const handleSearch = async () => {
     if (!destination || !allergies) {
       toast({
-        title: "Please fill in all fields",
-        description: "Enter both destination and allergy details to help you find the right hotel",
+        title: "נא למלא את כל השדות",
+        description: "יש להזין גם יעד וגם סוג אלרגיה כדי שנוכל לעזור במציאת המלון המתאים",
         variant: "destructive",
       });
       return;
@@ -28,52 +29,58 @@ export const SearchBar = () => {
     setIsSearching(true);
     setRecommendation("");
 
-    try {
-      const { data, error } = await supabase.functions.invoke('search-with-gpt', {
-        body: { destination, allergies }
-      });
+    // Simulated API response for testing
+    setTimeout(() => {
+      const sampleRecommendation = `
+        המלצות מלונות עבור אלרגיה ל${allergies} ב${destination}:
 
-      if (error) {
-        console.error('Supabase Function Error:', error);
-        throw error;
-      }
+        1. מלון מנדרין אוריינטל:
+        - מטבח נפרד לאוכל ללא גלוטן
+        - צוות מיומן בטיפול באלרגיות
+        - תפריט מותאם אישית
+        - ניקיון ברמה גבוהה
 
-      if (!data?.recommendation) {
-        throw new Error('No recommendation received from the AI');
-      }
-
-      setRecommendation(data.recommendation);
-    } catch (error) {
-      console.error('Error:', error);
-      toast({
-        title: "Search Error",
-        description: "Sorry, we couldn't complete the search. Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
+        2. ריץ קרלטון:
+        - שף מומחה לתזונה מיוחדת
+        - חדרים היפואלרגניים
+        - מערכת סינון אוויר מתקדמת
+        
+        3. פור סיזנס:
+        - פרוטוקול מיוחד לניקוי חדרים
+        - תפריט עשיר לבעלי אלרגיות
+        - צוות רפואי זמין 24/7
+      `;
+      
+      setRecommendation(sampleRecommendation);
       setIsSearching(false);
-    }
+    }, 1500);
   };
 
-  const formatRecommendation = (text: string) => {
-    // Extract hotel name and location from the first line
-    const firstLine = text.split('\n')[0];
-    const hotelInfo = firstLine.match(/\*\*(.*?)\*\*/) || [];
-    const hotelName = hotelInfo[1] || "Recommended Hotel";
+  const formatRecommendations = (text: string) => {
+    const lines = text.split('\n').filter(line => line.trim());
+    const hotels = [];
+    let currentHotel: any = {};
 
-    // Split the recommendation into sections based on numbered points
-    const sections = text.split(/\d\.\s\*\*/).filter(Boolean);
-
-    return {
-      hotelName,
-      sections: sections.map(section => {
-        const [title, ...content] = section.split('**:');
-        return {
-          title: title.trim(),
-          content: content.join('**:').trim()
+    for (const line of lines) {
+      if (line.includes('מלון')) {
+        if (currentHotel.name) {
+          hotels.push(currentHotel);
+        }
+        currentHotel = {
+          name: line.replace(/\d+\.\s+/, '').trim(),
+          features: []
         };
-      })
-    };
+      } else if (line.startsWith('-')) {
+        currentHotel.features = currentHotel.features || [];
+        currentHotel.features.push(line.replace('-', '').trim());
+      }
+    }
+    
+    if (currentHotel.name) {
+      hotels.push(currentHotel);
+    }
+
+    return hotels;
   };
 
   return (
@@ -81,18 +88,20 @@ export const SearchBar = () => {
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1">
           <Input 
-            placeholder="Enter destination" 
-            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
+            placeholder="הכנס יעד" 
+            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors text-right"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
+            dir="rtl"
           />
         </div>
         <div className="flex-1">
           <Input 
-            placeholder="Type of allergy" 
-            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
+            placeholder="סוג אלרגיה" 
+            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors text-right"
             value={allergies}
             onChange={(e) => setAllergies(e.target.value)}
+            dir="rtl"
           />
         </div>
         <Sheet>
@@ -103,13 +112,15 @@ export const SearchBar = () => {
               disabled={isSearching}
             >
               <Search className="mr-2 h-5 w-5" />
-              {isSearching ? "Searching..." : "Search Now"}
+              {isSearching ? "מחפש..." : "חפש"}
             </Button>
           </SheetTrigger>
-          <SheetContent className="w-full sm:max-w-2xl" side="bottom">
-            <div className="flex justify-between items-center">
+          <SheetContent className="w-full sm:max-w-4xl overflow-y-auto" side="bottom">
+            <div className="flex justify-between items-center mb-6">
               <SheetHeader>
-                <SheetTitle className="text-2xl font-display">Personalized Hotel Recommendation</SheetTitle>
+                <SheetTitle className="text-2xl font-display text-right">
+                  המלצות מלונות מותאמות אישית
+                </SheetTitle>
               </SheetHeader>
               <SheetClose asChild>
                 <Button variant="ghost" size="icon">
@@ -117,47 +128,54 @@ export const SearchBar = () => {
                 </Button>
               </SheetClose>
             </div>
-            <div className="mt-6">
-              {recommendation ? (
-                <Card className="p-6 space-y-6">
-                  {(() => {
-                    const { hotelName, sections } = formatRecommendation(recommendation);
-                    const icons = {
-                      'Kitchen Facilities & Food Preparation': <ChefHat className="h-5 w-5 text-primary" />,
-                      'Room Cleaning Protocols': <ShieldCheck className="h-5 w-5 text-primary" />,
-                      'Air Filtration Systems': <AirVent className="h-5 w-5 text-primary" />,
-                      'Staff Training for Allergy Awareness': <GraduationCap className="h-5 w-5 text-primary" />
-                    };
 
-                    return (
-                      <>
-                        <div className="flex items-center gap-2 border-b pb-4">
-                          <Star className="h-6 w-6 text-primary" />
-                          <h3 className="text-xl font-semibold">{hotelName}</h3>
-                        </div>
-                        <div className="grid gap-6 md:grid-cols-2">
-                          {sections.map((section, index) => (
-                            <div key={index} className="space-y-2">
-                              <div className="flex items-center gap-2">
-                                {icons[section.title as keyof typeof icons]}
-                                <h4 className="font-medium">{section.title}</h4>
+            <div className="mt-6" dir="rtl">
+              {recommendation ? (
+                <div className="space-y-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <MapPin className="h-5 w-5 text-primary" />
+                    <h3 className="text-lg font-medium">
+                      תוצאות עבור {destination} - מלונות מתאימים לאלרגיה ל{allergies}
+                    </h3>
+                  </div>
+
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {formatRecommendations(recommendation).map((hotel, index) => (
+                      <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300">
+                        <div className="p-6 space-y-4">
+                          <div className="flex items-start gap-2">
+                            <Star className="h-5 w-5 text-primary shrink-0 mt-1" />
+                            <h3 className="text-xl font-semibold">{hotel.name}</h3>
+                          </div>
+                          
+                          <Separator />
+                          
+                          <div className="space-y-3">
+                            {hotel.features.map((feature, idx) => (
+                              <div key={idx} className="flex items-start gap-2">
+                                <ShieldCheck className="h-4 w-4 text-primary shrink-0 mt-1" />
+                                <p className="text-muted-foreground">{feature}</p>
                               </div>
-                              <p className="text-muted-foreground text-sm leading-relaxed">
-                                {section.content}
-                              </p>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
+
+                          <div className="pt-4">
+                            <Button variant="outline" className="w-full">
+                              <Clock className="mr-2 h-4 w-4" />
+                              הזמן עכשיו
+                            </Button>
+                          </div>
                         </div>
-                      </>
-                    );
-                  })()}
-                </Card>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
               ) : (
-                <p className="text-muted-foreground text-center py-8">
+                <p className="text-center py-8 text-muted-foreground">
                   {isSearching ? (
-                    "Finding the perfect hotel for your needs..."
+                    "מחפש את המלונות המתאימים ביותר עבורך..."
                   ) : (
-                    "Enter your destination and allergy details to get personalized recommendations"
+                    "הזן יעד וסוג אלרגיה כדי לקבל המלצות מותאמות אישית"
                   )}
                 </p>
               )}
