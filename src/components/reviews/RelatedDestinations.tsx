@@ -11,7 +11,8 @@ const RELATED_DESTINATIONS: Record<DestinationId, DestinationId[]> = {
   'crete': ['cyprus'],
   'barcelona': ['paris'],
   'ayia-napa': ['cyprus'],
-  'abu-dhabi': [] // Currently no related destinations until Dubai is added
+  'abu-dhabi': [],
+  'thailand': ['abu-dhabi'] // Adding Thailand with Abu Dhabi as related due to similar luxury standards
 };
 
 interface RelatedDestinationsProps {
@@ -26,9 +27,9 @@ export const RelatedDestinations = ({ currentDestinationId }: RelatedDestination
 
   const getImageUrl = (imagePath: string) => {
     if (imagePath.startsWith('photo-')) {
-      return `https://images.unsplash.com/photo-${imagePath.replace('photo-', '')}?auto=format&fit=crop&w=800&q=80`;
+      return `https://images.unsplash.com/${imagePath}?auto=format&fit=crop&w=800&q=80`;
     }
-    return imagePath.startsWith('lovable-uploads/') ? `/${imagePath}` : `/${imagePath}`;
+    return imagePath.startsWith('lovable-uploads/') ? `/${imagePath}` : imagePath;
   };
 
   return (
