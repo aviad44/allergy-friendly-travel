@@ -1,3 +1,4 @@
+
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -16,11 +17,11 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b shadow-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b shadow-sm">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-          <Link to="/" className="text-2xl font-display font-bold text-secondary hover:text-secondary/90 transition-colors dark:text-white" aria-label="Return to homepage">
+          <Link to="/" className="text-2xl font-display font-bold text-secondary hover:text-secondary/90 transition-colors" aria-label="Return to homepage">
             {HOME_CONTENT.navigation.brand}
           </Link>
           
@@ -60,7 +61,7 @@ const Index = () => {
             <h2 className="font-display text-xl md:text-2xl lg:text-3xl text-white mb-12 max-w-3xl mx-auto leading-relaxed">
               {HOME_CONTENT.hero.description}
             </h2>
-            <div className="bg-white/95 dark:bg-gray-900/95 p-6 rounded-xl shadow-lg transform hover:scale-[1.01] transition-all duration-300 border border-primary/20">
+            <div className="bg-gray-50 p-6 rounded-xl shadow-lg transform hover:scale-[1.01] transition-all duration-300 border border-gray-200">
               <SearchBar />
             </div>
           </div>
@@ -68,9 +69,9 @@ const Index = () => {
       </section>
 
       {/* Featured Destinations Section */}
-      <section className="py-20 px-4 bg-white dark:bg-gray-900">
+      <section className="py-20 px-4 bg-gray-50">
         <div className="container max-w-6xl mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl mb-4 text-center dark:text-white">
+          <h2 className="font-display text-3xl md:text-4xl mb-4 text-center">
             {HOME_CONTENT.featured.title}
           </h2>
           <p className="text-lg text-muted-foreground mb-12 text-center max-w-2xl mx-auto">
