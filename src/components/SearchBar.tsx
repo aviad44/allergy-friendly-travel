@@ -42,6 +42,7 @@ export const SearchBar = () => {
         throw new Error('No recommendation received from the AI');
       }
 
+      console.log('Received recommendation:', data.recommendation);
       setRecommendation(data.recommendation);
     } catch (error) {
       console.error('Error:', error);
@@ -56,24 +57,27 @@ export const SearchBar = () => {
   };
 
   const formatRecommendations = (text: string) => {
+    console.log('Formatting text:', text);
     const lines = text.split('\n').filter(line => line.trim());
     const hotels = [];
     let currentHotel: any = {};
 
     for (const line of lines) {
-      if (line.includes('Hotel') || line.includes('Hilton') || line.includes('Ritz')) {
+      if (line.match(/^\d+\./)) {  // Look for lines starting with a number and period
         if (currentHotel.name) {
           hotels.push(currentHotel);
         }
-        const [name, url] = line.split('|').map(part => part.trim());
+        const [fullName, url] = line.split('|').map(part => part.trim());
         currentHotel = {
-          name: name.replace(/\d+\.\s+/, '').trim(),
+          name: fullName.replace(/^\d+\.\s+/, '').trim(),
           url: url,
           features: []
         };
-      } else if (line.startsWith('-')) {
-        currentHotel.features = currentHotel.features || [];
-        currentHotel.features.push(line.replace('-', '').trim());
+      } else if (line.trim().startsWith('-')) {
+        if (!currentHotel.features) {
+          currentHotel.features = [];
+        }
+        currentHotel.features.push(line.trim().substring(1).trim());
       }
     }
     
@@ -81,6 +85,7 @@ export const SearchBar = () => {
       hotels.push(currentHotel);
     }
 
+    console.log('Formatted hotels:', hotels);
     return hotels;
   };
 
@@ -151,7 +156,7 @@ export const SearchBar = () => {
                         )}
                       </div>
                       <div className="space-y-2">
-                        {hotel.features.map((feature, idx) => (
+                        {hotel.features?.map((feature, idx) => (
                           <div key={idx} className="flex items-start gap-2">
                             <ShieldCheck className="h-4 w-4 text-primary shrink-0 mt-1" />
                             <p className="text-muted-foreground">{feature}</p>
