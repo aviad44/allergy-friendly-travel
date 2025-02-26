@@ -5,7 +5,7 @@ export const languages = [
   { code: 'fr' as const, name: 'Français' },
   { code: 'es' as const, name: 'Español' },
   { code: 'de' as const, name: 'Deutsch' },
-  { code: 'he' as const, name: 'עברי���' }
+  { code: 'he' as const, name: 'עברית' }
 ];
 
 export interface Destination {
@@ -99,6 +99,14 @@ export const destinations = [
     image: 'photo-1512632578888-169bbbc64f33',
     description: 'Allergy-Friendly Hotels in Abu Dhabi – The Ultimate Guide',
     subtitle: 'Finding Safe and Comfortable Stays for Allergy Sufferers'
+  },
+  {
+    id: 'thailand',
+    name: 'Thailand',
+    country: 'Thailand',
+    image: 'photo-1552465011-b4e21bf6e79a',
+    description: 'The Ultimate Guide to Allergy-Friendly Hotels in Thailand',
+    subtitle: 'Safe & Comfortable Stays for Travelers with Food Allergies'
   }
 ] as const;
 
@@ -117,7 +125,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         name: "Hôtel de Crillon",
         address: "Place de la Concorde, Paris",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏�� Allergy-free bedding", "👨‍🍳 Dedicated kitchen", "📝 Custom meal plans"],
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Dedicated kitchen", "📝 Custom meal plans"],
         description: "Historic luxury hotel with specialized allergy-friendly services and personalized dining options.",
         quote: "A dream for allergy sufferers! Their staff was so knowledgeable about food sensitivities.",
         bookingUrl: "https://www.rosewoodhotels.com/en/hotel-de-crillon"
@@ -532,6 +540,77 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         question: "What should I prepare before my stay in Abu Dhabi?",
         answer: "Notify the hotel in advance about your allergies, consider carrying Arabic allergy translation cards, and speak directly with the chef about your dietary needs."
+      }
+    ]
+  },
+  'thailand': {
+    intro: "Thailand offers a unique blend of exotic cuisine and modern hospitality, making it essential to choose the right accommodation if you have food allergies. Whether you're exploring bustling Bangkok or relaxing in Phuket, our carefully selected hotels understand the importance of accommodating dietary restrictions while providing an authentic Thai experience.",
+    hotels: [
+      {
+        name: "Shangri-La Bangkok",
+        address: "89 Soi Wat Suan Plu, Bangkok, Thailand",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "👨‍🍳 Dedicated allergy chef", "🍽️ Clear allergen labeling"],
+        description: "Luxury riverside hotel offering comprehensive allergy-friendly services with dedicated kitchen staff trained in handling allergies.",
+        quote: "Traveling with food allergies, the staff went above and beyond to accommodate my dietary restrictions.",
+        bookingUrl: "https://www.shangri-la.com/bangkok/shangrila/"
+      },
+      {
+        name: "Marriott Marquis Queen's Park",
+        address: "199 Sukhumvit Soi 22, Bangkok, Thailand",
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "🍽️ Personalized menus", "📝 Allergen protocols"],
+        description: "Modern luxury hotel with established allergen protocols and specialized dining options.",
+        quote: "They had a clear process in place and took my allergies seriously.",
+        bookingUrl: "https://www.marriott.com/en-us/hotels/bkkqp-bangkok-marriott-marquis-queens-park/overview/"
+      },
+      {
+        name: "JW Marriott Phuket Resort & Spa",
+        address: "231 Moo 3, Mai Khao Beach, Phuket, Thailand",
+        features: ["⭐ 5-star luxury", "🏖️ Beachfront", "🛏️ Hypoallergenic rooms", "👨‍🍳 Personal chef service", "🍽️ Safe dining"],
+        description: "Beachfront resort offering personalized dining experiences and comprehensive allergy management.",
+        quote: "The chef made me a special meal each day, and I felt completely safe.",
+        bookingUrl: "https://www.marriott.com/en-us/hotels/hktjw-jw-marriott-phuket-resort-and-spa/overview/"
+      },
+      {
+        name: "The Slate Phuket",
+        address: "116 Moo 1, Sakhu, Thalang, Phuket, Thailand",
+        features: ["⭐ 5-star luxury", "🏖️ Beach access", "🛏️ Allergy-safe rooms", "🍽️ Dietary options", "👨‍🍳 Trained staff"],
+        description: "Boutique resort known for its attention to dietary restrictions and personalized service.",
+        quote: "Their attention to detail with allergies was impressive. Every meal was carefully prepared.",
+        bookingUrl: "https://www.slatephuket.com/"
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Thai", "When to Use"],
+      rows: [
+        {
+          original: "I have food allergies",
+          translation: "ฉันแพ้อาหาร",
+          pronunciation: "When checking in"
+        },
+        {
+          original: "No peanuts please",
+          translation: "ไม่ใส่ถั่วลิสง",
+          pronunciation: "At restaurants"
+        },
+        {
+          original: "Is this allergen-free?",
+          translation: "อาหารนี้ปลอดภัยจากสารก่อภูมิแพ้ไหม",
+          pronunciation: "Before eating"
+        }
+      ]
+    },
+    faqs: [
+      {
+        question: "How common is English spoken in Thai hotels?",
+        answer: "Most luxury and international chain hotels in Thailand have English-speaking staff, particularly in Bangkok and Phuket. However, it's still recommended to carry allergy translation cards in Thai."
+      },
+      {
+        question: "What common ingredients should I watch out for in Thai cuisine?",
+        answer: "Common allergens in Thai cuisine include peanuts, tree nuts, shellfish, fish sauce (contains fish), and soy sauce. Always inform the staff about your specific allergies and ask about ingredients."
+      },
+      {
+        question: "Are Thai hotels experienced with handling food allergies?",
+        answer: "High-end hotels and international chains in Thailand are generally well-versed in handling food allergies. Many have specific protocols and trained staff to accommodate dietary restrictions."
       }
     ]
   }
