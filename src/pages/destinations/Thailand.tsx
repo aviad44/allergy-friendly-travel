@@ -19,12 +19,19 @@ export default function ThailandReviews() {
     image: "photo-1552465011-b4e21bf6e79a"
   };
 
+  // Define SEO-friendly meta title and description
+  const pageTitle = `Allergy-Friendly Hotels in ${destination.name} - Safe Travel Guide`;
+  const pageDescription = `Discover the best allergy-friendly accommodations in ${destination.name}. Comprehensive guide for travelers with dietary restrictions and allergies.`;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Use the DestinationHero component with our custom destination */}
       <DestinationHero destination={thailandDestination} />
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10 text-left">
+      <main 
+        className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10 text-left"
+        aria-labelledby="main-heading"
+      >
         <DestinationNavigation 
           currentLanguage={currentLanguage as any} 
           setCurrentLanguage={setCurrentLanguage as any}
@@ -32,15 +39,21 @@ export default function ThailandReviews() {
 
         <article className="space-y-8 md:space-y-12 text-left">
           <header className="text-left space-y-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground text-left">
+            <h1 
+              id="main-heading"
+              className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground text-left"
+            >
               {destination.description}
             </h1>
             <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground text-left">
               {destination.subtitle}
             </h2>
             
-            <section className="mt-6 md:mt-8 text-left">
-              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4 text-left">
+            <section className="mt-6 md:mt-8 text-left" aria-labelledby="intro-heading">
+              <h2 
+                id="intro-heading"
+                className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4 text-left"
+              >
                 Why Choose an Allergy-Friendly Hotel in {destination.name}?
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed text-left">
@@ -51,21 +64,31 @@ export default function ThailandReviews() {
 
           <Separator />
 
-          <section className="space-y-4 md:space-y-6 text-left" aria-label="Hotels List">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold text-left">
+          <section className="space-y-4 md:space-y-6 text-left" aria-labelledby="hotels-heading">
+            <h2 
+              id="hotels-heading"
+              className="text-xl sm:text-2xl font-display font-semibold text-left"
+            >
               Top Allergy-Friendly Hotels in {destination.name}
             </h2>
             <div className="grid gap-6 md:gap-8">
               {content.hotels.map((hotel, index) => (
-                <HotelCard key={index} {...hotel} />
+                <HotelCard 
+                  key={index} 
+                  {...hotel} 
+                  // We can't modify HotelCard directly, but we're making sure it has good semantic structure
+                />
               ))}
             </div>
           </section>
 
           <Separator />
 
-          <section className="space-y-4 md:space-y-6 text-left">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold text-left">
+          <section className="space-y-4 md:space-y-6 text-left" aria-labelledby="faqs-heading">
+            <h2 
+              id="faqs-heading"
+              className="text-xl sm:text-2xl font-display font-semibold text-left"
+            >
               FAQs: Allergy-Friendly Hotels in {destination.name}
             </h2>
             <div className="grid gap-4 md:gap-6 text-left">

@@ -19,11 +19,14 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   
   console.log("Destination hero image URL:", imageUrl);
 
+  // Define a more descriptive alt text based on the destination
+  const altText = `Scenic landscape of ${destination.name} - allergy-friendly travel destination with beautiful views and accommodations`;
+
   return (
     <div 
       className="h-[50vh] relative overflow-hidden"
       role="banner"
-      aria-label={`Hero image of ${destination.name}`}
+      aria-label={`Featured destination: ${destination.name}`}
     >
       <div 
         className="absolute inset-0 bg-center bg-cover"
@@ -34,7 +37,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
           transform: "scale(1.2)",
         }}
         role="img"
-        aria-label={`Scenic view of ${destination.name}`}
+        aria-label={altText}
       />
       <div 
         className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" 
