@@ -16,7 +16,7 @@ export default function ThailandReviews() {
   // Create a custom destination object with the image we want to use
   const thailandDestination = {
     ...destination,
-    image: "1552465011-b4e21bf6e79a"
+    image: "photo-1552465011-b4e21bf6e79a"
   };
 
   return (

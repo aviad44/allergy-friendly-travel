@@ -6,11 +6,18 @@ interface DestinationHeroProps {
 }
 
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
-  const imageUrl = destination.image.startsWith('photo-') 
-    ? `https://images.unsplash.com/photo-${destination.image.replace('photo-', '')}?auto=format&fit=crop&w=2000&q=80`
-    : destination.image.startsWith('lovable-uploads/') 
-      ? `/${destination.image}`
-      : `/${destination.image}`;
+  let imageUrl;
+
+  // Process image URL based on format
+  if (destination.image.startsWith('photo-')) {
+    imageUrl = `https://images.unsplash.com/photo-${destination.image.replace('photo-', '')}?auto=format&fit=crop&w=2000&q=80`;
+  } else if (destination.image.startsWith('lovable-uploads/')) {
+    imageUrl = `/${destination.image}`;
+  } else {
+    imageUrl = `/${destination.image}`;
+  }
+  
+  console.log("Destination hero image URL:", imageUrl);
 
   return (
     <div 
