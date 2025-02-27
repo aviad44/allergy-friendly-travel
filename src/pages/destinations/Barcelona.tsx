@@ -71,10 +71,12 @@ const Barcelona = () => {
   ];
 
   const destination = {
+    id: "barcelona",
     name: "Barcelona",
     image: "photo-1583422409516-2895a77efded",
     country: "Spain",
-    subtitle: "Allergy-Friendly Guide to the Catalan Capital"
+    subtitle: "Allergy-Friendly Guide to the Catalan Capital",
+    description: "Allergy-Friendly Hotels in Barcelona"
   };
 
   return (
