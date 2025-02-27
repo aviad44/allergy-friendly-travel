@@ -6,14 +6,14 @@ export const TravelTips = () => {
   const tips = [
     "Contact the hotel in advance – Confirm their ability to accommodate your allergies before arrival.",
     "Request a mini fridge – Helps store safe food options if needed.",
-    "Use an allergy translation card – Essential for restaurants and cafes if you don't speak French.",
+    "Use an allergy translation card – Essential for restaurants and cafes if you don't speak the local language.",
     "Check nearby allergy-friendly restaurants – Many hotels have partnerships with safe dining spots."
   ];
 
   return (
     <Card className="mt-12">
       <CardHeader>
-        <CardTitle className="text-2xl font-display">Final Tips for an Allergy-Safe Stay in Paris</CardTitle>
+        <CardTitle className="text-2xl font-display">Final Tips for an Allergy-Safe Stay</CardTitle>
       </CardHeader>
       <CardContent>
         <ul className="space-y-4">

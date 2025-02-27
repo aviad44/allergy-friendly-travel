@@ -6,11 +6,84 @@ import { LanguageTable } from "@/components/reviews/LanguageTable";
 import { TravelTips } from "@/components/hotels/TravelTips";
 import { DestinationNavigation } from "@/components/reviews/DestinationNavigation";
 import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Check } from "lucide-react";
 
 export default function BarcelonaReviews() {
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const destination = destinations.find(d => d.id === 'barcelona')!;
   const content = destinationData['barcelona'];
+
+  // Custom Barcelona content
+  const barcelonaHotels = [
+    {
+      id: "grand-hotel-central",
+      name: "Grand Hotel Central",
+      description: "Located in the heart of Barcelona, this luxury hotel prioritizes guest well-being. One visitor noted, \"Absolutely loved this hotel. From the moment I arrived, they ensured all my dietary needs were met.\"",
+      city: "Barcelona",
+      country: "Spain",
+      imageUrl: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
+      rating: 4.8,
+      reviewCount: 248,
+      allergyInfo: "Complete allergen protocols, dedicated preparation areas",
+      bookingUrl: "https://www.grandhotelcentral.com/"
+    },
+    {
+      id: "mercer-hotel-barcelona",
+      name: "Mercer Hotel Barcelona",
+      description: "Renowned for its exceptional service, Mercer Hotel provides tailored meals for guests with allergies. A guest shared, \"The staff was incredibly attentive to my son's peanut allergy, making our stay stress-free.\"",
+      city: "Barcelona",
+      country: "Spain",
+      imageUrl: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80",
+      rating: 4.9,
+      reviewCount: 186,
+      allergyInfo: "Tailored meals for guests with allergies",
+      bookingUrl: "https://www.mercerbarcelona.com/"
+    },
+    {
+      id: "hotel-arts-barcelona",
+      name: "Hotel Arts Barcelona",
+      description: "Overlooking the marina, Hotel Arts offers allergy-conscious dining. A traveler wrote, \"The staff took my allergies seriously and ensured every meal was prepared safely.\"",
+      city: "Barcelona",
+      country: "Spain",
+      imageUrl: "https://images.unsplash.com/photo-1606402179428-a57976d71fa4?auto=format&fit=crop&w=800&q=80",
+      rating: 4.7,
+      reviewCount: 312,
+      allergyInfo: "Allergy-conscious dining",
+      bookingUrl: "https://www.hotelartsbarcelona.com/"
+    },
+    {
+      id: "nobu-hotel-barcelona",
+      name: "Nobu Hotel Barcelona",
+      description: "Combining Japanese-inspired luxury with dietary sensitivity, Nobu Hotel is a top pick. \"The chef personally ensured that my meals were allergy-safe, and the service was impeccable,\" one guest commented.",
+      city: "Barcelona",
+      country: "Spain",
+      imageUrl: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80",
+      rating: 4.8,
+      reviewCount: 175,
+      allergyInfo: "Japanese-inspired luxury with dietary sensitivity",
+      bookingUrl: "https://barcelona.nobuhotels.com/"
+    },
+    {
+      id: "hotel-calipolis-sitges",
+      name: "Hotel Calipolis Sitges",
+      description: "Situated in Sitges, a short drive from Barcelona, this hotel offers allergy-friendly menus and customized meal plans. \"I felt completely safe dining here, thanks to their detailed approach to food allergies,\" said a visitor.",
+      city: "Sitges",
+      country: "Spain",
+      imageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+      rating: 4.6,
+      reviewCount: 203,
+      allergyInfo: "Allergy-friendly menus and customized meal plans",
+      bookingUrl: "https://www.hotelcalipolis.com/en/"
+    }
+  ];
+
+  const allergyTips = [
+    "Contact Hotels in Advance: Notify the hotel about your allergies before arrival.",
+    "Use Allergy Translation Cards: Carry Spanish-language allergy cards to ease communication at restaurants.",
+    "Know Common Ingredients: Be cautious of nuts, dairy, and gluten in Spanish cuisine.",
+    "Bring Emergency Medication: Always have antihistamines and an EpiPen ready."
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -34,18 +107,20 @@ export default function BarcelonaReviews() {
         <article className="space-y-8 md:space-y-12">
           <header className="text-left space-y-4">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
-              {destination.description}
+              The Ultimate Guide to Allergy-Friendly Hotels in Barcelona
             </h1>
             <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground">
-              {destination.subtitle}
+              Safe and Comfortable Stays for Travelers with Food Allergies
             </h2>
             
             <section className="mt-6 md:mt-8">
               <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4">
-                Why Choose an Allergy-Friendly Hotel in {destination.name}?
+                Why Choose an Allergy-Friendly Hotel in Barcelona?
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
-                {content.intro}
+                Barcelona offers a perfect blend of stunning architecture, Mediterranean cuisine, and vibrant culture. 
+                For travelers with food allergies, choosing the right accommodation is essential for a safe and enjoyable stay. 
+                These hotels understand dietary restrictions and go above and beyond to ensure your comfort and safety.
               </p>
             </section>
           </header>
@@ -54,40 +129,61 @@ export default function BarcelonaReviews() {
 
           <section className="space-y-4 md:space-y-6" aria-label="Hotels List">
             <h2 className="text-xl sm:text-2xl font-display font-semibold">
-              Top Allergy-Friendly Hotels in {destination.name}
+              Top Allergy-Friendly Hotels in Barcelona
             </h2>
             <div className="grid gap-6 md:gap-8">
-              {content.hotels.map((hotel, index) => (
-                <HotelCard key={index} {...hotel} />
+              {barcelonaHotels.map((hotel, index) => (
+                <HotelCard 
+                  key={index}
+                  name={hotel.name}
+                  description={hotel.description}
+                  imageUrl={hotel.imageUrl}
+                  rating={hotel.rating}
+                  reviewCount={hotel.reviewCount}
+                  city={hotel.city}
+                  country={hotel.country}
+                  allergyInfo={hotel.allergyInfo}
+                  bookingUrl={hotel.bookingUrl}
+                />
               ))}
             </div>
           </section>
 
           <Separator />
 
-          <section className="space-y-4 md:space-y-6">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold">
-              FAQs: Allergy-Friendly Hotels in {destination.name}
-            </h2>
-            <div className="grid gap-4 md:gap-6">
-              {content.faqs.map((faq, index) => (
-                <div key={index} className="space-y-2">
-                  <h3 className="text-base sm:text-lg font-semibold">{faq.question}</h3>
-                  <p className="text-sm sm:text-base text-muted-foreground">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          {/* Essential Tips Section */}
+          <Card className="mt-12">
+            <CardHeader>
+              <CardTitle className="text-2xl font-display">Essential Tips for Allergy-Safe Travel in Barcelona</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-4">
+                {allergyTips.map((tip, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                    <span>{tip}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
 
-          <TravelTips />
-
-          <div className="overflow-x-auto">
-            <LanguageTable 
-              headers={content.languageTable.headers}
-              rows={content.languageTable.rows}
-              destinationName={destination.name}
-            />
+          {/* Final Note */}
+          <div className="bg-muted p-6 rounded-lg text-center">
+            <p className="text-lg font-medium">
+              By choosing one of these allergy-friendly hotels, you can enjoy a safe and enjoyable Barcelona getaway. 🌍✨
+            </p>
           </div>
+
+          {content.languageTable.headers.length > 0 && (
+            <div className="overflow-x-auto">
+              <LanguageTable 
+                headers={content.languageTable.headers}
+                rows={content.languageTable.rows}
+                destinationName="Barcelona"
+              />
+            </div>
+          )}
         </article>
       </main>
     </div>
