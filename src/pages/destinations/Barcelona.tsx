@@ -1,136 +1,95 @@
 
 import { useState } from "react";
-import { DestinationHero } from "@/components/reviews/DestinationHero";
-import { DestinationNavigation } from "@/components/reviews/DestinationNavigation";
-import HotelSection from "@/components/hotels/HotelSection";
-import UsefulInfo from "@/components/hotels/UsefulInfo";
-import { TravelTips } from "@/components/hotels/TravelTips";
-import { DestinationReviews } from "@/components/reviews/DestinationReviews";
-import { RelatedDestinations } from "@/components/reviews/RelatedDestinations";
+import { destinations, destinationData } from "@/types/reviews";
+import { HotelCard } from "@/components/hotels/HotelCard";
 import { LanguageTable } from "@/components/reviews/LanguageTable";
-import AllergiesTable from "@/components/language/AllergiesTable";
-import { LanguageCode } from "@/types/reviews";
+import { TravelTips } from "@/components/hotels/TravelTips";
+import { DestinationNavigation } from "@/components/reviews/DestinationNavigation";
+import { Separator } from "@/components/ui/separator";
 
-const Barcelona = () => {
-  const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
-
-  const barcelonaHotels = [
-    {
-      id: 1,
-      name: "Hotel Arts Barcelona",
-      city: "Barcelona",
-      country: "Spain",
-      imageUrl: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
-      rating: 5,
-      reviews: 248,
-      allergyInfo: "Dedicated allergy-friendly kitchen",
-      bookingUrl: "https://example.com/hotel-arts"
-    },
-    {
-      id: 2,
-      name: "Almanac Barcelona",
-      city: "Barcelona",
-      country: "Spain",
-      imageUrl: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80",
-      rating: 5,
-      reviews: 186,
-      allergyInfo: "Comprehensive allergen protocols",
-      bookingUrl: "https://example.com/almanac"
-    },
-    {
-      id: 3,
-      name: "Majestic Hotel & Spa",
-      city: "Barcelona",
-      country: "Spain",
-      imageUrl: "https://images.unsplash.com/photo-1606402179428-a57976d71fa4?auto=format&fit=crop&w=800&q=80",
-      rating: 5,
-      reviews: 312,
-      allergyInfo: "Expert allergen handling",
-      bookingUrl: "https://example.com/majestic"
-    }
-  ];
-
-  // Language table headers and rows
-  const headers = ["Spanish", "English", "Pronunciation"];
-  const rows = [
-    {
-      original: "Tengo una alergia",
-      translation: "I have an allergy",
-      pronunciation: "Ten-go oo-na a-ler-hee-a"
-    },
-    {
-      original: "Soy alérgico/a al gluten",
-      translation: "I am allergic to gluten",
-      pronunciation: "Soy a-ler-hee-ko/ka al gloo-ten"
-    },
-    {
-      original: "¿Este plato contiene frutos secos?",
-      translation: "Does this dish contain nuts?",
-      pronunciation: "Es-te pla-to con-tee-e-ne froo-tos se-kos"
-    }
-  ];
-
-  const destination = {
-    id: "barcelona",
-    name: "Barcelona",
-    image: "photo-1583422409516-2895a77efded",
-    country: "Spain",
-    subtitle: "Allergy-Friendly Guide to the Catalan Capital",
-    description: "Allergy-Friendly Hotels in Barcelona"
-  };
+export default function BarcelonaReviews() {
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+  const destination = destinations.find(d => d.id === 'barcelona')!;
+  const content = destinationData['barcelona'];
 
   return (
     <div className="min-h-screen bg-background">
-      <DestinationNavigation 
-        currentLanguage={currentLanguage}
-        setCurrentLanguage={setCurrentLanguage}
-      />
-      
-      <DestinationHero destination={destination} />
-      
-      <div className="container mx-auto px-4 py-12 max-w-5xl">
-        <div className="space-y-12">
-          <div>
-            <h2 className="text-3xl font-display font-bold mb-4">Discover Barcelona</h2>
-            <p className="text-lg text-muted-foreground mb-4">
-              Barcelona, the vibrant capital of Catalonia, offers a unique blend of stunning architecture, Mediterranean cuisine, 
-              and lively culture. For travelers with food allergies, the city presents both challenges and opportunities.
-            </p>
-            <p className="text-lg text-muted-foreground">
-              While traditional Spanish cuisine often incorporates common allergens like seafood, gluten, and nuts, 
-              Barcelona's international outlook and increasing awareness of dietary restrictions make it increasingly accessible 
-              for allergy-conscious travelers.
-            </p>
-          </div>
+      {/* Hero Section with Image */}
+      <div 
+        className="h-[50vh] w-full bg-cover bg-center relative" 
+        style={{
+          backgroundImage: `url(https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&q=80)`,
+          backgroundPosition: 'center'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+      </div>
 
-          <HotelSection hotels={barcelonaHotels} />
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10">
+        <DestinationNavigation 
+          currentLanguage={currentLanguage as any} 
+          setCurrentLanguage={setCurrentLanguage as any}
+        />
+
+        <article className="space-y-8 md:space-y-12">
+          <header className="text-left space-y-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
+              {destination.description}
+            </h1>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground">
+              {destination.subtitle}
+            </h2>
+            
+            <section className="mt-6 md:mt-8">
+              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4">
+                Why Choose an Allergy-Friendly Hotel in {destination.name}?
+              </h2>
+              <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
+                {content.intro}
+              </p>
+            </section>
+          </header>
+
+          <Separator />
+
+          <section className="space-y-4 md:space-y-6" aria-label="Hotels List">
+            <h2 className="text-xl sm:text-2xl font-display font-semibold">
+              Top Allergy-Friendly Hotels in {destination.name}
+            </h2>
+            <div className="grid gap-6 md:gap-8">
+              {content.hotels.map((hotel, index) => (
+                <HotelCard key={index} {...hotel} />
+              ))}
+            </div>
+          </section>
+
+          <Separator />
+
+          <section className="space-y-4 md:space-y-6">
+            <h2 className="text-xl sm:text-2xl font-display font-semibold">
+              FAQs: Allergy-Friendly Hotels in {destination.name}
+            </h2>
+            <div className="grid gap-4 md:gap-6">
+              {content.faqs.map((faq, index) => (
+                <div key={index} className="space-y-2">
+                  <h3 className="text-base sm:text-lg font-semibold">{faq.question}</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
           <TravelTips />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-2xl font-display font-bold mb-6">Essential Spanish Phrases</h3>
-              <LanguageTable 
-                headers={headers}
-                rows={rows}
-                destinationName="Barcelona"
-              />
-            </div>
-            <div>
-              <h3 className="text-2xl font-display font-bold mb-6">Common Allergies in Spanish</h3>
-              <AllergiesTable />
-            </div>
+          <div className="overflow-x-auto">
+            <LanguageTable 
+              headers={content.languageTable.headers}
+              rows={content.languageTable.rows}
+              destinationName={destination.name}
+            />
           </div>
-
-          <UsefulInfo />
-          
-          <DestinationReviews destinationId="barcelona" />
-          
-          <RelatedDestinations currentDestinationId="barcelona" />
-        </div>
-      </div>
+        </article>
+      </main>
     </div>
   );
-};
-
-export default Barcelona;
+}
