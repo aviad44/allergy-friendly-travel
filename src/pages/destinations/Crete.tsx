@@ -16,7 +16,7 @@ export default function CreteReviews() {
   // Create a custom destination object with the image we want to use
   const creteDestination = {
     ...destination,
-    image: "photo-1586640870641-c923f0a2eb34"
+    image: "lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png"
   };
 
   return (
