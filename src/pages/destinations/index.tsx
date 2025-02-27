@@ -42,7 +42,7 @@ const destinationArticles = [
     id: 3,
     title: "Cyprus Guide",
     description: "Find the best allergy-friendly hotels and dining options across the island",
-    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=2000&q=80",
+    image: "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png",
     href: "/destinations/cyprus",
     tags: ["Dairy-Free", "Gluten-Free"]
   },
@@ -50,7 +50,7 @@ const destinationArticles = [
     id: 4,
     title: "Crete Guide",
     description: "Experience Greek hospitality with peace of mind",
-    image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=2000&q=80",
+    image: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png",
     href: "/destinations/crete",
     tags: ["Gluten-Free", "Mediterranean"]
   },
