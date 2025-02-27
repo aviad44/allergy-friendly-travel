@@ -78,26 +78,26 @@ export default function BarcelonaReviews() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
       </div>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10 text-left">
         <DestinationNavigation 
           currentLanguage={currentLanguage as any} 
           setCurrentLanguage={setCurrentLanguage as any}
         />
 
-        <article className="space-y-8 md:space-y-12">
-          <header className="space-y-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
+        <article className="space-y-8 md:space-y-12 text-left">
+          <header className="space-y-4 text-left">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground text-left">
               The Ultimate Guide to Allergy-Friendly Hotels in Barcelona
             </h1>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground text-left">
               Safe and Comfortable Stays for Travelers with Food Allergies
             </h2>
             
-            <section className="mt-6 md:mt-8">
-              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4">
+            <section className="mt-6 md:mt-8 text-left">
+              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4 text-left">
                 Why Choose an Allergy-Friendly Hotel in Barcelona?
               </h2>
-              <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
+              <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed text-left">
                 Barcelona offers a perfect blend of stunning architecture, Mediterranean cuisine, and vibrant culture. 
                 For travelers with food allergies, choosing the right accommodation is essential for a safe and enjoyable stay. 
                 These hotels understand dietary restrictions and go above and beyond to ensure your comfort and safety.
@@ -107,8 +107,8 @@ export default function BarcelonaReviews() {
 
           <Separator />
 
-          <section className="space-y-4 md:space-y-6" aria-label="Hotels List">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold">
+          <section className="space-y-4 md:space-y-6 text-left" aria-label="Hotels List">
+            <h2 className="text-xl sm:text-2xl font-display font-semibold text-left">
               Top Allergy-Friendly Hotels in Barcelona
             </h2>
             <div className="grid gap-6 md:gap-8">
@@ -130,15 +130,15 @@ export default function BarcelonaReviews() {
 
           {/* Essential Tips Section */}
           <Card className="mt-12">
-            <CardHeader>
-              <CardTitle className="text-2xl font-display">Essential Tips for Allergy-Safe Travel in Barcelona</CardTitle>
+            <CardHeader className="text-left">
+              <CardTitle className="text-2xl font-display text-left">Essential Tips for Allergy-Safe Travel in Barcelona</CardTitle>
             </CardHeader>
-            <CardContent>
-              <ul className="space-y-4">
+            <CardContent className="text-left">
+              <ul className="space-y-4 text-left">
                 {allergyTips.map((tip, index) => (
-                  <li key={index} className="flex items-start gap-2">
+                  <li key={index} className="flex items-start gap-2 text-left">
                     <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                    <span>{tip}</span>
+                    <span className="text-left">{tip}</span>
                   </li>
                 ))}
               </ul>
@@ -146,8 +146,8 @@ export default function BarcelonaReviews() {
           </Card>
 
           {/* Final Note */}
-          <div className="bg-muted p-6 rounded-lg text-center">
-            <p className="text-lg font-medium">
+          <div className="bg-muted p-6 rounded-lg">
+            <p className="text-lg font-medium text-left">
               By choosing one of these allergy-friendly hotels, you can enjoy a safe and enjoyable Barcelona getaway. 🌍✨
             </p>
           </div>
