@@ -1,10 +1,10 @@
 
+import { useState } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
 import { LanguageTable } from "@/components/reviews/LanguageTable";
 import { TravelTips } from "@/components/hotels/TravelTips";
 import { DestinationNavigation } from "@/components/reviews/DestinationNavigation";
-import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 
 export default function CyprusReviews() {
@@ -26,26 +26,26 @@ export default function CyprusReviews() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
       </div>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10 text-left">
         <DestinationNavigation 
           currentLanguage={currentLanguage as any} 
           setCurrentLanguage={setCurrentLanguage as any}
         />
 
-        <article className="space-y-8 md:space-y-12">
+        <article className="space-y-8 md:space-y-12 text-left">
           <header className="text-left space-y-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground text-left">
               {destination.description}
             </h1>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground text-left">
               {destination.subtitle}
             </h2>
             
-            <section className="mt-6 md:mt-8">
-              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4">
+            <section className="mt-6 md:mt-8 text-left">
+              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4 text-left">
                 Why Choose an Allergy-Friendly Hotel in {destination.name}?
               </h2>
-              <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
+              <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed text-left">
                 {content.intro}
               </p>
             </section>
@@ -53,8 +53,8 @@ export default function CyprusReviews() {
 
           <Separator />
 
-          <section className="space-y-4 md:space-y-6" aria-label="Hotels List">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold">
+          <section className="space-y-4 md:space-y-6 text-left" aria-label="Hotels List">
+            <h2 className="text-xl sm:text-2xl font-display font-semibold text-left">
               Top Allergy-Friendly Hotels in {destination.name}
             </h2>
             <div className="grid gap-6 md:gap-8">
@@ -66,15 +66,15 @@ export default function CyprusReviews() {
 
           <Separator />
 
-          <section className="space-y-4 md:space-y-6">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold">
+          <section className="space-y-4 md:space-y-6 text-left">
+            <h2 className="text-xl sm:text-2xl font-display font-semibold text-left">
               FAQs: Allergy-Friendly Hotels in {destination.name}
             </h2>
-            <div className="grid gap-4 md:gap-6">
+            <div className="grid gap-4 md:gap-6 text-left">
               {content.faqs.map((faq, index) => (
-                <div key={index} className="space-y-2">
-                  <h3 className="text-base sm:text-lg font-semibold">{faq.question}</h3>
-                  <p className="text-sm sm:text-base text-muted-foreground">{faq.answer}</p>
+                <div key={index} className="space-y-2 text-left">
+                  <h3 className="text-base sm:text-lg font-semibold text-left">{faq.question}</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground text-left">{faq.answer}</p>
                 </div>
               ))}
             </div>
