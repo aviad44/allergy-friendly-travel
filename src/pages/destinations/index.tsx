@@ -69,6 +69,14 @@ const destinationArticles = [
     image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&q=80",
     href: "/destinations/barcelona",
     tags: ["Gluten-Free", "Shellfish-Free"]
+  },
+  {
+    id: 7,
+    title: "Thailand Guide",
+    description: "The ultimate guide to allergy-friendly hotels and dining across Thailand",
+    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=2000&q=80",
+    href: "/destinations/thailand",
+    tags: ["Gluten-Free", "Peanut-Free", "Seafood-Free"]
   }
 ];
 

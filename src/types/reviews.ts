@@ -1,3 +1,4 @@
+
 export type LanguageCode = 'en' | 'fr' | 'es' | 'de' | 'he';
 
 export const languages = [

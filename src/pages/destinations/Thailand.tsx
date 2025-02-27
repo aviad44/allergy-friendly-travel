@@ -1,200 +1,94 @@
 
-import { useEffect } from "react";
-import { DestinationHero } from "@/components/reviews/DestinationHero";
-import { RelatedDestinations } from "@/components/reviews/RelatedDestinations";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 import { destinations, destinationData } from "@/types/reviews";
-import { ExternalLink, MapPin, Star, Shield, AlarmClock } from "lucide-react";
+import { HotelCard } from "@/components/hotels/HotelCard";
+import { LanguageTable } from "@/components/reviews/LanguageTable";
+import { TravelTips } from "@/components/hotels/TravelTips";
+import { DestinationNavigation } from "@/components/reviews/DestinationNavigation";
+import { Separator } from "@/components/ui/separator";
+import { DestinationHero } from "@/components/reviews/DestinationHero";
 
-const ThailandPage = () => {
-  const destination = destinations.find(d => d.id === 'thailand');
+export default function ThailandReviews() {
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+  const destination = destinations.find(d => d.id === 'thailand')!;
   const content = destinationData['thailand'];
-
-  useEffect(() => {
-    if (destination) {
-      document.title = `${destination.description} | Hypoallergenic Stays`;
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute("content", "Find the best allergy-friendly hotels in Thailand with safe dining options and real guest reviews. Plan a worry-free vacation today!");
-      }
-    }
-  }, [destination]);
-
-  if (!destination || !content) return null;
+  
+  // Create a custom destination object with the image we want to use
+  const thailandDestination = {
+    ...destination,
+    image: "1552465011-b4e21bf6e79a"
+  };
 
   return (
-    <div className="min-h-screen bg-background pb-16">
-      <DestinationHero destination={destination} />
-      
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10">
-        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-xl p-6 md:p-8 space-y-8">
-          <header className="text-center space-y-4">
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">
+    <div className="min-h-screen bg-background">
+      {/* Use the DestinationHero component with our custom destination */}
+      <DestinationHero destination={thailandDestination} />
+
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10 text-left">
+        <DestinationNavigation 
+          currentLanguage={currentLanguage as any} 
+          setCurrentLanguage={setCurrentLanguage as any}
+        />
+
+        <article className="space-y-8 md:space-y-12 text-left">
+          <header className="text-left space-y-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground text-left">
               {destination.description}
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              {content.intro}
-            </p>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground text-left">
+              {destination.subtitle}
+            </h2>
+            
+            <section className="mt-6 md:mt-8 text-left">
+              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4 text-left">
+                Why Choose an Allergy-Friendly Hotel in {destination.name}?
+              </h2>
+              <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed text-left">
+                {content.intro}
+              </p>
+            </section>
           </header>
 
-          <Separator className="my-8" />
+          <Separator />
 
-          {/* Bangkok Section */}
-          <section className="space-y-6">
-            <h2 className="text-2xl font-display font-semibold flex items-center gap-2">
-              <MapPin className="text-primary" />
-              Bangkok: Allergy-Friendly Luxury in the Heart of the City
+          <section className="space-y-4 md:space-y-6 text-left" aria-label="Hotels List">
+            <h2 className="text-xl sm:text-2xl font-display font-semibold text-left">
+              Top Allergy-Friendly Hotels in {destination.name}
             </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {content.hotels.slice(0, 2).map((hotel, index) => (
-                <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300">
-                  <div className="p-6 space-y-4">
-                    <div className="flex justify-between items-start">
-                      <h3 className="text-xl font-semibold">{hotel.name}</h3>
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                          Visit Hotel <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </Button>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{hotel.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {hotel.features.map((feature, idx) => (
-                        <span key={idx} className="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full">
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                    <blockquote className="border-l-4 border-primary/30 pl-4 italic text-muted-foreground">
-                      {hotel.quote}
-                    </blockquote>
-                  </div>
-                </Card>
+            <div className="grid gap-6 md:gap-8">
+              {content.hotels.map((hotel, index) => (
+                <HotelCard key={index} {...hotel} />
               ))}
             </div>
           </section>
 
-          {/* Phuket Section */}
-          <section className="space-y-6">
-            <h2 className="text-2xl font-display font-semibold flex items-center gap-2">
-              <Star className="text-primary" />
-              Phuket: Beachfront Resorts with Allergy-Safe Dining
+          <Separator />
+
+          <section className="space-y-4 md:space-y-6 text-left">
+            <h2 className="text-xl sm:text-2xl font-display font-semibold text-left">
+              FAQs: Allergy-Friendly Hotels in {destination.name}
             </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {content.hotels.slice(2).map((hotel, index) => (
-                <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300">
-                  <div className="p-6 space-y-4">
-                    <div className="flex justify-between items-start">
-                      <h3 className="text-xl font-semibold">{hotel.name}</h3>
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                          Visit Hotel <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </Button>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{hotel.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {hotel.features.map((feature, idx) => (
-                        <span key={idx} className="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full">
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                    <blockquote className="border-l-4 border-primary/30 pl-4 italic text-muted-foreground">
-                      {hotel.quote}
-                    </blockquote>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </section>
-
-          <Separator className="my-8" />
-
-          {/* Travel Tips Section */}
-          <section className="space-y-6">
-            <h2 className="text-2xl font-display font-semibold flex items-center gap-2">
-              <Shield className="text-primary" />
-              Travel Tips for Allergy-Friendly Travel in Thailand
-            </h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                  <AlarmClock className="h-5 w-5 text-primary" />
-                  Before Your Trip
-                </h3>
-                <ul className="space-y-3 text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    Contact hotels in advance about your allergies
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    Pack translation cards in Thai
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    Bring extra medication and documentation
-                  </li>
-                </ul>
-              </Card>
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Common Thai Ingredients to Watch</h3>
-                <ul className="space-y-3 text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    Fish sauce (contains fish)
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    Peanuts and tree nuts
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    Soy sauce (contains wheat)
-                  </li>
-                </ul>
-              </Card>
-            </div>
-          </section>
-
-          {/* Language Guide */}
-          <section className="mt-12">
-            <Card className="overflow-hidden">
-              <div className="p-6">
-                <h2 className="text-2xl font-display font-semibold mb-6">Essential Thai Phrases for Allergies</h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="text-left p-2">English</th>
-                        <th className="text-left p-2">Thai</th>
-                        <th className="text-left p-2">When to Use</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {content.languageTable.rows.map((row, index) => (
-                        <tr key={index} className="border-b last:border-0">
-                          <td className="p-2">{row.original}</td>
-                          <td className="p-2 font-medium">{row.translation}</td>
-                          <td className="p-2 text-muted-foreground">{row.pronunciation}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+            <div className="grid gap-4 md:gap-6 text-left">
+              {content.faqs.map((faq, index) => (
+                <div key={index} className="space-y-2 text-left">
+                  <h3 className="text-base sm:text-lg font-semibold text-left">{faq.question}</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground text-left">{faq.answer}</p>
                 </div>
-              </div>
-            </Card>
+              ))}
+            </div>
           </section>
 
-          {/* Related Destinations */}
-          <RelatedDestinations currentDestinationId="thailand" />
-        </div>
+          <TravelTips />
+
+          <div className="overflow-x-auto">
+            <LanguageTable 
+              headers={content.languageTable.headers}
+              rows={content.languageTable.rows}
+              destinationName={destination.name}
+            />
+          </div>
+        </article>
       </main>
     </div>
   );
-};
-
-export default ThailandPage;
+}

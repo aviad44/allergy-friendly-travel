@@ -58,6 +58,15 @@ const FEATURED_DESTINATIONS = [
     description: "Luxurious stays with world-class allergy care",
     commonAllergies: ["Gluten", "Dairy"],
     href: "/destinations/abu-dhabi"
+  },
+  {
+    id: 7,
+    name: "Thailand",
+    country: "Thailand",
+    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+    description: "Tropical paradise with allergy-conscious options",
+    commonAllergies: ["Peanut", "Gluten"],
+    href: "/destinations/thailand"
   }
 ];
 
@@ -65,7 +74,7 @@ export const FeaturedDestinations = () => {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {FEATURED_DESTINATIONS.map((destination) => (
+        {FEATURED_DESTINATIONS.slice(0, 6).map((destination) => (
           <Link to={destination.href} key={destination.id}>
             <Card className="overflow-hidden group cursor-pointer h-full hover:shadow-lg transition-shadow duration-300">
               <div className="relative aspect-[16/10] overflow-hidden">
