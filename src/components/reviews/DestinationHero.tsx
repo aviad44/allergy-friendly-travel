@@ -34,7 +34,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: "cover",
           backgroundPosition: "center 80%",
-          transform: "scale(0.9)",
+          transform: "scale(1)",
         }}
         role="img"
         aria-label={altText}
