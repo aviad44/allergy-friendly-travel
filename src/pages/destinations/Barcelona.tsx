@@ -14,66 +14,46 @@ export default function BarcelonaReviews() {
   const destination = destinations.find(d => d.id === 'barcelona')!;
   const content = destinationData['barcelona'];
 
-  // Custom Barcelona content
+  // Custom Barcelona content with correct props for HotelCard
   const barcelonaHotels = [
     {
-      id: "grand-hotel-central",
       name: "Grand Hotel Central",
+      address: "Via Laietana 30, Barcelona, Spain",
+      features: ["⭐ 5-star luxury", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining"],
       description: "Located in the heart of Barcelona, this luxury hotel prioritizes guest well-being. One visitor noted, \"Absolutely loved this hotel. From the moment I arrived, they ensured all my dietary needs were met.\"",
-      city: "Barcelona",
-      country: "Spain",
-      imageUrl: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
-      rating: 4.8,
-      reviewCount: 248,
-      allergyInfo: "Complete allergen protocols, dedicated preparation areas",
+      quote: "Absolutely loved this hotel. From the moment I arrived, they ensured all my dietary needs were met.",
       bookingUrl: "https://www.grandhotelcentral.com/"
     },
     {
-      id: "mercer-hotel-barcelona",
       name: "Mercer Hotel Barcelona",
-      description: "Renowned for its exceptional service, Mercer Hotel provides tailored meals for guests with allergies. A guest shared, \"The staff was incredibly attentive to my son's peanut allergy, making our stay stress-free.\"",
-      city: "Barcelona",
-      country: "Spain",
-      imageUrl: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80",
-      rating: 4.9,
-      reviewCount: 186,
-      allergyInfo: "Tailored meals for guests with allergies",
+      address: "Carrer dels Lledó 7, Barcelona, Spain",
+      features: ["⭐ 5-star luxury", "👨‍🍳 Personalized dining", "🍽️ Dedicated kitchen"],
+      description: "Renowned for its exceptional service, Mercer Hotel provides tailored meals for guests with allergies.",
+      quote: "The staff was incredibly attentive to my son's peanut allergy, making our stay stress-free.",
       bookingUrl: "https://www.mercerbarcelona.com/"
     },
     {
-      id: "hotel-arts-barcelona",
       name: "Hotel Arts Barcelona",
-      description: "Overlooking the marina, Hotel Arts offers allergy-conscious dining. A traveler wrote, \"The staff took my allergies seriously and ensured every meal was prepared safely.\"",
-      city: "Barcelona",
-      country: "Spain",
-      imageUrl: "https://images.unsplash.com/photo-1606402179428-a57976d71fa4?auto=format&fit=crop&w=800&q=80",
-      rating: 4.7,
-      reviewCount: 312,
-      allergyInfo: "Allergy-conscious dining",
+      address: "Marina 19-21, Barcelona, Spain",
+      features: ["⭐ 5-star luxury", "🏖️ Beachfront", "🍽️ Allergen-conscious dining"],
+      description: "Overlooking the marina, Hotel Arts offers allergy-conscious dining.",
+      quote: "The staff took my allergies seriously and ensured every meal was prepared safely.",
       bookingUrl: "https://www.hotelartsbarcelona.com/"
     },
     {
-      id: "nobu-hotel-barcelona",
       name: "Nobu Hotel Barcelona",
-      description: "Combining Japanese-inspired luxury with dietary sensitivity, Nobu Hotel is a top pick. \"The chef personally ensured that my meals were allergy-safe, and the service was impeccable,\" one guest commented.",
-      city: "Barcelona",
-      country: "Spain",
-      imageUrl: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80",
-      rating: 4.8,
-      reviewCount: 175,
-      allergyInfo: "Japanese-inspired luxury with dietary sensitivity",
+      address: "Avinguda de Roma 2-4, Barcelona, Spain",
+      features: ["⭐ 5-star luxury", "🍣 Japanese cuisine", "👨‍🍳 Specialized chefs"],
+      description: "Combining Japanese-inspired luxury with dietary sensitivity, Nobu Hotel is a top pick.",
+      quote: "The chef personally ensured that my meals were allergy-safe, and the service was impeccable.",
       bookingUrl: "https://barcelona.nobuhotels.com/"
     },
     {
-      id: "hotel-calipolis-sitges",
       name: "Hotel Calipolis Sitges",
-      description: "Situated in Sitges, a short drive from Barcelona, this hotel offers allergy-friendly menus and customized meal plans. \"I felt completely safe dining here, thanks to their detailed approach to food allergies,\" said a visitor.",
-      city: "Sitges",
-      country: "Spain",
-      imageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-      rating: 4.6,
-      reviewCount: 203,
-      allergyInfo: "Allergy-friendly menus and customized meal plans",
+      address: "Avinguda Sofia 2-6, Sitges, Spain",
+      features: ["⭐ 4-star comfort", "🏖️ Beachfront", "🍽️ Allergy-friendly menus"],
+      description: "Situated in Sitges, a short drive from Barcelona, this hotel offers allergy-friendly menus and customized meal plans.",
+      quote: "I felt completely safe dining here, thanks to their detailed approach to food allergies.",
       bookingUrl: "https://www.hotelcalipolis.com/en/"
     }
   ];
@@ -136,13 +116,10 @@ export default function BarcelonaReviews() {
                 <HotelCard 
                   key={index}
                   name={hotel.name}
+                  address={hotel.address}
+                  features={hotel.features}
                   description={hotel.description}
-                  imageUrl={hotel.imageUrl}
-                  rating={hotel.rating}
-                  reviewCount={hotel.reviewCount}
-                  city={hotel.city}
-                  country={hotel.country}
-                  allergyInfo={hotel.allergyInfo}
+                  quote={hotel.quote}
                   bookingUrl={hotel.bookingUrl}
                 />
               ))}
