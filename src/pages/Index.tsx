@@ -45,13 +45,13 @@ const Index = () => {
         {/* Content Overlay */}
         <div className="relative z-10 container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-8xl mb-4 sm:mb-6 md:mb-8 leading-tight text-white">
-              {HOME_CONTENT.hero.title.line1}
-              <span className="block mt-1 sm:mt-2 text-blue-400">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-8xl mb-4 sm:mb-6 md:mb-8 leading-tight">
+              <span className="text-sky-200">{HOME_CONTENT.hero.title.line1}</span>
+              <span className="block mt-1 sm:mt-2 text-teal-300">
                 {HOME_CONTENT.hero.title.line2} {HOME_CONTENT.hero.title.line3}
               </span>
             </h1>
-            <h2 className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-200 mb-6 sm:mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed">
+            <h2 className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-amber-50 mb-6 sm:mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed capitalize">
               {HOME_CONTENT.hero.description}
             </h2>
             <div className="bg-white rounded-lg shadow-lg border border-gray-200 max-w-4xl mx-auto p-4 sm:p-5">

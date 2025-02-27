@@ -19,7 +19,7 @@ export const HOME_CONTENT = {
       line2: "Allergy-Friendly",
       line3: "Hotel"
     },
-    description: "Discover accommodations that cater to your specific needs and enjoy worry-free travels",
+    description: "Discover Accommodations That Cater To Your Specific Needs And Enjoy Worry-Free Travels",
     featured: {
       title: "Popular Allergy-Friendly Destinations",
       description: "Explore our curated selection of cities with excellent allergy-aware accommodations"
