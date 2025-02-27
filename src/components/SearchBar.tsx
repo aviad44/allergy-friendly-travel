@@ -1,5 +1,5 @@
 
-import { Search, Star, ShieldCheck, ChefHat, AirVent, GraduationCap, X, ExternalLink } from "lucide-react";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Card } from "@/components/ui/card";
+import { X, ExternalLink, Star, ShieldCheck } from "lucide-react";
 
 export const SearchBar = () => {
   const [destination, setDestination] = useState("");
@@ -90,96 +91,92 @@ export const SearchBar = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-4">
-        <div className="w-full">
-          <Input 
-            placeholder="Enter destination" 
-            className="h-12 text-base sm:text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-          />
-        </div>
-        <div className="w-full">
-          <Input 
-            placeholder="Type of allergy" 
-            className="h-12 text-base sm:text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
-            value={allergies}
-            onChange={(e) => setAllergies(e.target.value)}
-          />
-        </div>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button 
-              className="h-12 w-full sm:w-auto px-8 bg-primary hover:bg-primary/90 transform hover:scale-105 transition-all duration-300 shadow-lg"
-              onClick={handleSearch}
-              disabled={isSearching}
-            >
-              <Search className="mr-2 h-5 w-5" />
-              {isSearching ? "Searching..." : "Search"}
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="w-full sm:max-w-2xl" side="bottom">
-            <div className="flex justify-between items-center">
-              <SheetHeader>
-                <SheetTitle className="text-xl sm:text-2xl font-display">
-                  Personalized Hotel Recommendations
-                </SheetTitle>
-              </SheetHeader>
-              <SheetClose asChild>
-                <Button variant="ghost" size="icon">
-                  <X className="h-4 w-4" />
-                </Button>
-              </SheetClose>
-            </div>
-            <div className="mt-6">
-              {recommendation ? (
-                <Card className="p-4 sm:p-6">
-                  <h3 className="text-base sm:text-lg font-medium mb-4">
-                    Results for {destination} - Hotels suitable for {allergies} allergies
-                  </h3>
-                  {formatRecommendations(recommendation).map((hotel, index) => (
-                    <div key={index} className="mb-6 last:mb-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Star className="h-4 sm:h-5 w-4 sm:w-5 text-primary" />
-                        <h4 className="text-lg sm:text-xl font-semibold">{hotel.name}</h4>
-                        {hotel.url && (
-                          <a 
-                            href={hotel.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-primary hover:underline ml-2"
-                          >
-                            <ExternalLink className="h-3 sm:h-4 w-3 sm:w-4" />
-                            <span className="hidden sm:inline">Book Now</span>
-                            <span className="sm:hidden">Book</span>
-                          </a>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        {hotel.features?.map((feature, idx) => (
-                          <div key={idx} className="flex items-start gap-2">
-                            <ShieldCheck className="h-4 w-4 text-primary shrink-0 mt-1" />
-                            <p className="text-sm sm:text-base text-muted-foreground">{feature}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </Card>
-              ) : (
-                <p className="text-center py-8 text-muted-foreground">
-                  {isSearching ? (
-                    "Finding the perfect hotel for your needs..."
-                  ) : (
-                    "Enter destination and allergy details to get personalized recommendations"
-                  )}
-                </p>
-              )}
-            </div>
-          </SheetContent>
-        </Sheet>
+    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 flex-grow">
+        <Input 
+          placeholder="Enter destination" 
+          className="h-12 text-base sm:text-lg border border-gray-300 rounded-md bg-white"
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
+        />
+        <Input 
+          placeholder="Type of allergies" 
+          className="h-12 text-base sm:text-lg border border-gray-300 rounded-md bg-white"
+          value={allergies}
+          onChange={(e) => setAllergies(e.target.value)}
+        />
       </div>
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button 
+            className="h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md"
+            onClick={handleSearch}
+            disabled={isSearching}
+          >
+            <Search className="mr-2 h-5 w-5" />
+            <span>Search Now</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent className="w-full sm:max-w-2xl" side="bottom">
+          <div className="flex justify-between items-center">
+            <SheetHeader>
+              <SheetTitle className="text-xl sm:text-2xl font-display">
+                Personalized Hotel Recommendations
+              </SheetTitle>
+            </SheetHeader>
+            <SheetClose asChild>
+              <Button variant="ghost" size="icon">
+                <X className="h-4 w-4" />
+              </Button>
+            </SheetClose>
+          </div>
+          <div className="mt-6">
+            {recommendation ? (
+              <Card className="p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-medium mb-4">
+                  Results for {destination} - Hotels suitable for {allergies} allergies
+                </h3>
+                {formatRecommendations(recommendation).map((hotel, index) => (
+                  <div key={index} className="mb-6 last:mb-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Star className="h-4 sm:h-5 w-4 sm:w-5 text-primary" />
+                      <h4 className="text-lg sm:text-xl font-semibold">{hotel.name}</h4>
+                      {hotel.url && (
+                        <a 
+                          href={hotel.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-primary hover:underline ml-2"
+                        >
+                          <ExternalLink className="h-3 sm:h-4 w-3 sm:w-4" />
+                          <span className="hidden sm:inline">Book Now</span>
+                          <span className="sm:hidden">Book</span>
+                        </a>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      {hotel.features?.map((feature, idx) => (
+                        <div key={idx} className="flex items-start gap-2">
+                          <ShieldCheck className="h-4 w-4 text-primary shrink-0 mt-1" />
+                          <p className="text-sm sm:text-base text-muted-foreground">{feature}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </Card>
+            ) : (
+              <p className="text-center py-8 text-muted-foreground">
+                {isSearching ? (
+                  "Finding the perfect hotel for your needs..."
+                ) : (
+                  "Enter destination and allergy details to get personalized recommendations"
+                )}
+              </p>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
