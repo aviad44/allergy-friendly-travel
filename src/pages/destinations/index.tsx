@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Globe, Home } from "lucide-react";
@@ -60,6 +61,14 @@ const destinationArticles = [
     image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=2000&q=80",
     href: "/destinations/abu-dhabi",
     tags: ["Luxury", "Family-Friendly", "Allergy-Safe"]
+  },
+  {
+    id: 6,
+    title: "Barcelona Guide",
+    description: "Allergy-friendly tapas and Mediterranean delights in the Catalan capital",
+    image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&q=80",
+    href: "/destinations/barcelona",
+    tags: ["Gluten-Free", "Shellfish-Free"]
   }
 ];
 
