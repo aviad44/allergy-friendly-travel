@@ -54,7 +54,7 @@ const Index = () => {
             <h2 className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-200 mb-6 sm:mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed">
               {HOME_CONTENT.hero.description}
             </h2>
-            <div className="bg-white/95 p-4 sm:p-6 rounded-xl shadow-lg backdrop-blur-sm">
+            <div className="bg-white/95 p-4 sm:p-6 rounded-xl shadow-lg backdrop-blur-sm max-w-lg mx-auto">
               <SearchBar />
             </div>
           </div>
