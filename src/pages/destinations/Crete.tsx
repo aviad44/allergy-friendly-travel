@@ -1,10 +1,10 @@
 
+import { useState } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
 import { LanguageTable } from "@/components/reviews/LanguageTable";
 import { TravelTips } from "@/components/hotels/TravelTips";
 import { DestinationNavigation } from "@/components/reviews/DestinationNavigation";
-import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { DestinationHero } from "@/components/reviews/DestinationHero";
 
@@ -12,20 +12,17 @@ export default function CreteReviews() {
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const destination = destinations.find(d => d.id === 'crete')!;
   const content = destinationData['crete'];
+  
+  // Create a custom destination object with the image we want to use
+  const creteDestination = {
+    ...destination,
+    image: "photo-1586640870641-c923f0a2eb34"
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section with Image */}
-      <div 
-        className="h-[50vh] w-full bg-cover bg-center relative" 
-        style={{
-          backgroundImage: `url(https://images.unsplash.com/photo-1586640870641-c923f0a2eb34?auto=format&fit=crop&w=2000&q=80)`,
-          backgroundPosition: 'center'
-        }}
-        aria-label="Scenic view of beautiful Balos beach lagoon in Crete, Greece with crystal clear turquoise water and tourists enjoying summer vacation"
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
-      </div>
+      {/* Use the DestinationHero component with our custom destination */}
+      <DestinationHero destination={creteDestination} />
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10 text-left">
         <DestinationNavigation 
