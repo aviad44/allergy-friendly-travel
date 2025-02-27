@@ -6,6 +6,7 @@ import { TravelTips } from "@/components/hotels/TravelTips";
 import { DestinationNavigation } from "@/components/reviews/DestinationNavigation";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
+import { DestinationHero } from "@/components/reviews/DestinationHero";
 
 export default function CreteReviews() {
   const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -18,9 +19,10 @@ export default function CreteReviews() {
       <div 
         className="h-[50vh] w-full bg-cover bg-center relative" 
         style={{
-          backgroundImage: `url(/lovable-uploads/e8c36400-9150-4115-a6e5-d7c858e844cd.png)`,
+          backgroundImage: `url(https://images.unsplash.com/photo-1586640870641-c923f0a2eb34?auto=format&fit=crop&w=2000&q=80)`,
           backgroundPosition: 'center'
         }}
+        aria-label="Scenic view of beautiful Balos beach lagoon in Crete, Greece with crystal clear turquoise water and tourists enjoying summer vacation"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
       </div>
