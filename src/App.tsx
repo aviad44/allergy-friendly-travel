@@ -18,6 +18,7 @@ import Barcelona from '@/pages/destinations/Barcelona';
 import AyiaNapa from '@/pages/destinations/AyiaNapa';
 import Cyprus from '@/pages/destinations/Cyprus';
 import AbuDhabi from '@/pages/destinations/AbuDhabi';
+import Thailand from '@/pages/destinations/Thailand';
 
 import "./App.css";
 
@@ -43,6 +44,7 @@ function App() {
               <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
               <Route path="/destinations/cyprus" element={<Cyprus />} />
               <Route path="/destinations/abu-dhabi" element={<AbuDhabi />} />
+              <Route path="/destinations/thailand" element={<Thailand />} />
               <Route path="/hotels/le-petit-palace" element={<LePetitPalace />} />
             </Routes>
           </BrowserRouter>
