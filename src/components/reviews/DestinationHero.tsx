@@ -29,12 +29,12 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       aria-label={`Featured destination: ${destination.name}`}
     >
       <div 
-        className="absolute inset-0 bg-center bg-cover"
+        className="absolute inset-0"
         style={{
           backgroundImage: `url(${imageUrl})`,
-          backgroundSize: "100%",
-          backgroundPosition: "center center",
-          transform: "scale(1.2)",
+          backgroundSize: "cover",
+          backgroundPosition: "center 80%",
+          transform: "scale(0.9)",
         }}
         role="img"
         aria-label={altText}
