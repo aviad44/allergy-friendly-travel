@@ -85,7 +85,7 @@ export default function BarcelonaReviews() {
         />
 
         <article className="space-y-8 md:space-y-12">
-          <header className="text-left space-y-4">
+          <header className="space-y-4">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
               The Ultimate Guide to Allergy-Friendly Hotels in Barcelona
             </h1>
