@@ -91,19 +91,19 @@ export const SearchBar = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
+      <div className="flex flex-col gap-4">
+        <div className="w-full">
           <Input 
             placeholder="Enter destination" 
-            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
+            className="h-12 text-base sm:text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
           />
         </div>
-        <div className="flex-1">
+        <div className="w-full">
           <Input 
             placeholder="Type of allergy" 
-            className="h-12 text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
+            className="h-12 text-base sm:text-lg border-2 border-primary/20 hover:border-primary/40 transition-colors"
             value={allergies}
             onChange={(e) => setAllergies(e.target.value)}
           />
@@ -111,7 +111,7 @@ export const SearchBar = () => {
         <Sheet>
           <SheetTrigger asChild>
             <Button 
-              className="h-12 px-8 bg-primary hover:bg-primary/90 transform hover:scale-105 transition-all duration-300 shadow-lg"
+              className="h-12 w-full sm:w-auto px-8 bg-primary hover:bg-primary/90 transform hover:scale-105 transition-all duration-300 shadow-lg"
               onClick={handleSearch}
               disabled={isSearching}
             >
@@ -122,7 +122,7 @@ export const SearchBar = () => {
           <SheetContent className="w-full sm:max-w-2xl" side="bottom">
             <div className="flex justify-between items-center">
               <SheetHeader>
-                <SheetTitle className="text-2xl font-display">
+                <SheetTitle className="text-xl sm:text-2xl font-display">
                   Personalized Hotel Recommendations
                 </SheetTitle>
               </SheetHeader>
@@ -134,15 +134,15 @@ export const SearchBar = () => {
             </div>
             <div className="mt-6">
               {recommendation ? (
-                <Card className="p-6">
-                  <h3 className="text-lg font-medium mb-4">
+                <Card className="p-4 sm:p-6">
+                  <h3 className="text-base sm:text-lg font-medium mb-4">
                     Results for {destination} - Hotels suitable for {allergies} allergies
                   </h3>
                   {formatRecommendations(recommendation).map((hotel, index) => (
                     <div key={index} className="mb-6 last:mb-0">
                       <div className="flex items-center gap-2 mb-2">
-                        <Star className="h-5 w-5 text-primary" />
-                        <h4 className="text-xl font-semibold">{hotel.name}</h4>
+                        <Star className="h-4 sm:h-5 w-4 sm:w-5 text-primary" />
+                        <h4 className="text-lg sm:text-xl font-semibold">{hotel.name}</h4>
                         {hotel.url && (
                           <a 
                             href={hotel.url} 
@@ -150,8 +150,9 @@ export const SearchBar = () => {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 text-primary hover:underline ml-2"
                           >
-                            <ExternalLink className="h-4 w-4" />
-                            Book Now
+                            <ExternalLink className="h-3 sm:h-4 w-3 sm:w-4" />
+                            <span className="hidden sm:inline">Book Now</span>
+                            <span className="sm:hidden">Book</span>
                           </a>
                         )}
                       </div>
@@ -159,7 +160,7 @@ export const SearchBar = () => {
                         {hotel.features?.map((feature, idx) => (
                           <div key={idx} className="flex items-start gap-2">
                             <ShieldCheck className="h-4 w-4 text-primary shrink-0 mt-1" />
-                            <p className="text-muted-foreground">{feature}</p>
+                            <p className="text-sm sm:text-base text-muted-foreground">{feature}</p>
                           </div>
                         ))}
                       </div>
