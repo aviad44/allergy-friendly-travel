@@ -45,7 +45,7 @@ const FEATURED_DESTINATIONS = [
     id: 5,
     name: "Crete",
     country: "Greece",
-    image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80",
+    image: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png",
     description: "Traditional Greek cuisine with allergy awareness",
     commonAllergies: ["Dairy", "Nuts"],
     href: "/destinations/crete"
