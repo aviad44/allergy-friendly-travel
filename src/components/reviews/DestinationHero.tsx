@@ -26,9 +26,12 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       aria-label={`Hero image of ${destination.name}`}
     >
       <div 
-        className="absolute inset-0 bg-center bg-cover animate-hero-zoom"
+        className="absolute inset-0 bg-center bg-cover"
         style={{
           backgroundImage: `url(${imageUrl})`,
+          backgroundSize: "100%",
+          backgroundPosition: "center center",
+          transform: "scale(1.2)",
         }}
         role="img"
         aria-label={`Scenic view of ${destination.name}`}
