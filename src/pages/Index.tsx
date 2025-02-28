@@ -16,9 +16,9 @@ const Index = () => {
     HelpCircle
   };
 
-  return <div className="min-h-screen bg-gray-50">
+  return <div className="min-h-screen bg-gray-50 w-full">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm w-full">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Link to="/" aria-label="Return to homepage" className="text-2xl font-display font-bold text-blue-700 hover:text-blue-800 transition-colors">
             {HOME_CONTENT.navigation.brand}
@@ -29,13 +29,13 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/70 to-black/90">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/70 to-black/90 w-full">
         {/* Background Image with optimized loading */}
         <picture>
           <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90" type="image/webp" />
           <img 
             src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90" 
-            alt="" 
+            alt="Allergy-friendly travel destination" 
             className="absolute inset-0 w-full h-full object-cover opacity-50" 
             loading="eager" 
             fetchPriority="high" 
@@ -43,9 +43,9 @@ const Index = () => {
         </picture>
         
         {/* Content Overlay */}
-        <div className="relative z-10 container mx-auto px-4 text-center">
+        <div className="relative z-10 container mx-auto px-4 text-center w-full">
           <div className="max-w-4xl mx-auto">
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-8xl mb-4 sm:mb-6 md:mb-8 leading-tight">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 sm:mb-6 md:mb-8 leading-tight">
               <span className="text-sky-200">{HOME_CONTENT.hero.title.line1}</span>
               <span className="block mt-1 sm:mt-2 text-teal-300">
                 {HOME_CONTENT.hero.title.line2} {HOME_CONTENT.hero.title.line3}
@@ -62,8 +62,8 @@ const Index = () => {
       </section>
 
       {/* Featured Destinations Section */}
-      <section className="py-10 sm:py-16 md:py-20 px-4 bg-gray-50">
-        <div className="container max-w-6xl mx-auto">
+      <section className="py-10 sm:py-16 md:py-20 px-4 bg-gray-50 w-full">
+        <div className="container mx-auto max-w-[1400px]">
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4 text-center">
             {HOME_CONTENT.featured.title}
           </h2>
