@@ -49,10 +49,10 @@ export const MainMenu = () => {
               <Link
                 key={item.title}
                 to={item.href}
-                className="flex items-center gap-3 text-lg font-medium p-2 rounded-lg transition-colors hover:bg-secondary/10 hover:text-secondary"
+                className="flex items-center gap-3 text-lg font-medium p-2 rounded-lg hover:bg-secondary/10 hover:text-primary transition-colors"
               >
                 <Icon className="h-5 w-5" />
-                {item.title}
+                <span>{item.title}</span>
               </Link>
             );
           })}
