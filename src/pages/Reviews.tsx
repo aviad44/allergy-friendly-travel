@@ -136,7 +136,7 @@ const Reviews = () => {
     <div className="min-h-screen bg-background">
       <div className="hero-gradient absolute inset-0 z-0" />
       <div className="relative z-10">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="container mx-auto px-4 py-12 max-w-5xl">
           <div className="flex justify-between items-center mb-8">
             <Link to="/">
               <Button variant="ghost" className="hover:bg-white/10 transition-colors">
@@ -147,16 +147,17 @@ const Reviews = () => {
             <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="border border-white/20 backdrop-blur-sm">
                     <Globe className="h-4 w-4 mr-2" />
                     {languages.find(lang => lang.code === currentLanguage)?.name}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="bg-white/90 backdrop-blur-md border border-white/20">
                   {languages.map((language) => (
                     <DropdownMenuItem
                       key={language.code}
                       onClick={() => setCurrentLanguage(language.code as LanguageCode)}
+                      className="hover:bg-white/50"
                     >
                       {language.name}
                     </DropdownMenuItem>
@@ -167,55 +168,64 @@ const Reviews = () => {
             </div>
           </div>
 
-          <div className={`text-center mb-12 ${textAlignment}`}>
-            <h1 className="text-4xl font-display font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <div className={`reviews-container reviews-animation-fade ${textAlignment}`}>
+            <h1 className={`reviews-title ${textAlignment}`}>
               {t.title}
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className={`reviews-subtitle ${textAlignment}`}>
               {t.subtitle}
             </p>
-          </div>
 
-          <ReviewForm
-            rating={rating}
-            reviewText={reviewText}
-            onRatingChange={setRating}
-            onReviewTextChange={setReviewText}
-            onSubmit={handleSubmitReview}
-            isRTL={isRTL}
-            textAlignment={textAlignment}
-            translations={t}
-          />
-
-          <div className="space-y-6">
-            <h2 className={`text-2xl font-semibold mb-8 ${textAlignment}`}>{t.recentReviews}</h2>
-            
-            <ReviewFilters
-              selectedDestination={selectedDestination}
-              selectedTravelerType={selectedTravelerType}
-              sortBy={sortBy}
-              onDestinationChange={setSelectedDestination}
-              onTravelerTypeChange={setSelectedTravelerType}
-              onSortChange={(value) => setSortBy(value as typeof sortOptions[number])}
+            <ReviewForm
+              rating={rating}
+              reviewText={reviewText}
+              onRatingChange={setRating}
+              onReviewTextChange={setReviewText}
+              onSubmit={handleSubmitReview}
+              isRTL={isRTL}
               textAlignment={textAlignment}
               translations={t}
             />
 
-            {isLoading ? (
-              <div className="text-center">Loading reviews...</div>
-            ) : reviews.length === 0 ? (
-              <div className="text-center text-muted-foreground">No reviews yet</div>
-            ) : (
-              filterAndSortReviews(reviews).map((review) => (
-                <ReviewCard
-                  key={review.id}
-                  review={review}
-                  isRTL={isRTL}
-                  textAlignment={textAlignment}
-                  translations={t}
-                />
-              ))
-            )}
+            <div className="space-y-6 mt-10">
+              <h2 className={`text-2xl font-semibold mb-8 text-primary ${textAlignment}`}>{t.recentReviews}</h2>
+              
+              <ReviewFilters
+                selectedDestination={selectedDestination}
+                selectedTravelerType={selectedTravelerType}
+                sortBy={sortBy}
+                onDestinationChange={setSelectedDestination}
+                onTravelerTypeChange={setSelectedTravelerType}
+                onSortChange={(value) => setSortBy(value as typeof sortOptions[number])}
+                textAlignment={textAlignment}
+                translations={t}
+              />
+
+              {isLoading ? (
+                <div className="text-center py-12">
+                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+                  <p className="mt-4 text-muted-foreground">Loading reviews...</p>
+                </div>
+              ) : reviews.length === 0 ? (
+                <div className="text-center py-16 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
+                  <p className="text-muted-foreground text-lg">No reviews yet</p>
+                  <p className="text-sm mt-2">Be the first to share your experience!</p>
+                </div>
+              ) : (
+                <div className="grid gap-6">
+                  {filterAndSortReviews(reviews).map((review) => (
+                    <div key={review.id} className="reviews-animation-fade" style={{animationDelay: `${reviews.indexOf(review) * 0.1}s`}}>
+                      <ReviewCard
+                        review={review}
+                        isRTL={isRTL}
+                        textAlignment={textAlignment}
+                        translations={t}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
