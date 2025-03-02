@@ -16,7 +16,7 @@ export default function AbuDhabiReviews() {
   // Create a custom destination object with the image we want to use
   const abuDhabiDestination = {
     ...destination,
-    image: "1512632578888-169bbbc64f33"
+    image: "photo-1512632578888-169bbbc64f33"
   };
 
   return (

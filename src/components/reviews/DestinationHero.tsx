@@ -10,7 +10,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
 
   // Process image URL based on format
   if (destination.image.startsWith('photo-')) {
-    imageUrl = `https://images.unsplash.com/photo-${destination.image.replace('photo-', '')}?auto=format&fit=crop&w=2000&q=80`;
+    imageUrl = `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80`;
   } else if (destination.image.startsWith('lovable-uploads/')) {
     imageUrl = `/${destination.image}`;
   } else {
