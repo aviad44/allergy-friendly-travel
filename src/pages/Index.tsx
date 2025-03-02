@@ -1,4 +1,3 @@
-
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -28,8 +27,8 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/70 to-black/90 w-full">
+      {/* Hero Section - Added pt-16 to create space below the fixed navbar */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/70 to-black/90 w-full pt-16 md:pt-20">
         {/* Background Image with optimized loading */}
         <picture>
           <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90" type="image/webp" />
@@ -38,12 +37,11 @@ const Index = () => {
             alt="Allergy-friendly travel destination" 
             className="absolute inset-0 w-full h-full object-cover opacity-50" 
             loading="eager" 
-            fetchPriority="high" 
           />
         </picture>
         
-        {/* Content Overlay */}
-        <div className="relative z-10 container mx-auto px-4 text-center w-full">
+        {/* Content Overlay - Improved mobile spacing with padding adjustments */}
+        <div className="relative z-10 container mx-auto px-4 text-center w-full pt-8 sm:pt-12">
           <div className="max-w-4xl mx-auto">
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 sm:mb-6 md:mb-8 leading-tight">
               <span className="text-sky-200">{HOME_CONTENT.hero.title.line1}</span>
