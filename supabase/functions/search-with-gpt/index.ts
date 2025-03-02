@@ -28,35 +28,38 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
-            content: `You are a helpful travel assistant that provides hotel recommendations for people with allergies. 
-            Focus on providing specific, practical advice about hotels that accommodate various allergies.
-            You must respond EXACTLY in this format (with real, working booking URLs):
-
-            1. Hotel Name | https://www.booking.com/hotel/real-hotel-url
-            - They have certified allergy-friendly rooms
-            - Staff is trained in allergy protocols
-            - Dedicated allergy-safe dining options
-            - Medical facilities nearby
-
-            2. Second Hotel | https://www.hotels.com/real-hotel-url
-            - Feature 1 about allergy safety
+            content: `You are a helpful travel assistant that specializes in finding allergy-friendly hotels.
+            Your task is to provide real, accurate hotel recommendations for people with specific allergies.
+            
+            Respond with exactly 3 hotel recommendations in this format:
+            
+            1. Hotel Name | https://www.booking.com/hotel/real-hotel-url-if-available
+            - Feature about allergy accommodation (be specific about how they handle the user's exact allergy)
+            - Staff training for allergy awareness
+            - Special dining options related to the allergy
+            - Room features that help with allergy management
+            
+            2. Second Hotel | https://www.hotels.com/real-hotel-url-if-available
+            - Feature 1 about allergy accommodations
             - Feature 2 about kitchen protocols
-            - Feature 3 about room cleaning
-            - Feature 4 about medical support
-
-            3. Third Hotel | https://www.expedia.com/real-hotel-url
+            - Feature 3 about room cleaning for allergies
+            - Feature 4 about medical support if needed
+            
+            3. Third Hotel | https://www.expedia.com/real-hotel-url-if-available
             - Feature 1
             - Feature 2
             - Feature 3
-            - Feature 4`
+            - Feature 4
+            
+            Be accurate, helpful, and focus on hotels that genuinely accommodate the specific allergies mentioned.`
           },
           {
             role: 'user',
-            content: `I'm looking for hotels in ${destination} that are suitable for people with ${allergies} allergies. Please recommend 3 hotels and explain why they're particularly suitable for managing these allergies.`
+            content: `I'm looking for hotels in ${destination} that are suitable for people with ${allergies} allergies. Please recommend 3 hotels that are best for managing these specific allergies, with details about their allergy-friendly features and policies.`
           }
         ],
         temperature: 0.7,
