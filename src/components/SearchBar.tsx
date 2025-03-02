@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Card } from "@/components/ui/card";
-import { X, ExternalLink, Star, ShieldCheck } from "lucide-react";
+import { X, ExternalLink, Star, ShieldCheck, ChevronDown } from "lucide-react";
 
 export const SearchBar = () => {
   const [destination, setDestination] = useState("");
@@ -117,7 +117,7 @@ export const SearchBar = () => {
             <span>Search Now</span>
           </Button>
         </SheetTrigger>
-        <SheetContent className="w-full sm:max-w-2xl" side="bottom">
+        <SheetContent className="w-full sm:max-w-2xl max-h-[95vh] overflow-hidden flex flex-col" side="bottom">
           <div className="flex justify-between items-center">
             <SheetHeader>
               <SheetTitle className="text-xl sm:text-2xl font-display">
@@ -130,51 +130,65 @@ export const SearchBar = () => {
               </Button>
             </SheetClose>
           </div>
-          <div className="mt-6">
+          
+          {/* Scroll indicator for mobile */}
+          <div className="md:hidden flex justify-center my-2">
+            <ChevronDown className="h-5 w-5 text-muted-foreground animate-bounce" />
+          </div>
+          
+          <div className="mt-2 overflow-y-auto flex-grow pb-safe">
             {recommendation ? (
-              <Card className="p-4 sm:p-6">
+              <Card className="p-3 sm:p-6 mb-4 overflow-y-auto">
                 <h3 className="text-base sm:text-lg font-medium mb-4">
                   Results for {destination} - Hotels suitable for {allergies} allergies
                 </h3>
-                {formatRecommendations(recommendation).map((hotel, index) => (
-                  <div key={index} className="mb-6 last:mb-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Star className="h-4 sm:h-5 w-4 sm:w-5 text-primary" />
-                      <h4 className="text-lg sm:text-xl font-semibold">{hotel.name}</h4>
-                      {hotel.url && (
-                        <a 
-                          href={hotel.url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-primary hover:underline ml-2"
-                        >
-                          <ExternalLink className="h-3 sm:h-4 w-3 sm:w-4" />
-                          <span className="hidden sm:inline">Book Now</span>
-                          <span className="sm:hidden">Book</span>
-                        </a>
-                      )}
+                <div className="space-y-6">
+                  {formatRecommendations(recommendation).map((hotel, index) => (
+                    <div key={index} className="mb-5 last:mb-0 pb-4 border-b last:border-b-0 border-gray-100">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <Star className="h-4 sm:h-5 w-4 sm:w-5 text-primary flex-shrink-0" />
+                        <h4 className="text-lg sm:text-xl font-semibold">{hotel.name}</h4>
+                        {hotel.url && (
+                          <a 
+                            href={hotel.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-primary hover:underline ml-auto"
+                          >
+                            <ExternalLink className="h-3 sm:h-4 w-3 sm:w-4" />
+                            <span className="hidden sm:inline">Book Now</span>
+                            <span className="sm:hidden">Book</span>
+                          </a>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        {hotel.features?.map((feature, idx) => (
+                          <div key={idx} className="flex items-start gap-2">
+                            <ShieldCheck className="h-4 w-4 text-primary shrink-0 mt-1" />
+                            <p className="text-sm sm:text-base text-muted-foreground">{feature}</p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      {hotel.features?.map((feature, idx) => (
-                        <div key={idx} className="flex items-start gap-2">
-                          <ShieldCheck className="h-4 w-4 text-primary shrink-0 mt-1" />
-                          <p className="text-sm sm:text-base text-muted-foreground">{feature}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </Card>
             ) : (
-              <p className="text-center py-8 text-muted-foreground">
+              <div className="flex flex-col items-center justify-center py-8 text-muted-foreground h-40">
                 {isSearching ? (
-                  "Finding the perfect hotel for your needs..."
+                  <>
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4"></div>
+                    <p>Finding the perfect hotel for your needs...</p>
+                  </>
                 ) : (
-                  "Enter destination and allergy details to get personalized recommendations"
+                  <p>Enter destination and allergy details to get personalized recommendations</p>
                 )}
-              </p>
+              </div>
             )}
           </div>
+          
+          {/* Bottom padding to ensure content is visible above the sheet handle on mobile */}
+          <div className="h-4 md:hidden"></div>
         </SheetContent>
       </Sheet>
     </div>

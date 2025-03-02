@@ -97,6 +97,19 @@
   background: linear-gradient(to right, rgba(45, 212, 191, 0.1), rgba(30, 64, 175, 0.1));
 }
 
+/* Sheet content overrides for better mobile experience */
+[data-radix-sheet-content] {
+  max-height: 85vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding-bottom: env(safe-area-inset-bottom, 1rem) !important;
+}
+
+/* Make sure sheet overlay is above all other content */
+[data-radix-sheet-overlay] {
+  z-index: 40 !important;
+}
+
 /* Optional skip link - hidden by default */
 .skip-to-main-content {
   @apply sr-only;
@@ -115,4 +128,9 @@
 /* Responsive text container for better reading on mobile */
 .text-container {
   @apply max-w-full sm:max-w-[85%] md:max-w-[75%];
+}
+
+/* Padding for bottom safe area */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
 }
