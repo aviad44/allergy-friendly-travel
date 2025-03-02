@@ -8,6 +8,7 @@ import { TravelTips } from "@/components/hotels/TravelTips";
 import { RelatedDestinations } from "./RelatedDestinations";
 import { LanguageCode, destinations, DestinationId, destinationData } from "@/types/reviews";
 import { Separator } from "@/components/ui/separator";
+import { Footer } from "@/components/Footer";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -35,10 +36,10 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   if (!destination || !content) return null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <DestinationHero destination={destination} />
 
-      <main className="container mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-4xl -mt-16 sm:-mt-20 relative z-10">
+      <main className="container mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-4xl -mt-16 sm:-mt-20 relative z-10 flex-grow">
         <DestinationNavigation 
           currentLanguage={currentLanguage}
           setCurrentLanguage={setCurrentLanguage}
@@ -115,6 +116,8 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           <RelatedDestinations currentDestinationId={destinationId} />
         </article>
       </main>
+
+      <Footer />
     </div>
   );
 };

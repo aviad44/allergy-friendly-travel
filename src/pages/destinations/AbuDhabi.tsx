@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
@@ -9,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { DestinationHero } from "@/components/reviews/DestinationHero";
 import { Helmet } from "react-helmet";
 import { RelatedDestinations } from "@/components/reviews/RelatedDestinations";
+import { Footer } from "@/components/Footer";
 
 export default function AbuDhabiReviews() {
   const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -167,43 +167,8 @@ export default function AbuDhabiReviews() {
         </article>
       </main>
       
-      {/* SEO-friendly footer with internal links */}
-      <footer className="bg-muted/30 py-6 mt-12">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <h3 className="text-base font-semibold mb-3">Allergy-Friendly Travel</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="/destinations" className="hover:text-primary transition-colors">All Destinations</a></li>
-                <li><a href="/about" className="hover:text-primary transition-colors">About Our Guide</a></li>
-                <li><a href="/reviews" className="hover:text-primary transition-colors">Hotel Reviews</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-base font-semibold mb-3">Popular Destinations</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="/destinations/paris" className="hover:text-primary transition-colors">Paris, France</a></li>
-                <li><a href="/destinations/london" className="hover:text-primary transition-colors">London, UK</a></li>
-                <li><a href="/destinations/thailand" className="hover:text-primary transition-colors">Thailand</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-base font-semibold mb-3">Resources</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">Allergy Translation Cards</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Food Allergy Guide</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Travel Insurance Tips</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-6 pt-6 border-t border-border/40">
-            <p className="text-sm text-muted-foreground">
-              Last updated: {new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })} • 
-              This guide to allergy-friendly hotels in Abu Dhabi is regularly reviewed to ensure accurate information for travelers with dietary restrictions.
-            </p>
-          </div>
-        </div>
-      </footer>
+      {/* Replace the inline footer with our new Footer component */}
+      <Footer />
     </div>
   );
 }

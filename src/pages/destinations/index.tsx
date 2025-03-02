@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Globe, Home } from "lucide-react";
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
+import { Footer } from "@/components/Footer";
 
 const languages = [
   { code: 'en', name: 'English' },
@@ -84,9 +84,9 @@ const Destinations = () => {
   const [currentLanguage, setCurrentLanguage] = useState('en');
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <div className="hero-gradient absolute inset-0 z-0" />
-      <div className="relative z-10">
+      <div className="relative z-10 flex-grow">
         <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-6xl">
           {/* Navigation */}
           <div className="flex justify-between items-center mb-4 sm:mb-6 md:mb-8">
@@ -169,6 +169,7 @@ const Destinations = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
