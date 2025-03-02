@@ -24,7 +24,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
 
   return (
     <div 
-      className="h-[50vh] relative overflow-hidden"
+      className="h-[30vh] sm:h-[40vh] md:h-[50vh] relative overflow-hidden"
       role="banner"
       aria-label={`Featured destination: ${destination.name}`}
     >

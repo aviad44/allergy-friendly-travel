@@ -14,14 +14,32 @@ export default {
       },
     },
     extend: {
+      screens: {
+        'xs': '480px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+      },
       keyframes: {
         "hero-zoom": {
           "0%": { transform: "scale(1.1)" },
           "100%": { transform: "scale(1)" },
         },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "slide-in": {
+          "0%": { transform: "translateX(-10px)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
       },
       animation: {
         "hero-zoom": "hero-zoom 1.5s ease-out forwards",
+        "fade-in": "fade-in 0.5s ease-out forwards",
+        "slide-in": "slide-in 0.5s ease-out forwards",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -66,6 +84,25 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         display: ["var(--font-display)", ...fontFamily.sans],
+      },
+      spacing: {
+        '0.75': '0.1875rem',
+        '1.25': '0.3125rem',
+        '1.75': '0.4375rem',
+        '2.25': '0.5625rem',
+        '2.75': '0.6875rem',
+      },
+      fontSize: {
+        'xxs': '0.625rem',
+        'xs': '0.75rem',
+        'sm': '0.875rem',
+        'base': '1rem',
+        'lg': '1.125rem',
+        'xl': '1.25rem',
+        '2xl': '1.5rem',
+        '3xl': '1.875rem',
+        '4xl': '2.25rem',
+        '5xl': '3rem',
       },
     },
   },

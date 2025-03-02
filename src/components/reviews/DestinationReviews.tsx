@@ -38,23 +38,23 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     <div className="min-h-screen bg-background">
       <DestinationHero destination={destination} />
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10">
+      <main className="container mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-4xl -mt-16 sm:-mt-20 relative z-10">
         <DestinationNavigation 
           currentLanguage={currentLanguage}
           setCurrentLanguage={setCurrentLanguage}
         />
 
-        <article className="space-y-8 md:space-y-12 text-left">
-          <header className="space-y-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground">
+        <article className="space-y-6 sm:space-y-8 md:space-y-12 text-left">
+          <header className="space-y-3 sm:space-y-4">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground">
               {destination.description}
             </h1>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground">
+            <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
               {destination.subtitle}
             </h2>
             
-            <section className="mt-6 md:mt-8">
-              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4">
+            <section className="mt-4 sm:mt-6 md:mt-8">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold mb-2 sm:mb-3 md:mb-4">
                 Why Choose an Allergy-Friendly Hotel in {destination.name}?
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
@@ -65,11 +65,11 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
           <Separator />
 
-          <section className="space-y-4 md:space-y-6">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold">
+          <section className="space-y-3 sm:space-y-4 md:space-y-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold">
               Top Allergy-Friendly Hotels in {destination.name}
             </h2>
-            <div className="grid gap-6 md:gap-8">
+            <div className="grid gap-4 sm:gap-6 md:gap-8">
               {content.hotels.map((hotel, index) => (
                 <div key={index}>
                   <HotelCard {...hotel} />
@@ -80,13 +80,13 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
           <Separator />
 
-          <section className="space-y-4 md:space-y-6">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold">
+          <section className="space-y-3 sm:space-y-4 md:space-y-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold">
               FAQs: Allergy-Friendly Hotels in {destination.name}
             </h2>
-            <div className="grid gap-4 md:gap-6">
+            <div className="grid gap-3 sm:gap-4 md:gap-6">
               {content.faqs.map((faq, index) => (
-                <div key={index} className="space-y-2">
+                <div key={index} className="space-y-1 sm:space-y-2">
                   <h3 className="text-base sm:text-lg font-semibold">
                     {faq.question}
                   </h3>
@@ -101,12 +101,14 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           <TravelTips />
 
           {content.languageTable.headers.length > 0 && (
-            <div className="overflow-x-auto">
-              <LanguageTable 
-                headers={content.languageTable.headers}
-                rows={content.languageTable.rows}
-                destinationName={destination.name}
-              />
+            <div className="overflow-x-auto -mx-3 sm:mx-0">
+              <div className="min-w-full p-3 sm:p-0">
+                <LanguageTable 
+                  headers={content.languageTable.headers}
+                  rows={content.languageTable.rows}
+                  destinationName={destination.name}
+                />
+              </div>
             </div>
           )}
 

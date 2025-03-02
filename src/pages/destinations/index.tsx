@@ -87,24 +87,24 @@ const Destinations = () => {
     <div className="min-h-screen bg-background">
       <div className="hero-gradient absolute inset-0 z-0" />
       <div className="relative z-10">
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 max-w-6xl">
           {/* Navigation */}
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex gap-2">
+          <div className="flex justify-between items-center mb-4 sm:mb-6 md:mb-8">
+            <div className="flex gap-1 sm:gap-2">
               <Link to="/">
-                <Button variant="ghost">
-                  <Home className="h-4 w-4 mr-2" />
-                  Home
+                <Button variant="ghost" size="sm" className="text-xs sm:text-sm">
+                  <Home className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                  <span className="hidden xs:inline">Home</span>
                 </Button>
               </Link>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <Globe className="h-4 w-4 mr-2" />
-                    {languages.find(lang => lang.code === currentLanguage)?.name}
+                  <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                    <Globe className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden xs:inline">{languages.find(lang => lang.code === currentLanguage)?.name}</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -112,6 +112,7 @@ const Destinations = () => {
                     <DropdownMenuItem
                       key={language.code}
                       onClick={() => setCurrentLanguage(language.code)}
+                      className="text-xs sm:text-sm"
                     >
                       {language.name}
                     </DropdownMenuItem>
@@ -123,18 +124,18 @@ const Destinations = () => {
           </div>
 
           {/* Search Section */}
-          <div className="mb-12 bg-white/5 backdrop-blur-lg rounded-xl p-8 border border-primary/10">
-            <h1 className="font-display text-4xl md:text-5xl mb-6 text-center">
+          <div className="mb-6 sm:mb-8 md:mb-12 bg-white/5 backdrop-blur-lg rounded-xl p-4 sm:p-6 md:p-8 border border-primary/10">
+            <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-3 sm:mb-4 md:mb-6 text-center">
               Find Your Perfect Destination
             </h1>
-            <p className="text-lg text-muted-foreground mb-8 text-center max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground mb-4 sm:mb-6 md:mb-8 text-center max-w-2xl mx-auto">
               Search for allergy-friendly destinations and accommodations worldwide
             </p>
             <SearchBar />
           </div>
 
           {/* Destinations Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {destinationArticles.map((article) => (
               <Link key={article.id} to={article.href}>
                 <Card className="group hover:shadow-lg transition-all duration-300">
@@ -145,17 +146,17 @@ const Destinations = () => {
                       className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-xl font-semibold text-white mb-2">{article.title}</h3>
-                      <p className="text-white/90 text-sm line-clamp-2">{article.description}</p>
+                    <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4">
+                      <h3 className="text-base sm:text-lg md:text-xl font-semibold text-white mb-1 sm:mb-2">{article.title}</h3>
+                      <p className="text-white/90 text-xs sm:text-sm line-clamp-2">{article.description}</p>
                     </div>
                   </div>
-                  <div className="p-4">
-                    <div className="flex flex-wrap gap-2">
+                  <div className="p-2 sm:p-4">
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {article.tags.map((tag, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-primary/10 text-primary text-sm rounded-full"
+                          className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-primary/10 text-primary text-xs sm:text-sm rounded-full"
                         >
                           {tag}
                         </span>

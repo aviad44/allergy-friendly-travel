@@ -74,6 +74,23 @@
   a:not([class]) {
     @apply no-underline hover:text-primary/90;
   }
+
+  /* Responsive text sizing */
+  h1 {
+    @apply text-2xl sm:text-3xl md:text-4xl font-bold;
+  }
+  
+  h2 {
+    @apply text-xl sm:text-2xl md:text-3xl font-semibold;
+  }
+  
+  h3 {
+    @apply text-lg sm:text-xl md:text-2xl font-semibold;
+  }
+  
+  p {
+    @apply text-sm sm:text-base leading-relaxed;
+  }
 }
 
 .hero-gradient {
@@ -83,4 +100,19 @@
 /* Optional skip link - hidden by default */
 .skip-to-main-content {
   @apply sr-only;
+}
+
+/* Responsive container for consistent spacing */
+.responsive-container {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+/* Image optimization */
+.responsive-img {
+  @apply w-full h-auto object-cover;
+}
+
+/* Responsive text container for better reading on mobile */
+.text-container {
+  @apply max-w-full sm:max-w-[85%] md:max-w-[75%];
 }
