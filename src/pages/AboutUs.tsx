@@ -23,12 +23,27 @@ const AboutUs = () => {
         </div>
       </nav>
 
+      {/* Hero Image */}
+      <div className="w-full h-[400px] relative mt-16">
+        <img 
+          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2000&q=80" 
+          alt="Family enjoying a hotel swimming pool - allergy-friendly vacation"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent">
+          <div className="container mx-auto px-4 h-full flex items-center">
+            <h1 className="text-4xl md:text-5xl font-display font-bold text-white max-w-3xl">
+              Making Travel Safe and Enjoyable for Everyone
+            </h1>
+          </div>
+        </div>
+      </div>
+
       {/* About Us Content */}
-      <div className="container mx-auto px-4 pt-24 pb-16 max-w-4xl">
-        <h1 className="text-3xl md:text-4xl font-display font-bold text-blue-800 mb-8 text-center">About Us</h1>
-        
+      <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="bg-white rounded-lg shadow-md p-6 md:p-8 space-y-6">
           <section>
+            <h2 className="text-3xl font-display font-bold text-blue-800 mb-5">About Us</h2>
             <p className="text-gray-700 text-lg leading-relaxed">
               Welcome to the Allergy-Friendly Hotel Finder, your trusted resource for safe and enjoyable travel experiences for individuals with food allergies. Our mission is to make travel accessible, stress-free, and inclusive by connecting travelers with hotels that understand and accommodate dietary restrictions.
             </p>
