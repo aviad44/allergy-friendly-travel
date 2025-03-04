@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Helmet } from "react-helmet";
 import { MainMenu } from "@/components/MainMenu";
@@ -25,8 +26,8 @@ const AboutUs = () => {
       {/* Hero Image */}
       <div className="w-full h-[400px] relative mt-16">
         <img 
-          src="https://images.unsplash.com/photo-1458668383970-8ddd3927deed?auto=format&fit=crop&q=80" 
-          alt="Luxury resort hotel with pool near mountains - allergy-friendly vacation"
+          src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&q=80" 
+          alt="Beautiful summer resort hotel with beach view - allergy-friendly vacation"
           className="w-full h-full object-cover"
         />
       </div>
