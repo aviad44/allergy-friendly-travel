@@ -26,8 +26,8 @@ const AboutUs = () => {
       {/* Hero Image */}
       <div className="w-full h-[400px] relative mt-16">
         <img 
-          src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&q=80" 
-          alt="Beautiful summer resort hotel with beach view - allergy-friendly vacation"
+          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80" 
+          alt="Luxury hotel with swimming pool - allergy-friendly vacation destination"
           className="w-full h-full object-cover"
         />
       </div>
