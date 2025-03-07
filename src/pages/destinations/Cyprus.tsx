@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
@@ -6,25 +5,21 @@ import { LanguageTable } from "@/components/reviews/LanguageTable";
 import { TravelTips } from "@/components/hotels/TravelTips";
 import { DestinationNavigation } from "@/components/reviews/DestinationNavigation";
 import { Separator } from "@/components/ui/separator";
+import { DestinationHero } from "@/components/reviews/DestinationHero";
 
 export default function CyprusReviews() {
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const destination = destinations.find(d => d.id === 'cyprus')!;
   const content = destinationData['cyprus'];
+  
+  const cyprusDestination = {
+    ...destination,
+    image: "lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png"
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <div 
-        className="h-[50vh] w-full bg-cover bg-center relative"
-        style={{
-          backgroundImage: `url(/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png)`,
-          backgroundPosition: 'center'
-        }}
-        role="img"
-        aria-label="WaterWorld Themed Waterpark in Ayia Napa, Cyprus - Popular allergy-friendly tourist destination featuring safe dining options and family activities"
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
-      </div>
+      <DestinationHero destination={cyprusDestination} />
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10 text-left">
         <DestinationNavigation 

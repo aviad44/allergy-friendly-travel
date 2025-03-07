@@ -54,13 +54,13 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
         <div className="container mx-auto">
           <div className="animate-fade-in max-w-lg">
             <div className="flex items-center gap-3 mb-3">
-              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full">
+              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full animate-pulse-light">
                 <Luggage className="h-5 w-5 text-white" aria-hidden="true" />
               </div>
-              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full">
+              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full animate-pulse-light [animation-delay:400ms]">
                 <UtensilsCrossed className="h-5 w-5 text-white" aria-hidden="true" />
               </div>
-              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full">
+              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full animate-pulse-light [animation-delay:800ms]">
                 <Hotel className="h-5 w-5 text-white" aria-hidden="true" />
               </div>
             </div>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
@@ -8,11 +7,18 @@ import { DestinationNavigation } from "@/components/reviews/DestinationNavigatio
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
+import { DestinationHero } from "@/components/reviews/DestinationHero";
 
 export default function BarcelonaReviews() {
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const destination = destinations.find(d => d.id === 'barcelona')!;
   const content = destinationData['barcelona'];
+  
+  // Create a custom destination object with the image we want to use
+  const barcelonaDestination = {
+    ...destination,
+    image: "photo-1583422409516-2895a77efded"
+  };
 
   // Custom Barcelona content with correct props for HotelCard
   const barcelonaHotels = [
@@ -67,16 +73,8 @@ export default function BarcelonaReviews() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section with Image */}
-      <div 
-        className="h-[50vh] w-full bg-cover bg-center relative" 
-        style={{
-          backgroundImage: `url(https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&q=80)`,
-          backgroundPosition: 'center'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
-      </div>
+      {/* Use the DestinationHero component with our custom destination */}
+      <DestinationHero destination={barcelonaDestination} />
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10 text-left">
         <DestinationNavigation 

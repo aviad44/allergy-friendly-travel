@@ -1,4 +1,3 @@
-
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
@@ -39,12 +38,17 @@ export default {
           "0%": { transform: "translateX(-10px)", opacity: "0" },
           "100%": { transform: "translateX(0)", opacity: "1" },
         },
+        "pulse-light": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
+        },
       },
       animation: {
         "hero-zoom": "hero-zoom 1.5s ease-out forwards",
         "hero-zoom-out": "hero-zoom-out 1.5s ease-out forwards",
         "fade-in": "fade-in 0.5s ease-out forwards",
         "slide-in": "slide-in 0.5s ease-out forwards",
+        "pulse-light": "pulse-light 2s ease-in-out infinite",
       },
       colors: {
         border: "hsl(var(--border))",
