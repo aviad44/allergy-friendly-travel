@@ -5,8 +5,8 @@ import { destinations, DestinationId } from "@/types/reviews";
 
 // Define geographical relationships between destinations
 const RELATED_DESTINATIONS: Record<DestinationId, DestinationId[]> = {
-  'paris': ['london'],
-  'london': ['paris'],
+  'paris': ['london' as DestinationId],
+  'london': ['paris' as DestinationId],
   'cyprus': ['crete', 'ayia-napa'],
   'crete': ['cyprus'],
   'barcelona': ['paris'],

@@ -35,6 +35,9 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
   if (!destination || !content) return null;
 
+  // Check if the current destination is London, without using a string literal
+  const isLondon = destinationId === 'london' as DestinationId;
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <DestinationHero destination={destination} />
@@ -47,7 +50,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
         <article className="space-y-6 sm:space-y-8 md:space-y-12 text-left">
           <header className="space-y-3 sm:space-y-4">
-            {destinationId === 'london' ? (
+            {isLondon ? (
               <>
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground">
                   🏨 Best Allergy-Friendly Hotels in London: A Guide for Food-Allergy Travelers
@@ -68,7 +71,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             )}
             
             <section className="mt-4 sm:mt-6 md:mt-8">
-              {destinationId === 'london' ? (
+              {isLondon ? (
                 <>
                   <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold mb-2 sm:mb-3 md:mb-4">
                     🔍 Why Choose Allergy-Friendly Hotels in London?
@@ -104,7 +107,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                     {content.intro}
                   </p>
                   
-                  {destinationId === 'london' && (
+                  {isLondon && (
                     <ul className="mt-4 space-y-2 text-sm sm:text-base text-muted-foreground">
                       <li className="flex items-start">
                         <span className="mr-2">✅</span>
@@ -136,7 +139,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
               🏆 Top Allergy-Friendly Hotels in {destination.name}
             </h2>
             <div className="grid gap-4 sm:gap-6 md:gap-8">
-              {destinationId === 'london' ? (
+              {isLondon ? (
                 <div>
                   <HotelCard 
                     name="The Athenaeum Hotel & Residences"
@@ -203,7 +206,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             <p className="text-sm sm:text-base font-medium">
               🔔 Subscribe for updates on new allergy-friendly hotels and travel tips.
             </p>
-            {destinationId === 'london' && (
+            {isLondon && (
               <div className="mt-4">
                 <h3 className="text-base sm:text-lg font-semibold">⭐ Rate This Guide!</h3>
                 <p className="text-sm sm:text-base text-muted-foreground">
