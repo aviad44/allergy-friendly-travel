@@ -1,5 +1,6 @@
 
 import { Destination } from "@/types/reviews";
+import { Luggage, UtensilsCrossed, Hotel } from "lucide-react";
 
 interface DestinationHeroProps {
   destination: Destination;
@@ -52,6 +53,17 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 md:p-10 text-white">
         <div className="container mx-auto">
           <div className="animate-fade-in max-w-lg">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full">
+                <Luggage className="h-5 w-5 text-white" aria-hidden="true" />
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full">
+                <UtensilsCrossed className="h-5 w-5 text-white" aria-hidden="true" />
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full">
+                <Hotel className="h-5 w-5 text-white" aria-hidden="true" />
+              </div>
+            </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold mb-2 text-white/90">
               {destination.name}
             </h1>
