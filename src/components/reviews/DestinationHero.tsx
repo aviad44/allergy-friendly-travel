@@ -24,25 +24,38 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
 
   return (
     <div 
-      className="h-[30vh] sm:h-[40vh] md:h-[50vh] relative overflow-hidden"
+      className="h-[40vh] sm:h-[50vh] md:h-[60vh] relative overflow-hidden"
       role="banner"
       aria-label={`Featured destination: ${destination.name}`}
     >
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 animate-hero-zoom"
         style={{
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: "cover",
-          backgroundPosition: "center 80%",
-          transform: "scale(1)",
+          backgroundPosition: "center 30%",
         }}
         role="img"
         aria-label={altText}
       />
       <div 
-        className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" 
+        className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent" 
         aria-hidden="true"
       />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background"></div>
+      
+      <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 md:p-10 text-white">
+        <div className="container mx-auto">
+          <div className="animate-fade-in max-w-lg">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold mb-2 text-white/90">
+              {destination.name}
+            </h1>
+            <p className="text-xl text-white/70">
+              {destination.country}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
