@@ -55,12 +55,12 @@ export const DestinationNavigation = ({
               <span className="hidden xs:inline">{languages.find(lang => lang.code === currentLanguage)?.name}</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="bg-white/90 backdrop-blur-md border border-white/20">
             {languages.map((language) => (
               <DropdownMenuItem
                 key={language.code}
-                onClick={() => setCurrentLanguage(language.code)}
-                className="text-xs sm:text-sm"
+                onClick={() => setCurrentLanguage(language.code as LanguageCode)}
+                className="text-xs sm:text-sm hover:bg-white/50"
               >
                 {language.name}
               </DropdownMenuItem>
