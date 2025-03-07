@@ -106,7 +106,12 @@ export default function Destinations() {
       <header className="w-full py-4 px-4 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-sm border-b sticky top-0 z-50">
         <div className="container mx-auto max-w-7xl">
           <div className="flex justify-between items-center">
-            <Link to="/" className="text-xl font-bold text-primary">
+            <Link to="/" className="flex items-center gap-3 text-xl font-bold text-primary">
+              <img 
+                src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
+                alt="Allergy Free Travel Logo" 
+                className="h-8" 
+              />
               Allergy Free Travel
             </Link>
             <MainMenu />
