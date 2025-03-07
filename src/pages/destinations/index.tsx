@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { MainMenu } from "@/components/MainMenu";
@@ -125,42 +126,57 @@ export default function Destinations() {
               </p>
             </div>
             
-            <div className="relative mx-auto max-w-3xl mt-6">
-              <div className="relative">
-                <SearchInput 
-                  value={searchQuery} 
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full"
-                />
-              </div>
+            <div className="relative mx-auto max-w-3xl mt-6 mb-8">
+              <SearchInput 
+                value={searchQuery} 
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full"
+              />
             </div>
           </div>
         </section>
         
         <section className="py-10 sm:py-12">
           <div className="container mx-auto px-4 max-w-7xl">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredDestinations.map((destination, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <img 
-                    src={destination.imageUrl} 
-                    alt={destination.name} 
-                    className="w-full h-52 object-cover object-center" 
-                  />
-                  <div className="p-4">
-                    <h2 className="text-xl font-semibold text-foreground mb-2">{destination.name}</h2>
-                    <p className="text-muted-foreground text-sm mb-3">{destination.description}</p>
-                    <p className="text-sm text-primary font-medium">Allergy Info:</p>
-                    <p className="text-muted-foreground text-xs mb-3">{destination.allergyInfo}</p>
-                    <Link to={destination.link}>
-                      <Button className="w-full">
-                        Learn More
-                      </Button>
-                    </Link>
+            {filteredDestinations.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredDestinations.map((destination, index) => (
+                  <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden h-full border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+                    <div className="h-48 overflow-hidden">
+                      <img 
+                        src={destination.imageUrl} 
+                        alt={`${destination.name} - Allergy-friendly travel destination`}
+                        className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105" 
+                      />
+                    </div>
+                    <div className="p-5">
+                      <h2 className="text-xl font-semibold text-foreground mb-2">{destination.name}</h2>
+                      <p className="text-muted-foreground text-sm mb-4">{destination.description}</p>
+                      <div className="bg-blue-50 p-3 rounded-md mb-4">
+                        <p className="text-sm text-primary font-medium mb-1">Allergy Information:</p>
+                        <p className="text-muted-foreground text-xs">{destination.allergyInfo}</p>
+                      </div>
+                      <Link to={destination.link}>
+                        <Button className="w-full">
+                          Learn More
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-lg text-muted-foreground">No destinations found matching your search.</p>
+                <Button 
+                  variant="outline" 
+                  className="mt-4"
+                  onClick={() => setSearchQuery("")}
+                >
+                  Reset Search
+                </Button>
+              </div>
+            )}
           </div>
         </section>
       </main>
