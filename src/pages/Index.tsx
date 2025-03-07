@@ -22,7 +22,7 @@ const Index = () => {
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Link to="/" aria-label="Return to homepage" className="flex items-center gap-3 text-2xl font-display font-bold text-blue-700 hover:text-blue-800 transition-colors">
             <img 
-              src="/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png" 
+              src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
               alt="Allergy Free Travel Logo" 
               className="h-10" 
             />
