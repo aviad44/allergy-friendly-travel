@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { DestinationHero } from "./DestinationHero";
 import { DestinationNavigation } from "./DestinationNavigation";
@@ -9,7 +8,8 @@ import { RelatedDestinations } from "./RelatedDestinations";
 import { LanguageCode, destinations, DestinationId, destinationData } from "@/types/reviews";
 import { Separator } from "@/components/ui/separator";
 import { Footer } from "@/components/Footer";
-import { Star, Globe, Coffee, MessageSquare, Bell } from "lucide-react";
+import { Star, Globe, Coffee, MessageSquare } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -36,7 +36,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
   if (!destination || !content) return null;
 
-  // Check if the current destination is London
   const isLondon = destinationId === 'london' as DestinationId;
 
   return (
@@ -255,11 +254,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                 Share Your Experience!
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground">
-                Have you stayed in an allergy-friendly hotel in {destination.name}? Help others by leaving a review!
-              </p>
-              <p className="text-sm sm:text-base font-medium flex items-center">
-                <Bell className="mr-2 h-5 w-5 text-primary/80" aria-hidden="true" />
-                Subscribe for updates on new allergy-friendly hotels and travel tips.
+                Have you stayed in an allergy-friendly hotel in {destination.name}? <Link to="/reviews" className="text-primary hover:underline">Help others by leaving a review!</Link>
               </p>
               {isLondon && (
                 <div className="mt-4 bg-white p-4 rounded-lg shadow-sm">
