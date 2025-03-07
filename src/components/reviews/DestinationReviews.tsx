@@ -47,40 +47,84 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
         <article className="space-y-6 sm:space-y-8 md:space-y-12 text-left">
           <header className="space-y-3 sm:space-y-4">
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground">
-              🏨 {destination.description}
-            </h1>
-            <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
-              {destination.subtitle}
-            </h2>
+            {destinationId === 'london' ? (
+              <>
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground">
+                  🏨 Best Allergy-Friendly Hotels in London: A Guide for Food-Allergy Travelers
+                </h1>
+                <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
+                  Traveling with food allergies can be stressful, but London offers a range of hotels that prioritize the safety and comfort of guests with dietary restrictions. From celiac-friendly kitchens to staff trained in handling severe allergies, these accommodations go the extra mile to ensure a worry-free stay.
+                </h2>
+              </>
+            ) : (
+              <>
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground">
+                  🏨 {destination.description}
+                </h1>
+                <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
+                  {destination.subtitle}
+                </h2>
+              </>
+            )}
             
             <section className="mt-4 sm:mt-6 md:mt-8">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold mb-2 sm:mb-3 md:mb-4">
-                🔍 Why Choose an Allergy-Friendly Hotel in {destination.name}?
-              </h2>
-              <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
-                {content.intro}
-              </p>
-              
-              {destinationId === 'london' && (
-                <ul className="mt-4 space-y-2 text-sm sm:text-base text-muted-foreground">
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>Certified allergy-aware kitchens</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>Gluten-free, nut-free, and dairy-free menu options</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>Staff trained in handling severe allergies</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>Hypoallergenic rooms with air purifiers</span>
-                  </li>
-                </ul>
+              {destinationId === 'london' ? (
+                <>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold mb-2 sm:mb-3 md:mb-4">
+                    🔍 Why Choose Allergy-Friendly Hotels in London?
+                  </h2>
+                  <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
+                    For travelers with food allergies, finding a hotel that understands dietary restrictions is crucial. These hotels provide:
+                  </p>
+                  <ul className="mt-4 space-y-2 text-sm sm:text-base text-muted-foreground">
+                    <li className="flex items-start">
+                      <span className="mr-2">✅</span>
+                      <span>Certified allergy-aware kitchens</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">✅</span>
+                      <span>Gluten-free, nut-free, and dairy-free menu options</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">✅</span>
+                      <span>Staff trained in handling severe allergies</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">✅</span>
+                      <span>Hypoallergenic rooms with air purifiers</span>
+                    </li>
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold mb-2 sm:mb-3 md:mb-4">
+                    🔍 Why Choose an Allergy-Friendly Hotel in {destination.name}?
+                  </h2>
+                  <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
+                    {content.intro}
+                  </p>
+                  
+                  {destinationId === 'london' && (
+                    <ul className="mt-4 space-y-2 text-sm sm:text-base text-muted-foreground">
+                      <li className="flex items-start">
+                        <span className="mr-2">✅</span>
+                        <span>Certified allergy-aware kitchens</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">✅</span>
+                        <span>Gluten-free, nut-free, and dairy-free menu options</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">✅</span>
+                        <span>Staff trained in handling severe allergies</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">✅</span>
+                        <span>Hypoallergenic rooms with air purifiers</span>
+                      </li>
+                    </ul>
+                  )}
+                </>
               )}
             </section>
           </header>
@@ -92,11 +136,24 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
               🏆 Top Allergy-Friendly Hotels in {destination.name}
             </h2>
             <div className="grid gap-4 sm:gap-6 md:gap-8">
-              {content.hotels.map((hotel, index) => (
-                <div key={index}>
-                  <HotelCard {...hotel} />
+              {destinationId === 'london' ? (
+                <div>
+                  <HotelCard 
+                    name="The Athenaeum Hotel & Residences"
+                    address="116 Piccadilly, London W1J 7BJ, UK"
+                    features={["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic bedding", "🍽️ Allergy-aware dining", "👨‍🍳 Trained staff"]}
+                    description="The on-site restaurant, 116 at The Athenaeum, offers a fully customizable menu with gluten-free, dairy-free, and nut-free options. Staff are trained in food allergies and guests can request feather-free pillows and duvets."
+                    quote="I have celiac disease, and the hotel was beyond accommodating. The restaurant ensured my meals were 100% gluten-free, and the staff checked in daily about my needs. Felt completely safe!"
+                    bookingUrl="https://www.athenaeumhotel.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=hotel_recommendation"
+                  />
                 </div>
-              ))}
+              ) : (
+                content.hotels.map((hotel, index) => (
+                  <div key={index}>
+                    <HotelCard {...hotel} />
+                  </div>
+                ))
+              )}
             </div>
           </section>
 
@@ -136,19 +193,25 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
           <RelatedDestinations currentDestinationId={destinationId} />
           
-          {destinationId === 'london' && (
-            <section className="space-y-3 sm:space-y-4 md:space-y-6 bg-gray-50 p-4 rounded-lg">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold">
-                📢 Share Your Experience!
-              </h2>
-              <p className="text-sm sm:text-base text-muted-foreground">
-                Have you stayed in an allergy-friendly hotel in London? Help others by leaving a review!
-              </p>
-              <p className="text-sm sm:text-base font-medium">
-                🔔 Subscribe for updates on new allergy-friendly hotels and travel tips.
-              </p>
-            </section>
-          )}
+          <section className="space-y-3 sm:space-y-4 md:space-y-6 bg-gray-50 p-4 rounded-lg">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold">
+              📢 Share Your Experience!
+            </h2>
+            <p className="text-sm sm:text-base text-muted-foreground">
+              Have you stayed in an allergy-friendly hotel in {destination.name}? Help others by leaving a review!
+            </p>
+            <p className="text-sm sm:text-base font-medium">
+              🔔 Subscribe for updates on new allergy-friendly hotels and travel tips.
+            </p>
+            {destinationId === 'london' && (
+              <div className="mt-4">
+                <h3 className="text-base sm:text-lg font-semibold">⭐ Rate This Guide!</h3>
+                <p className="text-sm sm:text-base text-muted-foreground">
+                  How helpful was this guide? Rate from 1-5 stars! 🌟🌟🌟🌟🌟
+                </p>
+              </div>
+            )}
+          </section>
         </article>
       </main>
 
