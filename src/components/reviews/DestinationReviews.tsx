@@ -43,67 +43,67 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     <div className="min-h-screen bg-background flex flex-col">
       <DestinationHero destination={destination} />
 
-      <main className="container mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 -mt-16 sm:-mt-20 relative z-10 flex-grow">
-        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 sm:p-8 md:p-10">
+      <main className="container mx-auto px-3 sm:px-5 lg:px-6 py-4 sm:py-6 -mt-14 sm:-mt-16 relative z-10 flex-grow">
+        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-5 sm:p-6">
           <DestinationNavigation 
             currentLanguage={currentLanguage}
             setCurrentLanguage={setCurrentLanguage}
           />
 
-          <article className="space-y-8 sm:space-y-12 md:space-y-16 text-left">
-            <header className="space-y-4 sm:space-y-6">
+          <article className="space-y-6 sm:space-y-8 text-left">
+            <header className="space-y-3 sm:space-y-4">
               {isLondon ? (
                 <>
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-700">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-700">
                     Best Allergy-Friendly Hotels in London
                   </h1>
-                  <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
+                  <h2 className="text-base sm:text-lg md:text-xl font-display text-muted-foreground">
                     A Comprehensive Guide for Food-Allergy Travelers
                   </h2>
                 </>
               ) : (
                 <>
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-700">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-700">
                     {destination.description}
                   </h1>
-                  <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
+                  <h2 className="text-base sm:text-lg md:text-xl font-display text-muted-foreground">
                     {destination.subtitle}
                   </h2>
                 </>
               )}
               
-              <section className="mt-6 sm:mt-8 md:mt-10 bg-primary/5 p-6 rounded-xl">
+              <section className="mt-4 sm:mt-5 bg-primary/5 p-4 sm:p-5 rounded-xl">
                 {isLondon ? (
                   <>
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold mb-4 sm:mb-6 flex items-center">
-                      <Coffee className="mr-2 h-6 w-6 text-primary/80" />
+                    <h2 className="text-lg sm:text-xl font-display font-semibold mb-3 flex items-center">
+                      <Coffee className="mr-2 h-5 w-5 text-primary/80" />
                       Why Choose Allergy-Friendly Hotels in London?
                     </h2>
                     <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
                       For travelers with food allergies, finding a hotel that understands dietary restrictions is crucial. These hotels provide:
                     </p>
-                    <ul className="mt-4 grid sm:grid-cols-2 gap-3 sm:gap-4">
-                      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm">
-                        <div className="mr-3 bg-primary/10 rounded-full p-1">
-                          <Star className="h-4 w-4 text-primary" />
+                    <ul className="mt-3 grid sm:grid-cols-2 gap-2 sm:gap-3">
+                      <li className="flex items-start p-2 sm:p-3 bg-white rounded-lg shadow-sm">
+                        <div className="mr-2 bg-primary/10 rounded-full p-1">
+                          <Star className="h-3 w-3 text-primary" />
                         </div>
                         <span>Certified allergy-aware kitchens</span>
                       </li>
-                      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm">
-                        <div className="mr-3 bg-primary/10 rounded-full p-1">
-                          <Star className="h-4 w-4 text-primary" />
+                      <li className="flex items-start p-2 sm:p-3 bg-white rounded-lg shadow-sm">
+                        <div className="mr-2 bg-primary/10 rounded-full p-1">
+                          <Star className="h-3 w-3 text-primary" />
                         </div>
                         <span>Gluten-free, nut-free, and dairy-free menu options</span>
                       </li>
-                      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm">
-                        <div className="mr-3 bg-primary/10 rounded-full p-1">
-                          <Star className="h-4 w-4 text-primary" />
+                      <li className="flex items-start p-2 sm:p-3 bg-white rounded-lg shadow-sm">
+                        <div className="mr-2 bg-primary/10 rounded-full p-1">
+                          <Star className="h-3 w-3 text-primary" />
                         </div>
                         <span>Staff trained in handling severe allergies</span>
                       </li>
-                      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm">
-                        <div className="mr-3 bg-primary/10 rounded-full p-1">
-                          <Star className="h-4 w-4 text-primary" />
+                      <li className="flex items-start p-2 sm:p-3 bg-white rounded-lg shadow-sm">
+                        <div className="mr-2 bg-primary/10 rounded-full p-1">
+                          <Star className="h-3 w-3 text-primary" />
                         </div>
                         <span>Hypoallergenic rooms with air purifiers</span>
                       </li>
@@ -111,8 +111,8 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                   </>
                 ) : (
                   <>
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold mb-4 sm:mb-6 flex items-center">
-                      <Coffee className="mr-2 h-6 w-6 text-primary/80" />
+                    <h2 className="text-lg sm:text-xl font-display font-semibold mb-3 flex items-center">
+                      <Coffee className="mr-2 h-5 w-5 text-primary/80" />
                       Why Choose an Allergy-Friendly Hotel in {destination.name}?
                     </h2>
                     <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
@@ -120,28 +120,28 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                     </p>
                     
                     {isLondon && (
-                      <ul className="mt-4 grid sm:grid-cols-2 gap-3 sm:gap-4">
-                        <li className="flex items-start p-3 bg-white rounded-lg shadow-sm">
-                          <div className="mr-3 bg-primary/10 rounded-full p-1">
-                            <Star className="h-4 w-4 text-primary" />
+                      <ul className="mt-3 grid sm:grid-cols-2 gap-2 sm:gap-3">
+                        <li className="flex items-start p-2 sm:p-3 bg-white rounded-lg shadow-sm">
+                          <div className="mr-2 bg-primary/10 rounded-full p-1">
+                            <Star className="h-3 w-3 text-primary" />
                           </div>
                           <span>Certified allergy-aware kitchens</span>
                         </li>
-                        <li className="flex items-start p-3 bg-white rounded-lg shadow-sm">
-                          <div className="mr-3 bg-primary/10 rounded-full p-1">
-                            <Star className="h-4 w-4 text-primary" />
+                        <li className="flex items-start p-2 sm:p-3 bg-white rounded-lg shadow-sm">
+                          <div className="mr-2 bg-primary/10 rounded-full p-1">
+                            <Star className="h-3 w-3 text-primary" />
                           </div>
                           <span>Gluten-free, nut-free, and dairy-free menu options</span>
                         </li>
-                        <li className="flex items-start p-3 bg-white rounded-lg shadow-sm">
-                          <div className="mr-3 bg-primary/10 rounded-full p-1">
-                            <Star className="h-4 w-4 text-primary" />
+                        <li className="flex items-start p-2 sm:p-3 bg-white rounded-lg shadow-sm">
+                          <div className="mr-2 bg-primary/10 rounded-full p-1">
+                            <Star className="h-3 w-3 text-primary" />
                           </div>
                           <span>Staff trained in handling severe allergies</span>
                         </li>
-                        <li className="flex items-start p-3 bg-white rounded-lg shadow-sm">
-                          <div className="mr-3 bg-primary/10 rounded-full p-1">
-                            <Star className="h-4 w-4 text-primary" />
+                        <li className="flex items-start p-2 sm:p-3 bg-white rounded-lg shadow-sm">
+                          <div className="mr-2 bg-primary/10 rounded-full p-1">
+                            <Star className="h-3 w-3 text-primary" />
                           </div>
                           <span>Hypoallergenic rooms with air purifiers</span>
                         </li>
