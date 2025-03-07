@@ -11,7 +11,6 @@ import {
   Mail, 
   Send, 
   ArrowRight,
-  Home,
   Clock,
   MessageSquare
 } from "lucide-react";
@@ -88,13 +87,6 @@ export default function Contact() {
                   <Clock className="h-5 w-5 text-muted-foreground" />
                   <span className="text-muted-foreground">
                     Response time: Within 24-48 hours
-                  </span>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <Home className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-muted-foreground">
-                    Based in: London, United Kingdom
                   </span>
                 </div>
               </div>
