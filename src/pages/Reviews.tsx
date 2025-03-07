@@ -46,7 +46,13 @@ const Reviews = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setReviews(data || []);
+      
+      // Filter out test reviews
+      const filteredReviews = data ? data.filter(review => 
+        !["love this hotel", "loved this hotel", "Great hotel"].includes(review.text)
+      ) : [];
+      
+      setReviews(filteredReviews);
     } catch (error) {
       console.error('Error fetching reviews:', error);
       toast({
