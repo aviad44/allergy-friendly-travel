@@ -55,7 +55,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
               {isLondon ? (
                 <>
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-700">
-                    🏨 Best Allergy-Friendly Hotels in London
+                    Best Allergy-Friendly Hotels in London
                   </h1>
                   <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
                     A Comprehensive Guide for Food-Allergy Travelers
@@ -64,7 +64,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
               ) : (
                 <>
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-700">
-                    🏨 {destination.description}
+                    {destination.description}
                   </h1>
                   <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
                     {destination.subtitle}
