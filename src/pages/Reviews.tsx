@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { MainMenu } from "@/components/MainMenu";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Helmet } from "react-helmet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +36,10 @@ const Reviews = () => {
 
   useEffect(() => {
     fetchReviews();
+    // Set HTML language attribute for SEO
+    document.documentElement.lang = currentLanguage;
+    // Adjust text direction for RTL languages
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
   }, [currentLanguage]);
 
   const fetchReviews = async () => {
@@ -140,6 +145,23 @@ const Reviews = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <html lang={currentLanguage} dir={isRTL ? 'rtl' : 'ltr'} />
+        <title>{t.title} | Allergy-Friendly Travel Guide</title>
+        <meta name="description" content={t.seoDescription} />
+        <meta name="keywords" content={t.seoKeywords} />
+        {/* Add hreflang tags for all supported languages */}
+        {languages.map(lang => (
+          <link 
+            key={lang.code}
+            rel="alternate" 
+            hrefLang={lang.code} 
+            href={`${window.location.origin}/reviews?lang=${lang.code}`} 
+          />
+        ))}
+        <link rel="canonical" href={`${window.location.origin}/reviews`} />
+      </Helmet>
+
       <div className="hero-gradient absolute inset-0 z-0" />
       <div className="relative z-10">
         <div className="container mx-auto px-4 py-12 max-w-5xl">
@@ -182,6 +204,12 @@ const Reviews = () => {
               {t.subtitle}
             </p>
 
+            <div className={`bg-white/5 backdrop-blur-sm rounded-lg p-4 sm:p-6 mt-6 mb-8 ${textAlignment}`}>
+              <p className="text-muted-foreground">
+                {t.pageContent.introText}
+              </p>
+            </div>
+
             <ReviewForm
               rating={rating}
               reviewText={reviewText}
@@ -195,6 +223,15 @@ const Reviews = () => {
 
             <div className="space-y-6 mt-10">
               <h2 className={`text-2xl font-semibold mb-8 text-primary ${textAlignment}`}>{t.recentReviews}</h2>
+              
+              <div className={`bg-white/5 backdrop-blur-sm rounded-lg p-4 sm:p-6 mb-8 ${textAlignment}`}>
+                <p className="text-muted-foreground text-sm mb-3">
+                  {t.pageContent.reviewTips}
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  {t.pageContent.helpfulReviews}
+                </p>
+              </div>
               
               <ReviewFilters
                 selectedDestination={selectedDestination}
