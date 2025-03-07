@@ -56,7 +56,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                   🏨 Best Allergy-Friendly Hotels in London: A Guide for Food-Allergy Travelers
                 </h1>
                 <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
-                  Traveling with food allergies can be stressful, but London offers a range of hotels that prioritize the safety and comfort of guests with dietary restrictions. From celiac-friendly kitchens to staff trained in handling severe allergies, these accommodations go the extra mile to ensure a worry-free stay.
+                  Traveling with food allergies can be stressful, but London offers a range of hotels that prioritize the safety and comfort of guests with dietary restrictions.
                 </h2>
               </>
             ) : (
@@ -140,16 +140,43 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             </h2>
             <div className="grid gap-4 sm:gap-6 md:gap-8">
               {isLondon ? (
-                <div>
+                <>
                   <HotelCard 
-                    name="The Athenaeum Hotel & Residences"
+                    name="1. The Athenaeum Hotel & Residences ★★★★★"
                     address="116 Piccadilly, London W1J 7BJ, UK"
-                    features={["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic bedding", "🍽️ Allergy-aware dining", "👨‍🍳 Trained staff"]}
-                    description="The on-site restaurant, 116 at The Athenaeum, offers a fully customizable menu with gluten-free, dairy-free, and nut-free options. Staff are trained in food allergies and guests can request feather-free pillows and duvets."
-                    quote="I have celiac disease, and the hotel was beyond accommodating. The restaurant ensured my meals were 100% gluten-free, and the staff checked in daily about my needs. Felt completely safe!"
-                    bookingUrl="https://www.athenaeumhotel.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=hotel_recommendation"
+                    features={["⭐ 5-star luxury", "🍽️ Allergy-aware dining", "👨‍🍳 Staff trained in food allergies"]}
+                    description="The on-site restaurant offers gluten-free, dairy-free, and nut-free options. Staff trained in food allergies – Ensuring no cross-contamination."
+                    quote="I have celiac disease, and the restaurant ensured my meals were 100% gluten-free! – Emma W."
+                    bookingUrl="https://www.athenaeumhotel.com/"
                   />
-                </div>
+                  
+                  <HotelCard 
+                    name="2. The Langham, London ★★★★★"
+                    address="1C Portland Pl, London W1B 1JA, UK"
+                    features={["⭐ 5-star luxury", "🍰 Dedicated gluten-free afternoon tea", "🍽️ Kitchen trained to prevent cross-contamination"]}
+                    description="Dedicated gluten-free afternoon tea available at the Palm Court. Their kitchen is trained to prevent cross-contamination for allergy sufferers."
+                    quote="Best gluten-free afternoon tea in London! – Sophie M."
+                    bookingUrl="https://www.langhamhotels.com/en/the-langham/london/"
+                  />
+                  
+                  <HotelCard 
+                    name="3. The Ritz London ★★★★★"
+                    address="150 Piccadilly, London W1J 9BR, UK"
+                    features={["⭐ 5-star luxury", "🍽️ Bespoke meal preparation", "📋 Dedicated gluten-free menu"]}
+                    description="The restaurant customizes meals for guests with allergies and offers a dedicated gluten-free menu."
+                    quote="The best allergy-safe dining experience I've ever had! – Mark D."
+                    bookingUrl="https://www.theritzlondon.com/"
+                  />
+                  
+                  <HotelCard 
+                    name="4. One Aldwych ★★★★★"
+                    address="1 Aldwych, London WC2B 4BZ, UK"
+                    features={["⭐ 5-star luxury", "🌱 Fully vegan and gluten-free menus", "👨‍🍳 Kitchen trained in allergy protocols"]}
+                    description="Indigo Restaurant serves gourmet dishes free from gluten and dairy. The kitchen staff is trained in allergy protocols to ensure safe dining."
+                    quote="Indigo was a game-changer! 100% gluten-free and dairy-free! – Laura H."
+                    bookingUrl="https://www.onealdwych.com/"
+                  />
+                </>
               ) : (
                 content.hotels.map((hotel, index) => (
                   <div key={index}>
@@ -157,6 +184,20 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                   </div>
                 ))
               )}
+            </div>
+          </section>
+
+          <Separator />
+
+          <section className="space-y-3 sm:space-y-4 md:space-y-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold">
+              🌍 Interactive Map of Allergy-Friendly Hotels in London
+            </h2>
+            <p className="text-sm sm:text-base text-muted-foreground">
+              Click below to explore locations and read guest reviews.
+            </p>
+            <div className="bg-muted rounded-lg p-4 text-center">
+              <p className="italic text-muted-foreground">Interactive map coming soon</p>
             </div>
           </section>
 
