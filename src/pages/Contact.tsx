@@ -85,16 +85,6 @@ export default function Contact() {
                 </p>
                 
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5 text-muted-foreground" />
-                  <a 
-                    href="mailto:Allergy-friendly-travel@mail.com" 
-                    className="text-primary hover:underline transition-colors"
-                  >
-                    Allergy-friendly-travel@mail.com
-                  </a>
-                </div>
-                
-                <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-muted-foreground" />
                   <span className="text-muted-foreground">
                     Response time: Within 24-48 hours
