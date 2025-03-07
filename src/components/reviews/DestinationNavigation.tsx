@@ -47,20 +47,20 @@ export const DestinationNavigation = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button 
-              variant="ghost" 
+              variant="outline" 
               size="sm" 
-              className="bg-background/80 backdrop-blur-sm text-xs sm:text-sm py-1 px-2 sm:py-2 sm:px-3 h-auto"
+              className="text-xs sm:text-sm py-1 px-2 sm:py-2 sm:px-3 h-auto"
             >
               <Globe className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               <span className="hidden xs:inline">{languages.find(lang => lang.code === currentLanguage)?.name}</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white/90 backdrop-blur-md border border-white/20">
+          <DropdownMenuContent align="end">
             {languages.map((language) => (
               <DropdownMenuItem
                 key={language.code}
                 onClick={() => setCurrentLanguage(language.code as LanguageCode)}
-                className="text-xs sm:text-sm hover:bg-white/50"
+                className="text-xs sm:text-sm"
               >
                 {language.name}
               </DropdownMenuItem>

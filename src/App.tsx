@@ -20,6 +20,7 @@ import Cyprus from '@/pages/destinations/Cyprus';
 import AbuDhabi from '@/pages/destinations/AbuDhabi';
 import Thailand from '@/pages/destinations/Thailand';
 import AboutUs from '@/pages/AboutUs';
+import Contact from '@/pages/Contact';
 
 import "./App.css";
 
@@ -48,6 +49,7 @@ function App() {
               <Route path="/destinations/thailand" element={<Thailand />} />
               <Route path="/hotels/le-petit-palace" element={<LePetitPalace />} />
               <Route path="/about" element={<AboutUs />} />
+              <Route path="/contact" element={<Contact />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
