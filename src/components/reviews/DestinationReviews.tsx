@@ -9,7 +9,7 @@ import { RelatedDestinations } from "./RelatedDestinations";
 import { LanguageCode, destinations, DestinationId, destinationData } from "@/types/reviews";
 import { Separator } from "@/components/ui/separator";
 import { Footer } from "@/components/Footer";
-import { MapPin, Star, Globe, Coffee, MessageSquare, Bell } from "lucide-react";
+import { Star, Globe, Coffee, MessageSquare, Bell } from "lucide-react";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -205,22 +205,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                     </div>
                   ))
                 )}
-              </div>
-            </section>
-
-            <Separator className="bg-primary/10 h-0.5" />
-
-            <section className="space-y-4 sm:space-y-6 md:space-y-8 bg-gradient-to-br from-blue-50 to-slate-50 p-6 rounded-xl shadow-inner">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-semibold flex items-center">
-                <Globe className="mr-2 h-6 w-6 text-primary/80" aria-hidden="true" />
-                Interactive Map of Allergy-Friendly Hotels in London
-              </h2>
-              <p className="text-sm sm:text-base text-muted-foreground">
-                Click below to explore locations and read guest reviews.
-              </p>
-              <div className="bg-white rounded-lg p-8 text-center border border-primary/10 shadow-sm">
-                <MapPin className="mx-auto h-16 w-16 text-primary/30 mb-4" />
-                <p className="italic text-muted-foreground">Interactive map coming soon</p>
               </div>
             </section>
 
