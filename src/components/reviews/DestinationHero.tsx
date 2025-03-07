@@ -24,8 +24,8 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
 
   // Determine if this is Paris to adjust background position
   const isParis = destination.name === "Paris";
-  const backgroundPosition = isParis ? "center 45%" : "center 30%"; 
-  const backgroundSize = isParis ? "110%" : "cover";
+  const backgroundPosition = isParis ? "center 60%" : "center 30%"; 
+  const backgroundSize = isParis ? "120%" : "cover";
 
   return (
     <div 
