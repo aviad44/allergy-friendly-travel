@@ -22,6 +22,11 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   // Define a more descriptive alt text based on the destination
   const altText = `Scenic landscape of ${destination.name} - allergy-friendly travel destination with beautiful views and accommodations`;
 
+  // Determine if this is Paris to adjust background position and zoom
+  const isParis = destination.name === "Paris";
+  const backgroundPosition = isParis ? "center 20%" : "center 30%"; 
+  const zoomClass = isParis ? "animate-hero-zoom-out" : "animate-hero-zoom";
+
   return (
     <div 
       className="h-[40vh] sm:h-[50vh] md:h-[60vh] relative overflow-hidden"
@@ -29,11 +34,11 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       aria-label={`Featured destination: ${destination.name}`}
     >
       <div 
-        className="absolute inset-0 animate-hero-zoom"
+        className={`absolute inset-0 ${zoomClass}`}
         style={{
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: "cover",
-          backgroundPosition: "center 30%",
+          backgroundPosition: backgroundPosition,
         }}
         role="img"
         aria-label={altText}

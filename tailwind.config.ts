@@ -27,6 +27,10 @@ export default {
           "0%": { transform: "scale(1.1)" },
           "100%": { transform: "scale(1)" },
         },
+        "hero-zoom-out": {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(0.9)" },
+        },
         "fade-in": {
           "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
@@ -38,6 +42,7 @@ export default {
       },
       animation: {
         "hero-zoom": "hero-zoom 1.5s ease-out forwards",
+        "hero-zoom-out": "hero-zoom-out 1.5s ease-out forwards",
         "fade-in": "fade-in 0.5s ease-out forwards",
         "slide-in": "slide-in 0.5s ease-out forwards",
       },
