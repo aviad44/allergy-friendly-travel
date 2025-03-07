@@ -1,4 +1,3 @@
-
 export type LanguageCode = 'en' | 'fr' | 'es' | 'de' | 'he';
 
 export const languages = [
@@ -180,15 +179,23 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
     ]
   },
   'london': {
-    intro: "Traveling with food allergies can be challenging, but London offers a variety of allergy-friendly accommodations with hypoallergenic rooms and special dietary options to ensure a worry-free stay. Whether you need a hotel with allergen-free dining, dust-mite-proof bedding, or staff trained in food sensitivities, London has options for you.",
+    intro: "For travelers with food allergies, finding a hotel that understands dietary restrictions is crucial. London offers excellent options for allergy-friendly accommodations with certified allergy-aware kitchens, gluten-free menus, staff trained in handling severe allergies, and hypoallergenic rooms with air purifiers.",
     hotels: [
       {
-        name: "The Langham",
-        address: "Marylebone, London",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Personalized dining", "🍽️ Dedicated kitchen"],
-        description: "Luxury hotel in Marylebone offering comprehensive allergy-friendly amenities and personalized service.",
-        quote: "Incredible attention to allergy safety! The staff was highly knowledgeable about food sensitivities.",
-        bookingUrl: "https://www.langhamhotels.com/en/the-langham/london/"
+        name: "The Athenaeum Hotel & Residences",
+        address: "116 Piccadilly, London W1J 7BJ, UK",
+        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic bedding", "🍽️ Allergy-aware dining", "👨‍🍳 Trained staff"],
+        description: "Luxury hotel offering comprehensive allergy-friendly amenities with gluten-free and dairy-free menus.",
+        quote: "As a celiac traveler, this was the safest dining experience I've had in London!",
+        bookingUrl: "https://www.athenaeumhotel.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=hotel_recommendation"
+      },
+      {
+        name: "The Langham, London",
+        address: "1C Portland Pl, London W1B 1JA, UK",
+        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Air-purified rooms", "🍽️ Gluten-free afternoon tea", "🌸 Cross-contamination prevention"],
+        description: "Prestigious hotel with dedicated gluten-free afternoon tea and air-purified rooms for sensitive guests.",
+        quote: "Best gluten-free afternoon tea in London!",
+        bookingUrl: "https://www.langhamhotels.com/en/the-langham/london/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=hotel_recommendation"
       },
       {
         name: "The Connaught",
@@ -358,7 +365,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
           pronunciation: "At restaurants"
         },
         {
-          original: "I need special bedding",
+          original: "I need allergen-free bedding",
           translation: "Χρειάζομαι ειδικά κλινοσκεπάσματα",
           pronunciation: "At the hotel"
         }
@@ -494,7 +501,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic bedding", "🍽️ Allergen-free dining", "📝 Custom meal plans"],
         description: "Prestigious hotel with extensive allergen-free meal options and customized dining experiences.",
         quote: "I have celiac disease, and I was pleasantly surprised by the level of care and understanding shown by the hotel staff.",
-        bookingUrl: "https://www.marriott.com/hotels/travel/auhxr-the-st-regis-abu-dhabi/"
+        bookingUrl: "https://www.marriott.com/en-us/hotels/travel/auhxr-the-st-regis-abu-dhabi/overview/"
       },
       {
         name: "Saadiyat Rotana Resort & Villas",

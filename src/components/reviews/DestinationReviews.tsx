@@ -22,12 +22,12 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
   useEffect(() => {
     if (destination) {
-      document.title = `Best Allergy-Friendly Hotels in ${destination.name} | Hypoallergenic Stays & Dining`;
+      document.title = `Best Allergy-Friendly Hotels in ${destination.name} | Safe Travel for Food Allergies`;
       
       const metaDescription = document.querySelector('meta[name="description"]');
       if (metaDescription) {
         metaDescription.setAttribute("content", 
-          `Find the best allergy-friendly hotels in ${destination.name}. Enjoy safe stays with hypoallergenic rooms, allergy-conscious dining, and top-rated services for food-sensitive travelers.`
+          `Discover the best allergy-friendly hotels in ${destination.name}. Safe accommodations for celiac, gluten-free, nut-free, and dairy-free travelers. Read real guest reviews!`
         );
       }
     }
@@ -48,7 +48,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
         <article className="space-y-6 sm:space-y-8 md:space-y-12 text-left">
           <header className="space-y-3 sm:space-y-4">
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground">
-              {destination.description}
+              🏨 {destination.description}
             </h1>
             <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-display text-muted-foreground">
               {destination.subtitle}
@@ -56,11 +56,32 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             
             <section className="mt-4 sm:mt-6 md:mt-8">
               <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold mb-2 sm:mb-3 md:mb-4">
-                Why Choose an Allergy-Friendly Hotel in {destination.name}?
+                🔍 Why Choose an Allergy-Friendly Hotel in {destination.name}?
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
                 {content.intro}
               </p>
+              
+              {destinationId === 'london' && (
+                <ul className="mt-4 space-y-2 text-sm sm:text-base text-muted-foreground">
+                  <li className="flex items-start">
+                    <span className="mr-2">✅</span>
+                    <span>Certified allergy-aware kitchens</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-2">✅</span>
+                    <span>Gluten-free, nut-free, and dairy-free menu options</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-2">✅</span>
+                    <span>Staff trained in handling severe allergies</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-2">✅</span>
+                    <span>Hypoallergenic rooms with air purifiers</span>
+                  </li>
+                </ul>
+              )}
             </section>
           </header>
 
@@ -68,7 +89,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
           <section className="space-y-3 sm:space-y-4 md:space-y-6">
             <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold">
-              Top Allergy-Friendly Hotels in {destination.name}
+              🏆 Top Allergy-Friendly Hotels in {destination.name}
             </h2>
             <div className="grid gap-4 sm:gap-6 md:gap-8">
               {content.hotels.map((hotel, index) => (
@@ -83,7 +104,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
           <section className="space-y-3 sm:space-y-4 md:space-y-6">
             <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold">
-              FAQs: Allergy-Friendly Hotels in {destination.name}
+              📢 FAQs: Allergy-Friendly Hotels in {destination.name}
             </h2>
             <div className="grid gap-3 sm:gap-4 md:gap-6">
               {content.faqs.map((faq, index) => (
@@ -114,6 +135,20 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           )}
 
           <RelatedDestinations currentDestinationId={destinationId} />
+          
+          {destinationId === 'london' && (
+            <section className="space-y-3 sm:space-y-4 md:space-y-6 bg-gray-50 p-4 rounded-lg">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-display font-semibold">
+                📢 Share Your Experience!
+              </h2>
+              <p className="text-sm sm:text-base text-muted-foreground">
+                Have you stayed in an allergy-friendly hotel in London? Help others by leaving a review!
+              </p>
+              <p className="text-sm sm:text-base font-medium">
+                🔔 Subscribe for updates on new allergy-friendly hotels and travel tips.
+              </p>
+            </section>
+          )}
         </article>
       </main>
 
