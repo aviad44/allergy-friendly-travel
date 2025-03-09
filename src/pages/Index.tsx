@@ -1,3 +1,4 @@
+
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -33,14 +34,14 @@ const Index = () => {
       </nav>
 
       {/* Hero Section - Added pt-16 to create space below the fixed navbar */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/70 to-black/90 w-full pt-16 md:pt-20">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/75 to-black/90 w-full pt-16 md:pt-20">
         {/* Background Image with optimized loading */}
         <picture>
           <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90" type="image/webp" />
           <img 
             src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90" 
             alt="Allergy-friendly travel destination" 
-            className="absolute inset-0 w-full h-full object-cover opacity-50" 
+            className="absolute inset-0 w-full h-full object-cover opacity-45" 
             loading="eager" 
           />
         </picture>
@@ -48,13 +49,13 @@ const Index = () => {
         {/* Content Overlay - Improved mobile spacing with padding adjustments */}
         <div className="relative z-10 container mx-auto px-4 text-center w-full pt-8 sm:pt-12">
           <div className="max-w-4xl mx-auto">
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 sm:mb-6 md:mb-8 leading-tight">
-              <span className="text-sky-200">{HOME_CONTENT.hero.title.line1}</span>
-              <span className="block mt-1 sm:mt-2 text-teal-300">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 sm:mb-6 md:mb-8 leading-tight drop-shadow-lg">
+              <span className="text-sky-200 font-bold">{HOME_CONTENT.hero.title.line1}</span>
+              <span className="block mt-1 sm:mt-2 text-teal-300 font-bold">
                 {HOME_CONTENT.hero.title.line2} {HOME_CONTENT.hero.title.line3}
               </span>
             </h1>
-            <h2 className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-sky-100 mb-6 sm:mb-8 md:mb-12 max-w-3xl mx-auto leading-normal tracking-wide capitalize shadow-sm">
+            <h2 className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-sky-100 mb-6 sm:mb-8 md:mb-12 max-w-3xl mx-auto leading-normal tracking-wide capitalize drop-shadow-md">
               {HOME_CONTENT.hero.description}
             </h2>
             <div className="bg-white rounded-lg shadow-lg border border-gray-200 max-w-4xl mx-auto p-4 sm:p-5">
@@ -67,7 +68,7 @@ const Index = () => {
       {/* Featured Destinations Section */}
       <section className="py-10 sm:py-16 md:py-20 px-4 bg-gray-50 w-full">
         <div className="container mx-auto max-w-[1400px]">
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4 text-center">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4 text-center font-bold text-blue-800">
             {HOME_CONTENT.featured.title}
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 md:mb-12 text-center max-w-2xl mx-auto">

@@ -2,7 +2,7 @@
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
 
 const FEATURED_DESTINATIONS = [
   {
@@ -76,7 +76,7 @@ export const FeaturedDestinations = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {FEATURED_DESTINATIONS.slice(0, 6).map((destination) => (
           <Link to={destination.href} key={destination.id}>
-            <Card className="overflow-hidden group cursor-pointer h-full hover:shadow-lg transition-shadow duration-300">
+            <Card className="overflow-hidden group cursor-pointer h-full hover:shadow-xl transition-all duration-300 border-gray-200">
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
                   src={destination.image}
@@ -84,22 +84,23 @@ export const FeaturedDestinations = () => {
                     ? "WaterWorld Themed Waterpark in Ayia Napa, Cyprus - Best allergy-friendly destination for family vacations"
                     : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`
                   }
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-4 text-white">
-                  <h3 className="font-display text-2xl mb-1">{destination.name}</h3>
-                  <p className="text-sm text-white/90">{destination.country}</p>
+                  <h3 className="font-display text-2xl md:text-2xl lg:text-3xl font-bold mb-1 drop-shadow-md">{destination.name}</h3>
+                  <p className="text-sm md:text-base text-white/90">{destination.country}</p>
                 </div>
               </div>
               <div className="p-4">
-                <p className="text-muted-foreground mb-3">{destination.description}</p>
+                <p className="text-muted-foreground mb-3 text-sm md:text-base">{destination.description}</p>
                 <div className="flex flex-wrap gap-2">
                   {destination.commonAllergies.map((allergy) => (
                     <span
                       key={allergy}
-                      className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
+                      className="text-xs flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-full"
                     >
+                      <Shield className="h-3 w-3" />
                       {allergy}-free options
                     </span>
                   ))}
@@ -111,9 +112,9 @@ export const FeaturedDestinations = () => {
       </div>
       <div className="flex justify-center">
         <Link to="/destinations">
-          <Button variant="secondary" size="lg" className="gap-2">
+          <Button variant="secondary" size="lg" className="gap-2 group hover:bg-blue-600 hover:text-white transition-colors duration-300 shadow-md border border-gray-200">
             More Destinations
-            <ArrowRight className="size-4" />
+            <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform duration-300" />
           </Button>
         </Link>
       </div>
