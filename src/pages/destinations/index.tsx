@@ -1,192 +1,200 @@
 
 import { useState } from "react";
-import { Helmet } from "react-helmet";
-import { MainMenu } from "@/components/MainMenu";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Search, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Rocket } from "lucide-react";
 
-const destinationsData = [
+// Import all destination photos
+import londonImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
+import parisImg from "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
+import barcelonaImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
+
+// Import the MainMenu component
+import { MainMenu } from "@/components/MainMenu";
+
+const destinations = [
   {
-    name: "Paris",
-    description: "The City of Lights, known for its romantic ambiance and iconic landmarks.",
-    imageUrl: "/images/destinations/paris.jpg",
-    allergyInfo: "Many restaurants offer gluten-free and dairy-free options. Be sure to communicate your needs clearly.",
-    link: "/destinations/paris",
-  },
-  {
+    id: "london",
     name: "London",
-    description: "A vibrant city with a rich history and diverse culinary scene.",
-    imageUrl: "/images/destinations/london.jpg",
-    allergyInfo: "London has a wide range of allergy-friendly restaurants and accommodations.",
-    link: "/destinations/london",
+    country: "United Kingdom",
+    image: londonImg,
+    description: "Discover allergen-friendly accommodations in the heart of England's capital.",
+    path: "/destinations/london"
   },
   {
-    name: "Crete",
-    description: "The largest of the Greek islands, offering stunning beaches and ancient ruins.",
-    imageUrl: "/images/destinations/crete.jpg",
-    allergyInfo: "Traditional Cretan cuisine often uses fresh, local ingredients, making it easier to find allergy-friendly options.",
-    link: "/destinations/crete",
+    id: "paris",
+    name: "Paris",
+    country: "France",
+    image: parisImg,
+    description: "Enjoy the city of lights with peace of mind at these allergy-aware hotels.",
+    path: "/destinations/paris"
   },
   {
+    id: "barcelona",
     name: "Barcelona",
-    description: "A cosmopolitan city known for its art, architecture, and delicious cuisine.",
-    imageUrl: "/images/destinations/barcelona.jpg",
-    allergyInfo: "Many restaurants in Barcelona are familiar with dietary restrictions and can accommodate various allergies.",
-    link: "/destinations/barcelona",
+    country: "Spain",
+    image: barcelonaImg,
+    description: "Experience Catalan hospitality with allergen-conscious accommodations.",
+    path: "/destinations/barcelona"
   },
   {
+    id: "ayia-napa",
     name: "Ayia Napa",
-    description: "Famous for its beaches and vibrant nightlife.",
-    imageUrl: "/images/destinations/ayia-napa.jpg",
-    allergyInfo: "Resorts and restaurants in Ayia Napa are increasingly catering to guests with allergies.",
-    link: "/destinations/ayia-napa",
+    country: "Cyprus",
+    image: "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Relax on the beaches of Cyprus with allergy-friendly accommodation options.",
+    path: "/destinations/ayianapa"
   },
   {
-    name: "Cyprus",
-    description: "An island nation with a rich history and beautiful landscapes.",
-    imageUrl: "/images/destinations/cyprus.jpg",
-    allergyInfo: "Cypriot cuisine features many naturally gluten-free and dairy-free dishes.",
-    link: "/destinations/cyprus",
-  },
-  {
+    id: "abu-dhabi",
     name: "Abu Dhabi",
-    description: "A modern city with stunning architecture and cultural attractions.",
-    imageUrl: "/images/destinations/abu-dhabi.jpg",
-    allergyInfo: "Luxury hotels in Abu Dhabi are well-equipped to handle various dietary needs.",
-    link: "/destinations/abu-dhabi",
+    country: "UAE",
+    image: "https://images.unsplash.com/photo-1550077838-9013e4e6c8e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80",
+    description: "Luxury accommodation with allergy considerations in the heart of the UAE.",
+    path: "/destinations/abudhabi"
   },
-   {
-    name: "Thailand",
-    description: "Known for its tropical beaches, opulent royal palaces, ancient ruins and ornate temples.",
-    imageUrl: "/images/destinations/thailand.jpg",
-    allergyInfo: "Communicate your allergy needs clearly when dining out.",
-    link: "/destinations/thailand",
+  {
+    id: "thailand",
+    name: "Bangkok",
+    country: "Thailand",
+    image: "https://images.unsplash.com/photo-1508009603885-50cf7c8dd0d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Experience Thai hospitality with allergen-aware accommodations.",
+    path: "/destinations/thailand"
   },
+  {
+    id: "cyprus",
+    name: "Nicosia",
+    country: "Cyprus",
+    image: "https://images.unsplash.com/photo-1529686342540-1b43aec0df75?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Discover the capital of Cyprus with peace of mind at these allergy-friendly hotels.",
+    path: "/destinations/cyprus"
+  },
+  {
+    id: "crete",
+    name: "Crete",
+    country: "Greece",
+    image: "https://images.unsplash.com/photo-1586640978833-b1db50f582d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Relax on the beautiful Greek island with allergy-aware accommodations.",
+    path: "/destinations/crete"
+  }
 ];
 
-interface SearchInputProps {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  className?: string;
-}
+const DestinationsIndex = () => {
+  const [searchTerm, setSearchTerm] = useState("");
 
-const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, className }) => (
-  <div className={`relative ${className}`}>
-    <Input
-      type="text"
-      placeholder="Search destinations..."
-      value={value}
-      onChange={onChange}
-      className="pl-10"
-    />
-    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-      <Search className="h-4 w-4 text-muted-foreground" />
-    </div>
-  </div>
-);
-
-export default function Destinations() {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredDestinations = destinationsData.filter(destination =>
-    destination.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredDestinations = destinations.filter(destination =>
+    destination.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    destination.country.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Helmet>
-        <title>Destinations | Allergy Free Travel</title>
-        <meta name="description" content="Explore allergy-friendly travel destinations around the world." />
-        <meta name="keywords" content="allergy-friendly travel, destinations, food allergies, travel advice, dietary restrictions" />
-      </Helmet>
+    <div className="min-h-screen bg-gray-50">
+      {/* Beta Banner */}
+      <div className="w-full bg-white text-gray-800 text-xs py-1.5 text-center flex items-center justify-center font-medium">
+        <Rocket className="h-3 w-3 mr-1.5 text-[#edab69]" />
+        Website in Beta
+      </div>
+      
+      {/* Navigation - Changed from fixed to relative */}
+      <nav className="relative bg-white shadow-sm w-full">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <Link to="/" aria-label="Return to homepage" className="flex items-center gap-3 text-2xl font-display font-bold text-[#edab69] hover:text-amber-400 transition-colors">
+            <img 
+              src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
+              alt="Allergy Free Travel Logo" 
+              className="h-10" 
+            />
+            Allergy Free Travel
+          </Link>
+          
+          <MainMenu />
+        </div>
+      </nav>
 
-      <header className="w-full py-4 px-4 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-sm border-b sticky top-0 z-50">
-        <div className="container mx-auto max-w-7xl">
-          <div className="flex justify-between items-center">
-            <Link to="/" className="flex items-center gap-3 text-xl font-bold text-primary">
-              <img 
-                src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
-                alt="Allergy Free Travel Logo" 
-                className="h-8" 
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-b from-black/75 to-black/90 py-16 md:py-24">
+        <div className="absolute inset-0 overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1488085061387-422e29b40080?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2731&q=80" 
+            alt="Travel destinations" 
+            className="w-full h-full object-cover object-center opacity-30" 
+          />
+        </div>
+        <div className="relative z-10 container mx-auto px-4 text-center">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
+            <span className="text-sky-200 font-bold">Discover</span>
+            <span className="block mt-2 text-teal-300 font-bold">Allergy-Friendly Destinations</span>
+          </h1>
+          <p className="text-white text-lg md:text-xl max-w-2xl mx-auto mb-8">
+            Find the perfect accommodation that caters to your specific allergy needs
+          </p>
+          <div className="relative max-w-md mx-auto">
+            <div className="flex gap-2">
+              <Input
+                type="text"
+                placeholder="Search destinations..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-12 pl-4 pr-10 bg-white/90 backdrop-blur-sm text-gray-800 w-full"
               />
-              Allergy Free Travel
-            </Link>
-            <MainMenu />
+              <Button 
+                className="h-12 px-4 bg-teal-500 hover:bg-teal-600 text-white flex items-center gap-2" 
+                onClick={() => setSearchTerm("")}
+              >
+                <Search className="h-4 w-4" />
+                <span>Search</span>
+              </Button>
+            </div>
           </div>
         </div>
-      </header>
-      
-      <main className="flex-grow">
-        <section className="py-12 sm:py-16 bg-gradient-to-b from-blue-50 to-white">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="text-center">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
-                Explore Allergy-Friendly Destinations
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Discover amazing places around the world where you can travel with confidence, knowing your dietary needs are catered for.
-              </p>
-            </div>
-            
-            <div className="relative mx-auto max-w-3xl mt-6 mb-8">
-              <SearchInput 
-                value={searchQuery} 
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full"
-              />
-            </div>
-          </div>
-        </section>
-        
-        <section className="py-10 sm:py-12">
-          <div className="container mx-auto px-4 max-w-7xl">
-            {filteredDestinations.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredDestinations.map((destination, index) => (
-                  <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden h-full border border-gray-100 hover:shadow-lg transition-shadow duration-300">
-                    <div className="h-48 overflow-hidden">
-                      <img 
-                        src={destination.imageUrl} 
-                        alt={`${destination.name} - Allergy-friendly travel destination`}
-                        className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105" 
-                      />
-                    </div>
-                    <div className="p-5">
-                      <h2 className="text-xl font-semibold text-foreground mb-2">{destination.name}</h2>
-                      <p className="text-muted-foreground text-sm mb-4">{destination.description}</p>
-                      <div className="bg-blue-50 p-3 rounded-md mb-4">
-                        <p className="text-sm text-primary font-medium mb-1">Allergy Information:</p>
-                        <p className="text-muted-foreground text-xs">{destination.allergyInfo}</p>
-                      </div>
-                      <Link to={destination.link}>
-                        <Button className="w-full">
-                          Learn More
-                        </Button>
-                      </Link>
-                    </div>
+      </section>
+
+      {/* Destinations List */}
+      <section className="py-12 md:py-16 container mx-auto px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredDestinations.map((destination) => (
+            <Link key={destination.id} to={destination.path} className="group">
+              <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={destination.image}
+                    alt={destination.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <h3 className="text-white font-bold text-xl">{destination.name}</h3>
+                    <p className="text-gray-200 text-sm">{destination.country}</p>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-lg text-muted-foreground">No destinations found matching your search.</p>
-                <Button 
-                  variant="outline" 
-                  className="mt-4"
-                  onClick={() => setSearchQuery("")}
-                >
-                  Reset Search
-                </Button>
-              </div>
-            )}
-          </div>
-        </section>
-      </main>
-      
-      <Footer />
+                </div>
+                <div className="p-4">
+                  <p className="text-gray-600 mb-3 text-sm">
+                    {destination.description}
+                  </p>
+                  <div className="flex items-center text-teal-600 font-medium text-sm">
+                    <span>View details</span>
+                    <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </Card>
+            </Link>
+          ))}
+          
+          {filteredDestinations.length === 0 && (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-600 mb-2">No destinations found matching "{searchTerm}"</p>
+              <Button onClick={() => setSearchTerm("")} variant="outline" className="mt-2">
+                Clear search
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
-}
+};
+
+export default DestinationsIndex;
