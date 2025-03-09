@@ -20,7 +20,7 @@ const Index = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm w-full">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Link to="/" aria-label="Return to homepage" className="flex items-center gap-3 text-2xl font-display font-bold text-blue-700 hover:text-blue-800 transition-colors">
+          <Link to="/" aria-label="Return to homepage" className="flex items-center gap-3 text-2xl font-display font-bold text-amber-600 hover:text-amber-700 transition-colors">
             <img 
               src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
               alt="Allergy Free Travel Logo" 
