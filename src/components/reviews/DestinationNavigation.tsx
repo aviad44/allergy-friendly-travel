@@ -23,7 +23,7 @@ export const DestinationNavigation = ({
   const navigate = useNavigate();
 
   return (
-    <nav className="flex justify-between items-center mb-4 sm:mb-6 md:mb-8" aria-label="Main navigation">
+    <nav className="flex justify-between items-center mb-4 sm:mb-6 md:mb-8 mt-7" aria-label="Main navigation">
       <div className="flex gap-1 sm:gap-2">
         <Button 
           variant="ghost" 

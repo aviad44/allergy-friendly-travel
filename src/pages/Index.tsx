@@ -2,7 +2,7 @@
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
-import { MapPin, Star, Shield, Info, HelpCircle } from "lucide-react";
+import { MapPin, Star, Shield, Info, HelpCircle, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MainMenu } from "@/components/MainMenu";
 import { HOME_CONTENT } from "@/constants/home";
@@ -17,8 +17,14 @@ const Index = () => {
   };
 
   return <div className="min-h-screen bg-gray-50 w-full">
+      {/* Beta Banner */}
+      <div className="w-full bg-[#fef3e5] text-gray-800 text-xs py-1.5 text-center flex items-center justify-center font-medium">
+        <AlertTriangle className="h-3 w-3 mr-1.5 text-[#edab69]" />
+        Website in Beta
+      </div>
+      
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm w-full">
+      <nav className="fixed top-7 left-0 right-0 z-50 bg-white shadow-sm w-full">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Link to="/" aria-label="Return to homepage" className="flex items-center gap-3 text-2xl font-display font-bold text-[#edab69] hover:text-amber-400 transition-colors">
             <img 
@@ -33,8 +39,8 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Hero Section - Added pt-16 to create space below the fixed navbar */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/75 to-black/90 w-full pt-16 md:pt-20">
+      {/* Hero Section - Updated pt-24 to account for both the navigation bar and beta banner */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/75 to-black/90 w-full pt-24 md:pt-28">
         {/* Background Image with optimized loading */}
         <picture>
           <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90" type="image/webp" />
