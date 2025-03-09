@@ -2,7 +2,7 @@
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
-import { MapPin, Star, Shield, Info, HelpCircle, AlertTriangle } from "lucide-react";
+import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MainMenu } from "@/components/MainMenu";
 import { HOME_CONTENT } from "@/constants/home";
@@ -19,7 +19,7 @@ const Index = () => {
   return <div className="min-h-screen bg-gray-50 w-full">
       {/* Beta Banner */}
       <div className="w-full bg-[#fef3e5] text-gray-800 text-xs py-1.5 text-center flex items-center justify-center font-medium">
-        <AlertTriangle className="h-3 w-3 mr-1.5 text-[#edab69]" />
+        <Rocket className="h-3 w-3 mr-1.5 text-[#edab69]" />
         Website in Beta
       </div>
       
