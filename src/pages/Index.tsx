@@ -18,13 +18,13 @@ const Index = () => {
 
   return <div className="min-h-screen bg-gray-50 w-full">
       {/* Beta Banner */}
-      <div className="w-full bg-[#fef3e5] text-gray-800 text-xs py-1.5 text-center flex items-center justify-center font-medium">
+      <div className="w-full bg-white text-gray-800 text-xs py-1.5 text-center flex items-center justify-center font-medium">
         <Rocket className="h-3 w-3 mr-1.5 text-[#edab69]" />
         Website in Beta
       </div>
       
-      {/* Navigation */}
-      <nav className="fixed top-7 left-0 right-0 z-50 bg-white shadow-sm w-full">
+      {/* Navigation - Changed from fixed to relative */}
+      <nav className="relative bg-white shadow-sm w-full">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Link to="/" aria-label="Return to homepage" className="flex items-center gap-3 text-2xl font-display font-bold text-[#edab69] hover:text-amber-400 transition-colors">
             <img 
@@ -39,8 +39,8 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Hero Section - Updated pt-24 to account for both the navigation bar and beta banner */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/75 to-black/90 w-full pt-24 md:pt-28">
+      {/* Hero Section - Adjusted padding top since nav is no longer fixed */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/75 to-black/90 w-full">
         {/* Background Image with optimized loading */}
         <picture>
           <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90" type="image/webp" />
