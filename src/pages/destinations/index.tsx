@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Search, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Rocket } from "lucide-react";
-import { SearchBar } from "@/components/SearchBar";
+import { Input } from "@/components/ui/input";
 
 // Import all destination photos
 import londonImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
@@ -42,12 +42,12 @@ const destinations = [
     path: "/destinations/barcelona"
   },
   {
-    id: "ayia-napa",
-    name: "Ayia Napa",
+    id: "cyprus",
+    name: "Cyprus",
     country: "Cyprus",
-    image: "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    description: "Relax on the beaches of Cyprus with allergy-friendly accommodation options.",
-    path: "/destinations/ayianapa"
+    image: londonImg,
+    description: "Discover the beauty of Cyprus with peace of mind at these allergy-friendly hotels.",
+    path: "/destinations/cyprus"
   },
   {
     id: "abu-dhabi",
@@ -56,22 +56,6 @@ const destinations = [
     image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=800&q=80",
     description: "Luxury accommodation with allergy considerations in the heart of the UAE.",
     path: "/destinations/abudhabi"
-  },
-  {
-    id: "bangkok",
-    name: "Bangkok",
-    country: "Thailand",
-    image: "https://images.unsplash.com/photo-1508009603885-50cf7c8dd0d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    description: "Experience Thai hospitality with allergen-aware accommodations.",
-    path: "/destinations/thailand"
-  },
-  {
-    id: "nicosia",
-    name: "Nicosia",
-    country: "Cyprus",
-    image: londonImg,
-    description: "Discover the capital of Cyprus with peace of mind at these allergy-friendly hotels.",
-    path: "/destinations/cyprus"
   },
   {
     id: "crete",
@@ -132,9 +116,21 @@ const DestinationsIndex = () => {
           <p className="text-white text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Find the perfect accommodation that caters to your specific allergy needs
           </p>
-          <div className="relative max-w-md mx-auto">
-            <div className="bg-white rounded-lg shadow-lg border border-gray-200 max-w-4xl mx-auto p-4 sm:p-5">
-              <SearchBar />
+          <div className="relative max-w-xl mx-auto">
+            <div className="flex flex-row gap-2 items-center bg-white rounded-lg shadow-lg border border-gray-200 p-2">
+              <Input 
+                placeholder="Search destination..." 
+                className="h-10 border-none shadow-none text-base flex-grow focus-visible:ring-0 pl-2"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <Button 
+                className="h-10 px-4 bg-teal-500 hover:bg-teal-600 text-white" 
+                onClick={() => setSearchTerm(searchTerm)}
+              >
+                <Search className="h-4 w-4 mr-2" />
+                <span className="whitespace-nowrap">Search</span>
+              </Button>
             </div>
           </div>
         </div>
