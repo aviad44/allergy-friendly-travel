@@ -2,10 +2,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Search, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Rocket } from "lucide-react";
-import { Input } from "@/components/ui/input";
 
 // Import all destination photos
 import londonImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
@@ -68,13 +67,6 @@ const destinations = [
 ];
 
 const DestinationsIndex = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredDestinations = destinations.filter(destination =>
-    destination.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    destination.country.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Beta Banner */}
@@ -99,8 +91,8 @@ const DestinationsIndex = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-black/75 to-black/90 py-16 md:py-24">
+      {/* Hero Section - Reduced height */}
+      <section className="relative bg-gradient-to-b from-black/75 to-black/90 py-12 md:py-16">
         <div className="absolute inset-0 overflow-hidden">
           <img 
             src="https://images.unsplash.com/photo-1488085061387-422e29b40080?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2731&q=80" 
@@ -113,36 +105,19 @@ const DestinationsIndex = () => {
             <span className="text-sky-200 font-bold">Discover</span>
             <span className="block mt-2 text-teal-300 font-bold">Allergy-Friendly Destinations</span>
           </h1>
-          <p className="text-white text-lg md:text-xl max-w-2xl mx-auto mb-8">
+          <p className="text-white text-lg md:text-xl max-w-2xl mx-auto">
             Find the perfect accommodation that caters to your specific allergy needs
           </p>
-          <div className="relative max-w-xl mx-auto">
-            <div className="flex flex-row gap-2 items-center bg-white rounded-lg shadow-lg border border-gray-200 p-2">
-              <Input 
-                placeholder="Search destination..." 
-                className="h-10 border-none shadow-none text-base flex-grow focus-visible:ring-0 pl-2"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <Button 
-                className="h-10 px-4 bg-teal-500 hover:bg-teal-600 text-white" 
-                onClick={() => setSearchTerm(searchTerm)}
-              >
-                <Search className="h-4 w-4 mr-2" />
-                <span className="whitespace-nowrap">Search</span>
-              </Button>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* Destinations List */}
-      <section className="py-12 md:py-16 container mx-auto px-4">
+      <section className="py-8 md:py-12 container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredDestinations.map((destination) => (
+          {destinations.map((destination) => (
             <Link key={destination.id} to={destination.path} className="group">
               <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-40 overflow-hidden">
                   <img
                     src={destination.image}
                     alt={destination.name}
@@ -166,15 +141,6 @@ const DestinationsIndex = () => {
               </Card>
             </Link>
           ))}
-          
-          {filteredDestinations.length === 0 && (
-            <div className="col-span-full text-center py-12">
-              <p className="text-gray-600 mb-2">No destinations found matching "{searchTerm}"</p>
-              <Button onClick={() => setSearchTerm("")} variant="outline" className="mt-2">
-                Clear search
-              </Button>
-            </div>
-          )}
         </div>
       </section>
     </div>
