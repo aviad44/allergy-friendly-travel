@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -102,15 +101,13 @@ const DestinationsIndex = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
         </div>
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <div className="bg-black/20 backdrop-blur-sm p-4 sm:p-6 rounded-xl inline-block max-w-2xl mx-auto">
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
-              <span className="text-sky-200 font-bold">Discover</span>
-              <span className="block mt-2 text-teal-300 font-bold">Allergy-Friendly Destinations</span>
-            </h1>
-            <p className="text-white text-lg md:text-xl mx-auto">
-              Find the perfect accommodation that caters to your specific allergy needs
-            </p>
-          </div>
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
+            <span className="text-sky-200 font-bold">Discover</span>
+            <span className="block mt-2 text-teal-300 font-bold">Allergy-Friendly Destinations</span>
+          </h1>
+          <p className="text-white text-lg md:text-xl mx-auto">
+            Find the perfect accommodation that caters to your specific allergy needs
+          </p>
         </div>
       </section>
 
