@@ -91,17 +91,18 @@ const DestinationsIndex = () => {
         </div>
       </nav>
 
-      {/* Hero Section - With more transparency */}
-      <section className="relative bg-gradient-to-b from-black/50 to-black/70 py-12 md:py-16">
+      {/* Hero Section - Improved mobile transparency */}
+      <section className="relative py-12 md:py-16">
         <div className="absolute inset-0 overflow-hidden">
           <img 
             src="https://images.unsplash.com/photo-1488085061387-422e29b40080?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2731&q=80" 
             alt="Travel destinations" 
-            className="w-full h-full object-cover object-center opacity-60" 
+            className="w-full h-full object-cover object-center" 
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
         </div>
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <div className="bg-black/30 backdrop-blur-sm p-4 sm:p-6 rounded-xl inline-block max-w-2xl mx-auto">
+          <div className="bg-black/20 backdrop-blur-sm p-4 sm:p-6 rounded-xl inline-block max-w-2xl mx-auto">
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
               <span className="text-sky-200 font-bold">Discover</span>
               <span className="block mt-2 text-teal-300 font-bold">Allergy-Friendly Destinations</span>
