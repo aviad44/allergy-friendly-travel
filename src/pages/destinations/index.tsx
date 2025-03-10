@@ -9,8 +9,9 @@ import { Rocket } from "lucide-react";
 // Import all destination photos with correct assignments
 import londonImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
 import parisImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
-import barcelonaImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
+import barcelonaImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png"; 
 import creteImg from "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
+import cyprusImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
 
 // Import the MainMenu component
 import { MainMenu } from "@/components/MainMenu";
@@ -36,7 +37,7 @@ const destinations = [
     id: "barcelona",
     name: "Barcelona",
     country: "Spain",
-    image: barcelonaImg,
+    image: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png",
     description: "Experience Catalan hospitality with allergen-conscious accommodations.",
     path: "/destinations/barcelona"
   },
@@ -44,7 +45,7 @@ const destinations = [
     id: "cyprus",
     name: "Cyprus",
     country: "Cyprus",
-    image: londonImg,
+    image: cyprusImg,
     description: "Discover the beauty of Cyprus with peace of mind at these allergy-friendly hotels.",
     path: "/destinations/cyprus"
   },

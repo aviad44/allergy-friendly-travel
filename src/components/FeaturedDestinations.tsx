@@ -8,7 +8,8 @@ import { ArrowRight, Shield } from "lucide-react";
 import londonImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
 import parisImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
 import creteImg from "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
-import barcelonaImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
+import barcelonaImg from "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
+import cyprusImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
 
 const FEATURED_DESTINATIONS = [
   {
@@ -33,7 +34,7 @@ const FEATURED_DESTINATIONS = [
     id: 3,
     name: "Cyprus",
     country: "Cyprus",
-    image: "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png",
+    image: cyprusImg,
     description: "Mediterranean cuisine adapted for your needs",
     commonAllergies: ["Gluten", "Nuts"],
     href: "/destinations/cyprus"
