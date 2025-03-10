@@ -1,21 +1,28 @@
 
 import { Destination } from "@/types/reviews";
 import { Luggage, UtensilsCrossed, Hotel } from "lucide-react";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 interface DestinationHeroProps {
   destination: Destination;
 }
 
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
+  // Check if we have a custom image defined in DESTINATION_IMAGES
+  const destinationKey = destination.id as keyof typeof DESTINATION_IMAGES;
+  const customImage = destinationKey in DESTINATION_IMAGES ? DESTINATION_IMAGES[destinationKey] : null;
+  
+  // Use custom image if available, otherwise fall back to destination.image
+  const imageSource = customImage || destination.image;
+  
   let imageUrl;
-
   // Process image URL based on format
-  if (destination.image.startsWith('photo-')) {
-    imageUrl = `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=2000&q=80`;
-  } else if (destination.image.startsWith('lovable-uploads/')) {
-    imageUrl = `/${destination.image}`;
+  if (imageSource.startsWith('photo-')) {
+    imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=2000&q=80`;
+  } else if (imageSource.startsWith('/lovable-uploads/')) {
+    imageUrl = imageSource;
   } else {
-    imageUrl = destination.image;
+    imageUrl = imageSource;
   }
   
   console.log("Destination hero image URL:", imageUrl);
@@ -23,6 +30,8 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   // Define a more descriptive alt text based on the destination
   const altText = destination.name === "Barcelona" 
     ? "Sagrada Familia - Antoni Gaudí's masterpiece in Barcelona, Spain - allergy-friendly travel destination" 
+    : destination.name === "Paris"
+    ? "Eiffel Tower - Iconic symbol of Paris, France - allergy-friendly travel destination with beautiful views"
     : `Scenic landscape of ${destination.name} - allergy-friendly travel destination with beautiful views and accommodations`;
 
   // Determine if this is Paris or Barcelona to adjust background position
@@ -32,8 +41,8 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   let backgroundSize = "cover";
   
   if (isParis) {
-    backgroundPosition = "center 60%";
-    backgroundSize = "120%";
+    backgroundPosition = "center center";
+    backgroundSize = "cover";
   } else if (isBarcelona) {
     backgroundPosition = "center 40%";
   }

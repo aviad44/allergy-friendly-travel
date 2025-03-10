@@ -6,7 +6,7 @@ import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 // Define geographical relationships between destinations
 const RELATED_DESTINATIONS: Record<DestinationId, DestinationId[]> = {
-  'paris': ['london' as DestinationId],
+  'paris': ['london' as DestinationId, 'barcelona' as DestinationId],
   'london': ['paris' as DestinationId],
   'cyprus': ['crete', 'ayia-napa'],
   'crete': ['cyprus'],
