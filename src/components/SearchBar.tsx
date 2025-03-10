@@ -93,17 +93,17 @@ export const SearchBar = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 flex-grow">
+    <div className="flex flex-col sm:flex-row gap-2">
+      <div className="flex flex-col sm:flex-row gap-2 flex-grow">
         <Input 
           placeholder="Enter destination" 
-          className="h-12 text-base sm:text-lg border border-gray-300 rounded-md bg-white"
+          className="h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm"
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
         />
         <Input 
           placeholder="Type of allergies" 
-          className="h-12 text-base sm:text-lg border border-gray-300 rounded-md bg-white"
+          className="h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm"
           value={allergies}
           onChange={(e) => setAllergies(e.target.value)}
         />
