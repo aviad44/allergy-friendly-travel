@@ -1,3 +1,4 @@
+
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -79,7 +80,9 @@ export const FeaturedDestinations = () => {
             <Card className="overflow-hidden group cursor-pointer h-full hover:shadow-xl transition-all duration-300 border-gray-200">
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
-                  src={destination.image}
+                  src={destination.image.startsWith('photo-') 
+                    ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=800&q=80` 
+                    : destination.image}
                   alt={destination.name === "Cyprus" 
                     ? "WaterWorld Themed Waterpark in Ayia Napa, Cyprus - Best allergy-friendly destination for family vacations"
                     : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`

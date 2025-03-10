@@ -15,18 +15,28 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   } else if (destination.image.startsWith('lovable-uploads/')) {
     imageUrl = `/${destination.image}`;
   } else {
-    imageUrl = `/${destination.image}`;
+    imageUrl = destination.image;
   }
   
   console.log("Destination hero image URL:", imageUrl);
 
   // Define a more descriptive alt text based on the destination
-  const altText = `Scenic landscape of ${destination.name} - allergy-friendly travel destination with beautiful views and accommodations`;
+  const altText = destination.name === "Barcelona" 
+    ? "Sagrada Familia - Antoni Gaudí's masterpiece in Barcelona, Spain - allergy-friendly travel destination" 
+    : `Scenic landscape of ${destination.name} - allergy-friendly travel destination with beautiful views and accommodations`;
 
-  // Determine if this is Paris to adjust background position
+  // Determine if this is Paris or Barcelona to adjust background position
   const isParis = destination.name === "Paris";
-  const backgroundPosition = isParis ? "center 60%" : "center 30%"; 
-  const backgroundSize = isParis ? "120%" : "cover";
+  const isBarcelona = destination.name === "Barcelona";
+  let backgroundPosition = "center 30%";
+  let backgroundSize = "cover";
+  
+  if (isParis) {
+    backgroundPosition = "center 60%";
+    backgroundSize = "120%";
+  } else if (isBarcelona) {
+    backgroundPosition = "center 40%";
+  }
 
   return (
     <div 

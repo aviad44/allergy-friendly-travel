@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { destinations, DestinationId } from "@/types/reviews";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 // Define geographical relationships between destinations
 const RELATED_DESTINATIONS: Record<DestinationId, DestinationId[]> = {
@@ -25,11 +26,21 @@ export const RelatedDestinations = ({ currentDestinationId }: RelatedDestination
 
   if (relatedDestinations.length === 0) return null;
 
-  const getImageUrl = (imagePath: string) => {
-    if (imagePath.startsWith('photo-')) {
-      return `https://images.unsplash.com/${imagePath}?auto=format&fit=crop&w=800&q=80`;
+  const getImageUrl = (destinationId: string) => {
+    const imageKey = destinationId as keyof typeof DESTINATION_IMAGES;
+    if (imageKey in DESTINATION_IMAGES) {
+      const imagePath = DESTINATION_IMAGES[imageKey];
+      if (imagePath.startsWith('photo-')) {
+        return `https://images.unsplash.com/${imagePath}?auto=format&fit=crop&w=800&q=80`;
+      }
+      return imagePath;
     }
-    return imagePath.startsWith('lovable-uploads/') ? `/${imagePath}` : imagePath;
+    // Fallback to the original image
+    const dest = destinations.find(d => d.id === destinationId);
+    if (dest?.image.startsWith('photo-')) {
+      return `https://images.unsplash.com/${dest.image}?auto=format&fit=crop&w=800&q=80`;
+    }
+    return dest?.image || '';
   };
 
   return (
@@ -43,7 +54,7 @@ export const RelatedDestinations = ({ currentDestinationId }: RelatedDestination
             <Card className="overflow-hidden group cursor-pointer hover:shadow-lg transition-shadow duration-300">
               <div className="relative aspect-[16/9] overflow-hidden">
                 <img
-                  src={getImageUrl(destination.image)}
+                  src={getImageUrl(destination.id)}
                   alt={`${destination.name}, ${destination.country} - Related allergy-friendly travel destination`}
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                 />

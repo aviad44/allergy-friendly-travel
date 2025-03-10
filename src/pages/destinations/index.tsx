@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -112,7 +113,9 @@ const DestinationsIndex = () => {
               <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
                 <div className="relative h-40 overflow-hidden">
                   <img
-                    src={destination.image}
+                    src={destination.image.startsWith('photo-') 
+                      ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=800&q=80` 
+                      : destination.image}
                     alt={destination.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />

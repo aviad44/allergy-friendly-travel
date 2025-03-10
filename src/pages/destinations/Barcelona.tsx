@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
@@ -8,16 +9,17 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { DestinationHero } from "@/components/reviews/DestinationHero";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 export default function BarcelonaReviews() {
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const destination = destinations.find(d => d.id === 'barcelona')!;
   const content = destinationData['barcelona'];
   
-  // Create a custom destination object with the image we want to use
+  // Create a custom destination object with the Sagrada Familia image from our constants
   const barcelonaDestination = {
     ...destination,
-    image: "photo-1583422409516-2895a77efded"
+    image: DESTINATION_IMAGES.barcelona
   };
 
   // Custom Barcelona content with correct props for HotelCard
