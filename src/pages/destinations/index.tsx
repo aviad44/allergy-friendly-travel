@@ -75,16 +75,16 @@ const DestinationsIndex = () => {
         Website in Beta
       </div>
       
-      {/* Navigation - Changed from fixed to relative */}
+      {/* Navigation - Adjusted spacing between elements */}
       <nav className="relative bg-white shadow-sm w-full">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Link to="/" aria-label="Return to homepage" className="flex items-center gap-3 text-2xl font-display font-bold text-[#edab69] hover:text-amber-400 transition-colors">
+          <Link to="/" aria-label="Return to homepage" className="flex items-center space-x-3 text-2xl font-display font-bold text-[#edab69] hover:text-amber-400 transition-colors">
             <img 
               src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
               alt="Allergy Free Travel Logo" 
               className="h-10" 
             />
-            Allergy Free Travel
+            <span>Allergy Free Travel</span>
           </Link>
           
           <MainMenu />
