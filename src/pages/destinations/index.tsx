@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -5,9 +6,9 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Rocket } from "lucide-react";
 
-// Import all destination photos
-import londonImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
-import parisImg from "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
+// Import all destination photos with correct assignments
+import londonImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
+import parisImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
 import barcelonaImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
 import creteImg from "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
 

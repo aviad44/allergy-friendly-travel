@@ -4,12 +4,18 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield } from "lucide-react";
 
+// Import destination images
+import londonImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
+import parisImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
+import creteImg from "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
+import barcelonaImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
+
 const FEATURED_DESTINATIONS = [
   {
     id: 1,
     name: "Paris",
     country: "France",
-    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
+    image: parisImg,
     description: "Discover allergy-friendly luxury in the City of Light",
     commonAllergies: ["Gluten", "Dairy", "Nuts"],
     href: "/destinations/paris"
@@ -18,7 +24,7 @@ const FEATURED_DESTINATIONS = [
     id: 2,
     name: "London",
     country: "United Kingdom",
-    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80",
+    image: londonImg,
     description: "Experience safe dining in Britain's capital",
     commonAllergies: ["Dairy", "Seafood"],
     href: "/destinations/london"
@@ -36,7 +42,7 @@ const FEATURED_DESTINATIONS = [
     id: 4,
     name: "Barcelona",
     country: "Spain",
-    image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
+    image: barcelonaImg,
     description: "Allergy-friendly tapas and Mediterranean delights",
     commonAllergies: ["Gluten", "Shellfish"],
     href: "/destinations/barcelona"
@@ -45,7 +51,7 @@ const FEATURED_DESTINATIONS = [
     id: 5,
     name: "Crete",
     country: "Greece",
-    image: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png",
+    image: creteImg,
     description: "Traditional Greek cuisine with allergy awareness",
     commonAllergies: ["Dairy", "Nuts"],
     href: "/destinations/crete"
