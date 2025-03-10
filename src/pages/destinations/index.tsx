@@ -21,7 +21,7 @@ const destinations = [
     id: "london",
     name: "London",
     country: "United Kingdom",
-    image: londonImg,
+    image: londonImg, 
     description: "Discover allergen-friendly accommodations in the heart of England's capital.",
     path: "/destinations/london"
   },
