@@ -31,7 +31,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   const altText = destination.name === "Barcelona" 
     ? "Sagrada Familia - Antoni Gaudí's masterpiece in Barcelona, Spain - allergy-friendly travel destination" 
     : destination.name === "Paris"
-    ? "Eiffel Tower - Iconic symbol of Paris, France - allergy-friendly travel destination with beautiful views"
+    ? "Full view of the iconic Eiffel Tower against the Paris skyline - allergy-friendly travel destination"
     : `Scenic landscape of ${destination.name} - allergy-friendly travel destination with beautiful views and accommodations`;
 
   // Determine if this is Paris or Barcelona to adjust background position
@@ -41,7 +41,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   let backgroundSize = "cover";
   
   if (isParis) {
-    backgroundPosition = "center center";
+    backgroundPosition = "center 35%"; // Adjusted to show full tower
     backgroundSize = "cover";
   } else if (isBarcelona) {
     backgroundPosition = "center 40%";
