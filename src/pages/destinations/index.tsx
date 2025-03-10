@@ -1,27 +1,18 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Rocket } from "lucide-react";
-
-// Import all destination photos with correct assignments
-import londonImg from "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png";
-import parisImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
-import barcelonaImg from "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
-import creteImg from "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
-import cyprusImg from "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
-
-// Import the MainMenu component
 import { MainMenu } from "@/components/MainMenu";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 const destinations = [
   {
     id: "london",
     name: "London",
     country: "United Kingdom",
-    image: londonImg, 
+    image: DESTINATION_IMAGES.london,
     description: "Discover allergen-friendly accommodations in the heart of England's capital.",
     path: "/destinations/london"
   },
@@ -29,7 +20,7 @@ const destinations = [
     id: "paris",
     name: "Paris",
     country: "France",
-    image: parisImg,
+    image: DESTINATION_IMAGES.paris,
     description: "Enjoy the city of lights with peace of mind at these allergy-aware hotels.",
     path: "/destinations/paris"
   },
@@ -37,7 +28,7 @@ const destinations = [
     id: "barcelona",
     name: "Barcelona",
     country: "Spain",
-    image: barcelonaImg,
+    image: DESTINATION_IMAGES.barcelona,
     description: "Experience Catalan hospitality with allergen-conscious accommodations.",
     path: "/destinations/barcelona"
   },
@@ -45,7 +36,7 @@ const destinations = [
     id: "cyprus",
     name: "Cyprus",
     country: "Cyprus",
-    image: cyprusImg,
+    image: DESTINATION_IMAGES.cyprus,
     description: "Discover the beauty of Cyprus with peace of mind at these allergy-friendly hotels.",
     path: "/destinations/cyprus"
   },
@@ -53,7 +44,7 @@ const destinations = [
     id: "abu-dhabi",
     name: "Abu Dhabi",
     country: "UAE",
-    image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=800&q=80",
+    image: DESTINATION_IMAGES["abu-dhabi"],
     description: "Luxury accommodation with allergy considerations in the heart of the UAE.",
     path: "/destinations/abudhabi"
   },
@@ -61,7 +52,7 @@ const destinations = [
     id: "crete",
     name: "Crete",
     country: "Greece",
-    image: creteImg,
+    image: DESTINATION_IMAGES.crete,
     description: "Relax on the beautiful Greek island with allergy-aware accommodations.",
     path: "/destinations/crete"
   }
