@@ -20,6 +20,52 @@ serve(async (req) => {
 
     const { destination, allergies } = await req.json();
     console.log('Received search request for:', { destination, allergies });
+    try {
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openAIApiKey) {
+        throw new Error('OpenAI API key is not configured');
+    }
+
+    const { destination, allergies } = await req.json();
+    console.log('📌 Received search request for:', { destination, allergies }); // ✅ הדפסה לוודא שהפרמטרים התקבלו
+
+    // ✅ יצירת השאילתה שנשלחת ל-GPT
+    const payload = {
+        model: "gpt-4-turbo",
+        messages: [
+            { role: "system", content: "You are a travel assistant specializing in allergy-friendly hotels." },
+            { role: "user", content: `Find 3-5 hotels in ${destination} suitable for guests with ${allergies} allergies. Include:
+              - Hotel name and website link
+              - Allergy-friendly features (e.g., dairy-free menu, no cross-contamination)
+              - Guest reviews from people with allergies
+              - Booking links
+              Be concise but include essential details.` }
+        ],
+        temperature: 0.3,
+        max_tokens: 1500,
+    };
+
+    console.log("📤 Sending to GPT:", JSON.stringify(payload, null, 2)); // ✅ הדפסת השאילתה שנשלחת ל-GPT
+
+    // ✅ שליחת השאילתה ל-GPT
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${openAIApiKey}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        console.error("❌ OpenAI API Error:", error);
+        throw new Error(error.error.message || 'Failed to get hotel recommendations');
+    }
+
+    const data = await response.json();
+    console.log("✅ OpenAI Response:", data.choices[0].message.content); // ✅ הדפסת התגובה שה-GPT מחזיר
+
 // ✅ הדפסת מה שנשלח ל-GPT לפני שליחת הבקשה
 
 // 🔹 שליחת הבקשה ל-GPT
