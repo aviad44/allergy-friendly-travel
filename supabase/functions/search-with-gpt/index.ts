@@ -23,6 +23,20 @@ serve(async (req) => {
 // ✅ הדפסת מה שנשלח ל-GPT לפני שליחת הבקשה
 
 // 🔹 שליחת הבקשה ל-GPT
+console.log("📤 Sending to GPT:", JSON.stringify({
+    model: "gpt-4-turbo",
+    messages: [
+        { role: "system", content: "You are a travel assistant specializing in allergy-friendly hotels." },
+        { role: "user", content: `Find 3-5 hotels in ${destination} suitable for guests with ${allergies} allergies. Include:
+          - Hotel name and website link
+          - Allergy-friendly features (e.g., dairy-free menu, no cross-contamination)
+          - Guest reviews from people with allergies
+          - Booking links
+          Be concise but include essential details.` }
+    ],
+    temperature: 0.3,
+    max_tokens: 1500,
+}, null, 2));
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
