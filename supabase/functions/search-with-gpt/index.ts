@@ -20,6 +20,9 @@ serve(async (req) => {
 
     const { destination, allergies } = await req.json();
     console.log('Received search request for:', { destination, allergies });
+// ✅ הדפסת מה שנשלח ל-GPT לפני שליחת הבקשה
+
+// 🔹 שליחת הבקשה ל-GPT
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
