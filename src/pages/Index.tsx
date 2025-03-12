@@ -5,6 +5,7 @@ import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MainMenu } from "@/components/MainMenu";
 import { HOME_CONTENT } from "@/constants/home";
+import { AllergyChatBox } from "@/components/AllergyChatBox";
 
 const Index = () => {
   const iconComponents = {
@@ -67,6 +68,19 @@ const Index = () => {
               <SearchBar />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Chat Section */}
+      <section className="py-10 sm:py-16 px-4 bg-white w-full">
+        <div className="container mx-auto">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4 text-center font-bold text-blue-800">
+            יש לך שאלה על מלונות ידידותיים לאלרגיות?
+          </h2>
+          <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 md:mb-12 text-center max-w-2xl mx-auto">
+            שאל את המומחה שלנו והוא יעזור לך למצוא את המידע שאתה מחפש
+          </p>
+          <AllergyChatBox />
         </div>
       </section>
 
