@@ -5,7 +5,6 @@ import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MainMenu } from "@/components/MainMenu";
 import { HOME_CONTENT } from "@/constants/home";
-import { AllergyChatBox } from "@/components/AllergyChatBox";
 
 const Index = () => {
   const iconComponents = {
@@ -47,9 +46,10 @@ const Index = () => {
           <img 
             src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90" 
             alt="Allergy-friendly travel destination" 
-            className="absolute inset-0 w-full h-full object-cover opacity-45" 
+            className="absolute inset-0 w-full h-full object-cover object-center" 
             loading="eager" 
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
         </picture>
         
         {/* Content Overlay - Improved mobile spacing with padding adjustments */}
@@ -68,19 +68,6 @@ const Index = () => {
               <SearchBar />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Chat Section */}
-      <section className="py-10 sm:py-16 px-4 bg-white w-full">
-        <div className="container mx-auto">
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4 text-center font-bold text-blue-800">
-            יש לך שאלה על מלונות ידידותיים לאלרגיות?
-          </h2>
-          <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 md:mb-12 text-center max-w-2xl mx-auto">
-            שאל את המומחה שלנו והוא יעזור לך למצוא את המידע שאתה מחפש
-          </p>
-          <AllergyChatBox />
         </div>
       </section>
 
