@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -7,6 +8,7 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -14,38 +16,43 @@ serve(async (req) => {
   try {
     const openAIApiKey = Deno.env.get("OPENAI_API_KEY");
     if (!openAIApiKey) {
-      throw new Error("❌ OpenAI API key is not configured");
+      console.error("❌ OpenAI API key is missing");
+      throw new Error("OpenAI API key is not configured");
     }
 
     const { destination, allergies } = await req.json();
-    console.log("✅ Received search request for:", { destination, allergies }); // הדפסת הנתונים שהתקבלו
+    console.log("✅ Processing search request for:", { destination, allergies });
 
-    // יצירת הודעה שתישלח ל-GPT
+    // Improved prompt for better, more consistent results
     const payload = {
-      model: "gpt-4-turbo",
+      model: "gpt-4o-mini", // Using the faster, more cost-effective model
       messages: [
         {
           role: "system",
-          content: "You are a travel assistant specializing in allergy-friendly hotels. Provide structured responses with clear details.",
+          content: `You are an expert travel assistant specializing in allergy-friendly hotels. 
+          Your task is to provide accurate, structured information about hotels that cater to specific dietary restrictions and allergies.
+          Format your response as a clear, structured list with exactly 3-5 hotels.
+          For each hotel include:
+          - Hotel name with its official website (if available)
+          - Key allergy-friendly features (special menus, kitchen practices, staff training)
+          - Any special accommodations they make for the specific allergy mentioned
+          - One brief but authentic guest review related to allergy handling
+          - Any additional safety information
+
+          Present each hotel in a format that's easy to parse programmatically, with each hotel starting with a number followed by the name, then listing features with bullet points.`
         },
         {
           role: "user",
-          content: `Find 3-5 highly-rated hotels in ${destination} that are suitable for guests with ${allergies} allergies. Each hotel should include:
-          - Hotel name and official website link
-          - Allergy-friendly features (e.g., dairy-free menu, no cross-contamination, allergy-aware staff)
-          - Guest reviews from people with allergies
-          - Booking links (if available)
-          - Any additional notes about safety measures for allergic guests.
-          Format the response in bullet points for easy readability.`,
+          content: `Find 3-5 highly-rated hotels in ${destination} that are suitable for guests with ${allergies} allergies.`,
         },
       ],
-      temperature: 0.7,
+      temperature: 0.5, // Lower temperature for more consistent outputs
       max_tokens: 1000,
     };
 
-    console.log("📤 Sending request to GPT:", JSON.stringify(payload, null, 2)); // הדפסת הבקשה שנשלחת ל-GPT
+    console.log("📤 Sending request to OpenAI");
 
-    // שליחת הבקשה ל-OpenAI
+    // Send request to OpenAI
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -64,10 +71,13 @@ serve(async (req) => {
     const data = await response.json();
     const gptResponse = data.choices[0]?.message?.content?.trim();
 
-    console.log("✅ OpenAI Response:", gptResponse); // הדפסת התשובה שהתקבלה מ-GPT
+    console.log("✅ Received response from OpenAI");
 
     return new Response(
-      JSON.stringify({ recommendation: gptResponse, status: "success" }),
+      JSON.stringify({ 
+        recommendation: gptResponse, 
+        status: "success" 
+      }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
@@ -76,7 +86,10 @@ serve(async (req) => {
   } catch (error) {
     console.error("❌ Error in search-with-gpt function:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "An unexpected error occurred", status: "error" }),
+      JSON.stringify({ 
+        error: error instanceof Error ? error.message : "An unexpected error occurred", 
+        status: "error" 
+      }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
