@@ -38,12 +38,20 @@ serve(async (req) => {
             role: 'system',
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels. 
             Your task is to provide detailed information about hotels that cater to specific allergies and dietary restrictions.
+            
             Format your response as a list where each hotel entry includes:
             - Hotel name
             - Key allergy accommodations they provide
             - Special dietary considerations they address
-            - Brief authentic guest reviews related to allergy handling
-            - Any additional safety information`
+            - A brief simulated guest review (clearly label it as "Simulated Review")
+            - Any additional safety information
+            
+            IMPORTANT:
+            1. For each hotel, include a Booking.com URL in the format: "https://www.booking.com/hotel/[country-code]/[hotel-name-slug].html"
+               If the hotel isn't available on Booking.com, provide the hotel's official website URL.
+            2. Clearly indicate that reviews are AI-generated simulations based on typical guest experiences, not actual reviews.
+            3. Format each hotel entry with the hotel name, followed by a pipe symbol, followed by the booking URL.
+               Example: "Hotel Sunshine | https://www.booking.com/hotel/fr/sunshine.html"`
           },
           {
             role: 'user',
