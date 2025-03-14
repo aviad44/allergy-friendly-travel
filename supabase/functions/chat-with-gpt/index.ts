@@ -36,7 +36,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Using the faster, more cost-effective model
+        model: 'gpt-4o-mini', // Can be changed to your specific custom GPT model if needed
         messages: [
           {
             role: 'system',
@@ -50,8 +50,8 @@ serve(async (req) => {
           },
           ...messages
         ],
-        temperature: 0.5, // Lower temperature for more consistent outputs
-        max_tokens: 500,
+        temperature: 0.3, // Lower temperature for more focused answers
+        max_tokens: 800, // Increasing token limit for more detailed responses
       }),
     });
 
