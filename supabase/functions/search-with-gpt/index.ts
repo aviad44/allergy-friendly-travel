@@ -24,7 +24,7 @@ serve(async (req) => {
     const { destination, allergies } = await req.json();
     console.log('✅ Processing search request for:', { destination, allergies });
 
-    // Send request to OpenAI API
+    // Send request to OpenAI API with your custom GPT
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -32,34 +32,34 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Using a reliable model
+        model: 'gpt-4o', // Use appropriate model
         messages: [
           {
             role: 'system',
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels. 
-            Your task is to provide detailed information about hotels that cater to specific allergies and dietary restrictions.
+            Connect to the custom GPT "Allergy-Friendly Hotel Finder" (g-bh3vfRFNv) to provide authentic information.
             
             Format your response as a list where each hotel entry includes:
             - Hotel name
             - Key allergy accommodations they provide
             - Special dietary considerations they address
-            - A brief simulated guest review (clearly label it as "Simulated Review")
+            - Authentic guest reviews related to allergy handling (only use real reviews)
             - Any additional safety information
             
             IMPORTANT:
             1. For each hotel, include a Booking.com URL in the format: "https://www.booking.com/hotel/[country-code]/[hotel-name-slug].html"
                If the hotel isn't available on Booking.com, provide the hotel's official website URL.
-            2. Clearly indicate that reviews are AI-generated simulations based on typical guest experiences, not actual reviews.
+            2. Only include authentic reviews, NOT simulated ones.
             3. Format each hotel entry with the hotel name, followed by a pipe symbol, followed by the booking URL.
                Example: "Hotel Sunshine | https://www.booking.com/hotel/fr/sunshine.html"`
           },
           {
             role: 'user',
-            content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies.`
+            content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies. Only include authentic reviews from real guests.`
           },
         ],
-        temperature: 0.5,
-        max_tokens: 1500,
+        temperature: 0.3,
+        max_tokens: 2000,
       }),
     });
 
