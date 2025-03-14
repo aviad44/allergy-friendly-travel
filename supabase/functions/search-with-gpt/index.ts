@@ -24,8 +24,7 @@ serve(async (req) => {
     const { destination, allergies } = await req.json();
     console.log('✅ Processing search request for:', { destination, allergies });
 
-    // For custom GPT integration, we need to format the message appropriately
-    // The query includes the assistant ID for the custom GPT
+    // Send request to OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -33,14 +32,14 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Using the current model, can be changed to your specific custom GPT model
+        model: 'gpt-4o-mini', // Using a reliable model
         messages: [
           {
             role: 'system',
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels. 
             Your task is to provide detailed information about hotels that cater to specific allergies and dietary restrictions.
-            Format your response clearly with 3-5 hotels where each hotel entry includes:
-            - Hotel name and website (if available)
+            Format your response as a list where each hotel entry includes:
+            - Hotel name
             - Key allergy accommodations they provide
             - Special dietary considerations they address
             - Brief authentic guest reviews related to allergy handling
@@ -51,8 +50,8 @@ serve(async (req) => {
             content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies.`
           },
         ],
-        temperature: 0.3, // Lower temperature for more consistent answers from your custom GPT
-        max_tokens: 1500, // Increasing the response length for more detailed hotel information
+        temperature: 0.5,
+        max_tokens: 1500,
       }),
     });
 

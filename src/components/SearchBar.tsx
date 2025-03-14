@@ -1,4 +1,3 @@
-
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +31,7 @@ export const SearchBar = () => {
     setIsSheetOpen(true);
 
     try {
+      console.log('Sending search request to Supabase function');
       const { data, error } = await supabase.functions.invoke('search-with-gpt', {
         body: { destination, allergies }
       });
@@ -42,18 +42,20 @@ export const SearchBar = () => {
       }
 
       if (!data?.recommendation) {
+        console.error('No recommendation data:', data);
         throw new Error('No recommendation received from the AI');
       }
 
       console.log('Received recommendation:', data.recommendation);
       setRecommendation(data.recommendation);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error during search:', error);
       toast({
         title: "Search Error",
         description: "Sorry, we couldn't complete the search. Please try again later.",
         variant: "destructive",
       });
+      // Keep the sheet open to show the error state
     } finally {
       setIsSearching(false);
     }
@@ -66,21 +68,33 @@ export const SearchBar = () => {
     let currentHotel: any = {};
 
     for (const line of lines) {
-      if (line.match(/^\d+\./)) {  // Look for lines starting with a number and period
+      if (line.match(/^\d+\./) || line.match(/^[A-Za-z\s]+:/) || line.match(/^Hotel/i)) {
         if (currentHotel.name) {
           hotels.push(currentHotel);
         }
-        const parts = line.split('|');
+        
+        let hotelName = line.replace(/^\d+\.\s*/, '').split('|')[0].trim();
+        if (hotelName.includes(':')) {
+          hotelName = hotelName.split(':')[0].trim();
+        }
+        
         currentHotel = {
-          name: parts[0].replace(/^\d+\.\s+/, '').trim(),
-          url: parts.length > 1 ? parts[1].trim() : '',
+          name: hotelName,
+          url: line.includes('|') ? line.split('|')[1].trim() : '',
           features: []
         };
-      } else if (line.trim().startsWith('-')) {
+      } else if (line.trim().startsWith('-') || line.trim().startsWith('•')) {
         if (!currentHotel.features) {
           currentHotel.features = [];
         }
         currentHotel.features.push(line.trim().substring(1).trim());
+      } else if (currentHotel.name) {
+        if (!currentHotel.features) {
+          currentHotel.features = [];
+        }
+        if (line.length > 10 && !line.startsWith('http')) {
+          currentHotel.features.push(line.trim());
+        }
       }
     }
     
@@ -88,8 +102,22 @@ export const SearchBar = () => {
       hotels.push(currentHotel);
     }
 
+    if (hotels.length === 0) {
+      const paragraphs = text.split('\n\n').filter(p => p.trim());
+      for (const paragraph of paragraphs) {
+        if (paragraph.length > 30) {
+          const lines = paragraph.split('\n');
+          const name = lines[0].trim();
+          hotels.push({
+            name,
+            features: lines.slice(1).map(l => l.trim()).filter(l => l)
+          });
+        }
+      }
+    }
+
     console.log('Formatted hotels:', hotels);
-    return hotels;
+    return hotels.length > 0 ? hotels : [{ name: "Results", features: [text] }];
   };
 
   return (
@@ -140,7 +168,6 @@ export const SearchBar = () => {
             </SheetClose>
           </div>
           
-          {/* Scroll indicator for mobile */}
           <div className="md:hidden flex justify-center my-2">
             <ChevronDown className="h-5 w-5 text-muted-foreground animate-bounce" />
             <span className="text-xs text-muted-foreground ml-1">Scroll for more</span>
@@ -197,7 +224,6 @@ export const SearchBar = () => {
             )}
           </div>
           
-          {/* Bottom padding to ensure content is visible above the sheet handle on mobile */}
           <div className="h-6 md:hidden"></div>
         </SheetContent>
       </Sheet>
