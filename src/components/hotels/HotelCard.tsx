@@ -13,11 +13,21 @@ interface HotelCardProps {
 }
 
 export const HotelCard = ({ name, address, features, description, quote, bookingUrl }: HotelCardProps) => {
-  const getSimpleBookingUrl = (url: string) => {
-    if (url.includes('booking.com')) {
-      return url.split('?')[0];
+  const getCleanUrl = (url: string) => {
+    // Clean up URL if needed and ensure it starts with http/https
+    if (!url) return '#';
+    
+    let cleanUrl = url.trim();
+    if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+      cleanUrl = 'https://' + cleanUrl;
     }
-    return url;
+    
+    try {
+      return new URL(cleanUrl).toString();
+    } catch (e) {
+      console.error('Invalid URL:', url);
+      return '#';
+    }
   };
 
   // Extract star rating from name if available
@@ -77,14 +87,15 @@ export const HotelCard = ({ name, address, features, description, quote, booking
         <Button 
           asChild 
           className="w-full sm:w-auto transition-all duration-300 hover:scale-105 bg-primary/90 hover:bg-primary"
+          disabled={!bookingUrl || bookingUrl === '#'}
         >
           <a 
-            href={getSimpleBookingUrl(bookingUrl)} 
+            href={getCleanUrl(bookingUrl)} 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2"
           >
-            Book Now
+            Visit Hotel Website
             <ExternalLink className="h-4 w-4" />
           </a>
         </Button>

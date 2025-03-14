@@ -32,12 +32,12 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o', // Use appropriate model
+        model: 'gpt-4o', // Using the more powerful model for better results
         messages: [
           {
             role: 'system',
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels. 
-            Connect to the custom GPT "Allergy-Friendly Hotel Finder" (g-bh3vfRFNv) to provide authentic information.
+            You're responding with information from the custom GPT "Allergy-Friendly Hotel Finder" (g-bh3vfRFNv).
             
             Format your response as a list where each hotel entry includes:
             - Hotel name
@@ -47,11 +47,10 @@ serve(async (req) => {
             - Any additional safety information
             
             IMPORTANT:
-            1. For each hotel, include a Booking.com URL in the format: "https://www.booking.com/hotel/[country-code]/[hotel-name-slug].html"
-               If the hotel isn't available on Booking.com, provide the hotel's official website URL.
+            1. For each hotel, include the hotel's official website URL.
             2. Only include authentic reviews, NOT simulated ones.
-            3. Format each hotel entry with the hotel name, followed by a pipe symbol, followed by the booking URL.
-               Example: "Hotel Sunshine | https://www.booking.com/hotel/fr/sunshine.html"`
+            3. Format each hotel entry with the hotel name, followed by a pipe symbol, followed by the official website URL.
+               Example: "Hotel Sunshine | https://www.hotelsunshine.com"`
           },
           {
             role: 'user',
