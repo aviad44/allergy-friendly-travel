@@ -21,6 +21,7 @@ import AbuDhabi from '@/pages/destinations/AbuDhabi';
 import Thailand from '@/pages/destinations/Thailand';
 import AboutUs from '@/pages/AboutUs';
 import Contact from '@/pages/Contact';
+import NotFound from '@/pages/NotFound';
 
 import "./App.css";
 
@@ -50,6 +51,8 @@ function App() {
               <Route path="/hotels/le-petit-palace" element={<LePetitPalace />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/contact" element={<Contact />} />
+              {/* Add catch-all route for 404 errors */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
