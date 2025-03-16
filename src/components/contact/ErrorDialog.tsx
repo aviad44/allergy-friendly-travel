@@ -21,7 +21,10 @@ export function ErrorDialog({ open, onOpenChange, errorDetails }: ErrorDialogPro
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Error Sending Message</DialogTitle>
+          <DialogTitle className="text-destructive flex items-center gap-2">
+            <AlertCircle className="h-5 w-5" /> 
+            Error Sending Message
+          </DialogTitle>
           <DialogDescription>
             We encountered an issue while trying to send your message.
           </DialogDescription>

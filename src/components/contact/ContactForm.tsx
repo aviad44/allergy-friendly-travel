@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Mail } from "lucide-react";
+import { Send, Mail, Clock, AlertCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ErrorDialog } from "./ErrorDialog";
-import { Clock } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function ContactForm() {
   const [email, setEmail] = useState("");
@@ -17,14 +17,23 @@ export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [errorDetails, setErrorDetails] = useState("");
+  const [formError, setFormError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFormError(null);
     
     try {
       console.log("Submitting contact form:", { name, email, message });
+      
+      // Validate form fields
+      if (!name.trim() || !email.trim() || !message.trim()) {
+        setFormError("Please fill out all fields before submitting.");
+        setIsSubmitting(false);
+        return;
+      }
       
       // Call our Supabase Edge Function to send the email
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
@@ -94,6 +103,13 @@ export function ContactForm() {
       
       <Card className="p-6 shadow-md">
         <form onSubmit={handleSubmit} className="space-y-4">
+          {formError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{formError}</AlertDescription>
+            </Alert>
+          )}
+          
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-1">
               Your Name

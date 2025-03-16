@@ -1,6 +1,5 @@
 
 import { Helmet } from "react-helmet";
-import { MainMenu } from "@/components/MainMenu";
 import { Footer } from "@/components/Footer";
 import { ContactHeader } from "@/components/contact/ContactHeader";
 import { ContactForm } from "@/components/contact/ContactForm";

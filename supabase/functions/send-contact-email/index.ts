@@ -11,31 +11,37 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  console.log("📨 Contact form request received");
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
+    console.log("✅ Handling CORS preflight request");
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { name, email, message } = await req.json();
-
-    // Validate required fields
-    if (!name || !email || !message) {
-      return new Response(
-        JSON.stringify({ 
-          error: "Missing required fields: name, email, and message are required"
-        }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
-    }
-
-    console.log(`✅ Processing contact form from ${name} (${email})`);
-
+    let requestData;
     try {
+      requestData = await req.json();
+      const { name, email, message } = requestData;
+      console.log(`✅ Request data parsed: ${name} (${email})`);
+
+      // Validate required fields
+      if (!name || !email || !message) {
+        console.error("❌ Missing required fields");
+        return new Response(
+          JSON.stringify({ 
+            error: "Missing required fields: name, email, and message are required"
+          }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      }
+
       // Send email to admin
+      console.log("📧 Sending admin email...");
       const adminEmailResponse = await resend.emails.send({
         from: "Allergy Free Travel <onboarding@resend.dev>",
         to: ["aviad44@gmail.com"],
@@ -52,6 +58,7 @@ serve(async (req) => {
       console.log("✅ Admin email sent:", adminEmailResponse);
 
       // Send confirmation email to user
+      console.log("📧 Sending user confirmation email...");
       const userEmailResponse = await resend.emails.send({
         from: "Allergy Free Travel <onboarding@resend.dev>",
         to: [email],
@@ -81,15 +88,15 @@ serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         }
       );
-    } catch (emailError) {
-      console.error('❌ Error sending emails:', emailError);
+    } catch (parseError) {
+      console.error("❌ Failed to parse request body:", parseError);
       return new Response(
         JSON.stringify({ 
-          error: "Failed to send emails",
-          details: emailError instanceof Error ? emailError.message : 'Unknown email error',
+          error: "Invalid request body", 
+          details: parseError instanceof Error ? parseError.message : 'Unknown parsing error' 
         }),
         {
-          status: 500,
+          status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         }
       );
@@ -98,8 +105,8 @@ serve(async (req) => {
     console.error('❌ Error in send-contact-email function:', error);
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred',
-        details: error instanceof Error ? error.stack : undefined,
+        error: "An unexpected error occurred",
+        details: error instanceof Error ? error.message : 'Unknown error',
       }),
       {
         status: 500,
