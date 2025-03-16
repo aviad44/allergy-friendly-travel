@@ -1,9 +1,7 @@
-
 import React from "react";
 import { Helmet } from "react-helmet";
 import { MainMenu } from "@/components/MainMenu";
 import { Link } from "react-router-dom";
-import { Footer } from "@/components/Footer";
 
 const AboutUs = () => {
   return (
@@ -96,8 +94,6 @@ const AboutUs = () => {
           </section>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

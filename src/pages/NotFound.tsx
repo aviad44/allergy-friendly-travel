@@ -1,8 +1,8 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { MainMenu } from "@/components/MainMenu";
-import { Footer } from "@/components/Footer";
 import { Home, ArrowLeft } from "lucide-react";
 
 const NotFound = () => {
@@ -57,8 +57,6 @@ const NotFound = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

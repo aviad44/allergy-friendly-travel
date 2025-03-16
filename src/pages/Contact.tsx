@@ -1,6 +1,5 @@
 
 import { Helmet } from "react-helmet";
-import { Footer } from "@/components/Footer";
 import { ContactHeader } from "@/components/contact/ContactHeader";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ServicesSection } from "@/components/contact/ServicesSection";
@@ -32,8 +31,6 @@ export default function Contact() {
           <ServicesSection />
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

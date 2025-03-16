@@ -1,6 +1,4 @@
-
 import { Helmet } from "react-helmet";
-import { Footer } from "@/components/Footer";
 import { ContactHeader } from "@/components/contact/ContactHeader";
 import { 
   Accordion,
@@ -174,8 +172,6 @@ export default function FAQ() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

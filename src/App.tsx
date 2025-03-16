@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { MainLayout } from "@/components/MainLayout";
 
 import Index from '@/pages/Index';
 import Categories from '@/pages/Categories';
@@ -37,24 +38,25 @@ function App() {
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/categories" element={<Categories />} />
-              <Route path="/reviews" element={<Reviews />} />
-              <Route path="/destinations" element={<Destinations />} />
-              <Route path="/destinations/paris" element={<Paris />} />
-              <Route path="/destinations/london" element={<London />} />
-              <Route path="/destinations/crete" element={<Crete />} />
-              <Route path="/destinations/barcelona" element={<Barcelona />} />
-              <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
-              <Route path="/destinations/cyprus" element={<Cyprus />} />
-              <Route path="/destinations/abu-dhabi" element={<AbuDhabi />} />
-              <Route path="/destinations/thailand" element={<Thailand />} />
-              <Route path="/hotels/le-petit-palace" element={<LePetitPalace />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/faq" element={<FAQ />} />
-              {/* Add catch-all route for 404 errors */}
-              <Route path="*" element={<NotFound />} />
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<Index />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/reviews" element={<Reviews />} />
+                <Route path="/destinations" element={<Destinations />} />
+                <Route path="/destinations/paris" element={<Paris />} />
+                <Route path="/destinations/london" element={<London />} />
+                <Route path="/destinations/crete" element={<Crete />} />
+                <Route path="/destinations/barcelona" element={<Barcelona />} />
+                <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
+                <Route path="/destinations/cyprus" element={<Cyprus />} />
+                <Route path="/destinations/abu-dhabi" element={<AbuDhabi />} />
+                <Route path="/destinations/thailand" element={<Thailand />} />
+                <Route path="/hotels/le-petit-palace" element={<LePetitPalace />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
