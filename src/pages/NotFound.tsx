@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -16,7 +15,7 @@ const NotFound = () => {
             <img 
               src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
               alt="Allergy Free Travel Logo" 
-              className="h-10" 
+              className="h-12 w-auto" 
             />
             <span>Allergy Free Travel</span>
           </Link>

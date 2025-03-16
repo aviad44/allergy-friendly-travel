@@ -1,4 +1,3 @@
-
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Button } from "@/components/ui/button";
@@ -56,7 +55,7 @@ const Index = () => {
               <img 
                 src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
                 alt="Allergy Free Travel Logo" 
-                className="h-10" 
+                className="h-12 w-auto" 
               />
               <span>{HOME_CONTENT.navigation.brand}</span>
             </Link>
