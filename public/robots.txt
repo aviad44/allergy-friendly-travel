@@ -1,0 +1,10 @@
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.allergy-free-travel.com/sitemap.xml
+
+# Disallow duplicate content or admin areas (if any in the future)
+# Disallow: /admin/
+# Disallow: /duplicate-content/
