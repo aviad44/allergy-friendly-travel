@@ -12,18 +12,22 @@ import {
   Send, 
   ArrowRight,
   Clock,
-  MessageSquare
+  MessageSquare,
+  AlertCircle
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function Contact() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showErrorDialog, setShowErrorDialog] = useState(false);
+  const [errorDetails, setErrorDetails] = useState("");
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,11 +36,12 @@ export default function Contact() {
     
     try {
       // Call our Supabase Edge Function to send the email
-      const { error } = await supabase.functions.invoke('send-contact-email', {
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: { name, email, message }
       });
 
       if (error) {
+        console.error('Contact form submission error:', error);
         throw new Error(error.message || 'Failed to send message');
       }
 
@@ -51,11 +56,17 @@ export default function Contact() {
       setMessage("");
     } catch (error) {
       console.error('Contact form submission error:', error);
+      
+      // Show error in toast
       toast({
         title: "Message not sent",
         description: "There was a problem sending your message. Please try again later.",
         variant: "destructive"
       });
+      
+      // Show detailed error in dialog
+      setErrorDetails(error instanceof Error ? error.message : 'Unknown error occurred');
+      setShowErrorDialog(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -220,6 +231,40 @@ export default function Contact() {
           </section>
         </div>
       </main>
+
+      {/* Error Dialog */}
+      <Dialog open={showErrorDialog} onOpenChange={setShowErrorDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Error Sending Message</DialogTitle>
+            <DialogDescription>
+              We encountered an issue while trying to send your message.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="bg-destructive/10 p-3 rounded-md border border-destructive/20 flex gap-2">
+            <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
+            <div className="text-sm text-destructive">
+              <p className="font-semibold">Error details:</p>
+              <p className="font-mono text-xs break-all">{errorDetails}</p>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowErrorDialog(false)}>
+              Close
+            </Button>
+            <Button 
+              onClick={() => {
+                setShowErrorDialog(false);
+                window.open("mailto:support@allergy-free-travel.com", "_blank");
+              }}
+            >
+              Contact Support
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
