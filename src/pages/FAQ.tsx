@@ -1,3 +1,4 @@
+
 import { Helmet } from "react-helmet";
 import { ContactHeader } from "@/components/contact/ContactHeader";
 import { 
@@ -70,7 +71,7 @@ export default function FAQ() {
     },
     {
       id: "reviews",
-      label: "User Reviews & Contributions",
+      label: "User Reviews",
       questions: [
         {
           question: "Can I leave a review about my stay at an allergy-friendly hotel?",
@@ -84,7 +85,7 @@ export default function FAQ() {
     },
     {
       id: "technical",
-      label: "Technical & Support",
+      label: "Technical Support",
       questions: [
         {
           question: "Is the Allergy-Friendly Hotel Finder free to use?",
@@ -102,7 +103,7 @@ export default function FAQ() {
     },
     {
       id: "future",
-      label: "Future Features & Updates",
+      label: "Future Updates",
       questions: [
         {
           question: "Are you planning to add more destinations?",
@@ -143,24 +144,30 @@ export default function FAQ() {
 
           <div className="bg-card rounded-lg border p-6 shadow-sm">
             <Tabs defaultValue="general" className="w-full">
-              <TabsList className="mb-6 flex flex-wrap justify-start gap-2 w-full">
-                {faqCategories.map((category) => (
-                  <TabsTrigger key={category.id} value={category.id} className="px-4 py-2">
-                    {category.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+              <div className="overflow-x-auto pb-2">
+                <TabsList className="mb-6 h-auto flex flex-wrap sm:flex-nowrap gap-2 w-max min-w-full">
+                  {faqCategories.map((category) => (
+                    <TabsTrigger 
+                      key={category.id} 
+                      value={category.id} 
+                      className="whitespace-nowrap px-4 py-2 flex-shrink-0"
+                    >
+                      {category.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
               
               {faqCategories.map((category) => (
-                <TabsContent key={category.id} value={category.id}>
-                  <h2 className="text-xl font-semibold mb-4">{category.label}</h2>
-                  <Accordion type="single" collapsible className="w-full">
+                <TabsContent key={category.id} value={category.id} className="pt-4">
+                  <h2 className="text-xl font-semibold mb-6">{category.label}</h2>
+                  <Accordion type="single" collapsible className="w-full space-y-4">
                     {category.questions.map((item, index) => (
-                      <AccordionItem key={index} value={`item-${index}`}>
-                        <AccordionTrigger className="text-left font-medium">
+                      <AccordionItem key={index} value={`item-${index}`} className="border rounded-md px-4">
+                        <AccordionTrigger className="text-left font-medium py-4">
                           {item.question}
                         </AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground">
+                        <AccordionContent className="text-muted-foreground pb-4">
                           {item.answer}
                         </AccordionContent>
                       </AccordionItem>
