@@ -1,86 +1,12 @@
 
-import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { MainMenu } from "@/components/MainMenu";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { 
-  Mail, 
-  Send, 
-  ArrowRight,
-  Clock,
-  MessageSquare,
-  AlertCircle
-} from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
-import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ContactHeader } from "@/components/contact/ContactHeader";
+import { ContactForm } from "@/components/contact/ContactForm";
+import { ServicesSection } from "@/components/contact/ServicesSection";
 
 export default function Contact() {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showErrorDialog, setShowErrorDialog] = useState(false);
-  const [errorDetails, setErrorDetails] = useState("");
-  const { toast } = useToast();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      console.log("Submitting contact form:", { name, email, message });
-      
-      // Call our Supabase Edge Function to send the email
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: { name, email, message }
-      });
-
-      console.log("Response from edge function:", { data, error });
-
-      if (error) {
-        console.error('Contact form submission error:', error);
-        throw new Error(error.message || 'Failed to send message');
-      }
-
-      if (data?.error) {
-        console.error('Edge function returned error:', data.error);
-        throw new Error(data.error);
-      }
-
-      toast({
-        title: "Message sent!",
-        description: "We'll get back to you as soon as possible.",
-      });
-      
-      // Clear the form
-      setEmail("");
-      setName("");
-      setMessage("");
-    } catch (error) {
-      console.error('Contact form submission error:', error);
-      
-      // Show error in toast
-      toast({
-        title: "Message not sent",
-        description: "There was a problem sending your message. Please try again later.",
-        variant: "destructive"
-      });
-      
-      // Show detailed error in dialog
-      setErrorDetails(error instanceof Error ? error.message : 'Unknown error occurred');
-      setShowErrorDialog(true);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Helmet>
@@ -89,21 +15,7 @@ export default function Contact() {
         <meta name="keywords" content="contact, allergy-friendly travel, food allergies, travel assistance, dietary restrictions" />
       </Helmet>
 
-      <header className="w-full py-4 px-4 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-sm border-b sticky top-0 z-50">
-        <div className="container mx-auto max-w-7xl">
-          <div className="flex justify-between items-center">
-            <Link to="/" className="flex items-center gap-3 text-2xl font-display font-bold text-blue-700 hover:text-blue-800 transition-colors">
-              <img 
-                src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
-                alt="Allergy Free Travel Logo" 
-                className="h-8" 
-              />
-              Allergy Free Travel
-            </Link>
-            <MainMenu />
-          </div>
-        </div>
-      </header>
+      <ContactHeader />
 
       <main className="flex-grow container mx-auto px-4 py-12 max-w-7xl">
         <div className="max-w-3xl mx-auto space-y-10">
@@ -116,164 +28,11 @@ export default function Contact() {
             </p>
           </section>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="p-6 shadow-md">
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <Mail className="h-6 w-6 text-primary" />
-                  <h2 className="text-xl font-semibold">Get in Touch</h2>
-                </div>
-                
-                <p className="text-muted-foreground">
-                  Have questions about allergy-friendly accommodations or need personalized travel advice? Send us a message and we'll respond as soon as possible.
-                </p>
-                
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-muted-foreground">
-                    Response time: Within 24-48 hours
-                  </span>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-6 shadow-md">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-1">
-                    Your Name
-                  </label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-1">
-                    Email Address
-                  </label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-1">
-                    Message
-                  </label>
-                  <Textarea
-                    id="message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Tell us about your allergies and travel needs..."
-                    rows={5}
-                    required
-                  />
-                </div>
-                
-                <Button 
-                  type="submit" 
-                  className="w-full" 
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    "Sending..."
-                  ) : (
-                    <>
-                      Send Message <Send className="ml-2 h-4 w-4" />
-                    </>
-                  )}
-                </Button>
-              </form>
-            </Card>
-          </div>
+          <ContactForm />
 
-          <Separator />
-
-          <section className="space-y-6">
-            <h2 className="text-2xl font-display font-semibold text-center">
-              How We Can Help
-            </h2>
-            
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <div className="p-6 border rounded-lg flex flex-col items-center text-center space-y-3">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <Mail className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-semibold">Hotel Recommendations</h3>
-                <p className="text-muted-foreground text-sm">Get personalized hotel suggestions based on your specific allergies and dietary needs.</p>
-              </div>
-              
-              <div className="p-6 border rounded-lg flex flex-col items-center text-center space-y-3">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <MessageSquare className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-semibold">Allergy Resources</h3>
-                <p className="text-muted-foreground text-sm">Access translation cards, emergency guidelines, and other helpful resources for your destination.</p>
-              </div>
-              
-              <div className="p-6 border rounded-lg flex flex-col items-center text-center space-y-3">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <Clock className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-semibold">Travel Planning</h3>
-                <p className="text-muted-foreground text-sm">Get assistance with creating allergy-friendly itineraries and finding safe dining options.</p>
-              </div>
-            </div>
-            
-            <div className="flex justify-center mt-8">
-              <Button variant="outline" asChild>
-                <a href="/reviews">
-                  See Traveler Reviews <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-            </div>
-          </section>
+          <ServicesSection />
         </div>
       </main>
-
-      {/* Error Dialog */}
-      <Dialog open={showErrorDialog} onOpenChange={setShowErrorDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Error Sending Message</DialogTitle>
-            <DialogDescription>
-              We encountered an issue while trying to send your message.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="bg-destructive/10 p-3 rounded-md border border-destructive/20 flex gap-2">
-            <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
-            <div className="text-sm text-destructive">
-              <p className="font-semibold">Error details:</p>
-              <p className="font-mono text-xs break-all">{errorDetails}</p>
-            </div>
-          </div>
-          
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowErrorDialog(false)}>
-              Close
-            </Button>
-            <Button 
-              onClick={() => {
-                setShowErrorDialog(false);
-                window.open("mailto:support@allergy-free-travel.com", "_blank");
-              }}
-            >
-              Contact Support
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       <Footer />
     </div>
