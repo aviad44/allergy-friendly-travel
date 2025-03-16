@@ -35,14 +35,23 @@ export default function Contact() {
     setIsSubmitting(true);
     
     try {
+      console.log("Submitting contact form:", { name, email, message });
+      
       // Call our Supabase Edge Function to send the email
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: { name, email, message }
       });
 
+      console.log("Response from edge function:", { data, error });
+
       if (error) {
         console.error('Contact form submission error:', error);
         throw new Error(error.message || 'Failed to send message');
+      }
+
+      if (data?.error) {
+        console.error('Edge function returned error:', data.error);
+        throw new Error(data.error);
       }
 
       toast({

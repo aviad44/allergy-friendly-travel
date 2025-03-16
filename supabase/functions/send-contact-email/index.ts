@@ -34,49 +34,66 @@ serve(async (req) => {
 
     console.log(`✅ Processing contact form from ${name} (${email})`);
 
-    // Send email to admin
-    const emailResponse = await resend.emails.send({
-      from: "Allergy Free Travel <onboarding@resend.dev>",
-      to: ["aviad44@gmail.com"],
-      subject: "New Contact Form Submission - Allergy Free Travel",
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-      `,
-    });
+    try {
+      // Send email to admin
+      const adminEmailResponse = await resend.emails.send({
+        from: "Allergy Free Travel <onboarding@resend.dev>",
+        to: ["aviad44@gmail.com"],
+        subject: "New Contact Form Submission - Allergy Free Travel",
+        html: `
+          <h2>New Contact Form Submission</h2>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Message:</strong></p>
+          <p>${message.replace(/\n/g, '<br>')}</p>
+        `,
+      });
 
-    // Send confirmation email to user
-    await resend.emails.send({
-      from: "Allergy Free Travel <onboarding@resend.dev>",
-      to: [email],
-      subject: "We've received your message - Allergy Free Travel",
-      html: `
-        <h2>Thank you for contacting Allergy Free Travel!</h2>
-        <p>Dear ${name},</p>
-        <p>We've received your message and will get back to you as soon as possible.</p>
-        <p>Here's a copy of your message:</p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-        <p>Best regards,</p>
-        <p>The Allergy Free Travel Team</p>
-      `,
-    });
+      console.log("✅ Admin email sent:", adminEmailResponse);
 
-    console.log(`✅ Contact form emails sent successfully`);
+      // Send confirmation email to user
+      const userEmailResponse = await resend.emails.send({
+        from: "Allergy Free Travel <onboarding@resend.dev>",
+        to: [email],
+        subject: "We've received your message - Allergy Free Travel",
+        html: `
+          <h2>Thank you for contacting Allergy Free Travel!</h2>
+          <p>Dear ${name},</p>
+          <p>We've received your message and will get back to you as soon as possible.</p>
+          <p>Here's a copy of your message:</p>
+          <p>${message.replace(/\n/g, '<br>')}</p>
+          <p>Best regards,</p>
+          <p>The Allergy Free Travel Team</p>
+        `,
+      });
 
-    return new Response(
-      JSON.stringify({ 
-        success: true,
-        message: "Contact form submitted successfully"
-      }),
-      {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
+      console.log("✅ User confirmation email sent:", userEmailResponse);
 
+      return new Response(
+        JSON.stringify({ 
+          success: true,
+          message: "Contact form submitted successfully",
+          adminEmail: adminEmailResponse,
+          userEmail: userEmailResponse
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    } catch (emailError) {
+      console.error('❌ Error sending emails:', emailError);
+      return new Response(
+        JSON.stringify({ 
+          error: "Failed to send emails",
+          details: emailError instanceof Error ? emailError.message : 'Unknown email error',
+        }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
   } catch (error) {
     console.error('❌ Error in send-contact-email function:', error);
     return new Response(
