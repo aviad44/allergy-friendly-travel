@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Card } from "@/components/ui/card";
 import { X, ExternalLink, Star, ShieldCheck, ChevronDown } from "lucide-react";
+
 export const SearchBar = () => {
   const [destination, setDestination] = useState("");
   const [allergies, setAllergies] = useState("");
@@ -16,6 +17,7 @@ export const SearchBar = () => {
   const {
     toast
   } = useToast();
+  
   const handleSearch = async () => {
     if (!destination || !allergies) {
       toast({
@@ -61,6 +63,7 @@ export const SearchBar = () => {
       setIsSearching(false);
     }
   };
+  
   const formatRecommendations = (text: string) => {
     console.log('Formatting text:', text);
     const lines = text.split('\n').filter(line => line.trim());
@@ -116,6 +119,7 @@ export const SearchBar = () => {
       features: [text]
     }];
   };
+  
   return <div className="flex flex-col sm:flex-row gap-2">
       <div className="flex flex-col sm:flex-row gap-2 flex-grow">
         <Input placeholder="Enter destination" className="h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm" value={destination} onChange={e => setDestination(e.target.value)} />
@@ -123,12 +127,14 @@ export const SearchBar = () => {
       </div>
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
-          <Button className="h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" onClick={handleSearch} disabled={isSearching}>
+          <Button className="h-9 sm:h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" onClick={handleSearch} disabled={isSearching}>
             <Search className="mr-2 h-5 w-5" />
             <span className="\u05E9\u05D9\u05DD \u05DC\u05D1 \u05E9\u05DB\u05E4\u05EA\u05D5\u05E8 \u05D4\u05D7\u05D9\u05E4\u05D5\u05E9 \u05DC\u05D0 \u05D6\u05D4\u05D4 \u05D1\u05D2\u05D5\u05D1\u05D4 \u05DC\u05E9\u05D3\u05D5\u05EA \u05D4\u05D7\u05D9\u05E4\u05D5\u05E9. \u05DB\u05D3\u05D0\u05D9 \u05DC\u05D4\u05EA\u05D0\u05D9\u05DD \u05D0\u05DC\u05D9\u05D4\u05DD">Search Now</span>
           </Button>
         </SheetTrigger>
-        <SheetContent className="w-full sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" side="bottom">
+        
+        
+          <SheetContent className="w-full sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" side="bottom">
           <div className="flex justify-between items-center">
             <SheetHeader>
               <SheetTitle className="text-xl sm:text-2xl font-display">
@@ -181,6 +187,7 @@ export const SearchBar = () => {
           
           <div className="h-6 md:hidden"></div>
         </SheetContent>
+        
       </Sheet>
     </div>;
 };
