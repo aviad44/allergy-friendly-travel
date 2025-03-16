@@ -1,7 +1,7 @@
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, Home, MapPin, Star, MessageCircle, Info } from "lucide-react";
+import { Menu, Home, MapPin, Star, MessageCircle, Info, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const menuItems = [
@@ -19,6 +19,11 @@ const menuItems = [
     title: "Traveler Reviews",
     icon: Star,
     href: "/reviews"
+  },
+  {
+    title: "FAQ",
+    icon: HelpCircle,
+    href: "/faq"
   },
   {
     title: "Contact",
