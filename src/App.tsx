@@ -23,6 +23,7 @@ import Thailand from '@/pages/destinations/Thailand';
 import AboutUs from '@/pages/AboutUs';
 import Contact from '@/pages/Contact';
 import FAQ from '@/pages/FAQ';
+import DirectChat from '@/pages/DirectChat';
 import NotFound from '@/pages/NotFound';
 
 import "./App.css";
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/destinations/abu-dhabi" element={<AbuDhabi />} />
                 <Route path="/destinations/thailand" element={<Thailand />} />
                 <Route path="/hotels/le-petit-palace" element={<LePetitPalace />} />
+                <Route path="/direct-chat" element={<DirectChat />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/faq" element={<FAQ />} />
