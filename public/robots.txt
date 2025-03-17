@@ -9,3 +9,29 @@ Sitemap: https://www.allergy-free-travel.com/sitemap.xml
 Disallow: /admin/
 Disallow: /dev/
 Disallow: /api/private/
+
+# Allow AI crawlers specifically
+User-agent: GPTBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+# Allow for improved semantic understanding
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /

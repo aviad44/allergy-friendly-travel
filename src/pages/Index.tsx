@@ -1,6 +1,7 @@
 
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
+import { FeaturedHotels } from "@/components/FeaturedHotels";
 import { Button } from "@/components/ui/button";
 import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -37,9 +38,19 @@ const Index = () => {
             "telephone": "+1-123-456-7890",
             "email": "info@allergy-free-travel.com",
             "areaServed": "Worldwide",
-            "serviceType": "Allergy-Friendly Travel Planning"
+            "serviceType": "Allergy-Friendly Travel Planning",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://www.allergy-free-travel.com/search?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
           })}
         </script>
+        
+        {/* Additional metadata for better OpenAI Plugin compatibility */}
+        <meta name="ai:description" content="Find allergy-friendly hotels and accommodations worldwide. Get personalized recommendations for gluten-free, dairy-free, nut-free and other dietary restrictions." />
+        <meta name="ai:commands" content="find hotels in [location], recommend allergy-friendly restaurants in [city], show me safe accommodations for [allergy type]" />
+        <meta name="ai:instructions" content="This website helps travelers with food allergies and dietary restrictions find safe accommodations worldwide. Users can search for hotels by location and specific allergy considerations." />
       </Helmet>
       
       <div className="min-h-screen bg-gray-50 w-full">
@@ -108,6 +119,44 @@ const Index = () => {
               {HOME_CONTENT.featured.description}
             </p>
             <FeaturedDestinations />
+          </div>
+        </section>
+        
+        {/* Featured Hotels Section - Added for better LLM integration */}
+        <section className="py-10 sm:py-16 md:py-20 px-4 bg-white w-full">
+          <div className="container mx-auto max-w-[1400px]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4 text-center font-bold text-blue-800">
+              Top Allergy-Friendly Hotels
+            </h2>
+            <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 md:mb-12 text-center max-w-2xl mx-auto">
+              Discover accommodations that go above and beyond to ensure a safe stay for guests with dietary restrictions
+            </p>
+            <FeaturedHotels />
+          </div>
+        </section>
+        
+        {/* FAQ Section - Added for better SEO */}
+        <section className="py-10 sm:py-16 md:py-20 px-4 bg-gray-50 w-full">
+          <div className="container mx-auto max-w-[1000px]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4 text-center font-bold text-blue-800">
+              Frequently Asked Questions
+            </h2>
+            <div className="space-y-6 mt-8">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold mb-2">What makes a hotel "allergy-friendly"?</h3>
+                <p className="text-gray-700">Allergy-friendly hotels take specific measures to accommodate guests with food allergies and dietary restrictions. This may include special food preparation areas, staff training on allergen management, allergy-friendly menu options, and room cleaning protocols that reduce allergen exposure.</p>
+              </div>
+              
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold mb-2">How do I communicate my allergies to hotel staff?</h3>
+                <p className="text-gray-700">We recommend contacting hotels directly before booking to discuss your specific allergies. Many allergy-friendly hotels have protocols for handling special dietary requirements and can provide information about their accommodation capabilities.</p>
+              </div>
+              
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold mb-2">Can I trust hotel reviews regarding allergy accommodations?</h3>
+                <p className="text-gray-700">While reviews can provide valuable insights, allergy needs are highly individual. We recommend reading recent reviews from travelers with similar allergies and always confirming directly with the hotel about their current practices and capabilities.</p>
+              </div>
+            </div>
           </div>
         </section>
       </div>
