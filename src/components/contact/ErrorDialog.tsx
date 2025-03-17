@@ -19,28 +19,28 @@ interface ErrorDialogProps {
 export function ErrorDialog({ open, onOpenChange, errorDetails }: ErrorDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="rtl:text-right">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-destructive flex items-center gap-2">
             <AlertCircle className="h-5 w-5" /> 
-            שגיאה בשליחת ההודעה
+            Error Sending Message
           </DialogTitle>
           <DialogDescription>
-            נתקלנו בבעיה בעת ניסיון לשלוח את ההודעה שלך.
+            We encountered a problem while trying to send your message.
           </DialogDescription>
         </DialogHeader>
         
         <div className="bg-destructive/10 p-3 rounded-md border border-destructive/20 flex gap-2">
           <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
           <div className="text-sm text-destructive">
-            <p className="font-semibold">פרטי השגיאה:</p>
+            <p className="font-semibold">Error details:</p>
             <p className="font-mono text-xs break-all">{errorDetails}</p>
           </div>
         </div>
         
-        <DialogFooter className="sm:space-x-reverse">
+        <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            סגור
+            Close
           </Button>
           <Button 
             onClick={() => {
@@ -48,7 +48,7 @@ export function ErrorDialog({ open, onOpenChange, errorDetails }: ErrorDialogPro
               window.open("mailto:support@allergy-free-travel.com", "_blank");
             }}
           >
-            צור קשר עם התמיכה
+            Contact Support
           </Button>
         </DialogFooter>
       </DialogContent>
