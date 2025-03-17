@@ -19,7 +19,7 @@ interface ErrorDialogProps {
 export function ErrorDialog({ open, onOpenChange, errorDetails }: ErrorDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="rtl:text-right">
         <DialogHeader>
           <DialogTitle className="text-destructive flex items-center gap-2">
             <AlertCircle className="h-5 w-5" /> 
@@ -38,7 +38,7 @@ export function ErrorDialog({ open, onOpenChange, errorDetails }: ErrorDialogPro
           </div>
         </div>
         
-        <DialogFooter>
+        <DialogFooter className="sm:space-x-reverse">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             סגור
           </Button>
