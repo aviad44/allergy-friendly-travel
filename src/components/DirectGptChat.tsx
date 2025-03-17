@@ -1,16 +1,11 @@
 
-import { useState, useEffect, useRef } from "react";
-import { Send, Loader, Info } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Send, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 
 interface Message {
   role: "system" | "user" | "assistant";
@@ -21,17 +16,16 @@ export const DirectGptChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
-      content: "You are an expert assistant specialized in recommending allergy-friendly hotels. Always provide accurate, clear, and concise information. Respond in the same language the user uses to communicate with you."
+      content: "You are an expert assistant specialized in recommending allergy-friendly hotels. Always provide accurate, clear, and concise information."
     }
   ]);
   const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState("");
   const [systemPrompt, setSystemPrompt] = useState(
-    "You are an expert assistant specialized in recommending allergy-friendly hotels. Always provide accurate, clear, and concise information. Respond in the same language the user uses to communicate with you."
+    "You are an expert assistant specialized in recommending allergy-friendly hotels. Always provide accurate, clear, and concise information."
   );
   const { toast } = useToast();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Load API key from localStorage if available
@@ -51,14 +45,6 @@ export const DirectGptChat = () => {
       ]);
     }
   }, []);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   const handleSaveApiKey = () => {
     if (apiKey.trim()) {
@@ -169,7 +155,7 @@ export const DirectGptChat = () => {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto overflow-hidden border rounded-lg shadow-lg" aria-label="Chat with AI for allergy-friendly travel information">
+    <Card className="w-full max-w-4xl mx-auto overflow-hidden border rounded-lg shadow-lg">
       <div className="p-4 border-b bg-muted/20">
         <h2 className="text-xl font-semibold">Direct OpenAI GPT Chat</h2>
         <p className="text-sm text-muted-foreground">
@@ -180,16 +166,8 @@ export const DirectGptChat = () => {
       {/* API Key and System Prompt Settings */}
       <div className="p-4 border-b bg-muted/10">
         <details className="mb-4">
-          <summary className="cursor-pointer text-sm font-medium flex items-center">
-            <span>Settings</span>
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <Info className="h-4 w-4 ml-2 text-muted-foreground cursor-help" />
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80">
-                <p className="text-sm">Your API key and prompts are stored securely in your browser's local storage and never sent to our servers.</p>
-              </HoverCardContent>
-            </HoverCard>
+          <summary className="cursor-pointer text-sm font-medium">
+            Settings
           </summary>
           <div className="mt-3 space-y-3">
             <div>
@@ -204,13 +182,12 @@ export const DirectGptChat = () => {
                   onChange={(e) => setApiKey(e.target.value)}
                   placeholder="sk-..."
                   className="flex-1"
-                  aria-describedby="apikey-desc"
                 />
                 <Button onClick={handleSaveApiKey} size="sm">
                   Save Key
                 </Button>
               </div>
-              <p id="apikey-desc" className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Your API key is stored only in your browser and never sent to our servers.
               </p>
             </div>
@@ -226,13 +203,12 @@ export const DirectGptChat = () => {
                   onChange={(e) => setSystemPrompt(e.target.value)}
                   className="flex-1"
                   rows={3}
-                  aria-describedby="prompt-desc"
                 />
                 <Button onClick={handleSaveSystemPrompt} size="sm" className="self-start">
                   Update
                 </Button>
               </div>
-              <p id="prompt-desc" className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 This prompt defines how the AI assistant will behave.
               </p>
             </div>
@@ -265,7 +241,6 @@ export const DirectGptChat = () => {
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
           </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input Box */}
@@ -278,9 +253,8 @@ export const DirectGptChat = () => {
             placeholder="Ask about allergy-friendly hotels..."
             className="min-h-[80px] resize-none"
             disabled={isLoading}
-            aria-label="Your message"
           />
-          <Button type="submit" disabled={isLoading} className="self-end" aria-label="Send message">
+          <Button type="submit" disabled={isLoading} className="self-end">
             {isLoading ? <Loader className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>
