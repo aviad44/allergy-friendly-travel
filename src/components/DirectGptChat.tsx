@@ -95,20 +95,20 @@ export const DirectGptChat = () => {
     }
 
     const userMessage: Message = { role: "user", content: userInput };
-    const updatedMessages = [...messages.filter(msg => msg.role !== "system"), userMessage];
-    
-    // Always include the system message at the beginning
-    const fullMessages = [
-      messages.find(msg => msg.role === "system") as Message,
-      ...updatedMessages
-    ];
-    
-    setMessages([...fullMessages]);
+    setMessages(prev => [...prev, userMessage]);
     setUserInput("");
     setIsLoading(true);
 
     try {
       console.log("Sending request to OpenAI API...");
+      
+      // Create a properly structured messages array for the API
+      const apiMessages = [
+        ...messages.filter(msg => msg.role === "system"),
+        ...messages.filter(msg => msg.role !== "system"),
+        userMessage
+      ];
+      
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -117,7 +117,7 @@ export const DirectGptChat = () => {
         },
         body: JSON.stringify({
           model: "gpt-4o", // Using the latest model
-          messages: fullMessages,
+          messages: apiMessages,
           temperature: 0.2,
           max_tokens: 1000
         })
@@ -130,6 +130,8 @@ export const DirectGptChat = () => {
       }
 
       const data = await response.json();
+      console.log("API Response:", data);
+      
       const assistantMessage: Message = data.choices[0].message;
       
       setMessages(prev => [...prev, assistantMessage]);
