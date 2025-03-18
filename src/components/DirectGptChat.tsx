@@ -1,15 +1,17 @@
 
 import { useState, useEffect } from "react";
-import { Send, Loader } from "lucide-react";
+import { Send, Loader, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface Message {
   role: "system" | "user" | "assistant";
   content: string;
+  isComplete?: boolean;
 }
 
 export const DirectGptChat = () => {
@@ -24,6 +26,7 @@ export const DirectGptChat = () => {
   const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState(defaultSystemPrompt);
+  const [tokenUsage, setTokenUsage] = useState<{prompt_tokens?: number, completion_tokens?: number, total_tokens?: number} | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -72,6 +75,7 @@ export const DirectGptChat = () => {
     setMessages(prev => [...prev, userMessage]);
     setUserInput("");
     setIsLoading(true);
+    setTokenUsage(null);
 
     try {
       console.log("Sending request to Supabase proxy function...");
@@ -81,8 +85,8 @@ export const DirectGptChat = () => {
           userInput: userInput,
           systemPrompt: systemPrompt,
           model: "gpt-4o",
-          temperature: 1.0,
-          max_tokens: 1500
+          temperature: 0.7,
+          max_tokens: 2000
         }
       });
 
@@ -93,13 +97,25 @@ export const DirectGptChat = () => {
 
       console.log("API Response:", data);
       console.log("Response length:", data.result.length);
+      console.log("Token usage:", data.tokenUsage);
+      
+      setTokenUsage(data.tokenUsage);
       
       const assistantMessage: Message = { 
         role: "assistant", 
-        content: data.result 
+        content: data.result,
+        isComplete: data.isComplete
       };
       
       setMessages(prev => [...prev, assistantMessage]);
+      
+      if (!data.isComplete) {
+        toast({
+          title: "Incomplete Response",
+          description: "The response may be incomplete. Try asking a more specific question or adjust settings.",
+          variant: "warning",
+        });
+      }
     } catch (error) {
       console.error("Error when calling Supabase proxy function:", error);
       toast({
@@ -157,26 +173,43 @@ export const DirectGptChat = () => {
             </div>
           </div>
         </details>
+        
+        {tokenUsage && (
+          <div className="text-xs text-muted-foreground mt-2">
+            <p>Token usage: {tokenUsage.completion_tokens} (response) / {tokenUsage.total_tokens} (total)</p>
+          </div>
+        )}
       </div>
 
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-4 max-h-[400px] space-y-4 bg-card">
         {messages.filter(msg => msg.role !== "system").map((message, index) => (
-          <div
-            key={index}
-            className={`flex ${
-              message.role === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
+          <div key={index} className="space-y-2">
             <div
-              className={`max-w-[80%] rounded-lg p-3 ${
-                message.role === "user"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted"
+              className={`flex ${
+                message.role === "user" ? "justify-end" : "justify-start"
               }`}
             >
-              <div className="whitespace-pre-wrap">{message.content}</div>
+              <div
+                className={`max-w-[80%] rounded-lg p-3 ${
+                  message.role === "user"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted"
+                }`}
+              >
+                <div className="whitespace-pre-wrap">{message.content}</div>
+              </div>
             </div>
+            {message.role === "assistant" && message.isComplete === false && (
+              <div className="flex justify-center">
+                <Alert variant="warning" className="max-w-[80%] p-2">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertDescription className="text-xs">
+                    This response may be incomplete. Consider asking a more specific question.
+                  </AlertDescription>
+                </Alert>
+              </div>
+            )}
           </div>
         ))}
         {isLoading && (

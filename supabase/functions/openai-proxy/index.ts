@@ -21,7 +21,7 @@ serve(async (req) => {
     }
 
     // Parse request body
-    const { userInput, systemPrompt, model = "gpt-4o", temperature = 1.0, max_tokens = 1500 } = await req.json();
+    const { userInput, systemPrompt, model = "gpt-4o", temperature = 0.7, max_tokens = 2000 } = await req.json();
     
     console.log('✅ Processing chat request with input:', { 
       inputPreview: userInput.substring(0, 50) + (userInput.length > 50 ? '...' : ''),
@@ -65,11 +65,39 @@ serve(async (req) => {
     const data = await response.json();
     console.log('✅ Received response from OpenAI');
     console.log('✅ Response length:', data.choices[0].message.content.length);
-    console.log('✅ Response first 100 chars:', data.choices[0].message.content.substring(0, 100));
-    console.log('✅ Response last 100 chars:', data.choices[0].message.content.substring(data.choices[0].message.content.length - 100));
+    console.log('✅ Token usage:', {
+      prompt_tokens: data.usage?.prompt_tokens || 'unknown',
+      completion_tokens: data.usage?.completion_tokens || 'unknown',
+      total_tokens: data.usage?.total_tokens || 'unknown'
+    });
+    
+    // Check if response includes guest reviews
+    const content = data.choices[0].message.content;
+    console.log('✅ Response first 100 chars:', content.substring(0, 100));
+    console.log('✅ Response last 100 chars:', content.substring(content.length - 100));
+    
+    // Check for guest reviews section
+    const hasGuestReviews = content.includes("Guest Review") || content.includes("🗣");
+    console.log('✅ Contains guest reviews:', hasGuestReviews);
+    
+    // Check for restaurants section
+    const hasRestaurants = content.includes("Nearby Allergy-Friendly Restaurants") || 
+                           content.includes("Allergy-Friendly Restaurants") ||
+                           content.includes("Restaurants");
+    console.log('✅ Contains restaurants section:', hasRestaurants);
+    
+    // Check if response was likely truncated
+    const isLikelyTruncated = !content.includes("General Allergy Safety Tips") || 
+                             !hasGuestReviews || 
+                             !hasRestaurants;
+    console.log('✅ Response likely truncated:', isLikelyTruncated);
 
     return new Response(
-      JSON.stringify({ result: data.choices[0].message.content }),
+      JSON.stringify({ 
+        result: data.choices[0].message.content,
+        tokenUsage: data.usage,
+        isComplete: !isLikelyTruncated
+      }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
