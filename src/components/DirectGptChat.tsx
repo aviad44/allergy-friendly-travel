@@ -113,7 +113,7 @@ export const DirectGptChat = () => {
         toast({
           title: "Incomplete Response",
           description: "The response may be incomplete. Try asking a more specific question or adjust settings.",
-          variant: "warning",
+          variant: "destructive", // Changed from "warning" to "destructive"
         });
       }
     } catch (error) {
@@ -202,7 +202,7 @@ export const DirectGptChat = () => {
             </div>
             {message.role === "assistant" && message.isComplete === false && (
               <div className="flex justify-center">
-                <Alert variant="warning" className="max-w-[80%] p-2">
+                <Alert variant="destructive" className="max-w-[80%] p-2"> {/* Changed from "warning" to "destructive" */}
                   <AlertTriangle className="h-4 w-4" />
                   <AlertDescription className="text-xs">
                     This response may be incomplete. Consider asking a more specific question.
