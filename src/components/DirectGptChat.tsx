@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Send, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,17 +14,17 @@ interface Message {
 }
 
 export const DirectGptChat = () => {
+  const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured, always including:\n\n1️⃣ **Hotel Name**\n2️⃣ **City & Country**\n3️⃣ **Star Rating (⭐ Rating based on guest reviews)**\n4️⃣ **Exact Address**\n5️⃣ **Why This Hotel is Suitable for Allergy Sufferers (list specific allergy-friendly features like nut-free kitchens, dedicated allergy-trained staff, buffet labeling, hypoallergenic bedding, etc.)**\n6️⃣ **Direct Booking Links to:**\n   - The Hotel's Official Website (🔗 Hotel Website)\n   - Booking.com (🔗 Book on Booking.com)\n7️⃣ **Authentic Guest Reviews with Star Ratings (🗣 Guest Review: \"Example review\" — ⭐⭐⭐⭐⭐)**\n8️⃣ **Nearby Allergy-Friendly Restaurants (list at least 2-3 restaurants that accommodate dietary restrictions)**\n9️⃣ **General Allergy Safety Tips for Travelers in this Destination**\n\n✅ **Important Formatting Rules:**\n- Always use structured bullet points for clarity.\n- Never omit star ratings, guest reviews, or booking links.\n- If guest reviews are not available, generate a plausible review based on verified guest experiences.\n- If no dedicated nut-free restaurants are available, recommend general allergy-aware dining options.\n- Maintain consistent hotel ranking order based on suitability.\n\nThe goal is to ensure that users receive hotel recommendations as rich and structured as those provided in ChatGPT's Custom GPT.";
+
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
-      content: "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Always include guest reviews, direct booking links, and detailed allergy-friendly features. Ensure structured responses similar to ChatGPT Custom GPTs, always presenting: - Hotel Name - City & Country - Star Rating - Exact Address - Why This Hotel is Suitable for Allergy Sufferers - Direct Booking Links to the Hotel's Official Website & Booking.com - Authentic Guest Reviews with Star Ratings (No 'null' values allowed!) - Additional details about allergy-friendly restaurants nearby."
+      content: defaultSystemPrompt
     }
   ]);
   const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [systemPrompt, setSystemPrompt] = useState(
-    "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Always include guest reviews, direct booking links, and detailed allergy-friendly features. Ensure structured responses similar to ChatGPT Custom GPTs, always presenting: - Hotel Name - City & Country - Star Rating - Exact Address - Why This Hotel is Suitable for Allergy Sufferers - Direct Booking Links to the Hotel's Official Website & Booking.com - Authentic Guest Reviews with Star Ratings (No 'null' values allowed!) - Additional details about allergy-friendly restaurants nearby."
-  );
+  const [systemPrompt, setSystemPrompt] = useState(defaultSystemPrompt);
   const { toast } = useToast();
 
   useEffect(() => {
