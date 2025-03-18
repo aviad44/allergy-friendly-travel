@@ -21,7 +21,7 @@ serve(async (req) => {
     }
 
     // Parse request body
-    const { userInput, systemPrompt, model = "gpt-4o", temperature = 1.0, max_tokens = 700 } = await req.json();
+    const { userInput, systemPrompt, model = "gpt-4o", temperature = 1.0, max_tokens = 1500 } = await req.json();
     
     console.log('✅ Processing chat request with input:', { 
       inputPreview: userInput.substring(0, 50) + (userInput.length > 50 ? '...' : ''),
@@ -64,6 +64,9 @@ serve(async (req) => {
 
     const data = await response.json();
     console.log('✅ Received response from OpenAI');
+    console.log('✅ Response length:', data.choices[0].message.content.length);
+    console.log('✅ Response first 100 chars:', data.choices[0].message.content.substring(0, 100));
+    console.log('✅ Response last 100 chars:', data.choices[0].message.content.substring(data.choices[0].message.content.length - 100));
 
     return new Response(
       JSON.stringify({ result: data.choices[0].message.content }),

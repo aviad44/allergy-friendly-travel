@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { Send, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -83,7 +82,7 @@ export const DirectGptChat = () => {
           systemPrompt: systemPrompt,
           model: "gpt-4o",
           temperature: 1.0,
-          max_tokens: 700
+          max_tokens: 1500
         }
       });
 
@@ -93,6 +92,7 @@ export const DirectGptChat = () => {
       }
 
       console.log("API Response:", data);
+      console.log("Response length:", data.result.length);
       
       const assistantMessage: Message = { 
         role: "assistant", 
