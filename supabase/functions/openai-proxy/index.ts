@@ -20,11 +20,14 @@ serve(async (req) => {
       throw new Error('OpenAI API key is not configured');
     }
 
+    console.log('⏱️ Function invocation started at:', new Date().toISOString());
+
     // Parse request body
     const { userInput, systemPrompt, model = "gpt-4o", temperature = 0.7, max_tokens = 2000 } = await req.json();
     
     console.log('✅ Processing chat request with input:', { 
       inputPreview: userInput.substring(0, 50) + (userInput.length > 50 ? '...' : ''),
+      systemPromptPreview: systemPrompt?.substring(0, 50) + (systemPrompt?.length > 50 ? '...' : ''),
       model,
       temperature,
       max_tokens
@@ -32,6 +35,9 @@ serve(async (req) => {
 
     // Default system prompt if none provided
     const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured, always including:\n\n1️⃣ **Hotel Name**\n2️⃣ **City & Country**\n3️⃣ **Star Rating (⭐ Rating based on guest reviews)**\n4️⃣ **Exact Address**\n5️⃣ **Why This Hotel is Suitable for Allergy Sufferers (list specific allergy-friendly features like nut-free kitchens, dedicated allergy-trained staff, buffet labeling, hypoallergenic bedding, etc.)**\n6️⃣ **Direct Booking Links to:**\n   - The Hotel's Official Website (🔗 Hotel Website)\n   - Booking.com (🔗 Book on Booking.com)\n7️⃣ **Authentic Guest Reviews with Star Ratings (🗣 Guest Review: \"Example review\" — ⭐⭐⭐⭐⭐)**\n8️⃣ **Nearby Allergy-Friendly Restaurants (list at least 2-3 restaurants that accommodate dietary restrictions)**\n9️⃣ **General Allergy Safety Tips for Travelers in this Destination**\n\n✅ **Important Formatting Rules:**\n- Always use structured bullet points for clarity.\n- Never omit star ratings, guest reviews, or booking links.\n- If guest reviews are not available, generate a plausible review based on verified guest experiences.\n- If no dedicated nut-free restaurants are available, recommend general allergy-aware dining options.\n- Maintain consistent hotel ranking order based on suitability.\n\nThe goal is to ensure that users receive hotel recommendations as rich and structured as those provided in ChatGPT's Custom GPT.";
+
+    console.log('🔄 Sending request to OpenAI API...');
+    const startTime = Date.now();
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -56,6 +62,10 @@ serve(async (req) => {
       }),
     });
 
+    const endTime = Date.now();
+    const requestDuration = (endTime - startTime) / 1000;
+    console.log(`⏱️ OpenAI API request completed in: ${requestDuration.toFixed(2)}s`);
+
     if (!response.ok) {
       const errorData = await response.json();
       console.error('❌ OpenAI API Error:', errorData);
@@ -76,27 +86,36 @@ serve(async (req) => {
     console.log('✅ Response first 100 chars:', content.substring(0, 100));
     console.log('✅ Response last 100 chars:', content.substring(content.length - 100));
     
-    // Check for guest reviews section
-    const hasGuestReviews = content.includes("Guest Review") || content.includes("🗣");
-    console.log('✅ Contains guest reviews:', hasGuestReviews);
+    // Enhanced section checking
+    const checkSections = {
+      'Hotel Name': content.includes("Hotel Name") || content.match(/^\d+\./) !== null || content.match(/\*\*[\w\s]+Hotel[\w\s]+\*\*/) !== null,
+      'Star Rating': content.includes("Star Rating") || content.includes("⭐"),
+      'Address': content.includes("Address") || content.includes("located at"),
+      'Allergy Features': content.includes("Allergy") || content.includes("allergen") || content.includes("gluten") || content.includes("nut-free"),
+      'Booking Links': content.includes("Booking") || content.includes("🔗") || content.includes("Official Website"),
+      'Guest Reviews': content.includes("Guest Review") || content.includes("🗣") || content.includes("review"),
+      'Restaurants': content.includes("Restaurant") || content.includes("dining"),
+      'Safety Tips': content.includes("Safety Tips") || content.includes("Safety") || content.includes("Tips for")
+    };
     
-    // Check for restaurants section
-    const hasRestaurants = content.includes("Nearby Allergy-Friendly Restaurants") || 
-                           content.includes("Allergy-Friendly Restaurants") ||
-                           content.includes("Restaurants");
-    console.log('✅ Contains restaurants section:', hasRestaurants);
+    console.log('✅ Section check results:', checkSections);
     
-    // Check if response was likely truncated
-    const isLikelyTruncated = !content.includes("General Allergy Safety Tips") || 
-                             !hasGuestReviews || 
-                             !hasRestaurants;
+    // Check if response was likely truncated based on a more comprehensive set of criteria
+    const isLikelyTruncated = 
+      !checkSections['Safety Tips'] || 
+      !checkSections['Guest Reviews'] || 
+      !checkSections['Restaurants'] ||
+      (data.usage?.completion_tokens > 1900); // If we're close to the token limit
+    
     console.log('✅ Response likely truncated:', isLikelyTruncated);
+    console.log('⏱️ Function invocation completed at:', new Date().toISOString());
 
     return new Response(
       JSON.stringify({ 
         result: data.choices[0].message.content,
         tokenUsage: data.usage,
-        isComplete: !isLikelyTruncated
+        isComplete: !isLikelyTruncated,
+        sectionCheck: checkSections
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

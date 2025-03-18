@@ -78,7 +78,16 @@ export const DirectGptChat = () => {
     setTokenUsage(null);
 
     try {
-      console.log("Sending request to Supabase proxy function...");
+      console.log("📡 Sending request to Supabase openai-proxy function...");
+      console.log("Request parameters:", {
+        userInput,
+        systemPrompt: systemPrompt.substring(0, 50) + "...",
+        model: "gpt-4o",
+        temperature: 0.7,
+        max_tokens: 2000
+      });
+      
+      const startTime = Date.now();
       
       const { data, error } = await supabase.functions.invoke('openai-proxy', {
         body: {
@@ -90,14 +99,29 @@ export const DirectGptChat = () => {
         }
       });
 
+      const endTime = Date.now();
+      const requestDuration = (endTime - startTime) / 1000;
+
       if (error) {
-        console.error("Supabase function error:", error);
+        console.error("❌ Supabase function error:", error);
         throw new Error(error.message || "Failed to get response from the server");
       }
 
-      console.log("API Response:", data);
+      console.log(`✅ API Response received in ${requestDuration.toFixed(2)}s:`, data);
       console.log("Response length:", data.result.length);
       console.log("Token usage:", data.tokenUsage);
+      
+      // Check if response contains expected sections
+      const hasGuestReviews = data.result.includes("Guest Review") || data.result.includes("🗣");
+      const hasRestaurants = data.result.includes("Nearby Allergy-Friendly Restaurants");
+      const hasSafetyTips = data.result.includes("General Allergy Safety Tips");
+      
+      console.log("Response completeness check:", {
+        hasGuestReviews,
+        hasRestaurants,
+        hasSafetyTips,
+        isComplete: data.isComplete
+      });
       
       setTokenUsage(data.tokenUsage);
       
@@ -113,11 +137,11 @@ export const DirectGptChat = () => {
         toast({
           title: "Incomplete Response",
           description: "The response may be incomplete. Try asking a more specific question or adjust settings.",
-          variant: "destructive", // Changed from "warning" to "destructive"
+          variant: "destructive", 
         });
       }
     } catch (error) {
-      console.error("Error when calling Supabase proxy function:", error);
+      console.error("❌ Error when calling Supabase proxy function:", error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "An error occurred while getting a response",
