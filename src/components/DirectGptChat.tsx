@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Send, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,13 +16,13 @@ export const DirectGptChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
-      content: "You are an expert assistant specialized in recommending allergy-friendly hotels. Always provide accurate, clear, and concise information."
+      content: "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Always include guest reviews, direct booking links, and detailed allergy-friendly features. Ensure structured responses similar to ChatGPT Custom GPTs, always presenting: - Hotel Name - City & Country - Star Rating - Exact Address - Why This Hotel is Suitable for Allergy Sufferers - Direct Booking Links to the Hotel's Official Website & Booking.com - Authentic Guest Reviews with Star Ratings (No 'null' values allowed!) - Additional details about allergy-friendly restaurants nearby."
     }
   ]);
   const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState(
-    "You are an expert assistant specialized in recommending allergy-friendly hotels. Always provide accurate, clear, and concise information."
+    "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Always include guest reviews, direct booking links, and detailed allergy-friendly features. Ensure structured responses similar to ChatGPT Custom GPTs, always presenting: - Hotel Name - City & Country - Star Rating - Exact Address - Why This Hotel is Suitable for Allergy Sufferers - Direct Booking Links to the Hotel's Official Website & Booking.com - Authentic Guest Reviews with Star Ratings (No 'null' values allowed!) - Additional details about allergy-friendly restaurants nearby."
   );
   const { toast } = useToast();
 
@@ -82,8 +81,8 @@ export const DirectGptChat = () => {
           userInput: userInput,
           systemPrompt: systemPrompt,
           model: "gpt-4o",
-          temperature: 0.5,
-          max_tokens: 800
+          temperature: 1.0,
+          max_tokens: 700
         }
       });
 

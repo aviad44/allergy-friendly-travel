@@ -21,7 +21,7 @@ serve(async (req) => {
     }
 
     // Parse request body
-    const { userInput, systemPrompt, model = "gpt-4o", temperature = 0.7, max_tokens = 700 } = await req.json();
+    const { userInput, systemPrompt, model = "gpt-4o", temperature = 1.0, max_tokens = 700 } = await req.json();
     
     console.log('✅ Processing chat request with input:', { 
       inputPreview: userInput.substring(0, 50) + (userInput.length > 50 ? '...' : ''),
@@ -31,7 +31,7 @@ serve(async (req) => {
     });
 
     // Default system prompt if none provided
-    const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Always include guest reviews, direct booking links, and detailed allergy-friendly features.";
+    const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Always include guest reviews, direct booking links, and detailed allergy-friendly features. Ensure structured responses similar to ChatGPT Custom GPTs, always presenting: - Hotel Name - City & Country - Star Rating - Exact Address - Why This Hotel is Suitable for Allergy Sufferers - Direct Booking Links to the Hotel's Official Website & Booking.com - Authentic Guest Reviews with Star Ratings (No 'null' values allowed!) - Additional details about allergy-friendly restaurants nearby.";
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -50,6 +50,9 @@ serve(async (req) => {
         ],
         temperature: temperature,
         max_tokens: max_tokens,
+        top_p: 1.0,
+        frequency_penalty: 0,
+        presence_penalty: 0
       }),
     });
 
