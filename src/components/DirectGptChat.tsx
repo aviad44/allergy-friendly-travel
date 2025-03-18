@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   role: "system" | "user" | "assistant";
@@ -21,19 +22,12 @@ export const DirectGptChat = () => {
   ]);
   const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState("");
   const [systemPrompt, setSystemPrompt] = useState(
     "You are an expert assistant specialized in recommending allergy-friendly hotels. Always provide accurate, clear, and concise information."
   );
   const { toast } = useToast();
 
   useEffect(() => {
-    // Load API key from localStorage if available
-    const savedApiKey = localStorage.getItem("openai_direct_api_key");
-    if (savedApiKey) {
-      setApiKey(savedApiKey);
-    }
-
     // Load system prompt from localStorage if available
     const savedSystemPrompt = localStorage.getItem("openai_system_prompt");
     if (savedSystemPrompt) {
@@ -45,16 +39,6 @@ export const DirectGptChat = () => {
       ]);
     }
   }, []);
-
-  const handleSaveApiKey = () => {
-    if (apiKey.trim()) {
-      localStorage.setItem("openai_direct_api_key", apiKey.trim());
-      toast({
-        title: "API Key Saved",
-        description: "Your OpenAI API key has been saved securely in your browser.",
-      });
-    }
-  };
 
   const handleSaveSystemPrompt = () => {
     if (systemPrompt.trim()) {
@@ -85,58 +69,39 @@ export const DirectGptChat = () => {
       return;
     }
 
-    if (!apiKey) {
-      toast({
-        title: "API Key Required",
-        description: "Please enter your OpenAI API key in the settings section.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     const userMessage: Message = { role: "user", content: userInput };
     setMessages(prev => [...prev, userMessage]);
     setUserInput("");
     setIsLoading(true);
 
     try {
-      console.log("Sending request to OpenAI API...");
+      console.log("Sending request to Supabase proxy function...");
       
-      // Create a properly structured messages array for the API
-      const apiMessages = [
-        ...messages.filter(msg => msg.role === "system"),
-        ...messages.filter(msg => msg.role !== "system"),
-        userMessage
-      ];
-      
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: "gpt-4o", // Using the latest model
-          messages: apiMessages,
-          temperature: 0.2,
-          max_tokens: 1000
-        })
+      const { data, error } = await supabase.functions.invoke('openai-proxy', {
+        body: {
+          userInput: userInput,
+          systemPrompt: systemPrompt,
+          model: "gpt-4o",
+          temperature: 0.5,
+          max_tokens: 800
+        }
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("OpenAI API Error:", errorData);
-        throw new Error(errorData.error?.message || "Failed to get response from OpenAI");
+      if (error) {
+        console.error("Supabase function error:", error);
+        throw new Error(error.message || "Failed to get response from the server");
       }
 
-      const data = await response.json();
       console.log("API Response:", data);
       
-      const assistantMessage: Message = data.choices[0].message;
+      const assistantMessage: Message = { 
+        role: "assistant", 
+        content: data.result 
+      };
       
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error("Error when calling OpenAI API:", error);
+      console.error("Error when calling Supabase proxy function:", error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "An error occurred while getting a response",
@@ -159,39 +124,17 @@ export const DirectGptChat = () => {
       <div className="p-4 border-b bg-muted/20">
         <h2 className="text-xl font-semibold">Direct OpenAI GPT Chat</h2>
         <p className="text-sm text-muted-foreground">
-          Ask questions about allergy-friendly hotels directly using OpenAI's API
+          Ask questions about allergy-friendly hotels using our secure proxy
         </p>
       </div>
       
-      {/* API Key and System Prompt Settings */}
+      {/* System Prompt Settings */}
       <div className="p-4 border-b bg-muted/10">
         <details className="mb-4">
           <summary className="cursor-pointer text-sm font-medium">
             Settings
           </summary>
           <div className="mt-3 space-y-3">
-            <div>
-              <label htmlFor="apiKey" className="block text-sm font-medium mb-1">
-                OpenAI API Key
-              </label>
-              <div className="flex gap-2">
-                <Input
-                  id="apiKey"
-                  type="password"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="sk-..."
-                  className="flex-1"
-                />
-                <Button onClick={handleSaveApiKey} size="sm">
-                  Save Key
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Your API key is stored only in your browser and never sent to our servers.
-              </p>
-            </div>
-            
             <div>
               <label htmlFor="systemPrompt" className="block text-sm font-medium mb-1">
                 System Prompt

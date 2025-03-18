@@ -6,19 +6,18 @@ const DirectChat = () => {
   return (
     <>
       <Helmet>
-        <title>Direct OpenAI GPT Chat | Allergy-Friendly Hotel Finder</title>
+        <title>Secure OpenAI Chat | Allergy-Friendly Hotel Finder</title>
         <meta 
           name="description" 
-          content="Chat directly with our AI assistant to find allergy-friendly hotels using the OpenAI GPT API." 
+          content="Chat securely with our AI assistant to find allergy-friendly hotels using our OpenAI GPT proxy." 
         />
       </Helmet>
 
       <div className="container max-w-6xl mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold mb-2">Direct OpenAI GPT Integration</h1>
+        <h1 className="text-3xl font-bold mb-2">Secure OpenAI GPT Integration</h1>
         <p className="text-muted-foreground mb-8">
-          This page demonstrates a direct integration with the OpenAI API, allowing you to get responses 
-          exactly as they would appear in the OpenAI playground. Enter your OpenAI API key in the settings 
-          section to begin.
+          This page features a secure integration with the OpenAI API through our Supabase Edge Function proxy.
+          Your requests are processed securely on our server, and no API keys are exposed to the client.
         </p>
         
         <DirectGptChat />
