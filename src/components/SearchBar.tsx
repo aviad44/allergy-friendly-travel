@@ -31,26 +31,54 @@ export const SearchBar = () => {
     setRecommendation("");
     setIsSheetOpen(true);
     try {
-      console.log('Sending search request to Supabase function');
+      console.log('Sending search request to Supabase openai-proxy function');
+      const userInput = `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies.`;
+      
+      const systemPrompt = `You are a specialized travel assistant focusing on allergy-friendly hotels. 
+      You're responding with information from the custom GPT "Allergy-Friendly Hotel Finder" (g-bh3vfRFNv).
+      
+      Format your response as a list where each hotel entry includes:
+      - Hotel name
+      - Key allergy accommodations they provide
+      - Special dietary considerations they address
+      - Authentic guest reviews related to allergy handling (only use real reviews)
+      - Any additional safety information
+      
+      IMPORTANT:
+      1. For each hotel, include the hotel's official website URL.
+      2. Only include authentic reviews, NOT simulated ones.
+      3. Format each hotel entry with the hotel name, followed by a pipe symbol, followed by the official website URL.
+         Example: "Hotel Sunshine | https://www.hotelsunshine.com"`;
+      
       const {
         data,
         error
-      } = await supabase.functions.invoke('search-with-gpt', {
+      } = await supabase.functions.invoke('openai-proxy', {
         body: {
-          destination,
-          allergies
+          userInput,
+          systemPrompt,
+          model: "gpt-4o", // Using the more powerful model for better results
+          temperature: 0.3,
+          max_tokens: 2000
         }
       });
+      
       if (error) {
         console.error('Supabase Function Error:', error);
         throw error;
       }
-      if (!data?.recommendation) {
+      
+      if (!data?.result) {
         console.error('No recommendation data:', data);
         throw new Error('No recommendation received from the AI');
       }
-      console.log('Received recommendation:', data.recommendation);
-      setRecommendation(data.recommendation);
+      
+      console.log('Received recommendation:', data.result);
+      console.log('Token usage:', data.tokenUsage);
+      console.log('Is response complete:', data.isComplete);
+      console.log('Section check:', data.sectionCheck);
+      
+      setRecommendation(data.result);
     } catch (error) {
       console.error('Error during search:', error);
       toast({
@@ -129,7 +157,7 @@ export const SearchBar = () => {
         <SheetTrigger asChild>
           <Button className="h-9 sm:h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" onClick={handleSearch} disabled={isSearching}>
             <Search className="mr-2 h-5 w-5" />
-            <span className="\u05E9\u05D9\u05DD \u05DC\u05D1 \u05E9\u05DB\u05E4\u05EA\u05D5\u05E8 \u05D4\u05D7\u05D9\u05E4\u05D5\u05E9 \u05DC\u05D0 \u05D6\u05D4\u05D4 \u05D1\u05D2\u05D5\u05D1\u05D4 \u05DC\u05E9\u05D3\u05D5\u05EA \u05D4\u05D7\u05D9\u05E4\u05D5\u05E9. \u05DB\u05D3\u05D0\u05D9 \u05DC\u05D4\u05EA\u05D0\u05D9\u05DD \u05D0\u05DC\u05D9\u05D4\u05DD">Search Now</span>
+            <span>Search Now</span>
           </Button>
         </SheetTrigger>
         
