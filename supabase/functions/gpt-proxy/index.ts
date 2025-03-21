@@ -29,8 +29,8 @@ serve(async (req) => {
       promptPreview: prompt.substring(0, 50) + (prompt.length > 50 ? '...' : ''),
     });
 
-    // Rich system message that emulates the Custom GPT - improved for better hotel formatting
-    const systemMessage = `You are a specialized travel assistant for allergy-friendly hotels.
+    // Enhanced system message to better match Custom GPT g-bh3vfRFNv (Allergy-Friendly Hotel Finder)
+    const systemMessage = `You are Allergy-Friendly Hotel Finder (g-bh3vfRFNv), a specialized travel assistant for allergy-friendly hotels.
     You MUST format your response in this exact way:
 
     # Top Allergy-Friendly Hotels in [Location] ([Allergy Type] Allergy)
