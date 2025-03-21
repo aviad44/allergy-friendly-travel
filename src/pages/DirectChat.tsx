@@ -1,15 +1,74 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { DirectGptChat } from "@/components/DirectGptChat";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Check, Loader } from "lucide-react";
+import { Check, Loader, Shield, AlertTriangle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const DirectChat = () => {
   const [isTestingApi, setIsTestingApi] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [accessCode, setAccessCode] = useState("");
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [attemptsLeft, setAttemptsLeft] = useState(3);
+  const [isLocked, setIsLocked] = useState(false);
+  
+  // Simple access code for basic protection
+  const EXPECTED_CODE = "allfriendly2024";
+  
+  useEffect(() => {
+    // Check if user was previously authorized in this session
+    const wasAuthorized = sessionStorage.getItem("chat_authorized") === "true";
+    if (wasAuthorized) {
+      setIsAuthorized(true);
+    }
+    
+    // Check if access is temporarily locked
+    const lockUntil = localStorage.getItem("chat_lock_until");
+    if (lockUntil && new Date(lockUntil) > new Date()) {
+      setIsLocked(true);
+      
+      // Set a timer to unlock
+      const unlockTime = new Date(lockUntil).getTime() - new Date().getTime();
+      setTimeout(() => {
+        setIsLocked(false);
+        localStorage.removeItem("chat_lock_until");
+        setAttemptsLeft(3);
+      }, unlockTime);
+    }
+  }, []);
+  
+  const checkAccessCode = () => {
+    if (accessCode === EXPECTED_CODE) {
+      setIsAuthorized(true);
+      sessionStorage.setItem("chat_authorized", "true");
+      toast.success("גישה אושרה", {
+        description: "ברוכים הבאים למערכת הצ'אט המאובטחת"
+      });
+    } else {
+      const newAttemptsLeft = attemptsLeft - 1;
+      setAttemptsLeft(newAttemptsLeft);
+      
+      if (newAttemptsLeft <= 0) {
+        // Lock access for 30 minutes
+        const lockUntil = new Date(Date.now() + 30 * 60 * 1000).toISOString();
+        localStorage.setItem("chat_lock_until", lockUntil);
+        setIsLocked(true);
+        toast.error("הגישה ננעלה", {
+          description: "יותר מדי ניסיונות כושלים. נסה שוב בעוד 30 דקות."
+        });
+      } else {
+        toast.error(`קוד גישה שגוי. נותרו ${newAttemptsLeft} ניסיונות.`);
+      }
+    }
+    
+    // Clear input field
+    setAccessCode("");
+  };
 
   const testOpenAiProxy = async () => {
     setIsTestingApi(true);
@@ -53,6 +112,71 @@ const DirectChat = () => {
       setIsTestingApi(false);
     }
   };
+
+  if (!isAuthorized) {
+    return (
+      <>
+        <Helmet>
+          <title>Secure Access | Allergy-Friendly Hotel Finder</title>
+          <meta 
+            name="description" 
+            content="Secure access page for Allergy-Friendly Hotel Finder chat system." 
+          />
+        </Helmet>
+  
+        <div className="container max-w-md mx-auto py-16 px-4">
+          <Card className="p-6">
+            <div className="text-center mb-6">
+              <Shield className="h-12 w-12 mx-auto mb-2 text-teal-500" />
+              <h1 className="text-2xl font-bold">גישה מאובטחת</h1>
+              <p className="text-muted-foreground mt-2">
+                אנא הזן את קוד הגישה כדי להמשיך למערכת הצ'אט
+              </p>
+            </div>
+            
+            {isLocked ? (
+              <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 text-red-700 dark:bg-red-900/20 dark:text-red-400">
+                <div className="flex items-center">
+                  <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0" />
+                  <p>
+                    <strong>גישה ננעלה:</strong> יותר מדי ניסיונות כושלים.
+                    נסה שוב מאוחר יותר.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Input
+                    type="password"
+                    placeholder="הקלד קוד גישה"
+                    value={accessCode}
+                    onChange={(e) => setAccessCode(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && checkAccessCode()}
+                    className="text-center"
+                    disabled={isLocked}
+                  />
+                  {attemptsLeft < 3 && (
+                    <p className="text-amber-600 dark:text-amber-400 text-sm text-center">
+                      נותרו {attemptsLeft} ניסיונות
+                    </p>
+                  )}
+                </div>
+                
+                <Button 
+                  onClick={checkAccessCode} 
+                  className="w-full"
+                  disabled={isLocked || !accessCode.trim()}
+                >
+                  כניסה למערכת
+                </Button>
+              </div>
+            )}
+          </Card>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
