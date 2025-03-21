@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { ContactHeader } from "@/components/contact/ContactHeader";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ServicesSection } from "@/components/contact/ServicesSection";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Contact() {
   return (
@@ -31,6 +32,8 @@ export default function Contact() {
           <ServicesSection />
         </div>
       </main>
+      
+      <Toaster />
     </div>
   );
 }
