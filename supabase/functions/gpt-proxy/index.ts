@@ -25,26 +25,46 @@ serve(async (req) => {
     // Parse request body
     const { prompt } = await req.json();
     
-    console.log('✅ Processing chat request with prompt:', { 
+    console.log('✅ Processing search request with prompt:', { 
       promptPreview: prompt.substring(0, 50) + (prompt.length > 50 ? '...' : ''),
     });
 
-    // System message that emulates the Custom GPT
-    const systemMessage = `You are a specialized travel assistant focusing on allergy-friendly hotels. 
-    You're responding with information from the custom GPT "Allergy-Friendly Hotel Finder" (g-bh3vfRFNv).
+    // Rich system message that emulates the Custom GPT - improved for better hotel formatting
+    const systemMessage = `You are a specialized travel assistant for allergy-friendly hotels.
+    You MUST format your response in this exact way:
+
+    # Top Allergy-Friendly Hotels in [Location] ([Allergy Type] Allergy)
     
-    Format your response as a list where each hotel entry includes:
-    - Hotel name
-    - Key allergy accommodations they provide
-    - Special dietary considerations they address
-    - Authentic guest reviews related to allergy handling (only use real reviews)
-    - Any additional safety information
+    ## 1. [Hotel Name]
+    📍 [Exact Address including neighborhood]
     
-    IMPORTANT:
-    1. For each hotel, include the hotel's official website URL.
-    2. Only include authentic reviews, NOT simulated ones.
-    3. Format each hotel entry with the hotel name, followed by a pipe symbol, followed by the official website URL.
-       Example: "Hotel Sunshine | https://www.hotelsunshine.com"`;
+    🌟 Why it's great for [allergy type] allergy travelers:
+    - [Feature 1 - specific to allergy accommodation]
+    - [Feature 2 - specific to food handling procedures]
+    - [Feature 3 - another relevant feature]
+    
+    💬 Allergy Guest Review:
+    "[Insert a real, authentic review from someone with this specific allergy]" – ★★★★★
+    
+    🔗 [Hotel Website Link]
+    🔗 [Booking Link if available]
+    
+    [Repeat for 3-5 hotels]
+    
+    📍 Interactive Map suggestion
+    [Brief description of what would be on the map]
+    
+    🍽️ Nearby Allergy-Friendly Restaurants ([Allergy]-Safe)
+    - [Restaurant 1 with brief description]
+    - [Restaurant 2 with brief description]
+    - [Restaurant 3 with brief description]
+    
+    IMPORTANT REQUIREMENTS:
+    1. For hotels, ONLY include real, verifiable hotels with actual allergy accommodations
+    2. ALL guest reviews MUST be authentic, not fabricated
+    3. Include EXACT street addresses and neighborhoods
+    4. Focus specifically on [allergy type] rather than general allergy information
+    5. Use emoji icons as shown above to make the information visually organized`;
 
     console.log('🔄 Sending request to OpenAI API...');
     const startTime = Date.now();
@@ -56,13 +76,13 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: "gpt-4o", // Using the powerful model
+        model: "gpt-4o", // Using the powerful model for best results
         messages: [
           { role: 'system', content: systemMessage },
           { role: 'user', content: prompt }
         ],
-        temperature: 0.2,
-        max_tokens: 2000
+        temperature: 0.2, // Lower temperature for more consistent results
+        max_tokens: 2500 // Increased token count for more detailed responses
       }),
     });
 
@@ -86,8 +106,8 @@ serve(async (req) => {
     });
     
     const reply = data.choices[0].message.content;
-    console.log('✅ Response first 100 chars:', reply.substring(0, 100));
-    console.log('✅ Response last 100 chars:', reply.substring(reply.length - 100));
+    console.log('✅ Response first 150 chars:', reply.substring(0, 150));
+    console.log('✅ Response last 150 chars:', reply.substring(reply.length - 150));
     console.log('⏱️ Function invocation completed at:', new Date().toISOString());
 
     return new Response(
