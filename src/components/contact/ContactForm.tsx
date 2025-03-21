@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Mail, Clock, AlertCircle } from "lucide-react";
+import { Send, Mail, Clock, AlertCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ErrorDialog } from "./ErrorDialog";
@@ -157,7 +157,10 @@ export function ContactForm() {
             disabled={isSubmitting}
           >
             {isSubmitting ? (
-              "Sending..."
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Sending...
+              </>
             ) : (
               <>
                 Send Message <Send className="ml-2 h-4 w-4" />

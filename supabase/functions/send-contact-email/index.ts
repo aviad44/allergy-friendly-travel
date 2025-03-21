@@ -2,7 +2,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+// Initialize Resend with API key
+const resendApiKey = Deno.env.get("RESEND_API_KEY");
+console.log("RESEND_API_KEY defined:", resendApiKey ? "Yes" : "No");
+
+const resend = new Resend(resendApiKey);
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -40,54 +44,77 @@ serve(async (req) => {
         );
       }
 
+      // Debug Resend API key
+      console.log("📧 Attempting to use Resend with API key status:", !!resendApiKey);
+      
       // Send email to admin
-      console.log("📧 Sending admin email...");
-      const adminEmailResponse = await resend.emails.send({
-        from: "Allergy Free Travel <onboarding@resend.dev>",
-        to: ["aviad44@gmail.com"],
-        subject: "New Contact Form Submission - Allergy Free Travel",
-        html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message.replace(/\n/g, '<br>')}</p>
-        `,
-      });
+      console.log("📧 Sending admin email to aviad44@gmail.com...");
+      try {
+        const adminEmailResponse = await resend.emails.send({
+          from: "Allergy Free Travel <onboarding@resend.dev>",
+          to: ["aviad44@gmail.com"],
+          subject: "New Contact Form Submission - Allergy Free Travel",
+          html: `
+            <h2>New Contact Form Submission</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message.replace(/\n/g, '<br>')}</p>
+          `,
+        });
 
-      console.log("✅ Admin email sent:", adminEmailResponse);
-
-      // Send confirmation email to user
-      console.log("📧 Sending user confirmation email...");
-      const userEmailResponse = await resend.emails.send({
-        from: "Allergy Free Travel <onboarding@resend.dev>",
-        to: [email],
-        subject: "We've received your message - Allergy Free Travel",
-        html: `
-          <h2>Thank you for contacting Allergy Free Travel!</h2>
-          <p>Dear ${name},</p>
-          <p>We've received your message and will get back to you as soon as possible.</p>
-          <p>Here's a copy of your message:</p>
-          <p>${message.replace(/\n/g, '<br>')}</p>
-          <p>Best regards,</p>
-          <p>The Allergy Free Travel Team</p>
-        `,
-      });
-
-      console.log("✅ User confirmation email sent:", userEmailResponse);
-
-      return new Response(
-        JSON.stringify({ 
-          success: true,
-          message: "Contact form submitted successfully",
-          adminEmail: adminEmailResponse,
-          userEmail: userEmailResponse
-        }),
-        {
-          status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        console.log("✅ Admin email sent response:", JSON.stringify(adminEmailResponse));
+        
+        // If there was an error in the response
+        if (adminEmailResponse.error) {
+          throw new Error(`Resend API error: ${JSON.stringify(adminEmailResponse.error)}`);
         }
-      );
+
+        // Send confirmation email to user
+        console.log("📧 Sending user confirmation email...");
+        try {
+          const userEmailResponse = await resend.emails.send({
+            from: "Allergy Free Travel <onboarding@resend.dev>",
+            to: [email],
+            subject: "We've received your message - Allergy Free Travel",
+            html: `
+              <h2>Thank you for contacting Allergy Free Travel!</h2>
+              <p>Dear ${name},</p>
+              <p>We've received your message and will get back to you as soon as possible.</p>
+              <p>Here's a copy of your message:</p>
+              <p>${message.replace(/\n/g, '<br>')}</p>
+              <p>Best regards,</p>
+              <p>The Allergy Free Travel Team</p>
+            `,
+          });
+
+          console.log("✅ User confirmation email sent response:", JSON.stringify(userEmailResponse));
+          
+          // If there was an error in the user email response
+          if (userEmailResponse.error) {
+            console.error("⚠️ User email had error but admin email was sent:", userEmailResponse.error);
+          }
+
+        } catch (userEmailError) {
+          console.error("❌ Error sending user confirmation email:", userEmailError);
+          // We don't throw here because we still want to return success if admin email was sent
+        }
+
+        return new Response(
+          JSON.stringify({ 
+            success: true,
+            message: "Contact form submitted successfully",
+            adminEmailId: adminEmailResponse.id,
+          }),
+          {
+            status: 200,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      } catch (emailError) {
+        console.error("❌ Error sending admin email:", emailError);
+        throw emailError;
+      }
     } catch (parseError) {
       console.error("❌ Failed to parse request body:", parseError);
       return new Response(
