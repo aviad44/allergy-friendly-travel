@@ -31,35 +31,15 @@ export const SearchBar = () => {
     setRecommendation("");
     setIsSheetOpen(true);
     try {
-      console.log('Sending search request to Supabase openai-proxy function');
-      const userInput = `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies.`;
-      
-      const systemPrompt = `You are a specialized travel assistant focusing on allergy-friendly hotels. 
-      You're responding with information from the custom GPT "Allergy-Friendly Hotel Finder" (g-bh3vfRFNv).
-      
-      Format your response as a list where each hotel entry includes:
-      - Hotel name
-      - Key allergy accommodations they provide
-      - Special dietary considerations they address
-      - Authentic guest reviews related to allergy handling (only use real reviews)
-      - Any additional safety information
-      
-      IMPORTANT:
-      1. For each hotel, include the hotel's official website URL.
-      2. Only include authentic reviews, NOT simulated ones.
-      3. Format each hotel entry with the hotel name, followed by a pipe symbol, followed by the official website URL.
-         Example: "Hotel Sunshine | https://www.hotelsunshine.com"`;
+      console.log('Sending search request to Supabase gpt-proxy function');
+      const prompt = `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies.`;
       
       const {
         data,
         error
-      } = await supabase.functions.invoke('openai-proxy', {
+      } = await supabase.functions.invoke('gpt-proxy', {
         body: {
-          userInput,
-          systemPrompt,
-          model: "gpt-4o", // Using the more powerful model for better results
-          temperature: 0.3,
-          max_tokens: 2000
+          prompt
         }
       });
       
@@ -68,17 +48,13 @@ export const SearchBar = () => {
         throw error;
       }
       
-      if (!data?.result) {
+      if (!data?.reply) {
         console.error('No recommendation data:', data);
         throw new Error('No recommendation received from the AI');
       }
       
-      console.log('Received recommendation:', data.result);
-      console.log('Token usage:', data.tokenUsage);
-      console.log('Is response complete:', data.isComplete);
-      console.log('Section check:', data.sectionCheck);
-      
-      setRecommendation(data.result);
+      console.log('Received recommendation:', data.reply);
+      setRecommendation(data.reply);
     } catch (error) {
       console.error('Error during search:', error);
       toast({
@@ -161,8 +137,7 @@ export const SearchBar = () => {
           </Button>
         </SheetTrigger>
         
-        
-          <SheetContent className="w-full sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" side="bottom">
+        <SheetContent className="w-full sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" side="bottom">
           <div className="flex justify-between items-center">
             <SheetHeader>
               <SheetTitle className="text-xl sm:text-2xl font-display">
