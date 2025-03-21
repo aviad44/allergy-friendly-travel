@@ -1,3 +1,4 @@
+
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -107,6 +108,16 @@ export const SearchBar = () => {
           <div className="md:hidden flex justify-center my-2">
             <ChevronDown className="h-5 w-5 text-muted-foreground animate-bounce" />
             <span className="text-xs text-muted-foreground ml-1">Scroll for more</span>
+          </div>
+          
+          <div className="bg-amber-50 border-l-4 border-amber-500 p-3 mb-3 text-amber-800 text-sm">
+            <div className="flex items-start gap-2">
+              <ShieldCheck className="h-5 w-5 mt-0.5 flex-shrink-0" />
+              <p>
+                <strong>Safety Notice:</strong> While we strive for accuracy, always verify allergy accommodations directly 
+                with hotels before booking. Allergy severity varies, and hotel policies may change.
+              </p>
+            </div>
           </div>
           
           <div className="mt-2 overflow-y-auto flex-grow pb-safe pr-1">
