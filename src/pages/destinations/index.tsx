@@ -125,7 +125,7 @@ const DestinationsIndex = () => {
         Website in Beta
       </div>
       
-      {/* Navigation - Adjusted spacing between elements */}
+      {/* Navigation */}
       <nav className="relative bg-white shadow-sm w-full">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Link to="/" aria-label="Return to homepage" className="flex items-center space-x-3 text-2xl font-display font-bold text-[#edab69] hover:text-amber-400 transition-colors">
@@ -141,7 +141,7 @@ const DestinationsIndex = () => {
         </div>
       </nav>
 
-      {/* Hero Section - Improved mobile transparency */}
+      {/* Hero Section */}
       <section className="relative py-12 md:py-16">
         <div className="absolute inset-0 overflow-hidden">
           <img 
@@ -162,20 +162,33 @@ const DestinationsIndex = () => {
         </div>
       </section>
 
-      {/* Featured Hotel Chains Banner */}
+      {/* Featured Hotel Chains Banner - Modified to match other destination cards */}
       <section className="py-4 bg-blue-50">
         <div className="container mx-auto px-4">
-          <Link to="/destinations/hotel-chains" className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow group">
-            <div className="flex items-center gap-3">
-              <div className="bg-blue-100 p-2 rounded-full">
-                <Hotel className="h-5 w-5 text-blue-600" />
+          <Link to="/destinations/hotel-chains" className="block">
+            <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300 group">
+              <div className="relative h-40 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80"
+                  alt="Four Seasons Hotel"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
+                <div className="absolute bottom-3 left-3 right-3">
+                  <h3 className="text-white font-bold text-xl">Top Allergy-Friendly Hotel Chains</h3>
+                  <p className="text-gray-200 text-sm">Worldwide</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold text-gray-800">Top Allergy-Friendly Hotel Chains</h3>
-                <p className="text-sm text-gray-600">Global hotel chains with exceptional food allergy policies</p>
+              <div className="p-4">
+                <p className="text-gray-600 mb-3 text-sm">
+                  Global hotel chains with exceptional food allergy and celiac-friendly policies.
+                </p>
+                <div className="flex items-center text-teal-600 font-medium text-sm">
+                  <span>View details</span>
+                  <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                </div>
               </div>
-            </div>
-            <ArrowRight className="h-5 w-5 text-blue-600 group-hover:translate-x-1 transition-transform" />
+            </Card>
           </Link>
         </div>
       </section>
