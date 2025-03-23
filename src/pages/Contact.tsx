@@ -42,7 +42,7 @@ export default function Contact() {
       <section className="relative py-12 md:py-16 bg-gradient-to-b from-black/75 to-black/90">
         <div className="absolute inset-0 overflow-hidden">
           <img 
-            src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?q=80&w=1470&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=1470&auto=format&fit=crop"
             alt="Contact us background" 
             className="w-full h-full object-cover object-center" 
           />
