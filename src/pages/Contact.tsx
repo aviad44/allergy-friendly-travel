@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import { ContactHeader } from "@/components/contact/ContactHeader";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -40,14 +39,6 @@ export default function Contact() {
 
       {/* Hero Section - Styled like homepage */}
       <section className="relative py-12 md:py-16 bg-gradient-to-b from-black/75 to-black/90">
-        <div className="absolute inset-0 overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=1470&auto=format&fit=crop"
-            alt="Contact us background" 
-            className="w-full h-full object-cover object-center" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
-        </div>
         <div className="relative z-10 container mx-auto px-4 text-center">
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
             <span className="text-sky-200 font-bold">Get in Touch</span>
