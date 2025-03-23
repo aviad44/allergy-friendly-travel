@@ -1,13 +1,33 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { MainMenu } from "@/components/MainMenu";
 import { Home, ArrowLeft } from "lucide-react";
+import { Helmet } from "react-helmet";
 
 const NotFound = () => {
+  // Set proper 404 status code
+  useEffect(() => {
+    // This code will execute only in the browser, not during server-side rendering
+    const meta = document.createElement('meta');
+    meta.httpEquiv = 'status';
+    meta.content = '404';
+    document.head.appendChild(meta);
+    
+    return () => {
+      document.head.removeChild(meta);
+    };
+  }, []);
+  
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>404 - Page Not Found | Allergy Free Travel</title>
+        <meta name="robots" content="noindex, follow" />
+        <meta httpEquiv="status" content="404" />
+      </Helmet>
+      
       {/* Navigation */}
       <nav className="bg-white shadow-sm w-full">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">

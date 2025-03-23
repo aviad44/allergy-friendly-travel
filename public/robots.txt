@@ -2,10 +2,26 @@
 User-agent: *
 Allow: /
 
-# Sitemap location
-Sitemap: https://www.allergy-free-travel.com/sitemap.xml
-
 # Disallow admin areas and development routes
 Disallow: /admin/
 Disallow: /dev/
 Disallow: /api/private/
+
+# Explicitly allow important pages
+Allow: /about
+Allow: /contact
+Allow: /destinations
+Allow: /categories
+Allow: /reviews
+Allow: /destinations/paris
+Allow: /destinations/london
+Allow: /destinations/barcelona
+Allow: /destinations/cyprus
+Allow: /destinations/crete
+Allow: /destinations/abu-dhabi
+Allow: /destinations/thailand
+Allow: /destinations/ayia-napa
+Allow: /hotels/le-petit-palace
+
+# Sitemap location
+Sitemap: https://www.allergy-free-travel.com/sitemap.xml

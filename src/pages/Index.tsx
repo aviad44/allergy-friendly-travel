@@ -17,6 +17,9 @@ const Index = () => {
     HelpCircle
   };
 
+  // Updated metadata with current date
+  const currentDate = new Date().toISOString().split('T')[0];
+
   return (
     <>
       <Helmet>
@@ -24,6 +27,7 @@ const Index = () => {
         <meta name="description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
         <meta name="keywords" content="allergy-friendly travel, food allergy hotels, gluten-free accommodation, dairy-free travel, nut-free hotels, allergen-free vacation, safe travel with allergies" />
         <link rel="canonical" href="https://www.allergy-free-travel.com/" />
+        <meta name="robots" content="index, follow" />
         
         {/* Schema.org JSON-LD structured data */}
         <script type="application/ld+json">
@@ -37,7 +41,8 @@ const Index = () => {
             "telephone": "+1-123-456-7890",
             "email": "info@allergy-free-travel.com",
             "areaServed": "Worldwide",
-            "serviceType": "Allergy-Friendly Travel Planning"
+            "serviceType": "Allergy-Friendly Travel Planning",
+            "dateModified": currentDate
           })}
         </script>
       </Helmet>

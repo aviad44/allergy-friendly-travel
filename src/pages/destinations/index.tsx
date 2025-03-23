@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { Rocket } from "lucide-react";
 import { MainMenu } from "@/components/MainMenu";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
+import { Helmet } from "react-helmet";
+import { Footer } from "@/components/Footer";
 
 const destinations = [
   {
@@ -60,8 +62,63 @@ const destinations = [
 ];
 
 const DestinationsIndex = () => {
+  // SEO metadata
+  const pageTitle = "Allergy-Friendly Travel Destinations | Safe Hotels Worldwide";
+  const pageDescription = "Browse our comprehensive guide to allergy-friendly travel destinations worldwide. Find safe accommodations for dietary restrictions in top cities and regions.";
+  const pageKeywords = "allergy-friendly destinations, food allergy travel, gluten-free travel destinations, allergy-conscious hotels worldwide";
+  const canonicalUrl = "https://www.allergy-free-travel.com/destinations";
+  
+  // Current date for schema metadata
+  const currentDate = new Date().toISOString().split('T')[0];
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta name="keywords" content={pageKeywords} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" />
+        
+        {/* Schema.org markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "mainEntity": {
+              "@type": "ItemList",
+              "itemListElement": destinations.map((dest, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "item": {
+                  "@type": "TouristDestination",
+                  "name": dest.name,
+                  "description": dest.description,
+                  "url": `https://www.allergy-free-travel.com${dest.path}`
+                }
+              }))
+            },
+            "name": pageTitle,
+            "description": pageDescription,
+            "url": canonicalUrl,
+            "dateModified": currentDate
+          })}
+        </script>
+      </Helmet>
+      
       {/* Beta Banner */}
       <div className="w-full bg-white text-gray-800 text-xs py-1.5 text-center flex items-center justify-center font-medium">
         <Rocket className="h-3 w-3 mr-1.5 text-[#edab69]" />
@@ -139,6 +196,8 @@ const DestinationsIndex = () => {
           ))}
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 };
