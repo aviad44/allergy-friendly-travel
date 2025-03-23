@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Hotel } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Rocket } from "lucide-react";
 import { MainMenu } from "@/components/MainMenu";
@@ -159,6 +159,24 @@ const DestinationsIndex = () => {
           <p className="text-white text-lg md:text-xl mx-auto">
             Find the perfect accommodation that caters to your specific allergy needs
           </p>
+        </div>
+      </section>
+
+      {/* Featured Hotel Chains Banner */}
+      <section className="py-4 bg-blue-50">
+        <div className="container mx-auto px-4">
+          <Link to="/destinations/hotel-chains" className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow group">
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-100 p-2 rounded-full">
+                <Hotel className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-800">Top Allergy-Friendly Hotel Chains</h3>
+                <p className="text-sm text-gray-600">Global hotel chains with exceptional food allergy policies</p>
+              </div>
+            </div>
+            <ArrowRight className="h-5 w-5 text-blue-600 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
       </section>
 
