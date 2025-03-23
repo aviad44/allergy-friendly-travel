@@ -1,3 +1,4 @@
+
 import { Helmet } from "react-helmet";
 import { ContactHeader } from "@/components/contact/ContactHeader";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -38,15 +39,12 @@ export default function Contact() {
       <ContactHeader />
 
       {/* Hero Section - Styled like homepage */}
-      <section className="relative py-12 md:py-16 bg-gradient-to-b from-black/75 to-black/90">
+      <section className="relative py-12 md:py-16 bg-white">
         <div className="relative z-10 container mx-auto px-4 text-center">
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
             <span className="text-sky-200 font-bold">Get in Touch</span>
             <span className="block mt-2 text-teal-300 font-bold">We're Here to Help</span>
           </h1>
-          <p className="text-white text-lg md:text-xl max-w-2xl mx-auto">
-            Our team of allergy-friendly travel experts is ready to assist with your questions and travel needs
-          </p>
         </div>
       </section>
 
