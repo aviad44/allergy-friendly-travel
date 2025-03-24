@@ -20,6 +20,7 @@ import AyiaNapa from '@/pages/destinations/AyiaNapa';
 import Cyprus from '@/pages/destinations/Cyprus';
 import AbuDhabi from '@/pages/destinations/AbuDhabi';
 import Thailand from '@/pages/destinations/Thailand';
+import Tokyo from '@/pages/destinations/Tokyo';
 import HotelChains from '@/pages/destinations/HotelChains';
 import AboutUs from '@/pages/AboutUs';
 import Contact from '@/pages/Contact';
@@ -53,6 +54,7 @@ function App() {
                 <Route path="/destinations/cyprus" element={<Cyprus />} />
                 <Route path="/destinations/abu-dhabi" element={<AbuDhabi />} />
                 <Route path="/destinations/thailand" element={<Thailand />} />
+                <Route path="/destinations/tokyo" element={<Tokyo />} />
                 <Route path="/destinations/hotel-chains" element={<HotelChains />} />
                 <Route path="/hotels/le-petit-palace" element={<LePetitPalace />} />
                 <Route path="/direct-chat" element={<DirectChat />} />

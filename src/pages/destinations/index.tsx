@@ -61,6 +61,14 @@ const DestinationsIndex = () => {
       path: "/destinations/crete"
     },
     {
+      id: "tokyo",
+      name: "Tokyo",
+      country: "Japan",
+      image: DESTINATION_IMAGES.tokyo,
+      description: "Navigate Tokyo's culinary scene safely with these allergy-friendly hotels.",
+      path: "/destinations/tokyo"
+    },
+    {
       id: "hotel-chains",
       name: "Top Allergy-Friendly Hotel Chains",
       country: "Worldwide",

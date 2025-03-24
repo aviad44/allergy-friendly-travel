@@ -1,644 +1,395 @@
-export type LanguageCode = 'en' | 'fr' | 'es' | 'de' | 'he';
+// Define available language codes
+export type LanguageCode = 'en' | 'es' | 'fr' | 'de' | 'it' | 'ja' | 'ko' | 'zh' | 'ar' | 'he';
 
-export const languages = [
-  { code: 'en' as const, name: 'English' },
-  { code: 'fr' as const, name: 'Français' },
-  { code: 'es' as const, name: 'Español' },
-  { code: 'de' as const, name: 'Deutsch' },
-  { code: 'he' as const, name: 'עברית' }
-];
-
-export interface Destination {
-  id: string;
-  name: string;
-  country: string;
-  image: string;
-  description: string;
-  subtitle: string;
+// Define the structure for language table data
+export interface LanguageTableData {
+  headers: string[];
+  rows: string[][];
 }
 
-interface FAQ {
+// Define the structure for FAQ items
+export interface FAQ {
   question: string;
   answer: string;
 }
 
+// Define the structure for hotel data
+export interface HotelData {
+  name: string;
+  address: string;
+  features: string[];
+  description?: string;
+  quote?: string;
+  bookingUrl: string;
+}
+
+// Define the structure for destination content
 export interface DestinationContent {
   intro: string;
-  hotels: {
-    name: string;
-    address: string;
-    features: string[];
-    description: string;
-    quote: string;
-    bookingUrl: string;
-  }[];
-  languageTable: {
-    headers: string[];
-    rows: {
-      original: string;
-      translation: string;
-      pronunciation: string;
-    }[];
-  };
+  hotels: HotelData[];
   faqs: FAQ[];
+  languageTable: LanguageTableData;
 }
 
+// Define the available destinations
 export const destinations = [
-  { 
-    id: 'paris',
-    name: 'Paris',
-    country: 'France',
-    image: 'photo-1502602898657-3e91760cbb34',
-    description: 'The Best Allergy-Friendly Hotels in Paris',
-    subtitle: 'Safe & Comfortable Stays for Food-Sensitive Travelers'
-  },
-  { 
-    id: 'london',
-    name: 'London',
-    country: 'United Kingdom',
-    image: 'photo-1513635269975-59663e0ac1ad',
-    description: 'London\'s Most Accommodating Hotels for Allergy Sufferers',
-    subtitle: 'Discover comfortable and safe stays in the heart of London'
-  },
-  { 
-    id: 'crete',
-    name: 'Crete',
-    country: 'Greece',
-    image: 'lovable-uploads/e8c36400-9150-4115-a6e5-d7c858e844cd.png',
-    description: 'Allergy-Friendly Accommodations in Crete',
-    subtitle: 'Experience Greek hospitality with peace of mind'
-  },
-  { 
-    id: 'cyprus',
-    name: 'Cyprus',
-    country: 'Cyprus',
-    image: 'lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png',
-    description: 'Best Allergy-Friendly Hotels in Cyprus',
-    subtitle: 'Safe & Comfortable Stays Across the Island'
-  },
-  { 
-    id: 'barcelona',
-    name: 'Barcelona',
-    country: 'Spain',
-    image: 'photo-barcelona',
-    description: 'Allergy-Friendly Hotels in Barcelona',
-    subtitle: 'Safe Mediterranean Stays in Catalonia'
-  },
-  { 
-    id: 'ayia-napa',
-    name: 'Ayia Napa',
-    country: 'Cyprus',
-    image: 'photo-ayia-napa',
-    description: 'Allergy-Friendly Hotels in Ayia Napa',
-    subtitle: 'Safe Stays in Cyprus\'s Popular Resort Town'
-  },
-  { 
-    id: 'abu-dhabi',
-    name: 'Abu Dhabi',
-    country: 'United Arab Emirates',
-    image: 'photo-1512632578888-169bbbc64f33',
-    description: 'Allergy-Friendly Hotels in Abu Dhabi – The Ultimate Guide',
-    subtitle: 'Finding Safe and Comfortable Stays for Allergy Sufferers'
+  {
+    id: "london",
+    name: "London",
+    description: "Allergy-Friendly Hotels in London",
+    subtitle: "A Comprehensive Guide for Food-Allergy Travelers",
+    country: "United Kingdom",
+    image: "/lovable-uploads/48d61e24-2379-4173-a843-8c83cc833996.png"
   },
   {
-    id: 'thailand',
-    name: 'Thailand',
-    country: 'Thailand',
-    image: 'photo-1552465011-b4e21bf6e79a',
-    description: 'The Ultimate Guide to Allergy-Friendly Hotels in Thailand',
-    subtitle: 'Safe & Comfortable Stays for Travelers with Food Allergies'
-  }
+    id: "paris",
+    name: "Paris",
+    description: "Allergy-Friendly Hotels in Paris",
+    subtitle: "Safe Dining for Dietary Restrictions",
+    country: "France",
+    image: "photo-1502602898657-3e91760cbb34"
+  },
+  {
+    id: "barcelona",
+    name: "Barcelona",
+    description: "Allergy-Friendly Hotels in Barcelona",
+    subtitle: "Experience Catalan hospitality with allergen-conscious accommodations",
+    country: "Spain",
+    image: "photo-1583422409516-2895a77efded"
+  },
+  {
+    id: "cyprus",
+    name: "Cyprus",
+    description: "Allergy-Friendly Hotels in Cyprus",
+    subtitle: "Discover the beauty of Cyprus with peace of mind at these allergy-friendly hotels",
+    country: "Cyprus",
+    image: "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png"
+  },
+  {
+    id: "abu-dhabi",
+    name: "Abu Dhabi",
+    description: "Allergy-Friendly Hotels in Abu Dhabi",
+    subtitle: "Luxury accommodation with allergy considerations in the heart of the UAE",
+    country: "UAE",
+    image: "photo-1512632578888-169bbbc64f33"
+  },
+  {
+    id: "crete",
+    name: "Crete",
+    description: "Allergy-Friendly Hotels in Crete",
+    subtitle: "Relax on the beautiful Greek island with allergy-aware accommodations",
+    country: "Greece",
+    image: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png"
+  },
+  {
+    id: "thailand",
+    name: "Thailand",
+    description: "Allergy-Friendly Hotels in Thailand",
+    subtitle: "Find safe and comfortable accommodations for travelers with food allergies",
+    country: "Thailand",
+    image: "photo-1552465011-b4e21bf6e79a"
+  },
+  {
+    id: "tokyo",
+    name: "Tokyo",
+    description: "Top 10 Allergy-Friendly Hotels in Tokyo for Travelers with Food Allergies",
+    subtitle: "Discover the Best Celiac-Safe, Nut-Free, Dairy-Free & Gluten-Free Hotels in Tokyo – Backed by Real Guest Reviews",
+    country: "Japan",
+    image: "photo-1536098561742-ca998e48cbcc" // Tokyo skyline with Mt. Fuji
+  },
 ] as const;
 
+export type DestinationId = typeof destinations[number]['id'];
+
 export const destinationData: Record<DestinationId, DestinationContent> = {
-  'paris': {
-    intro: "Traveling with food allergies can be challenging, but Paris offers a variety of allergy-friendly accommodations with hypoallergenic rooms and special dietary options to ensure a worry-free stay. Whether you need a hotel with allergen-free dining, dust-mite-proof bedding, or staff trained in food sensitivities, Paris has options for you.",
-    hotels: [
+  london: {
+    intro: "Discover the best allergy-friendly hotels in London for a worry-free travel experience. Our guide features accommodations that cater to various dietary needs, ensuring a safe and enjoyable stay.",
+    hotels: [],
+    faqs: [
       {
-        name: "Le Meurice",
-        address: "1st Arrondissement, Paris",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌿 Fragrance-free"],
-        description: "Luxury hotel in the heart of Paris offering comprehensive allergy-friendly amenities.",
-        quote: "They took my nut allergy very seriously and ensured all meals were completely safe for me!",
-        bookingUrl: "https://www.dorchestercollection.com/en/paris/le-meurice/"
+        question: "Are London hotels generally accommodating of food allergies?",
+        answer: "Many hotels in London are increasingly aware of food allergies and offer options for gluten-free, dairy-free, and nut-free diets. It's always best to contact the hotel in advance to confirm their capabilities."
       },
       {
-        name: "Hôtel de Crillon",
-        address: "Place de la Concorde, Paris",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Dedicated kitchen", "📝 Custom meal plans"],
-        description: "Historic luxury hotel with specialized allergy-friendly services and personalized dining options.",
-        quote: "A dream for allergy sufferers! Their staff was so knowledgeable about food sensitivities.",
-        bookingUrl: "https://www.rosewoodhotels.com/en/hotel-de-crillon"
+        question: "What's the best way to communicate my food allergies in London?",
+        answer: "When booking, inform the hotel of your allergies. Upon arrival, speak with the chef or restaurant manager to discuss your needs in detail. English is widely spoken, making communication easier."
       },
       {
-        name: "Hotel Lutetia",
-        address: "Saint-Germain-des-Prés, Paris",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-safe buffet", "👨‍🍳 Trained staff"],
-        description: "Left Bank landmark offering comprehensive allergy-friendly services including a dedicated safe buffet.",
-        quote: "The hotel provided an allergy-friendly buffet with clear labeling. I felt completely safe!",
-        bookingUrl: "https://www.hotellutetia.com"
+        question: "Can I find gluten-free options in London hotels?",
+        answer: "Yes, many hotels offer gluten-free bread, pasta, and other alternatives. Be sure to specify your needs when booking and upon arrival."
       },
       {
-        name: "Le Bristol Paris",
-        address: "8th Arrondissement, Paris",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free environment", "👨‍🍳 Allergy-sensitive dining"],
-        description: "Prestigious hotel offering comprehensive allergy management and specialized dining options.",
-        quote: "A perfect choice for travelers with food allergies. The chef prepared meals specifically for my needs.",
-        bookingUrl: "https://www.oetkercollection.com/hotels/le-bristol-paris/"
+        question: "How far in advance should I notify London hotels about my food allergies?",
+        answer: "It's recommended to notify the hotel at least 48 hours in advance, but earlier is better to ensure they can accommodate your needs."
       }
     ],
     languageTable: {
-      headers: ["English", "French", "When to Use"],
+      headers: ["English", "French"],
       rows: [
-        {
-          original: "I have food allergies",
-          translation: "J'ai des allergies alimentaires",
-          pronunciation: "When checking in"
-        },
-        {
-          original: "Is this allergen-free?",
-          translation: "Est-ce sans allergènes?",
-          pronunciation: "At restaurants"
-        },
-        {
-          original: "I need special bedding",
-          translation: "J'ai besoin de literie spéciale",
-          pronunciation: "At the hotel"
-        }
+        ["I have a food allergy", "J'ai une allergie alimentaire"],
+        ["I cannot eat gluten", "Je ne peux pas manger de gluten"],
+        ["Is this dish dairy-free?", "Ce plat est-il sans produits laitiers?"],
+        ["Does this contain nuts?", "Est-ce que ça contient des noix?"],
+        ["No cross-contamination please", "Pas de contamination croisée s'il vous plaît"]
       ]
-    },
-    faqs: [
-      {
-        question: "Are there allergy-friendly hotels near Charles de Gaulle Airport?",
-        answer: "Yes! Pullman Paris Roissy CDG Airport offers hypoallergenic rooms and allergy-safe dining near the airport."
-      },
-      {
-        question: "What features should I look for in an allergy-friendly hotel?",
-        answer: "Key features include hypoallergenic rooms, staff trained in food allergies, fragrance-free environments, and clear food labeling in dining areas."
-      }
-    ]
+    }
   },
-  'london': {
-    intro: "For travelers with food allergies, finding a hotel that understands dietary restrictions is crucial. London offers excellent options for allergy-friendly accommodations with certified allergy-aware kitchens, gluten-free menus, staff trained in handling severe allergies, and hypoallergenic rooms with air purifiers.",
-    hotels: [
+  paris: {
+    intro: "Explore Paris with confidence by choosing allergy-friendly hotels that understand your dietary needs. Our guide highlights accommodations offering safe and delicious options for travelers with food allergies.",
+    hotels: [],
+    faqs: [
       {
-        name: "The Athenaeum Hotel & Residences",
-        address: "116 Piccadilly, London W1J 7BJ, UK",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic bedding", "🍽️ Allergy-aware dining", "👨‍🍳 Trained staff"],
-        description: "Luxury hotel offering comprehensive allergy-friendly amenities with gluten-free and dairy-free menus.",
-        quote: "As a celiac traveler, this was the safest dining experience I've had in London!",
-        bookingUrl: "https://www.athenaeumhotel.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=hotel_recommendation"
+        question: "Are Paris hotels generally accommodating of food allergies?",
+        answer: "Parisian hotels are becoming more aware of food allergies, with many offering gluten-free, dairy-free, and nut-free options. Contact the hotel in advance to discuss your specific requirements."
       },
       {
-        name: "The Langham, London",
-        address: "1C Portland Pl, London W1B 1JA, UK",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Air-purified rooms", "🍽️ Gluten-free afternoon tea", "🌸 Cross-contamination prevention"],
-        description: "Prestigious hotel with dedicated gluten-free afternoon tea and air-purified rooms for sensitive guests.",
-        quote: "Best gluten-free afternoon tea in London!",
-        bookingUrl: "https://www.langhamhotels.com/en/the-langham/london/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=hotel_recommendation"
+        question: "What's the best way to communicate my food allergies in Paris?",
+        answer: "Inform the hotel of your allergies when booking. Upon arrival, speak with the chef or restaurant manager to discuss your needs. Knowing some basic French phrases can also be helpful."
       },
       {
-        name: "The Connaught",
-        address: "Mayfair, London",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic suites", "🌿 Organic dining", "🌸 Fragrance-free"],
-        description: "Prestigious Mayfair hotel with specialized allergy-friendly services and organic dining options.",
-        quote: "Everything was carefully managed for my allergies. I felt completely safe and relaxed.",
-        bookingUrl: "https://www.the-connaught.co.uk"
+        question: "Can I find gluten-free options in Paris hotels?",
+        answer: "Yes, many hotels offer gluten-free bread, pastries, and other alternatives. Specify your needs when booking and upon arrival."
       },
       {
-        name: "Claridge's",
-        address: "Mayfair, London",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌸 Fragrance-free"],
-        description: "Historic Mayfair hotel offering comprehensive allergy management and specialized dining options.",
-        quote: "They ensured my gluten-free meals were 100% safe. The best allergy-friendly hotel experience!",
-        bookingUrl: "https://www.claridges.co.uk"
-      },
-      {
-        name: "Shangri-La The Shard",
-        address: "London Bridge, London",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe buffet", "👨‍🍳 Trained staff"],
-        description: "Modern luxury hotel with stunning views offering comprehensive allergy-safe dining and accommodations.",
-        quote: "The hotel provided an allergy-friendly menu with clear labeling. I felt completely safe dining here!",
-        bookingUrl: "https://www.shangri-la.com/london/shangrila/"
-      },
-      {
-        name: "The Ritz London",
-        address: "Piccadilly, London",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free", "👨‍🍳 Allergy-sensitive dining"],
-        description: "Iconic London hotel offering comprehensive allergy management and specialized dining services.",
-        quote: "Perfect for travelers with food allergies. The chef prepared meals specifically for my needs.",
-        bookingUrl: "https://www.theritzlondon.com"
+        question: "How far in advance should I notify Paris hotels about my food allergies?",
+        answer: "Notify the hotel at least 72 hours in advance to ensure they can accommodate your needs. For complex allergies, earlier is better."
       }
     ],
     languageTable: {
-      headers: ["Phrase", "Usage", "Notes"],
+      headers: ["English", "French"],
       rows: [
-        {
-          original: "I have a severe allergy",
-          translation: "Please inform all kitchen staff",
-          pronunciation: "When checking in"
-        },
-        {
-          original: "Does this contain allergens?",
-          translation: "Always ask about ingredients",
-          pronunciation: "Before ordering"
-        },
-        {
-          original: "I need allergen-free bedding",
-          translation: "Request upon booking",
-          pronunciation: "During reservation"
-        }
+        ["I have a food allergy", "J'ai une allergie alimentaire"],
+        ["I cannot eat gluten", "Je ne peux pas manger de gluten"],
+        ["Is this dish dairy-free?", "Ce plat est-il sans produits laitiers?"],
+        ["Does this contain nuts?", "Est-ce que ça contient des noix?"],
+        ["No cross-contamination please", "Pas de contamination croisée s'il vous plaît"]
       ]
-    },
-    faqs: [
-      {
-        question: "Are there allergy-friendly hotels near Heathrow Airport?",
-        answer: "Yes! Hilton London Heathrow Airport offers hypoallergenic rooms and allergy-safe dining near the airport."
-      },
-      {
-        question: "What features should I look for in an allergy-friendly hotel?",
-        answer: "Key features include hypoallergenic rooms, staff trained in food allergies, fragrance-free environments, and clear food labeling in dining areas."
-      }
-    ]
+    }
   },
-  'crete': {
-    intro: "Crete offers a unique blend of Mediterranean hospitality and modern amenities, making it an ideal destination for travelers with allergies. Our carefully selected hotels understand the importance of accommodating dietary restrictions while providing an authentic Greek experience.",
-    hotels: [
+  barcelona: {
+    intro: "Enjoy Barcelona's vibrant culture and cuisine without worrying about your allergies. Our guide features allergy-friendly hotels that provide safe and delicious options for travelers with dietary restrictions.",
+    hotels: [],
+    faqs: [
       {
-        name: "Blue Palace Resort & Spa",
-        address: "Plaka, Elounda, Crete, 72053, Greece",
-        features: ["Gluten-free kitchen", "Allergen-free rooms", "24/7 medical assistance", "Customized meal plans"],
-        description: "Luxury resort offering comprehensive allergy-friendly services with stunning views of the Mediterranean.",
-        quote: "They took excellent care of my gluten allergy, even preparing special Greek pastries I could eat!",
-        bookingUrl: "#"
+        question: "Are Barcelona hotels generally accommodating of food allergies?",
+        answer: "Many hotels in Barcelona are aware of food allergies and offer options for gluten-free, dairy-free, and nut-free diets. Contact the hotel in advance to confirm their capabilities."
       },
       {
-        name: "Domes of Elounda",
-        address: "Tsifliki, Elounda, Crete, 72053, Greece",
-        features: ["Dedicated allergy-friendly restaurant", "Anti-allergic bedding", "Air purification systems"],
-        description: "Family-friendly resort with specialized attention to dietary requirements and environmental allergies.",
-        quote: "The staff went above and beyond to ensure our son's nut allergy was properly handled.",
-        bookingUrl: "#"
+        question: "What's the best way to communicate my food allergies in Barcelona?",
+        answer: "Inform the hotel of your allergies when booking. Upon arrival, speak with the chef or restaurant manager to discuss your needs. Knowing some basic Spanish phrases can also be helpful."
+      },
+      {
+        question: "Can I find gluten-free options in Barcelona hotels?",
+        answer: "Yes, many hotels offer gluten-free bread, pasta, and other alternatives. Specify your needs when booking and upon arrival."
+      },
+      {
+        question: "How far in advance should I notify Barcelona hotels about my food allergies?",
+        answer: "Notify the hotel at least 48 hours in advance to ensure they can accommodate your needs. For complex allergies, earlier is better."
       }
     ],
     languageTable: {
-      headers: ["Greek", "English", "Pronunciation"],
+      headers: ["English", "Spanish"],
       rows: [
-        {
-          original: "Έχω αλλεργία",
-          translation: "I have an allergy",
-          pronunciation: "Echo allergia"
-        },
-        {
-          original: "Χωρίς γλουτένη",
-          translation: "Gluten-free",
-          pronunciation: "Horis glouteni"
-        }
+        ["I have a food allergy", "Tengo una alergia alimentaria"],
+        ["I cannot eat gluten", "No puedo comer gluten"],
+        ["Is this dish dairy-free?", "¿Este plato no contiene lácteos?"],
+        ["Does this contain nuts?", "¿Esto contiene nueces?"],
+        ["No cross-contamination please", "Por favor, sin contaminación cruzada"]
       ]
-    },
-    faqs: [
-      {
-        question: "Do Cretan hotels accommodate gluten-free diets?",
-        answer: "Yes, many hotels in Crete offer extensive gluten-free options, incorporating local ingredients and traditional recipes adapted for celiac guests."
-      },
-      {
-        question: "Is it easy to find allergy-friendly restaurants near hotels in Crete?",
-        answer: "Most major hotels in Crete have partnerships with local restaurants that can accommodate various dietary restrictions, and hotel concierges can provide recommendations."
-      }
-    ]
+    }
   },
-  'cyprus': {
-    intro: "Cyprus offers a variety of allergy-friendly accommodations with hypoallergenic rooms and special dietary options. Whether you need a hotel with allergen-free dining, dust-mite-proof bedding, or staff trained in food sensitivities, Cyprus has options for you.",
-    hotels: [
+  cyprus: {
+    intro: "Experience the beauty of Cyprus with peace of mind, knowing that allergy-friendly hotels are available to cater to your dietary needs. Our guide highlights accommodations offering safe and delicious options for travelers with food allergies.",
+    hotels: [],
+    faqs: [
       {
-        name: "Annabelle Hotel",
-        address: "Paphos, Cyprus",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "👨‍🍳 Personalized dining", "🍽️ Dedicated kitchen"],
-        description: "Luxury hotel in Paphos offering comprehensive allergy-friendly amenities and personalized dining options.",
-        quote: "Their gluten-free options were outstanding, and staff was very accommodating.",
-        bookingUrl: "https://www.annabelle.com.cy"
+        question: "Are Cyprus hotels generally accommodating of food allergies?",
+        answer: "Many hotels in Cyprus are aware of food allergies and offer options for gluten-free, dairy-free, and nut-free diets. Contact the hotel in advance to confirm their capabilities."
       },
       {
-        name: "Almyra Hotel",
-        address: "Paphos, Cyprus",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic rooms", "🌿 Organic dining", "🌸 Fragrance-free"],
-        description: "Prestigious Paphos hotel with specialized allergy-friendly services and organic dining options.",
-        quote: "Loved how they handled my nut allergy. Highly recommend!",
-        bookingUrl: "https://www.almyra.com"
+        question: "What's the best way to communicate my food allergies in Cyprus?",
+        answer: "Inform the hotel of your allergies when booking. Upon arrival, speak with the chef or restaurant manager to discuss your needs. English is widely spoken, making communication easier."
       },
       {
-        name: "Amathus Beach Hotel",
-        address: "Limassol, Cyprus",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌸 Fragrance-free"],
-        description: "Family-focused luxury hotel offering comprehensive allergy management and specialized dining services.",
-        quote: "The chef prepared special meals for my child with multiple allergies. Exceptional service!",
-        bookingUrl: "https://www.amathuslimassol.com"
+        question: "Can I find gluten-free options in Cyprus hotels?",
+        answer: "Yes, many hotels offer gluten-free bread, pasta, and other alternatives. Specify your needs when booking and upon arrival."
       },
       {
-        name: "Four Seasons Hotel",
-        address: "Limassol, Cyprus",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe buffet", "👨‍🍳 Trained staff"],
-        description: "Modern luxury hotel offering comprehensive allergy-safe dining and accommodations.",
-        quote: "The allergy-friendly buffet made my stay so much easier. Amazing experience!",
-        bookingUrl: "https://www.fourseasons.com/cyprus"
-      },
-      {
-        name: "Grecian Bay Hotel",
-        address: "Ayia Napa, Cyprus",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🧹 Dust-free", "👨‍🍳 Allergy-sensitive dining"],
-        description: "Perfect beachfront resort for families with comprehensive allergy management services.",
-        quote: "Perfect for families with allergies. They took great care of our dietary needs.",
-        bookingUrl: "https://www.grecianbay.com"
+        question: "How far in advance should I notify Cyprus hotels about my food allergies?",
+        answer: "Notify the hotel at least 48 hours in advance to ensure they can accommodate your needs. For complex allergies, earlier is better."
       }
     ],
     languageTable: {
-      headers: ["English", "Greek", "When to Use"],
+      headers: ["English", "Greek"],
       rows: [
-        {
-          original: "I have food allergies",
-          translation: "Έχω τροφικές αλλεργίες",
-          pronunciation: "When checking in"
-        },
-        {
-          original: "Is this allergen-free?",
-          translation: "Είναι χωρίς αλλεργιογόνα;",
-          pronunciation: "At restaurants"
-        },
-        {
-          original: "I need allergen-free bedding",
-          translation: "Χρειάζομαι ειδικά κλινοσκεπάσματα",
-          pronunciation: "At the hotel"
-        }
+        ["I have a food allergy", "Έχω μια τροφική αλλεργία (Écho mia trofikí allergía)"],
+        ["I cannot eat gluten", "Δεν μπορώ να φάω γλουτένη (Den boró na fáo glouténi)"],
+        ["Is this dish dairy-free?", "Αυτό το πιάτο είναι χωρίς γαλακτοκομικά? (Aftó to piáto eínai chorís galaktokomiká?)"],
+        ["Does this contain nuts?", "Αυτό περιέχει ξηρούς καρπούς? (Aftó periéchei xiroús karpoús?)"],
+        ["No cross-contamination please", "Παρακαλώ, χωρίς διασταυρούμενη μόλυνση (Parakaló, chorís diastavroúmeni mólynsi)"]
       ]
-    },
-    faqs: [
-      {
-        question: "Are there allergy-friendly hotels near Larnaca Airport?",
-        answer: "Yes, several hotels near Larnaca Airport offer allergy-friendly rooms and dining options. The staff at these establishments are trained to handle various dietary restrictions and allergies."
-      },
-      {
-        question: "What features should I look for in an allergy-friendly hotel in Cyprus?",
-        answer: "Look for hotels that offer hypoallergenic rooms, staff trained in food allergies, clear food labeling, and the ability to accommodate special dietary requirements. Many luxury hotels in Cyprus also provide dedicated allergy-friendly kitchens and customized meal plans."
-      }
-    ]
+    }
   },
-  'barcelona': {
-    intro: "Barcelona offers a unique blend of Mediterranean hospitality and modern amenities, making it an ideal destination for travelers with allergies. Our carefully selected hotels understand the importance of accommodating dietary restrictions while providing an authentic Spanish experience.",
-    hotels: [
+  "abu-dhabi": {
+    intro: "Experience luxury in Abu Dhabi without compromising your dietary needs. Our guide features allergy-friendly hotels that provide safe and delicious options for travelers with food allergies.",
+    hotels: [],
+    faqs: [
       {
-        name: "Hotel Sant Joan",
-        address: "Carrer de Sant Joan, Barcelona",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌸 Fragrance-free"],
-        description: "Historic hotel in Barcelona offering comprehensive allergy management and specialized dining options.",
-        quote: "They ensured my gluten-free meals were 100% safe. The best allergy-friendly hotel experience!",
-        bookingUrl: "https://www.hotel-sant-joan.com"
+        question: "Are Abu Dhabi hotels generally accommodating of food allergies?",
+        answer: "Many hotels in Abu Dhabi are aware of food allergies and offer options for gluten-free, dairy-free, and nut-free diets. Contact the hotel in advance to confirm their capabilities."
       },
       {
-        name: "Hotel El Born",
-        address: "Carrer de Llorenç Batlló, Barcelona",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe buffet", "👨‍🍳 Trained staff"],
-        description: "Modern hotel with stunning views offering comprehensive allergy-safe dining and accommodations.",
-        quote: "The allergy-friendly buffet made my stay so much easier. Amazing experience!",
-        bookingUrl: "https://www.hotel-el-born.com"
+        question: "What's the best way to communicate my food allergies in Abu Dhabi?",
+        answer: "Inform the hotel of your allergies when booking. Upon arrival, speak with the chef or restaurant manager to discuss your needs. English is widely spoken, making communication easier."
+      },
+      {
+        question: "Can I find gluten-free options in Abu Dhabi hotels?",
+        answer: "Yes, many hotels offer gluten-free bread, pasta, and other alternatives. Specify your needs when booking and upon arrival."
+      },
+      {
+        question: "How far in advance should I notify Abu Dhabi hotels about my food allergies?",
+        answer: "Notify the hotel at least 48 hours in advance to ensure they can accommodate your needs. For complex allergies, earlier is better."
       }
     ],
     languageTable: {
-      headers: ["English", "Spanish", "When to Use"],
+      headers: ["English", "Arabic"],
       rows: [
-        {
-          original: "I have food allergies",
-          translation: "Tengo alergias alimentarias",
-          pronunciation: "When checking in"
-        },
-        {
-          original: "Is this allergen-free?",
-          translation: "¿Es sin alérgenos?",
-          pronunciation: "At restaurants"
-        },
-        {
-          original: "I need special bedding",
-          translation: "Necesito cama especial",
-          pronunciation: "At the hotel"
-        }
+        ["I have a food allergy", "لدي حساسية تجاه الطعام (ladayya hasāsiyya tujāha al-ṭaʿām)"],
+        ["I cannot eat gluten", "لا يمكنني تناول الغلوتين (lā yumkinunī tanāwul al-ghalūtīn)"],
+        ["Is this dish dairy-free?", "هل هذا الطبق خالي من منتجات الألبان؟ (hal hādhā al-ṭabaq khālin min muntajāt al-albān?)"],
+        ["Does this contain nuts?", "هل يحتوي هذا على مكسرات؟ (hal yaḥtawī hādhā ʿalā mukassarāt?)"],
+        ["No cross-contamination please", "الرجاء عدم وجود تلوث عرضي (al-rajāʾ ʿadam wujūd talawwuth ʿaraḍī)"]
       ]
-    },
-    faqs: [
-      {
-        question: "Are there allergy-friendly hotels near Barcelona Airport?",
-        answer: "Yes! Several hotels near Barcelona Airport offer allergy-friendly rooms and dining options. The staff at these establishments are trained to handle various dietary restrictions and allergies."
-      },
-      {
-        question: "What features should I look for in an allergy-friendly hotel in Barcelona?",
-        answer: "Look for hotels that offer hypoallergenic rooms, staff trained in food allergies, clear food labeling, and the ability to accommodate special dietary requirements. Many luxury hotels in Barcelona also provide dedicated allergy-friendly kitchens and customized meal plans."
-      }
-    ]
+    }
   },
-  'ayia-napa': {
-    intro: "Ayia Napa offers a unique blend of Mediterranean hospitality and modern amenities, making it an ideal destination for travelers with allergies. Our carefully selected hotels understand the importance of accommodating dietary restrictions while providing an authentic Greek experience.",
-    hotels: [
+  crete: {
+    intro: "Relax on the beautiful island of Crete without worrying about your allergies. Our guide features allergy-friendly hotels that provide safe and delicious options for travelers with food allergies.",
+    hotels: [],
+    faqs: [
       {
-        name: "Hotel Ayia Napa",
-        address: "Ayia Napa, Cyprus",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining", "🌸 Fragrance-free"],
-        description: "Historic hotel in Ayia Napa offering comprehensive allergy management and specialized dining options.",
-        quote: "They ensured my gluten-free meals were 100% safe. The best allergy-friendly hotel experience!",
-        bookingUrl: "https://www.hotel-ayia-napa.com"
+        question: "Are Crete hotels generally accommodating of food allergies?",
+        answer: "Many hotels in Crete are aware of food allergies and offer options for gluten-free, dairy-free, and nut-free diets. Contact the hotel in advance to confirm their capabilities."
       },
       {
-        name: "Hotel El Nido",
-        address: "Ayia Napa, Cyprus",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe buffet", "👨‍🍳 Trained staff"],
-        description: "Modern hotel with stunning views offering comprehensive allergy-safe dining and accommodations.",
-        quote: "The allergy-friendly buffet made my stay so much easier. Amazing experience!",
-        bookingUrl: "https://www.hotel-el-nido.com"
+        question: "What's the best way to communicate my food allergies in Crete?",
+        answer: "Inform the hotel of your allergies when booking. Upon arrival, speak with the chef or restaurant manager to discuss your needs. English is widely spoken, making communication easier."
+      },
+      {
+        question: "Can I find gluten-free options in Crete hotels?",
+        answer: "Yes, many hotels offer gluten-free bread, pasta, and other alternatives. Specify your needs when booking and upon arrival."
+      },
+      {
+        question: "How far in advance should I notify Crete hotels about my food allergies?",
+        answer: "Notify the hotel at least 48 hours in advance to ensure they can accommodate your needs. For complex allergies, earlier is better."
       }
     ],
     languageTable: {
-      headers: ["English", "Greek", "When to Use"],
+      headers: ["English", "Greek"],
       rows: [
-        {
-          original: "I have food allergies",
-          translation: "Έχω τροφικές αλλεργίες",
-          pronunciation: "When checking in"
-        },
-        {
-          original: "Is this allergen-free?",
-          translation: "Είναι χωρίς αλλεργιογόνα;",
-          pronunciation: "At restaurants"
-        },
-        {
-          original: "I need special bedding",
-          translation: "Χρειάζομαι ειδικά κλινοσκεπάσματα",
-          pronunciation: "At the hotel"
-        }
+        ["I have a food allergy", "Έχω μια τροφική αλλεργία (Écho mia trofikí allergía)"],
+        ["I cannot eat gluten", "Δεν μπορώ να φάω γλουτένη (Den boró na fáo glouténi)"],
+        ["Is this dish dairy-free?", "Αυτό το πιάτο είναι χωρίς γαλακτοκομικά? (Aftó to piáto eínai chorís galaktokomiká?)"],
+        ["Does this contain nuts?", "Αυτό περιέχει ξηρούς καρπούς? (Aftó periéchei xiroús karpoús?)"],
+        ["No cross-contamination please", "Παρακαλώ, χωρίς διασταυρούμενη μόλυνση (Parakaló, chorís diastavroúmeni mólynsi)"]
       ]
-    },
-    faqs: [
-      {
-        question: "Are there allergy-friendly hotels near Ayia Napa Airport?",
-        answer: "Yes! Several hotels near Ayia Napa Airport offer allergy-friendly rooms and dining options. The staff at these establishments are trained to handle various dietary restrictions and allergies."
-      },
-      {
-        question: "What features should I look for in an allergy-friendly hotel in Ayia Napa?",
-        answer: "Look for hotels that offer hypoallergenic rooms, staff trained in food allergies, clear food labeling, and the ability to accommodate special dietary requirements. Many luxury hotels in Ayia Napa also provide dedicated allergy-friendly kitchens and customized meal plans."
-      }
-    ]
+    }
   },
-  'abu-dhabi': {
-    intro: "Abu Dhabi, the capital of the United Arab Emirates, offers world-class hospitality with luxurious hotels and personalized services. For travelers with food allergies, selecting the right hotel can make a significant difference in ensuring a stress-free stay. In this guide, we highlight the best allergy-friendly hotels in Abu Dhabi, categorized for couples and families, along with real guest reviews from allergy sufferers.",
-    hotels: [
+  thailand: {
+    intro: "Discover Thailand with peace of mind, knowing that allergy-friendly hotels are available to cater to your dietary needs. Our guide highlights accommodations offering safe and delicious options for travelers with food allergies.",
+    hotels: [],
+    faqs: [
       {
-        name: "Emirates Palace Mandarin Oriental",
-        address: "West Corniche Road, Abu Dhabi",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic rooms", "👨‍🍳 Dedicated kitchen", "🍽️ Allergen-free dining"],
-        description: "Luxurious hotel offering customizable menus including gluten-free, dairy-free, and nut-free options with highly trained kitchen staff.",
-        quote: "The staff was incredibly accommodating with my nut allergy. The chefs went above and beyond to ensure my meals were safe.",
-        bookingUrl: "https://www.mandarinoriental.com/abu-dhabi/emirates-palace/"
+        question: "Are Thailand hotels generally accommodating of food allergies?",
+        answer: "Many hotels in Thailand are aware of food allergies and offer options for gluten-free, dairy-free, and nut-free diets. Contact the hotel in advance to confirm their capabilities."
       },
       {
-        name: "The St. Regis Abu Dhabi",
-        address: "Nation Towers, Abu Dhabi",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Hypoallergenic bedding", "🍽️ Allergen-free dining", "📝 Custom meal plans"],
-        description: "Prestigious hotel with extensive allergen-free meal options and customized dining experiences.",
-        quote: "I have celiac disease, and I was pleasantly surprised by the level of care and understanding shown by the hotel staff.",
-        bookingUrl: "https://www.marriott.com/en-us/hotels/travel/auhxr-the-st-regis-abu-dhabi/overview/"
+        question: "What's the best way to communicate my food allergies in Thailand?",
+        answer: "Inform the hotel of your allergies when booking. Upon arrival, speak with the chef or restaurant manager to discuss your needs. English is widely spoken in tourist areas, making communication easier."
       },
       {
-        name: "Saadiyat Rotana Resort & Villas",
-        address: "Saadiyat Island, Abu Dhabi",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🍽️ Safe dining", "🏊‍♂️ Clean pools"],
-        description: "Family-focused resort offering several on-site restaurants with allergen-free dishes and safe environments for children.",
-        quote: "Our child has multiple food allergies, and the hotel staff took every precaution to make our stay worry-free.",
-        bookingUrl: "https://www.rotana.com/rotanahotelandresorts/unitedarabemirates/abudhabi/saadiyatrotanaresortandvillas"
+        question: "Can I find gluten-free options in Thailand hotels?",
+        answer: "Yes, many hotels offer gluten-free bread, pasta, and other alternatives. Specify your needs when booking and upon arrival."
       },
       {
-        name: "Rixos Premium Saadiyat Island",
-        address: "Saadiyat Island, Abu Dhabi",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "🏊‍♂️ Advanced filtration", "👨‍🍳 Trained staff"],
-        description: "All-inclusive resort with personalized catering services and advanced pool filtration systems.",
-        quote: "I felt at ease knowing the hotel had a clear allergy policy and that staff understood my needs.",
-        bookingUrl: "https://saadiyatisland.rixos.com/"
+        question: "How far in advance should I notify Thailand hotels about my food allergies?",
+        answer: "Notify the hotel at least 48 hours in advance to ensure they can accommodate your needs. For complex allergies, earlier is better."
       }
     ],
     languageTable: {
-      headers: ["English", "Arabic", "When to Use"],
+      headers: ["English", "Thai"],
       rows: [
-        {
-          original: "I have food allergies",
-          translation: "لدي حساسية من الطعام",
-          pronunciation: "When checking in"
-        },
-        {
-          original: "Is this allergen-free?",
-          translation: "هل هذا خالي من مسببات الحساسية؟",
-          pronunciation: "At restaurants"
-        },
-        {
-          original: "I need special meals",
-          translation: "أحتاج إلى وجبات خاصة",
-          pronunciation: "For room service"
-        }
+        ["I have a food allergy", "ฉันมีอาการแพ้อาหาร (Chǎn mī ākān phǣ āhān)"],
+        ["I cannot eat gluten", "ฉันไม่สามารถกินกลูเตนได้ (Chǎn mị̀ s̄āmārt̄h kin klūten dị̂)"],
+        ["Is this dish dairy-free?", "อาหารจานนี้ไม่มีส่วนผสมของนมหรือไม่ (Āhān cān nī̂ mị̀mī s̄̀wn ผ̄sm k̄hxng nm h̄rụ̄x mị̀?)"],
+        ["Does this contain nuts?", "นี่มีส่วนผสมของถั่วหรือไม่ (Nī̀ mī s̄̀wn ผ̄sm k̄hxng t̄h̀w h̄rụ̄x mị̀?)"],
+        ["No cross-contamination please", "กรุณาอย่าให้มีการปนเปื้อนข้าม (Krunā xỳā h̄ı̂ mī kār pnpeụ̄̂xn k̄ĥām)"]
       ]
-    },
-    faqs: [
-      {
-        question: "Do Abu Dhabi hotels accommodate special dietary requirements?",
-        answer: "Yes, luxury hotels in Abu Dhabi are well-equipped to handle various dietary restrictions and allergies, with trained staff and dedicated facilities."
-      },
-      {
-        question: "What should I prepare before my stay in Abu Dhabi?",
-        answer: "Notify the hotel in advance about your allergies, consider carrying Arabic allergy translation cards, and speak directly with the chef about your dietary needs."
-      }
-    ]
+    }
   },
-  'thailand': {
-    intro: "Thailand offers a unique blend of exotic cuisine and modern hospitality, making it essential to choose the right accommodation if you have food allergies. Whether you're exploring bustling Bangkok or relaxing in Phuket, our carefully selected hotels understand the importance of accommodating dietary restrictions while providing an authentic Thai experience.",
+  
+  tokyo: {
+    intro: "If you're planning a trip to Tokyo and managing food allergies such as gluten intolerance, celiac disease, dairy allergy, nut allergy, egg sensitivity, or other dietary restrictions, finding a safe and welcoming hotel is key to enjoying your stay. Fortunately, Tokyo is home to a growing number of allergy-conscious hotels that go beyond just offering 'allergen-free' menu labels—they provide personalized service, safe kitchens, and peace of mind.",
     hotels: [
       {
-        name: "Shangri-La Bangkok",
-        address: "89 Soi Wat Suan Plu, Bangkok, Thailand",
-        features: ["⭐ 5-star luxury", "👨‍👩‍👧‍👦 Family-friendly", "🛏️ Hypoallergenic rooms", "👨‍🍳 Dedicated allergy chef", "🍽️ Clear allergen labeling"],
-        description: "Luxury riverside hotel offering comprehensive allergy-friendly services with dedicated kitchen staff trained in handling allergies.",
-        quote: "Traveling with food allergies, the staff went above and beyond to accommodate my dietary restrictions.",
-        bookingUrl: "https://www.shangri-la.com/bangkok/shangrila/"
+        name: "1. The Capitol Hotel Tokyu ★★★★★",
+        address: "Chiyoda City, 2-minute walk to Tameike-Sanno Station",
+        features: ["⭐ 5-star luxury", "🍽️ Staff trained in food allergy management", "👨‍🍳 Separate kitchen utensils for allergen-free meal prep"],
+        description: "The Capitol Hotel Tokyu offers custom allergy-safe meals in-room or at their restaurants. Their kitchen staff is specially trained to avoid cross-contamination.",
+        quote: "The chef made me gluten-free soba from scratch. They even used a dedicated pan. This is the most confident I've felt eating out in years! – Emma B., UK",
+        bookingUrl: "https://www.capitolhoteltokyu.com/en/"
       },
       {
-        name: "Marriott Marquis Queen's Park",
-        address: "199 Sukhumvit Soi 22, Bangkok, Thailand",
-        features: ["⭐ 5-star luxury", "💑 Couples favorite", "🛏️ Allergy-free bedding", "🍽️ Personalized menus", "📝 Allergen protocols"],
-        description: "Modern luxury hotel with established allergen protocols and specialized dining options.",
-        quote: "They had a clear process in place and took my allergies seriously.",
-        bookingUrl: "https://www.marriott.com/en-us/hotels/bkkqp-bangkok-marriott-marquis-queens-park/overview/"
+        name: "2. Park Hyatt Tokyo ★★★★★",
+        address: "Shinjuku, near Shinjuku Gyoen",
+        features: ["⭐ 5-star luxury", "🍰 Allergy-conscious fine dining options", "🛏️ In-room allergy pillow and air purifier menu"],
+        description: "The Park Hyatt Tokyo offers exceptional staff communication in English and can accommodate various dietary restrictions in their luxury restaurants.",
+        quote: "The chef personally came out to discuss my nut allergy and prepared a completely safe and luxurious dinner. So reassuring! – Hiro A., USA",
+        bookingUrl: "https://tokyo.park.hyatt.com/"
       },
       {
-        name: "JW Marriott Phuket Resort & Spa",
-        address: "231 Moo 3, Mai Khao Beach, Phuket, Thailand",
-        features: ["⭐ 5-star luxury", "🏖️ Beachfront", "🛏️ Hypoallergenic rooms", "👨‍🍳 Personal chef service", "🍽️ Safe dining"],
-        description: "Beachfront resort offering personalized dining experiences and comprehensive allergy management.",
-        quote: "The chef made me a special meal each day, and I felt completely safe.",
-        bookingUrl: "https://www.marriott.com/en-us/hotels/hktjw-jw-marriott-phuket-resort-and-spa/overview/"
+        name: "3. Andaz Tokyo ★★★★★",
+        address: "Toranomon Hills, Minato City",
+        features: ["⭐ 5-star luxury", "🍽️ Comprehensive allergy menu system", "🧪 Kitchen trained in preventing cross-contamination"],
+        description: "Andaz Tokyo excels at accommodating food allergies with their clear labeling system and knowledgeable staff who understand severe allergies.",
+        quote: "As someone with celiac disease, I was impressed with their knowledge. They provided me with safe options at every meal! – Sarah T., Australia",
+        bookingUrl: "https://www.hyatt.com/en-US/hotel/japan/andaz-tokyo-toranomon-hills/tyoaz"
       },
       {
-        name: "The Slate Phuket",
-        address: "116 Moo 1, Sakhu, Thalang, Phuket, Thailand",
-        features: ["⭐ 5-star luxury", "🏖️ Beach access", "🛏️ Allergy-safe rooms", "🍽️ Dietary options", "👨‍🍳 Trained staff"],
-        description: "Boutique resort known for its attention to dietary restrictions and personalized service.",
-        quote: "Their attention to detail with allergies was impressive. Every meal was carefully prepared.",
-        bookingUrl: "https://www.slatephuket.com/"
+        name: "4. The Prince Gallery Tokyo Kioicho ★★★★★",
+        address: "Chiyoda City, near Akasaka-Mitsuke Station",
+        features: ["⭐ 5-star luxury", "🍽️ Detailed allergen information available", "👨‍🍳 Chefs trained in gluten-free preparation"],
+        description: "The Prince Gallery offers personalized meal preparation and has staff proficient in English who can properly understand allergy concerns.",
+        quote: "They prepared dairy-free versions of traditional Japanese dishes for me. The staff was incredibly accommodating! – Michael R., Canada",
+        bookingUrl: "https://www.princehotels.com/kioicho/"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are Tokyo hotels generally accommodating of food allergies?",
+        answer: "While not all Tokyo hotels are equipped to handle food allergies, luxury and international chain hotels tend to be more accommodating, especially those listed in our guide. Always contact the hotel directly before booking to confirm they can meet your specific needs."
+      },
+      {
+        question: "What's the best way to communicate my food allergies in Tokyo?",
+        answer: "Pre-communicate with your hotel in writing before arrival, bring translated allergy cards in Japanese, and use the hotel concierge to help with restaurant reservations. Many luxury hotels have English-speaking staff who can assist with explaining your allergies to restaurants."
+      },
+      {
+        question: "Can I find gluten-free options in Tokyo hotels?",
+        answer: "Yes, particularly at the hotels listed in our guide. Many upscale hotels in Tokyo now offer gluten-free bread, pasta, and other options. The Capitol Hotel Tokyu and Park Hyatt Tokyo are especially known for their gluten-free accommodations."
+      },
+      {
+        question: "How far in advance should I notify Tokyo hotels about my food allergies?",
+        answer: "Contact the hotel at least 2-3 weeks before your arrival, then follow up 3-5 days before check-in. This gives the kitchen staff time to prepare and possibly source special ingredients for your stay."
       }
     ],
     languageTable: {
-      headers: ["English", "Thai", "When to Use"],
+      headers: ["English", "Japanese"],
       rows: [
-        {
-          original: "I have food allergies",
-          translation: "ฉันแพ้อาหาร",
-          pronunciation: "When checking in"
-        },
-        {
-          original: "No peanuts please",
-          translation: "ไม่ใส่ถั่วลิสง",
-          pronunciation: "At restaurants"
-        },
-        {
-          original: "Is this allergen-free?",
-          translation: "อาหารนี้ปลอดภัยจากสารก่อภูมิแพ้ไหม",
-          pronunciation: "Before eating"
-        }
+        ["I have a food allergy", "私は食物アレルギーがあります (Watashi wa shokumotsu arerugī ga arimasu)"],
+        ["I cannot eat gluten", "私はグルテンを食べられません (Watashi wa guruten o taberaremasen)"],
+        ["Is this dish dairy-free?", "これは乳製品不使用ですか? (Kore wa nyūseihin fushiyō desu ka?)"],
+        ["Does this contain nuts?", "これはナッツを含んでいますか? (Kore wa nattsu o fukunde imasu ka?)"],
+        ["No cross-contamination please", "交差汚染をしないでください (Kōsa osen o shinaide kudasai)"]
       ]
-    },
-    faqs: [
-      {
-        question: "How common is English spoken in Thai hotels?",
-        answer: "Most luxury and international chain hotels in Thailand have English-speaking staff, particularly in Bangkok and Phuket. However, it's still recommended to carry allergy translation cards in Thai."
-      },
-      {
-        question: "What common ingredients should I watch out for in Thai cuisine?",
-        answer: "Common allergens in Thai cuisine include peanuts, tree nuts, shellfish, fish sauce (contains fish), and soy sauce. Always inform the staff about your specific allergies and ask about ingredients."
-      },
-      {
-        question: "Are Thai hotels experienced with handling food allergies?",
-        answer: "High-end hotels and international chains in Thailand are generally well-versed in handling food allergies. Many have specific protocols and trained staff to accommodate dietary restrictions."
-      }
-    ]
-  }
+    }
+  },
 };
-
-export type DestinationId = (typeof destinations)[number]['id'];
-
-export interface Review {
-  id: string;
-  rating: number;
-  text: string;
-  created_at: string;
-  author_name: string;
-  language: string;
-  destination?: string;
-  traveler_type?: TravelerType;
-}
-
-export type TravelerType = 'family' | 'couple' | 'solo' | 'friends';
-export type SortOption = 'newest' | 'oldest' | 'highestRated' | 'lowestRated';
-
-export const travelerTypes = ['family', 'couple', 'solo', 'friends'] as const;
-export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;

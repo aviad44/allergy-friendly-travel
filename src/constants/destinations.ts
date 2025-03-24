@@ -7,6 +7,6 @@ export const DESTINATION_IMAGES = {
   cyprus: "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png",
   crete: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png",
   'abu-dhabi': "photo-1512632578888-169bbbc64f33",
-  thailand: "photo-1552465011-b4e21bf6e79a"
+  thailand: "photo-1552465011-b4e21bf6e79a",
+  tokyo: "photo-1536098561742-ca998e48cbcc" // Tokyo skyline with Mt. Fuji
 } as const;
-
