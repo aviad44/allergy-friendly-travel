@@ -33,7 +33,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     : destination.name === "Paris"
     ? "Full view of the iconic Eiffel Tower against the Paris skyline - allergy-friendly travel destination"
     : destination.name === "Tokyo"
-    ? "Shibuya district of Tokyo with bustling crowds and iconic buildings - allergy-friendly travel destination"
+    ? "Shibuya crossing in Tokyo with colorful crowd and Japanese people in stylish clothing - allergy-friendly travel destination"
     : `Scenic landscape of ${destination.name} - allergy-friendly travel destination with beautiful views and accommodations`;
 
   // Determine if this is Paris or Barcelona or Tokyo to adjust background position
@@ -49,7 +49,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   } else if (isBarcelona) {
     backgroundPosition = "center 40%";
   } else if (isTokyo) {
-    backgroundPosition = "center 20%"; // Adjusted to focus on the Shibuya crossing and buildings
+    backgroundPosition = "center 35%"; // Adjusted to focus on the Shibuya crossing and people
   }
 
   return (
