@@ -43,15 +43,15 @@ export interface Destination {
 
 // Define the structure for reviews
 export interface Review {
-  id: number;
+  id: string;
+  author_name: string;
   rating: number;
   text: string;
   created_at: string;
+  user_id?: string;
   language: string;
-  author_name: string;
   destination?: string;
   traveler_type?: string;
-  user_id?: string;
 }
 
 // Define available traveler types

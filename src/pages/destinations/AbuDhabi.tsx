@@ -157,13 +157,12 @@ export default function AbuDhabiReviews() {
 
           <div className="overflow-x-auto">
             <LanguageTable 
-              headers={content.languageTable.headers}
-              rows={content.languageTable.rows}
+              data={content.languageTable}
               destinationName={destination.name}
             />
           </div>
           
-          <RelatedDestinations currentDestinationId="abu-dhabi" />
+          <RelatedDestinations currentDestination="abu-dhabi" />
         </article>
       </main>
       

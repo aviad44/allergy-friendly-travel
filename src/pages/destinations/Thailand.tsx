@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
@@ -68,7 +67,6 @@ export default function ThailandReviews() {
         <meta name="twitter:image" content="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80" />
       </Helmet>
 
-      {/* Use the DestinationHero component with our custom destination */}
       <DestinationHero destination={thailandDestination} />
 
       <main 
@@ -157,17 +155,15 @@ export default function ThailandReviews() {
 
           <div className="overflow-x-auto">
             <LanguageTable 
-              headers={content.languageTable.headers}
-              rows={content.languageTable.rows}
+              data={content.languageTable}
               destinationName={destination.name}
             />
           </div>
           
-          <RelatedDestinations currentDestinationId="thailand" />
+          <RelatedDestinations currentDestination="thailand" />
         </article>
       </main>
       
-      {/* Additional SEO-friendly footer with internal links */}
       <footer className="bg-muted/30 py-6 mt-12">
         <div className="container mx-auto px-4 max-w-4xl">
           <p className="text-sm text-muted-foreground">

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
@@ -169,8 +168,7 @@ export default function CreteReviews() {
 
           <div className="overflow-x-auto">
             <LanguageTable 
-              headers={content.languageTable.headers}
-              rows={content.languageTable.rows}
+              data={content.languageTable}
               destinationName={destination.name}
             />
           </div>
