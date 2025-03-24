@@ -37,6 +37,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   if (!destination || !content) return null;
 
   const isLondon = destinationId === 'london' as DestinationId;
+  const textAlignment = isRTL ? 'text-right' : 'text-left';
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -238,15 +239,17 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                     Essential Phrases for Allergy Travelers
                   </h2>
                   <LanguageTable 
-                    headers={content.languageTable.headers}
-                    rows={content.languageTable.rows}
-                    destinationName={destination.name}
+                    data={content.languageTable}
+                    textAlignment={textAlignment}
                   />
                 </div>
               </div>
             )}
 
-            <RelatedDestinations currentDestinationId={destinationId} />
+            <RelatedDestinations 
+              currentDestination={destinationId} 
+              textAlignment={textAlignment}
+            />
             
             <section className="space-y-4 sm:space-y-6 md:space-y-8 bg-gradient-to-r from-primary/10 to-blue-100 p-6 rounded-xl shadow-sm">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-semibold flex items-center">

@@ -1,15 +1,21 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-interface LanguageTableProps {
+export interface LanguageTableProps {
   data: {
     headers: string[];
     rows: string[][];
   };
-  textAlignment: string;
+  textAlignment?: string;
+  destinationName?: string;
 }
 
-export const LanguageTable = ({ data, textAlignment }: LanguageTableProps) => {
+export const LanguageTable = ({ data, textAlignment = "text-left", destinationName }: LanguageTableProps) => {
+  if (!data || !data.headers || !data.rows) {
+    console.error("LanguageTable: Missing required data props");
+    return null; // Return null if data is missing to prevent crashes
+  }
+
   return (
     <div className="overflow-x-auto">
       <Table className="w-full border-collapse">

@@ -51,6 +51,7 @@ export interface Review {
   author_name: string;
   destination?: string;
   traveler_type?: string;
+  user_id?: string;
 }
 
 // Define available traveler types
@@ -155,7 +156,7 @@ export const destinations = [
     subtitle: "Enjoy the beautiful beaches of Ayia Napa with allergy-aware accommodations",
     country: "Cyprus",
     image: "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png"
-  },
+  }
 ] as const;
 
 export type DestinationId = typeof destinations[number]['id'];
@@ -382,7 +383,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         ["I cannot eat gluten", "ฉันไม่สามารถกินกลูเตนได้ (Chǎn mị̀ s̄āmārt̄h kin klūten dị̂)"],
         ["Is this dish dairy-free?", "อาหารจานนี้ไม่มีส่วนผสมของนมหรือไม่ (Āhān cān nī̂ mị̀mī s̄̀wn ผ̄sm k̄hxng nm h̄rụ̄x mị̀?)"],
         ["Does this contain nuts?", "นี่มีส่วนผสมของถั่วหรือไม่ (Nī̀ mī s̄̀wn ผ̄sm k̄hxng t̄h̀w h̄rụ̄x mị̀?)"],
-        ["No cross-contamination please", "กรุณาอย่าให้มีการปนเปื้อนข้าม (Krunā xỳā h̄ı̂ mī kār pnpeụ̄̂xn k̄ĥām)"]
+        ["No cross-contamination please", "กรุณาอย่าให้มีการปนเปื้อนข้าม (Krunā xỳā h̄ı̂ mī kār pnpeụ̄̂xn k̄ĥām)"]
       ]
     }
   },
@@ -452,4 +453,61 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       ]
     }
   },
+  "ayia-napa": {
+    intro: "Enjoy the beautiful beaches of Ayia Napa with peace of mind, knowing that allergy-friendly hotels are available to cater to your dietary needs. Our guide highlights accommodations offering safe and delicious options for travelers with food allergies.",
+    hotels: [
+      {
+        name: "1. Grecian Bay Hotel ★★★★★",
+        address: "32 Kryou Nerou, Ayia Napa 5330, Cyprus",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-aware dining", "👨‍🍳 Staff trained in food allergies"],
+        description: "The Grecian Bay Hotel offers custom allergy menus and the staff is well-trained to handle food allergies. The kitchen staff takes extra precautions to avoid cross-contamination.",
+        quote: "The chef personally prepared my gluten-free meals and they were delicious! I felt completely safe dining here. – Maria T., Italy",
+        bookingUrl: "https://www.grecianbay.com/"
+      },
+      {
+        name: "2. Atlantica Aeneas Resort ★★★★",
+        address: "Nissi Avenue, Ayia Napa 5340, Cyprus",
+        features: ["⭐ 4-star resort", "🍽️ Gluten-free and dairy-free options", "🏊 Multiple restaurants with allergy menus"],
+        description: "The Atlantica Aeneas Resort offers multiple dining options with clear allergen labeling. They can accommodate gluten-free, dairy-free, and nut-free diets.",
+        quote: "They had gluten-free bread, pasta, and even desserts! The staff was knowledgeable about cross-contamination. – John D., UK",
+        bookingUrl: "https://www.atlanticahotels.com/en/Hotels/Cyprus/Aeneas"
+      },
+      {
+        name: "3. Nissi Beach Resort ★★★★",
+        address: "77 Nissi Avenue, Ayia Napa 5340, Cyprus",
+        features: ["⭐ 4-star beach resort", "🍽️ Allergy-friendly buffet options", "🥗 Special dietary meals upon request"],
+        description: "Nissi Beach Resort offers beautiful sea views and accommodating kitchen staff who can prepare special meals for guests with allergies upon request.",
+        quote: "They were very helpful with my dairy allergy. The chef made me special meals that weren't on the menu. – Sophie M., France",
+        bookingUrl: "https://www.nissi-beach.com/"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are Ayia Napa hotels generally accommodating of food allergies?",
+        answer: "Many hotels in Ayia Napa are aware of food allergies and offer options for gluten-free, dairy-free, and nut-free diets. It's always best to contact the hotel in advance to confirm their capabilities."
+      },
+      {
+        question: "What's the best way to communicate my food allergies in Ayia Napa?",
+        answer: "Inform the hotel of your allergies when booking. Upon arrival, speak with the chef or restaurant manager to discuss your needs. English is widely spoken, making communication easier."
+      },
+      {
+        question: "Can I find gluten-free options in Ayia Napa hotels?",
+        answer: "Yes, many hotels offer gluten-free bread, pasta, and other alternatives. Specify your needs when booking and upon arrival."
+      },
+      {
+        question: "How far in advance should I notify Ayia Napa hotels about my food allergies?",
+        answer: "Notify the hotel at least 48 hours in advance to ensure they can accommodate your needs. For complex allergies, earlier is better."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Greek"],
+      rows: [
+        ["I have a food allergy", "Έχω μια τροφική αλλεργία (Écho mia trofikí allergía)"],
+        ["I cannot eat gluten", "Δεν μπορώ να φάω γλουτένη (Den boró na fáo glouténi)"],
+        ["Is this dish dairy-free?", "Αυτό το πιάτο είναι χωρίς γαλακτοκομικά? (Aftó to piáto eínai chorís galaktokomiká?)"],
+        ["Does this contain nuts?", "Αυτό περιέχει ξηρούς καρπούς? (Aftó periéchei xiroús karpoús?)"],
+        ["No cross-contamination please", "Παρακαλώ, χωρίς διασταυρούμενη μόλυνση (Parakaló, chorís diastavroúmeni mólynsi)"]
+      ]
+    }
+  }
 };

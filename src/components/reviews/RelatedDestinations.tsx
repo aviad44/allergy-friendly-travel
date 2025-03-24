@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { destinations, type DestinationId } from "@/types/reviews";
 
-interface RelatedDestinationsProps {
+export interface RelatedDestinationsProps {
   currentDestination: DestinationId;
-  textAlignment: string;
-  title: string;
+  textAlignment?: string;
+  title?: string;
 }
 
-export const RelatedDestinations = ({ currentDestination, textAlignment, title }: RelatedDestinationsProps) => {
+export const RelatedDestinations = ({ currentDestination, textAlignment = "text-left", title = "Related Destinations" }: RelatedDestinationsProps) => {
   // Get a subset of destinations excluding the current one
   const relatedDestinations = destinations
     .filter(dest => dest.id !== currentDestination)
