@@ -147,7 +147,7 @@ export const destinations = [
     description: "Top 10 Allergy-Friendly Hotels in Tokyo for Travelers with Food Allergies",
     subtitle: "Discover the Best Celiac-Safe, Nut-Free, Dairy-Free & Gluten-Free Hotels in Tokyo – Backed by Real Guest Reviews",
     country: "Japan",
-    image: "photo-1536098561742-ca998e48cbcc" // Tokyo skyline with Mt. Fuji
+    image: "photo-1449157291145-7efd050a4d0e" // Updated to Shibuya district image
   },
   {
     id: "ayia-napa",

@@ -32,11 +32,14 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     ? "Sagrada Familia - Antoni Gaudí's masterpiece in Barcelona, Spain - allergy-friendly travel destination" 
     : destination.name === "Paris"
     ? "Full view of the iconic Eiffel Tower against the Paris skyline - allergy-friendly travel destination"
+    : destination.name === "Tokyo"
+    ? "Shibuya district of Tokyo with bustling crowds and iconic buildings - allergy-friendly travel destination"
     : `Scenic landscape of ${destination.name} - allergy-friendly travel destination with beautiful views and accommodations`;
 
-  // Determine if this is Paris or Barcelona to adjust background position
+  // Determine if this is Paris or Barcelona or Tokyo to adjust background position
   const isParis = destination.name === "Paris";
   const isBarcelona = destination.name === "Barcelona";
+  const isTokyo = destination.name === "Tokyo";
   let backgroundPosition = "center 30%";
   let backgroundSize = "cover";
   
@@ -45,6 +48,8 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     backgroundSize = "cover";
   } else if (isBarcelona) {
     backgroundPosition = "center 40%";
+  } else if (isTokyo) {
+    backgroundPosition = "center 20%"; // Adjusted to focus on the Shibuya crossing and buildings
   }
 
   return (

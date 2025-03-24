@@ -8,5 +8,5 @@ export const DESTINATION_IMAGES = {
   crete: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png",
   'abu-dhabi': "photo-1512632578888-169bbbc64f33",
   thailand: "photo-1552465011-b4e21bf6e79a",
-  tokyo: "photo-1536098561742-ca998e48cbcc" // Tokyo skyline with Mt. Fuji
+  tokyo: "photo-1449157291145-7efd050a4d0e" // Shibuya district with crowds and buildings
 } as const;
