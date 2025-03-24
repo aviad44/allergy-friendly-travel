@@ -2,39 +2,44 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface LanguageTableProps {
-  headers: string[];
-  rows: {
-    original: string;
-    translation: string;
-    pronunciation: string;
-  }[];
-  destinationName: string;
+  data: {
+    headers: string[];
+    rows: string[][];
+  };
+  textAlignment: string;
 }
 
-export const LanguageTable = ({ headers, rows, destinationName }: LanguageTableProps) => {
+export const LanguageTable = ({ data, textAlignment }: LanguageTableProps) => {
   return (
-    <section aria-label={`${destinationName} Language Tips`} className="bg-muted rounded-xl p-6 mt-16">
-      <h3 className="text-xl font-display font-bold mb-4">Essential Phrases for Travelers with Allergies</h3>
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {headers.map((header, index) => (
-                <TableHead key={index} className="w-1/3">{header}</TableHead>
+    <div className="overflow-x-auto">
+      <Table className="w-full border-collapse">
+        <TableHeader>
+          <TableRow className="bg-primary/5">
+            {data.headers.map((header, index) => (
+              <TableHead 
+                key={index} 
+                className={`p-3 text-primary font-semibold ${index === 0 ? textAlignment : 'text-center'}`}
+              >
+                {header}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.rows.map((row, rowIndex) => (
+            <TableRow key={rowIndex} className="border-b border-primary/10 hover:bg-primary/5">
+              {row.map((cell, cellIndex) => (
+                <TableCell
+                  key={cellIndex}
+                  className={`p-3 ${cellIndex === 0 ? textAlignment : 'text-center'} ${cellIndex === 0 ? 'font-medium' : ''}`}
+                >
+                  {cell}
+                </TableCell>
               ))}
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rows.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{row.original}</TableCell>
-                <TableCell className="italic">{row.translation}</TableCell>
-                <TableCell className="text-muted-foreground">{row.pronunciation}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </section>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };

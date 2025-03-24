@@ -31,6 +31,57 @@ export interface DestinationContent {
   languageTable: LanguageTableData;
 }
 
+// Define the structure for destinations
+export interface Destination {
+  id: string;
+  name: string;
+  description: string;
+  subtitle: string;
+  country: string;
+  image: string;
+}
+
+// Define the structure for reviews
+export interface Review {
+  id: number;
+  rating: number;
+  text: string;
+  created_at: string;
+  language: string;
+  author_name: string;
+  destination?: string;
+  traveler_type?: string;
+}
+
+// Define available traveler types
+export const travelerTypes = [
+  'family', 
+  'couple', 
+  'solo', 
+  'business', 
+  'friends'
+] as const;
+
+// Define available sort options
+export const sortOptions = [
+  'newest',
+  'oldest', 
+  'highestRated', 
+  'lowestRated'
+] as const;
+
+// Define available languages
+export const languages = [
+  { code: 'en', name: 'English', dir: 'ltr' },
+  { code: 'es', name: 'Español', dir: 'ltr' },
+  { code: 'fr', name: 'Français', dir: 'ltr' },
+  { code: 'de', name: 'Deutsch', dir: 'ltr' },
+  { code: 'it', name: 'Italiano', dir: 'ltr' },
+  { code: 'ja', name: 'Japanese', dir: 'ltr' },
+  { code: 'ar', name: 'العربية', dir: 'rtl' },
+  { code: 'he', name: 'עברית', dir: 'rtl' }
+] as const;
+
 // Define the available destinations
 export const destinations = [
   {
@@ -97,10 +148,19 @@ export const destinations = [
     country: "Japan",
     image: "photo-1536098561742-ca998e48cbcc" // Tokyo skyline with Mt. Fuji
   },
+  {
+    id: "ayia-napa",
+    name: "Ayia Napa",
+    description: "Allergy-Friendly Hotels in Ayia Napa",
+    subtitle: "Enjoy the beautiful beaches of Ayia Napa with allergy-aware accommodations",
+    country: "Cyprus",
+    image: "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png"
+  },
 ] as const;
 
 export type DestinationId = typeof destinations[number]['id'];
 
+// Rest of the file remains the same with destinationData
 export const destinationData: Record<DestinationId, DestinationContent> = {
   london: {
     intro: "Discover the best allergy-friendly hotels in London for a worry-free travel experience. Our guide features accommodations that cater to various dietary needs, ensuring a safe and enjoyable stay.",
