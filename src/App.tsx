@@ -25,9 +25,17 @@ import { Footer } from '@/components/Footer';
 import { MainMenu } from '@/components/MainMenu';
 import { Link } from 'react-router-dom';
 import { Rocket } from "lucide-react";
+import Contact from '@/pages/Contact';
+import AboutUs from '@/pages/AboutUs';
+import Categories from '@/pages/Categories';
+import Index from '@/pages/Index';
+import NotFound from '@/pages/NotFound';
+import DirectChat from '@/pages/DirectChat';
 
-function App() {
+// AppContent component to use hooks that require router context
+const AppContent = () => {
   const { theme, setTheme } = useTheme();
+  const location = useLocation();
 
   useEffect(() => {
     // Check if the code is running in a browser environment before accessing localStorage
@@ -43,7 +51,7 @@ function App() {
   }, [setTheme]);
 
   return (
-    <ThemeProvider defaultTheme="system" enableSystem>
+    <>
       <Toaster />
       
       {/* Beta Banner */}
@@ -69,6 +77,8 @@ function App() {
       </nav>
 
       <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/destinations" element={<DestinationsIndex />} />
         <Route path="/destinations/london" element={<London />} />
         <Route path="/destinations/paris" element={<Paris />} />
         <Route path="/destinations/barcelona" element={<Barcelona />} />
@@ -80,11 +90,25 @@ function App() {
         <Route path="/destinations/thailand" element={<Thailand />} />
         <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
         <Route path="/destinations/hotel-chains" element={<HotelChains />} />
-        <Route path="/destinations" element={<DestinationsIndex />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/direct-chat" element={<DirectChat />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />
-    </ThemeProvider>
+    </>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+        <AppContent />
+      </ThemeProvider>
+    </Router>
   );
 }
 

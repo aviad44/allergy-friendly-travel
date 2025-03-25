@@ -1,4 +1,3 @@
-
 // Define available language codes
 export type LanguageCode = 'en' | 'es' | 'fr' | 'de' | 'it' | 'ja' | 'ko' | 'zh' | 'ar' | 'he';
 
@@ -160,7 +159,19 @@ export const destinations = [
   }
 ] as const;
 
-export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'crete' | 'abu-dhabi' | 'tokyo' | 'newyork' | 'hotel-chains' | 'thailand' | 'ayia-napa';
+// Update the DestinationId type to include all our destinations
+export type DestinationId = 
+  | "paris" 
+  | "london" 
+  | "barcelona" 
+  | "cyprus" 
+  | "abu-dhabi" 
+  | "crete" 
+  | "newyork" 
+  | "tokyo" 
+  | "thailand" 
+  | "ayia-napa" 
+  | "hotel-chains";
 
 export const destinationData: Record<DestinationId, DestinationContent> = {
   london: {
@@ -661,4 +672,3 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
     }
   }
 };
-
