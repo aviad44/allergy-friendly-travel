@@ -1,22 +1,76 @@
+
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Card } from "@/components/ui/card";
 import { X, ExternalLink, Star, MapPin, ShieldCheck, ChevronDown, Utensils } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
+import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
+
 export const SearchBar = () => {
+  // Original state
   const [destination, setDestination] = useState("");
   const [allergies, setAllergies] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [recommendation, setRecommendation] = useState("");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const {
-    toast
-  } = useToast();
+  
+  // Autocomplete state
+  const [showDestinationSuggestions, setShowDestinationSuggestions] = useState(false);
+  const [showAllergySuggestions, setShowAllergySuggestions] = useState(false);
+  const [filteredDestinations, setFilteredDestinations] = useState<string[]>([]);
+  const [filteredAllergies, setFilteredAllergies] = useState<string[]>([]);
+  
+  // Refs for closing dropdowns when clicking outside
+  const destinationInputRef = useRef<HTMLDivElement>(null);
+  const allergyInputRef = useRef<HTMLDivElement>(null);
+  
+  const { toast } = useToast();
+  
+  // Filter suggestions based on input
+  useEffect(() => {
+    if (destination) {
+      const filtered = destinationSuggestions.filter(item => 
+        item.toLowerCase().startsWith(destination.toLowerCase())
+      );
+      setFilteredDestinations(filtered.slice(0, 5)); // Limit to 5 suggestions
+    } else {
+      setFilteredDestinations([]);
+    }
+  }, [destination]);
+  
+  useEffect(() => {
+    if (allergies) {
+      const filtered = allergySuggestions.filter(item => 
+        item.toLowerCase().startsWith(allergies.toLowerCase())
+      );
+      setFilteredAllergies(filtered.slice(0, 5)); // Limit to 5 suggestions
+    } else {
+      setFilteredAllergies([]);
+    }
+  }, [allergies]);
+  
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (destinationInputRef.current && !destinationInputRef.current.contains(event.target as Node)) {
+        setShowDestinationSuggestions(false);
+      }
+      if (allergyInputRef.current && !allergyInputRef.current.contains(event.target as Node)) {
+        setShowAllergySuggestions(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  
   const handleSearch = async () => {
     if (!destination || !allergies) {
       toast({
@@ -62,14 +116,97 @@ export const SearchBar = () => {
       setIsSearching(false);
     }
   };
-  return <div className="flex flex-col sm:flex-row gap-2">
+  
+  const handleDestinationSelection = (value: string) => {
+    setDestination(value);
+    setShowDestinationSuggestions(false);
+  };
+  
+  const handleAllergySelection = (value: string) => {
+    setAllergies(value);
+    setShowAllergySuggestions(false);
+  };
+
+  return (
+    <div className="flex flex-col sm:flex-row gap-2">
       <div className="flex flex-col sm:flex-row gap-2 flex-grow">
-        <Input placeholder="Enter destination" className="h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm" value={destination} onChange={e => setDestination(e.target.value)} />
-        <Input placeholder="Type of allergies" className="h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm" value={allergies} onChange={e => setAllergies(e.target.value)} />
+        {/* Destination input with autocomplete */}
+        <div ref={destinationInputRef} className="relative flex-1">
+          <Input 
+            placeholder="Enter destination" 
+            className="h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm" 
+            value={destination} 
+            onChange={e => setDestination(e.target.value)}
+            onFocus={() => setShowDestinationSuggestions(true)}
+            aria-autocomplete="list"
+            aria-controls="destination-suggestions"
+            aria-expanded={showDestinationSuggestions}
+          />
+          
+          {/* Destination suggestions dropdown */}
+          {showDestinationSuggestions && filteredDestinations.length > 0 && (
+            <ul 
+              id="destination-suggestions"
+              className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50"
+              role="listbox"
+            >
+              {filteredDestinations.map((item, index) => (
+                <li 
+                  key={index} 
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-left"
+                  role="option"
+                  onClick={() => handleDestinationSelection(item)}
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        
+        {/* Allergy input with autocomplete */}
+        <div ref={allergyInputRef} className="relative flex-1">
+          <Input 
+            placeholder="Type of allergies" 
+            className="h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm" 
+            value={allergies} 
+            onChange={e => setAllergies(e.target.value)}
+            onFocus={() => setShowAllergySuggestions(true)}
+            aria-autocomplete="list"
+            aria-controls="allergy-suggestions"
+            aria-expanded={showAllergySuggestions}
+          />
+          
+          {/* Allergy suggestions dropdown */}
+          {showAllergySuggestions && filteredAllergies.length > 0 && (
+            <ul 
+              id="allergy-suggestions"
+              className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50"
+              role="listbox"
+            >
+              {filteredAllergies.map((item, index) => (
+                <li 
+                  key={index} 
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-left"
+                  role="option"
+                  onClick={() => handleAllergySelection(item)}
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
+      
+      {/* Sheet component for search results */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
-          <Button className="h-9 sm:h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" onClick={handleSearch} disabled={isSearching}>
+          <Button 
+            className="h-9 sm:h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" 
+            onClick={handleSearch} 
+            disabled={isSearching}
+          >
             <Search className="mr-2 h-5 w-5" />
             <span>Search Now</span>
           </Button>
@@ -153,5 +290,6 @@ export const SearchBar = () => {
           <div className="h-6 md:hidden"></div>
         </SheetContent>
       </Sheet>
-    </div>;
+    </div>
+  );
 };
