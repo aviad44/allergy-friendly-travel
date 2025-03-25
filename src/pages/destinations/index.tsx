@@ -8,7 +8,6 @@ import { Rocket } from "lucide-react";
 import { MainMenu } from "@/components/MainMenu";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 import { Helmet } from "react-helmet";
-import { Footer } from "@/components/Footer";
 
 const DestinationsIndex = () => {
   const destinations = [
@@ -212,8 +211,6 @@ const DestinationsIndex = () => {
           ))}
         </div>
       </section>
-      
-      <Footer />
     </div>
   );
 };

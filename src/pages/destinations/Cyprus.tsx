@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
@@ -7,7 +8,6 @@ import { DestinationNavigation } from "@/components/reviews/DestinationNavigatio
 import { Separator } from "@/components/ui/separator";
 import { DestinationHero } from "@/components/reviews/DestinationHero";
 import { Helmet } from "react-helmet";
-import { Footer } from "@/components/Footer";
 
 export default function CyprusReviews() {
   const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -173,8 +173,6 @@ export default function CyprusReviews() {
           </div>
         </article>
       </main>
-      
-      <Footer />
     </div>
   );
 }
