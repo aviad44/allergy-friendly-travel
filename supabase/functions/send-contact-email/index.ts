@@ -48,11 +48,11 @@ serve(async (req) => {
       console.log("📧 Attempting to use Resend with API key status:", !!resendApiKey);
       
       // Send email to admin - UPDATED EMAIL ADDRESS HERE
-      console.log("📧 Sending admin email to info@allergy-free-travel.com...");
+      console.log("📧 Sending admin email to aviad44@gmail.com...");
       try {
         const adminEmailResponse = await resend.emails.send({
           from: "Allergy Free Travel <onboarding@resend.dev>",
-          to: ["info@allergy-free-travel.com"],
+          to: ["aviad44@gmail.com"],
           subject: "New Contact Form Submission - Allergy Free Travel",
           html: `
             <h2>New Contact Form Submission</h2>
