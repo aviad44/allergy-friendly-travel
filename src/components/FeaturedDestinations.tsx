@@ -26,6 +26,15 @@ const FEATURED_DESTINATIONS = [
   },
   {
     id: 3,
+    name: "New York",
+    country: "United States",
+    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
+    description: "Explore allergy-friendly dining in the Big Apple",
+    commonAllergies: ["Gluten", "Nuts"],
+    href: "/destinations/newyork"
+  },
+  {
+    id: 4,
     name: "Cyprus",
     country: "Cyprus",
     image: DESTINATION_IMAGES.cyprus,
@@ -34,7 +43,7 @@ const FEATURED_DESTINATIONS = [
     href: "/destinations/cyprus"
   },
   {
-    id: 4,
+    id: 5,
     name: "Barcelona",
     country: "Spain",
     image: DESTINATION_IMAGES.barcelona,
@@ -43,7 +52,7 @@ const FEATURED_DESTINATIONS = [
     href: "/destinations/barcelona"
   },
   {
-    id: 5,
+    id: 6,
     name: "Crete",
     country: "Greece",
     image: DESTINATION_IMAGES.crete,
@@ -52,7 +61,7 @@ const FEATURED_DESTINATIONS = [
     href: "/destinations/crete"
   },
   {
-    id: 6,
+    id: 7,
     name: "Abu Dhabi",
     country: "United Arab Emirates",
     image: DESTINATION_IMAGES["abu-dhabi"],
@@ -61,7 +70,7 @@ const FEATURED_DESTINATIONS = [
     href: "/destinations/abu-dhabi"
   },
   {
-    id: 7,
+    id: 8,
     name: "Thailand",
     country: "Thailand",
     image: DESTINATION_IMAGES.thailand,

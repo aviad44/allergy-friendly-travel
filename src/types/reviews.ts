@@ -159,9 +159,8 @@ export const destinations = [
   }
 ] as const;
 
-export type DestinationId = typeof destinations[number]['id'];
+export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'crete' | 'abu-dhabi' | 'tokyo' | 'newyork' | 'hotel-chains';
 
-// Rest of the file remains the same with destinationData
 export const destinationData: Record<DestinationId, DestinationContent> = {
   london: {
     intro: "Discover the best allergy-friendly hotels in London for a worry-free travel experience. Our guide features accommodations that cater to various dietary needs, ensuring a safe and enjoyable stay.",
@@ -453,6 +452,154 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       ]
     }
   },
+  "newyork": {
+    intro: "New York City offers incredible options for travelers with food allergies. These hotels provide specialized menus, allergen-free dining areas, and staff well-trained in handling dietary restrictions.",
+    hotels: [
+      {
+        name: "1. The Peninsula New York ★★★★★",
+        address: "700 5th Ave, New York, NY 10019",
+        features: ["⭐ 5-star luxury", "🍽️ Customized allergy-friendly meals", "👨‍🍳 Staff trained in allergy protocols"],
+        description: "The Peninsula New York is known for its luxurious accommodations and outstanding guest service, including special attention to food allergies. Their in-house restaurant, Clement, offers customized meals for guests with dietary restrictions.",
+        quote: "The chef personally spoke to me about my gluten allergy and prepared a separate meal in a dedicated kitchen space. I felt safe and taken care of!",
+        bookingUrl: "https://www.peninsula.com/en/new-york"
+      },
+      {
+        name: "2. The Ritz-Carlton New York, Central Park ★★★★★",
+        address: "50 Central Park S, New York, NY 10019",
+        features: ["⭐ 5-star luxury", "🍽️ Dedicated allergy-friendly menu", "👨‍🍳 Specially trained staff"],
+        description: "This five-star hotel takes food allergies seriously with a dedicated allergy-friendly menu and staff trained to handle special dietary needs.",
+        quote: "As someone with severe nut allergies, I was relieved that the staff was knowledgeable and went above and beyond to ensure my meals were safe.",
+        bookingUrl: "https://www.ritzcarlton.com/en/hotels/new-york-central-park"
+      },
+      {
+        name: "3. The Langham, New York, Fifth Avenue ★★★★★",
+        address: "400 5th Ave, New York, NY 10018",
+        features: ["⭐ 5-star luxury", "🍽️ Personalized dining service", "🛏️ Hypoallergenic bedding available"],
+        description: "The Langham stands out for its personalized dining service, where chefs consult with guests on their dietary restrictions. The hotel also offers hypoallergenic bedding and air purifiers upon request.",
+        quote: "I have celiac disease, and the staff ensured I had a completely gluten-free breakfast with no risk of cross-contamination. Highly recommend!",
+        bookingUrl: "https://www.langhamhotels.com/en/the-langham/new-york"
+      },
+      {
+        name: "4. Four Seasons Hotel New York ★★★★★",
+        address: "57 E 57th St, New York, NY 10022",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-free menu options", "👨‍🍳 Executive chef consultation"],
+        description: "Four Seasons offers exceptional service for guests with food allergies. The hotel provides allergy-free menu options and can arrange for an executive chef consultation to ensure your specific dietary needs are met.",
+        quote: "The Four Seasons kitchen staff was extremely accommodating of my multiple food allergies. They made me feel like a valued guest rather than an inconvenience.",
+        bookingUrl: "https://www.fourseasons.com/newyork/"
+      },
+      {
+        name: "5. 1 Hotel Central Park ★★★★★",
+        address: "1414 6th Ave, New York, NY 10019",
+        features: ["⭐ 5-star eco-luxury", "🍽️ Farm-to-table cuisine with allergy focus", "🌱 Organic allergy-friendly options"],
+        description: "This eco-conscious luxury hotel focuses on farm-to-table cuisine with clear allergen labeling. Their kitchen staff is thoroughly trained in preventing cross-contamination.",
+        quote: "As someone with severe food allergies, I was impressed by how seriously the staff took my dietary restrictions. The chef personally prepared my meals to ensure they were safe.",
+        bookingUrl: "https://www.1hotels.com/central-park"
+      },
+      {
+        name: "6. Park Hyatt New York ★★★★★",
+        address: "153 W 57th St, New York, NY 10019",
+        features: ["⭐ 5-star luxury", "🍽️ Special dietary menus", "🛏️ Allergy-friendly rooms"],
+        description: "Park Hyatt New York offers special dietary menus for guests with food allergies and can provide allergy-friendly rooms with air purification systems.",
+        quote: "The hotel staff went above and beyond to accommodate my nut allergy. They even provided a special room service menu that clearly marked all allergens.",
+        bookingUrl: "https://www.hyatt.com/en-US/hotel/new-york/park-hyatt-new-york/nycph"
+      },
+      {
+        name: "7. The Beekman, A Thompson Hotel ★★★★★",
+        address: "123 Nassau St, New York, NY 10038",
+        features: ["⭐ 5-star luxury", "🍽️ Allergen-aware dining", "👨‍🍳 Personalized meal preparation"],
+        description: "The Beekman offers allergen-aware dining options and can prepare personalized meals for guests with specific dietary restrictions.",
+        quote: "The chef at Temple Court restaurant was incredibly knowledgeable about my celiac disease and prepared a special gluten-free tasting menu for me.",
+        bookingUrl: "https://www.thebeekman.com/"
+      },
+      {
+        name: "8. The St. Regis New York ★★★★★",
+        address: "2 E 55th St, New York, NY 10022",
+        features: ["⭐ 5-star luxury", "🍽️ Custom allergy-friendly menus", "👨‍🍳 Chef consultation available"],
+        description: "The St. Regis offers custom allergy-friendly menus and the opportunity to consult with the chef about your specific dietary needs.",
+        quote: "I appreciated how the staff at The St. Regis took my food allergies seriously. They provided me with safe dining options throughout my stay.",
+        bookingUrl: "https://www.marriott.com/hotels/travel/nycxr-the-st-regis-new-york/"
+      },
+      {
+        name: "9. Crosby Street Hotel ★★★★★",
+        address: "79 Crosby St, New York, NY 10012",
+        features: ["⭐ 5-star boutique hotel", "🍽️ Allergy-conscious kitchen", "🥗 Organic ingredient focus"],
+        description: "This boutique hotel in SoHo features an allergy-conscious kitchen that focuses on organic ingredients and transparent food preparation.",
+        quote: "The staff was incredibly accommodating of my daughter's multiple food allergies. They made her special meals that were safe and delicious.",
+        bookingUrl: "https://www.firmdalehotels.com/hotels/new-york/crosby-street-hotel/"
+      },
+      {
+        name: "10. Mandarin Oriental, New York ★★★★★",
+        address: "80 Columbus Cir, New York, NY 10023",
+        features: ["⭐ 5-star luxury", "🍽️ Detailed allergen information", "👨‍🍳 Chef customization"],
+        description: "Mandarin Oriental provides detailed allergen information for all dishes and offers chef customization for guests with food allergies.",
+        quote: "The restaurant staff had complete knowledge of ingredients in every dish and were able to modify recipes to accommodate my allergies.",
+        bookingUrl: "https://www.mandarinoriental.com/new-york/manhattan/luxury-hotel"
+      }
+    ],
+    faqs: [
+      {
+        question: "What are the most accommodating NYC hotels for guests with celiac disease?",
+        answer: "The Peninsula New York, The Langham, and 1 Hotel Central Park are especially well-regarded for their gluten-free protocols and separate preparation areas to prevent cross-contamination."
+      },
+      {
+        question: "Do these New York hotels have emergency protocols for severe allergic reactions?",
+        answer: "Yes, most luxury hotels in NYC have staff trained to handle emergency situations, including severe allergic reactions. Many keep EpiPens on site and have medical response plans in place."
+      },
+      {
+        question: "Is it possible to arrange for allergy-safe room service at these hotels?",
+        answer: "Absolutely. All of the hotels listed offer allergy-safe room service options. It's best to communicate your specific needs when booking and again upon check-in."
+      },
+      {
+        question: "Are there any NYC hotels that specialize in vegan or plant-based cuisine?",
+        answer: "1 Hotel Central Park is known for its excellent plant-based options, while The Beekman and Crosby Street Hotel also offer extensive vegan menus."
+      },
+      {
+        question: "How far in advance should I notify these hotels about my food allergies?",
+        answer: "It's best to inform the hotel about your allergies when making your reservation, then follow up a few days before arrival. This gives the kitchen staff time to prepare for your specific needs."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Spanish", "French"],
+      rows: [
+        {
+          phrases: [
+            "I have a food allergy.",
+            "Tengo una alergia alimentaria.",
+            "J'ai une allergie alimentaire."
+          ]
+        },
+        {
+          phrases: [
+            "I cannot eat gluten/dairy/nuts.",
+            "No puedo comer gluten/lácteos/nueces.",
+            "Je ne peux pas manger de gluten/produits laitiers/noix."
+          ]
+        },
+        {
+          phrases: [
+            "Is this food allergy-safe?",
+            "¿Esta comida es segura para alergias?",
+            "Est-ce que cette nourriture est sans allergènes?"
+          ]
+        },
+        {
+          phrases: [
+            "I need to see the ingredients list.",
+            "Necesito ver la lista de ingredientes.",
+            "J'ai besoin de voir la liste des ingrédients."
+          ]
+        },
+        {
+          phrases: [
+            "Do you have gluten-free options?",
+            "¿Tienen opciones sin gluten?",
+            "Avez-vous des options sans gluten?"
+          ]
+        }
+      ]
+    }
+  },
+  
   "ayia-napa": {
     intro: "Enjoy the beautiful beaches of Ayia Napa with peace of mind, knowing that allergy-friendly hotels are available to cater to your dietary needs. Our guide highlights accommodations offering safe and delicious options for travelers with food allergies.",
     hotels: [
