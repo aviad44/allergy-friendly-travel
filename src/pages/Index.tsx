@@ -1,3 +1,4 @@
+
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";

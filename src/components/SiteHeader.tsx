@@ -7,7 +7,7 @@ import { HOME_CONTENT } from '@/constants/home';
 
 export const SiteHeader = () => {
   return (
-    <>
+    <header>
       {/* Beta Banner */}
       <div className="w-full bg-white text-gray-800 text-xs py-1.5 text-center flex items-center justify-center font-medium">
         <Rocket className="h-3 w-3 mr-1.5 text-[#edab69]" />
@@ -29,6 +29,6 @@ export const SiteHeader = () => {
           <MainMenu />
         </div>
       </nav>
-    </>
+    </header>
   );
 };

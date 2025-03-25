@@ -1,7 +1,6 @@
+
 import React from "react";
 import { Helmet } from "react-helmet";
-import { MainMenu } from "@/components/MainMenu";
-import { Link } from "react-router-dom";
 
 const AboutUs = () => {
   return (
@@ -11,19 +10,8 @@ const AboutUs = () => {
         <meta name="description" content="Learn about our mission to make travel accessible and safe for individuals with food allergies." />
       </Helmet>
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm w-full">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Link to="/" aria-label="Return to homepage" className="text-2xl font-display font-bold text-blue-700 hover:text-blue-800 transition-colors">
-            Allergy Free Travel
-          </Link>
-          
-          <MainMenu />
-        </div>
-      </nav>
-
       {/* Hero Image */}
-      <div className="w-full h-[400px] relative mt-16">
+      <div className="w-full h-[400px] relative">
         <img 
           src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80" 
           alt="Luxury hotel with swimming pool - allergy-friendly vacation destination"

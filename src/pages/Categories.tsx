@@ -1,7 +1,7 @@
+
 import { MapPin, Star, Shield, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MainMenu } from "@/components/MainMenu";
 
 const categories = [
   {
@@ -68,7 +68,6 @@ const Categories = () => {
               Home
             </Button>
           </Link>
-          <MainMenu />
         </div>
 
         <h1 className="font-display text-4xl md:text-5xl mb-6 text-center">

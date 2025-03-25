@@ -1,10 +1,8 @@
 
 import { Helmet } from "react-helmet";
-import { ContactHeader } from "@/components/contact/ContactHeader";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ServicesSection } from "@/components/contact/ServicesSection";
 import { Toaster } from "@/components/ui/toaster";
-import { Footer } from "@/components/Footer";
 
 export default function Contact() {
   // SEO metadata
@@ -36,8 +34,6 @@ export default function Contact() {
         <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" />
       </Helmet>
 
-      <ContactHeader />
-
       {/* Hero Section - Styled like homepage */}
       <section className="relative py-12 md:py-16 bg-white">
         <div className="relative z-10 container mx-auto px-4 text-center">
@@ -55,7 +51,6 @@ export default function Contact() {
         </div>
       </main>
       
-      <Footer />
       <Toaster />
     </div>
   );

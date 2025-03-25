@@ -52,28 +52,28 @@ const AppContent = () => {
     <>
       <Toaster />
       <SiteHeader />
-
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/destinations" element={<DestinationsIndex />} />
-        <Route path="/destinations/london" element={<London />} />
-        <Route path="/destinations/paris" element={<Paris />} />
-        <Route path="/destinations/barcelona" element={<Barcelona />} />
-        <Route path="/destinations/cyprus" element={<Cyprus />} />
-        <Route path="/destinations/abudhabi" element={<AbuDhabi />} />
-        <Route path="/destinations/crete" element={<Crete />} />
-        <Route path="/destinations/newyork" element={<NewYork />} />
-        <Route path="/destinations/tokyo" element={<Tokyo />} />
-        <Route path="/destinations/thailand" element={<Thailand />} />
-        <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
-        <Route path="/destinations/hotel-chains" element={<HotelChains />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/direct-chat" element={<DirectChat />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-
+      <main>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/destinations" element={<DestinationsIndex />} />
+          <Route path="/destinations/london" element={<London />} />
+          <Route path="/destinations/paris" element={<Paris />} />
+          <Route path="/destinations/barcelona" element={<Barcelona />} />
+          <Route path="/destinations/cyprus" element={<Cyprus />} />
+          <Route path="/destinations/abudhabi" element={<AbuDhabi />} />
+          <Route path="/destinations/crete" element={<Crete />} />
+          <Route path="/destinations/newyork" element={<NewYork />} />
+          <Route path="/destinations/tokyo" element={<Tokyo />} />
+          <Route path="/destinations/thailand" element={<Thailand />} />
+          <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
+          <Route path="/destinations/hotel-chains" element={<HotelChains />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/direct-chat" element={<DirectChat />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
       <Footer />
     </>
   );
