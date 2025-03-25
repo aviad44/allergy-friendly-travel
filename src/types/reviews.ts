@@ -1,3 +1,4 @@
+
 // Define available language codes
 export type LanguageCode = 'en' | 'es' | 'fr' | 'de' | 'it' | 'ja' | 'ko' | 'zh' | 'ar' | 'he';
 
@@ -159,7 +160,7 @@ export const destinations = [
   }
 ] as const;
 
-export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'crete' | 'abu-dhabi' | 'tokyo' | 'newyork' | 'hotel-chains';
+export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'crete' | 'abu-dhabi' | 'tokyo' | 'newyork' | 'hotel-chains' | 'thailand' | 'ayia-napa';
 
 export const destinationData: Record<DestinationId, DestinationContent> = {
   london: {
@@ -561,41 +562,11 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
     languageTable: {
       headers: ["English", "Spanish", "French"],
       rows: [
-        {
-          phrases: [
-            "I have a food allergy.",
-            "Tengo una alergia alimentaria.",
-            "J'ai une allergie alimentaire."
-          ]
-        },
-        {
-          phrases: [
-            "I cannot eat gluten/dairy/nuts.",
-            "No puedo comer gluten/lácteos/nueces.",
-            "Je ne peux pas manger de gluten/produits laitiers/noix."
-          ]
-        },
-        {
-          phrases: [
-            "Is this food allergy-safe?",
-            "¿Esta comida es segura para alergias?",
-            "Est-ce que cette nourriture est sans allergènes?"
-          ]
-        },
-        {
-          phrases: [
-            "I need to see the ingredients list.",
-            "Necesito ver la lista de ingredientes.",
-            "J'ai besoin de voir la liste des ingrédients."
-          ]
-        },
-        {
-          phrases: [
-            "Do you have gluten-free options?",
-            "¿Tienen opciones sin gluten?",
-            "Avez-vous des options sans gluten?"
-          ]
-        }
+        ["I have a food allergy.", "Tengo una alergia alimentaria.", "J'ai une allergie alimentaire."],
+        ["I cannot eat gluten/dairy/nuts.", "No puedo comer gluten/lácteos/nueces.", "Je ne peux pas manger de gluten/produits laitiers/noix."],
+        ["Is this food allergy-safe?", "¿Esta comida es segura para alergias?", "Est-ce que cette nourriture est sans allergènes?"],
+        ["I need to see the ingredients list.", "Necesito ver la lista de ingredientes.", "J'ai besoin de voir la liste des ingrédients."],
+        ["Do you have gluten-free options?", "¿Tienen opciones sin gluten?", "Avez-vous des options sans gluten?"]
       ]
     }
   },
@@ -656,5 +627,38 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         ["No cross-contamination please", "Παρακαλώ, χωρίς διασταυρούμενη μόλυνση (Parakaló, chorís diastavroúmeni mólynsi)"]
       ]
     }
+  },
+  "hotel-chains": {
+    intro: "Discover the best hotel chains for travelers with food allergies. This guide highlights global hotel chains that consistently provide safe dining options and accommodations for guests with dietary restrictions.",
+    hotels: [],
+    faqs: [
+      {
+        question: "Which hotel chains are most accommodating for food allergies?",
+        answer: "Four Seasons, Hyatt, Marriott, and Hilton are generally recognized as being among the most allergy-friendly hotel chains globally. They typically have staff training programs and standardized protocols for handling food allergies."
+      },
+      {
+        question: "Do international hotel chains have consistent allergy protocols across all locations?",
+        answer: "While major chains strive for consistency, the level of allergy awareness can vary by location. Luxury brands within hotel groups (like Ritz-Carlton in the Marriott family) often provide the most consistent allergy services."
+      },
+      {
+        question: "How should I communicate my allergies when booking with a hotel chain?",
+        answer: "Contact the specific hotel directly rather than using the central reservation system. Speak with the food and beverage director or chef concierge, then follow up with an email documenting your needs. Reconfirm upon arrival."
+      },
+      {
+        question: "Can hotel chains accommodate multiple food allergies?",
+        answer: "Yes, most major hotel chains can accommodate multiple allergies, though it's important to give them advance notice, especially for complex dietary restrictions. Luxury chains like Four Seasons and Ritz-Carlton excel at handling multiple allergies."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "French", "Spanish", "German"],
+      rows: [
+        ["I have a food allergy", "J'ai une allergie alimentaire", "Tengo una alergia alimentaria", "Ich habe eine Lebensmittelallergie"],
+        ["I cannot eat gluten", "Je ne peux pas manger de gluten", "No puedo comer gluten", "Ich kann kein Gluten essen"],
+        ["Is this dish dairy-free?", "Ce plat est-il sans produits laitiers?", "¿Este plato no contiene lácteos?", "Ist dieses Gericht milchfrei?"],
+        ["Does this contain nuts?", "Est-ce que ça contient des noix?", "¿Esto contiene nueces?", "Enthält dies Nüsse?"],
+        ["No cross-contamination please", "Pas de contamination croisée s'il vous plaît", "Por favor, sin contaminación cruzada", "Bitte keine Kreuzkontamination"]
+      ]
+    }
   }
 };
+

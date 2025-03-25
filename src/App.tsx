@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -19,6 +20,7 @@ import Tokyo from '@/pages/destinations/Tokyo';
 import Thailand from '@/pages/destinations/Thailand';
 import HotelChains from '@/pages/destinations/HotelChains';
 import NewYork from '@/pages/destinations/NewYork';
+import AyiaNapa from '@/pages/destinations/AyiaNapa';
 import { Footer } from '@/components/Footer';
 import { MainMenu } from '@/components/MainMenu';
 import { Link } from 'react-router-dom';
@@ -41,7 +43,7 @@ function App() {
   }, [setTheme]);
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider defaultTheme="system" enableSystem>
       <Toaster />
       
       {/* Beta Banner */}
@@ -76,6 +78,7 @@ function App() {
         <Route path="/destinations/newyork" element={<NewYork />} />
         <Route path="/destinations/tokyo" element={<Tokyo />} />
         <Route path="/destinations/thailand" element={<Thailand />} />
+        <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
         <Route path="/destinations/hotel-chains" element={<HotelChains />} />
         <Route path="/destinations" element={<DestinationsIndex />} />
       </Routes>

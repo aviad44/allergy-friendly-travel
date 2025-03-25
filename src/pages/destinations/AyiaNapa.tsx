@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { DestinationReviews } from "@/components/reviews/DestinationReviews";
-import { destinations } from "@/types/reviews";
 
 const AyiaNapaReviews = () => {
   // SEO metadata

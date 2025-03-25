@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
@@ -160,7 +161,7 @@ export default function ThailandReviews() {
             />
           </div>
           
-          <RelatedDestinations currentDestination="thailand" />
+          <RelatedDestinations currentDestination={'thailand'} />
         </article>
       </main>
       
