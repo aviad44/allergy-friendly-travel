@@ -29,6 +29,7 @@ import Categories from '@/pages/Categories';
 import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import DirectChat from '@/pages/DirectChat';
+import Reviews from '@/pages/Reviews';
 
 // AppContent component to use hooks that require router context
 const AppContent = () => {
@@ -71,6 +72,7 @@ const AppContent = () => {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/direct-chat" element={<DirectChat />} />
+          <Route path="/reviews" element={<Reviews />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
