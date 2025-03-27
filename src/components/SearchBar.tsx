@@ -7,10 +7,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Card } from "@/components/ui/card";
-import { X, ExternalLink, Star, MapPin, ShieldCheck, ChevronDown, Utensils, Home } from "lucide-react";
+import { X, ExternalLink, ChevronDown, Home } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
 import { Link } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const SearchBar = () => {
   // Original state
@@ -19,6 +21,7 @@ export const SearchBar = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [recommendation, setRecommendation] = useState("");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   // Autocomplete state
   const [showDestinationSuggestions, setShowDestinationSuggestions] = useState(false);
@@ -31,6 +34,7 @@ export const SearchBar = () => {
   const allergyInputRef = useRef<HTMLDivElement>(null);
   
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   // Filter suggestions based on input
   useEffect(() => {
@@ -83,7 +87,14 @@ export const SearchBar = () => {
     }
     setIsSearching(true);
     setRecommendation("");
-    setIsSheetOpen(true);
+    
+    // Use Dialog for mobile and Sheet for desktop
+    if (isMobile) {
+      setIsDialogOpen(true);
+    } else {
+      setIsSheetOpen(true);
+    }
+    
     try {
       console.log('Sending search request to Supabase gpt-proxy function');
       const prompt = `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies, including addresses, authentic guest reviews, and nearby restaurants.`;
@@ -112,7 +123,6 @@ export const SearchBar = () => {
         description: "Sorry, we couldn't complete the search. Please try again later.",
         variant: "destructive"
       });
-      // Keep the sheet open to show the error state
     } finally {
       setIsSearching(false);
     }
@@ -130,6 +140,105 @@ export const SearchBar = () => {
 
   const closeSheet = () => {
     setIsSheetOpen(false);
+  };
+  
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+  
+  const closeAll = () => {
+    setIsSheetOpen(false);
+    setIsDialogOpen(false);
+  };
+
+  const renderSearchResults = () => {
+    return (
+      <>
+        <div className="flex justify-between items-center mb-2">
+          <div>
+            <h3 className="text-xl sm:text-2xl font-display">
+              Allergy-Friendly Hotels
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Search results for {destination} with {allergies} allergies
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link to="/">
+              <Button variant="outline" size="sm" className="flex gap-1 items-center">
+                <Home className="h-4 w-4" />
+                <span>Home</span>
+              </Button>
+            </Link>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={closeAll} 
+              className="text-gray-500 hover:bg-gray-100 flex-shrink-0"
+            >
+              <X className="h-5 w-5" />
+              <span className="sr-only">Close</span>
+            </Button>
+          </div>
+        </div>
+      
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-3 mb-3 text-amber-800 text-sm">
+          <p className="flex items-start gap-2">
+            <span className="font-semibold">Safety Notice:</span> Always verify allergy accommodations directly 
+            with hotels before booking. Allergy severity varies, and hotel policies may change.
+          </p>
+        </div>
+          
+        <div className="mt-2 overflow-y-auto flex-grow pb-safe pr-1">
+          {recommendation ? (
+            <Card className="p-3 sm:p-6 mb-4 overflow-y-auto">
+              <div className="prose prose-sm sm:prose max-w-none">
+                <ReactMarkdown components={{
+                  h1: ({node, ...props}) => <h2 className="text-xl sm:text-2xl font-bold text-teal-600 mt-2 mb-4" {...props} />,
+                  h2: ({node, ...props}) => <h3 className="text-lg sm:text-xl font-semibold mt-6 mb-2 flex items-center gap-2" {...props} />,
+                  p: ({node, ...props}) => <p className="my-2" {...props} />,
+                  ul: ({node, ...props}) => <ul className="list-disc pl-5 my-2" {...props} />,
+                  li: ({node, ...props}) => <li className="mb-1" {...props} />,
+                  a: ({node, href, ...props}) => (
+                    <a 
+                      href={href} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-teal-600 hover:underline inline-flex items-center gap-1" 
+                      {...props}
+                    >
+                      {props.children} <ExternalLink className="h-3 w-3" />
+                    </a>
+                  )
+                }}>
+                  {recommendation}
+                </ReactMarkdown>
+              </div>
+            </Card>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-8 text-muted-foreground h-48">
+              {isSearching ? (
+                <>
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4"></div>
+                  <p>Finding the perfect hotel for your needs...</p>
+                </>
+              ) : (
+                <p>Enter destination and allergy details to get personalized recommendations</p>
+              )}
+            </div>
+          )}
+        </div>
+        
+        <div className="sticky bottom-0 w-full bg-background pt-2 pb-4 border-t mt-auto">
+          <Link to="/" className="w-full">
+            <Button variant="default" className="w-full" onClick={closeAll}>
+              <Home className="mr-2 h-4 w-4" />
+              Return to Home
+            </Button>
+          </Link>
+        </div>
+      </>
+    );
   };
 
   return (
@@ -204,110 +313,29 @@ export const SearchBar = () => {
         </div>
       </div>
       
-      {/* Sheet component for search results */}
-      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <SheetTrigger asChild>
-          <Button 
-            className="h-9 sm:h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" 
-            onClick={handleSearch} 
-            disabled={isSearching}
-          >
-            <Search className="mr-2 h-5 w-5" />
-            <span>Search Now</span>
-          </Button>
-        </SheetTrigger>
+      {/* Search button and modals */}
+      <Button 
+        className="h-9 sm:h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" 
+        onClick={handleSearch} 
+        disabled={isSearching}
+      >
+        <Search className="mr-2 h-5 w-5" />
+        <span>Search Now</span>
+      </Button>
         
-        <SheetContent className="w-full sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" side="bottom">
-          <div className="flex justify-between items-center mb-2">
-            <SheetHeader>
-              <SheetTitle className="text-xl sm:text-2xl font-display">
-                Allergy-Friendly Hotels
-              </SheetTitle>
-            </SheetHeader>
-            <div className="flex items-center gap-2">
-              <Link to="/">
-                <Button variant="outline" size="sm" className="hidden xs:flex" onClick={closeSheet}>
-                  <Home className="h-4 w-4 mr-1.5" />
-                  <span>Home</span>
-                </Button>
-              </Link>
-              <Button variant="ghost" size="icon" onClick={closeSheet} className="text-gray-500 hover:bg-gray-100">
-                <X className="h-5 w-5" />
-                <span className="sr-only">Close</span>
-              </Button>
-            </div>
-          </div>
-          
-          <div className="md:hidden flex justify-center my-2">
-            <ChevronDown className="h-5 w-5 text-muted-foreground animate-bounce" />
-            <span className="text-xs text-muted-foreground ml-1">Scroll for more</span>
-          </div>
-          
-          <div className="bg-amber-50 border-l-4 border-amber-500 p-3 mb-3 text-amber-800 text-sm">
-            <div className="flex items-start gap-2">
-              <ShieldCheck className="h-5 w-5 mt-0.5 flex-shrink-0" />
-              <p>
-                <strong>Safety Notice:</strong> While we strive for accuracy, always verify allergy accommodations directly 
-                with hotels before booking. Allergy severity varies, and hotel policies may change.
-              </p>
-            </div>
-          </div>
-          
-          <div className="mt-2 overflow-y-auto flex-grow pb-safe pr-1">
-            {recommendation ? (
-              <Card className="p-3 sm:p-6 mb-4 overflow-y-auto">
-                <h3 className="text-base sm:text-lg font-medium mb-4">
-                  Search results for {destination} with {allergies} allergies
-                </h3>
-                <div className="prose prose-sm sm:prose max-w-none">
-                  <ReactMarkdown components={{
-                    h1: ({node, ...props}) => <h2 className="text-xl sm:text-2xl font-bold text-teal-600 mt-2 mb-4" {...props} />,
-                    h2: ({node, ...props}) => <h3 className="text-lg sm:text-xl font-semibold mt-6 mb-2 flex items-center gap-2" {...props} />,
-                    p: ({node, ...props}) => <p className="my-2" {...props} />,
-                    ul: ({node, ...props}) => <ul className="list-disc pl-5 my-2" {...props} />,
-                    li: ({node, ...props}) => <li className="mb-1" {...props} />,
-                    a: ({node, href, ...props}) => (
-                      <a 
-                        href={href} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-teal-600 hover:underline inline-flex items-center gap-1" 
-                        {...props}
-                      >
-                        {props.children} <ExternalLink className="h-3 w-3" />
-                      </a>
-                    )
-                  }}>
-                    {recommendation}
-                  </ReactMarkdown>
-                </div>
-              </Card>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-8 text-muted-foreground h-48">
-                {isSearching ? (
-                  <>
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4"></div>
-                    <p>Finding the perfect hotel for your needs...</p>
-                  </>
-                ) : (
-                  <p>Enter destination and allergy details to get personalized recommendations</p>
-                )}
-              </div>
-            )}
-          </div>
-          
-          <div className="sticky bottom-0 w-full bg-background pt-2 pb-4 border-t mt-auto">
-            <div className="flex justify-between">
-              <Link to="/" className="w-full">
-                <Button variant="outline" className="w-full" onClick={closeSheet}>
-                  <Home className="mr-2 h-4 w-4" />
-                  Return to Home
-                </Button>
-              </Link>
-            </div>
-          </div>
+      {/* Sheet for desktop */}
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+        <SheetContent className="w-full sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col p-4 sm:p-6" side="bottom">
+          {renderSearchResults()}
         </SheetContent>
       </Sheet>
+        
+      {/* Dialog for mobile - better full-screen experience */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="w-full max-w-full sm:max-w-2xl h-[90vh] max-h-[90vh] overflow-hidden flex flex-col p-4 sm:p-6 rounded-t-xl">
+          {renderSearchResults()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
