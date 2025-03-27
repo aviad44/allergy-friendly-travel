@@ -49,7 +49,7 @@ const AbuDhabi = () => {
           })}
         </script>
       </Helmet>
-      <DestinationReviews destinationId="abudhabi" />
+      <DestinationReviews destinationId="abu-dhabi" />
     </>
   );
 };
