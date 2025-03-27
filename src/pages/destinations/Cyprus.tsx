@@ -14,8 +14,13 @@ export default function CyprusReviews() {
   const destination = destinations.find(d => d.id === 'cyprus')!;
   const content = destinationData['cyprus'];
   
+  // Create a custom destination object with all required properties
   const cyprusDestination = {
-    ...destination,
+    id: destination.id,
+    name: destination.name,
+    country: destination.country,
+    description: destination.description,
+    subtitle: destination.subtitle,
     image: "lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png"
   };
 

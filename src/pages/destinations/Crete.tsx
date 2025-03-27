@@ -14,9 +14,13 @@ export default function CreteReviews() {
   const destination = destinations.find(d => d.id === 'crete')!;
   const content = destinationData['crete'];
   
-  // Create a custom destination object with the image we want to use
+  // Create a custom destination object with all required properties
   const creteDestination = {
-    ...destination,
+    id: destination.id,
+    name: destination.name,
+    country: destination.country,
+    description: destination.description,
+    subtitle: destination.subtitle,
     image: "lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png"
   };
 

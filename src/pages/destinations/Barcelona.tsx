@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { destinations, destinationData } from "@/types/reviews";
 import { HotelCard } from "@/components/hotels/HotelCard";
@@ -15,9 +16,13 @@ export default function BarcelonaReviews() {
   const destination = destinations.find(d => d.id === 'barcelona')!;
   const content = destinationData['barcelona'];
   
-  // Create a custom destination object with the Sagrada Familia image from our constants
+  // Create a custom destination object with all required properties
   const barcelonaDestination = {
-    ...destination,
+    id: destination.id,
+    name: destination.name,
+    country: destination.country,
+    description: destination.description || "Allergy-Friendly Hotels in Barcelona",
+    subtitle: destination.subtitle || "Safe and Comfortable Stays for Travelers with Food Allergies",
     image: DESTINATION_IMAGES.barcelona
   };
 
