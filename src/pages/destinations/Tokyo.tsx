@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { destinations, destinationData } from "@/types/reviews";
 import { DestinationHero } from "@/components/reviews/DestinationHero";
@@ -143,7 +142,7 @@ const TokyoReviews = () => {
             </div>
           </section>
 
-          <TravelTips tips={content?.tips || []} />
+          <TravelTips tips={content?.tips} />
 
           <div className="overflow-x-auto">
             {content?.languageTable && (

@@ -32,7 +32,7 @@ const NewYork = () => {
           id: "new-york",
           name: "New York",
           country: "The Big Apple welcomes allergy-conscious travelers",
-          image: "photo-1496588152823-86ff7695e68f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+          image: "photo-1496442226666-8d4d0e62e6e9",
           description: "Allergy-Friendly Hotels in New York City",
           subtitle: "Find safe accommodations in the city that never sleeps"
         }}

@@ -157,6 +157,7 @@ interface DestinationContent {
   hotels: Hotel[];
   faqs: FAQ[];
   languageTable: LanguageTable;
+  tips?: string[]; // Add the tips property as optional
 }
 
 export const destinationData: Record<DestinationId, DestinationContent> = {
