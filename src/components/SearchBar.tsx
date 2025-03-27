@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Card } from "@/components/ui/card";
-import { X, ExternalLink, Star, MapPin, ShieldCheck, ChevronDown, Utensils } from "lucide-react";
+import { X, ExternalLink, Star, MapPin, ShieldCheck, ChevronDown, Utensils, Home } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
+import { Link } from "react-router-dom";
 
 export const SearchBar = () => {
   // Original state
@@ -127,6 +128,10 @@ export const SearchBar = () => {
     setShowAllergySuggestions(false);
   };
 
+  const closeSheet = () => {
+    setIsSheetOpen(false);
+  };
+
   return (
     <div className="flex flex-col sm:flex-row gap-2">
       <div className="flex flex-col sm:flex-row gap-2 flex-grow">
@@ -213,17 +218,24 @@ export const SearchBar = () => {
         </SheetTrigger>
         
         <SheetContent className="w-full sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" side="bottom">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-2">
             <SheetHeader>
               <SheetTitle className="text-xl sm:text-2xl font-display">
                 Allergy-Friendly Hotels
               </SheetTitle>
             </SheetHeader>
-            <SheetClose asChild>
-              <Button variant="ghost" size="icon" onClick={() => setIsSheetOpen(false)} className="\u05E9\u05D9\u05DD \u05DC\u05D1 \u05E9\u05D4\u05E1\u05D2\u05D9\u05E8\u05D4 \u05D4\u05D9\u05D0 \u05E2\u05DD \u05E9\u05E0\u05D9 X \u05D0\u05D6 \u05E6\u05E8\u05D9\u05DA \u05DC\u05D1\u05D8\u05DC \u05D0\u05D7\u05D3 \u05D1\u05E8\u05DB\u05D9\u05D1 \u05D4\u05D6\u05D4 \u05D0\u05D1\u05DC \u05DC\u05D4\u05D3\u05D2\u05D9\u05E9 \u05D5\u05DC\u05D4\u05D1\u05DC\u05D9\u05D8 \u05D9\u05D5\u05EA\u05E8 \u05D0\u05EA \u05D4\u05D0\u05D7\u05D3 \u05E9\u05E0\u05E9\u05D0\u05E8 \u05DB\u05D3\u05D9 \u05E9\u05D4\u05D2\u05D5\u05DC\u05E9 \u05D9\u05D5\u05DB\u05DC \u05DC\u05D7\u05D6\u05D5\u05E8 \u05DC\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA \u05D9\u05D5\u05EA\u05E8 \u05D1\u05E7\u05DC\u05D5\u05EA\n">
-                <X className="h-4 w-4" />
+            <div className="flex items-center gap-2">
+              <Link to="/">
+                <Button variant="outline" size="sm" className="hidden xs:flex" onClick={closeSheet}>
+                  <Home className="h-4 w-4 mr-1.5" />
+                  <span>Home</span>
+                </Button>
+              </Link>
+              <Button variant="ghost" size="icon" onClick={closeSheet} className="text-gray-500 hover:bg-gray-100">
+                <X className="h-5 w-5" />
+                <span className="sr-only">Close</span>
               </Button>
-            </SheetClose>
+            </div>
           </div>
           
           <div className="md:hidden flex justify-center my-2">
@@ -242,52 +254,58 @@ export const SearchBar = () => {
           </div>
           
           <div className="mt-2 overflow-y-auto flex-grow pb-safe pr-1">
-            {recommendation ? <Card className="p-3 sm:p-6 mb-4 overflow-y-auto">
+            {recommendation ? (
+              <Card className="p-3 sm:p-6 mb-4 overflow-y-auto">
                 <h3 className="text-base sm:text-lg font-medium mb-4">
                   Search results for {destination} with {allergies} allergies
                 </h3>
                 <div className="prose prose-sm sm:prose max-w-none">
                   <ReactMarkdown components={{
-                h1: ({
-                  node,
-                  ...props
-                }) => <h2 className="text-xl sm:text-2xl font-bold text-teal-600 mt-2 mb-4" {...props} />,
-                h2: ({
-                  node,
-                  ...props
-                }) => <h3 className="text-lg sm:text-xl font-semibold mt-6 mb-2 flex items-center gap-2" {...props} />,
-                p: ({
-                  node,
-                  ...props
-                }) => <p className="my-2" {...props} />,
-                ul: ({
-                  node,
-                  ...props
-                }) => <ul className="list-disc pl-5 my-2" {...props} />,
-                li: ({
-                  node,
-                  ...props
-                }) => <li className="mb-1" {...props} />,
-                a: ({
-                  node,
-                  href,
-                  ...props
-                }) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:underline inline-flex items-center gap-1" {...props}>
-                          {props.children} <ExternalLink className="h-3 w-3" />
-                        </a>
-              }}>
+                    h1: ({node, ...props}) => <h2 className="text-xl sm:text-2xl font-bold text-teal-600 mt-2 mb-4" {...props} />,
+                    h2: ({node, ...props}) => <h3 className="text-lg sm:text-xl font-semibold mt-6 mb-2 flex items-center gap-2" {...props} />,
+                    p: ({node, ...props}) => <p className="my-2" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc pl-5 my-2" {...props} />,
+                    li: ({node, ...props}) => <li className="mb-1" {...props} />,
+                    a: ({node, href, ...props}) => (
+                      <a 
+                        href={href} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-teal-600 hover:underline inline-flex items-center gap-1" 
+                        {...props}
+                      >
+                        {props.children} <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )
+                  }}>
                     {recommendation}
                   </ReactMarkdown>
                 </div>
-              </Card> : <div className="flex flex-col items-center justify-center py-8 text-muted-foreground h-48">
-                {isSearching ? <>
+              </Card>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-8 text-muted-foreground h-48">
+                {isSearching ? (
+                  <>
                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4"></div>
                     <p>Finding the perfect hotel for your needs...</p>
-                  </> : <p>Enter destination and allergy details to get personalized recommendations</p>}
-              </div>}
+                  </>
+                ) : (
+                  <p>Enter destination and allergy details to get personalized recommendations</p>
+                )}
+              </div>
+            )}
           </div>
           
-          <div className="h-6 md:hidden"></div>
+          <div className="sticky bottom-0 w-full bg-background pt-2 pb-4 border-t mt-auto">
+            <div className="flex justify-between">
+              <Link to="/" className="w-full">
+                <Button variant="outline" className="w-full" onClick={closeSheet}>
+                  <Home className="mr-2 h-4 w-4" />
+                  Return to Home
+                </Button>
+              </Link>
+            </div>
+          </div>
         </SheetContent>
       </Sheet>
     </div>
