@@ -1,60 +1,43 @@
 
-import { useState, useEffect } from "react";
-import { Home, Globe } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MainMenu } from "@/components/MainMenu";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Helmet } from "react-helmet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { ReviewFilters } from "@/components/reviews/ReviewFilters";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
-import { Review, LanguageCode, languages, sortOptions } from "@/types/reviews";
-import { translations } from "./translations";
+import { Review } from "@/types/reviews";
 
 const Reviews = () => {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
-  const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDestination, setSelectedDestination] = useState<string>('all');
   const [selectedTravelerType, setSelectedTravelerType] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<typeof sortOptions[number]>('newest');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'highestRated' | 'lowestRated'>('newest');
   const { toast } = useToast();
 
-  const isRTL = currentLanguage === 'he';
-  const textAlignment = isRTL ? 'text-right' : 'text-left';
-  const t = translations[currentLanguage];
   const baseUrl = window.location.origin;
   const canonicalUrl = `${baseUrl}/reviews`;
 
   useEffect(() => {
     fetchReviews();
-    // Set HTML language attribute for SEO
-    document.documentElement.lang = currentLanguage;
-    // Adjust text direction for RTL languages
-    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-  }, [currentLanguage]);
+  }, []);
 
   const fetchReviews = async () => {
     try {
       const { data, error } = await supabase
         .from('reviews')
         .select('*')
-        .eq('language', currentLanguage.toLowerCase())
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       
-      // Filter out test reviews
       const filteredReviews = data ? data.filter(review => 
         !["love this hotel", "loved this hotel", "Great hotel"].includes(review.text)
       ) : [];
@@ -74,7 +57,7 @@ const Reviews = () => {
   const handleSubmitReview = async () => {
     if (rating === 0) {
       toast({
-        title: t.error.rating,
+        title: "Please select a rating",
         variant: "destructive"
       });
       return;
@@ -82,7 +65,7 @@ const Reviews = () => {
 
     if (reviewText.trim().length < 10) {
       toast({
-        title: t.error.text,
+        title: "Please write a review of at least 10 characters",
         variant: "destructive"
       });
       return;
@@ -92,8 +75,7 @@ const Reviews = () => {
       const newReview = {
         rating,
         text: reviewText,
-        language: currentLanguage.toLowerCase(),
-        author_name: t.guest
+        author_name: "Guest"
       };
 
       const { error } = await supabase
@@ -107,8 +89,8 @@ const Reviews = () => {
       fetchReviews();
 
       toast({
-        title: t.success.title,
-        description: t.success.description,
+        title: "Thank you!",
+        description: "Your review has been added successfully",
       });
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -148,30 +130,11 @@ const Reviews = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <html lang={currentLanguage} dir={isRTL ? 'rtl' : 'ltr'} />
-        <title>{t.title} | Allergy-Friendly Travel Guide</title>
-        <meta name="description" content={t.seoDescription} />
-        <meta name="keywords" content={t.seoKeywords} />
-        
-        {/* Fixed canonical URL - no query parameters */}
+        <title>Traveler Reviews | Allergy-Friendly Travel Guide</title>
+        <meta name="description" content="Read authentic traveler reviews about allergy-friendly hotels worldwide. Share your own experience to help others find safe accommodations." />
+        <meta name="keywords" content="allergy-friendly hotels, traveler reviews, food allergies, gluten-free hotels, dairy-free accommodations" />
         <link rel="canonical" href={canonicalUrl} />
-        
-        {/* Add hreflang tags for all supported languages */}
-        {languages.map(lang => (
-          <link 
-            key={lang.code}
-            rel="alternate" 
-            hrefLang={lang.code} 
-            href={`${baseUrl}/reviews${lang.code === 'en' ? '' : `?lang=${lang.code}`}`} 
-          />
-        ))}
-        
-        {/* Self-referential hreflang for current language */}
-        <link 
-          rel="alternate" 
-          hrefLang="x-default" 
-          href={canonicalUrl} 
-        />
+        <meta name="robots" content="index, follow" />
       </Helmet>
 
       <div className="hero-gradient absolute inset-0 z-0" />
@@ -184,41 +147,20 @@ const Reviews = () => {
                 Home
               </Button>
             </Link>
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="border border-white/20 backdrop-blur-sm">
-                    <Globe className="h-4 w-4 mr-2" />
-                    {languages.find(lang => lang.code === currentLanguage)?.name}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-white/90 backdrop-blur-md border border-white/20">
-                  {languages.map((language) => (
-                    <DropdownMenuItem
-                      key={language.code}
-                      onClick={() => setCurrentLanguage(language.code as LanguageCode)}
-                      className="hover:bg-white/50"
-                    >
-                      {language.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <MainMenu />
-            </div>
+            <MainMenu />
           </div>
 
-          <div className={`reviews-container reviews-animation-fade ${textAlignment}`}>
-            <h1 className={`reviews-title ${textAlignment}`}>
-              {t.title}
+          <div className="reviews-container reviews-animation-fade">
+            <h1 className="reviews-title">
+              Traveler Reviews
             </h1>
-            <p className={`reviews-subtitle ${textAlignment}`}>
-              {t.subtitle}
+            <p className="reviews-subtitle">
+              Share your experience and help other travelers
             </p>
 
-            <div className={`bg-white/5 backdrop-blur-sm rounded-lg p-4 sm:p-6 mt-6 mb-8 ${textAlignment}`}>
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 sm:p-6 mt-6 mb-8">
               <p className="text-muted-foreground">
-                {t.pageContent.introText}
+                Your feedback helps the allergy-friendly travel community grow stronger. Find reviews from real travelers with dietary restrictions and share your own experiences.
               </p>
             </div>
 
@@ -228,20 +170,17 @@ const Reviews = () => {
               onRatingChange={setRating}
               onReviewTextChange={setReviewText}
               onSubmit={handleSubmitReview}
-              isRTL={isRTL}
-              textAlignment={textAlignment}
-              translations={t}
             />
 
             <div className="space-y-6 mt-10">
-              <h2 className={`text-2xl font-semibold mb-8 text-primary ${textAlignment}`}>{t.recentReviews}</h2>
+              <h2 className="text-2xl font-semibold mb-8 text-primary">Recent Reviews</h2>
               
-              <div className={`bg-white/5 backdrop-blur-sm rounded-lg p-4 sm:p-6 mb-8 ${textAlignment}`}>
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 sm:p-6 mb-8">
                 <p className="text-muted-foreground text-sm mb-3">
-                  {t.pageContent.reviewTips}
+                  When writing your review, consider mentioning specific allergy accommodations the hotel made, staff knowledge about cross-contamination, and availability of alternative food options.
                 </p>
                 <p className="text-muted-foreground text-sm">
-                  {t.pageContent.helpfulReviews}
+                  The most helpful reviews are detailed and specific. Mention the dates of your stay, room type, and specific allergies that were accommodated.
                 </p>
               </div>
               
@@ -251,9 +190,7 @@ const Reviews = () => {
                 sortBy={sortBy}
                 onDestinationChange={setSelectedDestination}
                 onTravelerTypeChange={setSelectedTravelerType}
-                onSortChange={(value) => setSortBy(value as typeof sortOptions[number])}
-                textAlignment={textAlignment}
-                translations={t}
+                onSortChange={(value) => setSortBy(value as typeof sortBy)}
               />
 
               {isLoading ? (
@@ -269,13 +206,8 @@ const Reviews = () => {
               ) : (
                 <div className="grid gap-6">
                   {filterAndSortReviews(reviews).map((review) => (
-                    <div key={review.id} className="reviews-animation-fade" style={{animationDelay: `${reviews.indexOf(review) * 0.1}s`}}>
-                      <ReviewCard
-                        review={review}
-                        isRTL={isRTL}
-                        textAlignment={textAlignment}
-                        translations={t}
-                      />
+                    <div key={review.id} className="reviews-animation-fade">
+                      <ReviewCard review={review} />
                     </div>
                   ))}
                 </div>

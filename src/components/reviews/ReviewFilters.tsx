@@ -1,76 +1,95 @@
 
-import { destinations, travelerTypes, sortOptions } from "@/types/reviews";
+import React from 'react';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
+import { sortOptions } from '@/types/reviews';
 
 interface ReviewFiltersProps {
   selectedDestination: string;
   selectedTravelerType: string;
-  sortBy: string;
-  onDestinationChange: (value: string) => void;
-  onTravelerTypeChange: (value: string) => void;
-  onSortChange: (value: string) => void;
-  textAlignment: string;
-  translations: any;
-  hideDestinationFilter?: boolean;
+  sortBy: typeof sortOptions[number];
+  onDestinationChange: (destination: string) => void;
+  onTravelerTypeChange: (travelerType: string) => void;
+  onSortChange: (sortOption: string) => void;
 }
 
-export const ReviewFilters = ({
+export const ReviewFilters: React.FC<ReviewFiltersProps> = ({
   selectedDestination,
   selectedTravelerType,
   sortBy,
   onDestinationChange,
   onTravelerTypeChange,
-  onSortChange,
-  textAlignment,
-  translations: t,
-  hideDestinationFilter
-}: ReviewFiltersProps) => {
+  onSortChange
+}) => {
+  const destinations = [
+    { value: 'all', label: 'All Destinations' },
+    { value: 'london', label: 'London' },
+    { value: 'paris', label: 'Paris' },
+    { value: 'barcelona', label: 'Barcelona' },
+    { value: 'new-york', label: 'New York' }
+  ];
+
+  const travelerTypes = [
+    { value: 'all', label: 'All Types' },
+    { value: 'family', label: 'Family' },
+    { value: 'couple', label: 'Couple' },
+    { value: 'solo', label: 'Solo' },
+    { value: 'friends', label: 'Friends' }
+  ];
+
   return (
-    <div className={`bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10 mb-8 ${textAlignment}`}>
-      <h3 className="text-lg font-semibold mb-4">{t.filter.title}</h3>
-      <div className={`grid grid-cols-1 ${hideDestinationFilter ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-4`}>
-        {!hideDestinationFilter && (
-          <div>
-            <label className="block text-sm mb-2">{t.filter.destination}</label>
-            <select
-              value={selectedDestination}
-              onChange={(e) => onDestinationChange(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-md p-2"
-            >
-              <option value="all">{t.filter.all}</option>
-              {destinations.map(dest => (
-                <option key={dest.id} value={dest.name}>{dest.name}</option>
-              ))}
-            </select>
-          </div>
-        )}
+    <div className="flex flex-col sm:flex-row gap-4 mb-6">
+      <Select 
+        value={selectedDestination} 
+        onValueChange={onDestinationChange}
+      >
+        <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectValue placeholder="Destination" />
+        </SelectTrigger>
+        <SelectContent>
+          {destinations.map((dest) => (
+            <SelectItem key={dest.value} value={dest.value}>
+              {dest.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
-        <div>
-          <label className="block text-sm mb-2">{t.filter.travelerType}</label>
-          <select
-            value={selectedTravelerType}
-            onChange={(e) => onTravelerTypeChange(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-md p-2"
-          >
-            <option value="all">{t.filter.allTypes}</option>
-            {travelerTypes.map(type => (
-              <option key={type} value={type}>{t.filter[type]}</option>
-            ))}
-          </select>
-        </div>
+      <Select 
+        value={selectedTravelerType} 
+        onValueChange={onTravelerTypeChange}
+      >
+        <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectValue placeholder="Traveler Type" />
+        </SelectTrigger>
+        <SelectContent>
+          {travelerTypes.map((type) => (
+            <SelectItem key={type.value} value={type.value}>
+              {type.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
-        <div>
-          <label className="block text-sm mb-2">{t.filter.sortBy}</label>
-          <select
-            value={sortBy}
-            onChange={(e) => onSortChange(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-md p-2"
-          >
-            {sortOptions.map(option => (
-              <option key={option} value={option}>{t.filter[option]}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <Select 
+        value={sortBy} 
+        onValueChange={onSortChange}
+      >
+        <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectValue placeholder="Sort By" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="newest">Newest First</SelectItem>
+          <SelectItem value="oldest">Oldest First</SelectItem>
+          <SelectItem value="highestRated">Highest Rated</SelectItem>
+          <SelectItem value="lowestRated">Lowest Rated</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   );
 };
