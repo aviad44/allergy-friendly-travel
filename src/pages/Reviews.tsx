@@ -1,9 +1,4 @@
-
 import React, { useState, useEffect } from "react";
-import { Home } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { MainMenu } from "@/components/MainMenu";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Helmet } from "react-helmet";
@@ -141,16 +136,6 @@ const Reviews = () => {
       <div className="hero-gradient absolute inset-0 z-0" />
       <div className="relative z-10">
         <div className="container mx-auto px-4 py-12 max-w-5xl">
-          <div className="flex justify-between items-center mb-8">
-            <Link to="/">
-              <Button variant="ghost" className="hover:bg-white/10 transition-colors">
-                <Home className="h-4 w-4 mr-2" />
-                Home
-              </Button>
-            </Link>
-            <MainMenu />
-          </div>
-
           <div className="reviews-container reviews-animation-fade">
             <h1 className="reviews-title">
               Traveler Reviews
