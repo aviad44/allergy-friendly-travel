@@ -33,7 +33,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     : "Beautiful travel destination for allergy-friendly accommodation";
 
   // Apply standard zoom out for all destinations (30% zoom out)
-  const backgroundSize = "75%"; // Zoomed out to 75% of original size (30% zoom out)
+  const backgroundSize = "70%"; // Zoomed out to 70% of original size (30% zoom out)
   let backgroundPosition = "center center";
 
   return (

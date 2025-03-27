@@ -52,7 +52,9 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
                   className="h-32 bg-cover bg-center" 
                   style={{ 
                     backgroundImage: `url(${imageUrl})`,
-                    backgroundPosition: 'center 30%'
+                    backgroundSize: "70%", // 30% zoom out for consistency
+                    backgroundPosition: 'center center',
+                    backgroundRepeat: "no-repeat"
                   }}
                 />
                 <CardContent className="p-4">
