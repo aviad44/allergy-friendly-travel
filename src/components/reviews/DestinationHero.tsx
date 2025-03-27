@@ -32,10 +32,6 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     ? `Scenic view of ${destination.name} - allergy-friendly travel destination with hotels and accommodations for travelers with dietary restrictions`
     : "Beautiful travel destination for allergy-friendly accommodation";
 
-  // Apply standard zoom out for all destinations (30% zoom out)
-  const backgroundSize = "70%"; // Zoomed out to 70% of original size (30% zoom out)
-  let backgroundPosition = "center center";
-
   return (
     <div 
       className="h-[35vh] sm:h-[40vh] md:h-[50vh] relative overflow-hidden"
@@ -43,12 +39,14 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       aria-label={`Featured destination: ${destination.name}`}
     >
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 flex items-center justify-center"
         style={{
           backgroundImage: `url(${imageUrl})`,
-          backgroundSize: backgroundSize,
-          backgroundPosition: backgroundPosition,
+          backgroundSize: "contain",
+          backgroundPosition: "center center",
           backgroundRepeat: "no-repeat",
+          maxHeight: "100%",
+          maxWidth: "100%"
         }}
         role="img"
         aria-label={altText}

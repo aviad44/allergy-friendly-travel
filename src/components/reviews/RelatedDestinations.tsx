@@ -48,15 +48,13 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
               className="group block"
             >
               <Card className="overflow-hidden h-full transition-all hover:shadow-md">
-                <div 
-                  className="h-32 bg-cover bg-center" 
-                  style={{ 
-                    backgroundImage: `url(${imageUrl})`,
-                    backgroundSize: "70%", // 30% zoom out for consistency
-                    backgroundPosition: 'center center',
-                    backgroundRepeat: "no-repeat"
-                  }}
-                />
+                <div className="h-32 flex items-center justify-center bg-gray-50">
+                  <img 
+                    src={imageUrl} 
+                    alt={`${destination.name}, ${destination.country}`}
+                    className="max-h-28 max-w-full object-contain"
+                  />
+                </div>
                 <CardContent className="p-4">
                   <h3 className="font-semibold group-hover:text-primary transition-colors">
                     {destination.name}
