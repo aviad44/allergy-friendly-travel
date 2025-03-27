@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Hotel } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Rocket } from "lucide-react";
-import { MainMenu } from "@/components/MainMenu";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 import { Helmet } from "react-helmet";
 
@@ -141,31 +139,9 @@ const DestinationsIndex = () => {
           })}
         </script>
       </Helmet>
-      
-      {/* Beta Banner */}
-      <div className="w-full bg-white text-gray-800 text-xs py-1.5 text-center flex items-center justify-center font-medium">
-        <Rocket className="h-3 w-3 mr-1.5 text-[#edab69]" />
-        Website in Beta
-      </div>
-      
-      {/* Navigation */}
-      <nav className="relative bg-white shadow-sm w-full">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Link to="/" aria-label="Return to homepage" className="flex items-center space-x-3 text-2xl font-display font-bold text-[#edab69] hover:text-amber-400 transition-colors">
-            <img 
-              src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
-              alt="Allergy Free Travel Logo" 
-              className="h-10" 
-            />
-            <span>Allergy Free Travel</span>
-          </Link>
-          
-          <MainMenu />
-        </div>
-      </nav>
 
       {/* Hero Section */}
-      <section className="relative py-12 md:py-16">
+      <section className="relative py-12 md:py-16 mt-0">
         <div className="absolute inset-0 overflow-hidden">
           <img 
             src="https://images.unsplash.com/photo-1488085061387-422e29b40080?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2731&q=80" 
