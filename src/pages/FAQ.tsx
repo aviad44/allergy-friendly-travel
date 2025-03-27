@@ -122,7 +122,7 @@ export default function FAQ() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen bg-white">
       <Helmet>
         <title>Frequently Asked Questions | Allergy Free Travel</title>
         <meta name="description" content="Find answers to common questions about allergy-friendly travel, hotel accommodations, and our platform." />
@@ -131,7 +131,7 @@ export default function FAQ() {
 
       <ContactHeader />
 
-      <main className="flex-grow container mx-auto px-4 py-12 max-w-7xl">
+      <main className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="max-w-4xl mx-auto space-y-10">
           <section className="text-center space-y-4">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground">
@@ -142,9 +142,9 @@ export default function FAQ() {
             </p>
           </section>
 
-          <div className="bg-card rounded-lg border p-6 shadow-sm">
+          <div className="bg-white rounded-lg border p-6 shadow-sm">
             <Tabs defaultValue="general" className="w-full">
-              <div className="overflow-x-auto pb-2">
+              <div className="overflow-x-auto pb-4">
                 <TabsList className="mb-6 h-auto flex flex-wrap sm:flex-nowrap gap-2 w-max min-w-full">
                   {faqCategories.map((category) => (
                     <TabsTrigger 
