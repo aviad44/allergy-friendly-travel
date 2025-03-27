@@ -58,14 +58,14 @@ export const MainMenu = () => {
           {menuItems.map((item) => {
             const Icon = item.icon;
             return (
-              <button
+              <Link
                 key={item.title}
-                onClick={() => handleNavigation(item.href)}
+                to={item.href}
                 className="flex items-center gap-3 text-lg font-medium p-2 rounded-lg hover:bg-secondary/10 transition-colors text-left"
               >
                 <Icon className="h-5 w-5" />
                 <span className="text-foreground">{item.title}</span>
-              </button>
+              </Link>
             );
           })}
         </nav>
