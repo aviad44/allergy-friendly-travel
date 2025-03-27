@@ -28,29 +28,13 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   console.log("Destination hero image URL:", imageUrl);
 
   // Define a more descriptive alt text based on the destination
-  const altText = destination.name === "Barcelona" 
-    ? "Sagrada Familia - Antoni Gaudí's masterpiece in Barcelona, Spain - allergy-friendly travel destination" 
-    : destination.name === "Paris"
-    ? "Full view of the iconic Eiffel Tower against the Paris skyline - allergy-friendly travel destination"
-    : destination.name === "Tokyo"
-    ? "Shibuya crossing in Tokyo with colorful crowd and Japanese people in stylish clothing - allergy-friendly travel destination"
-    : `Scenic landscape of ${destination.name} - allergy-friendly travel destination with beautiful views and accommodations`;
+  const altText = destination.name 
+    ? `Scenic view of ${destination.name} - allergy-friendly travel destination with hotels and accommodations for travelers with dietary restrictions`
+    : "Beautiful travel destination for allergy-friendly accommodation";
 
-  // Determine if this is Paris or Barcelona or Tokyo to adjust background position
-  const isParis = destination.name === "Paris";
-  const isBarcelona = destination.name === "Barcelona";
-  const isTokyo = destination.name === "Tokyo";
-  let backgroundPosition = "center 30%";
-  let backgroundSize = "cover";
-  
-  if (isParis) {
-    backgroundPosition = "center 35%"; // Adjusted to show full tower
-    backgroundSize = "cover";
-  } else if (isBarcelona) {
-    backgroundPosition = "center 40%";
-  } else if (isTokyo) {
-    backgroundPosition = "center 35%"; // Adjusted to focus on the Shibuya crossing and people
-  }
+  // Apply standard zoom out for all destinations (30% zoom out)
+  const backgroundSize = "75%"; // Zoomed out to 75% of original size (30% zoom out)
+  let backgroundPosition = "center center";
 
   return (
     <div 
@@ -59,11 +43,12 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       aria-label={`Featured destination: ${destination.name}`}
     >
       <div 
-        className="absolute inset-0 animate-hero-zoom"
+        className="absolute inset-0"
         style={{
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: backgroundSize,
           backgroundPosition: backgroundPosition,
+          backgroundRepeat: "no-repeat",
         }}
         role="img"
         aria-label={altText}

@@ -1,171 +1,57 @@
 
-import { useState } from "react";
-import { destinations, destinationData } from "@/types/reviews";
-import { HotelCard } from "@/components/hotels/HotelCard";
-import { LanguageTable } from "@/components/reviews/LanguageTable";
-import { TravelTips } from "@/components/hotels/TravelTips";
-import { DestinationNavigation } from "@/components/reviews/DestinationNavigation";
-import { Separator } from "@/components/ui/separator";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check } from "lucide-react";
-import { DestinationHero } from "@/components/reviews/DestinationHero";
-import { DESTINATION_IMAGES } from "@/constants/destinations";
+import { DestinationReviews } from "@/components/reviews/DestinationReviews";
+import { Helmet } from "react-helmet";
 
-export default function BarcelonaReviews() {
-  const [currentLanguage, setCurrentLanguage] = useState('en');
-  const destination = destinations.find(d => d.id === 'barcelona')!;
-  const content = destinationData['barcelona'];
-  
-  // Create a custom destination object with all required properties
-  const barcelonaDestination = {
-    id: destination.id,
-    name: destination.name,
-    country: destination.country,
-    description: destination.description || "Allergy-Friendly Hotels in Barcelona",
-    subtitle: destination.subtitle || "Safe and Comfortable Stays for Travelers with Food Allergies",
-    image: DESTINATION_IMAGES.barcelona
-  };
-
-  // Custom Barcelona content with correct props for HotelCard
-  const barcelonaHotels = [
-    {
-      name: "Grand Hotel Central",
-      address: "Via Laietana 30, Barcelona, Spain",
-      features: ["⭐ 5-star luxury", "🛏️ Hypoallergenic rooms", "🍽️ Allergen-free dining"],
-      description: "Located in the heart of Barcelona, this luxury hotel prioritizes guest well-being. One visitor noted, \"Absolutely loved this hotel. From the moment I arrived, they ensured all my dietary needs were met.\"",
-      quote: "Absolutely loved this hotel. From the moment I arrived, they ensured all my dietary needs were met.",
-      bookingUrl: "https://www.grandhotelcentral.com/"
-    },
-    {
-      name: "Mercer Hotel Barcelona",
-      address: "Carrer dels Lledó 7, Barcelona, Spain",
-      features: ["⭐ 5-star luxury", "👨‍🍳 Personalized dining", "🍽️ Dedicated kitchen"],
-      description: "Renowned for its exceptional service, Mercer Hotel provides tailored meals for guests with allergies.",
-      quote: "The staff was incredibly attentive to my son's peanut allergy, making our stay stress-free.",
-      bookingUrl: "https://www.mercerbarcelona.com/"
-    },
-    {
-      name: "Hotel Arts Barcelona",
-      address: "Marina 19-21, Barcelona, Spain",
-      features: ["⭐ 5-star luxury", "🏖️ Beachfront", "🍽️ Allergen-conscious dining"],
-      description: "Overlooking the marina, Hotel Arts offers allergy-conscious dining.",
-      quote: "The staff took my allergies seriously and ensured every meal was prepared safely.",
-      bookingUrl: "https://www.hotelartsbarcelona.com/"
-    },
-    {
-      name: "Nobu Hotel Barcelona",
-      address: "Avinguda de Roma 2-4, Barcelona, Spain",
-      features: ["⭐ 5-star luxury", "🍣 Japanese cuisine", "👨‍🍳 Specialized chefs"],
-      description: "Combining Japanese-inspired luxury with dietary sensitivity, Nobu Hotel is a top pick.",
-      quote: "The chef personally ensured that my meals were allergy-safe, and the service was impeccable.",
-      bookingUrl: "https://barcelona.nobuhotels.com/"
-    },
-    {
-      name: "Hotel Calipolis Sitges",
-      address: "Avinguda Sofia 2-6, Sitges, Spain",
-      features: ["⭐ 4-star comfort", "🏖️ Beachfront", "🍽️ Allergy-friendly menus"],
-      description: "Situated in Sitges, a short drive from Barcelona, this hotel offers allergy-friendly menus and customized meal plans.",
-      quote: "I felt completely safe dining here, thanks to their detailed approach to food allergies.",
-      bookingUrl: "https://www.hotelcalipolis.com/en/"
-    }
-  ];
-
-  const allergyTips = [
-    "Contact Hotels in Advance: Notify the hotel about your allergies before arrival.",
-    "Use Allergy Translation Cards: Carry Spanish-language allergy cards to ease communication at restaurants.",
-    "Know Common Ingredients: Be cautious of nuts, dairy, and gluten in Spanish cuisine.",
-    "Bring Emergency Medication: Always have antihistamines and an EpiPen ready."
-  ];
+const Barcelona = () => {
+  // SEO metadata
+  const pageTitle = "Allergy-Friendly Hotels in Barcelona | Safe Dining for Dietary Restrictions";
+  const pageDescription = "Discover the best allergy-friendly hotels in Barcelona. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
+  const pageKeywords = "allergy-friendly barcelona, gluten-free hotels barcelona, food allergies spain, barcelona hotels dietary restrictions";
+  const canonicalUrl = "https://www.allergy-free-travel.com/destinations/barcelona";
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Use the DestinationHero component with our custom destination */}
-      <DestinationHero destination={barcelonaDestination} />
-
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl -mt-20 relative z-10 text-left">
-        <DestinationNavigation 
-          currentLanguage={currentLanguage as any} 
-          setCurrentLanguage={setCurrentLanguage as any}
-        />
-
-        <article className="space-y-8 md:space-y-12 text-left">
-          <header className="space-y-4 text-left">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground text-left">
-              The Ultimate Guide to Allergy-Friendly Hotels in Barcelona
-            </h1>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-display text-muted-foreground text-left">
-              Safe and Comfortable Stays for Travelers with Food Allergies
-            </h2>
-            
-            <section className="mt-6 md:mt-8 text-left">
-              <h2 className="text-xl sm:text-2xl font-display font-semibold mb-3 md:mb-4 text-left">
-                Why Choose an Allergy-Friendly Hotel in Barcelona?
-              </h2>
-              <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed text-left">
-                Barcelona offers a perfect blend of stunning architecture, Mediterranean cuisine, and vibrant culture. 
-                For travelers with food allergies, choosing the right accommodation is essential for a safe and enjoyable stay. 
-                These hotels understand dietary restrictions and go above and beyond to ensure your comfort and safety.
-              </p>
-            </section>
-          </header>
-
-          <Separator />
-
-          <section className="space-y-4 md:space-y-6 text-left" aria-label="Hotels List">
-            <h2 className="text-xl sm:text-2xl font-display font-semibold text-left">
-              Top Allergy-Friendly Hotels in Barcelona
-            </h2>
-            <div className="grid gap-6 md:gap-8">
-              {barcelonaHotels.map((hotel, index) => (
-                <HotelCard 
-                  key={index}
-                  name={hotel.name}
-                  address={hotel.address}
-                  features={hotel.features}
-                  description={hotel.description}
-                  quote={hotel.quote}
-                  bookingUrl={hotel.bookingUrl}
-                />
-              ))}
-            </div>
-          </section>
-
-          <Separator />
-
-          {/* Essential Tips Section */}
-          <Card className="mt-12">
-            <CardHeader className="text-left">
-              <CardTitle className="text-2xl font-display text-left">Essential Tips for Allergy-Safe Travel in Barcelona</CardTitle>
-            </CardHeader>
-            <CardContent className="text-left">
-              <ul className="space-y-4 text-left">
-                {allergyTips.map((tip, index) => (
-                  <li key={index} className="flex items-start gap-2 text-left">
-                    <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                    <span className="text-left">{tip}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Final Note */}
-          <div className="bg-muted p-6 rounded-lg">
-            <p className="text-lg font-medium text-left">
-              By choosing one of these allergy-friendly hotels, you can enjoy a safe and enjoyable Barcelona getaway. 🌍✨
-            </p>
-          </div>
-
-          {content.languageTable.headers.length > 0 && (
-            <div className="overflow-x-auto">
-              <LanguageTable 
-                data={content.languageTable}
-                destinationName="Barcelona"
-              />
-            </div>
-          )}
-        </article>
-      </main>
-    </div>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta name="keywords" content={pageKeywords} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content="https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="article" />
+        
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content="https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" />
+        
+        {/* Schema.org markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "TravelGuide",
+            "name": pageTitle,
+            "description": pageDescription,
+            "datePublished": "2024-06-10",
+            "dateModified": "2024-06-10",
+            "about": {
+              "@type": "City",
+              "name": "Barcelona",
+              "description": "Popular city in Spain"
+            },
+            "audience": "Travelers with food allergies or dietary restrictions"
+          })}
+        </script>
+      </Helmet>
+      <DestinationReviews destinationId="barcelona" />
+    </>
   );
-}
+};
+
+export default Barcelona;
