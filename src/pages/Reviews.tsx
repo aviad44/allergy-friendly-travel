@@ -136,12 +136,12 @@ const Reviews = () => {
 
       <div className="hero-gradient absolute inset-0 z-0" />
       <div className="relative z-10">
-        <div className="container mx-auto px-4 py-12 max-w-5xl">
+        <div className="container mx-auto px-4 py-12 max-w-6xl"> 
           <div className="reviews-container reviews-animation-fade">
-            <h1 className="reviews-title">
+            <h1 className="reviews-title text-3xl md:text-4xl lg:text-5xl mb-4">
               Traveler Reviews
             </h1>
-            <p className="reviews-subtitle">
+            <p className="reviews-subtitle text-lg md:text-xl mb-8 max-w-2xl">
               Share your experience and help other travelers
             </p>
 
@@ -151,54 +151,58 @@ const Reviews = () => {
               </p>
             </div>
 
-            <ReviewForm
-              rating={rating}
-              reviewText={reviewText}
-              onRatingChange={setRating}
-              onReviewTextChange={setReviewText}
-              onSubmit={handleSubmitReview}
-            />
-
-            <div className="space-y-6 mt-10">
-              <h2 className="text-2xl font-semibold mb-8 text-primary">Recent Reviews</h2>
-              
-              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 sm:p-6 mb-8">
-                <p className="text-muted-foreground text-sm mb-3">
-                  When writing your review, consider mentioning specific allergy accommodations the hotel made, staff knowledge about cross-contamination, and availability of alternative food options.
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  The most helpful reviews are detailed and specific. Mention the dates of your stay, room type, and specific allergies that were accommodated.
-                </p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-5">
+                <ReviewForm
+                  rating={rating}
+                  reviewText={reviewText}
+                  onRatingChange={setRating}
+                  onReviewTextChange={setReviewText}
+                  onSubmit={handleSubmitReview}
+                />
               </div>
-              
-              <ReviewFilters
-                selectedDestination={selectedDestination}
-                selectedTravelerType={selectedTravelerType}
-                sortBy={sortBy}
-                onDestinationChange={setSelectedDestination}
-                onTravelerTypeChange={setSelectedTravelerType}
-                onSortChange={(value) => setSortBy(value as typeof sortOptions[number])}
-              />
 
-              {isLoading ? (
-                <div className="text-center py-12">
-                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
-                  <p className="mt-4 text-muted-foreground">Loading reviews...</p>
+              <div className="lg:col-span-7">
+                <h2 className="text-2xl font-semibold mb-6 text-primary">Recent Reviews</h2>
+                
+                <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 sm:p-6 mb-6">
+                  <p className="text-muted-foreground text-sm mb-3">
+                    When writing your review, consider mentioning specific allergy accommodations the hotel made, staff knowledge about cross-contamination, and availability of alternative food options.
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    The most helpful reviews are detailed and specific. Mention the dates of your stay, room type, and specific allergies that were accommodated.
+                  </p>
                 </div>
-              ) : reviews.length === 0 ? (
-                <div className="text-center py-16 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
-                  <p className="text-muted-foreground text-lg">No reviews yet</p>
-                  <p className="text-sm mt-2">Be the first to share your experience!</p>
-                </div>
-              ) : (
-                <div className="grid gap-6">
-                  {filterAndSortReviews(reviews).map((review) => (
-                    <div key={review.id} className="reviews-animation-fade">
-                      <ReviewCard review={review} />
-                    </div>
-                  ))}
-                </div>
-              )}
+                
+                <ReviewFilters
+                  selectedDestination={selectedDestination}
+                  selectedTravelerType={selectedTravelerType}
+                  sortBy={sortBy}
+                  onDestinationChange={setSelectedDestination}
+                  onTravelerTypeChange={setSelectedTravelerType}
+                  onSortChange={(value) => setSortBy(value as typeof sortOptions[number])}
+                />
+
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+                    <p className="mt-4 text-muted-foreground">Loading reviews...</p>
+                  </div>
+                ) : reviews.length === 0 ? (
+                  <div className="text-center py-16 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm">
+                    <p className="text-muted-foreground text-lg">No reviews yet</p>
+                    <p className="text-sm mt-2">Be the first to share your experience!</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-6">
+                    {filterAndSortReviews(reviews).map((review) => (
+                      <div key={review.id} className="reviews-animation-fade">
+                        <ReviewCard review={review} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
