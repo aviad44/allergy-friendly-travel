@@ -28,7 +28,7 @@ const FEATURED_DESTINATIONS = [
     id: 3,
     name: "New York",
     country: "United States",
-    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
+    image: DESTINATION_IMAGES["new-york"],
     description: "Explore allergy-friendly dining in the Big Apple",
     commonAllergies: ["Gluten", "Nuts"],
     href: "/destinations/newyork"
@@ -90,10 +90,10 @@ export const FeaturedDestinations = () => {
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
                   src={destination.image.startsWith('photo-') 
-                    ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=800&q=80` 
+                    ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=800&h=500&q=80` 
                     : destination.image}
                   alt={destination.name === "Cyprus" 
-                    ? "WaterWorld Themed Waterpark in Ayia Napa, Cyprus - Best allergy-friendly destination for family vacations"
+                    ? "Beautiful beach in Cyprus - Best allergy-friendly destination for family vacations"
                     : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`
                   }
                   className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"

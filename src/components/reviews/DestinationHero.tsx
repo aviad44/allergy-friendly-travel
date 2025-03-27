@@ -18,7 +18,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   let imageUrl;
   // Process image URL based on format
   if (imageSource.startsWith('photo-')) {
-    imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=2000&q=80`;
+    imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=2000&h=800&q=80`;
   } else if (imageSource.startsWith('/lovable-uploads/')) {
     imageUrl = imageSource;
   } else {
@@ -39,14 +39,12 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       aria-label={`Featured destination: ${destination.name}`}
     >
       <div 
-        className="absolute inset-0 flex items-center justify-center"
+        className="absolute inset-0"
         style={{
           backgroundImage: `url(${imageUrl})`,
-          backgroundSize: "contain",
+          backgroundSize: "cover",
           backgroundPosition: "center center",
-          backgroundRepeat: "no-repeat",
-          maxHeight: "100%",
-          maxWidth: "100%"
+          backgroundRepeat: "no-repeat"
         }}
         role="img"
         aria-label={altText}

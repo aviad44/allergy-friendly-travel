@@ -34,7 +34,7 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
           // Process image URL based on format
           let imageUrl;
           if (imageSource.startsWith('photo-')) {
-            imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=600&q=80`;
+            imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=600&h=400&q=80`;
           } else if (imageSource.startsWith('/lovable-uploads/')) {
             imageUrl = imageSource;
           } else {
@@ -48,13 +48,15 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
               className="group block"
             >
               <Card className="overflow-hidden h-full transition-all hover:shadow-md">
-                <div className="h-32 flex items-center justify-center bg-gray-50">
-                  <img 
-                    src={imageUrl} 
-                    alt={`${destination.name}, ${destination.country}`}
-                    className="max-h-28 max-w-full object-contain"
-                  />
-                </div>
+                <div 
+                  className="h-32 bg-cover bg-center" 
+                  style={{ 
+                    backgroundImage: `url(${imageUrl})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: 'center center',
+                    backgroundRepeat: "no-repeat"
+                  }}
+                />
                 <CardContent className="p-4">
                   <h3 className="font-semibold group-hover:text-primary transition-colors">
                     {destination.name}
