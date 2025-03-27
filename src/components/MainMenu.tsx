@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu, Home, MapPin, Star, MessageCircle, Info, HelpCircle } from "lucide-react";
@@ -38,8 +39,14 @@ const menuItems = [
 ];
 
 export const MainMenu = () => {
+  const [open, setOpen] = useState(false);
+  
+  const handleLinkClick = () => {
+    setOpen(false);
+  };
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="hover:bg-secondary/10">
           <Menu className="h-6 w-6" />
@@ -54,6 +61,7 @@ export const MainMenu = () => {
               <Link
                 key={item.title}
                 to={item.href}
+                onClick={handleLinkClick}
                 className="flex items-center gap-3 text-lg font-medium p-2 rounded-lg hover:bg-secondary/10 transition-colors text-left"
               >
                 <Icon className="h-5 w-5" />
