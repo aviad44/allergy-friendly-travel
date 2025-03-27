@@ -16,7 +16,8 @@
   exclude = [
     # Exclude pages you don't want in the sitemap
     '**/404/**',
-    '**/admin/**'
+    '**/admin/**',
+    '**/search/**'
   ]
   changeFreq = "weekly"
   priority = 0.5
@@ -46,3 +47,23 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Content-Security-Policy = "upgrade-insecure-requests"
 
+# Add cache control for static assets
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

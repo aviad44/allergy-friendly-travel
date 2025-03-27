@@ -33,6 +33,8 @@ const Reviews = () => {
   const isRTL = currentLanguage === 'he';
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   const t = translations[currentLanguage];
+  const baseUrl = window.location.origin;
+  const canonicalUrl = `${baseUrl}/reviews`;
 
   useEffect(() => {
     fetchReviews();
@@ -150,16 +152,26 @@ const Reviews = () => {
         <title>{t.title} | Allergy-Friendly Travel Guide</title>
         <meta name="description" content={t.seoDescription} />
         <meta name="keywords" content={t.seoKeywords} />
+        
+        {/* Fixed canonical URL - no query parameters */}
+        <link rel="canonical" href={canonicalUrl} />
+        
         {/* Add hreflang tags for all supported languages */}
         {languages.map(lang => (
           <link 
             key={lang.code}
             rel="alternate" 
             hrefLang={lang.code} 
-            href={`${window.location.origin}/reviews?lang=${lang.code}`} 
+            href={`${baseUrl}/reviews${lang.code === 'en' ? '' : `?lang=${lang.code}`}`} 
           />
         ))}
-        <link rel="canonical" href={`${window.location.origin}/reviews`} />
+        
+        {/* Self-referential hreflang for current language */}
+        <link 
+          rel="alternate" 
+          hrefLang="x-default" 
+          href={canonicalUrl} 
+        />
       </Helmet>
 
       <div className="hero-gradient absolute inset-0 z-0" />
