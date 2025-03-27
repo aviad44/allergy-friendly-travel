@@ -4,15 +4,12 @@ import { Review } from "@/types/reviews";
 
 interface ReviewCardProps {
   review: Review;
-  isRTL: boolean;
-  textAlignment: string;
-  translations: any;
 }
 
-export const ReviewCard = ({ review, isRTL, textAlignment, translations: t }: ReviewCardProps) => {
+export const ReviewCard = ({ review }: ReviewCardProps) => {
   return (
     <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 sm:p-4 md:p-6 border border-white/10 shadow-md hover:shadow-lg transition-all">
-      <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} justify-between items-start mb-2 sm:mb-4`}>
+      <div className="flex flex-row justify-between items-start mb-2 sm:mb-4">
         <span className="text-xs sm:text-sm text-muted-foreground">
           {new Date(review.created_at).toLocaleDateString()}
         </span>
@@ -27,9 +24,9 @@ export const ReviewCard = ({ review, isRTL, textAlignment, translations: t }: Re
           ))}
         </div>
       </div>
-      <p className={`mb-2 sm:mb-4 text-base sm:text-lg leading-relaxed ${textAlignment}`}>{review.text}</p>
-      <p className={`text-xs sm:text-sm text-muted-foreground ${textAlignment}`}>
-        {t.writtenBy}: <span className="text-primary">{review.author_name}</span>
+      <p className="mb-2 sm:mb-4 text-base sm:text-lg leading-relaxed">{review.text}</p>
+      <p className="text-xs sm:text-sm text-muted-foreground">
+        Written by: <span className="text-primary">{review.author_name}</span>
       </p>
     </div>
   );

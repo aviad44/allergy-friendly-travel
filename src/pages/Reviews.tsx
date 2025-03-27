@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { ReviewFilters } from "@/components/reviews/ReviewFilters";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
-import { Review } from "@/types/reviews";
+import { Review, sortOptions } from "@/types/reviews";
 
 const Reviews = () => {
   const [rating, setRating] = useState(0);
@@ -19,7 +19,7 @@ const Reviews = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDestination, setSelectedDestination] = useState<string>('all');
   const [selectedTravelerType, setSelectedTravelerType] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'highestRated' | 'lowestRated'>('newest');
+  const [sortBy, setSortBy] = useState<typeof sortOptions[number]>('newest');
   const { toast } = useToast();
 
   const baseUrl = window.location.origin;
@@ -75,7 +75,8 @@ const Reviews = () => {
       const newReview = {
         rating,
         text: reviewText,
-        author_name: "Guest"
+        author_name: "Guest",
+        language: "en" // Add the required language field
       };
 
       const { error } = await supabase
@@ -190,7 +191,7 @@ const Reviews = () => {
                 sortBy={sortBy}
                 onDestinationChange={setSelectedDestination}
                 onTravelerTypeChange={setSelectedTravelerType}
-                onSortChange={(value) => setSortBy(value as typeof sortBy)}
+                onSortChange={(value) => setSortBy(value as typeof sortOptions[number])}
               />
 
               {isLoading ? (
