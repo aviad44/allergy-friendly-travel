@@ -2,7 +2,7 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu, Home, MapPin, Star, MessageCircle, Info, HelpCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const menuItems = [
   {
@@ -38,6 +38,13 @@ const menuItems = [
 ];
 
 export const MainMenu = () => {
+  const navigate = useNavigate();
+  
+  // Function to handle navigation and close the sheet
+  const handleNavigation = (href: string) => {
+    navigate(href);
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -51,14 +58,14 @@ export const MainMenu = () => {
           {menuItems.map((item) => {
             const Icon = item.icon;
             return (
-              <Link
+              <button
                 key={item.title}
-                to={item.href}
-                className="flex items-center gap-3 text-lg font-medium p-2 rounded-lg hover:bg-secondary/10 transition-colors"
+                onClick={() => handleNavigation(item.href)}
+                className="flex items-center gap-3 text-lg font-medium p-2 rounded-lg hover:bg-secondary/10 transition-colors text-left"
               >
                 <Icon className="h-5 w-5" />
                 <span className="text-foreground">{item.title}</span>
-              </Link>
+              </button>
             );
           })}
         </nav>

@@ -6,7 +6,7 @@ import { TravelTips } from '@/components/hotels/TravelTips';
 import UsefulInfo from '@/components/hotels/UsefulInfo';
 import { DestinationNavigation } from '@/components/reviews/DestinationNavigation';
 import { DestinationReviews } from '@/components/reviews/DestinationReviews';
-import AllergiesTable from '@/components/language/AllergiesTable';
+import { default as AllergiesTable } from '@/components/language/AllergiesTable';
 import { RelatedDestinations } from '@/components/reviews/RelatedDestinations';
 import { Helmet } from 'react-helmet';
 import { Separator } from '@/components/ui/separator';
