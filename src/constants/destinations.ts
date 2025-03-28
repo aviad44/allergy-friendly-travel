@@ -4,7 +4,7 @@ export const DESTINATION_IMAGES = {
   london: "photo-1513635269975-59663e0ac1ad", // London skyline with Thames river
   paris: "photo-1502602898657-3e91760cbb34", // Wide view of Eiffel Tower
   barcelona: "photo-1583422409516-2895a77efded", // Sagrada Familia image
-  cyprus: "photo-1570554886916-3eb5dec08a50", // Beautiful Cyprus beach with crystal blue waters
+  cyprus: "photo-1500375592092-40eb2168fd21", // Beautiful Cyprus beach with ocean waves
   crete: "photo-1469796466635-455ede028aca", // Beautiful Cretan beach with turquoise waters
   'abu-dhabi': "photo-1512632578888-169bbbc64f33", // Abu Dhabi skyline
   thailand: "photo-1552465011-b4e21bf6e79a", // Thailand beach
