@@ -39,14 +39,21 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       role="banner"
       aria-label={`Featured destination: ${destination.name}`}
     >
-      <div 
-        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url(${imageUrl})`
-        }}
-        role="img"
-        aria-label={altText}
-      />
+      {/* Image container with absolute positioning */}
+      <div className="absolute inset-0">
+        <img 
+          src={imageUrl}
+          alt={altText}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            console.error(`Failed to load image for ${destination.name}: ${imageUrl}`);
+            // Set a fallback image if the original fails to load
+            (e.target as HTMLImageElement).src = "/placeholder.svg";
+          }}
+        />
+      </div>
+      
+      {/* Overlay gradients */}
       <div 
         className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-transparent" 
         aria-hidden="true"
