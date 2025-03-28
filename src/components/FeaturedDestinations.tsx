@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -35,6 +34,15 @@ const FEATURED_DESTINATIONS = [
   },
   {
     id: 4,
+    name: "Portugal",
+    country: "Portugal",
+    image: DESTINATION_IMAGES.portugal,
+    description: "Family and couple-friendly allergy-aware destinations",
+    commonAllergies: ["Gluten", "Dairy"],
+    href: "/destinations/portugal"
+  },
+  {
+    id: 5,
     name: "Cyprus",
     country: "Cyprus",
     image: DESTINATION_IMAGES.cyprus,
@@ -43,7 +51,7 @@ const FEATURED_DESTINATIONS = [
     href: "/destinations/cyprus"
   },
   {
-    id: 5,
+    id: 6,
     name: "Barcelona",
     country: "Spain",
     image: DESTINATION_IMAGES.barcelona,
@@ -52,7 +60,7 @@ const FEATURED_DESTINATIONS = [
     href: "/destinations/barcelona"
   },
   {
-    id: 6,
+    id: 7,
     name: "Crete",
     country: "Greece",
     image: DESTINATION_IMAGES.crete,
@@ -61,22 +69,13 @@ const FEATURED_DESTINATIONS = [
     href: "/destinations/crete"
   },
   {
-    id: 7,
+    id: 8,
     name: "Abu Dhabi",
     country: "United Arab Emirates",
     image: DESTINATION_IMAGES["abu-dhabi"],
     description: "Luxurious stays with world-class allergy care",
     commonAllergies: ["Gluten", "Dairy"],
     href: "/destinations/abu-dhabi"
-  },
-  {
-    id: 8,
-    name: "Thailand",
-    country: "Thailand",
-    image: DESTINATION_IMAGES.thailand,
-    description: "Tropical paradise with allergy-conscious options",
-    commonAllergies: ["Peanut", "Gluten"],
-    href: "/destinations/thailand"
   }
 ];
 

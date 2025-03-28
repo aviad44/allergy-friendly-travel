@@ -42,6 +42,14 @@ const DestinationsIndex = () => {
       path: "/destinations/newyork"
     },
     {
+      id: "portugal",
+      name: "Portugal",
+      country: "Portugal",
+      image: DESTINATION_IMAGES.portugal,
+      description: "Family and couple-friendly allergy-aware hotels across Lisbon, the Algarve and Porto.",
+      path: "/destinations/portugal"
+    },
+    {
       id: "cyprus",
       name: "Cyprus",
       country: "Cyprus",

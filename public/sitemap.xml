@@ -105,6 +105,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/portugal</loc>
+    <lastmod>2024-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
   
   <!-- Hotel Pages -->
   <url>
