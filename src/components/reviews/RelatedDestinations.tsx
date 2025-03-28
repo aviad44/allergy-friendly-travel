@@ -29,7 +29,7 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
         {randomDestinations.map(destination => {
           // Get image from DESTINATION_IMAGES or use default
           const destinationKey = destination.id as keyof typeof DESTINATION_IMAGES;
-          const imageSource = DESTINATION_IMAGES[destinationKey] || 'photo-1469474968028-56623f02e42e'; // Fallback image
+          const imageSource = DESTINATION_IMAGES[destinationKey] || '';
           
           // Process image URL based on format
           let imageUrl;
@@ -45,7 +45,7 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
             <Link 
               key={destination.id} 
               to={`/destinations/${destination.id}`}
-              className="group block h-full"
+              className="group block"
             >
               <Card className="overflow-hidden h-full transition-all hover:shadow-md">
                 <div 
@@ -58,10 +58,10 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
                   }}
                 />
                 <CardContent className="p-4">
-                  <h3 className="font-semibold group-hover:text-primary transition-colors line-clamp-1">
+                  <h3 className="font-semibold group-hover:text-primary transition-colors">
                     {destination.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     {destination.country}
                   </p>
                 </CardContent>

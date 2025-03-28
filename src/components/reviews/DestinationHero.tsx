@@ -10,22 +10,22 @@ interface DestinationHeroProps {
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   // Check if we have a custom image defined in DESTINATION_IMAGES
   const destinationKey = destination.id as keyof typeof DESTINATION_IMAGES;
-  const customImage = DESTINATION_IMAGES[destinationKey] || null;
+  const customImage = destinationKey in DESTINATION_IMAGES ? DESTINATION_IMAGES[destinationKey] : null;
   
   // Use custom image if available, otherwise fall back to destination.image
-  const imageSource = customImage || destination.image || "photo-1469474968028-56623f02e42e"; // Fallback image
+  const imageSource = customImage || destination.image;
   
   let imageUrl;
   // Process image URL based on format
-  if (typeof imageSource === 'string' && imageSource.startsWith('photo-')) {
+  if (imageSource.startsWith('photo-')) {
     imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=2000&h=800&q=80`;
-  } else if (typeof imageSource === 'string' && imageSource.startsWith('/lovable-uploads/')) {
+  } else if (imageSource.startsWith('/lovable-uploads/')) {
     imageUrl = imageSource;
   } else {
     imageUrl = imageSource;
   }
   
-  console.log("Destination hero image URL for", destination.id, ":", imageUrl);
+  console.log("Destination hero image URL:", imageUrl);
 
   // Define a more descriptive alt text based on the destination
   const altText = destination.name 

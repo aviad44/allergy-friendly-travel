@@ -31,14 +31,11 @@ import NotFound from '@/pages/NotFound';
 import DirectChat from '@/pages/DirectChat';
 import Reviews from '@/pages/Reviews';
 import FAQ from '@/pages/FAQ';
-import { BottomNavigation } from '@/components/BottomNavigation';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 // AppContent component to use hooks that require router context
 const AppContent = () => {
   const { theme, setTheme } = useTheme();
   const location = useLocation();
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Check if the code is running in a browser environment before accessing localStorage
@@ -57,7 +54,7 @@ const AppContent = () => {
     <>
       <Toaster />
       <SiteHeader />
-      <main className={isMobile ? "pb-16" : ""}>
+      <main>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/destinations" element={<DestinationsIndex />} />
@@ -81,7 +78,6 @@ const AppContent = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      {isMobile && <BottomNavigation />}
       <Footer />
     </>
   );

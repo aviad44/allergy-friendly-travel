@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, Home, MapPin, Star, MessageCircle, Info, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// Define menu items in one place for consistency between MainMenu and BottomNavigation
-export const menuItems = [
+const menuItems = [
   {
     title: "Home",
     icon: Home,
