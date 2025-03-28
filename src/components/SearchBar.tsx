@@ -1,4 +1,3 @@
-
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -242,94 +241,92 @@ export const SearchBar = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-2">
-      <div className="flex flex-col sm:flex-row gap-2 flex-grow">
-        {/* Destination input with autocomplete */}
-        <div ref={destinationInputRef} className="relative flex-1">
-          <Input 
-            placeholder="Enter destination" 
-            className="h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm" 
-            value={destination} 
-            onChange={e => setDestination(e.target.value)}
-            onFocus={() => setShowDestinationSuggestions(true)}
-            aria-autocomplete="list"
-            aria-controls="destination-suggestions"
-            aria-expanded={showDestinationSuggestions}
-          />
-          
-          {/* Destination suggestions dropdown */}
-          {showDestinationSuggestions && filteredDestinations.length > 0 && (
-            <ul 
-              id="destination-suggestions"
-              className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50"
-              role="listbox"
-            >
-              {filteredDestinations.map((item, index) => (
-                <li 
-                  key={index} 
-                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-left"
-                  role="option"
-                  onClick={() => handleDestinationSelection(item)}
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+    <div className="flex flex-col gap-3">
+      {/* Destination input with autocomplete */}
+      <div ref={destinationInputRef} className="relative w-full">
+        <Input 
+          placeholder="Enter destination" 
+          className="h-12 sm:h-12 text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm" 
+          value={destination} 
+          onChange={e => setDestination(e.target.value)}
+          onFocus={() => setShowDestinationSuggestions(true)}
+          aria-autocomplete="list"
+          aria-controls="destination-suggestions"
+          aria-expanded={showDestinationSuggestions}
+        />
         
-        {/* Allergy input with autocomplete */}
-        <div ref={allergyInputRef} className="relative flex-1">
-          <Input 
-            placeholder="Type of allergies" 
-            className="h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm" 
-            value={allergies} 
-            onChange={e => setAllergies(e.target.value)}
-            onFocus={() => setShowAllergySuggestions(true)}
-            aria-autocomplete="list"
-            aria-controls="allergy-suggestions"
-            aria-expanded={showAllergySuggestions}
-          />
-          
-          {/* Allergy suggestions dropdown */}
-          {showAllergySuggestions && filteredAllergies.length > 0 && (
-            <ul 
-              id="allergy-suggestions"
-              className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50"
-              role="listbox"
-            >
-              {filteredAllergies.map((item, index) => (
-                <li 
-                  key={index} 
-                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-left"
-                  role="option"
-                  onClick={() => handleAllergySelection(item)}
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        {/* Destination suggestions dropdown */}
+        {showDestinationSuggestions && filteredDestinations.length > 0 && (
+          <ul 
+            id="destination-suggestions"
+            className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50"
+            role="listbox"
+          >
+            {filteredDestinations.map((item, index) => (
+              <li 
+                key={index} 
+                className="px-4 py-3 hover:bg-gray-100 cursor-pointer text-left"
+                role="option"
+                onClick={() => handleDestinationSelection(item)}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       
-      {/* Search button and modals */}
+      {/* Allergy input with autocomplete */}
+      <div ref={allergyInputRef} className="relative w-full">
+        <Input 
+          placeholder="Type of allergies" 
+          className="h-12 sm:h-12 text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm" 
+          value={allergies} 
+          onChange={e => setAllergies(e.target.value)}
+          onFocus={() => setShowAllergySuggestions(true)}
+          aria-autocomplete="list"
+          aria-controls="allergy-suggestions"
+          aria-expanded={showAllergySuggestions}
+        />
+        
+        {/* Allergy suggestions dropdown */}
+        {showAllergySuggestions && filteredAllergies.length > 0 && (
+          <ul 
+            id="allergy-suggestions"
+            className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50"
+            role="listbox"
+          >
+            {filteredAllergies.map((item, index) => (
+              <li 
+                key={index} 
+                className="px-4 py-3 hover:bg-gray-100 cursor-pointer text-left"
+                role="option"
+                onClick={() => handleAllergySelection(item)}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      
+      {/* Search button */}
       <Button 
-        className="h-9 sm:h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" 
+        className="h-12 sm:h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md w-full" 
         onClick={handleSearch} 
         disabled={isSearching}
       >
         <Search className="mr-2 h-5 w-5" />
         <span>Search Now</span>
       </Button>
-        
+      
       {/* Sheet for desktop */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetContent className="w-full sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col p-4 sm:p-6" side="bottom">
           {renderSearchResults()}
         </SheetContent>
       </Sheet>
-        
+      
       {/* Dialog for mobile - better full-screen experience */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="w-full max-w-full sm:max-w-2xl h-[90vh] max-h-[90vh] overflow-hidden flex flex-col p-4 sm:p-6 rounded-t-xl">

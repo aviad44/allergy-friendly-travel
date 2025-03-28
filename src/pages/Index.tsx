@@ -4,6 +4,8 @@ import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
+import { BottomNavigation } from "@/components/BottomNavigation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
   const iconComponents = {
@@ -13,6 +15,7 @@ const Index = () => {
     Info,
     HelpCircle
   };
+  const isMobile = useIsMobile();
 
   // Updated metadata with current date
   const currentDate = new Date().toISOString().split('T')[0];
@@ -44,8 +47,8 @@ const Index = () => {
         </script>
       </Helmet>
       
-      {/* Hero Section - Adjusted padding top since nav is no longer fixed */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/75 to-black/90 w-full">
+      {/* Hero Section - Adjusted padding for mobile */}
+      <section className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/75 to-black/90 w-full">
         {/* Background Image with optimized loading */}
         <picture>
           <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90" type="image/webp" />
@@ -58,16 +61,16 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
         </picture>
         
-        {/* Content Overlay - Improved mobile spacing with padding adjustments */}
-        <div className="relative z-10 container mx-auto px-4 text-center w-full pt-8 sm:pt-12">
+        {/* Content Overlay - Improved mobile spacing */}
+        <div className="relative z-10 container mx-auto px-4 text-center w-full pt-4 sm:pt-8 md:pt-12">
           <div className="max-w-4xl mx-auto">
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 sm:mb-6 md:mb-8 leading-tight drop-shadow-lg">
+            <h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl mb-3 sm:mb-6 md:mb-8 leading-tight drop-shadow-lg">
               <span className="text-sky-200 font-bold">{HOME_CONTENT.hero.title.line1}</span>
               <span className="block mt-1 sm:mt-2 text-teal-300 font-bold">
                 {HOME_CONTENT.hero.title.line2} {HOME_CONTENT.hero.title.line3}
               </span>
             </h1>
-            <h2 className="font-display text-lg sm:text-xl text-sky-100 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto leading-snug drop-shadow-md">
+            <h2 className="font-display text-base sm:text-xl text-sky-100 mb-4 sm:mb-8 md:mb-10 max-w-2xl mx-auto leading-snug drop-shadow-md">
               Find hotels that understand your allergy needs for a safe and enjoyable stay
             </h2>
             <div className="bg-white rounded-lg shadow-lg border border-gray-200 max-w-4xl mx-auto p-4 sm:p-5">
@@ -78,7 +81,7 @@ const Index = () => {
       </section>
 
       {/* Featured Destinations Section */}
-      <section className="py-10 sm:py-16 md:py-20 px-4 bg-gray-50 w-full">
+      <section className="py-8 sm:py-16 md:py-20 px-4 bg-gray-50 w-full pb-20 sm:pb-16">
         <div className="container mx-auto max-w-[1400px]">
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4 text-center font-bold text-blue-800">
             {HOME_CONTENT.featured.title}
@@ -89,6 +92,9 @@ const Index = () => {
           <FeaturedDestinations />
         </div>
       </section>
+      
+      {/* Bottom Navigation - Mobile Only */}
+      <BottomNavigation />
     </>
   );
 };

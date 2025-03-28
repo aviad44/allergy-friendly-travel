@@ -45,7 +45,7 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
             <Link 
               key={destination.id} 
               to={`/destinations/${destination.id}`}
-              className="group block"
+              className="group block h-full"
             >
               <Card className="overflow-hidden h-full transition-all hover:shadow-md">
                 <div 
@@ -58,10 +58,10 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
                   }}
                 />
                 <CardContent className="p-4">
-                  <h3 className="font-semibold group-hover:text-primary transition-colors">
+                  <h3 className="font-semibold group-hover:text-primary transition-colors line-clamp-1">
                     {destination.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
                     {destination.country}
                   </p>
                 </CardContent>
