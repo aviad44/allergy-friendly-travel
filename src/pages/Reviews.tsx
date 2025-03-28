@@ -34,11 +34,15 @@ const Reviews = () => {
 
       if (error) throw error;
       
-      const filteredReviews = data ? data.filter(review => 
-        !["love this hotel", "loved this hotel", "Great hotel"].includes(review.text)
-      ) : [];
+      // Convert string IDs to numbers to match Review type
+      const processedReviews = data ? data
+        .filter(review => !["love this hotel", "loved this hotel", "Great hotel"].includes(review.text))
+        .map(review => ({
+          ...review,
+          id: typeof review.id === 'string' ? parseInt(review.id, 10) : review.id
+        })) : [];
       
-      setReviews(filteredReviews);
+      setReviews(processedReviews as Review[]);
     } catch (error) {
       console.error('Error fetching reviews:', error);
       toast({

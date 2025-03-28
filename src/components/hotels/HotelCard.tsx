@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Star, ExternalLink, Check } from "lucide-react";
 
-interface HotelCardProps {
+export interface HotelCardProps {
   name: string;
   address: string;
   features: string[];
