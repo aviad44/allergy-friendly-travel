@@ -138,7 +138,7 @@ export const destinations: Destination[] = [
     subtitle: 'Discover the top allergy-friendly hotels in the Big Apple for a safe and comfortable stay.',
     image: 'photo-1496442226666-8d4d0e62e6e9'
   },
-    {
+  {
     id: 'ayia-napa',
     name: 'Ayia Napa',
     country: 'Cyprus',
@@ -153,7 +153,7 @@ export const destinations: Destination[] = [
     description: 'Allergy-Friendly Hotels in Portugal (2025 Guide)',
     subtitle: 'Family- and couple-friendly allergy-aware hotels across Lisbon, the Algarve and Porto – with allergen-safe dining and verified hospitality standards.',
     image: 'photo-1555881400-74d7acaacd8b'
-  },
+  }
 ];
 
 export const destinationData: { [key in DestinationId]: DestinationContent } = {
@@ -214,11 +214,11 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
     languageTable: {
       headers: ["English", "French", "German", "Spanish", "Italian", "Pronunciation"],
       rows: [
-        ["I have a food allergy", "J'ai une allergie alimentaire", "Ich habe eine Lebensmittelallergie", "Tengo una alergia alimentaria", "Ho un'allergia alimentare", "zhay uhn a-lair-zhee a-lee-mahn-tair / eesh ha-buh ai-nuh leeb-s-mi-tel a-lair-gEE / ten-go oo-na a-lair-he-a a-lee-men-ta-ree-a / ooon a-lair-jee-a a-lee-men-ta-reh"],
-        ["I cannot eat gluten", "Je ne peux pas manger de gluten", "Ich kann kein Gluten essen", "No puedo comer gluten", "Non posso mangiare il glutine", "zhuh nuh puh pah mahn-zhay duh gloo-tehn / eesh kan kain gloo-ten e-suhn / no poo-ay-tho ko-mer gloo-ten / non po-so man-jah-reh eel gloo-tee-neh"],
-        ["I am allergic to nuts", "Je suis allergique aux noix", "Ich bin allergisch gegen Nüsse", "Soy alérgico a las nueces", "Sono allergico alla frutta a guscio", "zhuh swee a-lair-zheek o no-ah / eesh bin a-lair-gish gay-guhn nU-suh / soy a-lair-hee-ko a las noo-ay-thes / so-no a-lair-jee-ko a-la froo-ta a goo-sho"],
-        ["Does this contain dairy?", "Est-ce que ceci contient des produits laitiers?", "Enthält dies Milchprodukte?", "¿Esto contiene productos lácteos?", "Questo contiene latticini?", "es kuh suh-see kohn-tee-uhn day pro-doo-ee lay-tee-ay / ent-helt dees milsh-pro-doo-ktuh / es-to kon-tee-ay-neh pro-thoo-ktos lak-te-os / koo-es-to kon-tee-ay-neh la-tee-chee-nee"],
-        ["I need gluten-free food", "J'ai besoin de nourriture sans gluten", "Ich brauche glutenfreies Essen", "Necesito comida sin gluten", "Ho bisogno di cibo senza glutine", "zhay buh-zwan duh noo-ree-tur sang gloo-tehn / eesh brow-khuh gloo-ten-fry-es e-suhn / ne-se-see-to ko-mee-tha sin gloo-ten / o bee-zo-nyo dee chee-bo sen-za gloo-tee-neh"]
+        ["I have a food allergy", "J'ai une allergie alimentaire", "zhay uhn a-lair-zhee a-lee-mahn-tair / eesh ha-buh ai-nuh leeb-s-mi-tel a-lee-gEE / ten-go oo-na a-lair-he-a a-lee-men-ta-ree-a / ooon a-lair-jee-a a-lee-men-ta-reh"],
+        ["I cannot eat gluten", "Je ne peux pas manger de gluten", "zhuh nuh puh pah mahn-zhay duh gloo-tehn / eesh kan kain gloo-ten e-suhn / no poo-ay-tho ko-mer gloo-ten / non po-so man-jah-reh eel gloo-tee-neh"],
+        ["I am allergic to nuts", "Je suis allergique aux noix", "zhuh swee a-lair-zheek o no-ah / eesh bin a-lair-gish gay-guhn nU-suh / soy a-lair-hee-ko a las noo-ay-thes / so-no a-lair-jee-ko a-la froo-ta a goo-sho"],
+        ["Does this contain dairy?", "Est-ce que ceci contient des produits laitiers?", "es kuh suh-see kohn-tee-uhn day pro-doo-ee lay-tee-ay / ent-helt dees milch-pro-doo-ktuh / es-to kon-tee-ay-neh pro-thoo-ktos lak-te-os / koo-es-to kon-tee-ay-neh la-tee-chee-nee"],
+        ["I need gluten-free food", "J'ai besoin de nourriture sans gluten", "zhay buh-zwan duh noo-ree-tur sang gloo-tehn / eesh brow-khuh gloo-ten-fry-es e-suhn / ne-se-see-to ko-mee-tha sin gloo-ten / o bee-zo-nyo dee chee-bo sen-za gloo-tee-neh"]
       ]
     }
   },
@@ -499,4 +499,159 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
         features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
         description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
         quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
-        bookingUrl:
+        bookingUrl: "https://www.daioscove.com/"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there many allergy-friendly restaurants in Crete?",
+        answer: "Yes, Crete has a growing number of restaurants that cater to different allergies. Many restaurants are becoming more aware of cross-contamination and offer detailed allergen menus."
+      },
+      {
+        question: "How can I ensure my hotel room is allergy-free?",
+        answer: "When booking, request a room that has been thoroughly cleaned and is free from potential allergens like dust mites. Some hotels offer hypoallergenic bedding and air purifiers."
+      },
+      {
+        question: "What should I do if I have a reaction while in Crete?",
+        answer: "Crete has good medical facilities. In case of a severe reaction, call 112 for emergency services. Always carry your allergy medication with you."
+      },
+      {
+        question: "What are some common Cypriot dishes that can be made allergy-friendly?",
+        answer: "Many traditional Cypriot dishes can be adapted to be allergy-friendly. Souvlaki (grilled meat skewers) can be made gluten-free, and dishes like halloumi can be prepared without dairy. Always confirm with the restaurant."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Greek", "Pronunciation"],
+      rows: [
+        ["I have a food allergy", "Έχω μια τροφική αλλεργία", "Écho mia trofikí allergía"],
+        ["I cannot eat gluten", "Δεν μπορώ να φάω γλουτένη", "Den boró na fáo glouténi"],
+        ["I am allergic to nuts", "Είμαι αλλεργικός στους ξηρούς καρπούς", "Ímai allergikós stous xiroús karpoús"],
+        ["Does this contain dairy?", "Αυτό περιέχει γαλακτοκομικά προϊόντα;", "Aftó periéchei galaktokomiká proïónta?"],
+        ["I need gluten-free food", "Χρειάζομαι φαγητό χωρίς γλουτένη", "Chreiázomai fagitó chorís glouténi"]
+      ]
+    }
+  },
+  'tokyo': {
+    intro: 'Discover the best allergy-friendly hotels in Tokyo, ensuring a safe and enjoyable stay for travelers with food allergies. These hotels offer dedicated gluten-free, dairy-free, and nut-free options, along with trained staff to handle severe allergies.',
+    hotels: [],
+    faqs: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    }
+  },
+  'thailand': {
+    intro: 'Discover the best allergy-friendly hotels in Thailand, ensuring a safe and enjoyable stay for travelers with food allergies. These hotels offer dedicated gluten-free, dairy-free, and nut-free options, along with trained staff to handle severe allergies.',
+    hotels: [],
+    faqs: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    }
+  },
+  'new-york': {
+    intro: 'Discover the best allergy-friendly hotels in New York, ensuring a safe and enjoyable stay for travelers with food allergies. These hotels offer dedicated gluten-free, dairy-free, and nut-free options, along with trained staff to handle severe allergies.',
+    hotels: [],
+    faqs: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    }
+  },
+  'ayia-napa': {
+    intro: 'Discover the best allergy-friendly hotels in Ayia Napa, ensuring a safe and enjoyable stay for travelers with food allergies. These hotels offer dedicated gluten-free, dairy-free, and nut-free options, along with trained staff to handle severe allergies.',
+    hotels: [],
+    faqs: [],
+    languageTable: {
+      headers: [],
+      rows: []
+    }
+  },
+  'portugal': {
+    intro: 'Portugal is quickly becoming a top destination for travelers with food allergies. From gluten-free breakfasts to allergy-trained chefs, these hotels provide safety without sacrificing style.',
+    hotels: [
+      {
+        name: "1. Martinhal Sagres Family Resort ★★★★★",
+        address: "Sagres, Western Algarve",
+        features: ["✅ Separate prep areas for gluten-free and dairy-free meals", "👨‍🍳 Allergy consultations with chef at check-in", "🍽️ Kids' menus with custom allergen-friendly meals"],
+        description: "Perfect for families with kids, especially those with dietary restrictions. The resort offers separate preparation areas for allergen-free meals and personalized consultations with chefs.",
+        quote: "They prepared all meals separately for our daughter with dairy and egg allergies. Amazing team! — Rachel T.",
+        bookingUrl: "https://www.martinhal.com/sagres/"
+      },
+      {
+        name: "2. Vila Vita Parc Resort & Spa ��★★★★",
+        address: "Porches, Central Algarve",
+        features: ["✅ HACCP-certified kitchen and allergy protocols", "🥖 Daily gluten-free bakery options", "🌿 Uses local organic ingredients and allergy-safe oils"],
+        description: "Great for families and multi-generational travel. The resort features HACCP-certified kitchens with strict allergy protocols and daily fresh gluten-free bakery items.",
+        quote: "I'm lactose intolerant and was offered a full dairy-free breakfast every morning without asking. — Sandra R.",
+        bookingUrl: "https://vilavitaparc.com/"
+      },
+      {
+        name: "3. Memmo Príncipe Real ★★★★★",
+        address: "Bairro Alto, Lisbon",
+        features: ["✅ Gluten-free, dairy-free, and nut-aware options", "🍳 Chef can accommodate allergy requests in advance", "🌇 Rooftop breakfast with allergen-safe items"],
+        description: "Ideal for couples and solo travelers. This boutique hotel offers a range of allergy-friendly options and can accommodate special dietary requests with advance notice.",
+        quote: "They were very cautious with my nut allergy and had options ready every morning. — Lucia M.",
+        bookingUrl: "https://www.memmohotels.com/principereal/"
+      },
+      {
+        name: "4. Corpo Santo Hotel ★★★★★",
+        address: "Cais do Sodré, Lisbon",
+        features: ["✅ Labeled gluten-free breakfast items", "🧼 Trained staff with cross-contamination prevention", "🛎️ Personal attention and direct chef access"],
+        description: "Great for couples and allergy-conscious city travelers. The hotel offers clearly labeled allergen-free items and staff trained in cross-contamination prevention.",
+        quote: "The best hotel experience I've had as someone with celiac. I felt completely safe. — Karen B.",
+        bookingUrl: "https://www.corposantohotel.com/"
+      },
+      {
+        name: "5. The Yeatman Hotel ★★★★★",
+        address: "Vila Nova de Gaia, Porto",
+        features: ["✅ Chef-designed gluten-free tasting menus", "🍷 Wine pairing available with allergen-safe dishes", "🌟 Award-winning fine dining restaurant"],
+        description: "Best for foodies with dietary restrictions. The hotel's award-winning restaurant offers specially designed gluten-free tasting menus with wine pairings.",
+        quote: "I let them know in advance and the chef crafted a five-course gluten-free menu. Unforgettable. — Jens H.",
+        bookingUrl: "https://www.the-yeatman-hotel.com/"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there many restaurants in Portugal that cater to food allergies?",
+        answer: "Yes, Portugal has increasingly become more accommodating for travelers with food allergies. Many restaurants in tourist areas, especially in Lisbon, Porto, and the Algarve, offer allergen menus and gluten-free options. Traditional Portuguese cuisine relies heavily on fresh seafood, grilled meats, and vegetables, making it naturally adaptable for many dietary restrictions."
+      },
+      {
+        question: "Is it safe to travel to Portugal with celiac disease?",
+        answer: "Portugal is generally considered celiac-friendly. The Portuguese Celiac Association (APC) has done significant work in raising awareness. Look for restaurants displaying the 'Sem Gluten' (Gluten-Free) sign. Many bakeries now offer certified gluten-free bread and pastries, and larger cities have dedicated gluten-free restaurants and cafes."
+      },
+      {
+        question: "What should I know about communicating my allergies in Portugal?",
+        answer: "While many hospitality professionals in tourist areas speak English, it's helpful to have your allergies written in Portuguese. Use our translation table below or download allergy translation cards. The phrase 'Tenho alergia a...' (I have an allergy to...) is essential to know."
+      },
+      {
+        question: "Are Portuguese hotels generally accommodating of food allergies?",
+        answer: "Higher-end hotels and resorts in Portugal are typically very accommodating of food allergies. Always notify the hotel in advance when booking, and follow up with an email detailing your specific needs. Many hotels will arrange a meeting with the chef upon arrival to discuss safe meal options."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Portuguese", "Pronunciation"],
+      rows: [
+        ["I have a food allergy", "Tenho uma alergia alimentar", "TEN-yoo oo-ma a-ler-JEE-a a-lee-men-TAR"],
+        ["I cannot eat gluten", "Não posso comer glúten", "NOW po-soo ko-MER GLOO-ten"],
+        ["I am allergic to dairy", "Sou alérgico a laticínios", "so a-LER-jee-ko a la-tee-SEE-nee-osh"],
+        ["Does this contain nuts?", "Isto contém frutos secos?", "ISH-too kon-TEM FROO-tosh SEK-osh?"],
+        ["I need gluten-free food", "Preciso de comida sem glúten", "pre-SEE-zoo de ko-MEE-da sem GLOO-ten"]
+      ]
+    }
+  }
+};
+
+export type Review = {
+  id: number;
+  rating: number;
+  text: string;
+  author_name: string;
+  created_at: string;
+  updated_at?: string;
+  destination?: string;
+  traveler_type?: string;
+  language: string;
+};
+
+export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
