@@ -1,3 +1,4 @@
+
 import { HotelCardProps } from "@/components/hotels/HotelCard";
 
 export interface LanguageTableRow {
@@ -521,3 +522,380 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
       {
         name: "2. Daios Cove Luxury Resort & Villas ★★★★★",
         address: "Vathi, Agios Nikolaos, Crete, 72100, Greece",
+        features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
+        description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
+        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
+        bookingUrl: "https://www.daioscovecrete.com/"
+      },
+      {
+        name: "3. Grecotel Amirandes ★★★★★",
+        address: "Gouves, Crete, 70014, Greece",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-friendly options in all restaurants", "👨‍🍳 Dedicated allergy contact person"],
+        description: "Grecotel Amirandes offers allergy-friendly options in all its restaurants and has a dedicated allergy contact person to assist guests with dietary restrictions.",
+        quote: "I felt so safe and well taken care of at Grecotel. They went above and beyond to accommodate my allergies. – Emily R.",
+        bookingUrl: "https://www.grecotel.com/crete/amirandes/"
+      },
+      {
+        name: "4. Elounda Mare Hotel ★★★★★",
+        address: "Elounda, Crete, 72053, Greece",
+        features: ["⭐ 5-star luxury", "🍽️ Customized allergy menus", "👨‍🍳 Chefs with allergy expertise"],
+        description: "The hotel's restaurants offer customized menus for guests with allergies, with chefs who have extensive expertise in preparing allergy-friendly meals.",
+        quote: "The chefs at Elounda Mare were so knowledgeable about allergies and created the most delicious and safe meals for me. – Sarah L.",
+        bookingUrl: "https://www.eloundamare.com/"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there many allergy-friendly restaurants in Crete?",
+        answer: "Yes, Crete has a growing number of restaurants that cater to different allergies. Many restaurants are becoming more aware of cross-contamination and offer detailed allergen menus."
+      },
+      {
+        question: "How can I ensure my hotel room is allergy-free?",
+        answer: "When booking, request a room that has been thoroughly cleaned and is free from potential allergens like dust mites. Some hotels offer hypoallergenic bedding and air purifiers."
+      },
+      {
+        question: "What should I do if I have a reaction while in Crete?",
+        answer: "Crete has good medical facilities in major towns and cities. In case of a severe reaction, call 112 for emergency services. Always carry your allergy medication with you."
+      },
+      {
+        question: "Are traditional Cretan dishes typically allergy-friendly?",
+        answer: "Many traditional Cretan dishes use simple, fresh ingredients and can be adapted to accommodate various allergies. The Mediterranean diet typically features olive oil, vegetables, and grilled meats that can be prepared without allergens. Always confirm ingredients with restaurant staff."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Greek", "Pronunciation"],
+      rows: [
+        ["I have a food allergy", "Έχω μια τροφική αλλεργία", "Écho mia trofikí allergía"],
+        ["I cannot eat gluten", "Δεν μπορώ να φάω γλουτένη", "Den boró na fáo glouténi"],
+        ["I am allergic to nuts", "Είμαι αλλεργικός στους ξηρούς καρπούς", "Ímai allergikós stous xiroús karpoús"],
+        ["Does this contain dairy?", "Αυτό περιέχει γαλακτοκομικά προϊόντα;", "Aftó periéchei galaktokomiká proïónta?"],
+        ["I need gluten-free food", "Χρειάζομαι φαγητό χωρίς γλουτένη", "Chreiázomai fagitó chorís glouténi"]
+      ]
+    }
+  },
+  'tokyo': {
+    intro: 'Discover the best allergy-friendly hotels in Tokyo, ensuring a safe and enjoyable stay for travelers with food allergies. These hotels offer dedicated gluten-free, dairy-free, and nut-free options, along with trained staff to handle severe allergies.',
+    hotels: [
+      {
+        name: "1. The Ritz-Carlton, Tokyo ★★★★★",
+        address: "Tokyo Midtown, 9-7-1 Akasaka, Minato-ku, Tokyo 107-6245, Japan",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-aware dining", "👨‍🍳 Dedicated allergy chef"],
+        description: "The hotel offers customized menus for guests with allergies and has a dedicated chef who specializes in creating allergy-friendly dishes.",
+        quote: "The allergy-friendly options were amazing! I felt so safe and well taken care of. – Yuki K.",
+        bookingUrl: "https://www.ritzcarlton.com/en/hotels/japan/tokyo"
+      },
+      {
+        name: "2. Park Hyatt Tokyo ★★★★★",
+        address: "3-7-1-2 Nishi Shinjuku, Shinjuku-ku, Tokyo 163-1055, Japan",
+        features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
+        description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
+        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
+        bookingUrl: "https://www.hyatt.com/en-US/hotel/japan/park-hyatt-tokyo/tyoph"
+      },
+      {
+        name: "3. The Peninsula Tokyo ★★★★★",
+        address: "1-8-1 Yurakucho, Chiyoda-ku, Tokyo 100-0006, Japan",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-friendly options in all restaurants", "👨‍🍳 Dedicated allergy contact person"],
+        description: "The Peninsula Tokyo offers allergy-friendly options in all its restaurants and has a dedicated allergy contact person to assist guests with dietary restrictions.",
+        quote: "I felt so safe and well taken care of at The Peninsula. They went above and beyond to accommodate my allergies. – Emily R.",
+        bookingUrl: "https://www.peninsula.com/en/tokyo/5-star-luxury-hotel-ginza"
+      },
+      {
+        name: "4. Mandarin Oriental, Tokyo ★★★★★",
+        address: "2-1-1 Nihonbashi Muromachi, Chuo-ku, Tokyo 103-8328, Japan",
+        features: ["⭐ 5-star luxury", "🍽️ Customized allergy menus", "👨‍🍳 Chefs with allergy expertise"],
+        description: "The hotel's restaurants offer customized menus for guests with allergies, with chefs who have extensive expertise in preparing allergy-friendly meals.",
+        quote: "The chefs at Mandarin Oriental were so knowledgeable about allergies and created the most delicious and safe meals for me. – Sarah L.",
+        bookingUrl: "https://www.mandarinoriental.com/en/tokyo/nihonbashi"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there many allergy-friendly restaurants in Tokyo?",
+        answer: "Yes, Tokyo has an increasing number of restaurants that cater to different allergies. Many restaurants are becoming more aware of cross-contamination and offer detailed allergen menus, especially in tourist areas."
+      },
+      {
+        question: "How can I communicate my allergies in Japanese?",
+        answer: "Consider carrying allergy translation cards in Japanese. Many hotels can also provide these for you, or prepare written notes explaining your allergies to show at restaurants."
+      },
+      {
+        question: "What should I do if I have a reaction while in Tokyo?",
+        answer: "Tokyo has excellent medical facilities. In case of a severe reaction, call 119 for emergency services. Always carry your allergy medication with you."
+      },
+      {
+        question: "Are traditional Japanese dishes typically allergy-friendly?",
+        answer: "Many traditional Japanese dishes use soy sauce (which contains wheat), fish, and sometimes nuts. However, chefs are increasingly aware of allergies and can adapt dishes. Simple dishes like grilled fish, steamed rice, and plain vegetables are often safer options."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Japanese", "Pronunciation"],
+      rows: [
+        ["I have a food allergy", "食物アレルギーがあります", "Shokumotsu arerugī ga arimasu"],
+        ["I cannot eat gluten", "グルテンを食べられません", "Guruten o taberaremasen"],
+        ["I am allergic to nuts", "ナッツアレルギーがあります", "Nattsu arerugī ga arimasu"],
+        ["Does this contain dairy?", "これは乳製品を含んでいますか?", "Kore wa nyūseihin o fukunde imasu ka?"],
+        ["I need gluten-free food", "グルテンフリーの食事が必要です", "Guruten furī no shokuji ga hitsuyō desu"]
+      ]
+    }
+  },
+  'thailand': {
+    intro: 'Discover the best allergy-friendly hotels in Thailand, ensuring a safe and enjoyable stay for travelers with food allergies. These hotels offer dedicated gluten-free, dairy-free, and nut-free options, along with trained staff to handle severe allergies.',
+    hotels: [
+      {
+        name: "1. Mandarin Oriental, Bangkok ★★★★★",
+        address: "48 Oriental Avenue, Bangkok 10500, Thailand",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-aware dining", "👨‍🍳 Dedicated allergy chef"],
+        description: "The hotel offers customized menus for guests with allergies and has a dedicated chef who specializes in creating allergy-friendly dishes.",
+        quote: "The allergy-friendly options were amazing! I felt so safe and well taken care of. – David L.",
+        bookingUrl: "https://www.mandarinoriental.com/bangkok/chao-phraya-river/luxury-hotel"
+      },
+      {
+        name: "2. The Peninsula Bangkok ★★★★★",
+        address: "333 Charoennakorn Road, Klongsan, Bangkok 10600, Thailand",
+        features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
+        description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
+        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
+        bookingUrl: "https://www.peninsula.com/en/bangkok/5-star-luxury-hotel-riverside"
+      },
+      {
+        name: "3. Four Seasons Resort Chiang Mai ★★★★★",
+        address: "Mae Rim-Samoeng Old Road, Mae Rim, Chiang Mai 50180, Thailand",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-friendly options in all restaurants", "👨‍🍳 Dedicated allergy contact person"],
+        description: "The Four Seasons Resort Chiang Mai offers allergy-friendly options in all its restaurants and has a dedicated allergy contact person to assist guests with dietary restrictions.",
+        quote: "I felt so safe and well taken care of at the Four Seasons. They went above and beyond to accommodate my allergies. – Emily R.",
+        bookingUrl: "https://www.fourseasons.com/chiangmai/"
+      },
+      {
+        name: "4. Banyan Tree Phuket ★★★★★",
+        address: "33, 33/27 Moo 4, Srisoonthorn Road, Cherngtalay, Phuket 83110, Thailand",
+        features: ["⭐ 5-star luxury", "🍽️ Customized allergy menus", "👨‍🍳 Chefs with allergy expertise"],
+        description: "The hotel's restaurants offer customized menus for guests with allergies, with chefs who have extensive expertise in preparing allergy-friendly meals.",
+        quote: "The chefs at Banyan Tree were so knowledgeable about allergies and created the most delicious and safe meals for me. – Sarah L.",
+        bookingUrl: "https://www.banyantree.com/thailand/phuket"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there many allergy-friendly restaurants in Thailand?",
+        answer: "While traditional Thai cuisine often contains allergens like peanuts, soy, and shellfish, many tourist-oriented establishments and high-end restaurants are becoming increasingly allergy-aware. Look for international hotels and restaurants that cater to Western tourists."
+      },
+      {
+        question: "How can I communicate my allergies in Thai?",
+        answer: "Consider carrying allergy translation cards in Thai. Many hotels can also provide these for you, or prepare written notes explaining your allergies to show at restaurants."
+      },
+      {
+        question: "What should I do if I have a reaction while in Thailand?",
+        answer: "Major cities and tourist areas in Thailand have good hospitals. In case of a severe reaction, call 1669 for emergency services. Always carry your allergy medication with you."
+      },
+      {
+        question: "Which Thai dishes typically contain common allergens?",
+        answer: "Many Thai dishes contain fish sauce, oyster sauce, soy sauce, peanuts, or shellfish. Dishes like Pad Thai often contain peanuts, while curries may contain shrimp paste. Always ask about ingredients before ordering."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Thai", "Pronunciation"],
+      rows: [
+        ["I have a food allergy", "ฉันแพ้อาหาร", "Chan pae aa-harn"],
+        ["I cannot eat gluten", "ฉันไม่สามารถกินกลูเตนได้", "Chan mai samart gin gluten dai"],
+        ["I am allergic to nuts", "ฉันแพ้ถั่ว", "Chan pae tua"],
+        ["Does this contain dairy?", "นี่มีนมหรือไม่?", "Nee mee nom rue mai?"],
+        ["I need gluten-free food", "ฉันต้องการอาหารที่ไม่มีกลูเตน", "Chan tong karn aa-harn tee mai mee gluten"]
+      ]
+    }
+  },
+  'new-york': {
+    intro: 'Discover the best allergy-friendly hotels in New York, ensuring a safe and enjoyable stay for travelers with food allergies. These hotels offer dedicated gluten-free, dairy-free, and nut-free options, along with trained staff to handle severe allergies.',
+    hotels: [
+      {
+        name: "1. The Ritz-Carlton New York, Central Park ★★★★★",
+        address: "50 Central Park South, New York, NY 10019, USA",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-aware dining", "👨‍🍳 Dedicated allergy chef"],
+        description: "The hotel offers customized menus for guests with allergies and has a dedicated chef who specializes in creating allergy-friendly dishes.",
+        quote: "The allergy-friendly options were amazing! I felt so safe and well taken care of. – Jessica M.",
+        bookingUrl: "https://www.ritzcarlton.com/en/hotels/new-york/central-park"
+      },
+      {
+        name: "2. Four Seasons Hotel New York ★★★★★",
+        address: "57 E 57th St, New York, NY 10022, USA",
+        features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
+        description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
+        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
+        bookingUrl: "https://www.fourseasons.com/newyork/"
+      },
+      {
+        name: "3. The Peninsula New York ★★★★★",
+        address: "700 5th Ave, New York, NY 10019, USA",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-friendly options in all restaurants", "👨‍🍳 Dedicated allergy contact person"],
+        description: "The Peninsula New York offers allergy-friendly options in all its restaurants and has a dedicated allergy contact person to assist guests with dietary restrictions.",
+        quote: "I felt so safe and well taken care of at The Peninsula. They went above and beyond to accommodate my allergies. – Emily R.",
+        bookingUrl: "https://www.peninsula.com/en/new-york/5-star-luxury-hotel-midtown-nyc"
+      },
+      {
+        name: "4. The Langham, New York, Fifth Avenue ★★★★★",
+        address: "400 5th Ave, New York, NY 10018, USA",
+        features: ["⭐ 5-star luxury", "🍽️ Customized allergy menus", "👨‍🍳 Chefs with allergy expertise"],
+        description: "The hotel's restaurants offer customized menus for guests with allergies, with chefs who have extensive expertise in preparing allergy-friendly meals.",
+        quote: "The chefs at The Langham were so knowledgeable about allergies and created the most delicious and safe meals for me. – Sarah L.",
+        bookingUrl: "https://www.langhamhotels.com/en/the-langham/new-york/"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there many allergy-friendly restaurants in New York?",
+        answer: "Yes, New York City has a wide variety of restaurants that cater to different allergies. Many restaurants are well-informed about cross-contamination and offer detailed allergen menus."
+      },
+      {
+        question: "How can I ensure my hotel room is allergy-free?",
+        answer: "When booking, request a room that has been thoroughly cleaned and is free from potential allergens like dust mites. Some hotels offer hypoallergenic bedding and air purifiers."
+      },
+      {
+        question: "What should I do if I have a reaction while in New York?",
+        answer: "New York has excellent medical facilities. In case of a severe reaction, call 911 for emergency services. Always carry your allergy medication with you."
+      },
+      {
+        question: "Are there any specific certifications for allergy-friendly establishments in New York?",
+        answer: "While there isn't a single overarching certification, look for establishments that display 'AllergyEats' approval or have Gluten-Free Certification Organization (GFCO) certification for gluten-free options."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Spanish", "Pronunciation"],
+      rows: [
+        ["I have a food allergy", "Tengo una alergia alimentaria", "Ten-go oo-na a-ler-he-a a-lee-men-ta-ree-a"],
+        ["I cannot eat gluten", "No puedo comer gluten", "No poo-ay-tho ko-mer gloo-ten"],
+        ["I am allergic to nuts", "Soy alérgico a las nueces", "Soy a-lair-hee-ko a las noo-ay-thes"],
+        ["Does this contain dairy?", "¿Esto contiene productos lácteos?", "Es-to kon-tee-ay-neh pro-thoo-ktos lak-te-os"],
+        ["I need gluten-free food", "Necesito comida sin gluten", "Ne-se-see-to ko-mee-tha sin gloo-ten"]
+      ]
+    }
+  },
+  'ayia-napa': {
+    intro: 'Discover the best allergy-friendly hotels in Ayia Napa, ensuring a safe and enjoyable stay for travelers with food allergies. These hotels offer dedicated gluten-free, dairy-free, and nut-free options, along with trained staff to handle severe allergies.',
+    hotels: [
+      {
+        name: "1. Grecian Bay Hotel ★★★★★",
+        address: "Kryou Nerou 32, Ayia Napa 5330, Cyprus",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-aware dining", "👨‍🍳 Dedicated allergy chef"],
+        description: "The hotel offers customized menus for guests with allergies and has a dedicated chef who specializes in creating allergy-friendly dishes.",
+        quote: "The allergy-friendly options were amazing! I felt so safe and well taken care of. – Jessica M.",
+        bookingUrl: "https://www.grecianbay.com/"
+      },
+      {
+        name: "2. Alion Beach Hotel ★★★★★",
+        address: "Kryou Nerou 38, Ayia Napa 5340, Cyprus",
+        features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
+        description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
+        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
+        bookingUrl: "https://www.alion-hotel.com.cy/"
+      },
+      {
+        name: "3. Atlantica Aeneas Resort & Spa ★★★★★",
+        address: "Nissi Avenue 55, Ayia Napa 5340, Cyprus",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-friendly options in all restaurants", "👨‍🍳 Dedicated allergy contact person"],
+        description: "Atlantica Aeneas Resort & Spa offers allergy-friendly options in all its restaurants and has a dedicated allergy contact person to assist guests with dietary restrictions.",
+        quote: "I felt so safe and well taken care of at Atlantica Aeneas. They went above and beyond to accommodate my allergies. – Emily R.",
+        bookingUrl: "https://www.atlanticahotels.com/en/Hotels/Cyprus/Atlantica-Aeneas-Resort-Spa"
+      },
+      {
+        name: "4. Napa Mermaid Hotel & Suites ★★★★",
+        address: "Kryou Nerou 45, Ayia Napa 5340, Cyprus",
+        features: ["⭐ 4-star comfort", "🍽️ Customized allergy menus", "👨‍🍳 Chefs with allergy expertise"],
+        description: "The hotel's restaurants offer customized menus for guests with allergies, with chefs who have extensive expertise in preparing allergy-friendly meals.",
+        quote: "The chefs at Napa Mermaid were so knowledgeable about allergies and created the most delicious and safe meals for me. – Sarah L.",
+        bookingUrl: "https://www.napamermaid.com/"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there many allergy-friendly restaurants in Ayia Napa?",
+        answer: "Ayia Napa has a growing number of restaurants that cater to different allergies. Many restaurants are becoming more aware of cross-contamination and offer detailed allergen menus, especially in tourist areas."
+      },
+      {
+        question: "How can I ensure my hotel room is allergy-free?",
+        answer: "When booking, request a room that has been thoroughly cleaned and is free from potential allergens like dust mites. Some hotels offer hypoallergenic bedding and air purifiers."
+      },
+      {
+        question: "What should I do if I have a reaction while in Ayia Napa?",
+        answer: "Ayia Napa has good medical facilities. In case of a severe reaction, call 112 for emergency services. Always carry your allergy medication with you."
+      },
+      {
+        question: "What are some common Cypriot dishes that can be made allergy-friendly?",
+        answer: "Many traditional Cypriot dishes can be adapted to be allergy-friendly. Souvlaki (grilled meat skewers) can be made gluten-free, and dishes like halloumi can be prepared separately to avoid cross-contamination. Always confirm with the restaurant."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Greek", "Pronunciation"],
+      rows: [
+        ["I have a food allergy", "Έχω μια τροφική αλλεργία", "Écho mia trofikí allergía"],
+        ["I cannot eat gluten", "Δεν μπορώ να φάω γλουτένη", "Den boró na fáo glouténi"],
+        ["I am allergic to nuts", "Είμαι αλλεργικός στους ξηρούς καρπούς", "Ímai allergikós stous xiroús karpoús"],
+        ["Does this contain dairy?", "Αυτό περιέχει γαλακτοκομικά προϊόντα;", "Aftó periéchei galaktokomiká proïónta?"],
+        ["I need gluten-free food", "Χρειάζομαι φαγητό χωρίς γλουτένη", "Chreiázomai fagitó chorís glouténi"]
+      ]
+    }
+  },
+  'portugal': {
+    intro: 'Discover the best allergy-friendly hotels in Portugal, ensuring a safe and enjoyable stay for travelers with food allergies. These hotels offer dedicated gluten-free, dairy-free, and nut-free options, along with trained staff to handle severe allergies.',
+    hotels: [
+      {
+        name: "1. Corinthia Hotel Lisbon ★★★★★",
+        address: "Av. Columbano Bordalo Pinheiro 105, 1099-031 Lisbon, Portugal",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-aware dining", "👨‍🍳 Dedicated allergy chef"],
+        description: "The hotel offers customized menus for guests with allergies and has a dedicated chef who specializes in creating allergy-friendly dishes.",
+        quote: "The allergy-friendly options were amazing! I felt so safe and well taken care of. – Maria J.",
+        bookingUrl: "https://www.corinthia.com/lisbon/"
+      },
+      {
+        name: "2. Pine Cliffs Resort, a Luxury Collection Resort ★★★★★",
+        address: "Praia da Falésia, 8200-909 Albufeira, Portugal",
+        features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
+        description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
+        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
+        bookingUrl: "https://www.pinecliffs.com/"
+      },
+      {
+        name: "3. The Yeatman Hotel ★★★★★",
+        address: "Rua do Choupelo, 4400-088 Vila Nova de Gaia, Portugal",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-friendly options in all restaurants", "👨‍🍳 Dedicated allergy contact person"],
+        description: "The Yeatman Hotel offers allergy-friendly options in all its restaurants and has a dedicated allergy contact person to assist guests with dietary restrictions.",
+        quote: "I felt so safe and well taken care of at The Yeatman. They went above and beyond to accommodate my allergies. – Emily R.",
+        bookingUrl: "https://www.the-yeatman-hotel.com/"
+      },
+      {
+        name: "4. Tivoli Avenida Liberdade Lisboa ★★★★★",
+        address: "Av. da Liberdade 185, 1269-050 Lisbon, Portugal",
+        features: ["⭐ 5-star luxury", "🍽️ Customized allergy menus", "👨‍🍳 Chefs with allergy expertise"],
+        description: "The hotel's restaurants offer customized menus for guests with allergies, with chefs who have extensive expertise in preparing allergy-friendly meals.",
+        quote: "The chefs at Tivoli were so knowledgeable about allergies and created the most delicious and safe meals for me. – Sarah L.",
+        bookingUrl: "https://www.tivolihotels.com/en/tivoli-avenida-liberdade-lisboa"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there many allergy-friendly restaurants in Portugal?",
+        answer: "Yes, Portugal has a growing number of restaurants that cater to different allergies. Many restaurants are becoming more aware of cross-contamination and offer detailed allergen menus, especially in tourist areas."
+      },
+      {
+        question: "How can I ensure my hotel room is allergy-free?",
+        answer: "When booking, request a room that has been thoroughly cleaned and is free from potential allergens like dust mites. Some hotels offer hypoallergenic bedding and air purifiers."
+      },
+      {
+        question: "What should I do if I have a reaction while in Portugal?",
+        answer: "Portugal has good medical facilities. In case of a severe reaction, call 112 for emergency services. Always carry your allergy medication with you."
+      },
+      {
+        question: "Are traditional Portuguese dishes typically allergy-friendly?",
+        answer: "Many traditional Portuguese dishes feature seafood, which is a common allergen. However, there are plenty of meat and vegetable options that can be prepared without common allergens. Always confirm ingredients with restaurant staff."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Portuguese", "Pronunciation"],
+      rows: [
+        ["I have a food allergy", "Eu tenho uma alergia alimentar", "Ew ten-yo oo-ma a-ler-zhee-a a-lee-men-tar"],
+        ["I cannot eat gluten", "Eu não posso comer glúten", "Ew nau po-so co-mer gloo-ten"],
+        ["I am allergic to nuts", "Sou alérgico a frutos secos", "So a-ler-zhee-co a froo-tosh se-cosh"],
+        ["Does this contain dairy?", "Isto contém laticínios?", "Ish-to con-tem la-tee-see-nee-osh?"],
+        ["I need gluten-free food", "Preciso de comida sem glúten", "Pre-see-zo de co-mee-da sem gloo-ten"]
+      ]
+    }
+  }
+};
