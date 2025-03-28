@@ -520,4 +520,4 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
       },
       {
         name: "2. Daios Cove Luxury Resort & Villas ★★★★★",
-        address: "Vathi, Agios Nikolaos, Crete, 72100,
+        address: "Vathi, Agios Nikolaos, Crete, 72100, Greece",
