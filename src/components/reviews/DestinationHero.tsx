@@ -10,10 +10,10 @@ interface DestinationHeroProps {
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   // Check if we have a custom image defined in DESTINATION_IMAGES
   const destinationKey = destination.id as keyof typeof DESTINATION_IMAGES;
-  const customImage = destinationKey in DESTINATION_IMAGES ? DESTINATION_IMAGES[destinationKey] : null;
+  const customImage = DESTINATION_IMAGES[destinationKey] || null;
   
   // Use custom image if available, otherwise fall back to destination.image
-  const imageSource = customImage || destination.image;
+  const imageSource = customImage || destination.image || "photo-1469474968028-56623f02e42e"; // Fallback image
   
   let imageUrl;
   // Process image URL based on format

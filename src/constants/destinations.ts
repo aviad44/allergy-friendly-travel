@@ -9,5 +9,6 @@ export const DESTINATION_IMAGES = {
   'abu-dhabi': "photo-1512632578888-169bbbc64f33", // Abu Dhabi skyline
   thailand: "photo-1552465011-b4e21bf6e79a", // Thailand beach
   tokyo: "photo-1542051841857-5f90071e7989", // Tokyo skyline
-  'new-york': "photo-1496442226666-8d4d0e62e6e9" // New York skyline
+  'new-york': "photo-1496442226666-8d4d0e62e6e9", // New York skyline
+  'ayia-napa': "photo-1470171119584-533105e6e6c8" // Using Cyprus image as fallback for Ayia Napa
 } as const;

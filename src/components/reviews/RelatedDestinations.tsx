@@ -29,7 +29,7 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
         {randomDestinations.map(destination => {
           // Get image from DESTINATION_IMAGES or use default
           const destinationKey = destination.id as keyof typeof DESTINATION_IMAGES;
-          const imageSource = DESTINATION_IMAGES[destinationKey] || '';
+          const imageSource = DESTINATION_IMAGES[destinationKey] || 'photo-1469474968028-56623f02e42e'; // Fallback image
           
           // Process image URL based on format
           let imageUrl;
