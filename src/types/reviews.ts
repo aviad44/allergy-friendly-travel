@@ -510,4 +510,4 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
         address: "Vathi, Agios Nikolaos, Crete, 72100, Greece",
         features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
         description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
-        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John
+        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
