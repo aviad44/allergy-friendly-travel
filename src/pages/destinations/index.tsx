@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -37,7 +36,7 @@ const DestinationsIndex = () => {
       id: "newyork",
       name: "New York",
       country: "United States",
-      image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
+      image: DESTINATION_IMAGES["new-york"],
       description: "Discover the top allergy-friendly hotels in the Big Apple for a safe and comfortable stay.",
       path: "/destinations/newyork"
     },
@@ -83,13 +82,11 @@ const DestinationsIndex = () => {
     }
   ];
 
-  // SEO metadata
   const pageTitle = "Allergy-Friendly Travel Destinations | Safe Hotels Worldwide";
   const pageDescription = "Browse our comprehensive guide to allergy-friendly travel destinations worldwide. Find safe accommodations for dietary restrictions in top cities and regions.";
   const pageKeywords = "allergy-friendly destinations, food allergy travel, gluten-free travel destinations, allergy-conscious hotels worldwide";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations";
     
-  // Current date for schema metadata
   const currentDate = new Date().toISOString().split('T')[0];
 
   return (
@@ -101,20 +98,17 @@ const DestinationsIndex = () => {
         <link rel="canonical" href={canonicalUrl} />
         <meta name="robots" content="index, follow" />
         
-        {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
         
-        {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" />
         
-        {/* Schema.org markup */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -140,7 +134,6 @@ const DestinationsIndex = () => {
         </script>
       </Helmet>
 
-      {/* Hero Section */}
       <section className="relative py-12 md:py-16 mt-0">
         <div className="absolute inset-0 overflow-hidden">
           <img 
@@ -161,7 +154,6 @@ const DestinationsIndex = () => {
         </div>
       </section>
 
-      {/* Destinations List */}
       <section className="py-8 md:py-12 container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {destinations.map((destination) => (
@@ -175,7 +167,7 @@ const DestinationsIndex = () => {
                     alt={destination.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-80"></div>
                   <div className="absolute bottom-3 left-3 right-3">
                     <h3 className="text-white font-bold text-xl">{destination.name}</h3>
                     <p className="text-gray-200 text-sm">{destination.country}</p>
