@@ -40,7 +40,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       aria-label={`Featured destination: ${destination.name}`}
     >
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 w-full h-full"
         style={{
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: "cover",
@@ -51,10 +51,10 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
         aria-label={altText}
       />
       <div 
-        className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent" 
+        className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-transparent" 
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90"></div>
       
       <div className="absolute bottom-0 left-0 w-full p-4 sm:p-5 md:p-6 text-white">
         <div className="container mx-auto">
