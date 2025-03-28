@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -172,7 +171,7 @@ const DestinationsIndex = () => {
                       e.currentTarget.src = "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80"; // Fallback image
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-80"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60"></div>
                   <div className="absolute bottom-3 left-3 right-3">
                     <h3 className="text-white font-bold text-xl">{destination.name}</h3>
                     <p className="text-gray-200 text-sm">{destination.country}</p>
