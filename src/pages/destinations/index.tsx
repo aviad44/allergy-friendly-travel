@@ -37,7 +37,7 @@ const DestinationsIndex = () => {
       id: "newyork",
       name: "New York",
       country: "United States",
-      image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
+      image: DESTINATION_IMAGES["new-york"],
       description: "Discover the top allergy-friendly hotels in the Big Apple for a safe and comfortable stay.",
       path: "/destinations/newyork"
     },
@@ -174,6 +174,11 @@ const DestinationsIndex = () => {
                       : destination.image}
                     alt={destination.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      console.error(`Failed to load image for ${destination.name}: ${destination.image}`);
+                      // Set a fallback image if the original fails to load
+                      (e.target as HTMLImageElement).src = "/placeholder.svg";
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
                   <div className="absolute bottom-3 left-3 right-3">

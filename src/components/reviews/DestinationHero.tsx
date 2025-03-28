@@ -18,6 +18,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   let imageUrl;
   // Process image URL based on format
   if (imageSource.startsWith('photo-')) {
+    // Ensure correct formation of Unsplash URLs
     imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=2000&h=800&q=80`;
   } else if (imageSource.startsWith('/lovable-uploads/')) {
     imageUrl = imageSource;
