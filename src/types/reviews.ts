@@ -164,7 +164,7 @@ export const destinations: Destination[] = [
     subtitle: 'Your Guide to Safe and Enjoyable Stays in New York',
     image: '/lovable-uploads/e5496593-5969-447a-b969-45a15d49ef9c.jpg'
   },
-    {
+  {
     id: 'ayia-napa',
     name: 'Ayia Napa',
     country: 'Cyprus',
@@ -530,4 +530,55 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
       {
         name: "2. Daios Cove Luxury Resort & Villas ★★★★★",
         address: "Vathi, Agios Nikolaos, Crete, 72100, Greece",
-        features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs
+        features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
+        description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
+        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
+        bookingUrl: "https://www.daioscovecrete.com/"
+      },
+      {
+        name: "3. Elounda Peninsula All Suite Hotel ★★★★★",
+        address: "Elounda, Crete, 72053, Greece",
+        features: ["⭐ 5-star luxury", "🍽️ Allergy-friendly options in all restaurants", "👨‍🍳 Dedicated allergy contact person"],
+        description: "Elounda Peninsula All Suite Hotel offers allergy-friendly options in all its restaurants and has a dedicated allergy contact person to assist guests with dietary restrictions.",
+        quote: "I felt so safe and well taken care of at Elounda Peninsula. They went above and beyond to accommodate my allergies. – Emily R.",
+        bookingUrl: "https://www.eloundapeninsula.com/"
+      },
+      {
+        name: "4. Domes of Elounda, Autograph Collection ★★★★★",
+        address: "Tsifliki, Elounda, Crete, 72053, Greece",
+        features: ["⭐ 5-star luxury", "🍽️ Customized allergy menus", "👨‍🍳 Chefs with allergy expertise"],
+        description: "The hotel's restaurants offer customized menus for guests with allergies, with chefs who have extensive expertise in preparing allergy-friendly meals.",
+        quote: "The chefs at Domes of Elounda were so knowledgeable about allergies and created the most delicious and safe meals for me. – Sarah L.",
+        bookingUrl: "https://www.domesofelounda.com/"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are there many restaurants in Crete that cater to food allergies?",
+        answer: "Yes, Crete has a growing number of restaurants that cater to different allergies. Many restaurants are becoming more aware of cross-contamination and offer detailed allergen menus."
+      },
+      {
+        question: "How can I ensure my hotel room is allergy-free?",
+        answer: "When booking, request a room that has been thoroughly cleaned and is free from potential allergens like dust mites. Some hotels offer hypoallergenic bedding and air purifiers."
+      },
+      {
+        question: "What should I do if I have a reaction while in Crete?",
+        answer: "Crete has good medical facilities. In case of a severe reaction, call 112 for emergency services. Always carry your allergy medication with you."
+      },
+      {
+        question: "Are there any traditional Cretan dishes that can be made allergy-friendly?",
+        answer: "Yes, many traditional Cretan dishes can be adapted to be allergy-friendly. Souvlaki can be made gluten-free, and many seafood dishes are naturally dairy-free. Always confirm with the restaurant."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Greek", "Pronunciation"],
+      rows: [
+        ["I have a food allergy", "Έχω μια τροφική αλλεργία", "Écho mia trofikí allergía"],
+        ["I cannot eat gluten", "Δεν μπορώ να φάω γλουτένη", "Den boró na fáo glouténi"],
+        ["I am allergic to nuts", "Είμαι αλλεργικός στους ξηρούς καρπούς", "Ímai allergikós stous xiroús karpoús"],
+        ["Does this contain dairy?", "Αυτό περιέχει γαλακτοκομικά προϊόντα;", "Aftó periéchei galaktokomiká proïónta?"],
+        ["I need gluten-free food", "Χρειάζομαι φαγητό χωρίς γλουτένη", "Chreiázomai fagitó chorís glouténi"]
+      ]
+    }
+  }
+};
