@@ -77,6 +77,19 @@ export interface DestinationContent {
   };
 }
 
+export interface Review {
+  id: number;
+  rating: number;
+  text: string;
+  author_name: string;
+  created_at: string;
+  destination?: string;
+  traveler_type?: string;
+  language: string;
+}
+
+export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
+
 export const destinations: Destination[] = [
   {
     id: 'london',
@@ -507,7 +520,4 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
       },
       {
         name: "2. Daios Cove Luxury Resort & Villas ★★★★★",
-        address: "Vathi, Agios Nikolaos, Crete, 72100, Greece",
-        features: ["⭐ 5-star luxury", "🍽️ Personalized allergy menus", "👨‍🍳 Chefs trained in allergy protocols"],
-        description: "The hotel's restaurants offer personalized menus tailored to guests' allergies, with chefs trained in allergy protocols to ensure safe dining experiences.",
-        quote: "The staff was incredibly attentive to my allergies and made sure every meal was safe and delicious. – John P.",
+        address: "Vathi, Agios Nikolaos, Crete, 72100,
