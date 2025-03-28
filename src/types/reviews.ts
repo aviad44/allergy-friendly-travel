@@ -14,7 +14,6 @@ export interface LanguageTableRow {
 
 export type LanguageCode = 'en' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'nl' | 'he';
 
-// Languages for the language selector
 export const languages = [
   { code: 'en', name: 'English' },
   { code: 'es', name: 'Spanish' },
@@ -252,7 +251,7 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
         ["I cannot eat gluten", "Je ne peux pas manger de gluten", "Ich kann kein Gluten essen", "No puedo comer gluten", "Je ne peu pa mon-jay deu gloo-ten"],
         ["I am allergic to nuts", "Je suis allergique aux noix", "Ich bin allergisch gegen Nüsse", "Soy alérgico a las nueces", "Je swee a-lair-zheek o nwa"],
         ["Does this contain dairy?", "Est-ce que cela contient des produits laitiers?", "Enthält dies Milchprodukte?", "¿Esto contiene productos lácteos?", "Es keuh seh-la con-tee-an day pro-dwee lay-tee-ay?"],
-        ["I need gluten-free food", "J'ai besoin de nourriture sans gluten", "Ich brauche glutenfreie Speisen", "Necesito comida sin gluten", "Jay be-zwan deu noo-ri-ture son gloo-ten"]
+        ["I need gluten-free food", "J'ai besoin de nourriture sans gluten", "Jay be-zwan deu noo-ri-ture son gloo-ten"]
       ]
     }
   },
@@ -578,6 +577,56 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
         ["I am allergic to nuts", "Είμαι αλλεργικός στους ξηρούς καρπούς", "Ímai allergikós stous xiroús karpoús"],
         ["Does this contain dairy?", "Αυτό περιέχει γαλακτοκομικά προϊόντα;", "Aftó periéchei galaktokomiká proïónta?"],
         ["I need gluten-free food", "Χρειάζομαι φαγητό χωρίς γλουτένη", "Chreiázomai fagitó chorís glouténi"]
+      ]
+    }
+  },
+  'new-york': {
+    intro: 'Placeholder intro for New York',
+    hotels: [],
+    faqs: [],
+    languageTable: { headers: [], rows: [] }
+  },
+  'portugal': {
+    intro: 'Placeholder intro for Portugal',
+    hotels: [],
+    faqs: [],
+    languageTable: { headers: [], rows: [] }
+  },
+  'tokyo': {
+    intro: 'Placeholder intro for Tokyo',
+    hotels: [],
+    faqs: [],
+    languageTable: { headers: [], rows: [] }
+  },
+  'thailand': {
+    intro: 'Placeholder intro for Thailand',
+    hotels: [],
+    faqs: [],
+    languageTable: { headers: [], rows: [] }
+  },
+  'swiss-alps': {
+    intro: 'Discover the best allergy-friendly hotels in the Swiss Alps, ensuring a safe and enjoyable stay for travelers with food allergies.',
+    hotels: [
+      {
+        name: "1. Riffelalp Resort 2222m – Zermatt ★★★★★",
+        address: "Riffelalp, Zermatt, Switzerland",
+        features: ["⭐ 5-star alpine resort", "🍽️ Gluten-free dining", "👨‍🍳 Chef consultations for allergies"],
+        description: "Car-free mountain resort with dedicated gluten-free breakfast zone and personalized allergy care.",
+        quote: "The chef personally explained their allergen handling. We felt completely at ease.",
+        bookingUrl: "https://www.riffelalp.com/"
+      }
+    ],
+    faqs: [
+      {
+        question: "Are Swiss Alps hotels allergy-friendly?",
+        answer: "Many hotels in the Swiss Alps now offer specialized allergy-aware dining and accommodation options."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "German"],
+      rows: [
+        ["I have a food allergy", "Ich habe eine Lebensmittelallergie"],
+        ["I cannot eat gluten", "Ich kann kein Gluten essen"]
       ]
     }
   }
