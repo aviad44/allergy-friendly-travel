@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -161,11 +162,15 @@ const DestinationsIndex = () => {
               <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
                 <div className="relative h-40 overflow-hidden">
                   <img
-                    src={destination.image.startsWith('photo-') 
+                    src={typeof destination.image === 'string' && destination.image.startsWith('photo-') 
                       ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=800&q=80` 
                       : destination.image}
                     alt={destination.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      console.error(`Failed to load image for ${destination.name}:`, destination.image);
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80"; // Fallback image
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-80"></div>
                   <div className="absolute bottom-3 left-3 right-3">

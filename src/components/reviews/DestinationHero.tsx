@@ -17,15 +17,15 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   
   let imageUrl;
   // Process image URL based on format
-  if (imageSource.startsWith('photo-')) {
+  if (typeof imageSource === 'string' && imageSource.startsWith('photo-')) {
     imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=2000&h=800&q=80`;
-  } else if (imageSource.startsWith('/lovable-uploads/')) {
+  } else if (typeof imageSource === 'string' && imageSource.startsWith('/lovable-uploads/')) {
     imageUrl = imageSource;
   } else {
     imageUrl = imageSource;
   }
   
-  console.log("Destination hero image URL:", imageUrl);
+  console.log("Destination hero image URL for", destination.id, ":", imageUrl);
 
   // Define a more descriptive alt text based on the destination
   const altText = destination.name 
