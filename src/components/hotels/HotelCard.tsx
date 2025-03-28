@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, Star, ExternalLink, Check } from "lucide-react";
+import { MapPin, Star, ExternalLink, Check, Bed, Home } from "lucide-react";
 
 export interface HotelCardProps {
   name: string;
@@ -34,13 +34,19 @@ export const HotelCard = ({ name, address, features, description, quote, booking
   const starRating = name.includes('★') ? name.split('★').length - 1 : 0;
   const cleanName = name.replace(/★+$/, '').trim();
 
+  // Determine icon based on hotel name/type
+  const isResort = name.toLowerCase().includes('resort') || name.toLowerCase().includes('palace');
+  const isChalet = name.toLowerCase().includes('chalet') || name.toLowerCase().includes('airbnb');
+  const CardIcon = isChalet ? Home : isResort ? Bed : Bed;
+
   return (
     <Card className="w-full transition-all duration-300 hover:shadow-lg border-primary/20 overflow-hidden group">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 h-2"></div>
       <CardHeader className="space-y-2 sm:space-y-3 pt-6">
         <div className="flex justify-between items-start">
-          <CardTitle className="text-xl sm:text-2xl font-display text-primary/90">
-            {cleanName}
+          <CardTitle className="text-xl sm:text-2xl font-display text-primary/90 flex items-center gap-2">
+            <CardIcon className="h-5 w-5 text-primary/70" />
+            <span>{cleanName}</span>
           </CardTitle>
           {starRating > 0 && (
             <div className="flex space-x-0.5">

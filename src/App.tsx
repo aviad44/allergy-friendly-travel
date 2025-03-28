@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -22,6 +23,7 @@ import HotelChains from '@/pages/destinations/HotelChains';
 import NewYork from '@/pages/destinations/NewYork';
 import AyiaNapa from '@/pages/destinations/AyiaNapa';
 import Portugal from '@/pages/destinations/Portugal';
+import SwissAlps from '@/pages/destinations/SwissAlps';
 import { Footer } from '@/components/Footer';
 import Contact from '@/pages/Contact';
 import AboutUs from '@/pages/AboutUs';
@@ -70,6 +72,7 @@ const AppContent = () => {
           <Route path="/destinations/ayia-napa" element={<AyiaNapa />} />
           <Route path="/destinations/hotel-chains" element={<HotelChains />} />
           <Route path="/destinations/portugal" element={<Portugal />} />
+          <Route path="/destinations/swiss-alps" element={<SwissAlps />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/categories" element={<Categories />} />
