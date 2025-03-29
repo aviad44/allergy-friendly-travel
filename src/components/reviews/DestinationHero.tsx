@@ -16,14 +16,17 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   const destinationKey = destination.id as keyof typeof DESTINATION_IMAGES;
   const customImage = destinationKey in DESTINATION_IMAGES ? DESTINATION_IMAGES[destinationKey] : null;
   
-  // Use custom image if available, otherwise fall back to destination.image
-  const imageSource = customImage || destination.image;
+  // Default fallback image if there's no image defined
+  const defaultImage = "photo-1505578183806-3d2c2001570e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80";
+  
+  // Use custom image if available, otherwise fall back to destination.image or default
+  const imageSource = customImage || destination.image || defaultImage;
   
   // Determine the image URL based on format
   const getImageUrl = () => {
-    if (imageSource.startsWith('photo-')) {
+    if (imageSource && imageSource.startsWith('photo-')) {
       return `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=2000&h=1000&q=80`;
-    } else if (imageSource.startsWith('/lovable-uploads/')) {
+    } else if (imageSource && imageSource.startsWith('/lovable-uploads/')) {
       return imageSource;
     } else {
       return imageSource;

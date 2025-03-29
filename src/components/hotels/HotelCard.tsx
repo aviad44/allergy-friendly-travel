@@ -80,11 +80,11 @@ export const HotelCard = ({ name, address, features, description, quote, booking
         )}
         
         {quote && (
-          <div className="bg-primary/5 rounded-lg p-4 relative">
+          <div className="bg-primary/5 rounded-lg p-4 relative mt-2">
             <div className="absolute top-0 left-0 transform -translate-x-2 -translate-y-2 text-primary/20 text-4xl">"</div>
-            <blockquote className="pl-4 italic text-sm sm:text-base text-primary/90 relative z-10">
+            <p className="pl-4 italic text-sm sm:text-base text-primary/90 relative z-10">
               {quote}
-            </blockquote>
+            </p>
             <div className="absolute bottom-0 right-0 transform translate-x-2 translate-y-2 text-primary/20 text-4xl">"</div>
           </div>
         )}
