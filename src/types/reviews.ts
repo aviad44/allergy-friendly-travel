@@ -605,28 +605,67 @@ export const destinationData: { [key in DestinationId]: DestinationContent } = {
     languageTable: { headers: [], rows: [] }
   },
   'swiss-alps': {
-    intro: 'Discover the best allergy-friendly hotels in the Swiss Alps, ensuring a safe and enjoyable stay for travelers with food allergies.',
+    intro: 'Discover the best allergy-friendly hotels, chalets and Airbnbs in the Swiss Alps, ensuring a safe and enjoyable stay for travelers with food allergies. From family resorts to cozy Alpine escapes, find accommodations that understand dietary restrictions in Zermatt, St. Moritz, Lauterbrunnen and beyond.',
     hotels: [
       {
         name: "1. Riffelalp Resort 2222m – Zermatt ★★★★★",
-        address: "Riffelalp, Zermatt, Switzerland",
-        features: ["⭐ 5-star alpine resort", "🍽️ Gluten-free dining", "👨‍🍳 Chef consultations for allergies"],
+        address: "Riffelalp, near Zermatt – car-free mountain resort",
+        features: ["⭐ 5-star alpine resort", "🍽️ Dedicated gluten-free breakfast zone", "👨‍🍳 Chef consultations for allergies"],
         description: "Car-free mountain resort with dedicated gluten-free breakfast zone and personalized allergy care.",
-        quote: "The chef personally explained their allergen handling. We felt completely at ease.",
+        quote: "The chef personally came out to explain how they handle allergens. We felt completely at ease.",
         bookingUrl: "https://www.riffelalp.com/"
+      },
+      {
+        name: "2. Giardino Mountain – St. Moritz (Champfèr) ★★★★★",
+        address: "Champfèr, Engadin Valley",
+        features: ["⭐ 5-star design wellness hotel", "🥣 Offers lactose-free, gluten-free, nut-free meals", "💧 Family spa & allergy-free rooms"],
+        description: "Great for active families with allergies. Pre-arrival allergy coordination ensures a worry-free stay.",
+        quote: "They had everything ready for my son's celiac diet. The team was exceptional. — Jonas K.",
+        bookingUrl: "https://www.giardinohotels.ch/en/giardino-mountain/"
+      },
+      {
+        name: "3. Backstage Boutique Hotel – Zermatt ★★★★",
+        address: "Zermatt Village",
+        features: ["⭐ 4-star artistic design hotel", "🧑‍🍳 Fine dining restaurant trained on allergens", "🎭 Allergy-friendly bedding"],
+        description: "Ideal for couples seeking comfort + allergy care. Gluten-free breakfast available upon request.",
+        quote: "They understood my nut allergy completely and offered sealed plates and utensils. — Lea B.",
+        bookingUrl: "https://www.backstagehotel.ch/"
+      },
+      {
+        name: "4. Hotel Silberhorn – Lauterbrunnen ★★★★",
+        address: "Lauterbrunnen Valley, near Jungfrau",
+        features: ["⭐ 4-star chalet-style mountain hotel", "🧼 Kitchen staff trained on cross-contamination", "🌄 Surrounded by waterfalls and mountain trails"],
+        description: "Great for nature lovers and allergy-conscious hikers. Gluten-free and dairy-free options at breakfast.",
+        quote: "They remembered my allergies every morning and adjusted my meals accordingly. — Lior G.",
+        bookingUrl: "https://www.silberhorn.com/"
       }
     ],
     faqs: [
       {
         question: "Are Swiss Alps hotels allergy-friendly?",
-        answer: "Many hotels in the Swiss Alps now offer specialized allergy-aware dining and accommodation options."
+        answer: "Many hotels in the Swiss Alps now offer specialized allergy-aware dining and accommodation options. Luxury resorts like the Riffelalp and Giardino Mountain are particularly well-equipped to handle dietary restrictions with dedicated allergen protocols."
+      },
+      {
+        question: "What are the best options for families with food allergies visiting the Swiss Alps?",
+        answer: "Family-friendly resorts like Riffelalp Resort in Zermatt and Giardino Mountain in St. Moritz offer excellent allergy services including pre-arrival coordination, dedicated gluten-free dining zones, and staff trained in allergen handling."
+      },
+      {
+        question: "Are there self-catering options for allergy travelers in the Swiss Alps?",
+        answer: "Yes, there are several allergy-friendly Airbnbs and chalets like Haus Andorra in Zermatt and Chesa Plattner near St. Moritz that offer allergen-safe kitchens, fragrance-free cleaning products, and even optional gluten-free pantry stocking."
+      },
+      {
+        question: "What should I know before booking accommodation in the Swiss Alps with food allergies?",
+        answer: "Always contact the property directly before booking to discuss your specific allergies. Ask about kitchen protocols, cross-contamination procedures, and whether they can provide allergen-free meals. Request written confirmation of any accommodations they agree to make."
       }
     ],
     languageTable: {
-      headers: ["English", "German"],
+      headers: ["English", "German", "French", "Italian"],
       rows: [
-        ["I have a food allergy", "Ich habe eine Lebensmittelallergie"],
-        ["I cannot eat gluten", "Ich kann kein Gluten essen"]
+        ["I have a food allergy", "Ich habe eine Lebensmittelallergie", "J'ai une allergie alimentaire", "Ho un'allergia alimentare"],
+        ["I cannot eat gluten", "Ich kann kein Gluten essen", "Je ne peux pas manger de gluten", "Non posso mangiare glutine"],
+        ["I am allergic to nuts", "Ich bin allergisch gegen Nüsse", "Je suis allergique aux noix", "Sono allergico alla frutta secca"],
+        ["Does this contain dairy?", "Enthält dies Milchprodukte?", "Est-ce que cela contient des produits laitiers?", "Questo contiene latticini?"],
+        ["I need gluten-free food", "Ich brauche glutenfreies Essen", "J'ai besoin de nourriture sans gluten", "Ho bisogno di cibo senza glutine"]
       ]
     }
   }
