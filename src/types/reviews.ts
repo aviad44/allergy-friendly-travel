@@ -1,3 +1,4 @@
+
 export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'abu-dhabi' | 'crete' | 'tokyo' | 'thailand' | 'hotel-chains' | 'new-york' | 'ayia-napa' | 'portugal' | 'swiss-alps';
 
 export interface Destination {
@@ -6,6 +7,7 @@ export interface Destination {
   country: string;
   description: string;
   subtitle: string;
+  image?: string; // Make image optional
 }
 
 export interface Hotel {
@@ -27,12 +29,40 @@ export interface LanguageTable {
   rows: string[][];
 }
 
+// Adding missing Review interface
+export interface Review {
+  id: number;
+  rating: number;
+  text: string;
+  author_name: string;
+  created_at: string;
+  destination?: string;
+  traveler_type?: string;
+  language: string;
+}
+
 export interface DestinationContent {
   intro: string;
   hotels: Hotel[];
   faqs: FAQ[];
   languageTable: LanguageTable;
 }
+
+// Adding missing languages type
+export type LanguageCode = 'en' | 'fr' | 'de' | 'es' | 'it' | 'he';
+
+// Adding missing languages array
+export const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'fr', name: 'French' },
+  { code: 'de', name: 'German' },
+  { code: 'es', name: 'Spanish' },
+  { code: 'it', name: 'Italian' },
+  { code: 'he', name: 'Hebrew' }
+];
+
+// Adding missing sortOptions
+export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
 
 export const destinations: Destination[] = [
   {
@@ -227,6 +257,30 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
         description: "A design wellness hotel in Engadin Valley offering pre-arrival allergy coordination.",
         quote: "They prepared everything perfectly for my son's celiac diet.",
         bookingUrl: "https://www.giardinohotels.ch/"
+      },
+      {
+        name: "Backstage Boutique Hotel",
+        address: "Zermatt Village, Switzerland",
+        features: [
+          "⭐ 4-star artistic design hotel",
+          "🧑‍🍳 Fine dining trained on allergens",
+          "🎭 Allergy-friendly bedding"
+        ],
+        description: "A boutique hotel ideal for couples seeking comfort and allergy care in Zermatt.",
+        quote: "They understood my nut allergy completely and offered sealed plates and utensils.",
+        bookingUrl: "https://www.backstagehotel.ch/"
+      },
+      {
+        name: "Hotel Silberhorn",
+        address: "Lauterbrunnen Valley, Switzerland",
+        features: [
+          "⭐ 4-star chalet-style hotel",
+          "🧼 Staff trained on cross-contamination",
+          "🌄 Surrounded by waterfalls and trails"
+        ],
+        description: "A chalet-style mountain hotel great for nature lovers and allergy-conscious hikers.",
+        quote: "They remembered my allergies every morning and adjusted my meals accordingly.",
+        bookingUrl: "https://www.silberhorn.com/"
       }
     ],
     faqs: [
@@ -237,6 +291,14 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       {
         question: "Are mountain accommodations safe for allergy sufferers?",
         answer: "Yes, many Alpine hotels now provide hypoallergenic rooms, HEPA air filters, and detailed allergy management protocols."
+      },
+      {
+        question: "Can I find self-catering options for severe allergies?",
+        answer: "Absolutely. Many chalets and Airbnbs like Haus Andorra and Chesa Plattner offer allergy-safe kitchens with separate utensils and fragrance-free cleaning."
+      },
+      {
+        question: "What should I tell hotels in advance about my allergies?",
+        answer: "Contact them 1-2 weeks before arrival with specific details about your allergies, necessary precautions, and any medical requirements."
       }
     ],
     languageTable: {
@@ -244,7 +306,9 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
       rows: [
         ["I have a food allergy", "Ich habe eine Lebensmittelallergie", "J'ai une allergie alimentaire"],
         ["Gluten-free", "Glutenfrei", "Sans gluten"],
-        ["Dairy-free", "Milchfrei", "Sans lactose"]
+        ["Dairy-free", "Milchfrei", "Sans lactose"],
+        ["Nut-free", "Nussfrei", "Sans noix"],
+        ["Is this safe for me to eat?", "Ist das für mich sicher zu essen?", "Est-ce que je peux manger ceci en toute sécurité?"]
       ]
     }
   }
