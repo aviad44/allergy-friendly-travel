@@ -1,59 +1,79 @@
 
 import React from 'react';
 import { HotelInfo } from '@/types/search';
+import { Button } from '@/components/ui/button';
+import { ExternalLink } from 'lucide-react';
 
 interface HotelDetailsProps {
   hotel: HotelInfo;
 }
 
 export const HotelDetails: React.FC<HotelDetailsProps> = ({ hotel }) => {
+  // Default image if none provided
+  const defaultImage = "/placeholder.svg";
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = defaultImage;
+    e.currentTarget.classList.add("object-contain", "p-4");
+    e.currentTarget.classList.remove("object-cover");
+  };
+
   return (
-    <div className="bg-white p-5 rounded-lg shadow-sm mb-6 border border-gray-100">
-      <h3 className="text-xl font-bold mb-3">{hotel.name}</h3>
+    <div className="space-y-4">
+      {/* Hotel Image */}
+      <div className="relative w-full h-56 overflow-hidden rounded-lg bg-gray-50">
+        <img 
+          src={hotel.imageUrl || defaultImage}
+          alt={`${hotel.name}`} 
+          className="w-full h-full object-cover"
+          onError={handleImageError}
+          loading="lazy"
+        />
+      </div>
       
-      <div className="space-y-3 text-gray-700">
-        {hotel.url && (
-          <div>
-            <h4 className="font-semibold text-gray-900">Official Website:</h4>
-            <a 
-              href={hotel.url} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-teal-600 hover:underline break-words"
-            >
-              {hotel.url}
-            </a>
-          </div>
-        )}
-        
+      {/* Detail Sections */}
+      <div className="space-y-4">
         {hotel.accommodations && (
           <div>
-            <h4 className="font-semibold text-gray-900">Allergy Program Details:</h4>
-            <p>{hotel.accommodations}</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Allergy Accommodations</h3>
+            <p className="text-gray-700 leading-relaxed">{hotel.accommodations}</p>
           </div>
         )}
         
         {hotel.dietary && (
           <div>
-            <h4 className="font-semibold text-gray-900">Dietary Considerations:</h4>
-            <p>{hotel.dietary}</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Dietary Options</h3>
+            <p className="text-gray-700 leading-relaxed">{hotel.dietary}</p>
           </div>
         )}
         
         {hotel.safety && (
           <div>
-            <h4 className="font-semibold text-gray-900">Safety Protocols:</h4>
-            <p>{hotel.safety}</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Safety Protocols</h3>
+            <p className="text-gray-700 leading-relaxed">{hotel.safety}</p>
           </div>
         )}
         
         {hotel.reviews && (
           <div>
-            <h4 className="font-semibold text-gray-900">Guest Reviews:</h4>
-            <p>{hotel.reviews}</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Guest Feedback</h3>
+            <p className="text-gray-700 leading-relaxed">{hotel.reviews}</p>
           </div>
         )}
       </div>
+      
+      {/* Call to Action */}
+      {hotel.url && (
+        <div className="pt-4 flex justify-end">
+          <Button 
+            className="bg-teal-600 hover:bg-teal-700 text-white"
+            onClick={() => window.open(hotel.url, "_blank")}
+          >
+            Visit Official Website
+            <ExternalLink className="ml-1.5 h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

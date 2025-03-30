@@ -7,4 +7,7 @@ export interface HotelInfo {
   reviews?: string;
   safety?: string;
   imageUrl?: string;
+  rating?: number;
+  price?: string;
+  location?: string;
 }

@@ -72,7 +72,15 @@ const SearchResults = () => {
         // Extract hotels from the recommendation
         const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
         console.log('Extracted hotels:', extractedHotels);
-        setHotels(extractedHotels);
+        
+        // Add random ratings to hotels for demo purposes
+        const hotelsWithRatings = extractedHotels.map(hotel => ({
+          ...hotel,
+          rating: Math.floor(Math.random() * 2) + 4, // Random rating between 4-5
+          location: destination // Add location information
+        }));
+        
+        setHotels(hotelsWithRatings);
         
       } catch (error) {
         console.error('Error during search:', error);
@@ -100,23 +108,25 @@ const SearchResults = () => {
         <meta name="description" content={pageDescription} />
       </Helmet>
 
-      <div className="min-h-screen bg-white pb-12">
+      <div className="min-h-screen bg-gray-50 pb-12">
         {/* Hero Section */}
         <SearchHero destination={destination} allergies={allergies} />
 
-        <div className="container mx-auto px-4 py-6 max-w-5xl">
-          <BackButton />
-          <SafetyNotice />
+        <div className="container mx-auto px-4 py-6 max-w-7xl">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 md:p-8">
+            <BackButton />
+            <SafetyNotice />
 
-          {isSearching ? (
-            <LoadingState />
-          ) : (
-            <HotelList 
-              hotels={hotels} 
-              destination={destination} 
-              allergies={allergies} 
-            />
-          )}
+            {isSearching ? (
+              <LoadingState />
+            ) : (
+              <HotelList 
+                hotels={hotels} 
+                destination={destination} 
+                allergies={allergies} 
+              />
+            )}
+          </div>
         </div>
       </div>
     </>
