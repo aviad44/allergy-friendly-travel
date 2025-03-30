@@ -1,4 +1,3 @@
-
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -55,7 +54,7 @@ export const SearchBar = () => {
       
       {/* Search button */}
       <Button 
-        className="h-9 sm:h-12 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" 
+        className="h-9 sm:h-9 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" 
         onClick={handleSearch} 
         disabled={isSearching}
       >
