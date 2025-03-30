@@ -34,7 +34,7 @@ export const HotelGrid: React.FC<HotelGridProps> = ({ hotels, onHotelSelect }) =
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {uniqueHotels.map((hotel, index) => (
         <HotelCard 
           key={`${hotel.name}-${index}`} 

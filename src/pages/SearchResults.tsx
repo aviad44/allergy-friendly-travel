@@ -11,15 +11,7 @@ import { BackButton } from "@/components/search/BackButton";
 import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
 import { HotelList } from "@/components/search/hotel-list";
-
-// Verified working hotel images
-const HOTEL_IMAGES = [
-  'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80',
-  'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80',
-  'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80',
-  'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80',
-  'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80'
-];
+import { SearchHero } from "@/components/search/SearchHero";
 
 // Sample guest reviews
 const SAMPLE_REVIEWS = [
@@ -29,9 +21,6 @@ const SAMPLE_REVIEWS = [
   "They have a dedicated allergy-friendly menu. I was able to enjoy delicious meals despite my severe allergies.",
   "The staff took my celiac disease seriously and ensured all my meals were 100% gluten-free."
 ];
-
-// Different price points for more realistic hotel pricing
-const PRICE_POINTS = ['$129', '$159', '$189', '$219', '$249', '$299'];
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -45,19 +34,14 @@ const SearchResults = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [hotels, setHotels] = useState<HotelInfo[]>([]);
   
-  // Memoized function to enhance hotels with proper images, pricing, and reviews
+  // Memoized function to enhance hotels with proper data but no images or prices
   const enhanceHotelData = useCallback((extractedHotels: HotelInfo[]) => {
     return extractedHotels.map((hotel, index) => {
-      // Ensure each hotel has a unique index for image selection
-      const imageIndex = index % HOTEL_IMAGES.length;
-      const priceIndex = (index + Math.floor(Math.random() * 3)) % PRICE_POINTS.length;
-      
+      // Create enhanced hotel without images or prices
       const enhancedHotel: HotelInfo = {
         ...hotel,
         rating: (Math.floor(Math.random() * 10) + 36) / 10, // Random rating between 3.6-4.5
         location: destination, // Add location information
-        imageUrl: HOTEL_IMAGES[imageIndex],
-        price: PRICE_POINTS[priceIndex],
         reviews: hotel.reviews && hotel.reviews.length > 0 
           ? hotel.reviews 
           : [SAMPLE_REVIEWS[index % SAMPLE_REVIEWS.length]],
@@ -166,14 +150,8 @@ const SearchResults = () => {
             {/* Safety Notice */}
             <SafetyNotice />
 
-            <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                Allergy-Friendly Hotels in {destination}
-              </h1>
-              <p className="text-gray-600">
-                Safe accommodations for visitors with {allergies} allergies
-              </p>
-            </div>
+            {/* Title section */}
+            <SearchHero destination={destination} allergies={allergies} />
 
             {isSearching ? (
               <LoadingState />

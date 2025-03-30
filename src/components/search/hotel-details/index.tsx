@@ -17,15 +17,13 @@ export const HotelDetails: React.FC<HotelDetailsProps> = ({ hotel }) => {
   return (
     <div className="space-y-6">
       <HotelImage 
-        imageUrl={hotel.imageUrl} 
         name={hotel.name} 
         rating={hotel.rating} 
       />
       
       <HotelHeader 
         name={hotel.name} 
-        location={hotel.location} 
-        price={hotel.price} 
+        location={hotel.location}
       />
       
       <HotelDescription description={hotel.description} />
