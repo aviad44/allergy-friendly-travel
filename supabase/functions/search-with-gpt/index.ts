@@ -70,10 +70,24 @@ serve(async (req) => {
 
     const data = await response.json();
     console.log('✅ Received response from OpenAI');
+    
+    // Process the response to remove the prompt instructions
+    let processedResponse = data.choices[0].message.content;
+    
+    // Remove any system prompt instructions that might have leaked into the response
+    processedResponse = processedResponse
+      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/, '')
+      .replace(/Format your response as[\s\S]*?(?=\n\n|$)/, '')
+      .replace(/EXTREMELY IMPORTANT SAFETY REQUIREMENTS:[\s\S]*?(?=\n\n|$)/, '')
+      .replace(/For hotels, ONLY include[\s\S]*?(?=\n\n|$)/, '')
+      .replace(/ALL guest reviews MUST be authentic[\s\S]*?(?=\n\n|$)/, '')
+      .replace(/If you're not 100% certain[\s\S]*?(?=\n\n|$)/, '')
+      .replace(/Include WARNING notices[\s\S]*?(?=\n\n|$)/, '')
+      .replace(/Include EXACT street addresses[\s\S]*?(?=\n\n|$)/, '');
 
     return new Response(
       JSON.stringify({ 
-        recommendation: data.choices[0].message.content,
+        recommendation: processedResponse,
         status: "success" 
       }),
       {

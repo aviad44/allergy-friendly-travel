@@ -76,6 +76,23 @@ export const SearchBar = () => {
     };
   }, []);
   
+  // Function to clean the response text before displaying it
+  const cleanResponseText = (text: string) => {
+    if (!text) return "";
+
+    // Remove any prompt instructions or metadata that may have leaked into the response
+    return text
+      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Format your response as[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/EXTREMELY IMPORTANT SAFETY REQUIREMENTS:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/For hotels, ONLY include[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/ALL guest reviews MUST be authentic[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/If you're not 100% certain[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Include WARNING notices[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Include EXACT street addresses[\s\S]*?(?=\n\n|$)/g, '')
+      .trim();
+  };
+  
   const handleSearch = async () => {
     if (!destination || !allergies) {
       toast({
@@ -96,26 +113,33 @@ export const SearchBar = () => {
     }
     
     try {
-      console.log('Sending search request to Supabase gpt-proxy function');
-      const prompt = `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies, including addresses, authentic guest reviews, and nearby restaurants.`;
+      console.log('Sending search request to Supabase search-with-gpt function');
       const {
         data,
         error
-      } = await supabase.functions.invoke('gpt-proxy', {
+      } = await supabase.functions.invoke('search-with-gpt', {
         body: {
-          prompt
+          destination,
+          allergies
         }
       });
+      
       if (error) {
         console.error('Supabase Function Error:', error);
         throw error;
       }
-      if (!data?.reply) {
+      
+      if (!data?.recommendation) {
         console.error('No recommendation data:', data);
         throw new Error('No recommendation received from the AI');
       }
-      console.log('Received recommendation:', data.reply);
-      setRecommendation(data.reply);
+      
+      console.log('Received recommendation:', data.recommendation);
+      
+      // Clean the response before displaying it
+      const cleanedRecommendation = cleanResponseText(data.recommendation);
+      setRecommendation(cleanedRecommendation);
+      
     } catch (error) {
       console.error('Error during search:', error);
       toast({

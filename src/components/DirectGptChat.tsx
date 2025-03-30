@@ -15,7 +15,7 @@ interface Message {
 }
 
 export const DirectGptChat = () => {
-  const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured, always including:\n\n1️⃣ **Hotel Name**\n2️⃣ **City & Country**\n3️⃣ **Star Rating (⭐ Rating based on guest reviews)**\n4️⃣ **Exact Address**\n5️⃣ **Why This Hotel is Suitable for Allergy Sufferers (list specific allergy-friendly features like nut-free kitchens, dedicated allergy-trained staff, buffet labeling, hypoallergenic bedding, etc.)**\n6️⃣ **Direct Booking Links to:**\n   - The Hotel's Official Website (🔗 Hotel Website)\n   - Booking.com (🔗 Book on Booking.com)\n7️⃣ **Authentic Guest Reviews with Star Ratings (🗣 Guest Review: \"Example review\" — ⭐⭐⭐⭐⭐)**\n8️⃣ **Nearby Allergy-Friendly Restaurants (list at least 2-3 restaurants that accommodate dietary restrictions)**\n9️⃣ **General Allergy Safety Tips for Travelers in this Destination**\n\n✅ **Important Formatting Rules:**\n- Always use structured bullet points for clarity.\n- Never omit star ratings, guest reviews, or booking links.\n- If guest reviews are not available, generate a plausible review based on verified guest experiences.\n- If no dedicated nut-free restaurants are available, recommend general allergy-aware dining options.\n- Maintain consistent hotel ranking order based on suitability.\n\nThe goal is to ensure that users receive hotel recommendations as rich and structured as those provided in ChatGPT's Custom GPT.";
+  const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured, always including:\n\n1️⃣ **Hotel Name**\n2️⃣ **City & Country**\n3️⃣ **Star Rating (⭐ Rating based on guest reviews)**\n4️⃣ **Exact Address**\n5️⃣ **Why This Hotel is Suitable for Allergy Sufferers (list specific allergy-friendly features like nut-free kitchens, dedicated allergy-trained staff, buffet labeling, hypoallergenic bedding, etc.)**\n6️⃣ **Direct Booking Links to:**\n   - The Hotel's Official Website (🔗 Hotel Website)\n   - Booking.com (🔗 Book on Booking.com)\n7️⃣ **Authentic Guest Reviews with Star Ratings (🗣 Guest Review: \"Example review\" — ⭐⭐⭐⭐⭐)**\n8️⃣ **Nearby Allergy-Friendly Restaurants (list at least 2-3 restaurants that accommodate dietary restrictions)**\n9️⃣ **General Allergy Safety Tips for Travelers in this Destination**\n\nThe goal is to ensure that users receive detailed hotel recommendations for safe travel with allergies.";
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -57,6 +57,23 @@ export const DirectGptChat = () => {
         description: "Your custom system prompt has been updated.",
       });
     }
+  };
+
+  // Function to clean response text from any prompt instructions
+  const cleanResponseText = (text: string) => {
+    if (!text) return "";
+    
+    // Remove any prompt instructions or metadata that may have leaked into the response
+    return text
+      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Format your response as[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/EXTREMELY IMPORTANT SAFETY REQUIREMENTS:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/For hotels, ONLY include[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/ALL guest reviews MUST be authentic[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/If you're not 100% certain[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Include WARNING notices[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Include EXACT street addresses[\s\S]*?(?=\n\n|$)/g, '')
+      .trim();
   };
 
   const handleSubmit = async (e?: React.FormEvent) => {
@@ -111,10 +128,13 @@ export const DirectGptChat = () => {
       console.log("Response length:", data.result.length);
       console.log("Token usage:", data.tokenUsage);
       
+      // Clean the response before displaying it
+      const cleanedResponse = cleanResponseText(data.result);
+      
       // Check if response contains expected sections
-      const hasGuestReviews = data.result.includes("Guest Review") || data.result.includes("🗣");
-      const hasRestaurants = data.result.includes("Nearby Allergy-Friendly Restaurants");
-      const hasSafetyTips = data.result.includes("General Allergy Safety Tips");
+      const hasGuestReviews = cleanedResponse.includes("Guest Review") || cleanedResponse.includes("🗣");
+      const hasRestaurants = cleanedResponse.includes("Nearby Allergy-Friendly Restaurants");
+      const hasSafetyTips = cleanedResponse.includes("General Allergy Safety Tips");
       
       console.log("Response completeness check:", {
         hasGuestReviews,
@@ -127,7 +147,7 @@ export const DirectGptChat = () => {
       
       const assistantMessage: Message = { 
         role: "assistant", 
-        content: data.result,
+        content: cleanedResponse,
         isComplete: data.isComplete
       };
       
@@ -226,7 +246,7 @@ export const DirectGptChat = () => {
             </div>
             {message.role === "assistant" && message.isComplete === false && (
               <div className="flex justify-center">
-                <Alert variant="destructive" className="max-w-[80%] p-2"> {/* Changed from "warning" to "destructive" */}
+                <Alert variant="destructive" className="max-w-[80%] p-2">
                   <AlertTriangle className="h-4 w-4" />
                   <AlertDescription className="text-xs">
                     This response may be incomplete. Consider asking a more specific question.

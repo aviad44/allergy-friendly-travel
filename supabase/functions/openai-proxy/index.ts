@@ -34,7 +34,7 @@ serve(async (req) => {
     });
 
     // Default system prompt if none provided
-    const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured, always including:\n\n1️⃣ **Hotel Name**\n2️⃣ **City & Country**\n3️⃣ **Star Rating (⭐ Rating based on guest reviews)**\n4️⃣ **Exact Address**\n5️⃣ **Why This Hotel is Suitable for Allergy Sufferers (list specific allergy-friendly features like nut-free kitchens, dedicated allergy-trained staff, buffet labeling, hypoallergenic bedding, etc.)**\n6️⃣ **Direct Booking Links to:**\n   - The Hotel's Official Website (🔗 Hotel Website)\n   - Booking.com (🔗 Book on Booking.com)\n7️⃣ **Authentic Guest Reviews with Star Ratings (🗣 Guest Review: \"Example review\" — ⭐⭐⭐⭐⭐)**\n8️⃣ **Nearby Allergy-Friendly Restaurants (list at least 2-3 restaurants that accommodate dietary restrictions)**\n9️⃣ **General Allergy Safety Tips for Travelers in this Destination**\n\n✅ **Important Formatting Rules:**\n- Always use structured bullet points for clarity.\n- Never omit star ratings, guest reviews, or booking links.\n- If guest reviews are not available, generate a plausible review based on verified guest experiences.\n- If no dedicated nut-free restaurants are available, recommend general allergy-aware dining options.\n- Maintain consistent hotel ranking order based on suitability.\n\nThe goal is to ensure that users receive hotel recommendations as rich and structured as those provided in ChatGPT's Custom GPT.";
+    const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured, always including:\n\n1️⃣ **Hotel Name**\n2️⃣ **City & Country**\n3️⃣ **Star Rating (⭐ Rating based on guest reviews)**\n4️⃣ **Exact Address**\n5️⃣ **Why This Hotel is Suitable for Allergy Sufferers (list specific allergy-friendly features like nut-free kitchens, dedicated allergy-trained staff, buffet labeling, hypoallergenic bedding, etc.)**\n6️⃣ **Direct Booking Links to:**\n   - The Hotel's Official Website (🔗 Hotel Website)\n   - Booking.com (🔗 Book on Booking.com)\n7️⃣ **Authentic Guest Reviews with Star Ratings (🗣 Guest Review: \"Example review\" — ⭐⭐⭐⭐⭐)**\n8️⃣ **Nearby Allergy-Friendly Restaurants (list at least 2-3 restaurants that accommodate dietary restrictions)**\n9️⃣ **General Allergy Safety Tips for Travelers in this Destination**\n\nThe goal is to ensure that users receive detailed hotel recommendations for safe travel with allergies.";
 
     console.log('🔄 Sending request to OpenAI API...');
     const startTime = Date.now();
@@ -81,8 +81,20 @@ serve(async (req) => {
       total_tokens: data.usage?.total_tokens || 'unknown'
     });
     
-    // Check if response includes guest reviews
-    const content = data.choices[0].message.content;
+    // Clean the response before returning it
+    let content = data.choices[0].message.content;
+    
+    // Process response to remove prompt instructions that might have leaked into the response
+    content = content
+      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Format your response as[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/EXTREMELY IMPORTANT SAFETY REQUIREMENTS:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/For hotels, ONLY include[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/ALL guest reviews MUST be authentic[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/If you're not 100% certain[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Include WARNING notices[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Include EXACT street addresses[\s\S]*?(?=\n\n|$)/g, '');
+    
     console.log('✅ Response first 100 chars:', content.substring(0, 100));
     console.log('✅ Response last 100 chars:', content.substring(content.length - 100));
     
@@ -112,7 +124,7 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ 
-        result: data.choices[0].message.content,
+        result: content,
         tokenUsage: data.usage,
         isComplete: !isLikelyTruncated,
         sectionCheck: checkSections
