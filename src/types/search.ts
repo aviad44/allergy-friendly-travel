@@ -6,4 +6,5 @@ export interface HotelInfo {
   dietary?: string;
   reviews?: string;
   safety?: string;
+  imageUrl?: string;
 }

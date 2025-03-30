@@ -20,22 +20,25 @@ export const HotelList: React.FC<HotelListProps> = ({ hotels, destination, aller
   }
 
   return (
-    <div className="space-y-0">
+    <div className="space-y-8">
       {/* Hotel Cards Section - First part visible on initial scroll */}
-      <div className="mb-8">
-        {hotels.map((hotel, index) => (
-          <HotelCard key={`card-${index}`} hotel={hotel} />
-        ))}
+      <div className="mb-10">
+        <h2 className="text-2xl font-bold mb-6">Allergy-Friendly Hotels in {destination}</h2>
+        <div className="space-y-6">
+          {hotels.map((hotel, index) => (
+            <HotelCard key={`card-${index}`} hotel={hotel} />
+          ))}
+        </div>
       </div>
       
       {/* Additional Information Section - Visible on scrolling down */}
-      <div className="mt-10">
-        <h2 className="text-4xl font-bold mb-6">Additional Information</h2>
-        <div className="space-y-2">
-          <p className="mb-6 text-lg">
-            Here are some allergy-friendly hotels in {destination} that cater to guests with {allergies} allergies:
-          </p>
-          
+      <div className="pt-6 border-t border-gray-200 mt-10">
+        <h2 className="text-2xl font-bold mb-6">Detailed Information</h2>
+        <p className="mb-6 text-gray-700">
+          Here are detailed allergy-friendly accommodations for hotels in {destination} that cater to guests with {allergies} allergies:
+        </p>
+        
+        <div className="space-y-6">
           {hotels.map((hotel, index) => (
             <HotelDetails key={`details-${index}`} hotel={hotel} />
           ))}
