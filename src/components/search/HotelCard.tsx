@@ -10,15 +10,6 @@ interface HotelCardProps {
 }
 
 export const HotelCard: React.FC<HotelCardProps> = ({ hotel, onViewDetails }) => {
-  // Default image if none provided or if image fails to load
-  const defaultImage = "/placeholder.svg";
-  
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = defaultImage;
-    e.currentTarget.classList.add("object-contain", "p-4");
-    e.currentTarget.classList.remove("object-cover");
-  };
-  
   // Format price to ensure consistency
   const formattedPrice = hotel.price && typeof hotel.price === 'string' 
     ? hotel.price.startsWith('$') ? hotel.price : `$${hotel.price}` 
@@ -30,29 +21,10 @@ export const HotelCard: React.FC<HotelCardProps> = ({ hotel, onViewDetails }) =>
     : null;
   
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300">
-      <div className="flex flex-col md:flex-row">
-        {/* Left side - Image (only on medium screens and up) */}
-        <div className="md:w-1/4 lg:w-1/5 overflow-hidden md:rounded-l-lg flex-shrink-0">
-          <div className="relative w-full h-48 md:h-full bg-gray-100">
-            <img 
-              src={hotel.imageUrl || defaultImage}
-              alt={`${hotel.name}`} 
-              className="w-full h-full object-cover" 
-              onError={handleImageError}
-              loading="lazy"
-            />
-            {hotel.rating && (
-              <div className="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded-full flex items-center shadow-sm">
-                <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500 mr-1" />
-                <span className="text-xs font-medium">{hotel.rating}</span>
-              </div>
-            )}
-          </div>
-        </div>
-        
-        {/* Right side - Content */}
-        <div className="flex-1 p-4 md:p-5 flex flex-col h-full">
+    <div className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300 p-5">
+      <div className="flex flex-col">
+        {/* Content */}
+        <div className="flex-1 flex flex-col h-full">
           <div className="flex justify-between items-start mb-3">
             <div>
               <h2 className="text-xl font-bold text-gray-900 leading-tight">{hotel.name}</h2>

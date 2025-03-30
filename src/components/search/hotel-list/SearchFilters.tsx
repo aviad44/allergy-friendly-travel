@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 import { SortControls } from './SortControls';
 
 interface SearchFiltersProps {
@@ -16,27 +15,15 @@ interface SearchFiltersProps {
 }
 
 export const SearchFilters: React.FC<SearchFiltersProps> = ({
-  searchQuery,
-  onSearchQueryChange,
-  onFiltersDialogOpen,
   sortField,
   sortDirection,
+  onFiltersDialogOpen,
   onSortFieldChange,
   onSortDirectionChange
 }) => {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 mb-2">
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-grow">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search hotels by name or features..."
-            value={searchQuery}
-            onChange={(e) => onSearchQueryChange(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        
+      <div className="flex flex-col sm:flex-row gap-3 justify-end">
         <SortControls
           sortField={sortField}
           sortDirection={sortDirection}
