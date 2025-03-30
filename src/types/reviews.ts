@@ -167,9 +167,84 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
   },
   paris: {
     intro: "Discover Paris's finest allergy-aware hotels and accommodations.",
-    hotels: [],
-    faqs: [],
-    languageTable: { headers: [], rows: [] }
+    hotels: [
+      {
+        name: "Le Bristol Paris ★★★★★",
+        address: "112 Rue du Faubourg Saint-Honoré, 75008 Paris, France",
+        features: [
+          "⭐ 5-star luxury hotel",
+          "🍽️ Dedicated allergy menu",
+          "👨‍🍳 Private consultations with chef"
+        ],
+        description: "This iconic luxury hotel offers exceptional service for guests with dietary restrictions, including pre-arrival consultations.",
+        quote: "The chef personally came to our table to discuss my daughter's gluten allergy. The food was exquisite and completely safe.",
+        bookingUrl: "https://www.oetkercollection.com/hotels/le-bristol-paris/"
+      },
+      {
+        name: "Hôtel Plaza Athénée ★★★★★",
+        address: "25 Avenue Montaigne, 75008 Paris, France",
+        features: [
+          "⭐ 5-star luxury accommodation", 
+          "🥐 Gluten-free pastries", 
+          "🍲 Allergen-free room service"
+        ],
+        description: "Upscale accommodation with special attention to food allergies and comprehensive allergen training for all kitchen staff.",
+        quote: "They created a custom dairy-free menu for my entire stay, even including French pastries!",
+        bookingUrl: "https://www.dorchestercollection.com/en/paris/hotel-plaza-athenee/"
+      },
+      {
+        name: "Hôtel de Crillon ★★★★★",
+        address: "10 Place de la Concorde, 75008 Paris, France",
+        features: [
+          "⭐ 5-star historic hotel",
+          "📋 Personalized allergy protocols",
+          "🥗 Vegan and special diet options"
+        ],
+        description: "Elegant and historic Parisian hotel with knowledgeable staff trained to handle various dietary restrictions.",
+        quote: "Despite being in the land of gluten, they made my celiac stay wonderful with safe and delicious alternatives.",
+        bookingUrl: "https://www.rosewoodhotels.com/en/hotel-de-crillon"
+      },
+      {
+        name: "Shangri-La Hotel Paris ★★★★★",
+        address: "10 Avenue d'Iéna, 75116 Paris, France",
+        features: [
+          "⭐ 5-star palace hotel", 
+          "🍲 Asian-European fusion allergy options", 
+          "🛌 Allergy-friendly bedding"
+        ],
+        description: "Offers exceptional luxury accommodations with special attention to guest allergies and multiple dining venues with allergy-aware menus.",
+        quote: "The staff went above and beyond to ensure my nut allergy was accommodated throughout my entire stay.",
+        bookingUrl: "https://www.shangri-la.com/paris/shangrila/"
+      }
+    ],
+    faqs: [
+      {
+        question: "How do Paris hotels typically handle food allergies?",
+        answer: "Many luxury hotels in Paris now offer pre-arrival questionnaires to identify dietary needs, allergen-trained kitchen staff, and separate preparation areas to avoid cross-contamination."
+      },
+      {
+        question: "Can I find gluten-free options in Parisian hotels?",
+        answer: "Yes, particularly in 4 and 5-star hotels. Many offer gluten-free bread, pastries, and complete menu alternatives. Hotels like Le Bristol and Shangri-La are especially accommodating."
+      },
+      {
+        question: "Should I notify my Paris hotel about allergies before arrival?",
+        answer: "It's highly recommended to contact the hotel at least one week before arrival. Send a detailed explanation of your allergies in both English and French for the clearest communication."
+      },
+      {
+        question: "Are apartment hotels a good option for severe allergies in Paris?",
+        answer: "Yes, apartment hotels like Citadines and Adagio offer kitchenettes where you can prepare your own safe meals while still enjoying hotel amenities and services."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "French"],
+      rows: [
+        ["I have a food allergy", "J'ai une allergie alimentaire"],
+        ["Gluten-free", "Sans gluten"],
+        ["Dairy-free", "Sans lactose"],
+        ["Nut-free", "Sans noix"],
+        ["I cannot eat", "Je ne peux pas manger"]
+      ]
+    }
   },
   barcelona: {
     intro: "Barcelona's hotels are increasingly catering to guests with dietary restrictions.",
@@ -197,9 +272,84 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
   },
   tokyo: {
     intro: "Navigate Tokyo's culinary scene safely with these allergy-aware hotels.",
-    hotels: [],
-    faqs: [],
-    languageTable: { headers: [], rows: [] }
+    hotels: [
+      {
+        name: "Tokyo Marriott Hotel ★★★★★",
+        address: "4-7-36 Kitashinagawa, Shinagawa, Tokyo 140-0001, Japan",
+        features: [
+          "⭐ 5-star international chain",
+          "🍚 Allergen cards in Japanese",
+          "👨‍🍳 Staff trained in cross-contamination"
+        ],
+        description: "Excellent for international travelers with food allergies, offering allergen cards in Japanese to help communicate dietary needs.",
+        quote: "The staff provided me with allergen cards I could show at restaurants throughout my stay in Japan!",
+        bookingUrl: "https://www.marriott.com/hotels/travel/tyomc-tokyo-marriott-hotel/"
+      },
+      {
+        name: "Park Hyatt Tokyo ★★★★★",
+        address: "3-7-1-2 Nishi Shinjuku, Shinjuku-Ku, Tokyo 163-1055, Japan",
+        features: [
+          "⭐ 5-star landmark hotel",
+          "🍣 Allergen-aware Japanese cuisine",
+          "📝 Written dietary communication cards"
+        ],
+        description: "Sophisticated accommodation famous from 'Lost in Translation' with exceptional allergy awareness and custom meal preparation.",
+        quote: "The chef created special gluten-free versions of traditional Japanese dishes that were incredible.",
+        bookingUrl: "https://www.hyatt.com/en-US/hotel/japan/park-hyatt-tokyo/tyoph"
+      },
+      {
+        name: "The Peninsula Tokyo ★★★★★",
+        address: "1-8-1 Yurakucho, Chiyoda-ku, Tokyo 100-0006, Japan",
+        features: [
+          "⭐ 5-star luxury hotel",
+          "🏷️ Food labeling in multiple languages",
+          "🍲 Pre-arrival allergy coordination"
+        ],
+        description: "Luxury hotel near the Imperial Palace with exceptional allergy protocols and multilingual staff to assist with dietary needs.",
+        quote: "Every meal was prepared with my dairy and nut allergies in mind, and they even offered gluten-free afternoon tea.",
+        bookingUrl: "https://www.peninsula.com/en/tokyo/5-star-luxury-hotel-ginza"
+      },
+      {
+        name: "Keio Plaza Hotel Tokyo ★★★★",
+        address: "2-2-1 Nishi-Shinjuku, Shinjuku-Ku, Tokyo 160-8330, Japan",
+        features: [
+          "⭐ 4-star business hotel",
+          "🥣 Allergen-free menu options",
+          "🔍 Transparent ingredient lists"
+        ],
+        description: "Large, business-friendly hotel with designated allergy-friendly floors and restaurants experienced in handling dietary restrictions.",
+        quote: "They had comprehensive English ingredient lists for every buffet item and could prepare special meals on request.",
+        bookingUrl: "https://www.keioplaza.com/"
+      }
+    ],
+    faqs: [
+      {
+        question: "How do I communicate my food allergies in Tokyo hotels?",
+        answer: "Most high-end Tokyo hotels have English-speaking staff trained in allergy awareness. Request allergen cards in Japanese to use throughout your trip. Many hotels offer digital translation services as well."
+      },
+      {
+        question: "Are gluten-free options readily available in Tokyo hotels?",
+        answer: "While traditional Japanese cuisine often contains soy sauce (which contains wheat), upscale hotels are increasingly offering gluten-free alternatives including gluten-free soy sauce and special breakfast options."
+      },
+      {
+        question: "Do Tokyo hotels understand Western concepts of cross-contamination?",
+        answer: "Luxury and international chain hotels in Tokyo typically have well-trained staff who understand cross-contamination risks. Always clarify your specific needs directly with the food service manager."
+      },
+      {
+        question: "What hotel chains are best for food allergies in Tokyo?",
+        answer: "International chains like Marriott, Hyatt, and Hilton typically have standardized allergy protocols. Japanese luxury brands like The Peninsula and Imperial Hotel also offer exceptional allergy accommodations."
+      }
+    ],
+    languageTable: {
+      headers: ["English", "Japanese"],
+      rows: [
+        ["I have a food allergy", "わたしには食物アレルギーがあります (Watashi ni wa shokumotsu arerugī ga arimasu)"],
+        ["Gluten-free", "グルテンフリー (Guruten furī)"],
+        ["Dairy-free", "乳製品なし (Nyūseihin nashi)"],
+        ["Nut-free", "ナッツなし (Nattsu nashi)"],
+        ["I cannot eat this", "これを食べられません (Kore o taberaremasen)"]
+      ]
+    }
   },
   thailand: {
     intro: "Find safe and comfortable stays across Thailand's top destinations.",
