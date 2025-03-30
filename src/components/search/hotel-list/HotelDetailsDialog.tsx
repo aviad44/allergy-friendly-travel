@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { HotelDetails } from '../HotelDetails';
 import { HotelInfo } from '@/types/search';
+import { HotelDetails } from '../hotel-details';
 
 interface HotelDetailsDialogProps {
   selectedHotel: HotelInfo | null;
