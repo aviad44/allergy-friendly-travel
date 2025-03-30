@@ -1,0 +1,34 @@
+
+import { DestinationId, DestinationContent } from '@/types/definitions';
+import { parisContent } from './destination-paris';
+import { tokyoContent } from './destination-tokyo';
+import { swissAlpsContent } from './destination-swiss-alps';
+import { 
+  genericDestinationContent,
+  londonContent,
+  barcelonaContent,
+  cyprusContent,
+  abuDhabiContent,
+  creteContent,
+  thailandContent,
+  hotelChainsContent,
+  newYorkContent,
+  ayiaNapaContent,
+  portugalContent
+} from './destination-generic';
+
+export const destinationData: Record<DestinationId, DestinationContent> = {
+  london: londonContent,
+  paris: parisContent,
+  barcelona: barcelonaContent,
+  cyprus: cyprusContent,
+  'abu-dhabi': abuDhabiContent,
+  crete: creteContent,
+  tokyo: tokyoContent,
+  thailand: thailandContent,
+  'hotel-chains': hotelChainsContent,
+  'new-york': newYorkContent,
+  'ayia-napa': ayiaNapaContent,
+  portugal: portugalContent,
+  'swiss-alps': swissAlpsContent
+};
