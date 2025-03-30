@@ -9,7 +9,16 @@ interface HotelGridProps {
 }
 
 export const HotelGrid: React.FC<HotelGridProps> = ({ hotels, onHotelSelect }) => {
-  if (hotels.length === 0) {
+  // Deduplicate hotels by name to prevent duplicate listings
+  const uniqueHotels = hotels.reduce((acc: HotelInfo[], current) => {
+    const isDuplicate = acc.find(item => item.name === current.name);
+    if (!isDuplicate) {
+      return [...acc, current];
+    }
+    return acc;
+  }, []);
+
+  if (uniqueHotels.length === 0) {
     return (
       <div className="text-center py-12 bg-gray-50 rounded-lg">
         <div className="bg-white p-8 rounded-lg shadow-sm max-w-md mx-auto">
@@ -25,8 +34,8 @@ export const HotelGrid: React.FC<HotelGridProps> = ({ hotels, onHotelSelect }) =
   }
 
   return (
-    <div className="space-y-6">
-      {hotels.map((hotel, index) => (
+    <div className="space-y-8">
+      {uniqueHotels.map((hotel, index) => (
         <HotelCard 
           key={`${hotel.name}-${index}`} 
           hotel={hotel} 
