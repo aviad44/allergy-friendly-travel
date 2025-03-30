@@ -57,7 +57,9 @@ serve(async (req) => {
             2. Each detail section should be a separate paragraph with the bold heading
             3. Include 4-5 hotels for the given destination
             4. Use real hotel websites and information
-            5. Only include authentic information relevant to the specific allergies mentioned`
+            5. Only include authentic information relevant to the specific allergies mentioned
+            6. Always format URLs correctly and place them on the same line as the hotel name separated by a pipe character
+            7. For each hotel, use the EXACT format: "**Hotel Name** | https://website.com" (note the | character between name and URL)`
           },
           {
             role: 'user',

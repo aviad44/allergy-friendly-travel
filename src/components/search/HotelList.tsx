@@ -25,9 +25,9 @@ export const HotelList: React.FC<HotelListProps> = ({ hotels, destination, aller
         <HotelCard key={index} hotel={hotel} />
       ))}
       
-      <div className="mt-10 bg-gray-50 p-6 rounded-lg">
+      <div className="mt-10">
         <h2 className="text-2xl font-bold mb-4">Additional Information</h2>
-        <div className="space-y-4">
+        <div className="space-y-2">
           <p className="mb-4">
             Here are some allergy-friendly hotels in {destination} that cater to guests with {allergies} allergies:
           </p>

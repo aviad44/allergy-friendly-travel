@@ -8,8 +8,21 @@ interface HotelDetailsProps {
 
 export const HotelDetails: React.FC<HotelDetailsProps> = ({ hotel }) => {
   return (
-    <div className="mb-8">
-      <h3 className="text-xl font-bold mb-1">{hotel.name} {hotel.url ? `| ${hotel.url}` : ''}</h3>
+    <div className="mb-4">
+      <div className="text-xl font-bold mb-1">{hotel.name}{hotel.url ? ' |' : ''}</div>
+      
+      {hotel.url && (
+        <div className="mb-2">
+          <a 
+            href={hotel.url} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="break-words"
+          >
+            {hotel.url}
+          </a>
+        </div>
+      )}
       
       {hotel.accommodations && (
         <p className="mb-3">
