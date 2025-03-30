@@ -10,7 +10,7 @@ interface HotelCardProps {
 
 export const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
   // Default image if none provided
-  const imageUrl = hotel.imageUrl || "https://placeholder.svg";
+  const imageUrl = hotel.imageUrl || "/placeholder.svg";
   
   return (
     <div className="border border-gray-200 rounded-2xl overflow-hidden mb-6 shadow-md bg-white">
