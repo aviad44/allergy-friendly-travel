@@ -2,11 +2,9 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ArrowLeft, Hotel, ExternalLink } from "lucide-react";
+import { ArrowLeft, Hotel } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import ReactMarkdown from "react-markdown";
 import { cleanResponseText } from "@/components/search/utils";
 import { Helmet } from "react-helmet";
 
@@ -17,7 +15,6 @@ interface HotelInfo {
   dietary?: string;
   reviews?: string;
   safety?: string;
-  additionalInfo?: string;
 }
 
 const SearchResults = () => {
@@ -76,6 +73,7 @@ const SearchResults = () => {
         
         // Extract hotels from the recommendation
         const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
+        console.log('Extracted hotels:', extractedHotels);
         setHotels(extractedHotels);
         
       } catch (error) {
@@ -104,7 +102,7 @@ const SearchResults = () => {
         <meta name="description" content={pageDescription} />
       </Helmet>
 
-      <div className="min-h-screen bg-gray-50 pb-12">
+      <div className="min-h-screen bg-white pb-12">
         {/* Hero Section */}
         <div className="relative h-[25vh] sm:h-[30vh] md:h-[40vh] overflow-hidden">
           <img
@@ -150,83 +148,81 @@ const SearchResults = () => {
               <p className="text-lg">Finding the perfect hotel for your needs...</p>
             </div>
           ) : hotels.length > 0 ? (
-            <div className="space-y-4">
+            <div className="space-y-0">
               {hotels.map((hotel, index) => (
                 <div 
                   key={index}
-                  className="bg-white border-b border-gray-100 hover:shadow-md transition-shadow"
+                  className="border-b border-gray-200 py-5"
                 >
-                  <div className="flex justify-between items-center p-4">
-                    <div className="flex items-center gap-3">
-                      <Hotel className="h-6 w-6 text-teal-600 flex-shrink-0" />
-                      <h2 className="text-xl font-semibold">
-                        {hotel.name}
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="text-teal-600 flex-shrink-0">
+                        <Hotel className="h-10 w-10" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold mb-2">**{hotel.name}</h2>
                         {hotel.url && (
                           <a 
                             href={hotel.url} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className="ml-2 inline-flex items-center text-sm text-teal-600 hover:underline"
+                            className="text-teal-600 hover:underline flex items-center gap-1"
                           >
-                            <span className="text-sm font-normal">Website</span>
-                            <ExternalLink className="h-3 w-3 ml-1" />
+                            Website <span className="inline-block h-3 w-3">⟶</span>
                           </a>
                         )}
-                      </h2>
+                      </div>
                     </div>
-                    <Button 
-                      className="bg-teal-600 hover:bg-teal-700 text-white px-6"
-                      onClick={() => {
-                        if (hotel.url) {
-                          window.open(hotel.url, "_blank");
-                        } else {
-                          window.open(`https://www.google.com/search?q=${encodeURIComponent(hotel.name + " " + destination + " booking")}`, "_blank");
-                        }
-                      }}
-                    >
-                      Book Now
-                    </Button>
+                    {hotel.url && (
+                      <Button 
+                        className="bg-teal-600 hover:bg-teal-700 text-white text-lg px-8 py-6 h-auto"
+                        onClick={() => window.open(hotel.url, "_blank")}
+                      >
+                        Book Now
+                      </Button>
+                    )}
                   </div>
-                  
-                  {(hotel.accommodations || hotel.dietary || hotel.reviews || hotel.safety) && (
-                    <div className="px-4 pb-4 pt-0">
-                      <ul className="space-y-2">
-                        {hotel.accommodations && (
-                          <li>
-                            <span className="font-bold">Key Allergy Accommodations:</span> {hotel.accommodations}
-                          </li>
-                        )}
-                        {hotel.dietary && (
-                          <li>
-                            <span className="font-bold">Special Dietary Considerations:</span> {hotel.dietary}
-                          </li>
-                        )}
-                        {hotel.reviews && (
-                          <li>
-                            <span className="font-bold">Authentic Guest Reviews:</span> {hotel.reviews}
-                          </li>
-                        )}
-                        {hotel.safety && (
-                          <li>
-                            <span className="font-bold">Additional Safety Information:</span> {hotel.safety}
-                          </li>
-                        )}
-                      </ul>
-                    </div>
-                  )}
                 </div>
               ))}
               
-              {recommendation && (
-                <Card className="p-6 shadow-sm mt-8 bg-gray-50 border-gray-100">
-                  <h3 className="text-lg font-medium mb-3">Additional Information</h3>
-                  <div className="prose prose-sm max-w-none text-gray-700">
-                    <ReactMarkdown>
-                      {recommendation}
-                    </ReactMarkdown>
-                  </div>
-                </Card>
-              )}
+              <div className="mt-10 bg-gray-50 p-6 rounded-lg">
+                <h2 className="text-2xl font-bold mb-4">Additional Information</h2>
+                <div className="space-y-4">
+                  <p className="mb-4">
+                    Here are some allergy-friendly hotels in {destination} that cater to guests with {allergies} allergies:
+                  </p>
+                  
+                  {hotels.map((hotel, index) => (
+                    <div key={index} className="mb-8">
+                      <h3 className="text-xl font-bold mb-1">{hotel.name} {hotel.url ? `| ${hotel.url}` : ''}</h3>
+                      
+                      {hotel.accommodations && (
+                        <p className="mb-3">
+                          <span className="font-bold">Key Allergy Accommodations:</span> {hotel.accommodations}
+                        </p>
+                      )}
+                      
+                      {hotel.dietary && (
+                        <p className="mb-3">
+                          <span className="font-bold">Special Dietary Considerations:</span> {hotel.dietary}
+                        </p>
+                      )}
+                      
+                      {hotel.reviews && (
+                        <p className="mb-3">
+                          <span className="font-bold">Authentic Guest Reviews:</span> {hotel.reviews}
+                        </p>
+                      )}
+                      
+                      {hotel.safety && (
+                        <p className="mb-3">
+                          <span className="font-bold">Additional Safety Information:</span> {hotel.safety}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : (
             <div className="text-center py-12">
@@ -243,51 +239,36 @@ const SearchResults = () => {
 function parseHotelsFromMarkdown(markdown: string): HotelInfo[] {
   const hotels: HotelInfo[] = [];
   
-  // Split the markdown into sections (usually divided by headers)
-  const sections = markdown.split(/(?=##?\s|(?:\d+\.)\s)/g);
+  // Split by hotel entries (separated by --- or by double newlines)
+  const hotelSections = markdown.split(/---|(?:\n\n|\r\n\r\n)/);
   
-  for (const section of sections) {
-    // Skip sections that don't look like hotels
-    if (!section.includes("Key Allergy Accommodations") && 
-        !section.includes("Special Dietary") &&
-        !section.includes("Guest Reviews")) {
-      continue;
-    }
+  for (const section of hotelSections) {
+    if (!section.trim()) continue;
     
-    // Extract hotel name - look for headers or bold text at the beginning
-    const nameMatch = section.match(/^(?:##?\s+|(?:\d+\.)\s+|)([^|\n]+)(?:\s+\||:)/m);
-    if (!nameMatch) continue;
+    // Extract hotel name and URL
+    const nameUrlMatch = section.match(/\*\*(.*?)\*\*\s*\|\s*(https?:\/\/[\w\d\.-]+\.[a-z\.]{2,6}[^\s]*)/i);
     
-    const hotelName = nameMatch[1].trim();
+    if (!nameUrlMatch) continue;
     
-    // Skip if it doesn't look like a hotel name
-    if (hotelName.length < 3 || 
-        hotelName.toLowerCase().includes("key") ||
-        hotelName.toLowerCase().includes("special") ||
-        hotelName.toLowerCase().includes("authentic") ||
-        hotelName.toLowerCase().includes("review") ||
-        hotelName.toLowerCase().includes("additional")) {
-      continue;
-    }
+    const name = nameUrlMatch[1].trim();
+    const url = nameUrlMatch[2].trim();
     
-    // Extract URL if available
-    const urlMatch = section.match(/(?:https?:\/\/[^\s)]+)/);
-    const url = urlMatch ? urlMatch[0] : undefined;
+    // Extract accommodations info
+    const accommodationsMatch = section.match(/\*\*Key Allergy Accommodations:\*\*(.*?)(?:\*\*|$)/is);
+    const dietaryMatch = section.match(/\*\*Special Dietary Considerations:\*\*(.*?)(?:\*\*|$)/is);
+    const reviewsMatch = section.match(/\*\*Authentic Guest Reviews:\*\*(.*?)(?:\*\*|$)/is);
+    const safetyMatch = section.match(/\*\*Additional Safety Information:\*\*(.*?)(?:\*\*|$)/is);
     
-    // Extract different sections
-    const accommodationsMatch = section.match(/Key Allergy Accommodations:?\s+([^\n]*(?:\n(?!\n)[^\n]*)*)/i);
-    const dietaryMatch = section.match(/Special Dietary Considerations:?\s+([^\n]*(?:\n(?!\n)[^\n]*)*)/i);
-    const reviewsMatch = section.match(/(?:Authentic )?Guest Reviews:?\s+([^\n]*(?:\n(?!\n)[^\n]*)*)/i);
-    const safetyMatch = section.match(/Additional Safety Information:?\s+([^\n]*(?:\n(?!\n)[^\n]*)*)/i);
-    
-    hotels.push({
-      name: hotelName,
+    const hotel: HotelInfo = {
+      name,
       url,
       accommodations: accommodationsMatch ? accommodationsMatch[1].trim() : undefined,
       dietary: dietaryMatch ? dietaryMatch[1].trim() : undefined,
       reviews: reviewsMatch ? reviewsMatch[1].trim() : undefined,
-      safety: safetyMatch ? safetyMatch[1].trim() : undefined
-    });
+      safety: safetyMatch ? safetyMatch[1].trim() : undefined,
+    };
+    
+    hotels.push(hotel);
   }
   
   return hotels;

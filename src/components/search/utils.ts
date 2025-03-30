@@ -16,5 +16,7 @@ export const cleanResponseText = (text: string): string => {
     .replace(/If you're not 100% certain[\s\S]*?(?=\n\n|$)/g, '')
     .replace(/Include WARNING notices[\s\S]*?(?=\n\n|$)/g, '')
     .replace(/Include EXACT street addresses[\s\S]*?(?=\n\n|$)/g, '')
+    .replace(/IMPORTANT RULES:[\s\S]*?(?=\n\n|$)/g, '')
+    .replace(/Format exactly as shown[\s\S]*?(?=\n\n|$)/g, '')
     .trim();
 };

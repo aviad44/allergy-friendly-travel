@@ -36,28 +36,32 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `You are a specialized travel assistant focusing on allergy-friendly hotels. 
-            You're responding with information from the custom GPT "Allergy-Friendly Hotel Finder" (g-bh3vfRFNv).
+            content: `You are a specialized travel assistant focusing on allergy-friendly hotels.
+            Format your response in a clean, easy-to-parse format like this:
+
+            **Hotel Name** | https://www.hotelwebsite.com
             
-            Format your response in clear, structured sections for each hotel:
+            **Key Allergy Accommodations:** [Specific allergy accommodations details]
+            **Special Dietary Considerations:** [Dietary options details]
+            **Authentic Guest Reviews:** [Real guest feedback]
+            **Additional Safety Information:** [Safety details]
             
-            ## Hotel Name | https://www.hotelwebsite.com
+            ---
             
-            - **Key Allergy Accommodations:** [Describe specific allergy accommodations]
-            - **Special Dietary Considerations:** [Describe dietary options]
-            - **Authentic Guest Reviews:** [Include verified guest feedback]
-            - **Additional Safety Information:** [Include any safety details]
+            **Next Hotel Name** | https://www.nexthotelwebsite.com
             
-            IMPORTANT:
-            1. Include the real hotel's official website URL after the hotel name.
-            2. Only include authentic reviews, NOT simulated ones.
-            3. List at least 3-5 hotels for the given destination.
-            4. Ensure information is accurate and relevant to the specific allergy type mentioned.
-            5. DO NOT include any "I don't have specific information" statements.`
+            [Continue with same format]
+            
+            IMPORTANT RULES:
+            1. Format exactly as shown above with the hotel name and URL on the same line separated by |
+            2. Each detail section should be a separate paragraph with the bold heading
+            3. Include 4-5 hotels for the given destination
+            4. Use real hotel websites and information
+            5. Only include authentic information relevant to the specific allergies mentioned`
           },
           {
             role: 'user',
-            content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies. Only include authentic reviews from real guests.`
+            content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies.`
           },
         ],
         temperature: 0.3,
@@ -74,20 +78,9 @@ serve(async (req) => {
     const data = await response.json();
     console.log('✅ Received response from OpenAI');
     
-    // Process the response to remove the prompt instructions
+    // Process the response to remove any unwanted instructions
     let processedResponse = data.choices[0].message.content;
     
-    // Remove any system prompt instructions that might have leaked into the response
-    processedResponse = processedResponse
-      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/, '')
-      .replace(/Format your response[\s\S]*?(?=\n\n|$)/, '')
-      .replace(/EXTREMELY IMPORTANT SAFETY REQUIREMENTS:[\s\S]*?(?=\n\n|$)/, '')
-      .replace(/For hotels, ONLY include[\s\S]*?(?=\n\n|$)/, '')
-      .replace(/ALL guest reviews MUST be authentic[\s\S]*?(?=\n\n|$)/, '')
-      .replace(/If you're not 100% certain[\s\S]*?(?=\n\n|$)/, '')
-      .replace(/Include WARNING notices[\s\S]*?(?=\n\n|$)/, '')
-      .replace(/Include EXACT street addresses[\s\S]*?(?=\n\n|$)/, '');
-
     return new Response(
       JSON.stringify({ 
         recommendation: processedResponse,
