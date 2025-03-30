@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,7 +10,7 @@ import { SearchHero } from "@/components/search/SearchHero";
 import { BackButton } from "@/components/search/BackButton";
 import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
-import { HotelList } from "@/components/search/HotelList";
+import { HotelList } from "@/components/search/hotel-list";
 
 // Sample real hotel images for demo purposes
 const SAMPLE_HOTEL_IMAGES = [
