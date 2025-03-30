@@ -13,6 +13,24 @@ import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
 import { HotelList } from "@/components/search/HotelList";
 
+// Sample real hotel images for demo purposes
+const SAMPLE_HOTEL_IMAGES = [
+  'https://www.marriott.com/content/dam/marriott-kit/marriott/hotels/CHIDT-downtown-chicago-marriott-magnificent-mile/basic-property-information/facade/CYsDTIxkiiwj.jpg',
+  'https://www.hilton.com/im/en/ORDWAHH/3254503/hh-chicago-exterior-1.jpg?impolicy=crop&cw=5000&ch=3333&gravity=NorthWest&xposition=0&yposition=333&rw=768&rh=512',
+  'https://www.hyatt.com/content/dam/hyatt/hyattdam/images/2021/06/25/1340/CHIWH-P0765-Hotel-Exterior-16x9.jpg',
+  'https://www.ihg.com/content/dam/digital/media/images/content/dam/digital/kimpton/unified/property/gallery/exterior/ORDGP/ordgp-gate-00-hero-largesm.jpg',
+  'https://www.fourseasons.com/alt/img-opt/~80.930.0,0000-313,7500-3000,0000-1687,5000/publish/content/dam/fourseasons/images/web/CHI/CHI_079_aspect16x9.jpg'
+];
+
+// Sample guest reviews
+const SAMPLE_REVIEWS = [
+  "The kitchen staff was extremely knowledgeable about gluten cross-contamination. I felt completely safe dining here.",
+  "They provided me with detailed allergen information for every dish and even prepared a special menu for my nut allergy.",
+  "The chef personally came to discuss my dietary restrictions and created custom meals throughout my stay.",
+  "They have a dedicated allergy-friendly menu. I was able to enjoy delicious meals despite my severe allergies.",
+  "The staff took my celiac disease seriously and ensured all my meals were 100% gluten-free."
+];
+
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -73,14 +91,28 @@ const SearchResults = () => {
         const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
         console.log('Extracted hotels:', extractedHotels);
         
-        // Add random ratings to hotels for demo purposes
-        const hotelsWithRatings = extractedHotels.map(hotel => ({
-          ...hotel,
-          rating: Math.floor(Math.random() * 2) + 4, // Random rating between 4-5
-          location: destination // Add location information
-        }));
+        // Enhance hotels with additional information for demo purposes
+        const enhancedHotels = extractedHotels.map((hotel, index) => {
+          // Sample data for demonstration
+          const enhancedHotel: HotelInfo = {
+            ...hotel,
+            rating: Math.floor(Math.random() * 1.5) + 3.5, // Random rating between 3.5-5
+            location: destination, // Add location information
+            imageUrl: SAMPLE_HOTEL_IMAGES[index % SAMPLE_HOTEL_IMAGES.length],
+            price: `$${Math.floor(Math.random() * 150) + 100}`,
+            reviews: [SAMPLE_REVIEWS[index % SAMPLE_REVIEWS.length]],
+            allergyAmenities: [
+              { icon: "✓", text: "Allergen menu available" },
+              { icon: "✓", text: "Staff trained on cross-contamination" },
+              { icon: "✓", text: `${allergies}-free options available` }
+            ],
+            description: `A premier hotel in ${destination} offering exceptional accommodations for guests with dietary restrictions and allergies. The staff is well-trained to handle ${allergies} allergies with the utmost care.`
+          };
+          
+          return enhancedHotel;
+        });
         
-        setHotels(hotelsWithRatings);
+        setHotels(enhancedHotels);
         
       } catch (error) {
         console.error('Error during search:', error);
@@ -108,12 +140,12 @@ const SearchResults = () => {
         <meta name="description" content={pageDescription} />
       </Helmet>
 
-      <div className="min-h-screen bg-gray-50 pb-12">
+      <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
         <SearchHero destination={destination} allergies={allergies} />
 
-        <div className="container mx-auto px-4 py-6 max-w-7xl">
-          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 md:p-8">
+        <div className="container mx-auto px-4 py-8 pb-16 max-w-6xl">
+          <div className="bg-white rounded-lg shadow-sm p-5 sm:p-8">
             <BackButton />
             <SafetyNotice />
 
