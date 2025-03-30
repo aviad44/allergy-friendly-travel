@@ -25,7 +25,7 @@ export const HotelGrid: React.FC<HotelGridProps> = ({ hotels, onHotelSelect }) =
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="space-y-6">
       {hotels.map((hotel, index) => (
         <HotelCard 
           key={`${hotel.name}-${index}`} 

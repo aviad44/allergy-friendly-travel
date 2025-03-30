@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,7 +7,6 @@ import { cleanResponseText } from "@/components/search/utils";
 import { Helmet } from "react-helmet";
 import { HotelInfo } from "@/types/search";
 import { parseHotelsFromMarkdown } from "@/utils/parseHotelsFromMarkdown";
-import { SearchHero } from "@/components/search/SearchHero";
 import { BackButton } from "@/components/search/BackButton";
 import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
@@ -140,13 +140,22 @@ const SearchResults = () => {
       </Helmet>
 
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <SearchHero destination={destination} allergies={allergies} />
-
-        <div className="container mx-auto px-4 py-8 pb-16 max-w-6xl">
+        <div className="container mx-auto px-4 py-8 max-w-6xl">
           <div className="bg-white rounded-lg shadow-sm p-5 sm:p-8">
+            {/* Back Button */}
             <BackButton />
+            
+            {/* Safety Notice */}
             <SafetyNotice />
+
+            <div className="mb-6">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                Allergy-Friendly Hotels in {destination}
+              </h1>
+              <p className="text-gray-600">
+                Safe accommodations for visitors with {allergies} allergies
+              </p>
+            </div>
 
             {isSearching ? (
               <LoadingState />
