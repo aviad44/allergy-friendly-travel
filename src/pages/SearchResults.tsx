@@ -26,6 +26,8 @@ const SearchResults = () => {
   const [hotels, setHotels] = useState<HotelInfo[]>([]);
   
   useEffect(() => {
+    console.log('Search Parameters:', { destination, allergies }); // Debug log
+    
     if (!destination || !allergies) {
       toast({
         title: "Missing search parameters",

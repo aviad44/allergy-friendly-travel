@@ -1,41 +1,19 @@
 
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
 import { Autocomplete } from "./Autocomplete";
 
 export const SearchBar = () => {
-  // Original state
   const [destination, setDestination] = useState("");
   const [allergies, setAllergies] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   
-  // Refs for closing dropdowns when clicking outside
-  const destinationInputRef = useRef<HTMLDivElement>(null);
-  const allergyInputRef = useRef<HTMLDivElement>(null);
-  
   const { toast } = useToast();
   const navigate = useNavigate();
-  
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (destinationInputRef.current && !destinationInputRef.current.contains(event.target as Node)) {
-        // Dropdown will close itself due to the Autocomplete component
-      }
-      if (allergyInputRef.current && !allergyInputRef.current.contains(event.target as Node)) {
-        // Dropdown will close itself due to the Autocomplete component
-      }
-    };
-    
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
   
   const handleSearch = async () => {
     if (!destination || !allergies) {
@@ -60,7 +38,6 @@ export const SearchBar = () => {
       <div className="flex flex-col sm:flex-row gap-2 flex-grow">
         {/* Destination input with autocomplete */}
         <Autocomplete
-          ref={destinationInputRef}
           placeholder="Enter destination"
           value={destination}
           onChange={setDestination}
@@ -69,7 +46,6 @@ export const SearchBar = () => {
         
         {/* Allergy input with autocomplete */}
         <Autocomplete
-          ref={allergyInputRef}
           placeholder="Type of allergies"
           value={allergies}
           onChange={setAllergies}
