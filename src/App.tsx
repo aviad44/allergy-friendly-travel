@@ -33,6 +33,7 @@ import NotFound from '@/pages/NotFound';
 import DirectChat from '@/pages/DirectChat';
 import Reviews from '@/pages/Reviews';
 import FAQ from '@/pages/FAQ';
+import SearchResults from '@/pages/SearchResults';
 
 // AppContent component to use hooks that require router context
 const AppContent = () => {
@@ -73,6 +74,7 @@ const AppContent = () => {
           <Route path="/destinations/hotel-chains" element={<HotelChains />} />
           <Route path="/destinations/portugal" element={<Portugal />} />
           <Route path="/destinations/swiss-alps" element={<SwissAlps />} />
+          <Route path="/search-results" element={<SearchResults />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/categories" element={<Categories />} />
