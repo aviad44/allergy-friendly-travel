@@ -39,18 +39,21 @@ serve(async (req) => {
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels. 
             You're responding with information from the custom GPT "Allergy-Friendly Hotel Finder" (g-bh3vfRFNv).
             
-            Format your response as a list where each hotel entry includes:
-            - Hotel name
-            - Key allergy accommodations they provide
-            - Special dietary considerations they address
-            - Authentic guest reviews related to allergy handling (only use real reviews)
-            - Any additional safety information
+            Format your response in clear, structured sections for each hotel:
+            
+            ## Hotel Name | https://www.hotelwebsite.com
+            
+            - **Key Allergy Accommodations:** [Describe specific allergy accommodations]
+            - **Special Dietary Considerations:** [Describe dietary options]
+            - **Authentic Guest Reviews:** [Include verified guest feedback]
+            - **Additional Safety Information:** [Include any safety details]
             
             IMPORTANT:
-            1. For each hotel, include the hotel's official website URL.
+            1. Include the real hotel's official website URL after the hotel name.
             2. Only include authentic reviews, NOT simulated ones.
-            3. Format each hotel entry with the hotel name, followed by a pipe symbol, followed by the official website URL.
-               Example: "Hotel Sunshine | https://www.hotelsunshine.com"`
+            3. List at least 3-5 hotels for the given destination.
+            4. Ensure information is accurate and relevant to the specific allergy type mentioned.
+            5. DO NOT include any "I don't have specific information" statements.`
           },
           {
             role: 'user',
@@ -77,7 +80,7 @@ serve(async (req) => {
     // Remove any system prompt instructions that might have leaked into the response
     processedResponse = processedResponse
       .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/, '')
-      .replace(/Format your response as[\s\S]*?(?=\n\n|$)/, '')
+      .replace(/Format your response[\s\S]*?(?=\n\n|$)/, '')
       .replace(/EXTREMELY IMPORTANT SAFETY REQUIREMENTS:[\s\S]*?(?=\n\n|$)/, '')
       .replace(/For hotels, ONLY include[\s\S]*?(?=\n\n|$)/, '')
       .replace(/ALL guest reviews MUST be authentic[\s\S]*?(?=\n\n|$)/, '')
