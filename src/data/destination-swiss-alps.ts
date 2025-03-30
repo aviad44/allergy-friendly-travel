@@ -1,6 +1,9 @@
 
 import { DestinationContent } from '@/types/definitions';
 
+// Console log for debugging this module's initialization
+console.log("Loading destination-swiss-alps.ts module");
+
 export const swissAlpsContent: DestinationContent = {
   intro: "Experience the majestic Swiss Alps with peace of mind, offering allergy-aware accommodations across stunning mountain regions.",
   hotels: [
@@ -82,3 +85,6 @@ export const swissAlpsContent: DestinationContent = {
     ]
   }
 };
+
+// Log Swiss Alps content after initialization to verify data structure
+console.log("Swiss Alps content initialized:", swissAlpsContent);

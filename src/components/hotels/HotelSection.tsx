@@ -19,21 +19,29 @@ interface HotelSectionProps {
 }
 
 const HotelSection: React.FC<HotelSectionProps> = ({ hotels }) => {
+  console.log("HotelSection rendering with hotels:", hotels);
+  
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {hotels.map((hotel) => (
-        <HotelCard
-          key={hotel.id}
-          name={hotel.name}
-          address={`${hotel.city}, ${hotel.country}`}
-          features={[
-            `⭐ ${hotel.rating}-star hotel`,
-            `📍 ${hotel.city}`,
-            hotel.allergyInfo
-          ]}
-          bookingUrl={hotel.bookingUrl}
-        />
-      ))}
+      {hotels && hotels.length > 0 ? (
+        hotels.map((hotel) => (
+          <HotelCard
+            key={hotel.id}
+            name={hotel.name}
+            address={`${hotel.city}, ${hotel.country}`}
+            features={[
+              `⭐ ${hotel.rating}-star hotel`,
+              `📍 ${hotel.city}`,
+              hotel.allergyInfo
+            ]}
+            bookingUrl={hotel.bookingUrl}
+          />
+        ))
+      ) : (
+        <div className="col-span-3 text-center p-5">
+          <p>No hotels available at the moment.</p>
+        </div>
+      )}
     </div>
   );
 };

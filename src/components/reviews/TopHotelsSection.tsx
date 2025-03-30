@@ -12,6 +12,9 @@ interface TopHotelsSectionProps {
 export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: TopHotelsSectionProps) => {
   // Check if hotels array exists and is not empty
   const hasHotels = hotels && hotels.length > 0;
+  
+  // Debug log for hotels data
+  console.log(`Rendering hotels for ${destinationName}:`, hotels);
 
   return (
     <section className="space-y-4 sm:space-y-6 md:space-y-8">

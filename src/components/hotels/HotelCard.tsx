@@ -13,6 +13,9 @@ export interface HotelCardProps {
 }
 
 export const HotelCard = ({ name, address, features, description, quote, bookingUrl }: HotelCardProps) => {
+  // Debug log for individual hotel data rendering
+  console.log("Rendering HotelCard:", { name, address });
+  
   const getCleanUrl = (url: string) => {
     // Clean up URL if needed and ensure it starts with http/https
     if (!url) return '#';

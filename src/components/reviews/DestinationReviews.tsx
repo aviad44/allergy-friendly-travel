@@ -27,10 +27,13 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const isLondon = destinationId === 'london' as DestinationId;
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   
-  // Add debug logging to track content and hotels
+  // Enhanced debug logging
   console.log(`Loading destination: ${destinationId}`, { 
     content, 
     hotels: content?.hotels,
+    faqs: content?.faqs,
+    languageTable: content?.languageTable,
+    intro: content?.intro,
     destinationData
   });
 
@@ -47,7 +50,14 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     }
   }, [destination]);
 
-  if (!destination || !content) return null;
+  if (!destination || !content) {
+    console.error(`Missing destination or content data for: ${destinationId}`);
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading destination information...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

@@ -17,9 +17,11 @@ import {
   portugalContent
 } from './destination-generic';
 
-// Log the content of Paris and Tokyo for debugging
+// Log the content of destinations for debugging
 console.log('Paris content:', parisContent);
 console.log('Tokyo content:', tokyoContent);
+console.log('Swiss Alps content:', swissAlpsContent);
+console.log('London content:', londonContent);
 
 export const destinationData: Record<DestinationId, DestinationContent> = {
   london: londonContent,

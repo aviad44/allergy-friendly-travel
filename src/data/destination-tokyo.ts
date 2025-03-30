@@ -1,6 +1,9 @@
 
 import { DestinationContent } from '@/types/definitions';
 
+// Console log for debugging this module's initialization
+console.log("Loading destination-tokyo.ts module");
+
 export const tokyoContent: DestinationContent = {
   intro: "Navigate Tokyo's culinary scene safely with these allergy-aware hotels.",
   hotels: [
@@ -82,3 +85,6 @@ export const tokyoContent: DestinationContent = {
     ]
   }
 };
+
+// Log Tokyo content after initialization to verify data structure
+console.log("Tokyo content initialized:", tokyoContent);
