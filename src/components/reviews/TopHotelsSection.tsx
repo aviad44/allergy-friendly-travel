@@ -10,6 +10,9 @@ interface TopHotelsSectionProps {
 }
 
 export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: TopHotelsSectionProps) => {
+  // Check if hotels array exists and is not empty
+  const hasHotels = hotels && hotels.length > 0;
+
   return (
     <section className="space-y-4 sm:space-y-6 md:space-y-8">
       <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-semibold flex items-center">
@@ -56,11 +59,17 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
             />
           </>
         ) : (
-          hotels.map((hotel, index) => (
-            <div key={index}>
-              <HotelCard {...hotel} />
+          hasHotels ? (
+            hotels.map((hotel, index) => (
+              <div key={index}>
+                <HotelCard {...hotel} />
+              </div>
+            ))
+          ) : (
+            <div className="text-center p-4 bg-muted/30 rounded-lg">
+              <p>No hotel information available at the moment.</p>
             </div>
-          ))
+          )
         )}
       </div>
     </section>

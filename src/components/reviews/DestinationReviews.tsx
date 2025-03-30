@@ -26,6 +26,13 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const content = destinationData[destinationId];
   const isLondon = destinationId === 'london' as DestinationId;
   const textAlignment = isRTL ? 'text-right' : 'text-left';
+  
+  // Add debug logging to track content and hotels
+  console.log(`Loading destination: ${destinationId}`, { 
+    content, 
+    hotels: content?.hotels,
+    destinationData
+  });
 
   useEffect(() => {
     if (destination) {
@@ -70,7 +77,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             <Separator className="bg-primary/10 h-0.5" />
 
             <TopHotelsSection 
-              hotels={content.hotels}
+              hotels={content.hotels || []}
               destinationName={destination.name}
               isLondon={isLondon}
             />
@@ -78,13 +85,13 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             <Separator className="bg-primary/10 h-0.5" />
 
             <FAQSection 
-              faqs={content.faqs}
+              faqs={content.faqs || []}
               destinationName={destination.name}
             />
 
             <TravelTips />
 
-            {content.languageTable.headers.length > 0 && (
+            {content.languageTable && content.languageTable.headers && content.languageTable.headers.length > 0 && (
               <div className="overflow-x-auto -mx-3 sm:mx-0 bg-primary/5 p-4 rounded-xl">
                 <div className="min-w-full p-3 sm:p-0">
                   <h2 className="text-xl sm:text-2xl font-display font-semibold mb-4 flex items-center">
