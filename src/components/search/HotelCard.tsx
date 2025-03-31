@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { ExternalLink, MapPin, Star } from "lucide-react";
+import { ExternalLink, MapPin, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { HotelInfo } from '@/types/search';
 
 interface HotelCardProps {
@@ -13,11 +13,25 @@ export const HotelCard: React.FC<HotelCardProps> = ({
   hotel,
   onViewDetails
 }) => {
-  // Generate Google Maps URL
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  // Generate Google Maps URL with just city/location
   const getGoogleMapsUrl = (hotelName: string, location: string) => {
     if (!hotelName || !location) return '#';
     const query = encodeURIComponent(`${hotelName}, ${location}`);
     return `https://www.google.com/maps/search/?api=1&query=${query}`;
+  };
+
+  // Extract simplified location (city, country)
+  const getSimplifiedLocation = (location?: string) => {
+    if (!location) return '';
+    
+    // Try to extract city and country/state
+    const parts = location.split(',').map(part => part.trim());
+    if (parts.length >= 2) {
+      return `${parts[0]}, ${parts[parts.length - 1]}`;
+    }
+    return location;
   };
 
   // Extract star rating from hotel data
@@ -41,8 +55,25 @@ export const HotelCard: React.FC<HotelCardProps> = ({
         .trim()
     : 'Allergy-Friendly Hotel';
   
+  // Simplified location for display
+  const simplifiedLocation = getSimplifiedLocation(hotel.location);
+  
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      {/* Hotel Image (if available) */}
+      {hotel.imageUrl && (
+        <div className="w-full h-40 overflow-hidden">
+          <img 
+            src={hotel.imageUrl} 
+            alt={`${cleanHotelName} exterior`} 
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </div>
+      )}
+      
       <div className="p-5">
         {/* Hotel Name and Stars */}
         <div className="flex justify-between items-start mb-2">
@@ -52,46 +83,67 @@ export const HotelCard: React.FC<HotelCardProps> = ({
           </div>
         </div>
         
-        {/* Location with Map Link */}
-        {hotel.location && (
+        {/* Simplified Location with Map Link */}
+        {simplifiedLocation && (
           <a 
-            href={getGoogleMapsUrl(cleanHotelName, hotel.location)}
+            href={getGoogleMapsUrl(cleanHotelName, hotel.location || '')}
             target="_blank" 
             rel="noopener noreferrer" 
             className="flex items-center text-gray-500 text-sm mb-3 hover:text-primary"
           >
             <MapPin className="h-3.5 w-3.5 mr-1.5" />
-            <span>{hotel.location}</span>
+            <span>{simplifiedLocation}</span>
           </a>
         )}
         
-        {/* Hotel Description */}
+        {/* Hotel Description with Truncation */}
         {hotel.description && (
           <div className="mb-3">
-            <p className="text-sm text-gray-600 line-clamp-3">
+            <p className={`text-sm text-gray-600 ${!isExpanded ? 'line-clamp-3' : ''}`}>
               {hotel.description}
             </p>
+            {hotel.description.length > 180 && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-xs text-primary flex items-center gap-1 p-0 h-6 mt-1"
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                {isExpanded ? (
+                  <>Show Less <ChevronUp className="h-3 w-3" /></>
+                ) : (
+                  <>Show More <ChevronDown className="h-3 w-3" /></>
+                )}
+              </Button>
+            )}
           </div>
         )}
         
-        {/* Allergy Amenities */}
+        {/* Allergy Features */}
         {hotel.allergyFeatures && hotel.allergyFeatures.length > 0 && (
           <div className="mb-4">
             <ul className="text-sm space-y-1">
-              {hotel.allergyFeatures.map((feature, index) => (
+              {hotel.allergyFeatures.slice(0, 3).map((feature, index) => (
                 <li key={index} className="flex items-start">
                   <span className="text-teal-600 mr-2 text-sm">✓</span>
                   <span className="text-gray-600">{feature}</span>
                 </li>
               ))}
+              {hotel.allergyFeatures.length > 3 && (
+                <li className="text-xs text-primary mt-1">+{hotel.allergyFeatures.length - 3} more features</li>
+              )}
             </ul>
           </div>
         )}
         
-        {/* Guest Review */}
+        {/* Guest Review - Styled but not truncated */}
         {hotel.reviews && hotel.reviews.length > 0 && (
-          <div className="mb-4 bg-gray-50 p-3 rounded-md">
-            <p className="text-sm text-gray-600 italic">"{hotel.reviews[0]}"</p>
+          <div className="mb-4 bg-gray-50 p-3 rounded-md relative">
+            <div className="absolute top-1 left-2 text-gray-300 text-2xl">"</div>
+            <p className="text-sm text-gray-600 italic pl-3 pr-3">
+              {hotel.reviews[0]}
+            </p>
+            <div className="absolute bottom-1 right-2 text-gray-300 text-2xl">"</div>
           </div>
         )}
         
