@@ -15,7 +15,7 @@ interface HotelListProps {
 }
 
 // Hotels per page
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 5; // Reduced for better mobile view
 
 export const HotelList: React.FC<HotelListProps> = ({ hotels, destination, allergies }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,23 +23,12 @@ export const HotelList: React.FC<HotelListProps> = ({ hotels, destination, aller
   const [sortField, setSortField] = useState<'name' | 'rating'>('rating');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [isFiltersDialogOpen, setIsFiltersDialogOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   
   // Filter and sort hotels based on current criteria
   const filteredAndSortedHotels = useMemo(() => {
     if (!hotels.length) return [];
     
     let filtered = [...hotels];
-    
-    // Apply search query filter if any
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(hotel => 
-        hotel.name.toLowerCase().includes(query) || 
-        (hotel.location && hotel.location.toLowerCase().includes(query)) ||
-        (hotel.accommodations && hotel.accommodations.toLowerCase().includes(query))
-      );
-    }
     
     // Apply sorting
     return filtered.sort((a, b) => {
@@ -54,7 +43,7 @@ export const HotelList: React.FC<HotelListProps> = ({ hotels, destination, aller
       }
       return 0;
     });
-  }, [hotels, sortField, sortDirection, searchQuery]);
+  }, [hotels, sortField, sortDirection]);
 
   // Calculate pagination values
   const totalPages = Math.ceil(filteredAndSortedHotels.length / ITEMS_PER_PAGE);
@@ -68,38 +57,25 @@ export const HotelList: React.FC<HotelListProps> = ({ hotels, destination, aller
   };
   
   // Sorting handlers
-  const handleSort = (field: 'name' | 'rating') => {
-    if (sortField === field) {
-      // Toggle direction if clicking the same field
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      // Default to ascending for new sort field
-      setSortField(field);
-      setSortDirection(field === 'rating' ? 'desc' : 'asc');
-    }
-  };
-  
   const handleSortFieldChange = (field: 'name' | 'rating') => {
     setSortField(field);
     setSortDirection(field === 'rating' ? 'desc' : 'asc');
   };
 
   return (
-    <div className="space-y-6">
-      {/* Page title and allergen tag */}
+    <div className="space-y-5">
+      {/* Hotel Counter and Allergen tag */}
       <HotelListHeader 
         destination={destination} 
         allergies={allergies}
         hotelCount={filteredAndSortedHotels.length} 
       />
       
-      {/* Search and filters */}
+      {/* Sort filters */}
       <SearchFilters
-        searchQuery={searchQuery}
-        onSearchQueryChange={setSearchQuery}
-        onFiltersDialogOpen={() => setIsFiltersDialogOpen(true)}
         sortField={sortField}
         sortDirection={sortDirection}
+        onFiltersDialogOpen={() => setIsFiltersDialogOpen(true)}
         onSortFieldChange={handleSortFieldChange}
         onSortDirectionChange={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
       />
@@ -111,11 +87,13 @@ export const HotelList: React.FC<HotelListProps> = ({ hotels, destination, aller
       />
       
       {/* Pagination */}
-      <HotelsPagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {totalPages > 1 && (
+        <HotelsPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
       
       {/* Hotel Details Dialog */}
       <HotelDetailsDialog 
@@ -129,7 +107,14 @@ export const HotelList: React.FC<HotelListProps> = ({ hotels, destination, aller
         onOpenChange={setIsFiltersDialogOpen}
         sortField={sortField}
         sortDirection={sortDirection}
-        onSortChange={handleSort}
+        onSortChange={(field) => {
+          if (sortField === field) {
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+          } else {
+            setSortField(field);
+            setSortDirection(field === 'rating' ? 'desc' : 'asc');
+          }
+        }}
       />
     </div>
   );

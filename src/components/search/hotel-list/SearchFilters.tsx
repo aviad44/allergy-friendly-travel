@@ -5,11 +5,9 @@ import { SlidersHorizontal } from 'lucide-react';
 import { SortControls } from './SortControls';
 
 interface SearchFiltersProps {
-  searchQuery: string;
-  onSearchQueryChange: (query: string) => void;
-  onFiltersDialogOpen: () => void;
   sortField: 'name' | 'rating';
   sortDirection: 'asc' | 'desc';
+  onFiltersDialogOpen: () => void;
   onSortFieldChange: (field: 'name' | 'rating') => void;
   onSortDirectionChange: () => void;
 }
@@ -22,7 +20,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
   onSortDirectionChange
 }) => {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 mb-2">
+    <div className="bg-white rounded-lg border border-gray-200 p-3 mb-4">
       <div className="flex flex-col sm:flex-row gap-3 justify-end">
         <SortControls
           sortField={sortField}
