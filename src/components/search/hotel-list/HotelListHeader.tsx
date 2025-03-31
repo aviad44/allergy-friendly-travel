@@ -2,16 +2,18 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 
-interface HotelListHeaderProps {
+export interface HotelListHeaderProps {
   destination: string;
   allergies: string;
   hotelCount: number;
+  onOpenFilters?: () => void;
 }
 
 export const HotelListHeader: React.FC<HotelListHeaderProps> = ({
   destination,
   allergies,
-  hotelCount
+  hotelCount,
+  onOpenFilters
 }) => {
   return (
     <div className="mb-4">
@@ -28,7 +30,16 @@ export const HotelListHeader: React.FC<HotelListHeaderProps> = ({
         <span className="text-gray-500 text-sm ml-3">
           {hotelCount} hotels found
         </span>
+        {onOpenFilters && (
+          <button 
+            onClick={onOpenFilters} 
+            className="ml-3 text-sm text-primary hover:underline"
+          >
+            Open Filters
+          </button>
+        )}
       </div>
     </div>
   );
 };
+

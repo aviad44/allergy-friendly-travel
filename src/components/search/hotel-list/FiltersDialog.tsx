@@ -1,63 +1,86 @@
-
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ArrowUp, ArrowDown } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useNavigate } from 'react-router-dom';
 
-interface FiltersDialogProps {
+export interface FiltersDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  sortField: 'name' | 'rating';
-  sortDirection: 'asc' | 'desc';
-  onSortChange: (field: 'name' | 'rating') => void;
+  destination: string;
+  allergies: string;
 }
 
 export const FiltersDialog: React.FC<FiltersDialogProps> = ({
   isOpen,
   onOpenChange,
-  sortField,
-  sortDirection,
-  onSortChange
+  destination,
+  allergies
 }) => {
+  const navigate = useNavigate();
+  const [destinationInput, setDestinationInput] = React.useState(destination);
+  const [allergiesInput, setAllergiesInput] = React.useState(allergies);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Create search params
+    const searchParams = new URLSearchParams();
+    searchParams.set('destination', destinationInput);
+    searchParams.set('allergies', allergiesInput);
+    
+    // Close dialog
+    onOpenChange(false);
+    
+    // Navigate to search results with new params
+    navigate(`/search-results?${searchParams.toString()}`);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Sort Options</DialogTitle>
+          <DialogTitle>Refine Your Search</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 pt-2">
+        
+        <form onSubmit={handleSubmit} className="space-y-4 pt-4">
           <div className="space-y-2">
-            <h3 className="font-medium">Sort by:</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <Button 
-                variant={sortField === 'name' ? 'default' : 'outline'}
-                className="w-full justify-between"
-                onClick={() => {
-                  onSortChange('name');
-                  onOpenChange(false);
-                }}
-              >
-                <span>Name</span>
-                {sortField === 'name' && (
-                  sortDirection === 'asc' ? <ArrowUp className="h-3.5 w-3.5" /> : <ArrowDown className="h-3.5 w-3.5" />
-                )}
-              </Button>
-              <Button 
-                variant={sortField === 'rating' ? 'default' : 'outline'}
-                className="w-full justify-between"
-                onClick={() => {
-                  onSortChange('rating');
-                  onOpenChange(false);
-                }}
-              >
-                <span>Rating</span>
-                {sortField === 'rating' && (
-                  sortDirection === 'asc' ? <ArrowUp className="h-3.5 w-3.5" /> : <ArrowDown className="h-3.5 w-3.5" />
-                )}
-              </Button>
-            </div>
+            <Label htmlFor="destination">Destination</Label>
+            <Input 
+              id="destination" 
+              value={destinationInput} 
+              onChange={(e) => setDestinationInput(e.target.value)}
+              placeholder="Enter city or region"
+            />
           </div>
-        </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="allergies">Allergies</Label>
+            <Input 
+              id="allergies" 
+              value={allergiesInput} 
+              onChange={(e) => setAllergiesInput(e.target.value)}
+              placeholder="e.g., Peanut, Gluten, Dairy"
+            />
+          </div>
+          
+          <div className="flex justify-end space-x-2 pt-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit"
+              disabled={!destinationInput.trim() || !allergiesInput.trim()}
+            >
+              Search
+            </Button>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

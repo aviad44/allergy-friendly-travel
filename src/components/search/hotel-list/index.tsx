@@ -26,6 +26,8 @@ export const HotelList: React.FC<HotelListProps> = ({
     <div className="space-y-4">
       {/* Header with sorting and filter controls */}
       <HotelListHeader 
+        destination={destination}
+        allergies={allergies}
         hotelCount={hotels.length}
         onOpenFilters={() => setIsFiltersOpen(true)}
       />
@@ -45,7 +47,7 @@ export const HotelList: React.FC<HotelListProps> = ({
       
       {/* Filters dialog */}
       <FiltersDialog
-        open={isFiltersOpen}
+        isOpen={isFiltersOpen}
         onOpenChange={setIsFiltersOpen}
         destination={destination}
         allergies={allergies}
@@ -53,3 +55,4 @@ export const HotelList: React.FC<HotelListProps> = ({
     </div>
   );
 };
+
