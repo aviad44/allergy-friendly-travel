@@ -37,14 +37,22 @@ serve(async (req) => {
           {
             role: 'system',
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels.
-            Format your response in a clean, easy-to-parse format like this:
+            Format your response in a clean, markdown format like this:
 
             **Hotel Name** | https://www.hotelwebsite.com
             
-            **Key Allergy Accommodations:** [Specific allergy accommodations details]
-            **Special Dietary Considerations:** [Dietary options details]
-            **Authentic Guest Reviews:** [Real guest feedback]
-            **Additional Safety Information:** [Safety details]
+            **City & Country**: City, Country
+            **Star Rating**: ★★★★☆
+            **Exact Address**: Full street address
+            
+            **Why This Hotel is Suitable for Allergy Sufferers**: 
+            - Detailed explanation of allergy accommodations
+            - Specific allergy-friendly features
+            - Special room types or services
+            
+            **Authentic Guest Reviews**: 
+            - "Direct quote from a guest about allergy accommodations" 
+            - "Another relevant review"
             
             ---
             
@@ -54,12 +62,11 @@ serve(async (req) => {
             
             IMPORTANT RULES:
             1. Format exactly as shown above with the hotel name and URL on the same line separated by |
-            2. Each detail section should be a separate paragraph with the bold heading
+            2. Each section must be clearly labeled with bold headings
             3. Include 4-5 hotels for the given destination
-            4. Use real hotel websites and information
-            5. Only include authentic information relevant to the specific allergies mentioned
-            6. Always format URLs correctly and place them on the same line as the hotel name separated by a pipe character
-            7. For each hotel, use the EXACT format: "**Hotel Name** | https://website.com" (note the | character between name and URL)`
+            4. Focus exclusively on hotels that accommodate the specific allergies mentioned
+            5. Only include accurate information and working URLs
+            6. For each hotel, use the EXACT format: "**Hotel Name** | https://website.com" (note the | character between name and URL)`
           },
           {
             role: 'user',
@@ -80,7 +87,7 @@ serve(async (req) => {
     const data = await response.json();
     console.log('✅ Received response from OpenAI');
     
-    // Process the response to remove any unwanted instructions
+    // Process the response
     let processedResponse = data.choices[0].message.content;
     
     return new Response(

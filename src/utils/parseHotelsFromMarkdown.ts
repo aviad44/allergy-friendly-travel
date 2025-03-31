@@ -1,94 +1,111 @@
 
 import { HotelInfo } from '@/types/search';
 
-// Function to parse hotel information from the markdown response
-export function parseHotelsFromMarkdown(markdown: string): HotelInfo[] {
+export const parseHotelsFromMarkdown = (markdown: string): HotelInfo[] => {
+  if (!markdown) return [];
+
+  console.log('Parsing markdown to extract hotels');
+  
   const hotels: HotelInfo[] = [];
   
-  try {
-    // Split by hotel entries (separated by --- or by double newlines)
-    const hotelSections = markdown.split(/---|(?:\n\n|\r\n\r\n)/);
-    
-    for (const section of hotelSections) {
-      if (!section.trim()) continue;
+  // Match hotel blocks from the format: "**Hotel Name** | URL"
+  const hotelRegex = /\*\*([^*]+)\*\*\s*\|\s*(https?:\/\/[^\s]+)?/g;
+  let hotelMatches;
+  
+  while ((hotelMatches = hotelRegex.exec(markdown)) !== null) {
+    try {
+      const hotelName = hotelMatches[1].trim();
+      const hotelUrl = hotelMatches[2]?.trim();
       
-      // Extract hotel name and URL - handle various formats
-      let nameUrlMatch = section.match(/\*\*(.*?)\*\*\s*\|\s*(https?:\/\/[\w\d\.-]+\.[a-z\.]{2,6}[^\s]*)/i);
+      // Find the position of this hotel in the markdown
+      const hotelStartPos = hotelMatches.index;
       
-      // If no match found, try alternative pattern (e.g., "Hotel Name | https://...")
-      if (!nameUrlMatch) {
-        nameUrlMatch = section.match(/(.*?)\s*\|\s*(https?:\/\/[\w\d\.-]+\.[a-z\.]{2,6}[^\s]*)/i);
-      }
-      
-      // If still no match, try just getting the hotel name
-      if (!nameUrlMatch) {
-        const nameMatch = section.match(/\*\*(.*?)\*\*/);
-        if (nameMatch) {
-          const urlMatch = section.match(/(https?:\/\/[\w\d\.-]+\.[a-z\.]{2,6}[^\s]*)/i);
-          nameUrlMatch = [null, nameMatch[1].trim(), urlMatch ? urlMatch[1].trim() : ''];
-        }
-      }
-      
-      if (!nameUrlMatch) continue;
-      
-      const name = nameUrlMatch[1].trim().replace(/^\d+\.\s+/, ''); // Remove numbering if present
-      const url = nameUrlMatch[2] ? nameUrlMatch[2].trim() : '';
-      
-      // Extract descriptions - try to find the main hotel description
-      let description = '';
-      const descLines = section.split('\n')
-        .filter(line => 
-          !line.includes('**Key Allergy Accommodations:**') && 
-          !line.includes('**Special Dietary Considerations:**') && 
-          !line.includes('**Authentic Guest Reviews:**') && 
-          !line.includes('**Additional Safety Information:**') && 
-          !line.includes('|') && 
-          !line.startsWith('**') && 
-          line.trim().length > 20
-        );
-      
-      if (descLines.length > 0) {
-        description = descLines[0].trim();
-      }
-      
-      // Extract reviews as array
-      const reviewsTexts: string[] = [];
-      const reviewsMatch = section.match(/\*\*Authentic Guest Reviews:\*\*(.*?)(?:\*\*|$)/is);
-      if (reviewsMatch && reviewsMatch[1]) {
-        const reviewText = reviewsMatch[1].trim();
-        
-        // Try to extract individual reviews
-        const individualReviews = reviewText.match(/"([^"]+)"/g) || reviewText.match(/"([^"]+)"/g);
-        if (individualReviews && individualReviews.length > 0) {
-          reviewsTexts.push(individualReviews[0].replace(/[""]|^['"]\s*|\s*['"]$/g, '').trim());
+      // Find the position of the next hotel or end of string
+      let nextHotelPos = markdown.indexOf('**', hotelStartPos + 2);
+      if (nextHotelPos === -1) {
+        nextHotelPos = markdown.length;
+      } else {
+        // Find the actual next hotel, not just any bold text
+        const nextHotelMatch = markdown.slice(nextHotelPos).match(/\*\*([^*]+)\*\*\s*\|\s*(https?:\/\/[^\s]+)?/);
+        if (!nextHotelMatch || nextHotelMatch.index > 100) {
+          // If the next asterisks are not part of a hotel header or too far away
+          nextHotelPos = markdown.length;
         } else {
-          // If no quotes found, use the whole text as one review
-          reviewsTexts.push(reviewText);
+          nextHotelPos += nextHotelMatch.index;
         }
       }
       
-      // Create allergy amenities
-      const allergyAmenities = [
-        { icon: "✓", text: "Allergen menu available" },
-        { icon: "✓", text: "Staff trained on cross-contamination" },
-        { icon: "✓", text: "Allergy-friendly options available" }
-      ];
+      // Extract all content for this hotel
+      const hotelContent = markdown.slice(hotelStartPos, nextHotelPos).trim();
       
-      // Create and add the hotel to our list
+      // Extract hotel details
       const hotel: HotelInfo = {
-        name,
-        url,
-        description,
-        reviews: reviewsTexts,
-        allergyAmenities,
-        rating: 4 // Default rating
+        name: hotelName,
+        url: hotelUrl,
       };
       
+      // Extract location information if available
+      const locationMatch = hotelContent.match(/\*\*(?:City & Country|Location)\*\*:\s*([^*\n]+)/i);
+      if (locationMatch) {
+        hotel.location = locationMatch[1].trim();
+      }
+      
+      // Extract address if available
+      const addressMatch = hotelContent.match(/\*\*(?:Exact Address|Address)\*\*:\s*([^*\n]+)/i);
+      if (addressMatch) {
+        hotel.location = addressMatch[1].trim();
+      }
+      
+      // Extract allergy-specific information
+      const allergyMatch = hotelContent.match(/\*\*(?:Why This Hotel is Suitable|Key Allergy Accommodations|Allergy Features)\*\*:?\s*([\s\S]*?)(?:\n\s*\*\*|$)/i);
+      if (allergyMatch) {
+        hotel.description = allergyMatch[1].trim();
+        
+        // Create amenities from bullet points if they exist
+        const bulletPoints = hotel.description.match(/[•\-\*]\s*([^\n]+)/g);
+        if (bulletPoints) {
+          hotel.allergyAmenities = bulletPoints.map(point => ({
+            icon: "✓",
+            text: point.replace(/^[•\-\*]\s*/, '').trim()
+          }));
+        }
+      }
+      
+      // Extract guest reviews
+      const reviewMatch = hotelContent.match(/\*\*(?:Authentic Guest Reviews|Guest Reviews)\*\*:?\s*([\s\S]*?)(?:\n\s*\*\*|$)/i);
+      if (reviewMatch) {
+        const reviewText = reviewMatch[1].trim();
+        const reviews = reviewText.split(/\n/).map(r => r.replace(/^[•\-\*]\s*/, '').trim()).filter(Boolean);
+        if (reviews.length > 0) {
+          hotel.reviews = reviews;
+        }
+      }
+      
+      // Extract star rating
+      const ratingMatch = hotelContent.match(/\*\*(?:Star Rating)\*\*:?\s*([⭐★]{1,5})/i) || 
+                          hotelContent.match(/([⭐★]{1,5})/i);
+      if (ratingMatch) {
+        hotel.rating = ratingMatch[1].length;
+      }
+      
+      // If there's no specific description extracted, use a general section of the content
+      if (!hotel.description) {
+        // Remove the header line and find the first paragraph
+        const contentWithoutHeader = hotelContent.replace(/^\*\*[^*]+\*\*\s*\|\s*(https?:\/\/[^\s]+)?/g, '');
+        const firstParagraph = contentWithoutHeader.split(/\n\s*\n/)[0];
+        if (firstParagraph) {
+          hotel.description = firstParagraph.trim();
+        }
+      }
+      
       hotels.push(hotel);
+      
+      console.log(`Extracted hotel: ${hotel.name}`);
+      
+    } catch (error) {
+      console.error('Error parsing hotel information:', error);
     }
-  } catch (error) {
-    console.error('Error parsing hotels from markdown:', error);
   }
   
   return hotels;
-}
+};

@@ -34,23 +34,22 @@ const SearchResults = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [hotels, setHotels] = useState<HotelInfo[]>([]);
   
-  // Memoized function to enhance hotels with proper data but no images or prices
+  // Memoized function to enhance hotels with data not present in the markdown
   const enhanceHotelData = useCallback((extractedHotels: HotelInfo[]) => {
     return extractedHotels.map((hotel, index) => {
-      // Create enhanced hotel without images or prices
+      // Create enhanced hotel with additional info
       const enhancedHotel: HotelInfo = {
         ...hotel,
-        rating: (Math.floor(Math.random() * 10) + 36) / 10, // Random rating between 3.6-4.5
-        location: destination, // Add location information
+        rating: hotel.rating || (Math.floor(Math.random() * 10) + 36) / 10, // Use extracted rating or generate one
+        location: hotel.location || destination, // Use extracted location or fallback to destination
         reviews: hotel.reviews && hotel.reviews.length > 0 
           ? hotel.reviews 
           : [SAMPLE_REVIEWS[index % SAMPLE_REVIEWS.length]],
-        allergyAmenities: [
+        allergyAmenities: hotel.allergyAmenities || [
           { icon: "✓", text: "Allergen menu available" },
           { icon: "✓", text: "Staff trained on cross-contamination" },
           { icon: "✓", text: `${allergies}-free options available` }
-        ],
-        description: hotel.description || `A premier hotel in ${destination} offering exceptional accommodations for guests with dietary restrictions and allergies. The staff is well-trained to handle ${allergies} allergies with the utmost care.`
+        ]
       };
       
       return enhancedHotel;

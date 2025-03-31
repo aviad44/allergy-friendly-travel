@@ -46,7 +46,7 @@ export const SearchResults = ({
       <div className="bg-amber-50 border-l-4 border-amber-500 p-3 mb-3 text-amber-800 text-sm">
         <p className="flex items-start gap-2">
           <span className="font-semibold">Safety Notice:</span> Always verify allergy accommodations directly 
-          with hotels before booking. Allergy severity varies, and hotel policies may change.
+          with hotels before booking.
         </p>
       </div>
         
@@ -92,7 +92,7 @@ export const SearchResults = ({
       
       <div className="sticky bottom-0 w-full bg-background pt-2 pb-4 border-t mt-auto">
         <Link to="/" className="w-full">
-          <Button variant="default" className="w-full" onClick={onClose}>
+          <Button variant="default" className="w-full">
             <Home className="mr-2 h-4 w-4" />
             Return to Home
           </Button>
