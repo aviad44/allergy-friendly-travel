@@ -11,16 +11,6 @@ import { BackButton } from "@/components/search/BackButton";
 import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
 import { HotelList } from "@/components/search/hotel-list";
-import { SearchHero } from "@/components/search/SearchHero";
-
-// Sample guest reviews
-const SAMPLE_REVIEWS = [
-  "The kitchen staff was extremely knowledgeable about gluten cross-contamination. I felt completely safe dining here.",
-  "They provided me with detailed allergen information for every dish and even prepared a special menu for my nut allergy.",
-  "The chef personally came to discuss my dietary restrictions and created custom meals throughout my stay.",
-  "They have a dedicated allergy-friendly menu. I was able to enjoy delicious meals despite my severe allergies.",
-  "The staff took my celiac disease seriously and ensured all my meals were 100% gluten-free."
-];
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -33,28 +23,6 @@ const SearchResults = () => {
   const [recommendation, setRecommendation] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [hotels, setHotels] = useState<HotelInfo[]>([]);
-  
-  // Memoized function to enhance hotels with data not present in the markdown
-  const enhanceHotelData = useCallback((extractedHotels: HotelInfo[]) => {
-    return extractedHotels.map((hotel, index) => {
-      // Create enhanced hotel with additional info
-      const enhancedHotel: HotelInfo = {
-        ...hotel,
-        rating: hotel.rating || (Math.floor(Math.random() * 10) + 36) / 10, // Use extracted rating or generate one
-        location: hotel.location || destination, // Use extracted location or fallback to destination
-        reviews: hotel.reviews && hotel.reviews.length > 0 
-          ? hotel.reviews 
-          : [SAMPLE_REVIEWS[index % SAMPLE_REVIEWS.length]],
-        allergyAmenities: hotel.allergyAmenities || [
-          { icon: "✓", text: "Allergen menu available" },
-          { icon: "✓", text: "Staff trained on cross-contamination" },
-          { icon: "✓", text: `${allergies}-free options available` }
-        ]
-      };
-      
-      return enhancedHotel;
-    });
-  }, [destination, allergies]);
   
   useEffect(() => {
     console.log('Search Parameters:', { destination, allergies }); // Debug log
@@ -104,11 +72,8 @@ const SearchResults = () => {
         const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
         console.log('Extracted hotels:', extractedHotels);
         
-        // Enhance hotels with additional information
-        const enhancedHotels = enhanceHotelData(extractedHotels);
-        
         // Remove any duplicates
-        const uniqueHotels = enhancedHotels.filter((hotel, index, self) =>
+        const uniqueHotels = extractedHotels.filter((hotel, index, self) =>
           index === self.findIndex((h) => h.name === hotel.name)
         );
         
@@ -127,7 +92,7 @@ const SearchResults = () => {
     };
     
     performSearch();
-  }, [destination, allergies, toast, navigate, enhanceHotelData]);
+  }, [destination, allergies, toast, navigate]);
 
   // SEO metadata
   const pageTitle = `Allergy-Friendly Hotels in ${destination} | Safe Dining for ${allergies} Allergies`;
@@ -150,7 +115,14 @@ const SearchResults = () => {
             <SafetyNotice />
 
             {/* Title section */}
-            <SearchHero destination={destination} allergies={allergies} />
+            <div className="mb-6 mt-4">
+              <h1 className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2">
+                Allergy-Friendly Hotels in {destination}
+              </h1>
+              <p className="text-gray-600">
+                Safe accommodations for visitors with {allergies} allergies
+              </p>
+            </div>
 
             {isSearching ? (
               <LoadingState />

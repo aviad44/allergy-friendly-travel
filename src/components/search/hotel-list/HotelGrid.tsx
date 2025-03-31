@@ -18,45 +18,7 @@ export const HotelGrid: React.FC<HotelGridProps> = ({ hotels, onHotelSelect }) =
     return acc;
   }, []);
 
-  // Clean hotel data to remove internal prompt markers and format properly
-  const cleanedHotels = uniqueHotels.map(hotel => {
-    // Remove any internal prompt markers from description
-    let description = hotel.description || '';
-    description = description
-      .replace(/^\*\*(Authentic Guest Reviews|Additional Safety Information|Why This Hotel is Suitable|Key Allergy Accommodations|Exact Address).*?\*\*:?\s*/gi, '')
-      .replace(/^\*\*.*?\*\*:?\s*/gi, '') // Remove any other bold headers
-      .replace(/\*\*/g, '')
-      .trim();
-
-    // Clean up amenities as well
-    const cleanedAmenities = hotel.allergyAmenities?.map(amenity => ({
-      ...amenity,
-      text: amenity.text
-        .replace(/^\*\*(Authentic Guest Reviews|Additional Safety Information|Why This Hotel is Suitable|Key Allergy Accommodations|Exact Address).*?\*\*:?\s*/gi, '')
-        .replace(/^\*\*.*?\*\*:?\s*/gi, '') // Remove any other bold headers
-        .replace(/\*\*/g, '')
-        .trim()
-    })) || [];
-
-    // Remove any duplicate amenities
-    const uniqueAmenities = cleanedAmenities.filter((amenity, index, self) => 
-      index === self.findIndex(a => a.text === amenity.text)
-    );
-
-    // Ensure description is reasonably sized for consistent card heights
-    const maxDescLength = 200;
-    if (description.length > maxDescLength) {
-      description = description.substring(0, maxDescLength) + '...';
-    }
-
-    return {
-      ...hotel,
-      description,
-      allergyAmenities: uniqueAmenities
-    };
-  });
-
-  if (cleanedHotels.length === 0) {
+  if (uniqueHotels.length === 0) {
     return (
       <div className="text-center py-12 bg-gray-50 rounded-lg">
         <div className="bg-white p-8 rounded-lg shadow-sm max-w-md mx-auto">
@@ -73,7 +35,7 @@ export const HotelGrid: React.FC<HotelGridProps> = ({ hotels, onHotelSelect }) =
 
   return (
     <div className="space-y-6">
-      {cleanedHotels.map((hotel, index) => (
+      {uniqueHotels.map((hotel, index) => (
         <HotelCard 
           key={`${hotel.name}-${index}`} 
           hotel={hotel} 

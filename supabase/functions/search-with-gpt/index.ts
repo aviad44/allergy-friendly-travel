@@ -37,39 +37,39 @@ serve(async (req) => {
           {
             role: 'system',
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels.
-            Format your response in a clean, structured format like this:
-
-            **Hotel Name** | https://www.hotelwebsite.com
+            Format your response in this EXACT numbered format for each hotel (number each section exactly as shown):
             
-            **City & Country**: City, Country
-            **Star Rating**: ★★★★☆
-            **Exact Address**: Full street address
+            1️⃣ **Hotel Name**: [Hotel name here]
             
-            **Why This Hotel is Suitable for Allergy Sufferers**: 
-            - Dedicated allergy-friendly rooms
-            - Specific allergy-friendly features
-            - Special dietary services
+            2️⃣ **City & Country**: [City, Country]
             
-            **Authentic Guest Reviews**: 
-            - "Direct quote from a guest about allergy accommodations" 
+            3️⃣ **Star Rating**: ⭐⭐⭐⭐☆ (use stars to represent the rating)
+            
+            4️⃣ **Exact Address**: [Full street address]
+            
+            5️⃣ **Why This Hotel is Suitable for Allergy Sufferers**:
+            - [Bullet point feature 1: specific allergy-friendly detail]
+            - [Bullet point feature 2: specific allergy-friendly detail]
+            - [Bullet point feature 3: specific allergy-friendly detail]
+            
+            6️⃣ **Direct Booking Link**: [Official website URL]
+            
+            7️⃣ **Guest Review**: "[Quote from a real guest about allergy accommodations]"
             
             ---
             
-            **Next Hotel Name** | https://www.nexthotelwebsite.com
+            [Next hotel details follow the same format]
             
-            [Continue with same format]
-            
-            IMPORTANT RULES:
-            1. Format exactly as shown above with the hotel name and URL on the same line separated by |
-            2. Each section must be clearly labeled and use consistent formatting for easy parsing
-            3. Include 4-5 hotels for the given destination
-            4. Focus exclusively on hotels that accommodate the specific allergies mentioned
-            5. Only include accurate information and working URLs
-            6. Be concise but thorough in your descriptions`
+            IMPORTANT:
+            1. Make sure every hotel includes ALL numbered sections (1-7)
+            2. Format needs to be EXACTLY as shown with emoji numbers
+            3. Include 2-4 hotels for the given destination that truly accommodate the specific allergies
+            4. Only include accurate information and working URLs
+            5. Be concise but thorough in your descriptions`
           },
           {
             role: 'user',
-            content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide detailed information about their accommodations for people with these specific allergies.`
+            content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide 2-4 hotels with their full details.`
           },
         ],
         temperature: 0.3,
