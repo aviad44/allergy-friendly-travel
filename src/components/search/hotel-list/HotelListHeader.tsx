@@ -16,7 +16,7 @@ export const HotelListHeader: React.FC<HotelListHeaderProps> = ({
   onOpenFilters
 }) => {
   return (
-    <div className="mb-4">
+    <div className="mb-6">
       <h1 className="text-2xl font-bold text-gray-900 mb-1">
         Allergy-Friendly Hotels in {destination}
       </h1>

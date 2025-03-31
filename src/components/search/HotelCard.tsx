@@ -34,6 +34,17 @@ export const HotelCard: React.FC<HotelCardProps> = ({
     return `https://www.google.com/maps/search/?api=1&query=${query}`;
   };
 
+  // Clean hotel name by removing any numbering or formatting
+  const cleanHotelName = hotel.name
+    ? hotel.name
+        .replace(/^\d️⃣\s*\*\*Hotel Name\*\*:\s*/i, '')
+        .replace(/\*\*/g, '')
+        .trim()
+    : 'Allergy-Friendly Hotel';
+  
+  // Simplified location for display
+  const simplifiedLocation = getSimplifiedLocation(hotel.location);
+  
   // Extract star rating from hotel data
   const renderStars = () => {
     if (hotel.rating) {
@@ -46,20 +57,9 @@ export const HotelCard: React.FC<HotelCardProps> = ({
     }
     return null;
   };
-
-  // Clean hotel name by removing any numbering or formatting
-  const cleanHotelName = hotel.name
-    ? hotel.name
-        .replace(/^\d️⃣\s*\*\*Hotel Name\*\*:\s*/i, '')
-        .replace(/\*\*/g, '')
-        .trim()
-    : 'Allergy-Friendly Hotel';
-  
-  // Simplified location for display
-  const simplifiedLocation = getSimplifiedLocation(hotel.location);
   
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
       {/* Hotel Image (if available) */}
       {hotel.imageUrl && (
         <div className="w-full h-48 overflow-hidden">
@@ -75,7 +75,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
       )}
       
       <div className="p-5 flex-1 flex flex-col">
-        {/* Hotel Name and Stars */}
+        {/* Hotel Name and Stars - ONLY SHOW STARS HERE */}
         <div className="flex justify-between items-start mb-2">
           <h2 className="text-lg font-bold text-gray-900">{cleanHotelName}</h2>
           <div className="flex ml-2 shrink-0">
@@ -136,14 +136,14 @@ export const HotelCard: React.FC<HotelCardProps> = ({
           </div>
         )}
         
-        {/* Guest Review - Styled but not truncated */}
+        {/* Guest Review - Full display with quote styling */}
         {hotel.reviews && hotel.reviews.length > 0 && hotel.reviews[0] && (
           <div className="mb-4 bg-gray-50 p-3 rounded-md relative border-l-2 border-primary/30">
-            <div className="absolute top-1 left-2 text-gray-300 text-2xl">"</div>
+            <div className="absolute top-1 left-2 text-primary/20 text-2xl">"</div>
             <p className="text-sm text-gray-600 italic pl-3 pr-3">
               {hotel.reviews[0]}
             </p>
-            <div className="absolute bottom-1 right-2 text-gray-300 text-2xl">"</div>
+            <div className="absolute bottom-1 right-2 text-primary/20 text-2xl">"</div>
           </div>
         )}
         
