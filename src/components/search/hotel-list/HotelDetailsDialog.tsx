@@ -3,7 +3,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { HotelDetails } from '@/components/search/hotel-details';
 import { HotelInfo } from '@/types/search';
-import { ExternalLink, MapPin, Star } from 'lucide-react';
+import { ExternalLink, MapPin } from 'lucide-react';
 
 interface HotelDetailsDialogProps {
   selectedHotel: HotelInfo | null;
@@ -21,7 +21,7 @@ export const HotelDetailsDialog: React.FC<HotelDetailsDialogProps> = ({
     return `https://www.google.com/maps/search/?api=1&query=${query}`;
   };
 
-  // Clean hotel name by removing star indicators
+  // Clean hotel name by removing star indicators if they exist
   const cleanHotelName = selectedHotel?.name 
     ? selectedHotel.name.replace(/\d+[\s-]stars?|★+/g, '').trim()
     : '';

@@ -39,33 +39,33 @@ serve(async (req) => {
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels.
             Format your response in this EXACT numbered format for each hotel (number each section exactly as shown):
             
-            1️⃣ **Hotel Name**: [Hotel name here]
+            ## 1. [Hotel Name] ⭐⭐⭐⭐⭐
             
-            2️⃣ **City & Country**: [City, Country]
+            📍 [Exact Address including neighborhood, City, Country]
             
-            3️⃣ **Star Rating**: ⭐⭐⭐⭐☆ (use stars to represent the rating)
+            🌟 Why it's great for [allergy type] allergy travelers:
+            - [Feature 1 - specific to allergy accommodation]
+            - [Feature 2 - specific to food handling procedures]
+            - [Feature 3 - another relevant feature]
             
-            4️⃣ **Exact Address**: [Full street address]
+            💬 Allergy Guest Review:
+            "[Insert a real, authentic review from someone with this specific allergy]"
             
-            5️⃣ **Why This Hotel is Suitable for Allergy Sufferers**:
-            - [Bullet point feature 1: specific allergy-friendly detail]
-            - [Bullet point feature 2: specific allergy-friendly detail]
-            - [Bullet point feature 3: specific allergy-friendly detail]
-            
-            6️⃣ **Direct Booking Link**: [Official website URL]
-            
-            7️⃣ **Guest Review**: "[Quote from a real guest about allergy accommodations]"
+            🔗 [Official Hotel Website URL]
             
             ---
             
-            [Next hotel details follow the same format]
+            ## 2. [Next Hotel Name]
+            
+            [Continue with same format]
             
             IMPORTANT:
-            1. Make sure every hotel includes ALL numbered sections (1-7)
-            2. Format needs to be EXACTLY as shown with emoji numbers
+            1. Make sure EVERY hotel includes the hotel name, address, allergy features, guest review, and website URL
+            2. Format needs to be EXACTLY as shown with markdown headers and emoji
             3. Include 2-4 hotels for the given destination that truly accommodate the specific allergies
             4. Only include accurate information and working URLs
-            5. Be concise but thorough in your descriptions`
+            5. Be concise but thorough in your descriptions
+            6. Always use the ## header format for hotel names and --- separators between hotels`
           },
           {
             role: 'user',

@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -11,6 +11,8 @@ import { BackButton } from "@/components/search/BackButton";
 import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
 import { HotelList } from "@/components/search/hotel-list";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -23,6 +25,7 @@ const SearchResults = () => {
   const [recommendation, setRecommendation] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [hotels, setHotels] = useState<HotelInfo[]>([]);
+  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     console.log('Search Parameters:', { destination, allergies }); // Debug log
@@ -39,6 +42,7 @@ const SearchResults = () => {
     
     const performSearch = async () => {
       setIsSearching(true);
+      setError(null);
       
       try {
         console.log('Sending search request to Supabase search-with-gpt function');
@@ -57,33 +61,46 @@ const SearchResults = () => {
           throw error;
         }
         
+        console.log('Received response data:', data);
+        
         if (!data?.recommendation) {
           console.error('No recommendation data:', data);
           throw new Error('No recommendation received from the AI');
         }
-        
-        console.log('Received recommendation:', data.recommendation);
         
         // Clean the response before displaying it
         const cleanedRecommendation = cleanResponseText(data.recommendation);
         setRecommendation(cleanedRecommendation);
         
         // Extract hotels from the recommendation
-        const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
-        console.log('Extracted hotels:', extractedHotels);
-        
-        // Remove any duplicates
-        const uniqueHotels = extractedHotels.filter((hotel, index, self) =>
-          index === self.findIndex((h) => h.name === hotel.name)
-        );
-        
-        setHotels(uniqueHotels);
+        try {
+          const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
+          console.log('Extracted hotels:', extractedHotels);
+          
+          if (!extractedHotels || extractedHotels.length === 0) {
+            console.warn('No hotels could be extracted from the response');
+            setHotels([]);
+          } else {
+            // Remove any duplicates
+            const uniqueHotels = extractedHotels.filter((hotel, index, self) =>
+              index === self.findIndex((h) => h.name === hotel.name)
+            );
+            
+            setHotels(uniqueHotels);
+          }
+        } catch (parseError) {
+          console.error('Error parsing hotels from markdown:', parseError);
+          setError('There was an error processing the hotel information. Please try again.');
+          // Still set the recommendation so users can see raw data
+          setRecommendation(cleanedRecommendation);
+        }
         
       } catch (error) {
         console.error('Error during search:', error);
+        setError('Sorry, we couldn\'t complete the search. Please try again later.');
         toast({
           title: "Search Error",
-          description: "Sorry, we couldn't complete the search. Please try again later.",
+          description: "We couldn't complete your search. Please try again later.",
           variant: "destructive"
         });
       } finally {
@@ -114,6 +131,14 @@ const SearchResults = () => {
             {/* Safety Notice */}
             <SafetyNotice />
 
+            {/* Error display if needed */}
+            {error && (
+              <Alert variant="destructive" className="my-4">
+                <AlertCircle className="h-4 w-4 mr-2" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
             {/* Title section */}
             <div className="mb-6 mt-4">
               <h1 className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2">
@@ -130,7 +155,8 @@ const SearchResults = () => {
               <HotelList 
                 hotels={hotels} 
                 destination={destination} 
-                allergies={allergies} 
+                allergies={allergies}
+                error={error || undefined}
               />
             )}
           </div>

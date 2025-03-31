@@ -8,10 +8,12 @@ export interface HotelInfo {
   safety?: string;
   imageUrl?: string;
   rating?: number;
+  starRating?: string;
   price?: string;
   location?: string;
   description?: string;
   amenities?: string[];
+  allergyFeatures?: string[];
   allergyAmenities?: {
     icon: string;
     text: string;
