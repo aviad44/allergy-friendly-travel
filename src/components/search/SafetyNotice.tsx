@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AlertTriangle, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export const SafetyNotice: React.FC = () => {
@@ -9,10 +9,7 @@ export const SafetyNotice: React.FC = () => {
       <Shield className="h-5 w-5 text-amber-600" />
       <AlertTitle className="text-amber-800 font-medium text-base">Important Safety Notice</AlertTitle>
       <AlertDescription className="text-amber-700 text-sm mt-1">
-        Always verify allergy accommodations directly with hotels before booking. 
-        Allergy severity varies, and hotel policies may change without notice. 
-        We recommend contacting the hotel's chef or food service manager to discuss 
-        your specific dietary requirements.
+        Always verify allergy accommodations directly with hotels before booking.
       </AlertDescription>
     </Alert>
   );

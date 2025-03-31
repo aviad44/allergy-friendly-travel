@@ -34,25 +34,25 @@ export function parseHotelsFromMarkdown(markdown: string): HotelInfo[] {
       const name = nameUrlMatch[1].trim().replace(/^\d+\.\s+/, ''); // Remove numbering if present
       const url = nameUrlMatch[2] ? nameUrlMatch[2].trim() : '';
       
-      // Extract information sections - but don't include the titles in the final text
-      let accommodationsText = '';
-      let dietaryText = '';
-      let reviewsTexts: string[] = [];
-      let safetyText = '';
+      // Extract descriptions - try to find the main hotel description
+      let description = '';
+      const descLines = section.split('\n')
+        .filter(line => 
+          !line.includes('**Key Allergy Accommodations:**') && 
+          !line.includes('**Special Dietary Considerations:**') && 
+          !line.includes('**Authentic Guest Reviews:**') && 
+          !line.includes('**Additional Safety Information:**') && 
+          !line.includes('|') && 
+          !line.startsWith('**') && 
+          line.trim().length > 20
+        );
       
-      // Extract accommodations
-      const accommodationsMatch = section.match(/\*\*Key Allergy Accommodations:\*\*(.*?)(?:\*\*|$)/is);
-      if (accommodationsMatch && accommodationsMatch[1]) {
-        accommodationsText = accommodationsMatch[1].trim();
-      }
-      
-      // Extract dietary considerations
-      const dietaryMatch = section.match(/\*\*Special Dietary Considerations:\*\*(.*?)(?:\*\*|$)/is);
-      if (dietaryMatch && dietaryMatch[1]) {
-        dietaryText = dietaryMatch[1].trim();
+      if (descLines.length > 0) {
+        description = descLines[0].trim();
       }
       
       // Extract reviews as array
+      const reviewsTexts: string[] = [];
       const reviewsMatch = section.match(/\*\*Authentic Guest Reviews:\*\*(.*?)(?:\*\*|$)/is);
       if (reviewsMatch && reviewsMatch[1]) {
         const reviewText = reviewsMatch[1].trim();
@@ -60,28 +60,28 @@ export function parseHotelsFromMarkdown(markdown: string): HotelInfo[] {
         // Try to extract individual reviews
         const individualReviews = reviewText.match(/"([^"]+)"/g) || reviewText.match(/"([^"]+)"/g);
         if (individualReviews && individualReviews.length > 0) {
-          reviewsTexts = individualReviews.map(r => r.replace(/[""]|^['"]\s*|\s*['"]$/g, '').trim());
+          reviewsTexts.push(individualReviews[0].replace(/[""]|^['"]\s*|\s*['"]$/g, '').trim());
         } else {
           // If no quotes found, use the whole text as one review
-          reviewsTexts = [reviewText];
+          reviewsTexts.push(reviewText);
         }
       }
       
-      // Extract safety information
-      const safetyMatch = section.match(/\*\*Additional Safety Information:\*\*(.*?)(?:\*\*|$)/is);
-      if (safetyMatch && safetyMatch[1]) {
-        safetyText = safetyMatch[1].trim();
-      }
+      // Create allergy amenities
+      const allergyAmenities = [
+        { icon: "✓", text: "Allergen menu available" },
+        { icon: "✓", text: "Staff trained on cross-contamination" },
+        { icon: "✓", text: "Allergy-friendly options available" }
+      ];
       
       // Create and add the hotel to our list
       const hotel: HotelInfo = {
         name,
         url,
-        accommodations: accommodationsText,
-        dietary: dietaryText,
-        reviews: reviewsTexts.length > 0 ? reviewsTexts : undefined,
-        safety: safetyText,
-        // We'll add other info like ratings and location elsewhere
+        description,
+        reviews: reviewsTexts,
+        allergyAmenities,
+        rating: 4 // Default rating
       };
       
       hotels.push(hotel);

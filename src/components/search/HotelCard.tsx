@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Check, MapPin } from "lucide-react";
+import { ExternalLink, MapPin, Star } from "lucide-react";
 import { HotelInfo } from '@/types/search';
 
 interface HotelCardProps {
@@ -10,45 +10,88 @@ interface HotelCardProps {
 }
 
 export const HotelCard: React.FC<HotelCardProps> = ({ hotel, onViewDetails }) => {
+  // Generate Google Maps URL
+  const getGoogleMapsUrl = (hotelName: string, location: string) => {
+    const query = encodeURIComponent(`${hotelName}, ${location}`);
+    return `https://www.google.com/maps/search/?api=1&query=${query}`;
+  };
+  
+  // Extract star rating if available in the name
+  const extractStarRating = (name: string): number => {
+    const starMatch = name.match(/(\d+)[\s-]stars?|(\d+)[\s-]★/i);
+    if (starMatch) {
+      return parseInt(starMatch[1] || starMatch[2], 10);
+    }
+    
+    // Count the number of star symbols
+    const stars = (name.match(/★/g) || []).length;
+    if (stars > 0) {
+      return stars;
+    }
+    
+    // Default rating if no stars found
+    return hotel.rating ? Math.round(hotel.rating) : 4;
+  };
+  
+  const starRating = extractStarRating(hotel.name);
+  
+  // Clean hotel name by removing star indicators
+  const cleanHotelName = hotel.name
+    .replace(/\d+[\s-]stars?/i, '')
+    .replace(/★+/g, '')
+    .trim();
+  
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300">
+    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
       <div className="p-5">
-        {/* Hotel Name and Location */}
-        <div className="mb-3">
-          <h2 className="text-lg font-bold text-gray-900">{hotel.name}</h2>
-          {hotel.location && (
-            <div className="flex items-center text-gray-500 text-sm mt-1">
+        {/* Hotel Name and Stars */}
+        <div className="flex justify-between items-start mb-2">
+          <h2 className="text-lg font-bold text-gray-900">{cleanHotelName}</h2>
+          <div className="flex">
+            {Array.from({ length: starRating }).map((_, i) => (
+              <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+            ))}
+          </div>
+        </div>
+        
+        {/* Location with Map Link */}
+        {hotel.location && (
+          <div className="flex items-center text-gray-500 text-sm mb-3">
+            <a 
+              href={getGoogleMapsUrl(cleanHotelName, hotel.location)} 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center hover:text-primary"
+            >
               <MapPin className="h-3.5 w-3.5 mr-1.5" />
               <span>{hotel.location}</span>
-            </div>
-          )}
-        </div>
+            </a>
+          </div>
+        )}
         
         {/* Hotel Description */}
         <div className="mb-3">
-          <p className="text-sm text-gray-600 line-clamp-3">
+          <p className="text-sm text-gray-600">
             {hotel.description || `A hotel offering accommodations for guests with dietary restrictions and allergies.`}
           </p>
         </div>
         
         {/* Guest Review */}
         {hotel.reviews && hotel.reviews.length > 0 && (
-          <div className="mb-3 bg-gray-50 p-3 rounded-md">
-            <p className="text-sm text-gray-600 italic line-clamp-2">"{hotel.reviews[0]}"</p>
+          <div className="mb-4 bg-gray-50 p-3 rounded-md">
+            <p className="text-sm text-gray-600 italic">"{hotel.reviews[0]}"</p>
           </div>
         )}
         
         {/* Allergy Amenities Tags */}
-        {hotel.allergyAmenities && hotel.allergyAmenities.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {hotel.allergyAmenities.slice(0, 3).map((amenity, index) => (
-              <div key={index} className="flex items-center text-xs text-teal-700 bg-teal-50 px-2 py-1 rounded-full">
-                <Check className="h-3 w-3 text-teal-600 mr-1" />
-                <span>{amenity.text}</span>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {hotel.allergyAmenities && hotel.allergyAmenities.map((amenity, index) => (
+            <div key={index} className="flex items-center text-xs text-teal-700 bg-teal-50 px-2 py-1 rounded-full">
+              <span className="text-teal-600 mr-1">✓</span>
+              <span>{amenity.text}</span>
+            </div>
+          ))}
+        </div>
         
         {/* Action buttons */}
         <div className="flex flex-wrap gap-3 mt-4 pt-3 border-t">

@@ -9,7 +9,6 @@ interface HotelListHeaderProps {
 }
 
 export const HotelListHeader: React.FC<HotelListHeaderProps> = ({
-  destination,
   allergies,
   hotelCount
 }) => {
