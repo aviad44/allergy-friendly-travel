@@ -18,26 +18,41 @@ export const HotelGrid: React.FC<HotelGridProps> = ({ hotels, onHotelSelect }) =
     return acc;
   }, []);
 
-  // Clean hotel data to remove formatting markers
+  // Clean hotel data to remove internal prompt markers and format properly
   const cleanedHotels = uniqueHotels.map(hotel => {
-    // Remove any internal prompt markers
+    // Remove any internal prompt markers from description
     let description = hotel.description || '';
     description = description
-      .replace(/^\*\*(?:Authentic Guest Reviews|Additional Safety Information|Why This Hotel is Suitable|Key Allergy Accommodations).*?\*\*:?\s*/gi, '')
+      .replace(/^\*\*(Authentic Guest Reviews|Additional Safety Information|Why This Hotel is Suitable|Key Allergy Accommodations|Exact Address).*?\*\*:?\s*/gi, '')
+      .replace(/^\*\*.*?\*\*:?\s*/gi, '') // Remove any other bold headers
       .replace(/\*\*/g, '')
       .trim();
+
+    // Clean up amenities as well
+    const cleanedAmenities = hotel.allergyAmenities?.map(amenity => ({
+      ...amenity,
+      text: amenity.text
+        .replace(/^\*\*(Authentic Guest Reviews|Additional Safety Information|Why This Hotel is Suitable|Key Allergy Accommodations|Exact Address).*?\*\*:?\s*/gi, '')
+        .replace(/^\*\*.*?\*\*:?\s*/gi, '') // Remove any other bold headers
+        .replace(/\*\*/g, '')
+        .trim()
+    })) || [];
+
+    // Remove any duplicate amenities
+    const uniqueAmenities = cleanedAmenities.filter((amenity, index, self) => 
+      index === self.findIndex(a => a.text === amenity.text)
+    );
+
+    // Ensure description is reasonably sized for consistent card heights
+    const maxDescLength = 200;
+    if (description.length > maxDescLength) {
+      description = description.substring(0, maxDescLength) + '...';
+    }
 
     return {
       ...hotel,
       description,
-      // Ensure amenities don't have internal prompt markers
-      allergyAmenities: hotel.allergyAmenities?.map(amenity => ({
-        ...amenity,
-        text: amenity.text
-          .replace(/^\*\*(?:Authentic Guest Reviews|Additional Safety Information|Why This Hotel is Suitable|Key Allergy Accommodations).*?\*\*:?\s*/gi, '')
-          .replace(/\*\*/g, '')
-          .trim()
-      }))
+      allergyAmenities: uniqueAmenities
     };
   });
 

@@ -119,5 +119,3 @@ export const HotelList: React.FC<HotelListProps> = ({ hotels, destination, aller
     </div>
   );
 };
-
-export default HotelList;

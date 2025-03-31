@@ -37,7 +37,7 @@ serve(async (req) => {
           {
             role: 'system',
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels.
-            Format your response in a clean, markdown format like this:
+            Format your response in a clean, structured format like this:
 
             **Hotel Name** | https://www.hotelwebsite.com
             
@@ -46,13 +46,12 @@ serve(async (req) => {
             **Exact Address**: Full street address
             
             **Why This Hotel is Suitable for Allergy Sufferers**: 
-            - Detailed explanation of allergy accommodations
+            - Dedicated allergy-friendly rooms
             - Specific allergy-friendly features
-            - Special room types or services
+            - Special dietary services
             
             **Authentic Guest Reviews**: 
             - "Direct quote from a guest about allergy accommodations" 
-            - "Another relevant review"
             
             ---
             
@@ -62,11 +61,11 @@ serve(async (req) => {
             
             IMPORTANT RULES:
             1. Format exactly as shown above with the hotel name and URL on the same line separated by |
-            2. Each section must be clearly labeled with bold headings
+            2. Each section must be clearly labeled and use consistent formatting for easy parsing
             3. Include 4-5 hotels for the given destination
             4. Focus exclusively on hotels that accommodate the specific allergies mentioned
             5. Only include accurate information and working URLs
-            6. For each hotel, use the EXACT format: "**Hotel Name** | https://website.com" (note the | character between name and URL)`
+            6. Be concise but thorough in your descriptions`
           },
           {
             role: 'user',
@@ -87,8 +86,14 @@ serve(async (req) => {
     const data = await response.json();
     console.log('✅ Received response from OpenAI');
     
-    // Process the response
+    // Process the response to remove any potential prompt indicators
     let processedResponse = data.choices[0].message.content;
+    processedResponse = processedResponse
+      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Format your response[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/IMPORTANT RULES:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Format exactly as shown[\s\S]*?(?=\n\n|$)/g, '')
+      .trim();
     
     return new Response(
       JSON.stringify({ 

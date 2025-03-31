@@ -17,7 +17,7 @@ export const HotelDetailsDialog: React.FC<HotelDetailsDialogProps> = ({
     <Dialog open={!!selectedHotel} onOpenChange={() => onOpenChange()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Hotel Details</DialogTitle>
+          <DialogTitle>{selectedHotel?.name && selectedHotel.name.replace(/\d+[\s-]stars?|★+/g, '').trim()}</DialogTitle>
         </DialogHeader>
         
         {selectedHotel && (
