@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { HotelInfo } from '@/types/search';
-import { HotelImage } from './HotelImage';
 import { HotelHeader } from './HotelHeader';
 import { HotelDescription } from './HotelDescription';
 import { AllergyAmenities } from './AllergyAmenities';
@@ -16,11 +15,6 @@ interface HotelDetailsProps {
 export const HotelDetails: React.FC<HotelDetailsProps> = ({ hotel }) => {
   return (
     <div className="space-y-6">
-      <HotelImage 
-        name={hotel.name} 
-        rating={hotel.rating} 
-      />
-      
       <HotelHeader 
         name={hotel.name} 
         location={hotel.location}
