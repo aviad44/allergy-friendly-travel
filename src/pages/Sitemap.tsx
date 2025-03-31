@@ -15,6 +15,7 @@ const sitemapStructure = [
       { title: 'FAQ', path: '/faq' },
       { title: 'Categories', path: '/categories' },
       { title: 'Reviews', path: '/reviews' },
+      { title: 'Terms of Use', path: '/terms' },
     ],
   },
   {
