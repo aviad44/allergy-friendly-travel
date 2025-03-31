@@ -56,13 +56,14 @@ export const HotelGrid: React.FC<HotelGridProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {uniqueHotels.map((hotel, index) => (
-        <HotelCard 
-          key={`${hotel.name}-${index}`} 
-          hotel={hotel} 
-          onViewDetails={() => onHotelSelect(hotel)}
-        />
+        <div key={`${hotel.name}-${index}`} className="h-full">
+          <HotelCard 
+            hotel={hotel} 
+            onViewDetails={() => onHotelSelect(hotel)}
+          />
+        </div>
       ))}
     </div>
   );

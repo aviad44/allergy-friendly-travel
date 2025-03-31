@@ -23,7 +23,7 @@ export const HotelList: React.FC<HotelListProps> = ({
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Header with sorting and filter controls */}
       <HotelListHeader 
         destination={destination}
@@ -55,4 +55,3 @@ export const HotelList: React.FC<HotelListProps> = ({
     </div>
   );
 };
-

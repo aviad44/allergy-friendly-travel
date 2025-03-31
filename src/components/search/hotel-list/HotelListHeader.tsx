@@ -23,23 +23,22 @@ export const HotelListHeader: React.FC<HotelListHeaderProps> = ({
       <p className="text-gray-600 mb-3">
         Safe accommodations for visitors with {allergies} allergies
       </p>
-      <div className="flex items-center mt-2">
+      <div className="flex items-center flex-wrap gap-2 mt-2">
         <Badge variant="outline" className="text-primary border-primary bg-primary/5 font-medium">
           {allergies} Allergies
         </Badge>
-        <span className="text-gray-500 text-sm ml-3">
+        <span className="text-gray-500 text-sm">
           {hotelCount} hotels found
         </span>
         {onOpenFilters && (
           <button 
             onClick={onOpenFilters} 
-            className="ml-3 text-sm text-primary hover:underline"
+            className="text-sm text-primary hover:underline ml-auto"
           >
-            Open Filters
+            Filter Results
           </button>
         )}
       </div>
     </div>
   );
 };
-

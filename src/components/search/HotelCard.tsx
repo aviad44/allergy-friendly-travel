@@ -15,13 +15,6 @@ export const HotelCard: React.FC<HotelCardProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Generate Google Maps URL with just city/location
-  const getGoogleMapsUrl = (hotelName: string, location: string) => {
-    if (!hotelName || !location) return '#';
-    const query = encodeURIComponent(`${hotelName}, ${location}`);
-    return `https://www.google.com/maps/search/?api=1&query=${query}`;
-  };
-
   // Extract simplified location (city, country)
   const getSimplifiedLocation = (location?: string) => {
     if (!location) return '';
@@ -32,6 +25,13 @@ export const HotelCard: React.FC<HotelCardProps> = ({
       return `${parts[0]}, ${parts[parts.length - 1]}`;
     }
     return location;
+  };
+
+  // Generate Google Maps URL with just city/location
+  const getGoogleMapsUrl = (hotelName: string, location: string) => {
+    if (!hotelName || !location) return '#';
+    const query = encodeURIComponent(`${hotelName}, ${location}`);
+    return `https://www.google.com/maps/search/?api=1&query=${query}`;
   };
 
   // Extract star rating from hotel data
@@ -59,10 +59,10 @@ export const HotelCard: React.FC<HotelCardProps> = ({
   const simplifiedLocation = getSimplifiedLocation(hotel.location);
   
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col">
       {/* Hotel Image (if available) */}
       {hotel.imageUrl && (
-        <div className="w-full h-40 overflow-hidden">
+        <div className="w-full h-48 overflow-hidden">
           <img 
             src={hotel.imageUrl} 
             alt={`${cleanHotelName} exterior`} 
@@ -74,11 +74,11 @@ export const HotelCard: React.FC<HotelCardProps> = ({
         </div>
       )}
       
-      <div className="p-5">
+      <div className="p-5 flex-1 flex flex-col">
         {/* Hotel Name and Stars */}
         <div className="flex justify-between items-start mb-2">
           <h2 className="text-lg font-bold text-gray-900">{cleanHotelName}</h2>
-          <div className="flex">
+          <div className="flex ml-2 shrink-0">
             {renderStars()}
           </div>
         </div>
@@ -102,7 +102,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
             <p className={`text-sm text-gray-600 ${!isExpanded ? 'line-clamp-3' : ''}`}>
               {hotel.description}
             </p>
-            {hotel.description.length > 180 && (
+            {hotel.description.length > 150 && (
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -137,8 +137,8 @@ export const HotelCard: React.FC<HotelCardProps> = ({
         )}
         
         {/* Guest Review - Styled but not truncated */}
-        {hotel.reviews && hotel.reviews.length > 0 && (
-          <div className="mb-4 bg-gray-50 p-3 rounded-md relative">
+        {hotel.reviews && hotel.reviews.length > 0 && hotel.reviews[0] && (
+          <div className="mb-4 bg-gray-50 p-3 rounded-md relative border-l-2 border-primary/30">
             <div className="absolute top-1 left-2 text-gray-300 text-2xl">"</div>
             <p className="text-sm text-gray-600 italic pl-3 pr-3">
               {hotel.reviews[0]}
@@ -148,7 +148,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
         )}
         
         {/* Action buttons */}
-        <div className="flex flex-wrap gap-3 mt-4 pt-3 border-t">
+        <div className="flex flex-wrap gap-3 mt-auto pt-3 border-t">
           {hotel.url && (
             <Button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-sm h-9" onClick={() => window.open(hotel.url, "_blank")}>
               Book Now
