@@ -19,3 +19,11 @@ export enum Step {
   Preview = 2,
   Download = 3,
 }
+
+export interface CardData {
+  sourceText: string;
+  translatedText: string | null;
+  allergies: string[];
+  userName?: string;
+  audienceType: "adult" | "child";
+}

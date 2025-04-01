@@ -14,27 +14,39 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
   const generateCardContent = async () => {
     const values = form.getValues();
     const isChild = values.audienceType === "child";
-
+    
+    console.log("Generating card with allergies:", values.allergies);
     const cardText = generateCardText(values.allergies, isChild);
     setGeneratedCard(cardText);
     setTranslatedCard(null); // Reset translation when card is regenerated
     
     if (values.targetLanguage) {
+      console.log("Auto-translating to:", values.targetLanguage);
       await performTranslation(cardText, values.targetLanguage);
     }
   };
 
   const performTranslation = async (text: string, targetLanguage: string) => {
+    if (!text || !targetLanguage) {
+      toast.error("Missing content or target language for translation");
+      return;
+    }
+
     setIsTranslating(true);
+    console.log(`Starting translation to ${targetLanguage}`);
     try {
       const result = await translateText(text, targetLanguage);
+      console.log("Translation result:", result);
       if (result.translatedText) {
         setTranslatedCard(result.translatedText);
+        toast.success("Translation completed!");
       } else {
+        console.error("Translation failed:", result.error);
         toast.error("Translation failed: " + (result.error || "Unknown error"));
       }
     } catch (error) {
       console.error("Translation error:", error);
+      toast.error("Translation failed. Please try again.");
     } finally {
       setIsTranslating(false);
     }
@@ -43,6 +55,7 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
   const handleTranslationRequest = () => {
     const values = form.getValues();
     if (generatedCard && values.targetLanguage) {
+      console.log("Manual translation requested");
       performTranslation(generatedCard, values.targetLanguage);
     } else {
       toast.error("Please select a target language first");
@@ -55,6 +68,7 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
     }
     
     if (step === Step.ChooseLanguages) {
+      console.log("Moving to preview step, generating card");
       await generateCardContent();
     }
   };
@@ -74,6 +88,7 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
         // Auto-translate if we're already on the preview step
         const targetLang = value.targetLanguage as string;
         if (targetLang && generatedCard) {
+          console.log("Language changed, auto-translating");
           performTranslation(generatedCard, targetLang);
         }
       }

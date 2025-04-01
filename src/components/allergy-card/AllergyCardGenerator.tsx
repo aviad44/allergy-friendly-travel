@@ -10,6 +10,7 @@ import { Step } from './types';
 import { useAllergyCardForm } from './hooks/useAllergyCardForm';
 import { useAllergyCardSteps } from './hooks/useAllergyCardSteps';
 import { useAllergyCardSharing } from './hooks/useAllergyCardSharing';
+import { Toaster } from "sonner";
 
 export const AllergyCardGenerator = () => {
   const {
@@ -41,6 +42,9 @@ export const AllergyCardGenerator = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      {/* Add the Toaster component for notifications */}
+      <Toaster position="top-center" />
+      
       <div className="flex justify-between items-center mb-8">
         <ProgressBar currentStep={step} />
       </div>

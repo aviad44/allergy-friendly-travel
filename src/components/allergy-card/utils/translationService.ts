@@ -26,6 +26,16 @@ export const translateText = async (
 
     // Get language name from code for more accurate translations
     const languageName = getLanguageNameFromCode(targetLanguage);
+    
+    console.log(`Translating to ${languageName} (${targetLanguage})`);
+
+    // For debugging if API is not working
+    if (process.env.NODE_ENV === 'development' && import.meta.env.VITE_DEBUG_TRANSLATION === 'true') {
+      console.log("Using debug mock translation");
+      return { 
+        translatedText: `[${languageName.toUpperCase()} TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)` 
+      };
+    }
 
     const response = await fetch("/api/functions/v1/openai-proxy", {
       method: "POST",
@@ -46,11 +56,13 @@ export const translateText = async (
     });
 
     if (!response.ok) {
+      console.error("Translation API error:", response.status, response.statusText);
       const errorData = await response.json();
-      throw new Error(errorData.error || "Translation failed");
+      throw new Error(errorData.error || `Translation failed: ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log("Translation success, result:", data.result);
     return { translatedText: data.result };
   } catch (error) {
     console.error("Translation error:", error);

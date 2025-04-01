@@ -15,11 +15,6 @@ export const generateCardText = (allergiesList: string[], isChild: boolean): str
   return cardText;
 };
 
-export const generateFakeTranslation = (text: string, targetLanguage: string): string => {
-  // In a real implementation, this would call a translation API
-  return `[${targetLanguage.toUpperCase()} TRANSLATION]\n\n${text}\n\n(Translation would be implemented with a real API)`;
-};
-
 export const copyToClipboard = (sourceText: string | null, translatedText: string | null) => {
   if (sourceText) {
     const fullText = translatedText 
@@ -48,30 +43,38 @@ export const downloadAsPDF = () => {
   }
   
   toast.promise(
-    html2canvas(cardElement, {
-      scale: 2,
-      backgroundColor: "#ffffff"
-    })
-    .then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a5'  // Using A5 for better card size
-      });
-      
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('allergy-translation-card.pdf');
-      return true;
-    })
-    .catch(error => {
-      console.error("PDF generation failed:", error);
-      throw new Error("Failed to create PDF");
-    }),
+    (async () => {
+      try {
+        console.log("Starting PDF generation...");
+        const canvas = await html2canvas(cardElement, {
+          scale: 2,
+          backgroundColor: "#ffffff",
+          logging: true,
+          useCORS: true
+        });
+        
+        console.log("Canvas generated, creating PDF...");
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a5'  // Using A5 for better card size
+        });
+        
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('allergy-translation-card.pdf');
+        
+        console.log("PDF created and saved.");
+        return true;
+      } catch (error) {
+        console.error("PDF generation error details:", error);
+        throw new Error("Failed to create PDF");
+      }
+    })(),
     {
       loading: 'Creating PDF...',
       success: 'PDF downloaded successfully!',
@@ -89,21 +92,29 @@ export const downloadAsPNG = () => {
   }
   
   toast.promise(
-    html2canvas(cardElement, {
-      scale: 2,
-      backgroundColor: "#ffffff"
-    })
-    .then((canvas) => {
-      const link = document.createElement('a');
-      link.download = 'allergy-translation-card.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      return true;
-    })
-    .catch(error => {
-      console.error("PNG generation failed:", error);
-      throw new Error("Failed to create PNG");
-    }),
+    (async () => {
+      try {
+        console.log("Starting PNG generation...");
+        const canvas = await html2canvas(cardElement, {
+          scale: 2,
+          backgroundColor: "#ffffff",
+          logging: true,
+          useCORS: true
+        });
+        
+        console.log("Canvas generated, creating PNG...");
+        const link = document.createElement('a');
+        link.download = 'allergy-translation-card.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        console.log("PNG created and saved.");
+        return true;
+      } catch (error) {
+        console.error("PNG generation error details:", error);
+        throw new Error("Failed to create PNG");
+      }
+    })(),
     {
       loading: 'Creating PNG...',
       success: 'PNG downloaded successfully!',
@@ -120,6 +131,7 @@ export const shareToWhatsApp = (sourceText: string | null, translatedText: strin
     
     const encodedText = encodeURIComponent(fullText);
     window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+    toast.success("Opening WhatsApp with your card text!");
   } else {
     toast.error("Nothing to share. Please generate the card first.");
   }

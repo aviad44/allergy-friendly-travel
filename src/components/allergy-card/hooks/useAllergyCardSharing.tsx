@@ -13,22 +13,10 @@ export function useAllergyCardSharing() {
   };
 
   const handleDownloadPDF = () => {
-    const cardElement = document.getElementById('allergy-card');
-    if (!cardElement) {
-      toast.error("Card element not found. Please ensure the card is generated.");
-      return;
-    }
-    
     downloadAsPDF();
   };
 
   const handleDownloadPNG = () => {
-    const cardElement = document.getElementById('allergy-card');
-    if (!cardElement) {
-      toast.error("Card element not found. Please ensure the card is generated.");
-      return;
-    }
-    
     downloadAsPNG();
   };
 
