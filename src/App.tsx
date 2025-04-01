@@ -36,6 +36,7 @@ import FAQ from '@/pages/FAQ';
 import SearchResults from '@/pages/SearchResults';
 import Sitemap from '@/pages/Sitemap';
 import Terms from '@/pages/Terms';
+import AllergyTranslationCard from '@/pages/AllergyTranslationCard';
 
 // AppContent component to use hooks that require router context
 const AppContent = () => {
@@ -85,6 +86,7 @@ const AppContent = () => {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/sitemap" element={<Sitemap />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/allergy-translation-card" element={<AllergyTranslationCard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

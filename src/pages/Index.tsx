@@ -1,9 +1,10 @@
 
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
-import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
+import { MapPin, Star, Shield, Info, HelpCircle, Rocket, FileText } from "lucide-react";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const iconComponents = {
@@ -87,6 +88,62 @@ const Index = () => {
             {HOME_CONTENT.featured.description}
           </p>
           <FeaturedDestinations />
+        </div>
+      </section>
+      
+      {/* Allergy Translation Card Section */}
+      <section className="py-10 sm:py-16 px-4 bg-white w-full">
+        <div className="container mx-auto max-w-[1400px]">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <FileText className="h-6 w-6 text-blue-600" />
+                <span className="text-blue-600 font-semibold uppercase tracking-wider text-sm">Travel Tool</span>
+              </div>
+              <h2 className="font-display text-2xl sm:text-3xl mb-4 font-bold text-blue-800">
+                Allergy Translation Card Generator
+              </h2>
+              <p className="text-base sm:text-lg text-gray-700 mb-6 max-w-lg">
+                Traveling with food allergies? Create a free translation card to stay safe and understood anywhere in the world. Communicate your dietary needs in any language.
+              </p>
+              <ul className="mb-6 space-y-3">
+                <li className="flex items-start gap-2">
+                  <Shield className="h-5 w-5 text-green-600 mt-0.5" />
+                  <span className="text-gray-700">Translate your allergies into 40+ languages</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Shield className="h-5 w-5 text-green-600 mt-0.5" />
+                  <span className="text-gray-700">Custom downloadable cards to print or save</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Shield className="h-5 w-5 text-green-600 mt-0.5" />
+                  <span className="text-gray-700">Simple interface for easy card generation</span>
+                </li>
+              </ul>
+              <Link 
+                to="/allergy-translation-card" 
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              >
+                Create Your Card <FileText className="h-5 w-5" />
+              </Link>
+            </div>
+            <div className="bg-blue-50 p-6 rounded-lg border border-blue-100 shadow-sm">
+              <img 
+                src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+                alt="Travel safely with allergy translation cards" 
+                className="w-full h-64 object-cover rounded-lg shadow-md mb-4" 
+              />
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold mb-2">Sample Allergy Card:</h3>
+                <div className="p-3 bg-gray-50 border border-gray-200 rounded-md font-mono text-sm">
+                  (English → Italian)<br />
+                  Hello, I have a food allergy to: Milk, Eggs, Sesame.<br />
+                  Please ensure my food is completely free from contact with these ingredients.<br />
+                  Thank you very much!
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </>

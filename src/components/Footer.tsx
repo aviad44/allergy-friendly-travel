@@ -36,6 +36,14 @@ export const Footer = () => {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link 
+                  to="/allergy-translation-card" 
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Allergy Translation Card
+                </Link>
+              </li>
             </ul>
           </div>
           

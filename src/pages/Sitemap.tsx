@@ -16,6 +16,7 @@ const sitemapStructure = [
       { title: 'Categories', path: '/categories' },
       { title: 'Reviews', path: '/reviews' },
       { title: 'Terms of Use', path: '/terms' },
+      { title: 'Allergy Translation Card', path: '/allergy-translation-card' },
     ],
   },
   {
