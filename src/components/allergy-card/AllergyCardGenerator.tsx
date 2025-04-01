@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,7 +8,7 @@ import {
   Copy, 
   Share2, 
   ArrowRight,
-  Child, 
+  Baby, 
   User, 
   QrCode
 } from 'lucide-react';
@@ -50,7 +49,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Form schema for validating user input
 const formSchema = z.object({
   allergies: z.array(z.string()).min(1, "Please select at least one allergy"),
   customAllergy: z.string().optional(),
@@ -76,7 +74,6 @@ export const AllergyCardGenerator = () => {
   const [generatedCard, setGeneratedCard] = useState<string | null>(null);
   const [translatedCard, setTranslatedCard] = useState<string | null>(null);
 
-  // Initialize form with default values
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -145,8 +142,6 @@ export const AllergyCardGenerator = () => {
 
     setGeneratedCard(cardText);
     
-    // In a real-world implementation, this would call a translation API
-    // For now, we'll simulate the translation
     const fakeTranslatedText = `[${values.targetLanguage.toUpperCase()} TRANSLATION]\n\n${cardText}\n\n(Translation would be implemented with a real API)`;
     setTranslatedCard(fakeTranslatedText);
   };
@@ -161,12 +156,10 @@ export const AllergyCardGenerator = () => {
   };
 
   const downloadAsPDF = () => {
-    // In a real implementation, this would generate a PDF
     toast.success("PDF download feature would be integrated here");
   };
 
   const downloadAsPNG = () => {
-    // In a real implementation, this would generate a PNG
     toast.success("PNG download feature would be integrated here");
   };
 
@@ -337,7 +330,7 @@ export const AllergyCardGenerator = () => {
                                 className="flex-1 gap-2"
                                 onClick={() => form.setValue("audienceType", "child")}
                               >
-                                <Child className="h-4 w-4" />
+                                <Baby className="h-4 w-4" />
                                 Child
                               </Button>
                             </div>
