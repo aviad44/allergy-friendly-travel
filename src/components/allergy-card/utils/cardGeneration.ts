@@ -7,9 +7,9 @@ export const generateCardText = (allergiesList: string[], isChild: boolean): str
   let cardText = "";
   
   if (isChild) {
-    cardText = `Hello! My name is _________.\n\nI have severe allergies to: ${allergiesList}.\n\nThese foods could make me very sick or cause a medical emergency.\n\nPlease help make sure my food doesn't contain or touch these ingredients.\n\nThank you for keeping me safe!`;
+    cardText = `Hello! My name is _________.\n\nI have severe allergies to: ${allergiesList.join(', ')}.\n\nThese foods could make me very sick or cause a medical emergency.\n\nPlease help make sure my food doesn't contain or touch these ingredients.\n\nThank you for keeping me safe!`;
   } else {
-    cardText = `Hello,\n\nI have food allergies to: ${allergiesList}.\n\nPlease ensure my meal is completely free from these ingredients, including cross-contamination.\n\nIf you're unsure about the ingredients, please let me know so I can make an informed decision.\n\nThank you for your understanding and assistance.`;
+    cardText = `Hello,\n\nI have food allergies to: ${allergiesList.join(', ')}.\n\nPlease ensure my meal is completely free from these ingredients, including cross-contamination.\n\nIf you're unsure about the ingredients, please let me know so I can make an informed decision.\n\nThank you for your understanding and assistance.`;
   }
 
   return cardText;
@@ -21,11 +21,19 @@ export const generateFakeTranslation = (text: string, targetLanguage: string): s
 };
 
 export const copyToClipboard = (sourceText: string | null, translatedText: string | null) => {
-  if (sourceText && translatedText) {
-    const fullText = `${sourceText}\n\n${translatedText}`;
-    navigator.clipboard.writeText(fullText).then(() => {
-      toast.success("Card copied to clipboard!");
-    });
+  if (sourceText) {
+    const fullText = translatedText 
+      ? `${sourceText}\n\n${translatedText}` 
+      : sourceText;
+    
+    navigator.clipboard.writeText(fullText)
+      .then(() => {
+        toast.success("Card copied to clipboard!");
+      })
+      .catch(error => {
+        console.error("Failed to copy text:", error);
+        toast.error("Failed to copy to clipboard. Please try again.");
+      });
   } else {
     toast.error("Nothing to copy. Please generate the card first.");
   }
@@ -49,7 +57,7 @@ export const downloadAsPDF = () => {
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
-        format: 'a4'
+        format: 'a5'  // Using A5 for better card size
       });
       
       const imgProps = pdf.getImageProperties(imgData);
@@ -59,6 +67,10 @@ export const downloadAsPDF = () => {
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save('allergy-translation-card.pdf');
       return true;
+    })
+    .catch(error => {
+      console.error("PDF generation failed:", error);
+      throw new Error("Failed to create PDF");
     }),
     {
       loading: 'Creating PDF...',
@@ -87,6 +99,10 @@ export const downloadAsPNG = () => {
       link.href = canvas.toDataURL('image/png');
       link.click();
       return true;
+    })
+    .catch(error => {
+      console.error("PNG generation failed:", error);
+      throw new Error("Failed to create PNG");
     }),
     {
       loading: 'Creating PNG...',
@@ -97,9 +113,13 @@ export const downloadAsPNG = () => {
 };
 
 export const shareToWhatsApp = (sourceText: string | null, translatedText: string | null) => {
-  if (sourceText && translatedText) {
-    const fullText = encodeURIComponent(`${sourceText}\n\n${translatedText}`);
-    window.open(`https://wa.me/?text=${fullText}`, '_blank');
+  if (sourceText) {
+    const fullText = translatedText 
+      ? `${sourceText}\n\n${translatedText}` 
+      : sourceText;
+    
+    const encodedText = encodeURIComponent(fullText);
+    window.open(`https://wa.me/?text=${encodedText}`, '_blank');
   } else {
     toast.error("Nothing to share. Please generate the card first.");
   }

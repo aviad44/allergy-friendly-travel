@@ -8,6 +8,7 @@ export const formSchema = z.object({
   targetLanguage: z.string().min(1, "Please select a target language"),
   audienceType: z.enum(["adult", "child"]).default("adult"),
   includeQrCode: z.boolean().default(false),
+  userName: z.string().optional(),
 });
 
 export type FormValues = z.infer<typeof formSchema>;

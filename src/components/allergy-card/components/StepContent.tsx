@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Step, FormValues } from '../types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -108,6 +107,8 @@ export const StepContent: React.FC<StepContentProps> = ({
       );
 
     case Step.Download:
+      const userName = form.getValues().userName || "";
+      
       return (
         <Card>
           <CardHeader>
@@ -118,6 +119,10 @@ export const StepContent: React.FC<StepContentProps> = ({
           </CardHeader>
           <CardContent>
             <Step4Download 
+              generatedCard={generatedCard}
+              translatedCard={translatedCard}
+              userName={userName}
+              selectedAllergies={selectedAllergies}
               onDownloadPDF={onDownloadPDF}
               onDownloadPNG={onDownloadPNG}
               onCopyToClipboard={onCopyToClipboard}

@@ -81,7 +81,7 @@ export const AllergyCardGenerator = () => {
           onClick={handleNext}
           disabled={(step === Step.SelectAllergies && selectedAllergies.length === 0) || 
                   (step === Step.ChooseLanguages && !form.getValues().targetLanguage)}
-          className="gap-1"
+          className="gap-1 bg-teal-600 hover:bg-teal-700"
         >
           {step === Step.Download ? 'Finish' : 'Next'}
           {step !== Step.Download && <ArrowRight className="h-4 w-4" />}
