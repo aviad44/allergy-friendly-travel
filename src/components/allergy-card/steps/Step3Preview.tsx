@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { QrCode, RefreshCw } from 'lucide-react';
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Loader2, RefreshCw } from "lucide-react";
 
 interface Step3Props {
   generatedCard: string | null;
@@ -12,64 +11,62 @@ interface Step3Props {
   onRequestTranslation: () => void;
 }
 
-export const Step3Preview: React.FC<Step3Props> = ({ 
-  generatedCard, 
+export const Step3Preview: React.FC<Step3Props> = ({
+  generatedCard,
   translatedCard,
   includeQrCode,
   isTranslating,
   onRequestTranslation
 }) => {
-  if (!generatedCard) return null;
-  
+  if (!generatedCard) {
+    return <div className="text-center py-8">No card content generated yet.</div>;
+  }
+
   return (
     <div className="space-y-6">
-      <div className="bg-white border rounded-lg p-6 shadow-sm">
-        <h3 className="text-lg font-semibold mb-3">Source Language (English)</h3>
-        <div className="whitespace-pre-line">
-          {generatedCard}
-        </div>
-      </div>
-      
-      <Separator className="my-6" />
-      
-      <div className="bg-white border rounded-lg p-6 shadow-sm">
-        <div className="flex justify-between items-center mb-3">
-          <h3 className="text-lg font-semibold">Target Language Translation</h3>
-          <Button 
-            size="sm"
-            variant="outline"
-            onClick={onRequestTranslation}
-            disabled={isTranslating}
-            className="flex items-center gap-1"
-          >
-            <RefreshCw className={`h-3 w-3 ${isTranslating ? 'animate-spin' : ''}`} />
-            {isTranslating ? 'Translating...' : 'Refresh'}
-          </Button>
-        </div>
+      {/* Card Preview Container */}
+      <div id="allergy-card" className="border rounded-lg p-6 bg-white shadow-sm">
+        {/* Source Language Card */}
+        <div className="mb-6 whitespace-pre-wrap">{generatedCard}</div>
         
-        <div className="whitespace-pre-line min-h-[120px]">
-          {isTranslating ? (
-            <div className="flex items-center justify-center h-24 text-muted-foreground">
-              <div className="animate-pulse">Translating...</div>
+        {/* Translation */}
+        {translatedCard ? (
+          <div className="mt-4 pt-4 border-t whitespace-pre-wrap">{translatedCard}</div>
+        ) : (
+          <div className="mt-4 pt-4 border-t">
+            {isTranslating ? (
+              <div className="flex items-center justify-center py-6">
+                <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                <span>Translating...</span>
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="mb-3 text-gray-600">Translation not generated yet</p>
+                <Button onClick={onRequestTranslation} className="gap-2">
+                  <RefreshCw className="h-4 w-4" />
+                  Generate Translation
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+        
+        {/* QR Code would be here if includeQrCode is true */}
+        {includeQrCode && (
+          <div className="mt-4 pt-4 border-t">
+            <div className="bg-gray-100 h-32 w-32 flex items-center justify-center">
+              QR Code
             </div>
-          ) : translatedCard ? (
-            translatedCard
-          ) : (
-            <div className="text-muted-foreground">
-              Translation not available. Click refresh to translate.
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       
-      {includeQrCode && (
-        <div className="flex justify-center mt-6">
-          <div className="border p-4 inline-flex flex-col items-center">
-            <QrCode size={120} />
-            <p className="text-xs text-muted-foreground mt-2">QR Code for sharing</p>
-          </div>
-        </div>
-      )}
+      <div className="bg-blue-50 p-4 rounded-lg">
+        <h3 className="font-semibold text-blue-800 mb-2">Preview Your Card</h3>
+        <p className="text-blue-700">
+          This is how your allergy card will appear when downloaded or shared.
+        </p>
+      </div>
     </div>
   );
 };

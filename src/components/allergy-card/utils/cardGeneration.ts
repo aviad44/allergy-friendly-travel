@@ -1,5 +1,7 @@
 
 import { toast } from "sonner";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 
 export const generateCardText = (allergiesList: string[], isChild: boolean): string => {
   let cardText = "";
@@ -24,20 +26,81 @@ export const copyToClipboard = (sourceText: string | null, translatedText: strin
     navigator.clipboard.writeText(fullText).then(() => {
       toast.success("Card copied to clipboard!");
     });
+  } else {
+    toast.error("Nothing to copy. Please generate the card first.");
   }
 };
 
 export const downloadAsPDF = () => {
-  toast.success("PDF download feature would be integrated here");
+  const cardElement = document.getElementById('allergy-card');
+  
+  if (!cardElement) {
+    toast.error("Card not found. Please generate the card first.");
+    return;
+  }
+  
+  toast.promise(
+    html2canvas(cardElement, {
+      scale: 2,
+      backgroundColor: "#ffffff"
+    })
+    .then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+      
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('allergy-translation-card.pdf');
+      return true;
+    }),
+    {
+      loading: 'Creating PDF...',
+      success: 'PDF downloaded successfully!',
+      error: 'Failed to create PDF. Please try again.'
+    }
+  );
 };
 
 export const downloadAsPNG = () => {
-  toast.success("PNG download feature would be integrated here");
+  const cardElement = document.getElementById('allergy-card');
+  
+  if (!cardElement) {
+    toast.error("Card not found. Please generate the card first.");
+    return;
+  }
+  
+  toast.promise(
+    html2canvas(cardElement, {
+      scale: 2,
+      backgroundColor: "#ffffff"
+    })
+    .then((canvas) => {
+      const link = document.createElement('a');
+      link.download = 'allergy-translation-card.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      return true;
+    }),
+    {
+      loading: 'Creating PNG...',
+      success: 'PNG downloaded successfully!',
+      error: 'Failed to create PNG. Please try again.'
+    }
+  );
 };
 
 export const shareToWhatsApp = (sourceText: string | null, translatedText: string | null) => {
   if (sourceText && translatedText) {
     const fullText = encodeURIComponent(`${sourceText}\n\n${translatedText}`);
     window.open(`https://wa.me/?text=${fullText}`, '_blank');
+  } else {
+    toast.error("Nothing to share. Please generate the card first.");
   }
 };

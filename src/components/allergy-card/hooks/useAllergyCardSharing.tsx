@@ -4,6 +4,10 @@ import { copyToClipboard, downloadAsPDF, downloadAsPNG, shareToWhatsApp } from '
 
 export function useAllergyCardSharing() {
   const handleCopyToClipboard = (generatedCard: string | null, translatedCard: string | null) => {
+    if (!generatedCard || !translatedCard) {
+      toast.error("No card content to copy. Please generate the card first.");
+      return;
+    }
     copyToClipboard(generatedCard, translatedCard);
   };
 
@@ -16,6 +20,10 @@ export function useAllergyCardSharing() {
   };
 
   const handleShareToWhatsApp = (generatedCard: string | null, translatedCard: string | null) => {
+    if (!generatedCard || !translatedCard) {
+      toast.error("No card content to share. Please generate the card first.");
+      return;
+    }
     shareToWhatsApp(generatedCard, translatedCard);
   };
 
