@@ -11,6 +11,7 @@ import { ProgressBar } from './components/ProgressBar';
 import { SafetyTips } from './components/SafetyTips';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form } from "@/components/ui/form";
 import { formSchema, FormValues, Step } from './types';
 import { 
   generateCardText, 
@@ -113,14 +114,16 @@ export const AllergyCardGenerator = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Step1SelectAllergies 
-                selectedAllergies={selectedAllergies}
-                customAllergy={customAllergy}
-                setCustomAllergy={setCustomAllergy}
-                handleAddCustomAllergy={handleAddCustomAllergy}
-                handleToggleAllergy={handleToggleAllergy}
-                handleRemoveAllergy={handleRemoveAllergy}
-              />
+              <Form {...form}>
+                <Step1SelectAllergies 
+                  selectedAllergies={selectedAllergies}
+                  customAllergy={customAllergy}
+                  setCustomAllergy={setCustomAllergy}
+                  handleAddCustomAllergy={handleAddCustomAllergy}
+                  handleToggleAllergy={handleToggleAllergy}
+                  handleRemoveAllergy={handleRemoveAllergy}
+                />
+              </Form>
             </CardContent>
           </Card>
         );

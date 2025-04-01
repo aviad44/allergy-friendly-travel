@@ -1,10 +1,18 @@
 
 import React from 'react';
-import { Check } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+import { Trash2 } from 'lucide-react';
 import { Input } from "@/components/ui/input";
-import { FormLabel } from "@/components/ui/form";
-import { allergySuggestions } from "@/utils/searchSuggestions";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { UseFormReturn } from 'react-hook-form';
+import { FormValues } from '../types';
+
+// Common food allergies
+const commonAllergies = [
+  "Peanuts", "Tree Nuts", "Dairy", "Eggs", "Wheat", "Gluten", 
+  "Soy", "Fish", "Shellfish", "Sesame", "Mustard", "Celery"
+];
 
 interface Step1Props {
   selectedAllergies: string[];
@@ -13,6 +21,7 @@ interface Step1Props {
   handleAddCustomAllergy: () => void;
   handleToggleAllergy: (allergy: string) => void;
   handleRemoveAllergy: (allergy: string) => void;
+  form?: UseFormReturn<FormValues>; // Make form optional so we don't require it
 }
 
 export const Step1SelectAllergies: React.FC<Step1Props> = ({
@@ -21,60 +30,84 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
   setCustomAllergy,
   handleAddCustomAllergy,
   handleToggleAllergy,
-  handleRemoveAllergy,
+  handleRemoveAllergy
 }) => {
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
-        {allergySuggestions.map((allergy) => (
-          <Button
-            key={allergy}
-            variant={selectedAllergies.includes(allergy) ? "default" : "outline"}
-            onClick={() => handleToggleAllergy(allergy)}
-            className="flex items-center gap-1"
-          >
-            {selectedAllergies.includes(allergy) && <Check className="h-4 w-4" />}
-            {allergy}
-          </Button>
-        ))}
-      </div>
-      
-      <div className="pt-4">
-        <FormLabel htmlFor="customAllergy">Add a custom allergy or dietary need</FormLabel>
-        <div className="flex gap-2 mt-2">
-          <Input
-            id="customAllergy"
-            placeholder="Type a custom allergy..."
-            value={customAllergy}
-            onChange={(e) => setCustomAllergy(e.target.value)}
-            className="flex-1"
-          />
-          <Button onClick={handleAddCustomAllergy} type="button">Add</Button>
-        </div>
-      </div>
-      
-      {selectedAllergies.length > 0 && (
-        <div className="bg-muted/50 p-4 rounded-md mt-4">
-          <h4 className="text-sm font-medium mb-2">Selected allergies:</h4>
-          <div className="flex flex-wrap gap-2">
-            {selectedAllergies.map((allergy) => (
-              <div 
-                key={allergy}
-                className="bg-primary text-primary-foreground text-sm px-3 py-1 rounded-full flex items-center gap-1"
+      {/* Selected allergies */}
+      <div>
+        <label className="text-sm font-medium block mb-2">
+          Selected Allergies
+        </label>
+        <div className="min-h-16 bg-muted/40 rounded-md p-2 flex flex-wrap gap-2 mb-2">
+          {selectedAllergies.length === 0 ? (
+            <p className="text-sm text-muted-foreground p-2">No allergies selected</p>
+          ) : (
+            selectedAllergies.map(allergy => (
+              <Badge 
+                key={allergy} 
+                variant="secondary"
+                className="pl-3 pr-2 py-1.5 flex items-center gap-1 text-sm"
               >
                 {allergy}
-                <button 
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-4 w-4 p-0 ml-1 text-muted-foreground"
                   onClick={() => handleRemoveAllergy(allergy)}
-                  className="ml-1 hover:bg-primary-foreground/20 rounded-full h-4 w-4 inline-flex items-center justify-center"
-                  aria-label={`Remove ${allergy}`}
                 >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
+                  <Trash2 className="h-3 w-3" />
+                  <span className="sr-only">Remove {allergy}</span>
+                </Button>
+              </Badge>
+            ))
+          )}
         </div>
-      )}
+      </div>
+      
+      {/* Common allergies */}
+      <div>
+        <label className="text-sm font-medium block mb-2">
+          Common Food Allergies
+        </label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {commonAllergies.map(allergy => (
+            <Button
+              key={allergy}
+              type="button"
+              variant={selectedAllergies.includes(allergy) ? "default" : "outline"}
+              className="justify-start h-auto py-2"
+              onClick={() => handleToggleAllergy(allergy)}
+            >
+              {allergy}
+            </Button>
+          ))}
+        </div>
+      </div>
+      
+      {/* Custom allergy */}
+      <div className="mt-4">
+        <label className="text-sm font-medium block mb-2">
+          Add Custom Allergy or Dietary Restriction
+        </label>
+        <div className="flex gap-2">
+          <Input
+            type="text"
+            value={customAllergy}
+            onChange={(e) => setCustomAllergy(e.target.value)}
+            placeholder="Type a custom allergy..."
+            className="flex-1"
+          />
+          <Button 
+            type="button"
+            onClick={handleAddCustomAllergy}
+            disabled={!customAllergy.trim()}
+          >
+            Add
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

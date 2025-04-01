@@ -27,8 +27,8 @@ interface Step2Props {
 
 export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
   return (
-    <Form {...form}>
-      <div className="space-y-4">
+    <div className="space-y-4">
+      <Form {...form}>
         <FormField
           control={form.control}
           name="sourceLanguage"
@@ -142,7 +142,7 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
             </FormItem>
           )}
         />
-      </div>
-    </Form>
+      </Form>
+    </div>
   );
 };
