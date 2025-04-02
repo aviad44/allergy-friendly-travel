@@ -1,5 +1,8 @@
 
 import { getAllergyIcon } from './allergyIcons';
+import { toast } from "sonner";
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 /**
  * Generates the text content for an allergy card
@@ -70,3 +73,108 @@ export const generateCardHtml = (
     </div>
   `;
 };
+
+/**
+ * Copies the allergy card text to clipboard
+ */
+export const copyToClipboard = (generatedCard: string, translatedCard: string | null) => {
+  const textToCopy = translatedCard 
+    ? `${generatedCard}\n\n---\n\n${translatedCard}`
+    : generatedCard;
+  
+  try {
+    navigator.clipboard.writeText(textToCopy);
+    toast.success("Card text copied to clipboard!");
+  } catch (err) {
+    console.error("Failed to copy text: ", err);
+    toast.error("Failed to copy text. Please try again.");
+  }
+};
+
+/**
+ * Downloads the allergy card as a PDF file
+ */
+export const downloadAsPDF = async () => {
+  const cardElement = document.getElementById('allergy-card');
+  if (!cardElement) {
+    toast.error("Card element not found");
+    return;
+  }
+
+  try {
+    toast.loading("Generating PDF...");
+    const canvas = await html2canvas(cardElement, {
+      scale: 2, // Higher scale for better quality
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#ffffff"
+    });
+    
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+    });
+    
+    const imgWidth = 210; // A4 width in mm
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+    
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    pdf.save('allergy-card.pdf');
+    
+    toast.success("PDF downloaded successfully!");
+  } catch (err) {
+    console.error("Error generating PDF: ", err);
+    toast.error("Failed to generate PDF. Please try again.");
+  }
+};
+
+/**
+ * Downloads the allergy card as a PNG image
+ */
+export const downloadAsPNG = async () => {
+  const cardElement = document.getElementById('allergy-card');
+  if (!cardElement) {
+    toast.error("Card element not found");
+    return;
+  }
+
+  try {
+    toast.loading("Generating PNG image...");
+    const canvas = await html2canvas(cardElement, {
+      scale: 2, // Higher scale for better quality
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#ffffff"
+    });
+    
+    const link = document.createElement('a');
+    link.download = 'allergy-card.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    
+    toast.success("PNG image downloaded successfully!");
+  } catch (err) {
+    console.error("Error generating PNG: ", err);
+    toast.error("Failed to generate PNG. Please try again.");
+  }
+};
+
+/**
+ * Shares the allergy card text to WhatsApp
+ */
+export const shareToWhatsApp = (generatedCard: string, translatedCard: string | null) => {
+  const textToShare = translatedCard 
+    ? `${generatedCard}\n\n---\n\n${translatedCard}`
+    : generatedCard;
+  
+  try {
+    const encodedText = encodeURIComponent(textToShare);
+    const whatsappUrl = `https://wa.me/?text=${encodedText}`;
+    window.open(whatsappUrl, '_blank');
+  } catch (err) {
+    console.error("Failed to share to WhatsApp: ", err);
+    toast.error("Failed to share to WhatsApp. Please try again.");
+  }
+};
+
