@@ -30,7 +30,7 @@ export default function HotelChains() {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" />
+        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
         
@@ -38,7 +38,7 @@ export default function HotelChains() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" />
+        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">

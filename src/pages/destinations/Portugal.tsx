@@ -24,7 +24,7 @@ const Portugal = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content={`https://images.unsplash.com/${DESTINATION_IMAGES.portugal}?auto=format&fit=crop&w=1200&h=630&q=80`} />
+        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         
@@ -32,7 +32,7 @@ const Portugal = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content={`https://images.unsplash.com/${DESTINATION_IMAGES.portugal}?auto=format&fit=crop&w=1200&h=630&q=80`} />
+        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
@@ -41,7 +41,7 @@ const Portugal = () => {
             "@type": "TravelArticle",
             "headline": "Allergy-Friendly Hotels in Portugal (2025 Guide)",
             "description": pageDescription,
-            "image": `https://images.unsplash.com/${DESTINATION_IMAGES.portugal}?auto=format&fit=crop&w=1200&h=630&q=80`,
+            "image": "https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png",
             "author": {
               "@type": "Organization",
               "name": "Allergy-Free Travel"
@@ -51,7 +51,7 @@ const Portugal = () => {
               "name": "Allergy-Free Travel",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png"
+                "url": "https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png"
               }
             },
             "datePublished": currentDate,

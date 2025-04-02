@@ -27,6 +27,10 @@ const Index = () => {
         <link rel="canonical" href="https://www.allergy-free-travel.com/" />
         <meta name="robots" content="index, follow" />
         
+        {/* Open Graph Meta Tags */}
+        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
+        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
+        
         {/* Schema.org JSON-LD structured data */}
         <script type="application/ld+json">
           {JSON.stringify({
@@ -35,7 +39,7 @@ const Index = () => {
             "name": "Allergy Free Travel",
             "description": "Helping travelers with food allergies and dietary restrictions find safe accommodations worldwide.",
             "url": "https://www.allergy-free-travel.com",
-            "logo": "https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png",
+            "logo": "https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png",
             "telephone": "+1-123-456-7890",
             "email": "info@allergy-free-travel.com",
             "areaServed": "Worldwide",
