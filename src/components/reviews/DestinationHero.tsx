@@ -39,7 +39,8 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
         fallbackImage="/placeholder.svg"
       />
       
-      <HeroGradient />
+      {/* Using a lighter gradient to allow more natural sky color */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/30 to-black/50"></div>
       
       <DestinationInfo 
         name={destination.name}

@@ -45,21 +45,22 @@ const Index = () => {
         </script>
       </Helmet>
       
-      {/* Hero Section - Adjusted padding top since nav is no longer fixed */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/75 to-black/90 w-full">
-        {/* Background Image with optimized loading */}
+      {/* Hero Section - Adjusted overlay gradient for more natural sky appearance */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden w-full">
+        {/* Background Image with optimized loading - improved brightness */}
         <picture>
-          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90" type="image/webp" />
+          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000&h=1200" type="image/webp" />
           <img 
-            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90" 
+            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000&h=1200" 
             alt="Allergy-friendly travel destination" 
-            className="absolute inset-0 w-full h-full object-cover object-center" 
+            className="absolute inset-0 w-full h-full object-cover object-center brightness-110" 
             loading="eager" 
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
+          {/* Lighter gradient overlay to allow more natural sky color */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/50"></div>
         </picture>
         
-        {/* Content Overlay - Improved mobile spacing with padding adjustments */}
+        {/* Content Overlay */}
         <div className="relative z-10 container mx-auto px-4 text-center w-full pt-8 sm:pt-12">
           <div className="max-w-4xl mx-auto">
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 sm:mb-6 md:mb-8 leading-tight drop-shadow-lg">

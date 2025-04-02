@@ -23,7 +23,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
         <img 
           src={imageUrl}
           alt={altText}
-          className={`w-full h-full object-cover transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full object-cover transition-opacity duration-500 brightness-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImageLoaded(true)}
           onError={(e) => {
             console.error(`Failed to load image: ${imageUrl}`);
