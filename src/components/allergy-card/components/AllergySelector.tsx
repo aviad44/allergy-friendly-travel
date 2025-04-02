@@ -75,28 +75,26 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
               <CommandList>
                 <CommandEmpty>No allergies found.</CommandEmpty>
                 <CommandGroup>
-                  {filteredAllergies.map((allergy) => {
-                    const isSelected = selectedAllergies.includes(allergy.name);
-                    return (
-                      <CommandItem
-                        key={allergy.name}
-                        value={allergy.name}
-                        onSelect={() => {
-                          handleToggleAllergy(allergy.name);
-                        }}
-                        className="flex items-center"
-                      >
-                        <span className="mr-2">{allergy.emoji}</span>
-                        <span>{allergy.name}</span>
-                        <Check
-                          className={cn(
-                            "ml-auto h-4 w-4",
-                            isSelected ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                      </CommandItem>
-                    );
-                  })}
+                  {filteredAllergies.map((allergy) => (
+                    <CommandItem
+                      key={allergy.name}
+                      value={allergy.name}
+                      onSelect={() => {
+                        handleToggleAllergy(allergy.name);
+                        // Don't close the popover automatically after selection
+                      }}
+                      className="flex items-center cursor-pointer"
+                    >
+                      <span className="mr-2">{allergy.emoji}</span>
+                      <span>{allergy.name}</span>
+                      <Check
+                        className={cn(
+                          "ml-auto h-4 w-4",
+                          selectedAllergies.includes(allergy.name) ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                    </CommandItem>
+                  ))}
                 </CommandGroup>
               </CommandList>
             </Command>

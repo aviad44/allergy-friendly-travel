@@ -75,6 +75,12 @@ export const AllergyCardGenerator = () => {
     }
   }, [step]);
 
+  // Log the state for debugging
+  useEffect(() => {
+    console.log("Current allergies:", selectedAllergies);
+    console.log("Current step:", step);
+  }, [selectedAllergies, step]);
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Add the Toaster component for notifications */}

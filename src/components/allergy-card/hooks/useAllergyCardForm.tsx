@@ -26,6 +26,10 @@ export function useAllergyCardForm() {
   // Update the form whenever selected allergies change
   useEffect(() => {
     form.setValue("allergies", selectedAllergies);
+    // Trigger validation if needed
+    if (selectedAllergies.length > 0) {
+      form.clearErrors("allergies");
+    }
   }, [selectedAllergies, form]);
 
   const handleAddCustomAllergy = () => {
@@ -35,6 +39,10 @@ export function useAllergyCardForm() {
       form.setValue("allergies", updatedAllergies);
       setCustomAllergy("");
       toast.success(`Added: ${customAllergy.trim()}`);
+    } else if (customAllergy.trim() === "") {
+      toast.error("Please enter an allergy name");
+    } else {
+      toast.error("This allergy is already in your list");
     }
   };
 
@@ -46,6 +54,8 @@ export function useAllergyCardForm() {
   };
 
   const handleToggleAllergy = (allergy: string) => {
+    console.log("Toggling allergy:", allergy);
+    
     if (selectedAllergies.includes(allergy)) {
       handleRemoveAllergy(allergy);
     } else {

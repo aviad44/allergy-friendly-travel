@@ -22,7 +22,11 @@ export const SelectedAllergiesList: React.FC<SelectedAllergiesListProps> = ({
   };
 
   if (selectedAllergies.length === 0) {
-    return null;
+    return (
+      <div className="py-2 text-gray-500 italic">
+        No allergies selected. Please select at least one allergy to continue.
+      </div>
+    );
   }
 
   return (
@@ -33,18 +37,18 @@ export const SelectedAllergiesList: React.FC<SelectedAllergiesListProps> = ({
           <Badge
             key={allergy}
             variant="secondary"
-            className="px-3 py-1 flex items-center gap-1 bg-blue-100 text-blue-800 hover:bg-blue-200"
+            className="px-3 py-1.5 flex items-center gap-1.5 bg-blue-100 text-blue-800 hover:bg-blue-200"
           >
-            <span>{getEmoji(allergy)}</span>
+            <span className="text-lg">{getEmoji(allergy)}</span>
             <span>{allergy}</span>
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="h-5 w-5 p-0 rounded-full hover:bg-blue-200"
+              className="h-5 w-5 p-0 ml-1 rounded-full hover:bg-blue-200 hover:text-red-600"
               onClick={() => handleRemoveAllergy(allergy)}
             >
-              <X className="h-3 w-3" />
+              <X className="h-3.5 w-3.5" />
               <span className="sr-only">Remove {allergy}</span>
             </Button>
           </Badge>
