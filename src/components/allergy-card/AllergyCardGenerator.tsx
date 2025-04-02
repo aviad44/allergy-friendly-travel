@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -40,10 +40,20 @@ export const AllergyCardGenerator = () => {
     handleShareToWhatsApp
   } = useAllergyCardSharing();
 
+  // Apply animation class to the card when it appears
+  useEffect(() => {
+    if (step === Step.Download) {
+      const cardElement = document.getElementById('allergy-card');
+      if (cardElement) {
+        cardElement.classList.add('card-animate-in');
+      }
+    }
+  }, [step]);
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Add the Toaster component for notifications */}
-      <Toaster position="top-center" />
+      <Toaster position="top-center" richColors />
       
       <div className="flex justify-between items-center mb-8">
         <ProgressBar currentStep={step} />

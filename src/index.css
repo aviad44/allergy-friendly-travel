@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Comic+Neue:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -133,4 +133,41 @@
 /* Padding for bottom safe area */
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+/* Child-friendly styles for allergy card */
+#allergy-card.child-mode {
+  font-family: 'Poppins', 'Comic Neue', sans-serif;
+}
+
+/* Print styles for allergy card */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #allergy-card, #allergy-card * {
+    visibility: visible;
+  }
+  #allergy-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
+/* Animation for card entry */
+.card-animate-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

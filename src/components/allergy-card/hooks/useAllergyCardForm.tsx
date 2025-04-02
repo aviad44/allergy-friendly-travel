@@ -16,8 +16,9 @@ export function useAllergyCardForm() {
       customAllergy: "",
       sourceLanguage: "en",
       targetLanguage: "",
-      audienceType: "adult",
-      includeQrCode: false,
+      audienceType: "child", // Set default to child
+      includeQrCode: true, // Enable QR code by default
+      userName: "", // Add field for child's name
     },
   });
 
