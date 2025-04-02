@@ -1,225 +1,171 @@
 
 import React from 'react';
-import { UseFormReturn } from "react-hook-form";
-import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { HelpCircle } from "lucide-react";
+import { UseFormReturn } from 'react-hook-form';
 import { FormValues } from '../types';
+import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card } from "@/components/ui/card";
+
+const sourceLanguages = [
+  { value: 'en', label: 'English' },
+];
+
+const targetLanguages = [
+  { value: 'ar', label: 'Arabic' },
+  { value: 'zh', label: 'Chinese (Simplified)' },
+  { value: 'cs', label: 'Czech' },
+  { value: 'da', label: 'Danish' },
+  { value: 'nl', label: 'Dutch' },
+  { value: 'fi', label: 'Finnish' },
+  { value: 'fr', label: 'French' },
+  { value: 'de', label: 'German' },
+  { value: 'el', label: 'Greek' },
+  { value: 'he', label: 'Hebrew' },
+  { value: 'hi', label: 'Hindi' },
+  { value: 'hu', label: 'Hungarian' },
+  { value: 'it', label: 'Italian' },
+  { value: 'ja', label: 'Japanese' },
+  { value: 'ko', label: 'Korean' },
+  { value: 'no', label: 'Norwegian' },
+  { value: 'pl', label: 'Polish' },
+  { value: 'pt', label: 'Portuguese' },
+  { value: 'ru', label: 'Russian' },
+  { value: 'es', label: 'Spanish' },
+  { value: 'sv', label: 'Swedish' },
+  { value: 'th', label: 'Thai' },
+  { value: 'tr', label: 'Turkish' },
+  { value: 'vi', label: 'Vietnamese' },
+];
 
 interface Step2Props {
   form: UseFormReturn<FormValues>;
 }
 
 export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
-  const languages = [
-    { code: "fr", name: "French", flag: "🇫🇷" },
-    { code: "es", name: "Spanish", flag: "🇪🇸" },
-    { code: "de", name: "German", flag: "🇩🇪" },
-    { code: "it", name: "Italian", flag: "🇮🇹" },
-    { code: "pt", name: "Portuguese", flag: "🇵🇹" },
-    { code: "ru", name: "Russian", flag: "🇷🇺" },
-    { code: "zh", name: "Chinese (Simplified)", flag: "🇨🇳" },
-    { code: "ja", name: "Japanese", flag: "🇯🇵" },
-    { code: "ko", name: "Korean", flag: "🇰🇷" },
-    { code: "ar", name: "Arabic", flag: "🇸🇦" },
-    { code: "hi", name: "Hindi", flag: "🇮🇳" },
-    { code: "he", name: "Hebrew", flag: "🇮🇱" },
-    { code: "el", name: "Greek", flag: "🇬🇷" },
-    { code: "th", name: "Thai", flag: "🇹🇭" },
-    { code: "vi", name: "Vietnamese", flag: "🇻🇳" },
-    { code: "tr", name: "Turkish", flag: "🇹🇷" },
-    { code: "pl", name: "Polish", flag: "🇵🇱" },
-    { code: "sv", name: "Swedish", flag: "🇸🇪" },
-    { code: "nl", name: "Dutch", flag: "🇳🇱" },
-    { code: "da", name: "Danish", flag: "🇩🇰" },
-  ];
-
-  const sourceLanguages = [
-    { code: "en", name: "English", flag: "🇬🇧" },
-  ];
+  // Set default source language if it's not already set
+  React.useEffect(() => {
+    const sourceLanguage = form.getValues().sourceLanguage;
+    if (!sourceLanguage) {
+      console.log("Setting default source language to English");
+      form.setValue('sourceLanguage', 'en');
+    }
+  }, [form]);
 
   return (
-    <TooltipProvider>
-      <div className="space-y-6">
-        <FormField
-          control={form.control}
-          name="sourceLanguage"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center space-x-2">
-                <FormLabel>Source Language</FormLabel>
-                <Tooltip>
-                  <TooltipTrigger><HelpCircle className="h-4 w-4 text-gray-500" /></TooltipTrigger>
-                  <TooltipContent>
-                    <p>The language in which you are describing your allergies. Currently only English is supported.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || "en"}>
+    <div className="space-y-6">
+      <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+        <h3 className="text-lg font-medium mb-3 text-teal-800">Language Selection</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          Choose the source language of your allergy card and the language you want it translated to.
+        </p>
+        
+        <div className="space-y-5">
+          <FormField
+            control={form.control}
+            name="sourceLanguage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Source Language</FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select source language" />
-                  </SelectTrigger>
+                  <Select
+                    value={field.value}
+                    onValueChange={(value) => {
+                      console.log("Source language changed to:", value);
+                      field.onChange(value);
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select source language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {sourceLanguages.map((language) => (
+                          <SelectItem key={language.value} value={language.value}>
+                            {language.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
-                <SelectContent>
-                  {sourceLanguages.map(lang => (
-                    <SelectItem key={lang.code} value={lang.code}>
-                      <span className="flex items-center">
-                        <span className="mr-2">{lang.flag}</span>
-                        <span>{lang.name}</span>
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                Currently only supporting English as the source language.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="targetLanguage"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center space-x-2">
-                <FormLabel>Target Language</FormLabel>
-                <Tooltip>
-                  <TooltipTrigger><HelpCircle className="h-4 w-4 text-gray-500" /></TooltipTrigger>
-                  <TooltipContent>
-                    <p>The language into which your allergy card will be translated. Choose the language of the country you are visiting.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <Select 
-                onValueChange={(value) => {
-                  console.log("Target language selected:", value);
-                  field.onChange(value);
-                }} 
-                value={field.value || ""}
-              >
+                <FormDescription>
+                  Currently, cards can only be created in English.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="targetLanguage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Target Language</FormLabel>
                 <FormControl>
-                  <SelectTrigger className="bg-white">
-                    <SelectValue placeholder="Select target language" />
-                  </SelectTrigger>
+                  <Select
+                    value={field.value || ""}
+                    onValueChange={(value) => {
+                      console.log("Target language changed to:", value);
+                      field.onChange(value);
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select target language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {targetLanguages.map((language) => (
+                          <SelectItem key={language.value} value={language.value}>
+                            {language.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
-                <SelectContent className="max-h-[300px]">
-                  {languages.map(lang => (
-                    <SelectItem key={lang.code} value={lang.code}>
-                      <span className="flex items-center">
-                        <span className="mr-2">{lang.flag}</span>
-                        <span>{lang.name}</span>
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                Choose the language you need for your travels.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="userName"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center space-x-2">
-                <FormLabel>Name (Optional)</FormLabel>
-                <Tooltip>
-                  <TooltipTrigger><HelpCircle className="h-4 w-4 text-gray-500" /></TooltipTrigger>
-                  <TooltipContent>
-                    <p>Your name or your child's name will be added to the card to personalize the allergy translation.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <FormControl>
-                <Input 
-                  placeholder="Enter your name or your child's name" 
-                  {...field} 
-                />
-              </FormControl>
-              <FormDescription>
-                Will be displayed on your allergy card.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="audienceType"
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <div className="flex items-center space-x-2">
-                <FormLabel>Card Type</FormLabel>
-                <Tooltip>
-                  <TooltipTrigger><HelpCircle className="h-4 w-4 text-gray-500" /></TooltipTrigger>
-                  <TooltipContent>
-                    <p>Choose between a child-friendly card with simpler language or an adult card with more formal terminology.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex flex-col space-y-1"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="child" id="child" />
-                    <Label htmlFor="child">Child Card (Simplified language)</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="adult" id="adult" />
-                    <Label htmlFor="adult">Adult Card (Formal language)</Label>
-                  </div>
-                </RadioGroup>
-              </FormControl>
-              <FormDescription>
-                Select the appropriate card type.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="includeQrCode"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base">Include QR Code</FormLabel>
-                <Tooltip>
-                  <TooltipTrigger><HelpCircle className="h-4 w-4 text-gray-500" /></TooltipTrigger>
-                  <TooltipContent>
-                    <p>Add a QR code to your card that can be scanned to view your allergy information online.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+                <FormDescription>
+                  This is the language your card will be translated to.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="includeQrCode"
+            render={({ field }) => (
+              <FormItem className="flex items-start space-x-3 space-y-0 mt-4 pt-4 border-t">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="text-base">Include QR Code</FormLabel>
+                  <FormDescription>
+                    Add a QR code to your card that links to an online version.
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
       </div>
-    </TooltipProvider>
+      
+      <Card className="p-4 bg-blue-50 border-blue-200">
+        <div className="flex items-start">
+          <div className="text-blue-700">
+            <h3 className="font-semibold mb-2">Translation Tips</h3>
+            <ul className="list-disc pl-5 space-y-1 text-sm">
+              <li>Select the language of the country you're visiting</li>
+              <li>Consider having multiple cards in different languages if traveling to multiple countries</li>
+              <li>Restaurant staff may prefer seeing both the original and translated versions</li>
+            </ul>
+          </div>
+        </div>
+      </Card>
+    </div>
   );
 };

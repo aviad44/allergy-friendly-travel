@@ -75,6 +75,14 @@ export const translateText = async (
     }
 
     try {
+      // Add detailed logging before making the request
+      console.log("Sending translation request to OpenAI proxy:", {
+        targetLanguage,
+        languageName,
+        textLength: text.length,
+        textPreview: text.substring(0, 50) + "..."
+      });
+      
       const response = await fetch("/api/functions/v1/openai-proxy", {
         method: "POST",
         headers: {

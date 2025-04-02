@@ -4,6 +4,7 @@ import { Plus } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface CustomAllergyInputProps {
   customAllergy: string;
@@ -19,8 +20,20 @@ export const CustomAllergyInput: React.FC<CustomAllergyInputProps> = ({
   const handleCustomAllergyKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      if (!customAllergy.trim()) {
+        toast.error("Please enter an allergy name before adding");
+        return;
+      }
       handleAddCustomAllergy();
     }
+  };
+
+  const handleAddClick = () => {
+    if (!customAllergy.trim()) {
+      toast.error("Please enter an allergy name before adding");
+      return;
+    }
+    handleAddCustomAllergy();
   };
 
   return (
@@ -37,7 +50,7 @@ export const CustomAllergyInput: React.FC<CustomAllergyInputProps> = ({
         />
         <Button 
           type="button" 
-          onClick={handleAddCustomAllergy}
+          onClick={handleAddClick}
           disabled={!customAllergy.trim()}
           className="bg-teal-600 hover:bg-teal-700"
         >
