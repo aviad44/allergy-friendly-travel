@@ -32,12 +32,12 @@ export const SelectedAllergiesList: React.FC<SelectedAllergiesListProps> = ({
   return (
     <div className="mt-4">
       <Label className="mb-2 block">Your Selected Allergies</Label>
-      <div className="flex flex-wrap gap-2 p-3 border border-gray-200 rounded-md bg-gray-50 min-h-[60px]">
+      <div className="flex flex-wrap gap-2 p-3 border border-gray-200 rounded-md bg-white min-h-[60px]">
         {selectedAllergies.map((allergy) => (
           <Badge
             key={allergy}
             variant="secondary"
-            className="px-3 py-1.5 flex items-center gap-1.5 bg-blue-100 text-blue-800 hover:bg-blue-200"
+            className="px-3 py-1.5 flex items-center gap-1.5 bg-teal-100 text-teal-800 hover:bg-teal-200"
           >
             <span className="text-lg">{getEmoji(allergy)}</span>
             <span>{allergy}</span>
@@ -45,7 +45,7 @@ export const SelectedAllergiesList: React.FC<SelectedAllergiesListProps> = ({
               type="button"
               variant="ghost"
               size="sm"
-              className="h-5 w-5 p-0 ml-1 rounded-full hover:bg-blue-200 hover:text-red-600"
+              className="h-5 w-5 p-0 ml-1 rounded-full hover:bg-teal-200 hover:text-red-600"
               onClick={() => handleRemoveAllergy(allergy)}
             >
               <X className="h-3.5 w-3.5" />

@@ -25,16 +25,16 @@ serve(async (req) => {
     // Parse request body
     const { userInput, systemPrompt, model = "gpt-4o", temperature = 0.7, max_tokens = 2000 } = await req.json();
     
-    console.log('✅ Processing chat request with input:', { 
-      inputPreview: userInput.substring(0, 50) + (userInput.length > 50 ? '...' : ''),
-      systemPromptPreview: systemPrompt?.substring(0, 50) + (systemPrompt?.length > 50 ? '...' : ''),
+    console.log('✅ Processing request with input:', { 
+      inputPreview: userInput.substring(0, 100) + (userInput.length > 100 ? '...' : ''),
+      systemPromptPreview: systemPrompt?.substring(0, 100) + (systemPrompt?.length > 100 ? '...' : ''),
       model,
       temperature,
       max_tokens
     });
 
     // Default system prompt if none provided
-    const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured, always including:\n\n1️⃣ **Hotel Name**\n2️⃣ **City & Country**\n3️⃣ **Star Rating (⭐ Rating based on guest reviews)**\n4️⃣ **Exact Address**\n5️⃣ **Why This Hotel is Suitable for Allergy Sufferers (list specific allergy-friendly features like nut-free kitchens, dedicated allergy-trained staff, buffet labeling, hypoallergenic bedding, etc.)**\n6️⃣ **Direct Booking Links to:**\n   - The Hotel's Official Website (🔗 Hotel Website)\n   - Booking.com (🔗 Book on Booking.com)\n7️⃣ **Authentic Guest Reviews with Star Ratings (🗣 Guest Review: \"Example review\" — ⭐⭐⭐⭐⭐)**\n8️⃣ **Nearby Allergy-Friendly Restaurants (list at least 2-3 restaurants that accommodate dietary restrictions)**\n9️⃣ **General Allergy Safety Tips for Travelers in this Destination**\n\nThe goal is to ensure that users receive detailed hotel recommendations for safe travel with allergies.";
+    const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured.";
 
     console.log('🔄 Sending request to OpenAI API...');
     const startTime = Date.now();
@@ -89,46 +89,14 @@ serve(async (req) => {
       .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
       .replace(/Format your response as[\s\S]*?(?=\n\n|$)/g, '')
       .replace(/EXTREMELY IMPORTANT SAFETY REQUIREMENTS:[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/For hotels, ONLY include[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/ALL guest reviews MUST be authentic[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/If you're not 100% certain[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/Include WARNING notices[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/Include EXACT street addresses[\s\S]*?(?=\n\n|$)/g, '');
+      .trim();
     
     console.log('✅ Response first 100 chars:', content.substring(0, 100));
     console.log('✅ Response last 100 chars:', content.substring(content.length - 100));
-    
-    // Enhanced section checking
-    const checkSections = {
-      'Hotel Name': content.includes("Hotel Name") || content.match(/^\d+\./) !== null || content.match(/\*\*[\w\s]+Hotel[\w\s]+\*\*/) !== null,
-      'Star Rating': content.includes("Star Rating") || content.includes("⭐"),
-      'Address': content.includes("Address") || content.includes("located at"),
-      'Allergy Features': content.includes("Allergy") || content.includes("allergen") || content.includes("gluten") || content.includes("nut-free"),
-      'Booking Links': content.includes("Booking") || content.includes("🔗") || content.includes("Official Website"),
-      'Guest Reviews': content.includes("Guest Review") || content.includes("🗣") || content.includes("review"),
-      'Restaurants': content.includes("Restaurant") || content.includes("dining"),
-      'Safety Tips': content.includes("Safety Tips") || content.includes("Safety") || content.includes("Tips for")
-    };
-    
-    console.log('✅ Section check results:', checkSections);
-    
-    // Check if response was likely truncated based on a more comprehensive set of criteria
-    const isLikelyTruncated = 
-      !checkSections['Safety Tips'] || 
-      !checkSections['Guest Reviews'] || 
-      !checkSections['Restaurants'] ||
-      (data.usage?.completion_tokens > 1900); // If we're close to the token limit
-    
-    console.log('✅ Response likely truncated:', isLikelyTruncated);
     console.log('⏱️ Function invocation completed at:', new Date().toISOString());
 
     return new Response(
-      JSON.stringify({ 
-        result: content,
-        tokenUsage: data.usage,
-        isComplete: !isLikelyTruncated,
-        sectionCheck: checkSections
-      }),
+      JSON.stringify({ result: content }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 

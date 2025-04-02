@@ -49,7 +49,7 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
         toast.error("Translation failed: " + (result.error || "Unknown error"), { id: "translation" });
       }
     } catch (error) {
-      console.error("Translation error:", error);
+      console.error("Translation error in hook:", error);
       toast.error("Translation failed. Please try again.", { id: "translation" });
     } finally {
       setIsTranslating(false);
@@ -85,9 +85,10 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
       
       // When moving from language step to preview, generate card
       if (step === Step.ChooseLanguages) {
-        toast.loading("Generating your allergy card...");
+        toast.loading("Generating your allergy card...", { id: "generating" });
         console.log("Moving to preview step, generating card");
         await generateCardContent();
+        toast.success("Card generated successfully!", { id: "generating" });
       }
     }
   };

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { UseFormReturn } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
@@ -59,7 +60,7 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
                   </TooltipContent>
                 </Tooltip>
               </div>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || "en"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select source language" />
@@ -98,9 +99,15 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
                   </TooltipContent>
                 </Tooltip>
               </div>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select 
+                onValueChange={(value) => {
+                  console.log("Target language selected:", value);
+                  field.onChange(value);
+                }} 
+                value={field.value || ""}
+              >
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-white">
                     <SelectValue placeholder="Select target language" />
                   </SelectTrigger>
                 </FormControl>

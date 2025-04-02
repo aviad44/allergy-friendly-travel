@@ -94,25 +94,47 @@ export const translateText = async (
       });
 
       if (!response.ok) {
-        console.error("Translation API error:", response.status, response.statusText);
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Translation failed: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error("Translation API error response:", errorText);
+        try {
+          const errorData = JSON.parse(errorText);
+          throw new Error(errorData.error || `Translation failed: ${response.statusText}`);
+        } catch (parseError) {
+          throw new Error(`Translation failed: ${response.statusText} (${errorText.substring(0, 100)}...)`);
+        }
       }
 
       const data = await response.json();
       console.log("Translation success, result:", data.result);
+      if (!data.result) {
+        throw new Error("Translation API returned empty result");
+      }
       return { translatedText: data.result };
     } catch (error) {
-      // Fallback to local mock translation in case of API failure (for demo purposes)
-      console.warn("Translation API failed, using mock translation for demo");
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
-      return { 
-        translatedText: `[${languageName.toUpperCase()} TRANSLATION]\n\n${text}\n\n(This is a demo translation because the API is unavailable)` 
-      };
+      console.error("Translation API error details:", error);
+      
+      // Show user-facing error message
+      toast.error(`Translation error: ${error.message || "Unknown error"}. Please try again later.`, {
+        duration: 5000,
+        id: "translation-error"
+      });
+      
+      // For development, provide a mock translation after API failure
+      if (process.env.NODE_ENV === 'development') {
+        console.warn("Translation API failed, using mock translation for development");
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
+        return { 
+          translatedText: `[${languageName.toUpperCase()} MOCK TRANSLATION]\n\n${text}\n\n(This is a mock translation because the API failed)` 
+        };
+      }
+      
+      return { translatedText: null, error: error.message || "Translation API error" };
     }
   } catch (error) {
     console.error("Translation error:", error);
-    toast.error("Translation failed. Please try again.");
+    toast.error("Translation failed. Please try again.", {
+      duration: 5000
+    });
     return { translatedText: null, error: error instanceof Error ? error.message : "Unknown error" };
   }
 };

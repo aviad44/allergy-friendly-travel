@@ -36,7 +36,7 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
       <UserNameInput form={form} />
 
       <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-medium mb-3 text-blue-800">Select Your Allergies</h3>
+        <h3 className="text-lg font-medium mb-3 text-teal-800">Select Your Allergies</h3>
         <p className="text-sm text-gray-600 mb-4">
           Choose all allergies or dietary restrictions that apply to you by clicking on them.
         </p>
