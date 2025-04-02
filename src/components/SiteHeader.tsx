@@ -23,7 +23,7 @@ export const SiteHeader = () => {
             className="flex items-center space-x-3 text-2xl font-display font-bold text-[#edab69] hover:text-amber-400 transition-colors"
           >
             <img 
-              src="/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" 
+              src="/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" 
               alt="Allergy Free Travel Logo" 
               className="h-10" 
             />
