@@ -23,6 +23,14 @@ export const FiltersDialog: React.FC<FiltersDialogProps> = ({
   const [destinationInput, setDestinationInput] = React.useState(destination);
   const [allergiesInput, setAllergiesInput] = React.useState(allergies);
 
+  // Reset inputs when dialog opens
+  React.useEffect(() => {
+    if (isOpen) {
+      setDestinationInput(destination);
+      setAllergiesInput(allergies);
+    }
+  }, [isOpen, destination, allergies]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -76,7 +84,6 @@ export const FiltersDialog: React.FC<FiltersDialogProps> = ({
             </Button>
             <Button 
               type="submit"
-              disabled={!destinationInput.trim() || !allergiesInput.trim()}
             >
               Search
             </Button>

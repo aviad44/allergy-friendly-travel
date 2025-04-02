@@ -40,7 +40,7 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
   setAllergySearchTerm,
   handleToggleAllergy,
 }) => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   
   // Filter allergies based on search term
   const filteredAllergies = ALL_ALLERGIES.filter(allergy => 
@@ -50,12 +50,12 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
   return (
     <TooltipProvider>
       <div className="flex items-center space-x-2">
-        <Popover open={dropdownOpen} onOpenChange={setDropdownOpen}>
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               role="combobox"
-              aria-expanded={dropdownOpen}
+              aria-expanded={open}
               className="w-full justify-between"
             >
               {selectedAllergies.length > 0
