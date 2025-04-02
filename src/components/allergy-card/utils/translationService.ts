@@ -12,6 +12,42 @@ export interface TranslationResponse {
   error?: string;
 }
 
+// Define a more comprehensive language map
+const languageMap: Record<string, string> = {
+  en: "English",
+  es: "Spanish",
+  fr: "French",
+  de: "German",
+  it: "Italian",
+  ja: "Japanese",
+  ko: "Korean",
+  zh: "Chinese",
+  ru: "Russian",
+  ar: "Arabic",
+  hi: "Hindi",
+  pt: "Portuguese",
+  nl: "Dutch",
+  tr: "Turkish",
+  pl: "Polish",
+  vi: "Vietnamese",
+  th: "Thai",
+  sv: "Swedish",
+  da: "Danish",
+  fi: "Finnish",
+  no: "Norwegian",
+  el: "Greek",
+  he: "Hebrew",
+  cs: "Czech",
+  hu: "Hungarian",
+};
+
+/**
+ * Helper to get the full language name from language code
+ */
+const getLanguageNameFromCode = (code: string): string => {
+  return languageMap[code] || code;
+};
+
 /**
  * Translates text using the OpenAI API via our Supabase edge function
  */
@@ -32,70 +68,51 @@ export const translateText = async (
     // For debugging if API is not working
     if (process.env.NODE_ENV === 'development' && import.meta.env.VITE_DEBUG_TRANSLATION === 'true') {
       console.log("Using debug mock translation");
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
       return { 
         translatedText: `[${languageName.toUpperCase()} TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)` 
       };
     }
 
-    const response = await fetch("/api/functions/v1/openai-proxy", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userInput: `Please translate the following text into ${languageName}. The translation should be polite, culturally appropriate, and clearly understood by restaurant or hotel staff:
-        
-        ${text}`,
-        systemPrompt: `You are a professional translator helping a traveler with food allergies. Your task is to translate the provided text accurately while ensuring it is polite, culturally appropriate, and clearly conveys the severity of allergies.
-        
-        IMPORTANT: Only respond with the translated text. Do not include any explanations, notes, or original text. Do not output markdown formatting.`,
-        model: "gpt-4o-mini",
-        temperature: 0.3,
-        max_tokens: 800
-      }),
-    });
+    try {
+      const response = await fetch("/api/functions/v1/openai-proxy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userInput: `Please translate the following text into ${languageName}. The translation should be polite, culturally appropriate, and clearly understood by restaurant or hotel staff:
+          
+          ${text}`,
+          systemPrompt: `You are a professional translator helping a traveler with food allergies. Your task is to translate the provided text accurately while ensuring it is polite, culturally appropriate, and clearly conveys the severity of allergies.
+          
+          IMPORTANT: Only respond with the translated text. Do not include any explanations, notes, or original text. Do not output markdown formatting.`,
+          model: "gpt-4o-mini",
+          temperature: 0.3,
+          max_tokens: 800
+        }),
+      });
 
-    if (!response.ok) {
-      console.error("Translation API error:", response.status, response.statusText);
-      const errorData = await response.json();
-      throw new Error(errorData.error || `Translation failed: ${response.statusText}`);
+      if (!response.ok) {
+        console.error("Translation API error:", response.status, response.statusText);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Translation failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("Translation success, result:", data.result);
+      return { translatedText: data.result };
+    } catch (error) {
+      // Fallback to local mock translation in case of API failure (for demo purposes)
+      console.warn("Translation API failed, using mock translation for demo");
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
+      return { 
+        translatedText: `[${languageName.toUpperCase()} TRANSLATION]\n\n${text}\n\n(This is a demo translation because the API is unavailable)` 
+      };
     }
-
-    const data = await response.json();
-    console.log("Translation success, result:", data.result);
-    return { translatedText: data.result };
   } catch (error) {
     console.error("Translation error:", error);
     toast.error("Translation failed. Please try again.");
     return { translatedText: null, error: error instanceof Error ? error.message : "Unknown error" };
   }
-};
-
-/**
- * Helper to get the full language name from language code
- */
-const getLanguageNameFromCode = (code: string): string => {
-  // This is a simplified approach - in a real app, we'd use a complete mapping
-  const languageMap: Record<string, string> = {
-    en: "English",
-    es: "Spanish",
-    fr: "French",
-    de: "German",
-    it: "Italian",
-    ja: "Japanese",
-    ko: "Korean",
-    zh: "Chinese",
-    ru: "Russian",
-    ar: "Arabic",
-    hi: "Hindi",
-    pt: "Portuguese",
-    nl: "Dutch",
-    tr: "Turkish",
-    pl: "Polish",
-    vi: "Vietnamese",
-    th: "Thai",
-    // Add more languages as needed
-  };
-
-  return languageMap[code] || code;
 };

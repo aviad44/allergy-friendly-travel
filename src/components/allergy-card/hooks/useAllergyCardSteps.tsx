@@ -16,7 +16,7 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
     const isChild = values.audienceType === "child";
     
     console.log("Generating card with allergies:", values.allergies);
-    const cardText = generateCardText(values.allergies, isChild);
+    const cardText = generateCardText(values.allergies, isChild, values.userName);
     setGeneratedCard(cardText);
     setTranslatedCard(null); // Reset translation when card is regenerated
     
@@ -34,19 +34,23 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
 
     setIsTranslating(true);
     console.log(`Starting translation to ${targetLanguage}`);
+    
     try {
+      toast.loading("Translating your card...", { id: "translation" });
+      
       const result = await translateText(text, targetLanguage);
       console.log("Translation result:", result);
+      
       if (result.translatedText) {
         setTranslatedCard(result.translatedText);
-        toast.success("Translation completed!");
+        toast.success("Translation completed successfully!", { id: "translation" });
       } else {
         console.error("Translation failed:", result.error);
-        toast.error("Translation failed: " + (result.error || "Unknown error"));
+        toast.error("Translation failed: " + (result.error || "Unknown error"), { id: "translation" });
       }
     } catch (error) {
       console.error("Translation error:", error);
-      toast.error("Translation failed. Please try again.");
+      toast.error("Translation failed. Please try again.", { id: "translation" });
     } finally {
       setIsTranslating(false);
     }
@@ -63,13 +67,28 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
   };
 
   const handleNext = async () => {
+    // Validate the current step before proceeding
+    if (step === Step.SelectAllergies) {
+      if (form.getValues().allergies.length === 0) {
+        toast.error("Please select at least one allergy");
+        return;
+      }
+    } else if (step === Step.ChooseLanguages) {
+      if (!form.getValues().targetLanguage) {
+        toast.error("Please select a target language");
+        return;
+      }
+    }
+
     if (step < Step.Download) {
       setStep(step + 1);
-    }
-    
-    if (step === Step.ChooseLanguages) {
-      console.log("Moving to preview step, generating card");
-      await generateCardContent();
+      
+      // When moving from language step to preview, generate card
+      if (step === Step.ChooseLanguages) {
+        toast.loading("Generating your allergy card...");
+        console.log("Moving to preview step, generating card");
+        await generateCardContent();
+      }
     }
   };
 

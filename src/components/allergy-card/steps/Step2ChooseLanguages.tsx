@@ -15,18 +15,31 @@ interface Step2Props {
 
 export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
   const languages = [
-    { code: "fr", name: "French" },
-    { code: "es", name: "Spanish" },
-    { code: "de", name: "German" },
-    { code: "it", name: "Italian" },
-    { code: "pt", name: "Portuguese" },
-    { code: "ru", name: "Russian" },
-    { code: "zh", name: "Chinese (Simplified)" },
-    { code: "ja", name: "Japanese" },
-    { code: "ar", name: "Arabic" },
-    { code: "hi", name: "Hindi" },
-    { code: "he", name: "Hebrew" },
-    { code: "el", name: "Greek" },
+    { code: "fr", name: "French", flag: "🇫🇷" },
+    { code: "es", name: "Spanish", flag: "🇪🇸" },
+    { code: "de", name: "German", flag: "🇩🇪" },
+    { code: "it", name: "Italian", flag: "🇮🇹" },
+    { code: "pt", name: "Portuguese", flag: "🇵🇹" },
+    { code: "ru", name: "Russian", flag: "🇷🇺" },
+    { code: "zh", name: "Chinese (Simplified)", flag: "🇨🇳" },
+    { code: "ja", name: "Japanese", flag: "🇯🇵" },
+    { code: "ko", name: "Korean", flag: "🇰🇷" },
+    { code: "ar", name: "Arabic", flag: "🇸🇦" },
+    { code: "hi", name: "Hindi", flag: "🇮🇳" },
+    { code: "he", name: "Hebrew", flag: "🇮🇱" },
+    { code: "el", name: "Greek", flag: "🇬🇷" },
+    { code: "th", name: "Thai", flag: "🇹🇭" },
+    { code: "vi", name: "Vietnamese", flag: "🇻🇳" },
+    { code: "tr", name: "Turkish", flag: "🇹🇷" },
+    { code: "pl", name: "Polish", flag: "🇵🇱" },
+    { code: "sv", name: "Swedish", flag: "🇸🇪" },
+    { code: "nl", name: "Dutch", flag: "🇳🇱" },
+    { code: "da", name: "Danish", flag: "🇩🇰" },
+  ];
+
+  // Currently only English is available as source language in this version
+  const sourceLanguages = [
+    { code: "en", name: "English", flag: "🇬🇧" },
   ];
 
   return (
@@ -45,7 +58,14 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="en">English</SelectItem>
+                {sourceLanguages.map(lang => (
+                  <SelectItem key={lang.code} value={lang.code}>
+                    <span className="flex items-center">
+                      <span className="mr-2">{lang.flag}</span>
+                      <span>{lang.name}</span>
+                    </span>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <FormDescription>
@@ -69,9 +89,14 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
                   <SelectValue placeholder="Select target language" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent className="max-h-[300px]">
                 {languages.map(lang => (
-                  <SelectItem key={lang.code} value={lang.code}>{lang.name}</SelectItem>
+                  <SelectItem key={lang.code} value={lang.code}>
+                    <span className="flex items-center">
+                      <span className="mr-2">{lang.flag}</span>
+                      <span>{lang.name}</span>
+                    </span>
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>

@@ -1,42 +1,90 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { useForm, useFormContext } from "react-hook-form";
-import { CheckSquare, Plus, X } from 'lucide-react';
+import { useFormContext } from "react-hook-form";
+import { X, Plus, Check, ChevronsUpDown, Search } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Common food allergies
-const COMMON_ALLERGIES = [
-  "Peanuts", "Tree nuts", "Milk", "Eggs", "Fish", "Shellfish", 
-  "Wheat", "Soy", "Sesame", "Gluten", "Celery", "Mustard", "Lupin"
+// Common food allergies with emojis
+const ALLERGY_CATEGORIES = {
+  common: [
+    { name: "Peanuts", emoji: "🥜" },
+    { name: "Tree nuts", emoji: "🌰" },
+    { name: "Milk", emoji: "🥛" },
+    { name: "Eggs", emoji: "🍳" },
+    { name: "Fish", emoji: "🐟" },
+    { name: "Shellfish", emoji: "🦐" },
+    { name: "Wheat", emoji: "🌾" },
+    { name: "Soy", emoji: "🫘" },
+    { name: "Sesame", emoji: "🌱" },
+  ],
+  other: [
+    { name: "Gluten", emoji: "🍞" },
+    { name: "Celery", emoji: "🥬" },
+    { name: "Mustard", emoji: "🌭" },
+    { name: "Lupin", emoji: "🌿" },
+    { name: "Sulfites", emoji: "🍷" },
+    { name: "Crustaceans", emoji: "🦞" },
+    { name: "Molluscs", emoji: "🐚" }
+  ]
+};
+
+// Combine all allergies for searching
+const ALL_ALLERGIES = [
+  ...ALLERGY_CATEGORIES.common,
+  ...ALLERGY_CATEGORIES.other
 ];
 
 interface Step1Props {
   selectedAllergies: string[];
   customAllergy: string;
+  allergySearchTerm: string;
+  setAllergySearchTerm: (value: string) => void;
   setCustomAllergy: (value: string) => void;
   handleAddCustomAllergy: () => void;
   handleToggleAllergy: (allergy: string) => void;
   handleRemoveAllergy: (allergy: string) => void;
+  handleSelectAllergies: (allergies: string[]) => void;
 }
 
 export const Step1SelectAllergies: React.FC<Step1Props> = ({
   selectedAllergies,
   customAllergy,
+  allergySearchTerm,
+  setAllergySearchTerm,
   setCustomAllergy,
   handleAddCustomAllergy,
   handleToggleAllergy,
-  handleRemoveAllergy
+  handleRemoveAllergy,
+  handleSelectAllergies
 }) => {
   const form = useFormContext();
+  const [selectedCategory, setSelectedCategory] = useState<string>("common");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   
   const handleCustomAllergyKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAddCustomAllergy();
     }
+  };
+
+  // Filter allergies based on search term
+  const filteredAllergies = ALL_ALLERGIES.filter(allergy => 
+    allergy.name.toLowerCase().includes(allergySearchTerm.toLowerCase())
+  );
+
+  // Get emoji for an allergy
+  const getEmoji = (allergyName: string) => {
+    const found = ALL_ALLERGIES.find(a => a.name === allergyName);
+    return found ? found.emoji : '⚠️';
   };
 
   return (
@@ -62,33 +110,84 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
         )}
       />
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div>
-          <Label htmlFor="allergies" className="mb-2 block">Common Allergies</Label>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {COMMON_ALLERGIES.map((allergy) => (
+          <Label className="mb-2 block">Select Your Allergies</Label>
+          
+          {/* Multi-select dropdown for allergies */}
+          <Popover open={dropdownOpen} onOpenChange={setDropdownOpen}>
+            <PopoverTrigger asChild>
               <Button
-                key={allergy}
-                type="button"
-                variant={selectedAllergies.includes(allergy) ? "default" : "outline"}
-                className={`justify-start ${
-                  selectedAllergies.includes(allergy) 
-                    ? "bg-blue-600 hover:bg-blue-700 text-white" 
-                    : "hover:bg-blue-50"
-                }`}
-                onClick={() => handleToggleAllergy(allergy)}
+                variant="outline"
+                role="combobox"
+                aria-expanded={dropdownOpen}
+                className="w-full justify-between"
               >
-                {selectedAllergies.includes(allergy) && (
-                  <CheckSquare className="mr-2 h-4 w-4" />
-                )}
-                {allergy}
+                {selectedAllergies.length > 0
+                  ? `${selectedAllergies.length} allergy/allergen(s) selected`
+                  : "Select allergies..."}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
-            ))}
-          </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-full min-w-[300px] p-0" align="start">
+              <Tabs defaultValue="common" onValueChange={setSelectedCategory}>
+                <div className="flex items-center px-3 pt-3">
+                  <TabsList>
+                    <TabsTrigger value="common">Common</TabsTrigger>
+                    <TabsTrigger value="other">Other</TabsTrigger>
+                    <TabsTrigger value="all">All</TabsTrigger>
+                  </TabsList>
+                </div>
+              </Tabs>
+              
+              <Command>
+                <CommandInput 
+                  placeholder="Search allergies..." 
+                  value={allergySearchTerm}
+                  onValueChange={setAllergySearchTerm}
+                  className="h-9"
+                />
+                <CommandList>
+                  <CommandEmpty>No allergies found.</CommandEmpty>
+                  <CommandGroup>
+                    {(selectedCategory === "all" ? ALL_ALLERGIES : 
+                      selectedCategory === "common" ? ALLERGY_CATEGORIES.common :
+                      ALLERGY_CATEGORIES.other)
+                      .filter(allergy => 
+                        allergy.name.toLowerCase().includes(allergySearchTerm.toLowerCase())
+                      )
+                      .map((allergy) => {
+                        const isSelected = selectedAllergies.includes(allergy.name);
+                        return (
+                          <CommandItem
+                            key={allergy.name}
+                            value={allergy.name}
+                            onSelect={() => {
+                              handleToggleAllergy(allergy.name);
+                            }}
+                            className="flex items-center"
+                          >
+                            <span className="mr-2">{allergy.emoji}</span>
+                            <span>{allergy.name}</span>
+                            <Check
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                isSelected ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                          </CommandItem>
+                        );
+                      })}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
         </div>
-        
+
+        {/* Custom allergy input */}
         <div>
-          <Label htmlFor="custom-allergy" className="mb-2 block">Custom Allergies</Label>
+          <Label htmlFor="custom-allergy" className="mb-2 block">Add Custom Allergy</Label>
           <div className="flex gap-2 mb-3">
             <Input
               id="custom-allergy"
@@ -103,22 +202,25 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
               onClick={handleAddCustomAllergy}
               disabled={!customAllergy.trim()}
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-4 w-4 mr-1" />
               Add
             </Button>
           </div>
         </div>
 
+        {/* Selected allergies display */}
         {selectedAllergies.length > 0 && (
           <div>
             <Label className="mb-2 block">Selected Allergies</Label>
             <div className="flex flex-wrap gap-2">
               {selectedAllergies.map((allergy) => (
-                <div
+                <Badge
                   key={allergy}
-                  className="flex items-center bg-blue-100 text-blue-800 rounded-full px-3 py-1"
+                  variant="secondary"
+                  className="px-3 py-1 flex items-center gap-1 bg-blue-100 text-blue-800 hover:bg-blue-200"
                 >
-                  <span className="mr-1">{allergy}</span>
+                  <span>{getEmoji(allergy)}</span>
+                  <span>{allergy}</span>
                   <Button
                     type="button"
                     variant="ghost"
@@ -129,7 +231,7 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
                     <X className="h-3 w-3" />
                     <span className="sr-only">Remove {allergy}</span>
                   </Button>
-                </div>
+                </Badge>
               ))}
             </div>
           </div>

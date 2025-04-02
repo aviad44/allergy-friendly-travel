@@ -1,138 +1,72 @@
 
-import { toast } from "sonner";
-import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
+import { getAllergyIcon } from './allergyIcons';
 
-export const generateCardText = (allergiesList: string[], isChild: boolean): string => {
-  let cardText = "";
-  
+/**
+ * Generates the text content for an allergy card
+ * @param allergies List of allergies
+ * @param isChild Whether to use child-friendly language
+ * @param userName Optional name to include on the card
+ * @returns Generated card text
+ */
+export const generateCardText = (
+  allergies: string[], 
+  isChild: boolean = false,
+  userName: string | undefined = undefined
+): string => {
+  // Format allergies with emojis where available
+  const formattedAllergies = allergies.map(allergy => {
+    const icon = getAllergyIcon(allergy);
+    return icon ? `${icon} ${allergy}` : allergy;
+  }).join(", ");
+
   if (isChild) {
-    cardText = `Hello! My name is _________.\n\nI have severe allergies to: ${allergiesList.join(', ')}.\n\nThese foods could make me very sick or cause a medical emergency.\n\nPlease help make sure my food doesn't contain or touch these ingredients.\n\nThank you for keeping me safe!`;
-  } else {
-    cardText = `Hello,\n\nI have food allergies to: ${allergiesList.join(', ')}.\n\nPlease ensure my meal is completely free from these ingredients, including cross-contamination.\n\nIf you're unsure about the ingredients, please let me know so I can make an informed decision.\n\nThank you for your understanding and assistance.`;
-  }
-
-  return cardText;
-};
-
-export const copyToClipboard = (sourceText: string | null, translatedText: string | null) => {
-  if (sourceText) {
-    const fullText = translatedText 
-      ? `${sourceText}\n\n${translatedText}` 
-      : sourceText;
+    const nameSection = userName ? `My name is ${userName}.\n\n` : '';
     
-    navigator.clipboard.writeText(fullText)
-      .then(() => {
-        toast.success("Card copied to clipboard!");
-      })
-      .catch(error => {
-        console.error("Failed to copy text:", error);
-        toast.error("Failed to copy to clipboard. Please try again.");
-      });
+    return `⚠️ FOOD ALLERGY ALERT ⚠️\n\n${nameSection}I have serious food allergies. Please help keep me safe.\n\nI CANNOT EAT:\n${formattedAllergies}\n\nEven a tiny amount can make me very sick and might require emergency medicine. Please make sure my food is prepared without these ingredients.`;
   } else {
-    toast.error("Nothing to copy. Please generate the card first.");
+    return `⚠️ FOOD ALLERGY NOTIFICATION ⚠️\n\nI have severe allergies to the following foods:\n${formattedAllergies}\n\nCross-contamination can cause a serious allergic reaction. Please ensure that my meal is prepared without these allergens and that all cooking utensils and surfaces are thoroughly cleaned before preparing my food.\n\nThank you for your assistance in this important health matter.`;
   }
 };
 
-export const downloadAsPDF = () => {
-  const cardElement = document.getElementById('allergy-card');
+/**
+ * Generates custom HTML for rendering the allergy card
+ */
+export const generateCardHtml = (
+  allergies: string[],
+  translatedText: string | null,
+  includeQrCode: boolean,
+  userName?: string,
+  isChild: boolean = false
+): string => {
+  const title = isChild 
+    ? (userName ? `Child Allergy Card for ${userName}` : 'Child Allergy Card')
+    : 'Food Allergy Alert Card';
   
-  if (!cardElement) {
-    toast.error("Card not found. Please generate the card first.");
-    return;
-  }
-  
-  toast.promise(
-    (async () => {
-      try {
-        console.log("Starting PDF generation...");
-        const canvas = await html2canvas(cardElement, {
-          scale: 2,
-          backgroundColor: "#ffffff",
-          logging: true,
-          useCORS: true
-        });
-        
-        console.log("Canvas generated, creating PDF...");
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a5'  // Using A5 for better card size
-        });
-        
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save('allergy-translation-card.pdf');
-        
-        console.log("PDF created and saved.");
-        return true;
-      } catch (error) {
-        console.error("PDF generation error details:", error);
-        throw new Error("Failed to create PDF");
-      }
-    })(),
-    {
-      loading: 'Creating PDF...',
-      success: 'PDF downloaded successfully!',
-      error: 'Failed to create PDF. Please try again.'
-    }
-  );
-};
+  const originalText = generateCardText(allergies, isChild, userName);
+  const formattedOriginal = originalText.replace(/\n/g, '<br>');
+  const formattedTranslated = translatedText ? translatedText.replace(/\n/g, '<br>') : '';
 
-export const downloadAsPNG = () => {
-  const cardElement = document.getElementById('allergy-card');
-  
-  if (!cardElement) {
-    toast.error("Card not found. Please generate the card first.");
-    return;
-  }
-  
-  toast.promise(
-    (async () => {
-      try {
-        console.log("Starting PNG generation...");
-        const canvas = await html2canvas(cardElement, {
-          scale: 2,
-          backgroundColor: "#ffffff",
-          logging: true,
-          useCORS: true
-        });
-        
-        console.log("Canvas generated, creating PNG...");
-        const link = document.createElement('a');
-        link.download = 'allergy-translation-card.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        
-        console.log("PNG created and saved.");
-        return true;
-      } catch (error) {
-        console.error("PNG generation error details:", error);
-        throw new Error("Failed to create PNG");
-      }
-    })(),
-    {
-      loading: 'Creating PNG...',
-      success: 'PNG downloaded successfully!',
-      error: 'Failed to create PNG. Please try again.'
-    }
-  );
-};
-
-export const shareToWhatsApp = (sourceText: string | null, translatedText: string | null) => {
-  if (sourceText) {
-    const fullText = translatedText 
-      ? `${sourceText}\n\n${translatedText}` 
-      : sourceText;
-    
-    const encodedText = encodeURIComponent(fullText);
-    window.open(`https://wa.me/?text=${encodedText}`, '_blank');
-    toast.success("Opening WhatsApp with your card text!");
-  } else {
-    toast.error("Nothing to share. Please generate the card first.");
-  }
+  return `
+    <div class="allergy-card" style="position: relative; padding: 20px; border-radius: 12px; background-color: #f5f5f5; max-width: 100%;">
+      <h2 style="color: #d32f2f; font-weight: bold; text-align: center; margin-bottom: 15px;">${title}</h2>
+      
+      <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <h3 style="color: #333; margin-top: 0;">English</h3>
+        <div>${formattedOriginal}</div>
+      </div>
+      
+      ${translatedText ? `
+        <div style="background: #eff6ff; padding: 15px; border-radius: 8px;">
+          <h3 style="color: #1d4ed8; margin-top: 0;">Translated</h3>
+          <div>${formattedTranslated}</div>
+        </div>
+      ` : ''}
+      
+      ${includeQrCode ? `
+        <div style="position: absolute; bottom: 10px; right: 10px; width: 70px; height: 70px; background: #fff; border-radius: 5px;">
+          <div style="background-color: #ccc; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #666;">QR Code</div>
+        </div>
+      ` : ''}
+    </div>
+  `;
 };

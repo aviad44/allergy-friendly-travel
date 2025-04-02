@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Step, FormValues } from '../types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,10 +14,13 @@ interface StepContentProps {
   form: UseFormReturn<FormValues>;
   selectedAllergies: string[];
   customAllergy: string;
+  allergySearchTerm: string;
+  setAllergySearchTerm: (value: string) => void;
   setCustomAllergy: (value: string) => void;
   handleAddCustomAllergy: () => void;
   handleToggleAllergy: (allergy: string) => void;
   handleRemoveAllergy: (allergy: string) => void;
+  handleSelectAllergies: (allergies: string[]) => void;
   generatedCard: string | null;
   translatedCard: string | null;
   isTranslating: boolean;
@@ -32,10 +36,13 @@ export const StepContent: React.FC<StepContentProps> = ({
   form,
   selectedAllergies,
   customAllergy,
+  allergySearchTerm,
+  setAllergySearchTerm,
   setCustomAllergy,
   handleAddCustomAllergy,
   handleToggleAllergy,
   handleRemoveAllergy,
+  handleSelectAllergies,
   generatedCard,
   translatedCard,
   isTranslating,
@@ -45,14 +52,44 @@ export const StepContent: React.FC<StepContentProps> = ({
   onDownloadPNG,
   onShareToWhatsApp
 }) => {
+  const getStepTitle = () => {
+    switch (step) {
+      case Step.SelectAllergies:
+        return "Step 1: Select Your Allergies";
+      case Step.ChooseLanguages:
+        return "Step 2: Choose Your Source and Target Languages";
+      case Step.Preview:
+        return "Step 3: Preview Your Card";
+      case Step.Download:
+        return "Step 4: Download & Share";
+      default:
+        return "";
+    }
+  };
+
+  const getStepDescription = () => {
+    switch (step) {
+      case Step.SelectAllergies:
+        return "Choose all allergies or dietary restrictions that apply to you";
+      case Step.ChooseLanguages:
+        return "Select the source and target languages for your card";
+      case Step.Preview:
+        return "Review how your translation card will appear";
+      case Step.Download:
+        return "Save or share your allergy translation card";
+      default:
+        return "";
+    }
+  };
+
   switch (step) {
     case Step.SelectAllergies:
       return (
         <Card>
           <CardHeader>
-            <CardTitle>Step 1: Select Your Allergies</CardTitle>
+            <CardTitle>{getStepTitle()}</CardTitle>
             <CardDescription>
-              Choose all allergies or dietary restrictions that apply to you
+              {getStepDescription()}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -60,10 +97,13 @@ export const StepContent: React.FC<StepContentProps> = ({
               <Step1SelectAllergies 
                 selectedAllergies={selectedAllergies}
                 customAllergy={customAllergy}
+                allergySearchTerm={allergySearchTerm}
+                setAllergySearchTerm={setAllergySearchTerm}
                 setCustomAllergy={setCustomAllergy}
                 handleAddCustomAllergy={handleAddCustomAllergy}
                 handleToggleAllergy={handleToggleAllergy}
                 handleRemoveAllergy={handleRemoveAllergy}
+                handleSelectAllergies={handleSelectAllergies}
               />
             </Form>
           </CardContent>
@@ -74,9 +114,9 @@ export const StepContent: React.FC<StepContentProps> = ({
       return (
         <Card>
           <CardHeader>
-            <CardTitle>Step 2: Choose Languages</CardTitle>
+            <CardTitle>{getStepTitle()}</CardTitle>
             <CardDescription>
-              Select the source and target languages for your card
+              {getStepDescription()}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -89,9 +129,9 @@ export const StepContent: React.FC<StepContentProps> = ({
       return (
         <Card>
           <CardHeader>
-            <CardTitle>Step 3: Preview Your Card</CardTitle>
+            <CardTitle>{getStepTitle()}</CardTitle>
             <CardDescription>
-              Review how your translation card will appear
+              {getStepDescription()}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -112,9 +152,9 @@ export const StepContent: React.FC<StepContentProps> = ({
       return (
         <Card>
           <CardHeader>
-            <CardTitle>Step 4: Download & Share</CardTitle>
+            <CardTitle>{getStepTitle()}</CardTitle>
             <CardDescription>
-              Save or share your allergy translation card
+              {getStepDescription()}
             </CardDescription>
           </CardHeader>
           <CardContent>

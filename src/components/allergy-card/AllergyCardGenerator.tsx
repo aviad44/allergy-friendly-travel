@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -17,10 +17,13 @@ export const AllergyCardGenerator = () => {
     form,
     selectedAllergies,
     customAllergy,
+    allergySearchTerm,
+    setAllergySearchTerm,
     setCustomAllergy,
     handleAddCustomAllergy,
     handleToggleAllergy,
-    handleRemoveAllergy
+    handleRemoveAllergy,
+    handleSelectAllergies
   } = useAllergyCardForm();
 
   const {
@@ -40,6 +43,28 @@ export const AllergyCardGenerator = () => {
     handleShareToWhatsApp
   } = useAllergyCardSharing();
 
+  // References for scrolling to the top of each step
+  const stepRefs = {
+    [Step.SelectAllergies]: useRef<HTMLDivElement>(null),
+    [Step.ChooseLanguages]: useRef<HTMLDivElement>(null),
+    [Step.Preview]: useRef<HTMLDivElement>(null),
+    [Step.Download]: useRef<HTMLDivElement>(null),
+  };
+
+  // Handle scroll to active step
+  useEffect(() => {
+    const currentStepRef = stepRefs[step];
+    if (currentStepRef?.current) {
+      // Scroll with a slight delay to ensure elements are rendered
+      setTimeout(() => {
+        currentStepRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    }
+  }, [step]);
+
   // Apply animation class to the card when it appears
   useEffect(() => {
     if (step === Step.Download) {
@@ -55,30 +80,35 @@ export const AllergyCardGenerator = () => {
       {/* Add the Toaster component for notifications */}
       <Toaster position="top-center" richColors />
       
-      <div className="flex justify-between items-center mb-8">
+      <div className="mb-8">
         <ProgressBar currentStep={step} />
       </div>
       
       <div className="space-y-6">
         <Form {...form}>
-          <StepContent
-            step={step}
-            form={form}
-            selectedAllergies={selectedAllergies}
-            customAllergy={customAllergy}
-            setCustomAllergy={setCustomAllergy}
-            handleAddCustomAllergy={handleAddCustomAllergy}
-            handleToggleAllergy={handleToggleAllergy}
-            handleRemoveAllergy={handleRemoveAllergy}
-            generatedCard={generatedCard}
-            translatedCard={translatedCard}
-            isTranslating={isTranslating}
-            onRequestTranslation={handleTranslationRequest}
-            onCopyToClipboard={() => handleCopyToClipboard(generatedCard, translatedCard)}
-            onDownloadPDF={handleDownloadPDF}
-            onDownloadPNG={handleDownloadPNG}
-            onShareToWhatsApp={() => handleShareToWhatsApp(generatedCard, translatedCard)}
-          />
+          <div ref={stepRefs[step]} className="pt-2">
+            <StepContent
+              step={step}
+              form={form}
+              selectedAllergies={selectedAllergies}
+              customAllergy={customAllergy}
+              allergySearchTerm={allergySearchTerm}
+              setAllergySearchTerm={setAllergySearchTerm}
+              setCustomAllergy={setCustomAllergy}
+              handleAddCustomAllergy={handleAddCustomAllergy}
+              handleToggleAllergy={handleToggleAllergy}
+              handleRemoveAllergy={handleRemoveAllergy}
+              handleSelectAllergies={handleSelectAllergies}
+              generatedCard={generatedCard}
+              translatedCard={translatedCard}
+              isTranslating={isTranslating}
+              onRequestTranslation={handleTranslationRequest}
+              onCopyToClipboard={() => handleCopyToClipboard(generatedCard, translatedCard)}
+              onDownloadPDF={handleDownloadPDF}
+              onDownloadPNG={handleDownloadPNG}
+              onShareToWhatsApp={() => handleShareToWhatsApp(generatedCard, translatedCard)}
+            />
+          </div>
         </Form>
       </div>
       

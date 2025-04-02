@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, FormValues } from '../types';
@@ -8,6 +8,7 @@ import { toast } from "sonner";
 export function useAllergyCardForm() {
   const [selectedAllergies, setSelectedAllergies] = useState<string[]>([]);
   const [customAllergy, setCustomAllergy] = useState<string>("");
+  const [allergySearchTerm, setAllergySearchTerm] = useState<string>("");
   
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -28,6 +29,7 @@ export function useAllergyCardForm() {
       setSelectedAllergies(updatedAllergies);
       form.setValue("allergies", updatedAllergies);
       setCustomAllergy("");
+      toast.success(`Added: ${customAllergy.trim()}`);
     }
   };
 
@@ -35,6 +37,7 @@ export function useAllergyCardForm() {
     const updatedAllergies = selectedAllergies.filter(a => a !== allergy);
     setSelectedAllergies(updatedAllergies);
     form.setValue("allergies", updatedAllergies);
+    toast.info(`Removed: ${allergy}`);
   };
 
   const handleToggleAllergy = (allergy: string) => {
@@ -44,16 +47,26 @@ export function useAllergyCardForm() {
       const updatedAllergies = [...selectedAllergies, allergy];
       setSelectedAllergies(updatedAllergies);
       form.setValue("allergies", updatedAllergies);
+      toast.success(`Added: ${allergy}`);
     }
+  };
+
+  // Add a method for selecting multiple allergies at once from dropdown
+  const handleSelectAllergies = (allergies: string[]) => {
+    setSelectedAllergies(allergies);
+    form.setValue("allergies", allergies);
   };
 
   return {
     form,
     selectedAllergies,
     customAllergy,
+    allergySearchTerm,
+    setAllergySearchTerm,
     setCustomAllergy,
     handleAddCustomAllergy,
     handleToggleAllergy,
     handleRemoveAllergy,
+    handleSelectAllergies,
   };
 }
