@@ -32,34 +32,39 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
   const form = useFormContext();
   
   return (
-    <div>
+    <div className="space-y-6">
       <UserNameInput form={form} />
 
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-base font-medium mb-2">Choose Allergies</h3>
-          <p className="text-sm text-gray-500 mb-3">
-            Select all allergies that apply to you from the list below
-          </p>
-          <AllergySelector
-            selectedAllergies={selectedAllergies}
-            allergySearchTerm={allergySearchTerm}
-            setAllergySearchTerm={setAllergySearchTerm}
-            handleToggleAllergy={handleToggleAllergy}
+      <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+        <h3 className="text-lg font-medium mb-3 text-blue-800">Select Your Allergies</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          Choose all allergies or dietary restrictions that apply to you by clicking on them.
+        </p>
+        
+        <AllergySelector
+          selectedAllergies={selectedAllergies}
+          allergySearchTerm={allergySearchTerm}
+          setAllergySearchTerm={setAllergySearchTerm}
+          handleToggleAllergy={handleToggleAllergy}
+        />
+        
+        <div className="mt-6">
+          <CustomAllergyInput
+            customAllergy={customAllergy}
+            setCustomAllergy={setCustomAllergy}
+            handleAddCustomAllergy={handleAddCustomAllergy}
           />
         </div>
 
-        <CustomAllergyInput
-          customAllergy={customAllergy}
-          setCustomAllergy={setCustomAllergy}
-          handleAddCustomAllergy={handleAddCustomAllergy}
-        />
-
-        <SelectedAllergiesList
-          selectedAllergies={selectedAllergies}
-          handleRemoveAllergy={handleRemoveAllergy}
-        />
-        
+        <div className="mt-6">
+          <SelectedAllergiesList
+            selectedAllergies={selectedAllergies}
+            handleRemoveAllergy={handleRemoveAllergy}
+          />
+        </div>
+      </div>
+      
+      <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
         <CardTypeSelector form={form} />
       </div>
     </div>

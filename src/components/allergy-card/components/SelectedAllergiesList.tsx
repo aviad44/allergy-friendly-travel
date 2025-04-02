@@ -23,16 +23,16 @@ export const SelectedAllergiesList: React.FC<SelectedAllergiesListProps> = ({
 
   if (selectedAllergies.length === 0) {
     return (
-      <div className="py-2 text-gray-500 italic">
-        No allergies selected. Please select at least one allergy to continue.
+      <div className="bg-blue-50 border border-blue-100 rounded-md p-4 text-blue-700">
+        <p>No allergies selected yet. Please select at least one allergy to continue.</p>
       </div>
     );
   }
 
   return (
-    <div>
-      <Label className="mb-2 block">Selected Allergies</Label>
-      <div className="flex flex-wrap gap-2">
+    <div className="mt-4">
+      <Label className="mb-2 block">Your Selected Allergies</Label>
+      <div className="flex flex-wrap gap-2 p-3 border border-gray-200 rounded-md bg-gray-50 min-h-[60px]">
         {selectedAllergies.map((allergy) => (
           <Badge
             key={allergy}

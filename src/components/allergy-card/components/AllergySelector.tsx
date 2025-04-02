@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
-import { Check, ChevronsUpDown, HelpCircle } from 'lucide-react';
+import React from 'react';
+import { HelpCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Toggle } from "@/components/ui/toggle";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 // Common allergy list with emojis
@@ -40,8 +41,6 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
   setAllergySearchTerm,
   handleToggleAllergy,
 }) => {
-  const [open, setOpen] = useState(false);
-  
   // Filter allergies based on search term
   const filteredAllergies = ALL_ALLERGIES.filter(allergy => 
     allergy.name.toLowerCase().includes(allergySearchTerm.toLowerCase())
@@ -49,72 +48,57 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
 
   return (
     <TooltipProvider>
-      <div className="flex items-center space-x-2">
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={open}
-              className="w-full justify-between"
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2">
+          <div className="flex-1">
+            <Label htmlFor="search-allergies" className="mb-2 block">Search Allergies</Label>
+            <Input
+              id="search-allergies"
+              placeholder="Search allergies..."
+              value={allergySearchTerm}
+              onChange={(e) => setAllergySearchTerm(e.target.value)}
+              className="w-full"
+            />
+          </div>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="mt-6">
+                <HelpCircle className="h-4 w-4 text-gray-500" />
+                <span className="sr-only">Help</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Select all allergies or dietary restrictions that apply to you.</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+          {filteredAllergies.map((allergy) => (
+            <Toggle
+              key={allergy.name}
+              pressed={selectedAllergies.includes(allergy.name)}
+              onPressedChange={() => {
+                console.log("Toggling allergy:", allergy.name);
+                handleToggleAllergy(allergy.name);
+              }}
+              className={cn(
+                "flex items-center justify-start gap-2 border border-gray-200 hover:bg-blue-50 h-auto py-2 px-3",
+                selectedAllergies.includes(allergy.name) ? "bg-blue-100 border-blue-300" : ""
+              )}
             >
-              {selectedAllergies.length > 0
-                ? `${selectedAllergies.length} allergy/allergen(s) selected`
-                : "Select allergies..."}
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-full min-w-[300px] p-0" align="start">
-            <Command>
-              <CommandInput 
-                placeholder="Search allergies..." 
-                value={allergySearchTerm}
-                onValueChange={setAllergySearchTerm}
-                className="h-9"
-              />
-              <CommandList>
-                <CommandEmpty>No allergies found.</CommandEmpty>
-                <CommandGroup>
-                  {filteredAllergies.map((allergy) => (
-                    <CommandItem
-                      key={allergy.name}
-                      value={allergy.name}
-                      onSelect={() => {
-                        console.log("Selected allergy:", allergy.name);
-                        handleToggleAllergy(allergy.name);
-                        // Don't close the popover automatically after selection
-                      }}
-                      className="flex items-center cursor-pointer"
-                    >
-                      <div className="flex items-center flex-1">
-                        <span className="mr-2">{allergy.emoji}</span>
-                        <span>{allergy.name}</span>
-                      </div>
-                      <Check
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          selectedAllergies.includes(allergy.name) ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
+              <span className="text-lg">{allergy.emoji}</span>
+              <span className="text-sm">{allergy.name}</span>
+            </Toggle>
+          ))}
+        </div>
         
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-9 w-9 p-0">
-              <HelpCircle className="h-4 w-4 text-gray-500" />
-              <span className="sr-only">Help</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Select all allergies or dietary restrictions that apply to you. You can search and select multiple items.</p>
-          </TooltipContent>
-        </Tooltip>
+        {filteredAllergies.length === 0 && (
+          <div className="text-center py-4 text-sm text-gray-500">
+            No allergies found. Try a different search term or add a custom allergy.
+          </div>
+        )}
       </div>
     </TooltipProvider>
   );

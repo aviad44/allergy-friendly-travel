@@ -25,11 +25,11 @@ export const CustomAllergyInput: React.FC<CustomAllergyInputProps> = ({
 
   return (
     <div>
-      <Label htmlFor="custom-allergy" className="mb-2 block">Add Custom Allergy</Label>
-      <div className="flex gap-2 mb-3">
+      <Label htmlFor="custom-allergy" className="mb-2 block">Add Custom Allergy or Dietary Restriction</Label>
+      <div className="flex gap-2">
         <Input
           id="custom-allergy"
-          placeholder="Add other allergy or restriction"
+          placeholder="Enter custom allergy (e.g., Avocado)"
           value={customAllergy}
           onChange={(e) => setCustomAllergy(e.target.value)}
           onKeyDown={handleCustomAllergyKeyDown}
@@ -45,6 +45,7 @@ export const CustomAllergyInput: React.FC<CustomAllergyInputProps> = ({
           Add
         </Button>
       </div>
+      <p className="text-xs text-gray-500 mt-1">Press Enter or click Add button to add your custom allergy</p>
     </div>
   );
 };
