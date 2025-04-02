@@ -39,6 +39,7 @@ export const CustomAllergyInput: React.FC<CustomAllergyInputProps> = ({
           type="button" 
           onClick={handleAddCustomAllergy}
           disabled={!customAllergy.trim()}
+          className="bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="h-4 w-4 mr-1" />
           Add

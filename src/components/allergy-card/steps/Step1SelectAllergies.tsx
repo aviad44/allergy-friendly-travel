@@ -37,6 +37,10 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
 
       <div className="space-y-6">
         <div>
+          <h3 className="text-base font-medium mb-2">Choose Allergies</h3>
+          <p className="text-sm text-gray-500 mb-3">
+            Select all allergies that apply to you from the list below
+          </p>
           <AllergySelector
             selectedAllergies={selectedAllergies}
             allergySearchTerm={allergySearchTerm}

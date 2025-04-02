@@ -47,6 +47,7 @@ export function useAllergyCardForm() {
   };
 
   const handleRemoveAllergy = (allergy: string) => {
+    console.log("Removing allergy:", allergy);
     const updatedAllergies = selectedAllergies.filter(a => a !== allergy);
     setSelectedAllergies(updatedAllergies);
     form.setValue("allergies", updatedAllergies);

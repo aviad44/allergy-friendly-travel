@@ -80,13 +80,16 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
                       key={allergy.name}
                       value={allergy.name}
                       onSelect={() => {
+                        console.log("Selected allergy:", allergy.name);
                         handleToggleAllergy(allergy.name);
                         // Don't close the popover automatically after selection
                       }}
                       className="flex items-center cursor-pointer"
                     >
-                      <span className="mr-2">{allergy.emoji}</span>
-                      <span>{allergy.name}</span>
+                      <div className="flex items-center flex-1">
+                        <span className="mr-2">{allergy.emoji}</span>
+                        <span>{allergy.name}</span>
+                      </div>
                       <Check
                         className={cn(
                           "ml-auto h-4 w-4",
@@ -102,8 +105,11 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
         </Popover>
         
         <Tooltip>
-          <TooltipTrigger>
-            <HelpCircle className="h-4 w-4 text-gray-500" />
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-9 w-9 p-0">
+              <HelpCircle className="h-4 w-4 text-gray-500" />
+              <span className="sr-only">Help</span>
+            </Button>
           </TooltipTrigger>
           <TooltipContent>
             <p>Select all allergies or dietary restrictions that apply to you. You can search and select multiple items.</p>
