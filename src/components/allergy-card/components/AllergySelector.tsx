@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Check, ChevronsUpDown, HelpCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 // Common allergy list with emojis
@@ -47,57 +48,70 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
   );
 
   return (
-    <Popover open={dropdownOpen} onOpenChange={setDropdownOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={dropdownOpen}
-          className="w-full justify-between"
-        >
-          {selectedAllergies.length > 0
-            ? `${selectedAllergies.length} allergy/allergen(s) selected`
-            : "Select allergies..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-full min-w-[300px] p-0" align="start">
-        <Command>
-          <CommandInput 
-            placeholder="Search allergies..." 
-            value={allergySearchTerm}
-            onValueChange={setAllergySearchTerm}
-            className="h-9"
-          />
-          <CommandList>
-            <CommandEmpty>No allergies found.</CommandEmpty>
-            <CommandGroup>
-              {filteredAllergies.map((allergy) => {
-                const isSelected = selectedAllergies.includes(allergy.name);
-                return (
-                  <CommandItem
-                    key={allergy.name}
-                    value={allergy.name}
-                    onSelect={() => {
-                      handleToggleAllergy(allergy.name);
-                    }}
-                    className="flex items-center"
-                  >
-                    <span className="mr-2">{allergy.emoji}</span>
-                    <span>{allergy.name}</span>
-                    <Check
-                      className={cn(
-                        "ml-auto h-4 w-4",
-                        isSelected ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                  </CommandItem>
-                );
-              })}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <TooltipProvider>
+      <div className="flex items-center space-x-2">
+        <Popover open={dropdownOpen} onOpenChange={setDropdownOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={dropdownOpen}
+              className="w-full justify-between"
+            >
+              {selectedAllergies.length > 0
+                ? `${selectedAllergies.length} allergy/allergen(s) selected`
+                : "Select allergies..."}
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-full min-w-[300px] p-0" align="start">
+            <Command>
+              <CommandInput 
+                placeholder="Search allergies..." 
+                value={allergySearchTerm}
+                onValueChange={setAllergySearchTerm}
+                className="h-9"
+              />
+              <CommandList>
+                <CommandEmpty>No allergies found.</CommandEmpty>
+                <CommandGroup>
+                  {filteredAllergies.map((allergy) => {
+                    const isSelected = selectedAllergies.includes(allergy.name);
+                    return (
+                      <CommandItem
+                        key={allergy.name}
+                        value={allergy.name}
+                        onSelect={() => {
+                          handleToggleAllergy(allergy.name);
+                        }}
+                        className="flex items-center"
+                      >
+                        <span className="mr-2">{allergy.emoji}</span>
+                        <span>{allergy.name}</span>
+                        <Check
+                          className={cn(
+                            "ml-auto h-4 w-4",
+                            isSelected ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
+        
+        <Tooltip>
+          <TooltipTrigger>
+            <HelpCircle className="h-4 w-4 text-gray-500" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Select all allergies or dietary restrictions that apply to you. You can search and select multiple items.</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
+    </TooltipProvider>
   );
 };
