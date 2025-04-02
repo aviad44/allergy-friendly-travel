@@ -1,4 +1,3 @@
-
 export const HOME_CONTENT = {
   navigation: {
     brand: "Allergy Free Travel",
@@ -16,8 +15,7 @@ export const HOME_CONTENT = {
   hero: {
     title: {
       line1: "Find Your Perfect",
-      line2: "Allergy-Friendly",
-      line3: "Hotel"
+      line2: "Food Allergy-Friendly Hotel"
     },
     description: "Discover Accommodations That Cater To Your Specific Needs And Enjoy Worry-Free Travels",
     featured: {

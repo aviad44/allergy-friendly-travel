@@ -4,7 +4,7 @@ import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
 
-const Index = () => {
+export default function Index() {
   const iconComponents = {
     MapPin,
     Star,
@@ -60,10 +60,10 @@ const Index = () => {
         
         <div className="relative z-10 container mx-auto px-4 text-center w-full pt-8 sm:pt-12">
           <div className="max-w-4xl mx-auto">
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 sm:mb-6 md:mb-8 leading-tight drop-shadow-lg">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 md:mb-8 leading-tight drop-shadow-lg">
               <span className="text-sky-200 font-bold">{HOME_CONTENT.hero.title.line1}</span>
               <span className="block mt-1 sm:mt-2 text-teal-300 font-bold">
-                {HOME_CONTENT.hero.title.line2} {HOME_CONTENT.hero.title.line3}
+                {HOME_CONTENT.hero.title.line2}
               </span>
             </h1>
             <h2 className="font-display text-lg sm:text-xl text-sky-100 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto leading-snug drop-shadow-md">
@@ -89,6 +89,4 @@ const Index = () => {
       </section>
     </>
   );
-};
-
-export default Index;
+}
