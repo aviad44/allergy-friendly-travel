@@ -10,36 +10,25 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Common food allergies with emojis
-const ALLERGY_CATEGORIES = {
-  common: [
-    { name: "Peanuts", emoji: "🥜" },
-    { name: "Tree nuts", emoji: "🌰" },
-    { name: "Milk", emoji: "🥛" },
-    { name: "Eggs", emoji: "🍳" },
-    { name: "Fish", emoji: "🐟" },
-    { name: "Shellfish", emoji: "🦐" },
-    { name: "Wheat", emoji: "🌾" },
-    { name: "Soy", emoji: "🫘" },
-    { name: "Sesame", emoji: "🌱" },
-  ],
-  other: [
-    { name: "Gluten", emoji: "🍞" },
-    { name: "Celery", emoji: "🥬" },
-    { name: "Mustard", emoji: "🌭" },
-    { name: "Lupin", emoji: "🌿" },
-    { name: "Sulfites", emoji: "🍷" },
-    { name: "Crustaceans", emoji: "🦞" },
-    { name: "Molluscs", emoji: "🐚" }
-  ]
-};
-
-// Combine all allergies for searching
+// Combined allergy list with emojis
 const ALL_ALLERGIES = [
-  ...ALLERGY_CATEGORIES.common,
-  ...ALLERGY_CATEGORIES.other
+  { name: "Peanuts", emoji: "🥜" },
+  { name: "Tree nuts", emoji: "🌰" },
+  { name: "Milk", emoji: "🥛" },
+  { name: "Eggs", emoji: "🍳" },
+  { name: "Fish", emoji: "🐟" },
+  { name: "Shellfish", emoji: "🦐" },
+  { name: "Wheat", emoji: "🌾" },
+  { name: "Soy", emoji: "🫘" },
+  { name: "Sesame", emoji: "🌱" },
+  { name: "Gluten", emoji: "🍞" },
+  { name: "Celery", emoji: "🥬" },
+  { name: "Mustard", emoji: "🌭" },
+  { name: "Lupin", emoji: "🌿" },
+  { name: "Sulfites", emoji: "🍷" },
+  { name: "Crustaceans", emoji: "🦞" },
+  { name: "Molluscs", emoji: "🐚" }
 ];
 
 interface Step1Props {
@@ -66,7 +55,6 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
   handleSelectAllergies
 }) => {
   const form = useFormContext();
-  const [selectedCategory, setSelectedCategory] = useState<string>("common");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   
   const handleCustomAllergyKeyDown = (e: React.KeyboardEvent) => {
@@ -130,16 +118,6 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-full min-w-[300px] p-0" align="start">
-              <Tabs defaultValue="common" onValueChange={setSelectedCategory}>
-                <div className="flex items-center px-3 pt-3">
-                  <TabsList>
-                    <TabsTrigger value="common">Common</TabsTrigger>
-                    <TabsTrigger value="other">Other</TabsTrigger>
-                    <TabsTrigger value="all">All</TabsTrigger>
-                  </TabsList>
-                </div>
-              </Tabs>
-              
               <Command>
                 <CommandInput 
                   placeholder="Search allergies..." 
@@ -150,34 +128,28 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
                 <CommandList>
                   <CommandEmpty>No allergies found.</CommandEmpty>
                   <CommandGroup>
-                    {(selectedCategory === "all" ? ALL_ALLERGIES : 
-                      selectedCategory === "common" ? ALLERGY_CATEGORIES.common :
-                      ALLERGY_CATEGORIES.other)
-                      .filter(allergy => 
-                        allergy.name.toLowerCase().includes(allergySearchTerm.toLowerCase())
-                      )
-                      .map((allergy) => {
-                        const isSelected = selectedAllergies.includes(allergy.name);
-                        return (
-                          <CommandItem
-                            key={allergy.name}
-                            value={allergy.name}
-                            onSelect={() => {
-                              handleToggleAllergy(allergy.name);
-                            }}
-                            className="flex items-center"
-                          >
-                            <span className="mr-2">{allergy.emoji}</span>
-                            <span>{allergy.name}</span>
-                            <Check
-                              className={cn(
-                                "ml-auto h-4 w-4",
-                                isSelected ? "opacity-100" : "opacity-0"
-                              )}
-                            />
-                          </CommandItem>
-                        );
-                      })}
+                    {filteredAllergies.map((allergy) => {
+                      const isSelected = selectedAllergies.includes(allergy.name);
+                      return (
+                        <CommandItem
+                          key={allergy.name}
+                          value={allergy.name}
+                          onSelect={() => {
+                            handleToggleAllergy(allergy.name);
+                          }}
+                          className="flex items-center"
+                        >
+                          <span className="mr-2">{allergy.emoji}</span>
+                          <span>{allergy.name}</span>
+                          <Check
+                            className={cn(
+                              "ml-auto h-4 w-4",
+                              isSelected ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                        </CommandItem>
+                      );
+                    })}
                   </CommandGroup>
                 </CommandList>
               </Command>

@@ -16,12 +16,17 @@ export function useAllergyCardForm() {
       allergies: [],
       customAllergy: "",
       sourceLanguage: "en",
-      targetLanguage: "",
+      targetLanguage: "", // This will be selected by the user
       audienceType: "child", // Set default to child
       includeQrCode: true, // Enable QR code by default
       userName: "", // Add field for child's name
     },
   });
+
+  // Update the form whenever selected allergies change
+  useEffect(() => {
+    form.setValue("allergies", selectedAllergies);
+  }, [selectedAllergies, form]);
 
   const handleAddCustomAllergy = () => {
     if (customAllergy.trim() && !selectedAllergies.includes(customAllergy.trim())) {
