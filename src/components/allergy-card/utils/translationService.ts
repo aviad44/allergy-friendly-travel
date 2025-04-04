@@ -49,7 +49,7 @@ const getLanguageNameFromCode = (code: string): string => {
 };
 
 /**
- * Translates text using the OpenAI API via our Supabase edge function
+ * Translates text using our translate-card edge function
  */
 export const translateText = async (
   text: string,
@@ -76,28 +76,21 @@ export const translateText = async (
 
     try {
       // Add detailed logging before making the request
-      console.log("Sending translation request to OpenAI proxy:", {
+      console.log("Sending translation request to translate-card function:", {
         targetLanguage,
         languageName,
         textLength: text.length,
         textPreview: text.substring(0, 50) + "..."
       });
       
-      const response = await fetch("/api/functions/v1/openai-proxy", {
+      const response = await fetch("/api/functions/v1/translate-card", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userInput: `Please translate the following text into ${languageName}. The translation should be polite, culturally appropriate, and clearly understood by restaurant or hotel staff:
-          
-          ${text}`,
-          systemPrompt: `You are a professional translator helping a traveler with food allergies. Your task is to translate the provided text accurately while ensuring it is polite, culturally appropriate, and clearly conveys the severity of allergies.
-          
-          IMPORTANT: Only respond with the translated text. Do not include any explanations, notes, or original text. Do not output markdown formatting.`,
-          model: "gpt-4o-mini",
-          temperature: 0.3,
-          max_tokens: 800
+          text,
+          targetLanguage: languageName
         }),
       });
 
@@ -113,11 +106,11 @@ export const translateText = async (
       }
 
       const data = await response.json();
-      console.log("Translation success, result:", data.result);
-      if (!data.result) {
+      console.log("Translation success, result:", data.translation);
+      if (!data.translation) {
         throw new Error("Translation API returned empty result");
       }
-      return { translatedText: data.result };
+      return { translatedText: data.translation };
     } catch (error) {
       console.error("Translation API error details:", error);
       
