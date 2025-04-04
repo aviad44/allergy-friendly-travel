@@ -28,6 +28,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   
   // Enhanced debug logging
+  console.log(`Destination ID: ${destinationId}`);
   console.log(`Loading destination: ${destinationId}`, { 
     content, 
     hotels: content?.hotels,
@@ -50,13 +51,18 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     }
   }, [destination]);
 
-  if (!destination || !content) {
-    console.error(`Missing destination or content data for: ${destinationId}`);
+  if (!destination) {
+    console.error(`Missing destination data for: ${destinationId}`);
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>Loading destination information...</p>
       </div>
     );
+  }
+
+  // Ensure we have at least minimal content for missing destinations
+  if (!content) {
+    console.error(`Missing content data for: ${destinationId}`);
   }
 
   return (
@@ -79,7 +85,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             />
             
             <IntroSection 
-              intro={content.intro}
+              intro={content?.intro || []}
               destinationName={destination.name}
               isLondon={isLondon}
             />
@@ -87,7 +93,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             <Separator className="bg-primary/10 h-0.5" />
 
             <TopHotelsSection 
-              hotels={content.hotels || []}
+              hotels={content?.hotels || []}
               destinationName={destination.name}
               isLondon={isLondon}
             />
@@ -95,13 +101,13 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             <Separator className="bg-primary/10 h-0.5" />
 
             <FAQSection 
-              faqs={content.faqs || []}
+              faqs={content?.faqs || []}
               destinationName={destination.name}
             />
 
             <TravelTips />
 
-            {content.languageTable && content.languageTable.headers && content.languageTable.headers.length > 0 && (
+            {content?.languageTable && content.languageTable.headers && content.languageTable.headers.length > 0 && (
               <div className="overflow-x-auto -mx-3 sm:mx-0 bg-primary/5 p-4 rounded-xl">
                 <div className="min-w-full p-3 sm:p-0">
                   <h2 className="text-xl sm:text-2xl font-display font-semibold mb-4 flex items-center">
