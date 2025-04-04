@@ -8,7 +8,7 @@ interface DestinationInfoProps {
 
 export const DestinationInfo = ({ name, country }: DestinationInfoProps) => {
   return (
-    <div className="absolute bottom-0 left-0 w-full p-4 sm:p-5 md:p-6 text-white">
+    <div className="absolute bottom-0 left-0 w-full p-4 sm:p-5 md:p-6 text-white z-10">
       <div className="container mx-auto">
         <div className="animate-fade-in max-w-lg">
           <div className="flex items-center gap-2 mb-2">
