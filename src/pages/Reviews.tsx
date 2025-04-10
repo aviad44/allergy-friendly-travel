@@ -5,10 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Helmet } from "react-helmet";
 import { ReviewContent } from "@/components/reviews/ReviewContent";
 import { Review, sortOptions } from "@/types/reviews";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const Reviews = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedDestination, setSelectedDestination] = useState<string>('all');
   const [selectedTravelerType, setSelectedTravelerType] = useState<string>('all');
   const [sortBy, setSortBy] = useState<typeof sortOptions[number]>('newest');
@@ -24,12 +27,20 @@ const Reviews = () => {
   const fetchReviews = async () => {
     try {
       setIsLoading(true);
+      setError(null);
+      console.log("Fetching reviews from Supabase...");
+      
       const { data, error } = await supabase
         .from('reviews')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log("Raw reviews data:", data);
       
       // Process reviews and ensure we always have an array
       let processedReviews: Review[] = [];
@@ -48,12 +59,14 @@ const Reviews = () => {
           }));
       }
       
-      console.log("Fetched reviews:", processedReviews);
+      console.log("Processed reviews:", processedReviews);
       setReviews(processedReviews);
     } catch (error) {
       console.error('Error fetching reviews:', error);
+      setError("Failed to load reviews. Please try again later.");
       toast({
         title: "Error loading reviews",
+        description: "Please check your connection and try again.",
         variant: "destructive"
       });
     } finally {
@@ -74,6 +87,13 @@ const Reviews = () => {
       <div className="hero-gradient absolute inset-0 z-0" />
       <div className="relative z-10">
         <div className="container mx-auto px-4 py-12 max-w-6xl"> 
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4 mr-2" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          
           <ReviewContent 
             reviews={reviews}
             isLoading={isLoading}

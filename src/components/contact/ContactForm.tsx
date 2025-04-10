@@ -36,20 +36,21 @@ export function ContactForm() {
       }
       
       // Call our Supabase Edge Function to send the email
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+      console.log("Calling Supabase edge function: send-contact-email");
+      const response = await supabase.functions.invoke('send-contact-email', {
         body: { name, email, message }
       });
 
-      console.log("Response from edge function:", { data, error });
+      console.log("Response from edge function:", response);
 
-      if (error) {
-        console.error('Contact form submission error:', error);
-        throw new Error(error.message || 'Failed to send message');
+      if (response.error) {
+        console.error('Edge function invocation error:', response.error);
+        throw new Error(response.error.message || 'Failed to send message');
       }
 
-      if (data?.error) {
-        console.error('Edge function returned error:', data.error);
-        throw new Error(data.error);
+      if (response.data?.error) {
+        console.error('Edge function returned error:', response.data.error);
+        throw new Error(response.data.error);
       }
 
       toast({
@@ -61,7 +62,7 @@ export function ContactForm() {
       setEmail("");
       setName("");
       setMessage("");
-    } catch (error) {
+    } catch (error: any) {
       console.error('Contact form submission error:', error);
       
       // Show error in toast
@@ -72,7 +73,7 @@ export function ContactForm() {
       });
       
       // Show detailed error in dialog
-      setErrorDetails(error instanceof Error ? error.message : 'Unknown error occurred');
+      setErrorDetails(error instanceof Error ? error.message : String(error));
       setShowErrorDialog(true);
     } finally {
       setIsSubmitting(false);

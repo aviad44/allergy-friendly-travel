@@ -14,7 +14,7 @@ interface Toast {
 
 interface UseToastReturn {
   toasts: Toast[];
-  toast: (props: Omit<Toast, "id">) => void;
+  toast: (props: Omit<Toast, "id">) => string;
   dismiss: (id: string) => void;
 }
 

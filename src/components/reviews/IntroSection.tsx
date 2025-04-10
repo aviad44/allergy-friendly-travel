@@ -1,14 +1,14 @@
 
 interface IntroSectionProps {
-  intro: string;
+  intro: string | string[];
   destinationName: string;
   isLondon?: boolean;
 }
 
 export const IntroSection = ({ intro, destinationName, isLondon = false }: IntroSectionProps) => {
-  // Ensure intro is a string
+  // Handle different types of intro content safely
   const introText = typeof intro === 'string' ? intro : 
-    (Array.isArray(intro) ? intro.join(' ') : 
+    (Array.isArray(intro) && intro.length > 0 ? intro.join(' ') : 
     "Find safe and comfortable accommodations for travelers with dietary restrictions.");
 
   return (

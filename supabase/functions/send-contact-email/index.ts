@@ -32,7 +32,7 @@ serve(async (req) => {
 
       // Validate required fields
       if (!name || !email || !message) {
-        console.error("❌ Missing required fields");
+        console.error("❌ Missing required fields", { name, email, message: message ? "provided" : "missing" });
         return new Response(
           JSON.stringify({ 
             error: "Missing required fields: name, email, and message are required"
@@ -79,7 +79,7 @@ serve(async (req) => {
         console.log("✅ Admin email sent response:", JSON.stringify(adminEmailResponse));
         
         // If there was an error in the response
-        if (adminEmailResponse.error) {
+        if ('error' in adminEmailResponse && adminEmailResponse.error) {
           throw new Error(`Resend API error: ${JSON.stringify(adminEmailResponse.error)}`);
         }
 
@@ -104,7 +104,7 @@ serve(async (req) => {
           console.log("✅ User confirmation email sent response:", JSON.stringify(userEmailResponse));
           
           // If there was an error in the user email response
-          if (userEmailResponse.error) {
+          if ('error' in userEmailResponse && userEmailResponse.error) {
             console.error("⚠️ User email had error but admin email was sent:", userEmailResponse.error);
           }
 

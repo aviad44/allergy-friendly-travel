@@ -37,12 +37,15 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     destinationData
   });
 
-  // Ensure we have a valid intro as a string
-  const introContent = content?.intro ? 
-    (typeof content.intro === 'string' ? content.intro : 
-     (Array.isArray(content.intro) ? content.intro.join(' ') : 
-      "Find safe and comfortable accommodations for travelers with dietary restrictions.")) : 
-    "Find safe and comfortable accommodations for travelers with dietary restrictions.";
+  // Safely prepare intro content as string
+  let introContent = "Find safe and comfortable accommodations for travelers with dietary restrictions.";
+  if (content?.intro) {
+    if (typeof content.intro === 'string') {
+      introContent = content.intro;
+    } else if (Array.isArray(content.intro) && content.intro.length > 0) {
+      introContent = content.intro.join(' ');
+    }
+  }
 
   useEffect(() => {
     if (destination) {
