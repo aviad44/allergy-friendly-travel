@@ -23,6 +23,7 @@ const Reviews = () => {
 
   const fetchReviews = async () => {
     try {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from('reviews')
         .select('*')
@@ -30,15 +31,25 @@ const Reviews = () => {
 
       if (error) throw error;
       
-      // Convert string IDs to numbers to match Review type
-      const processedReviews = data ? data
-        .filter(review => !["love this hotel", "loved this hotel", "Great hotel"].includes(review.text))
-        .map(review => ({
-          ...review,
-          id: typeof review.id === 'string' ? parseInt(review.id, 10) : review.id
-        })) : [];
+      // Process reviews and ensure we always have an array
+      let processedReviews: Review[] = [];
       
-      setReviews(processedReviews as Review[]);
+      if (Array.isArray(data)) {
+        // Filter out test/placeholder reviews
+        processedReviews = data
+          .filter(review => !["love this hotel", "loved this hotel", "Great hotel"].includes(review.text || ""))
+          .map(review => ({
+            ...review,
+            id: typeof review.id === 'string' ? parseInt(review.id, 10) : review.id,
+            // Ensure created_at exists
+            created_at: review.created_at || new Date().toISOString(),
+            // Ensure rating is a number
+            rating: typeof review.rating === 'number' ? review.rating : 5
+          }));
+      }
+      
+      console.log("Fetched reviews:", processedReviews);
+      setReviews(processedReviews);
     } catch (error) {
       console.error('Error fetching reviews:', error);
       toast({

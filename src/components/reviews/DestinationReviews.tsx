@@ -37,6 +37,13 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     destinationData
   });
 
+  // Ensure we have a valid intro as a string
+  const introContent = content?.intro ? 
+    (typeof content.intro === 'string' ? content.intro : 
+     (Array.isArray(content.intro) ? content.intro.join(' ') : 
+      "Find safe and comfortable accommodations for travelers with dietary restrictions.")) : 
+    "Find safe and comfortable accommodations for travelers with dietary restrictions.";
+
   useEffect(() => {
     if (destination) {
       document.title = `Best Allergy-Friendly Hotels in ${destination.name} | Safe Travel for Food Allergies`;
@@ -63,11 +70,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   if (!content) {
     console.error(`Missing content data for: ${destinationId}`);
   }
-
-  // Process intro content to ensure it's always a string
-  const introContent = Array.isArray(content?.intro) ? 
-    (content?.intro.length > 0 ? content.intro.join(' ') : "Find safe and comfortable accommodations for travelers with dietary restrictions.") : 
-    (content?.intro || "Find safe and comfortable accommodations for travelers with dietary restrictions.");
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

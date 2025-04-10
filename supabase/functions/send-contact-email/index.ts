@@ -47,6 +47,19 @@ serve(async (req) => {
       // Debug Resend API key
       console.log("📧 Attempting to use Resend with API key status:", !!resendApiKey);
       
+      if (!resendApiKey) {
+        console.error("❌ RESEND_API_KEY is not defined");
+        return new Response(
+          JSON.stringify({ 
+            error: "Server configuration error: Resend API key is missing" 
+          }),
+          {
+            status: 500,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      }
+      
       // Send email to admin
       console.log("📧 Sending admin email to aviad44@gmail.com...");
       try {
