@@ -47,7 +47,7 @@ serve(async (req) => {
       // Debug Resend API key
       console.log("📧 Attempting to use Resend with API key status:", !!resendApiKey);
       
-      // Send email to admin - UPDATED EMAIL ADDRESS HERE
+      // Send email to admin
       console.log("📧 Sending admin email to aviad44@gmail.com...");
       try {
         const adminEmailResponse = await resend.emails.send({
