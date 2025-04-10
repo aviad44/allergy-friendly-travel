@@ -64,6 +64,11 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     console.error(`Missing content data for: ${destinationId}`);
   }
 
+  // Make sure intro is a string, not an array of undefined
+  const introContent = Array.isArray(content?.intro) ? 
+    (content?.intro.length > 0 ? content.intro.join(' ') : "Find safe and comfortable accommodations for travelers with dietary restrictions.") : 
+    (content?.intro || "Find safe and comfortable accommodations for travelers with dietary restrictions.");
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <DestinationHero destination={destination} />
@@ -84,7 +89,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             />
             
             <IntroSection 
-              intro={content?.intro || []}
+              intro={introContent}
               destinationName={destination.name}
               isLondon={isLondon}
             />
