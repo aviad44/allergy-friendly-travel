@@ -64,7 +64,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     console.error(`Missing content data for: ${destinationId}`);
   }
 
-  // Make sure intro is a string, not an array of undefined
+  // Process intro content to ensure it's always a string
   const introContent = Array.isArray(content?.intro) ? 
     (content?.intro.length > 0 ? content.intro.join(' ') : "Find safe and comfortable accommodations for travelers with dietary restrictions.") : 
     (content?.intro || "Find safe and comfortable accommodations for travelers with dietary restrictions.");
