@@ -7,7 +7,6 @@ import { TravelTips } from "@/components/hotels/TravelTips";
 import { RelatedDestinations } from "./RelatedDestinations";
 import { LanguageCode, destinations, DestinationId, destinationData } from "@/types/reviews";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/Footer";
 import { DestinationHeader } from "./DestinationHeader";
 import { IntroSection } from "./IntroSection";
 import { TopHotelsSection } from "./TopHotelsSection";
@@ -110,12 +109,12 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             {content?.languageTable && content.languageTable.headers && content.languageTable.headers.length > 0 && (
               <div className="overflow-x-auto -mx-3 sm:mx-0 bg-primary/5 p-4 rounded-xl">
                 <div className="min-w-full p-3 sm:p-0">
-                  <h2 className="text-xl sm:text-2xl font-display font-semibold mb-4 flex items-center">
+                  <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center">
                     <Globe className="mr-2 h-6 w-6 text-primary/80" aria-hidden="true" />
                     Essential Phrases for Allergy Travelers
                   </h2>
                   <LanguageTable 
-                    data={content.languageTable}
+                    data={content?.languageTable || { headers: [], rows: [] }}
                     textAlignment={textAlignment}
                   />
                 </div>
@@ -134,8 +133,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           </article>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
