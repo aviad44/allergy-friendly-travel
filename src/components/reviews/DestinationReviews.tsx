@@ -37,14 +37,10 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     destinationData
   });
 
-  // Safely prepare intro content as string
-  let introContent = "Find safe and comfortable accommodations for travelers with dietary restrictions.";
+  // Safely prepare intro content
+  let introContent: string | string[] = "Find safe and comfortable accommodations for travelers with dietary restrictions.";
   if (content?.intro) {
-    if (typeof content.intro === 'string') {
-      introContent = content.intro;
-    } else if (Array.isArray(content.intro) && content.intro.length > 0) {
-      introContent = content.intro.join(' ');
-    }
+    introContent = content.intro;
   }
 
   useEffect(() => {
