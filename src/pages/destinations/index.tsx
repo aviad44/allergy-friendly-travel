@@ -1,120 +1,16 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ArrowRight, Hotel } from "lucide-react";
-import { Link } from "react-router-dom";
-import { DESTINATION_IMAGES } from "@/constants/destinations";
-import { Helmet } from "react-helmet";
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { DestinationsHero } from '@/components/destinations/DestinationsHero';
+import { DestinationsList } from '@/components/destinations/DestinationsList';
 
 const DestinationsIndex = () => {
-  const destinations = [
-    {
-      id: "london",
-      name: "London",
-      country: "United Kingdom",
-      image: DESTINATION_IMAGES.london,
-      description: "Discover allergen-friendly accommodations in the heart of England's capital.",
-      path: "/destinations/london"
-    },
-    {
-      id: "paris",
-      name: "Paris",
-      country: "France",
-      image: DESTINATION_IMAGES.paris,
-      description: "Enjoy the city of lights with peace of mind at these allergy-aware hotels.",
-      path: "/destinations/paris"
-    },
-    {
-      id: "barcelona",
-      name: "Barcelona",
-      country: "Spain",
-      image: DESTINATION_IMAGES.barcelona,
-      description: "Experience Catalan hospitality with allergen-conscious accommodations.",
-      path: "/destinations/barcelona"
-    },
-    {
-      id: "newyork",
-      name: "New York",
-      country: "United States",
-      image: DESTINATION_IMAGES["new-york"],
-      description: "Discover the top allergy-friendly hotels in the Big Apple for a safe and comfortable stay.",
-      path: "/destinations/newyork"
-    },
-    {
-      id: "portugal",
-      name: "Portugal",
-      country: "Portugal",
-      image: DESTINATION_IMAGES.portugal,
-      description: "Family and couple-friendly allergy-aware hotels across Lisbon, the Algarve and Porto.",
-      path: "/destinations/portugal"
-    },
-    {
-      id: "cyprus",
-      name: "Cyprus",
-      country: "Cyprus",
-      image: DESTINATION_IMAGES.cyprus,
-      description: "Discover the beauty of Cyprus with peace of mind at these allergy-friendly hotels.",
-      path: "/destinations/cyprus"
-    },
-    {
-      id: "abu-dhabi",
-      name: "Abu Dhabi",
-      country: "UAE",
-      image: DESTINATION_IMAGES["abu-dhabi"],
-      description: "Luxury accommodation with allergy considerations in the heart of the UAE.",
-      path: "/destinations/abudhabi"
-    },
-    {
-      id: "crete",
-      name: "Crete",
-      country: "Greece",
-      image: DESTINATION_IMAGES.crete,
-      description: "Relax on the beautiful Greek island with allergy-aware accommodations.",
-      path: "/destinations/crete"
-    },
-    {
-      id: "tokyo",
-      name: "Tokyo",
-      country: "Japan",
-      image: DESTINATION_IMAGES.tokyo,
-      description: "Navigate Tokyo's culinary scene safely with these allergy-friendly hotels.",
-      path: "/destinations/tokyo"
-    },
-    {
-      id: "thailand",
-      name: "Thailand",
-      country: "Thailand",
-      image: DESTINATION_IMAGES.thailand,
-      description: "Explore exotic Thailand with peace of mind at these allergy-friendly accommodations.",
-      path: "/destinations/thailand"
-    },
-    {
-      id: "swiss-alps",
-      name: "Swiss Alps",
-      country: "Switzerland",
-      image: DESTINATION_IMAGES["swiss-alps"] || "https://images.unsplash.com/photo-1531400158697-004a3a06fd3f?auto=format&fit=crop&w=800&q=80",
-      description: "Enjoy mountain vacations with allergy-safe accommodations in the majestic Swiss Alps.",
-      path: "/destinations/swiss-alps"
-    },
-    {
-      id: "hotel-chains",
-      name: "Top Allergy-Friendly Hotel Chains",
-      country: "Worldwide",
-      image: "photo-1571896349842-33c89424de2d", // Four Seasons hotel image
-      description: "Global hotel chains with exceptional food allergy and celiac-friendly policies.",
-      path: "/destinations/hotel-chains"
-    }
-  ];
-
   // SEO metadata
   const pageTitle = "Allergy-Friendly Travel Destinations | Safe Hotels Worldwide";
   const pageDescription = "Browse our comprehensive guide to allergy-friendly travel destinations worldwide. Find safe accommodations for dietary restrictions in top cities and regions.";
   const pageKeywords = "allergy-friendly destinations, food allergy travel, gluten-free travel destinations, allergy-conscious hotels worldwide";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations";
-    
-  // Current date for schema metadata
   const currentDate = new Date().toISOString().split('T')[0];
-
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <Helmet>
@@ -163,66 +59,8 @@ const DestinationsIndex = () => {
         </script>
       </Helmet>
 
-      {/* Hero Section */}
-      <section className="relative py-12 md:py-16 mt-0">
-        <div className="absolute inset-0 overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1488085061387-422e29b40080?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2731&q=80" 
-            alt="Travel destinations" 
-            className="w-full h-full object-cover object-center" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
-        </div>
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
-            <span className="text-sky-200 font-bold">Discover</span>
-            <span className="block mt-2 text-teal-300 font-bold">Allergy-Friendly Destinations</span>
-          </h1>
-          <p className="text-white text-lg md:text-xl mx-auto">
-            Find the perfect accommodation that caters to your specific allergy needs
-          </p>
-        </div>
-      </section>
-
-      {/* Destinations List */}
-      <section className="py-8 md:py-12 container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {destinations.map((destination) => (
-            <Link key={destination.id} to={destination.path} className="group">
-              <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
-                <div className="relative h-40 overflow-hidden">
-                  <img
-                    src={destination.image.startsWith('photo-') 
-                      ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=800&q=80` 
-                      : destination.image}
-                    alt={destination.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    onError={(e) => {
-                      console.error(`Failed to load image for ${destination.name}: ${destination.image}`);
-                      // Set a fallback image if the original fails to load
-                      (e.target as HTMLImageElement).src = "/placeholder.svg";
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <h3 className="text-white font-bold text-xl">{destination.name}</h3>
-                    <p className="text-gray-200 text-sm">{destination.country}</p>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <p className="text-gray-600 mb-3 text-sm">
-                    {destination.description}
-                  </p>
-                  <div className="flex items-center text-teal-600 font-medium text-sm">
-                    <span>View details</span>
-                    <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <DestinationsHero />
+      <DestinationsList />
     </div>
   );
 };

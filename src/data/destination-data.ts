@@ -3,6 +3,7 @@ import { DestinationId, DestinationContent } from '@/types/definitions';
 import { parisContent } from './destination-paris';
 import { tokyoContent } from './destination-tokyo';
 import { swissAlpsContent } from './destination-swiss-alps';
+import { kohSamuiContent } from './destination-koh-samui';
 import { 
   genericDestinationContent,
   londonContent,
@@ -36,5 +37,6 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
   'new-york': newYorkContent,
   'ayia-napa': ayiaNapaContent,
   portugal: portugalContent,
-  'swiss-alps': swissAlpsContent
+  'swiss-alps': swissAlpsContent,
+  'koh-samui': kohSamuiContent
 };
