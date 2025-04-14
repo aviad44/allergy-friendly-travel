@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DestinationReviews } from '@/components/reviews/DestinationReviews';
 import { Helmet } from 'react-helmet';
@@ -12,10 +11,10 @@ const SwissAlps = () => {
   const pageKeywords = "Swiss Alps allergy-friendly hotels, gluten-free hotel Switzerland, allergy-safe chalets, dairy-free Zermatt, celiac travel St. Moritz";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/swiss-alps";
 
-  // Get image from our constants
+  // Get image from our constants and ensure proper formatting
   const imageId = DESTINATION_IMAGES['swiss-alps'];
-  const heroImageUrl = `https://images.unsplash.com/${imageId}?auto=format&fit=crop&w=1600&q=80`;
-  const heroAltText = "Picturesque Swiss Alps resort with traditional chalets and mountain views";
+  const heroImageUrl = `https://images.unsplash.com/${imageId}?auto=format&fit=crop&w=2000&h=1000&q=80`;
+  const heroAltText = "Luxury Swiss Alps resort infinity pool with stunning Matterhorn mountain view";
 
   return (
     <>
@@ -58,16 +57,6 @@ const SwissAlps = () => {
         </script>
       </Helmet>
       
-      <div className="h-[40vh] sm:h-[45vh] md:h-[55vh] relative overflow-hidden">
-        <HeroImage 
-          imageUrl={heroImageUrl}
-          altText={heroAltText}
-        />
-        
-        {/* Using a lighter gradient to allow more natural sky color */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/40"></div>
-      </div>
-
       <DestinationReviews destinationId="swiss-alps" />
     </>
   );
