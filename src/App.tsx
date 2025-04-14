@@ -9,7 +9,7 @@ import {
 import { ThemeProvider } from '@/components/theme-provider';
 import { useTheme } from 'next-themes';
 import { Toaster } from '@/components/ui/toaster';
-import { SiteHeader } from '@/components/SiteHeader';
+import { MainLayout } from '@/components/MainLayout';
 import DestinationsIndex from '@/pages/destinations';
 import London from '@/pages/destinations/London';
 import Paris from '@/pages/destinations/Paris';
@@ -24,7 +24,6 @@ import NewYork from '@/pages/destinations/NewYork';
 import AyiaNapa from '@/pages/destinations/AyiaNapa';
 import Portugal from '@/pages/destinations/Portugal';
 import SwissAlps from '@/pages/destinations/SwissAlps';
-import { Footer } from '@/components/Footer';
 import Contact from '@/pages/Contact';
 import AboutUs from '@/pages/AboutUs';
 import Categories from '@/pages/Categories';
@@ -59,9 +58,8 @@ const AppContent = () => {
   return (
     <>
       <Toaster />
-      <SiteHeader />
-      <main>
-        <Routes>
+      <Routes>
+        <Route element={<MainLayout />}>
           <Route path="/" element={<Index />} />
           <Route path="/destinations" element={<DestinationsIndex />} />
           <Route path="/destinations/london" element={<London />} />
@@ -88,9 +86,8 @@ const AppContent = () => {
           <Route path="/terms" element={<Terms />} />
           <Route path="/allergy-translation-card" element={<AllergyTranslationCard />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-      <Footer />
+        </Route>
+      </Routes>
     </>
   );
 };
