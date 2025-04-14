@@ -4,16 +4,13 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-
 const KohSamui = () => {
   // SEO metadata
   const pageTitle = "Four Seasons Koh Samui – Allergy-Friendly & White Lotus Filming Location";
   const pageDescription = "Discover why Four Seasons Resort Koh Samui, filming location of The White Lotus Season 3, is ideal for guests with food allergies – including gluten-free, nut-free, and dairy-free travelers. Includes allergy card translation in Thai.";
   const pageKeywords = "Four Seasons Koh Samui, allergy-friendly hotel Thailand, gluten-free hotel Koh Samui, White Lotus filming hotel, travel with food allergies Thailand";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/koh-samui";
-  
-  return (
-    <>
+  return <>
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -38,11 +35,7 @@ const KohSamui = () => {
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
         <div className="relative h-60 sm:h-72 md:h-96 overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" 
-            alt="Tropical beach in Koh Samui with turquoise waters and white sand"
-            className="w-full h-full object-cover" 
-          />
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" alt="Tropical beach in Koh Samui with turquoise waters and white sand" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
           <div className="absolute inset-0 flex items-center justify-center text-center px-4">
             <div className="max-w-4xl">
@@ -50,9 +43,7 @@ const KohSamui = () => {
                 <ArrowLeft className="h-4 w-4 mr-1" />
                 Back to all destinations
               </Link>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
-                🌴 Four Seasons Koh Samui – The "White Lotus" Resort in Thailand That's Truly Food Allergy-Friendly
-              </h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">The "White Lotus" Resort in Thailand That's Truly Food Allergy-Friendly</h1>
             </div>
           </div>
         </div>
@@ -160,8 +151,6 @@ const KohSamui = () => {
           </div>
         </main>
       </div>
-    </>
-  );
+    </>;
 };
-
 export default KohSamui;
