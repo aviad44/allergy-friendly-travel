@@ -57,8 +57,6 @@ const SwissAlps = () => {
         </script>
       </Helmet>
       
-      {/* Removed the duplicated hero image section from here */}
-      
       <DestinationReviews destinationId="swiss-alps" />
     </>
   );

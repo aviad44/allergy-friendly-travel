@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from "react";
 import { DestinationHero } from "./DestinationHero";
-import { DestinationNavigation } from "./DestinationNavigation";
 import { LanguageTable } from "./LanguageTable";
 import { TravelTips } from "@/components/hotels/TravelTips";
 import { RelatedDestinations } from "./RelatedDestinations";
@@ -80,10 +79,21 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
       <main className="container mx-auto px-3 sm:px-5 lg:px-6 py-4 sm:py-6 -mt-14 sm:-mt-16 relative z-10 flex-grow">
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-5 sm:p-6">
-          <DestinationNavigation 
-            currentLanguage={currentLanguage}
-            setCurrentLanguage={setCurrentLanguage}
-          />
+          {/* Language selector can remain as it's a useful feature */}
+          <div className="flex justify-end mt-4 mb-6">
+            <select
+              value={currentLanguage}
+              onChange={(e) => setCurrentLanguage(e.target.value as LanguageCode)}
+              className="text-sm border rounded-md px-2 py-1 bg-background/80 text-foreground"
+              aria-label="Select language"
+            >
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="es">Español</option>
+              <option value="de">Deutsch</option>
+              <option value="he">עברית</option>
+            </select>
+          </div>
 
           <article className="space-y-6 sm:space-y-8 text-left">
             <DestinationHeader 
