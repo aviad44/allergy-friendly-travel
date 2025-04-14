@@ -10,5 +10,6 @@ export const DESTINATION_IMAGES = {
   thailand: "photo-1552465011-b4e21bf6e79a", // Thailand beach
   tokyo: "photo-1542051841857-5f90071e7989", // Tokyo skyline
   'new-york': "photo-1496442226666-8d4d0e62e6e9", // New York skyline
-  portugal: "photo-1555881400-74d7acaacd8b" // Colorful houses in Porto, Portugal
+  portugal: "photo-1555881400-74d7acaacd8b", // Colorful houses in Porto, Portugal
+  'swiss-alps': "photo-1458668383970-8ddd3927deed" // Verified Swiss Alps mountain landscape
 } as const;
