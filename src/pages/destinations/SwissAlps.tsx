@@ -2,6 +2,7 @@
 import React from 'react';
 import { DestinationReviews } from '@/components/reviews/DestinationReviews';
 import { Helmet } from 'react-helmet';
+import { HeroImage } from '@/components/reviews/HeroImage';
 
 const SwissAlps = () => {
   // SEO metadata
@@ -9,6 +10,10 @@ const SwissAlps = () => {
   const pageDescription = "Discover allergy-friendly hotels and chalets in the Swiss Alps. Safe accommodations in Zermatt, St. Moritz, and Lauterbrunnen for travelers with food allergies.";
   const pageKeywords = "Swiss Alps allergy-friendly hotels, gluten-free hotel Switzerland, allergy-safe chalets, dairy-free Zermatt, celiac travel St. Moritz";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/swiss-alps";
+
+  // Hero image configuration
+  const heroImageUrl = "photo-1470071459604-3b5ec3a7fe05"; // Foggy mountain summit from placeholder_images
+  const heroAltText = "Majestic Swiss Alps mountain landscape with snow-capped peaks and misty scenery";
 
   return (
     <>
@@ -50,6 +55,17 @@ const SwissAlps = () => {
           })}
         </script>
       </Helmet>
+      
+      <div className="h-[40vh] sm:h-[45vh] md:h-[55vh] relative overflow-hidden">
+        <HeroImage 
+          imageUrl={heroImageUrl}
+          altText={heroAltText}
+        />
+        
+        {/* Using a lighter gradient to allow more natural sky color */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/40"></div>
+      </div>
+
       <DestinationReviews destinationId="swiss-alps" />
     </>
   );
