@@ -32,7 +32,7 @@ export const ReviewCard = ({ review, onDelete }: ReviewCardProps) => {
       const { error } = await supabase
         .from('reviews')
         .delete()
-        .eq('id', review.id);
+        .eq('id', review.id.toString()); // Convert the review.id to a string
 
       if (error) throw error;
 
