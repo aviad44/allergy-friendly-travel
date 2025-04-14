@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { ReviewsHeader } from "./ReviewsHeader";
 import { ReviewForm } from "./ReviewForm";
@@ -117,6 +118,7 @@ export const ReviewContent: React.FC<ReviewContentProps> = ({
   };
 
   const handleReviewDeleted = () => {
+    console.log("Review deleted, refreshing list");
     fetchReviews();
   };
 

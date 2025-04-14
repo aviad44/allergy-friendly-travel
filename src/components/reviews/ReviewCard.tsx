@@ -29,21 +29,29 @@ export const ReviewCard = ({ review, onDelete }: ReviewCardProps) => {
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
+      console.log("Attempting to delete review with ID:", review.id);
       
-      // Always use the original ID string format from the database
-      const { error } = await supabase
+      const { error, data } = await supabase
         .from('reviews')
         .delete()
         .eq('id', review.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error details:', error);
+        throw error;
+      }
+      
+      console.log("Delete response:", data);
 
       toast({
         title: "Review deleted",
         description: "The review has been successfully deleted",
       });
       
-      if (onDelete) onDelete();
+      if (onDelete) {
+        console.log("Calling onDelete callback");
+        onDelete();
+      }
     } catch (error) {
       console.error('Error deleting review:', error);
       toast({
