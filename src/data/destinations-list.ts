@@ -1,4 +1,3 @@
-
 import { Destination } from '@/types/definitions';
 
 export const destinations: Destination[] = [
@@ -92,5 +91,12 @@ export const destinations: Destination[] = [
     country: 'Switzerland',
     description: 'Best Allergy-Friendly Hotels in the Swiss Alps',
     subtitle: 'Safe Mountain Accommodations for Food Allergies'
+  },
+  {
+    id: 'koh-samui',
+    name: 'Koh Samui',
+    country: 'Thailand',
+    description: 'Best Allergy-Friendly Hotels in Koh Samui',
+    subtitle: 'Including White Lotus Season 3 Filming Location'
   }
 ];

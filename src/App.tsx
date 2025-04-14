@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -37,20 +36,18 @@ import SearchResults from '@/pages/SearchResults';
 import Sitemap from '@/pages/Sitemap';
 import Terms from '@/pages/Terms';
 import AllergyTranslationCard from '@/pages/AllergyTranslationCard';
+import KohSamui from '@/pages/destinations/KohSamui';
 
-// AppContent component to use hooks that require router context
 const AppContent = () => {
   const { theme, setTheme } = useTheme();
   const location = useLocation();
 
   useEffect(() => {
-    // Check if the code is running in a browser environment before accessing localStorage
     if (typeof window !== 'undefined') {
       const storedTheme = localStorage.getItem('theme');
       if (storedTheme) {
         setTheme(storedTheme);
       } else {
-        // Set the theme based on the user's system preference
         setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       }
     }
@@ -86,6 +83,7 @@ const AppContent = () => {
           <Route path="/sitemap" element={<Sitemap />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/allergy-translation-card" element={<AllergyTranslationCard />} />
+          <Route path="/destinations/koh-samui" element={<KohSamui />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
