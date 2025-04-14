@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,7 +50,8 @@ const Reviews = () => {
           .filter(review => !["love this hotel", "loved this hotel", "Great hotel"].includes(review.text || ""))
           .map(review => ({
             ...review,
-            id: typeof review.id === 'string' ? parseInt(review.id, 10) : review.id,
+            // No more conversion to number, keep ID as a string
+            id: review.id,
             // Ensure created_at exists
             created_at: review.created_at || new Date().toISOString(),
             // Ensure rating is a number

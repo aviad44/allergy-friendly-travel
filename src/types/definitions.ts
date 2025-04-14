@@ -30,7 +30,7 @@ export interface LanguageTable {
 }
 
 export interface Review {
-  id: string | number; // Allow both string and number to handle both UUID strings and parsed numbers
+  id: string; // Changed to string only, as IDs come from database as UUID strings
   rating: number;
   text: string;
   author_name: string;
@@ -38,13 +38,6 @@ export interface Review {
   destination?: string;
   traveler_type?: string;
   language: string;
-}
-
-export interface DestinationContent {
-  intro: string;
-  hotels: Hotel[];
-  faqs: FAQ[];
-  languageTable: LanguageTable;
 }
 
 export type LanguageCode = 'en' | 'fr' | 'de' | 'es' | 'it' | 'he';
