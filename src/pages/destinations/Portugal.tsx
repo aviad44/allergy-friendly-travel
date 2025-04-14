@@ -2,7 +2,6 @@
 import React from 'react';
 import { DestinationReviews } from '@/components/reviews/DestinationReviews';
 import { Helmet } from 'react-helmet';
-import { DESTINATION_IMAGES } from '@/constants/destinations';
 
 const Portugal = () => {
   // SEO metadata

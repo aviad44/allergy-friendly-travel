@@ -26,16 +26,20 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const isLondon = destinationId === 'london' as DestinationId;
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   
-  // Enhanced debug logging
+  // Enhanced debug logging to ensure data is loaded
   console.log(`Destination ID: ${destinationId}`);
   console.log(`Loading destination: ${destinationId}`, { 
-    content, 
-    hotels: content?.hotels,
-    faqs: content?.faqs,
-    languageTable: content?.languageTable,
-    intro: content?.intro,
-    destinationData
+    contentExists: !!content,
+    hotels: content?.hotels?.length || 0,
+    faqs: content?.faqs?.length || 0,
+    languageTable: !!content?.languageTable,
+    intro: !!content?.intro,
+    destinationData: Object.keys(destinationData)
   });
+
+  if (content?.hotels) {
+    console.log(`Hotel data for ${destinationId}:`, content.hotels.slice(0, 1)); // Log first hotel as sample
+  }
 
   // Safely prepare intro content
   let introContent: string | string[] = "Find safe and comfortable accommodations for travelers with dietary restrictions.";

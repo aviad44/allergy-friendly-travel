@@ -77,7 +77,40 @@ export const abuDhabiContent: DestinationContent = {
 // Content for Crete
 export const creteContent: DestinationContent = {
   intro: "Discover Crete's most accommodating hotels for dietary restrictions.",
-  hotels: [],
+  hotels: [
+    {
+      name: "1. Blue Palace Elounda ★★★★★",
+      address: "Plaka, Elounda 720 53, Crete, Greece",
+      features: ["⭐ 5-star luxury", "🍽️ Dedicated allergen-free kitchen areas", "👨‍🍳 Specialized chefs"],
+      description: "Blue Palace features dedicated allergen-free kitchen spaces and specialized chefs who can prepare custom meals for guests with food allergies or dietary restrictions.",
+      quote: "The chef prepared gluten-free versions of traditional Greek dishes that were absolutely incredible! - James M.",
+      bookingUrl: "https://www.bluepalace.gr/"
+    },
+    {
+      name: "2. Domes of Elounda ★★★★★",
+      address: "Tsifliki, Elounda 720 53, Crete, Greece",
+      features: ["⭐ 5-star luxury", "🥗 Allergen menus", "📱 Digital allergen tracking"],
+      description: "Domes of Elounda provides detailed allergen menus at all their restaurants and uses digital systems to track guest dietary requirements throughout their stay.",
+      quote: "As someone with multiple food allergies, their attention to detail made my vacation worry-free! - Caroline D.",
+      bookingUrl: "https://domesresorts.com/domesofelounda/"
+    },
+    {
+      name: "3. Abaton Island Resort & Spa ★★★★★",
+      address: "Themistokleous Avenue, Hersonissos 700 14, Crete, Greece",
+      features: ["⭐ 5-star luxury", "🍽️ Allergy-friendly menus", "🍰 Gluten-free pastries"],
+      description: "Abaton Island Resort offers comprehensive allergy-friendly dining options at all five of their restaurants, including a selection of gluten-free pastries and desserts.",
+      quote: "Their gluten-free baklava was the highlight of my trip! Never thought I could enjoy traditional Greek desserts. - Sophie T.",
+      bookingUrl: "https://www.abaton.gr/"
+    },
+    {
+      name: "4. Daios Cove Luxury Resort ★★★★★",
+      address: "Vathi, Agios Nikolaos 721 00, Crete, Greece",
+      features: ["⭐ 5-star luxury", "🍽️ Allergen-free zones", "📋 Personalized meal plans"],
+      description: "Daios Cove maintains allergen-free preparation zones in their kitchens and offers personalized meal plans for guests with dietary restrictions throughout their stay.",
+      quote: "The resort accommodated my dairy allergy at every meal without me having to ask twice. Amazing service! - Robert K.",
+      bookingUrl: "https://www.daioscove.com/"
+    }
+  ],
   faqs: [],
   languageTable: { headers: [], rows: [] }
 };
@@ -150,6 +183,47 @@ export const ayiaNapaContent: DestinationContent = {
 // Content for Portugal
 export const portugalContent: DestinationContent = {
   intro: "Portugal's finest hotels catering to dietary restrictions.",
+  hotels: [
+    {
+      name: "1. Four Seasons Hotel Ritz Lisbon ★★★★★",
+      address: "Rua Rodrigo da Fonseca 88, 1099-039 Lisbon, Portugal",
+      features: ["⭐ 5-star luxury", "🍽️ Dedicated allergen-free kitchen", "👨‍🍳 Allergen-trained chefs"],
+      description: "Four Seasons Lisbon features a dedicated allergen-free kitchen area and specially trained chefs who can accommodate virtually any dietary restriction with advance notice.",
+      quote: "The pastry chef created gluten-free versions of Portuguese pastries that were even better than the originals! - Emma L.",
+      bookingUrl: "https://www.fourseasons.com/lisbon/"
+    },
+    {
+      name: "2. Pine Cliffs Resort ★★★★★",
+      address: "Praia da Falésia, Albufeira 8200-909, Algarve, Portugal",
+      features: ["⭐ 5-star luxury", "🍽️ Comprehensive allergen menus", "🥗 Allergen-free buffet sections"],
+      description: "Pine Cliffs offers comprehensive allergen information for all their restaurants and maintains dedicated allergen-free sections at their buffets to prevent cross-contamination.",
+      quote: "Their allergy-friendly kids' menu was a lifesaver for our son with multiple food allergies. First vacation without stress! - Thomas B.",
+      bookingUrl: "https://www.pinecliffs.com/"
+    },
+    {
+      name: "3. Six Senses Douro Valley ★★★★★",
+      address: "Quinta de Vale Abraão, 5100-758 Lamego, Portugal",
+      features: ["⭐ 5-star luxury", "🌱 Farm-to-table with allergy focus", "🍽️ Personalized dietary programs"],
+      description: "Six Senses' farm-to-table approach allows for complete transparency in ingredients and preparation. They offer personalized dietary programs for guests with allergies or restrictions.",
+      quote: "The resort created a completely personalized menu plan for my challenging combination of allergies. Phenomenal service! - Sarah M.",
+      bookingUrl: "https://www.sixsenses.com/en/resorts/douro-valley/"
+    },
+    {
+      name: "4. Tivoli Avenida Liberdade Lisboa ★★★★★",
+      address: "Av. da Liberdade 185, 1269-050 Lisbon, Portugal",
+      features: ["⭐ 5-star luxury", "🍽️ Allergen information system", "👨‍🍳 Chef consultation available"],
+      description: "Tivoli Avenida Liberdade implements a comprehensive allergen information system across all their dining venues and offers chef consultations for guests with complex dietary needs.",
+      quote: "The staff's knowledge about cross-contamination was impressive. I could enjoy traditional Portuguese cuisine safely as a celiac! - David K.",
+      bookingUrl: "https://www.tivolihotels.com/en/tivoli-avenida-liberdade-lisboa"
+    }
+  ],
+  faqs: [],
+  languageTable: { headers: [], rows: [] }
+};
+
+// Content for Swiss Alps
+export const swissAlpsContent: DestinationContent = {
+  intro: "The Swiss Alps offer excellent options for travelers with food allergies and dietary restrictions.",
   hotels: [],
   faqs: [],
   languageTable: { headers: [], rows: [] }
