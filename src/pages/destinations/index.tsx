@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { DestinationsHero } from '@/components/destinations/DestinationsHero';
 import { DestinationsList } from '@/components/destinations/DestinationsList';
+import { destinations } from '@/data/destinations-list';
 
 const DestinationsIndex = () => {
   // SEO metadata
@@ -47,7 +49,7 @@ const DestinationsIndex = () => {
                   "@type": "TouristDestination",
                   "name": dest.name,
                   "description": dest.description,
-                  "url": `https://www.allergy-free-travel.com${dest.path}`
+                  "url": `https://www.allergy-free-travel.com/destinations/${dest.id}`
                 }
               }))
             },

@@ -6,7 +6,7 @@ export interface Destination {
   country: string;
   description: string;
   subtitle: string;
-  image?: string; // Make image optional
+  image?: string; // Add the image property as optional
 }
 
 export interface Hotel {
