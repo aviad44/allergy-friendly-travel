@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Mail, Clock, AlertCircle, Loader2 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { Send, Mail, Clock, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ErrorDialog } from "./ErrorDialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -15,6 +15,7 @@ export function ContactForm() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [errorDetails, setErrorDetails] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
@@ -53,15 +54,13 @@ export function ContactForm() {
         throw new Error(response.data.error);
       }
 
+      // Set submitted state instead of clearing form
+      setIsSubmitted(true);
+      
       toast({
         title: "Message sent!",
         description: "We'll get back to you as soon as possible.",
       });
-      
-      // Clear the form
-      setEmail("");
-      setName("");
-      setMessage("");
     } catch (error: any) {
       console.error('Contact form submission error:', error);
       
@@ -79,6 +78,32 @@ export function ContactForm() {
       setIsSubmitting(false);
     }
   };
+
+  // Reset form to allow new submission
+  const handleNewMessage = () => {
+    setIsSubmitted(false);
+    setEmail("");
+    setName("");
+    setMessage("");
+  };
+
+  // Render thank you state
+  if (isSubmitted) {
+    return (
+      <Card className="p-6 shadow-md text-center space-y-4">
+        <div className="flex justify-center mb-4">
+          <CheckCircle2 className="h-16 w-16 text-green-500" />
+        </div>
+        <h2 className="text-2xl font-bold text-primary">Thank You!</h2>
+        <p className="text-muted-foreground">
+          We've received your message and will get back to you soon.
+        </p>
+        <Button onClick={handleNewMessage} className="w-full">
+          Send Another Message
+        </Button>
+      </Card>
+    );
+  }
 
   return (
     <div className="grid md:grid-cols-2 gap-8">
