@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { ReviewsHeader } from "./ReviewsHeader";
 import { ReviewForm } from "./ReviewForm";
@@ -57,8 +56,8 @@ export const ReviewContent: React.FC<ReviewContentProps> = ({
         rating,
         text: reviewText,
         author_name: "Guest",
-        language: "en", // Add the required language field
-        created_at: new Date().toISOString(), // Ensure created_at is set
+        language: "en",
+        created_at: new Date().toISOString(),
         destination: selectedDestination !== 'all' ? selectedDestination : undefined,
         traveler_type: selectedTravelerType !== 'all' ? selectedTravelerType : undefined
       };
@@ -87,7 +86,6 @@ export const ReviewContent: React.FC<ReviewContentProps> = ({
   };
 
   const filterAndSortReviews = (reviews: Review[]) => {
-    // Ensure reviews is an array
     if (!Array.isArray(reviews)) {
       console.error("Reviews is not an array:", reviews);
       return [];
@@ -116,6 +114,10 @@ export const ReviewContent: React.FC<ReviewContentProps> = ({
           return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       }
     });
+  };
+
+  const handleReviewDeleted = () => {
+    fetchReviews();
   };
 
   return (
@@ -156,7 +158,8 @@ export const ReviewContent: React.FC<ReviewContentProps> = ({
 
           <ReviewsList 
             reviews={filterAndSortReviews(reviews)} 
-            isLoading={isLoading} 
+            isLoading={isLoading}
+            onReviewDeleted={handleReviewDeleted}
           />
         </div>
       </div>

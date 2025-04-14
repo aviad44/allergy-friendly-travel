@@ -6,9 +6,10 @@ import { ReviewCard } from "./ReviewCard";
 interface ReviewsListProps {
   reviews: Review[];
   isLoading: boolean;
+  onReviewDeleted?: () => void;
 }
 
-export const ReviewsList: React.FC<ReviewsListProps> = ({ reviews, isLoading }) => {
+export const ReviewsList: React.FC<ReviewsListProps> = ({ reviews, isLoading, onReviewDeleted }) => {
   if (isLoading) {
     return (
       <div className="text-center py-12">
@@ -31,7 +32,10 @@ export const ReviewsList: React.FC<ReviewsListProps> = ({ reviews, isLoading }) 
     <div className="grid gap-6">
       {reviews.map((review) => (
         <div key={review.id} className="reviews-animation-fade">
-          <ReviewCard review={review} />
+          <ReviewCard 
+            review={review} 
+            onDelete={onReviewDeleted}
+          />
         </div>
       ))}
     </div>
