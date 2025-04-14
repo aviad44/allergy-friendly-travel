@@ -23,7 +23,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
         <img 
           src={imageUrl}
           alt={altText}
-          className={`w-full h-full object-cover transition-opacity duration-500 brightness-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full object-cover transition-opacity duration-500 brightness-125 contrast-105 saturate-110 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImageLoaded(true)}
           onError={(e) => {
             console.error(`Failed to load image: ${imageUrl}`);
@@ -40,6 +40,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
           className="w-full h-full object-cover bg-gray-200"
         />
       )}
+      <div className="absolute inset-0 bg-gradient-to-b from-sky-500/10 via-transparent to-transparent pointer-events-none"></div>
     </div>
   );
 };

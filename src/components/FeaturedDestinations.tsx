@@ -89,15 +89,15 @@ export const FeaturedDestinations = () => {
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
                   src={destination.image.startsWith('photo-') 
-                    ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=800&h=500&q=80` 
+                    ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=800&h=500&q=80&sat=1.2&con=1.1&bright=1.1` 
                     : destination.image}
                   alt={destination.name === "Cyprus" 
                     ? "Beautiful beach in Cyprus - Best allergy-friendly destination for family vacations"
                     : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`
                   }
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-4 text-white">
                   <h3 className="font-display text-2xl md:text-2xl lg:text-3xl font-bold mb-1 drop-shadow-md">{destination.name}</h3>
                   <p className="text-sm md:text-base text-white/90">{destination.country}</p>

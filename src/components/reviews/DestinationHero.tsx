@@ -29,7 +29,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
 
   return (
     <div 
-      className="h-[35vh] sm:h-[40vh] md:h-[50vh] relative overflow-hidden"
+      className="h-[40vh] sm:h-[45vh] md:h-[55vh] relative overflow-hidden"
       role="banner"
       aria-label={`Featured destination: ${destination.name}`}
     >
@@ -40,7 +40,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       />
       
       {/* Using a lighter gradient to allow more natural sky color */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/30 to-black/50"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/40"></div>
       
       <DestinationInfo 
         name={destination.name}

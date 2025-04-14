@@ -48,14 +48,14 @@ export default function Index() {
       
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden w-full">
         <picture>
-          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000&h=1200" type="image/webp" />
+          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.3&con=1.05&bright=1.2" type="image/webp" />
           <img 
-            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000&h=1200" 
+            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.3&con=1.05&bright=1.2" 
             alt="Allergy-friendly travel destination" 
-            className="absolute inset-0 w-full h-full object-cover object-center brightness-110" 
+            className="absolute inset-0 w-full h-full object-cover object-center brightness-110 saturate-110" 
             loading="eager" 
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/25 to-black/45"></div>
         </picture>
         
         <div className="relative z-10 container mx-auto px-4 text-center w-full pt-8 sm:pt-12">
