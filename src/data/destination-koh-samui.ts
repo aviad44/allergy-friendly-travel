@@ -2,7 +2,7 @@
 import { DestinationContent } from '@/types/definitions';
 
 export const kohSamuiContent: DestinationContent = {
-  intro: "Discover why Four Seasons Resort Koh Samui, filming location of The White Lotus Season 3, is ideal for guests with food allergies – including gluten-free, nut-free, and dairy-free travelers.",
+  intro: "Dreaming of the lush tropical setting from The White Lotus Season 3? You're not alone. And if you or a family member has food allergies, you'll be thrilled to learn that the actual filming location – the Four Seasons Resort Koh Samui in Thailand – is not only luxurious, but also well-equipped to handle food allergies with exceptional care.",
   hotels: [
     {
       name: "Four Seasons Resort Koh Samui",

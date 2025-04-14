@@ -73,13 +73,6 @@ export const destinations: Destination[] = [
     subtitle: 'Safe Accommodations for Food Allergies'
   },
   {
-    id: 'ayia-napa',
-    name: 'Ayia Napa',
-    country: 'Cyprus',
-    description: 'Best Allergy-Friendly Hotels in Ayia Napa',
-    subtitle: 'Safe Accommodations for Food Allergies'
-  },
-  {
     id: 'portugal',
     name: 'Portugal',
     country: 'Portugal',
@@ -97,7 +90,7 @@ export const destinations: Destination[] = [
     id: 'koh-samui',
     name: 'Koh Samui',
     country: 'Thailand',
-    description: 'Best Allergy-Friendly Hotels in Koh Samui',
-    subtitle: 'Including White Lotus Season 3 Filming Location'
+    description: 'Four Seasons Koh Samui – The "White Lotus" Resort',
+    subtitle: 'Allergy-Friendly White Lotus Filming Location'
   }
 ];
