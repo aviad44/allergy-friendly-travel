@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -80,6 +79,22 @@ const DestinationsIndex = () => {
       image: DESTINATION_IMAGES.tokyo,
       description: "Navigate Tokyo's culinary scene safely with these allergy-friendly hotels.",
       path: "/destinations/tokyo"
+    },
+    {
+      id: "thailand",
+      name: "Thailand",
+      country: "Thailand",
+      image: DESTINATION_IMAGES.thailand,
+      description: "Explore exotic Thailand with peace of mind at these allergy-friendly accommodations.",
+      path: "/destinations/thailand"
+    },
+    {
+      id: "swiss-alps",
+      name: "Swiss Alps",
+      country: "Switzerland",
+      image: DESTINATION_IMAGES["swiss-alps"] || "https://images.unsplash.com/photo-1531400158697-004a3a06fd3f?auto=format&fit=crop&w=800&q=80",
+      description: "Enjoy mountain vacations with allergy-safe accommodations in the majestic Swiss Alps.",
+      path: "/destinations/swiss-alps"
     },
     {
       id: "hotel-chains",
