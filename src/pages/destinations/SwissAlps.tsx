@@ -1,21 +1,54 @@
 
 import React from 'react';
 import { DestinationReviews } from '@/components/reviews/DestinationReviews';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 
 const SwissAlps = () => {
+  // SEO metadata
+  const pageTitle = "Allergy-Friendly Hotels in the Swiss Alps | Safe Mountain Accommodations";
+  const pageDescription = "Discover allergy-friendly hotels and chalets in the Swiss Alps. Safe accommodations in Zermatt, St. Moritz, and Lauterbrunnen for travelers with food allergies.";
+  const pageKeywords = "Swiss Alps allergy-friendly hotels, gluten-free hotel Switzerland, allergy-safe chalets, dairy-free Zermatt, celiac travel St. Moritz";
+  const canonicalUrl = "https://www.allergy-free-travel.com/destinations/swiss-alps";
+
   return (
     <>
       <Helmet>
-        <title>Allergy-Friendly Hotels in the Swiss Alps | Safe Mountain Accommodations</title>
-        <meta 
-          name="description" 
-          content="Discover allergy-friendly hotels and chalets in the Swiss Alps. Safe accommodations in Zermatt, St. Moritz, and Lauterbrunnen for travelers with food allergies."
-        />
-        <meta 
-          name="keywords" 
-          content="Swiss Alps allergy-friendly hotels, gluten-free hotel Switzerland, allergy-safe chalets, dairy-free Zermatt, celiac travel St. Moritz" 
-        />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta name="keywords" content={pageKeywords} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content="https://images.unsplash.com/photo-1531400158697-004a3a06fd3f?auto=format&fit=crop&w=1200&q=80" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="article" />
+        
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content="https://images.unsplash.com/photo-1531400158697-004a3a06fd3f?auto=format&fit=crop&w=1200&q=80" />
+        
+        {/* Schema.org markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "TravelGuide",
+            "name": pageTitle,
+            "description": pageDescription,
+            "datePublished": "2024-06-10",
+            "dateModified": "2024-06-10",
+            "about": {
+              "@type": "Place",
+              "name": "Swiss Alps",
+              "description": "Mountain range in Switzerland"
+            },
+            "audience": "Travelers with food allergies or dietary restrictions"
+          })}
+        </script>
       </Helmet>
       <DestinationReviews destinationId="swiss-alps" />
     </>

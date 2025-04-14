@@ -10,6 +10,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { useTheme } from 'next-themes';
 import { Toaster } from '@/components/ui/toaster';
 import { MainLayout } from '@/components/MainLayout';
+import { HelmetProvider } from 'react-helmet-async';
 import DestinationsIndex from '@/pages/destinations';
 import London from '@/pages/destinations/London';
 import Paris from '@/pages/destinations/Paris';
@@ -95,9 +96,11 @@ const AppContent = () => {
 function App() {
   return (
     <Router>
-      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-        <AppContent />
-      </ThemeProvider>
+      <HelmetProvider>
+        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+          <AppContent />
+        </ThemeProvider>
+      </HelmetProvider>
     </Router>
   );
 }
