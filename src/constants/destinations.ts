@@ -1,9 +1,10 @@
+
 // Define destination hero images that will be used consistently across the site
 export const DESTINATION_IMAGES = {
   london: "photo-1513635269975-59663e0ac1ad", // London skyline with Thames river
   paris: "photo-1502602898657-3e91760cbb34", // Wide view of Eiffel Tower
   barcelona: "photo-1583422409516-2895a77efded", // Sagrada Familia image
-  cyprus: "photo-1586015555751-63bb77f4322a", // Beautiful Fig Tree Bay beach in Protaras, Cyprus
+  cyprus: "photo-1500673922987-e212871fec22", // Luxury beachfront resort in Cyprus with crystal clear waters
   crete: "photo-1469796466635-455ede028aca", // Beautiful Cretan beach with turquoise waters
   'abu-dhabi': "photo-1512632578888-169bbbc64f33", // Abu Dhabi skyline
   thailand: "photo-1552465011-b4e21bf6e79a", // Thailand beach
@@ -12,3 +13,4 @@ export const DESTINATION_IMAGES = {
   portugal: "photo-1555881400-74d7acaacd8b", // Colorful houses in Porto, Portugal
   'swiss-alps': "photo-1491555103944-7c647fd857e6", // Swiss Alps mountain resort with lake view
 } as const;
+
