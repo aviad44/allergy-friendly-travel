@@ -36,7 +36,7 @@ export const DestinationCard = ({
               (e.target as HTMLImageElement).src = "/placeholder.svg";
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
           <div className="absolute bottom-3 left-3 right-3">
             <h3 className="text-white font-bold text-xl">{name}</h3>
             <p className="text-gray-200 text-sm">{country}</p>
