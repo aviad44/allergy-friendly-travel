@@ -11,5 +11,5 @@ export const DESTINATION_IMAGES = {
   tokyo: "photo-1542051841857-5f90071e7989", // Tokyo skyline
   'new-york': "photo-1496442226666-8d4d0e62e6e9", // New York skyline
   portugal: "photo-1555881400-74d7acaacd8b", // Colorful houses in Porto, Portugal
-  'swiss-alps': "photo-1528127269322-539801943592" // Typical Swiss alpine resort with chalets and mountains
+  'swiss-alps': "photo-1482938289607-e9573fc25ebb" // Swiss Alps with classic mountain river view
 } as const;

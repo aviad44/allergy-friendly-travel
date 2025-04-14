@@ -29,7 +29,7 @@ const SwissAlps = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://images.unsplash.com/photo-1531400158697-004a3a06fd3f?auto=format&fit=crop&w=1200&q=80" />
+        <meta property="og:image" content={heroImageUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         
@@ -37,7 +37,7 @@ const SwissAlps = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://images.unsplash.com/photo-1531400158697-004a3a06fd3f?auto=format&fit=crop&w=1200&q=80" />
+        <meta name="twitter:image" content={heroImageUrl} />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
