@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { DestinationReviews } from '@/components/reviews/DestinationReviews';
 import { Helmet } from 'react-helmet';
@@ -56,6 +57,16 @@ const SwissAlps = () => {
           })}
         </script>
       </Helmet>
+      
+      <div className="h-[40vh] sm:h-[45vh] md:h-[55vh] relative overflow-hidden">
+        <HeroImage 
+          imageUrl={heroImageUrl}
+          altText={heroAltText}
+        />
+        
+        {/* Using a lighter gradient to allow more natural sky color */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/40"></div>
+      </div>
       
       <DestinationReviews destinationId="swiss-alps" />
     </>

@@ -1,3 +1,4 @@
+
 // Define destination hero images that will be used consistently across the site
 export const DESTINATION_IMAGES = {
   london: "photo-1513635269975-59663e0ac1ad", // London skyline with Thames river
@@ -10,5 +11,5 @@ export const DESTINATION_IMAGES = {
   tokyo: "photo-1542051841857-5f90071e7989", // Tokyo skyline
   'new-york': "photo-1496442226666-8d4d0e62e6e9", // New York skyline
   portugal: "photo-1555881400-74d7acaacd8b", // Colorful houses in Porto, Portugal
-  'swiss-alps': "photo-1622320833801-91ec928728f6", // Swiss Alps resort pool with Matterhorn view
+  'swiss-alps': "photo-1491555103944-7c647fd857e6", // Swiss Alps mountain resort with lake view
 } as const;
