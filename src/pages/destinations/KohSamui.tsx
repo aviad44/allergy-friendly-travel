@@ -1,9 +1,8 @@
-
 import React from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Star } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const KohSamui = () => {
@@ -25,7 +24,7 @@ const KohSamui = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&w=1200&q=80" />
+        <meta property="og:image" content="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         
@@ -33,15 +32,15 @@ const KohSamui = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&w=1200&q=80" />
+        <meta name="twitter:image" content="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" />
       </Helmet>
       
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
         <div className="relative h-60 sm:h-72 md:h-96 overflow-hidden">
           <img 
-            src="https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&w=1200&q=80" 
-            alt="Scenic view of Koh Samui beach with tropical trees and ocean"
+            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" 
+            alt="Tropical beach in Koh Samui with turquoise waters and white sand"
             className="w-full h-full object-cover" 
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
@@ -148,21 +147,6 @@ const KohSamui = () => {
               </div>
 
               <Separator className="my-6" />
-
-              {/* Rating Section */}
-              <div className="text-center p-4 bg-blue-50 rounded-lg mb-4">
-                <h2 className="text-xl font-bold text-gray-800 mb-2">⭐ Rate This Guide</h2>
-                <p className="font-medium mb-2">How useful was this travel guide for you?</p>
-                <div className="flex justify-center">
-                  {[1, 2, 3, 4, 5].map((rating) => (
-                    <Star 
-                      key={rating}
-                      className="h-6 w-6 text-amber-300 cursor-pointer"
-                    />
-                  ))}
-                </div>
-                <p className="mt-2 text-sm text-gray-600">Your feedback helps improve this service for future allergy-aware travelers.</p>
-              </div>
 
               <div className="mt-8 text-center">
                 <Link to="/destinations">
