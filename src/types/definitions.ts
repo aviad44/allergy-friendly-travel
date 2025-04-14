@@ -30,7 +30,7 @@ export interface LanguageTable {
 }
 
 export interface Review {
-  id: number;
+  id: string | number; // Allow both string and number to handle both UUID strings and parsed numbers
   rating: number;
   text: string;
   author_name: string;

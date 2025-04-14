@@ -29,11 +29,13 @@ export const ReviewCard = ({ review, onDelete }: ReviewCardProps) => {
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
-      // Use the ID directly as it's already a UUID string
+      // Ensure the ID is used as a string for the database operation
+      const reviewId = typeof review.id === 'number' ? review.id.toString() : review.id;
+      
       const { error } = await supabase
         .from('reviews')
         .delete()
-        .eq('id', review.id);
+        .eq('id', reviewId);
 
       if (error) throw error;
 
