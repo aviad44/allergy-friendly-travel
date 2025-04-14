@@ -40,6 +40,13 @@ export interface Review {
   language: string;
 }
 
+export interface DestinationContent {
+  intro: string;
+  hotels: Hotel[];
+  faqs: FAQ[];
+  languageTable: LanguageTable;
+}
+
 export type LanguageCode = 'en' | 'fr' | 'de' | 'es' | 'it' | 'he';
 
 export const languages = [
