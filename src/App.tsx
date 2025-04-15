@@ -37,6 +37,7 @@ import Sitemap from '@/pages/Sitemap';
 import Terms from '@/pages/Terms';
 import AllergyTranslationCard from '@/pages/AllergyTranslationCard';
 import KohSamui from '@/pages/destinations/KohSamui';
+import Privacy from '@/pages/Privacy';
 
 const AppContent = () => {
   const { theme, setTheme } = useTheme();
@@ -84,6 +85,7 @@ const AppContent = () => {
           <Route path="/terms" element={<Terms />} />
           <Route path="/allergy-translation-card" element={<AllergyTranslationCard />} />
           <Route path="/destinations/koh-samui" element={<KohSamui />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
