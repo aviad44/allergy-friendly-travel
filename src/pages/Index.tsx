@@ -1,3 +1,4 @@
+
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
@@ -25,8 +26,8 @@ export default function Index() {
         <meta name="robots" content="index, follow" />
         
         {/* Open Graph Meta Tags */}
-        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
-        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
+        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/ea490ba9-d771-4073-8a50-d7f7a7a27a7c.png" />
+        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/ea490ba9-d771-4073-8a50-d7f7a7a27a7c.png" />
         
         {/* Schema.org JSON-LD structured data */}
         <script type="application/ld+json">
