@@ -21,7 +21,7 @@ const Cyprus = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png" />
+        <meta property="og:image" content="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         
@@ -29,7 +29,7 @@ const Cyprus = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png" />
+        <meta name="twitter:image" content="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80" />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
@@ -43,7 +43,7 @@ const Cyprus = () => {
             "about": {
               "@type": "Country",
               "name": "Cyprus",
-              "description": "Island country in the Mediterranean Sea"
+              "description": "Island country in the Mediterranean Sea with beautiful beaches"
             },
             "audience": "Travelers with food allergies or dietary restrictions"
           })}
