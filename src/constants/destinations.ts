@@ -1,4 +1,3 @@
-
 export const DESTINATION_IMAGES = {
   london: "photo-1513635269975-59663e0ac1ad", // London skyline with Thames river
   paris: "photo-1502602898657-3e91760cbb34", // Wide view of Eiffel Tower
@@ -12,5 +11,6 @@ export const DESTINATION_IMAGES = {
   portugal: "photo-1555881400-74d7acaacd8b", // Colorful houses in Porto, Portugal
   'swiss-alps': "photo-1491555103944-7c647fd857e6", // Swiss Alps mountain resort with lake view
   'koh-samui': "photo-1507525428034-b723cf961d3e", // Koh Samui beach - same as used in the article page
-  'hotel-chains': "photo-1551882547-ff40c63fe5fa" // Luxury hotel lobby
+  'hotel-chains': "photo-1551882547-ff40c63fe5fa", // Luxury hotel lobby
+  'turkey': "photo-1570598838702-920e0cde602b" // Beautiful coastal view of Turkey
 } as const;

@@ -38,6 +38,7 @@ import Terms from '@/pages/Terms';
 import AllergyTranslationCard from '@/pages/AllergyTranslationCard';
 import KohSamui from '@/pages/destinations/KohSamui';
 import Privacy from '@/pages/Privacy';
+import Turkey from '@/pages/destinations/Turkey';
 
 const AppContent = () => {
   const { theme, setTheme } = useTheme();
@@ -86,6 +87,7 @@ const AppContent = () => {
           <Route path="/allergy-translation-card" element={<AllergyTranslationCard />} />
           <Route path="/destinations/koh-samui" element={<KohSamui />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/destinations/turkey" element={<Turkey />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
