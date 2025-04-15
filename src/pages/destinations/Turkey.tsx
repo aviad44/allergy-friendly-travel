@@ -4,10 +4,16 @@ import { Helmet } from 'react-helmet-async';
 import { Card } from "@/components/ui/card";
 import { HOME_CONTENT } from "@/constants/home";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, MapPin } from 'lucide-react';
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const Turkey = () => {
   const currentYear = new Date().getFullYear();
+  
+  const getGoogleMapsUrl = (hotelName: string, location: string) => {
+    const query = encodeURIComponent(`${hotelName}, ${location}`);
+    return `https://www.google.com/maps/search/?api=1&query=${query}`;
+  };
   
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -104,9 +110,17 @@ const Turkey = () => {
       </Helmet>
 
       <header className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">🌿 Top All-Inclusive Hotels in Turkey for Travelers with Food Allergies ({currentYear} Guide)</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-4">Top All-Inclusive Hotels in Turkey for Travelers with Food Allergies ({currentYear} Guide)</h1>
         <h2 className="text-xl text-muted-foreground">Discover the best allergy-friendly all-inclusive resorts in Turkey, based on real guest reviews from travelers with food allergies.</h2>
       </header>
+
+      <AspectRatio ratio={16/9} className="mb-8 overflow-hidden rounded-lg">
+        <img
+          src="https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&w=2000&q=80"
+          alt="Beautiful view of Antalya, Turkey"
+          className="object-cover w-full h-full"
+        />
+      </AspectRatio>
 
       <div className="prose max-w-none">
         <p className="text-lg mb-6">
@@ -115,11 +129,11 @@ const Turkey = () => {
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
           <p className="text-blue-700">
-            ✅ <strong>NOTE:</strong> Always inform the hotel about your allergies in advance, and speak directly with the chef or food & beverage team upon arrival to ensure your dietary needs are clearly understood and accommodated.
+            <strong>NOTE:</strong> Always inform the hotel about your allergies in advance, and speak directly with the chef or food & beverage team upon arrival to ensure your dietary needs are clearly understood and accommodated.
           </p>
         </div>
 
-        <h2 className="text-2xl font-bold mt-8 mb-6">🇹🇷 Best Allergy-Friendly All-Inclusive Resorts in Turkey</h2>
+        <h2 className="text-2xl font-bold mt-8 mb-6">Best Allergy-Friendly All-Inclusive Resorts in Turkey</h2>
 
         {[
           {
@@ -188,7 +202,18 @@ const Turkey = () => {
           }
         ].map((hotel, index) => (
           <Card key={index} className="p-6 mb-8">
-            <h3 className="text-xl font-bold mb-3">🏨 {hotel.name} – {hotel.location}</h3>
+            <div className="flex justify-between items-start mb-3">
+              <h3 className="text-xl font-bold">{hotel.name} – {hotel.location}</h3>
+              <a
+                href={getGoogleMapsUrl(hotel.name, hotel.location)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary/80 transition-colors"
+                title={`View ${hotel.name} on Google Maps`}
+              >
+                <MapPin className="h-5 w-5" />
+              </a>
+            </div>
             <p className="mb-4"><strong>Why it stands out:</strong> Special attention to allergy-sensitive guests with multiple dining options and trained staff.</p>
             <ul className="list-disc pl-6 mb-4 space-y-2">
               {hotel.features.map((feature, i) => (
