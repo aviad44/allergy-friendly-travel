@@ -12,6 +12,11 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
   const [imageFailed, setImageFailed] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState(imageUrl);
   
+  // Add debug logging
+  useEffect(() => {
+    console.log(`HeroImage attempting to load: ${imageUrl}`);
+  }, [imageUrl]);
+  
   useEffect(() => {
     // Reset states when imageUrl changes
     setImageLoaded(false);
