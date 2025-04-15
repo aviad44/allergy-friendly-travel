@@ -27,12 +27,12 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
   // Alternate image URLs in case the first one fails
   // Using known working image IDs for reliability
   const alternateImageUrls = [
-    // Try with different parameters
-    imageUrl.replace('auto=format', 'ixlib=rb-4.0.3&auto=format'),
-    // Generic Turkey fallback
-    "https://images.unsplash.com/photo-1559967308-bd6d7f8f3046?auto=format&fit=crop&w=2000&h=1000&q=80",
-    // Alternative Turkey image
+    // Blue Mosque in Istanbul - very reliable image
     "https://images.unsplash.com/photo-1592305951212-cae76d6119f7?auto=format&fit=crop&w=2000&h=1000&q=80",
+    // Istanbul Bosphorus view - backup reliable image
+    "https://images.unsplash.com/photo-1633163940265-e75d1f3549f8?auto=format&fit=crop&w=2000&h=1000&q=80",
+    // Generic Turkey beach image
+    "https://images.unsplash.com/photo-1679895519579-d3fe832125dc?auto=format&fit=crop&w=2000&h=1000&q=80",
     // Last resort fallback
     fallbackImage
   ];
@@ -71,11 +71,20 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
       
       {/* Fallback image rendered when all image attempts fail */}
       {(imageFailed && !alternateImageUrls.length) && (
-        <img 
-          src={fallbackImage}
-          alt={`Fallback image for ${altText}`}
-          className="w-full h-full object-cover bg-gray-200"
-        />
+        <div className="w-full h-full bg-gradient-to-b from-blue-400 to-blue-600 flex items-center justify-center">
+          <img 
+            src={fallbackImage}
+            alt={`Fallback image for ${altText}`}
+            className="max-w-[50%] max-h-[50%] object-contain"
+          />
+        </div>
+      )}
+      
+      {/* Loading state indicator */}
+      {!imageLoaded && !imageFailed && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
       )}
       
       <div className="absolute inset-0 bg-gradient-to-b from-sky-500/10 via-transparent to-transparent pointer-events-none"></div>

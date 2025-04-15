@@ -13,5 +13,5 @@ export const DESTINATION_IMAGES = {
   'swiss-alps': "photo-1491555103944-7c647fd857e6", // Swiss Alps mountain resort with lake view
   'koh-samui': "photo-1507525428034-b723cf961d3e", // Koh Samui beach - same as used in the article page
   'hotel-chains': "photo-1551882547-ff40c63fe5fa", // Luxury hotel lobby
-  'turkey': "photo-1559967308-bd6d7f8f3046" // Turkish coastal city Antalya - reliable Unsplash image
+  'turkey': "photo-1592305951212-cae76d6119f7" // Beautiful view of Turkey - this is a very reliable Unsplash image
 } as const;

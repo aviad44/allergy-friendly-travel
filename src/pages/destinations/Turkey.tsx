@@ -9,7 +9,8 @@ const Turkey = () => {
   const pageKeywords = "Turkey allergy friendly hotels, gluten free hotel Turkey, celiac Turkey travel, nut free hotels Antalya, dairy free hotels Belek";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/turkey";
   const currentDate = new Date().toISOString().split('T')[0];
-  const imageUrl = "https://images.unsplash.com/photo-1559967308-bd6d7f8f3046?auto=format&fit=crop&w=1200&q=80";
+  // Updated to use a reliable image of the Blue Mosque in Istanbul
+  const imageUrl = "https://images.unsplash.com/photo-1592305951212-cae76d6119f7?auto=format&fit=crop&w=1200&q=80";
 
   return (
     <>
