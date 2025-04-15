@@ -25,9 +25,15 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
   }, [imageUrl]);
 
   // Alternate image URLs in case the first one fails
+  // Using known working image IDs for reliability
   const alternateImageUrls = [
+    // Try with different parameters
     imageUrl.replace('auto=format', 'ixlib=rb-4.0.3&auto=format'),
-    `/lovable-uploads/${imageUrl.split('/').pop()}.jpg`,
+    // Generic Turkey fallback
+    "https://images.unsplash.com/photo-1559967308-bd6d7f8f3046?auto=format&fit=crop&w=2000&h=1000&q=80",
+    // Alternative Turkey image
+    "https://images.unsplash.com/photo-1592305951212-cae76d6119f7?auto=format&fit=crop&w=2000&h=1000&q=80",
+    // Last resort fallback
     fallbackImage
   ];
 
@@ -37,6 +43,10 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
       console.log(`Trying alternate image: ${nextUrl}`);
       setCurrentImageUrl(nextUrl);
       setImageFailed(false);
+    } else {
+      // If all alternates fail, use the fallback
+      console.log(`All alternatives failed, using fallback: ${fallbackImage}`);
+      setCurrentImageUrl(fallbackImage);
     }
   };
 
@@ -46,7 +56,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
         <img 
           src={currentImageUrl}
           alt={altText}
-          className={`w-full h-full object-cover transition-opacity duration-500 brightness-125 contrast-105 saturate-110 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full object-cover transition-opacity duration-500 brightness-110 contrast-105 saturate-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => {
             console.log(`Successfully loaded image: ${currentImageUrl}`);
             setImageLoaded(true);
@@ -59,14 +69,15 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
         />
       )}
       
-      {/* Fallback image rendered as separate element when primary fails */}
-      {imageFailed && (
+      {/* Fallback image rendered when all image attempts fail */}
+      {(imageFailed && !alternateImageUrls.length) && (
         <img 
           src={fallbackImage}
           alt={`Fallback image for ${altText}`}
           className="w-full h-full object-cover bg-gray-200"
         />
       )}
+      
       <div className="absolute inset-0 bg-gradient-to-b from-sky-500/10 via-transparent to-transparent pointer-events-none"></div>
     </div>
   );

@@ -1,13 +1,14 @@
+
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 /**
  * Determines the image URL to use based on destination ID and image source
  */
 export const getDestinationImageUrl = (destinationId: string, imageSource: string | null): string => {
-  // Special case for Turkey - use a direct Unsplash URL of coastal view
+  // Special case for Turkey - use a direct Unsplash URL of Antalya
   if (destinationId === 'turkey') {
-    console.log("Turkey detected - using coastal Unsplash URL");
-    return "https://images.unsplash.com/photo-1570598838702-920e0cde602b?auto=format&fit=crop&w=2000&h=1000&q=80";
+    console.log("Turkey detected - using Antalya coastal view");
+    return "https://images.unsplash.com/photo-1559967308-bd6d7f8f3046?auto=format&fit=crop&w=2000&h=1000&q=80";
   }
   
   // Special case for Cyprus - use a direct Unsplash URL to ensure the image loads
@@ -41,7 +42,7 @@ export const getDestinationAltText = (destinationName: string): string => {
   }
   
   if (destinationName === 'Turkey') {
-    return "Scenic view of Turkey's beautiful coastal landscape with turquoise waters and scenic shoreline - ideal for allergy-friendly vacations";
+    return "Beautiful view of Antalya, Turkey - a popular coastal destination with allergy-friendly hotels and resorts";
   }
   
   return destinationName 
@@ -57,8 +58,8 @@ export const getImageSource = (destinationId: string, fallbackImage: string | nu
   
   // Special handling for Turkey
   if (destinationId === 'turkey') {
-    console.log("Turkey destination detected - using coastal image source");
-    return "photo-1570598838702-920e0cde602b";
+    console.log("Turkey destination detected - using Antalya coastal image");
+    return "photo-1559967308-bd6d7f8f3046";
   }
   
   // Special handling for Cyprus
