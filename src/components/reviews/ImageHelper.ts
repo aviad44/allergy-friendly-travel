@@ -1,21 +1,19 @@
-
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 /**
  * Determines the image URL to use based on destination ID and image source
  */
 export const getDestinationImageUrl = (destinationId: string, imageSource: string | null): string => {
+  // Special case for Turkey - use a direct Unsplash URL of coastal view
+  if (destinationId === 'turkey') {
+    console.log("Turkey detected - using coastal Unsplash URL");
+    return "https://images.unsplash.com/photo-1570598838702-920e0cde602b?auto=format&fit=crop&w=2000&h=1000&q=80";
+  }
+  
   // Special case for Cyprus - use a direct Unsplash URL to ensure the image loads
   if (destinationId === 'cyprus') {
     console.log("Cyprus detected - using direct Unsplash URL");
     return "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&h=1000&q=80";
-  }
-  
-  // Special case for Turkey - use a direct Unsplash URL of Antalya
-  if (destinationId === 'turkey') {
-    console.log("Turkey detected - using direct Unsplash URL of Antalya");
-    // Use a different Unsplash photo that's more reliable
-    return "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=2000&h=1000&q=80";
   }
   
   // Default fallback image if there's no image defined
@@ -43,7 +41,7 @@ export const getDestinationAltText = (destinationName: string): string => {
   }
   
   if (destinationName === 'Turkey') {
-    return "Scenic view of Antalya, Turkey with beautiful landscape and vibrant colors - ideal for allergy-friendly vacations";
+    return "Scenic view of Turkey's beautiful coastal landscape with turquoise waters and scenic shoreline - ideal for allergy-friendly vacations";
   }
   
   return destinationName 
@@ -57,16 +55,16 @@ export const getDestinationAltText = (destinationName: string): string => {
 export const getImageSource = (destinationId: string, fallbackImage: string | null): string | null => {
   console.log(`Getting image source for destination: ${destinationId}`);
   
+  // Special handling for Turkey
+  if (destinationId === 'turkey') {
+    console.log("Turkey destination detected - using coastal image source");
+    return "photo-1570598838702-920e0cde602b";
+  }
+  
   // Special handling for Cyprus
   if (destinationId === 'cyprus') {
     console.log("Cyprus destination detected - using special image source");
     return "photo-1500375592092-40eb2168fd21";
-  }
-  
-  // Special handling for Turkey - use a more reliable image
-  if (destinationId === 'turkey') {
-    console.log("Turkey destination detected - using special image source");
-    return "photo-1465146344425-f00d5f5c8f07"; // Orange flowers image - more reliable
   }
   
   const destinationKey = destinationId as keyof typeof DESTINATION_IMAGES;
@@ -74,4 +72,3 @@ export const getImageSource = (destinationId: string, fallbackImage: string | nu
   console.log(`Image source result: ${result}`);
   return result;
 };
-
