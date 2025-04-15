@@ -24,6 +24,14 @@ console.log('Tokyo content:', tokyoContent);
 console.log('Swiss Alps content:', swissAlpsContent);
 console.log('London content:', londonContent);
 
+// Create a basic content for Turkey
+const turkeyContent: DestinationContent = {
+  intro: "Turkey offers numerous allergy-friendly all-inclusive resorts perfect for travelers with dietary restrictions.",
+  hotels: [],
+  faqs: [],
+  languageTable: { headers: [], rows: [] }
+};
+
 export const destinationData: Record<DestinationId, DestinationContent> = {
   london: londonContent,
   paris: parisContent,
@@ -38,5 +46,6 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
   'ayia-napa': ayiaNapaContent,
   portugal: portugalContent,
   'swiss-alps': swissAlpsContent,
-  'koh-samui': kohSamuiContent
+  'koh-samui': kohSamuiContent,
+  'turkey': turkeyContent
 };

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Card } from "@/components/ui/card";
@@ -11,7 +12,7 @@ const Turkey = () => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <Helmet>
-        <title>Top All-Inclusive Hotels in Turkey for Travelers with Food Allergies ({currentYear} Guide) | {HOME_CONTENT.navigation.brand}</title>
+        <title>{`Top All-Inclusive Hotels in Turkey for Travelers with Food Allergies (${currentYear} Guide) | ${HOME_CONTENT.navigation.brand}`}</title>
         <meta name="description" content="Discover the best all-inclusive hotels in Turkey for travelers with food allergies like gluten, dairy, nuts and more. Based on real guest reviews." />
         <meta name="keywords" content="all-inclusive allergy-friendly hotels Turkey, gluten-free resorts Turkey, nut-free hotels in Antalya, celiac-safe resorts, dairy-free Turkey hotels" />
         
@@ -163,7 +164,7 @@ const Turkey = () => {
               "Food safety certifications for staff"
             ],
             review: {
-              text: "I’m allergic to dairy and peanuts, and I felt truly taken care of. The chef made a customized dish every night!",
+              text: "I'm allergic to dairy and peanuts, and I felt truly taken care of. The chef made a customized dish every night!",
               author: "Elif K., Netherlands"
             },
             website: "https://www.kayapalazzogolfresort.com/?utm_source=allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
