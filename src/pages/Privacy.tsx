@@ -1,17 +1,13 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { HOME_CONTENT } from '@/constants/home';
-
 const Privacy = () => {
-  const currentDate = new Date().toLocaleDateString('en-US', { 
+  const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
-
-  return (
-    <>
+  return <>
       <Helmet>
         <title>Privacy Policy | {HOME_CONTENT.navigation.brand}</title>
         <meta name="description" content="Our privacy policy outlines how we collect, use, and protect your personal information when using our allergy-friendly hotel finding service." />
@@ -63,12 +59,12 @@ const Privacy = () => {
           <h3 className="font-display text-xl font-semibold mb-3 text-blue-700">9. Policy Updates</h3>
           <p className="mb-6">We reserve the right to update this Privacy Policy. Any changes will be posted on this page with the updated date.</p>
 
-          <h3 className="font-display text-xl font-semibold mb-3 text-blue-700">10. Contact</h3>
-          <p className="mb-6">If you have any questions regarding this policy, please contact us at: info@allergy-free-travel.com</p>
+          <h3 className="font-display text-xl font-semibold mb-3 text-blue-700">
+        </h3>
+          <p className="mb-6">
+        </p>
         </section>
       </div>
-    </>
-  );
+    </>;
 };
-
 export default Privacy;
