@@ -11,6 +11,12 @@ export const getDestinationImageUrl = (destinationId: string, imageSource: strin
     return "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&h=1000&q=80";
   }
   
+  // Special case for Turkey - use a direct Unsplash URL of Antalya
+  if (destinationId === 'turkey') {
+    console.log("Turkey detected - using direct Unsplash URL of Antalya");
+    return "https://images.unsplash.com/photo-1570598838702-920e0cde602b?auto=format&fit=crop&w=2000&h=1000&q=80";
+  }
+  
   // Default fallback image if there's no image defined
   const defaultImage = "photo-1505578183806-3d2c2001570e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80";
   
@@ -35,6 +41,10 @@ export const getDestinationAltText = (destinationName: string): string => {
     return "Beautiful beach in Cyprus with crystal clear turquoise waters - perfect for allergy-friendly vacations";
   }
   
+  if (destinationName === 'Turkey') {
+    return "Scenic view of Antalya, Turkey with beautiful coastline and resorts - ideal for allergy-friendly vacations";
+  }
+  
   return destinationName 
     ? `Scenic view of ${destinationName} - allergy-friendly travel destination with hotels and accommodations for travelers with dietary restrictions`
     : "Beautiful travel destination for allergy-friendly accommodation";
@@ -50,6 +60,12 @@ export const getImageSource = (destinationId: string, fallbackImage: string | nu
   if (destinationId === 'cyprus') {
     console.log("Cyprus destination detected - using special image source");
     return "photo-1500375592092-40eb2168fd21";
+  }
+  
+  // Special handling for Turkey
+  if (destinationId === 'turkey') {
+    console.log("Turkey destination detected - using special image source");
+    return "photo-1570598838702-920e0cde602b";
   }
   
   const destinationKey = destinationId as keyof typeof DESTINATION_IMAGES;
