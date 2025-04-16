@@ -10,29 +10,37 @@ interface HeroImageProps {
 export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg" }: HeroImageProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
-  const [currentImageUrl, setCurrentImageUrl] = useState(imageUrl);
+  const [currentImageUrl, setCurrentImageUrl] = useState("");
+  
+  // Convert to WebP if supported and add responsive sizing
+  const optimizeImageUrl = (url: string) => {
+    if (!url) return fallbackImage;
+    
+    // For Unsplash URLs, use their optimization API
+    if (url.includes('unsplash.com')) {
+      return `${url.split('?')[0]}?auto=format&fit=crop&w=1200&q=80`;
+    }
+    
+    // Return original for other URLs
+    return url;
+  };
   
   // Add debug logging
   useEffect(() => {
     console.log(`HeroImage attempting to load: ${imageUrl}`);
+    // Set optimized URL
+    setCurrentImageUrl(optimizeImageUrl(imageUrl));
   }, [imageUrl]);
   
-  useEffect(() => {
-    // Reset states when imageUrl changes
-    setImageLoaded(false);
-    setImageFailed(false);
-    setCurrentImageUrl(imageUrl);
-  }, [imageUrl]);
-
   // Alternate image URLs in case the first one fails
   // Using known working image IDs for reliability
   const alternateImageUrls = [
     // Blue Mosque in Istanbul - very reliable image
-    "https://images.unsplash.com/photo-1592305951212-cae76d6119f7?auto=format&fit=crop&w=2000&h=1000&q=80",
+    "https://images.unsplash.com/photo-1592305951212-cae76d6119f7?auto=format&fit=crop&w=1200&q=80",
     // Istanbul Bosphorus view - backup reliable image
-    "https://images.unsplash.com/photo-1633163940265-e75d1f3549f8?auto=format&fit=crop&w=2000&h=1000&q=80",
+    "https://images.unsplash.com/photo-1633163940265-e75d1f3549f8?auto=format&fit=crop&w=1200&q=80",
     // Generic Turkey beach image
-    "https://images.unsplash.com/photo-1679895519579-d3fe832125dc?auto=format&fit=crop&w=2000&h=1000&q=80",
+    "https://images.unsplash.com/photo-1679895519579-d3fe832125dc?auto=format&fit=crop&w=1200&q=80",
     // Last resort fallback
     fallbackImage
   ];
@@ -49,19 +57,62 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
       setCurrentImageUrl(fallbackImage);
     }
   };
+  
+  // Preload image
+  useEffect(() => {
+    if (currentImageUrl) {
+      // Create a lightweight placeholder while image loads
+      const placeholderStyle = document.createElement('style');
+      placeholderStyle.innerHTML = `
+        .image-placeholder-${imageUrl.replace(/[^a-zA-Z0-9]/g, '')} {
+          background: linear-gradient(to bottom, #add8e6, #4682b4);
+        }
+      `;
+      document.head.appendChild(placeholderStyle);
+      
+      // Preload actual image
+      const img = new Image();
+      img.src = currentImageUrl;
+      img.onload = () => {
+        setImageLoaded(true);
+        document.head.removeChild(placeholderStyle);
+      };
+      img.onerror = () => {
+        setImageFailed(true);
+        tryNextImage();
+      };
+      
+      return () => {
+        if (document.head.contains(placeholderStyle)) {
+          document.head.removeChild(placeholderStyle);
+        }
+      };
+    }
+  }, [currentImageUrl]);
 
   return (
     <div className="absolute inset-0">
+      {/* Placeholder gradient while image loads */}
+      {!imageLoaded && !imageFailed && (
+        <div 
+          className={`absolute inset-0 image-placeholder-${imageUrl.replace(/[^a-zA-Z0-9]/g, '')}`} 
+          aria-hidden="true"
+        ></div>
+      )}
+      
       {!imageFailed && (
         <img 
           src={currentImageUrl}
           alt={altText}
           className={`w-full h-full object-cover transition-opacity duration-500 brightness-110 contrast-105 saturate-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          loading="lazy"
+          width="1200"
+          height="600"
           onLoad={() => {
             console.log(`Successfully loaded image: ${currentImageUrl}`);
             setImageLoaded(true);
           }}
-          onError={(e) => {
+          onError={() => {
             console.error(`Failed to load image: ${currentImageUrl}`);
             setImageFailed(true);
             tryNextImage();
@@ -76,6 +127,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
             src={fallbackImage}
             alt={`Fallback image for ${altText}`}
             className="max-w-[50%] max-h-[50%] object-contain"
+            loading="lazy"
           />
         </div>
       )}

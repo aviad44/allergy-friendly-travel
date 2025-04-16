@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Star, ExternalLink, Check, Bed, Home } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export interface HotelCardProps {
   name: string;
@@ -10,11 +11,23 @@ export interface HotelCardProps {
   description?: string;
   quote?: string;
   bookingUrl: string;
+  imageUrl?: string;
 }
 
-export const HotelCard = ({ name, address, features, description, quote, bookingUrl }: HotelCardProps) => {
+export const HotelCard = ({ 
+  name, 
+  address, 
+  features, 
+  description, 
+  quote, 
+  bookingUrl,
+  imageUrl
+}: HotelCardProps) => {
   // Debug log for individual hotel data rendering
   console.log("Rendering HotelCard:", { name, address });
+  
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
   
   const getCleanUrl = (url: string) => {
     // Clean up URL if needed and ensure it starts with http/https
@@ -45,6 +58,29 @@ export const HotelCard = ({ name, address, features, description, quote, booking
   return (
     <Card className="w-full transition-all duration-300 hover:shadow-lg border-primary/20 overflow-hidden group">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 h-2"></div>
+      
+      {/* Optional Hotel Image with lazy loading */}
+      {imageUrl && (
+        <div className="aspect-[16/9] bg-gray-100 overflow-hidden">
+          {/* Placeholder before image loads */}
+          {!imgLoaded && !imgError && (
+            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+              <div className="w-8 h-8 border-2 border-primary/30 border-t-primary/10 rounded-full animate-spin"></div>
+            </div>
+          )}
+          
+          {/* Actual image with lazy loading */}
+          <img 
+            src={imageUrl}
+            alt={`View of ${cleanName}`}
+            className={`w-full h-full object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            loading="lazy"
+            onLoad={() => setImgLoaded(true)}
+            onError={() => setImgError(true)}
+          />
+        </div>
+      )}
+      
       <CardHeader className="space-y-2 sm:space-y-3 pt-6">
         <div className="flex justify-between items-start">
           <CardTitle className="text-xl sm:text-2xl font-display text-primary/90 flex items-center gap-2">

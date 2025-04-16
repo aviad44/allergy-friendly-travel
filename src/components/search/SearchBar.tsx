@@ -1,11 +1,14 @@
 
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
 import { Autocomplete } from "./Autocomplete";
+
+// Memoized Autocomplete to prevent unnecessary re-renders
+const MemoizedAutocomplete = memo(Autocomplete);
 
 export const SearchBar = () => {
   const [destination, setDestination] = useState("");
@@ -15,7 +18,16 @@ export const SearchBar = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  const handleSearch = async () => {
+  // Memoize handlers to prevent unnecessary re-renders
+  const handleDestinationChange = useCallback((value: string) => {
+    setDestination(value);
+  }, []);
+  
+  const handleAllergiesChange = useCallback((value: string) => {
+    setAllergies(value);
+  }, []);
+  
+  const handleSearch = useCallback(async () => {
     if (!destination || !allergies) {
       toast({
         title: "Please fill in all fields",
@@ -31,25 +43,25 @@ export const SearchBar = () => {
     navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergies)}`);
     
     setIsSearching(false);
-  };
+  }, [destination, allergies, navigate, toast]);
 
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Destination input with autocomplete */}
-        <Autocomplete
+        <MemoizedAutocomplete
           placeholder="Enter destination"
           value={destination}
-          onChange={setDestination}
+          onChange={handleDestinationChange}
           suggestions={destinationSuggestions}
           className="bg-white/90 backdrop-blur-sm"
         />
         
         {/* Allergy input with autocomplete */}
-        <Autocomplete
+        <MemoizedAutocomplete
           placeholder="Type of allergies"
           value={allergies}
-          onChange={setAllergies}
+          onChange={handleAllergiesChange}
           suggestions={allergySuggestions}
           className="bg-white/90 backdrop-blur-sm"
         />

@@ -1,19 +1,37 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchBar } from '@/components/search/SearchBar';
 
 export const HeroSection = () => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
+  // Preload hero image
+  useEffect(() => {
+    const img = new Image();
+    img.src = "/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.webp";
+    img.onload = () => setImageLoaded(true);
+  }, []);
+
   return (
     <section 
       className="relative min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
       style={{
-        backgroundImage: 'url("/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.png")',
+        backgroundImage: `url("/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.webp")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '110vh',
-        opacity: 1
+        opacity: imageLoaded ? 1 : 0,
+        transition: 'opacity 0.3s ease-in'
       }}
     >
+      {/* Lightweight placeholder while image loads */}
+      {!imageLoaded && (
+        <div 
+          className="absolute inset-0 bg-gradient-to-b from-sky-400 to-blue-600"
+          aria-hidden="true"
+        ></div>
+      )}
+      
       <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]"></div>
       
       <div className="relative z-10 container mx-auto px-4 -mt-16 sm:mt-0">

@@ -22,7 +22,7 @@
   changeFreq = "weekly"
   priority = 0.5
 
-# Enable Brotli and Gzip compression for better performance
+# Enable optimizations for better performance
 [build.processing]
   skip_processing = false
 [build.processing.css]
@@ -46,24 +46,45 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Content-Security-Policy = "upgrade-insecure-requests"
+    # Enable HTTP/2 Server Push
+    Link = "</src/index.css>; rel=preload; as=style, </src/main.tsx>; rel=preload; as=script"
 
-# Add cache control for static assets
+# Add improved cache control for static assets (7+ days)
 [[headers]]
   for = "*.js"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=604800, immutable"
 
 [[headers]]
   for = "*.css"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
 
 [[headers]]
   for = "*.png"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=604800, immutable"
 
 [[headers]]
   for = "*.jpg"
   [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "*.woff2"
+  [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Enable Brotli compression for better performance
+[build.processing.brotli]
+  enabled = true
+  
+# Additional optimizations via Edge Functions
+[[edge_functions]]
+  path = "/*"
+  function = "optimize-static-assets"
