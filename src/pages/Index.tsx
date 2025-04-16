@@ -47,21 +47,21 @@ export default function Index() {
         </script>
       </Helmet>
       
-      <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden w-full">
-        {/* Background image - tropical resort with pool and palm trees */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden w-full">
+        {/* Background image - original hotel image */}
         <picture>
-          <source srcSet="https://images.unsplash.com/photo-1545579133-99bb5ab189bd?fm=webp&q=95&auto=format&fit=crop&w=2000&h=1200&sat=1.3&con=1.1&bright=1.1" type="image/webp" />
+          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.2&con=1.1&bright=1.2" type="image/webp" />
           <img 
-            src="https://images.unsplash.com/photo-1545579133-99bb5ab189bd?q=95&auto=format&fit=crop&w=2000&h=1200&sat=1.3&con=1.1&bright=1.1" 
-            alt="Tropical resort with pool and palm trees - allergy-friendly destination" 
-            className="absolute inset-0 w-full h-full object-cover object-center" 
+            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.2&con=1.1&bright=1.2" 
+            alt="Allergy-friendly travel destination - Luxury resort pool with palm trees" 
+            className="absolute inset-0 w-full h-full object-cover object-center brightness-105" 
             loading="eager" 
           />
         </picture>
         
         <div className="relative z-10 container mx-auto px-4 text-center w-full">
           <div className="max-w-xl mx-auto">
-            {/* Semi-transparent teal/blue overlay box */}
+            {/* Semi-transparent teal/blue overlay box - exact match to design */}
             <div className="bg-[#1e5f7a]/70 backdrop-blur-md rounded-3xl p-8 sm:p-10 shadow-lg text-white">
               <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 md:mb-8 leading-tight text-white">
                 <span className="block font-bold">{HOME_CONTENT.hero.title.line1}</span>
@@ -76,7 +76,7 @@ export default function Index() {
                 Find hotels that understand your allergy needs for a safe and enjoyable stay
               </h2>
               
-              {/* Custom search form to match the design */}
+              {/* Custom search form to match the design exactly */}
               <div className="flex flex-col gap-3 mt-6">
                 <input
                   type="text"
