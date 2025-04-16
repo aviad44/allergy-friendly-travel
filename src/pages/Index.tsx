@@ -1,9 +1,8 @@
-
-import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
-import { Search } from "lucide-react";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
+import { HeroSection } from "@/components/hero/HeroSection";
+import { SearchSection } from "@/components/search/SearchSection";
 
 export default function Index() {
   // Define currentDate for use in the JSON-LD schema
@@ -40,60 +39,9 @@ export default function Index() {
         </script>
       </Helmet>
       
-      <section 
-        className="relative min-h-screen flex items-center justify-center overflow-hidden w-full font-['Poppins']"
-        style={{
-          backgroundImage: `url('https://i.imgur.com/2Tzy9gP.jpeg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center center',
-          height: '100vh'
-        }}
-      >
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/30"></div>
-        
-        <div className="relative z-10 container mx-auto px-4">
-          <div className="mx-auto max-w-[700px]">
-            {/* Hero content with semi-transparent teal background */}
-            <div 
-              className="text-center p-6 sm:p-10 rounded-2xl"
-              style={{ backgroundColor: 'rgba(0, 85, 102, 0.5)' }}
-            >
-              <h1 className="text-[1.5em] sm:text-[2.2em] font-semibold leading-relaxed mb-6 text-white">
-                <span className="block">Find Your Perfect</span>
-                <span className="block font-bold">
-                  Food Allergy Friendly Hotel
-                </span>
-              </h1>
-              
-              <p className="text-base sm:text-[1.1em] mb-8 text-white drop-shadow-[1px_1px_3px_rgba(0,0,0,0.5)]">
-                Find hotels that understand your allergy needs for a safe and enjoyable stay
-              </p>
-              
-              {/* Search form with responsive padding and spacing */}
-              <div className="flex flex-col gap-4">
-                <input
-                  type="text"
-                  placeholder="Enter destination"
-                  className="w-full p-3 rounded-lg text-gray-800 text-base border-none bg-white/90"
-                />
-                <input
-                  type="text"
-                  placeholder="Type of allergies"
-                  className="w-full p-3 rounded-lg text-gray-800 text-base border-none bg-white/90"
-                />
-                <button 
-                  className="w-full p-3 bg-[#00b397] hover:bg-[#009f84] text-white rounded-lg text-[1.1em] transition-colors duration-300 flex items-center justify-center gap-2"
-                >
-                  <Search className="h-5 w-5" />
-                  <span>Search Now</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <HeroSection />
+      <SearchSection />
+      
       <section className="py-10 sm:py-16 md:py-20 px-4 bg-gray-50 w-full">
         <div className="container mx-auto max-w-[1400px]">
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4 text-center font-bold text-blue-800">
