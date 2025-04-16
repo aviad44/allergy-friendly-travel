@@ -1,4 +1,3 @@
-
 export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'abu-dhabi' | 'crete' | 'tokyo' | 'thailand' | 'hotel-chains' | 'new-york' | 'ayia-napa' | 'portugal' | 'swiss-alps' | 'koh-samui' | 'turkey';
 
 export interface Destination {
@@ -18,6 +17,7 @@ export interface Hotel {
   quote: string;
   bookingUrl: string;
   rating?: number; // Added rating as an optional property
+  imageUrl?: string; // Added imageUrl as an optional property
 }
 
 export interface FAQ {

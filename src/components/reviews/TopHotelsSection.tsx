@@ -33,6 +33,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
               description="The on-site restaurant offers gluten-free, dairy-free, and nut-free options. Staff trained in food allergies – Ensuring no cross-contamination."
               quote="I have celiac disease, and the restaurant ensured my meals were 100% gluten-free! – Emma W."
               bookingUrl="https://www.athenaeumhotel.com/"
+              imageUrl="https://www.athenaeumhotel.com/wp-content/uploads/2022/03/AHR-Exterior.jpg"
             />
             
             <HotelCard 
@@ -42,6 +43,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
               description="Dedicated gluten-free afternoon tea available at the Palm Court. Their kitchen is trained to prevent cross-contamination for allergy sufferers."
               quote="Best gluten-free afternoon tea in London! – Sophie M."
               bookingUrl="https://www.langhamhotels.com/en/the-langham/london/"
+              imageUrl="https://www.langhamhotels.com/en/the-langham/london/media/1034/01-enter-the-residence-langham-london.jpg"
             />
             
             <HotelCard 
@@ -51,6 +53,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
               description="The restaurant customizes meals for guests with allergies and offers a dedicated gluten-free menu."
               quote="The best allergy-safe dining experience I've ever had! – Mark D."
               bookingUrl="https://www.theritzlondon.com/"
+              imageUrl="https://www.theritzlondon.com/wp-content/uploads/2022/07/Exterior-1.jpg"
             />
             
             <HotelCard 
@@ -60,6 +63,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
               description="Indigo Restaurant serves gourmet dishes free from gluten and dairy. The kitchen staff is trained in allergy protocols to ensure safe dining."
               quote="Indigo was a game-changer! 100% gluten-free and dairy-free! – Laura H."
               bookingUrl="https://www.onealdwych.com/"
+              imageUrl="https://www.onealdwych.com/wp-content/uploads/2023/07/one-aldwych-exterior-low-res.jpg"
             />
           </>
         ) : hasHotels ? (
@@ -69,7 +73,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
             </div>
           ))
         ) : (
-          // Default static hotel data for Barcelona
+          // Default static hotel data for Barcelona with images
           destinationName === "Barcelona" ? (
             <>
               <HotelCard 
@@ -79,6 +83,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
                 description="Their restaurant offers dedicated menus for guests with celiac disease, gluten intolerance, and other food allergies. All staff undergo allergy awareness training."
                 quote="The chef personally came to discuss my allergies and created a special menu for me! – Maria J."
                 bookingUrl="https://www.hotelartsbarcelona.com/"
+                imageUrl="https://www.hotelartsbarcelona.com/wp-content/uploads/2022/02/Hotel-Arts-Barcelona-Exterior-Night-1.jpg"
               />
               
               <HotelCard 
@@ -88,10 +93,11 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
                 description="This luxury hotel offers personalized menus for guests with food allergies and intolerances. Their kitchens have strict protocols to prevent cross-contamination."
                 quote="As someone with severe nut allergies, I felt completely safe dining at their restaurants. – Thomas K."
                 bookingUrl="https://www.mandarinoriental.com/barcelona"
+                imageUrl="https://photos.mandarinoriental.com/is/image/MandarinOriental/barcelona-hotel-exterior-03"
               />
             </>
           ) : 
-          // Default static hotel data for Abu Dhabi
+          // Default static hotel data for Abu Dhabi with images
           destinationName === "Abu Dhabi" ? (
             <>
               <HotelCard 
@@ -101,6 +107,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
                 description="The hotel's culinary team specializes in accommodating all dietary requirements including allergies, gluten-free, and vegan options across all their restaurants."
                 quote="They prepared special gluten-free Arabic pastries for me during my stay! – Sarah M."
                 bookingUrl="https://www.mandarinoriental.com/abu-dhabi/emirates-palace"
+                imageUrl="https://photos.mandarinoriental.com/is/image/MandarinOriental/abu-dhabi-2021-exterior-dusk-01"
               />
               
               <HotelCard 
@@ -110,6 +117,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
                 description="Their restaurants feature specialized chefs trained in preparing allergy-friendly cuisine, with clear ingredient labeling and alternatives for common allergens."
                 quote="The staff went above and beyond to ensure my dairy allergy was taken care of. – Khalid A."
                 bookingUrl="https://www.rosewoodhotels.com/en/abu-dhabi"
+                imageUrl="https://cdn.kiwicollection.com/media/property/PR005643/xl/005643-01-hotel-exterior-sunset.jpg"
               />
             </>
           ) : (
