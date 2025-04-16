@@ -1,3 +1,4 @@
+
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { Search } from "lucide-react";
@@ -5,6 +6,9 @@ import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
 
 export default function Index() {
+  // Define currentDate for use in the JSON-LD schema
+  const currentDate = new Date().toISOString().split('T')[0];
+  
   return (
     <>
       <Helmet>
