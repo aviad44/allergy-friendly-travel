@@ -47,32 +47,53 @@ export default function Index() {
         </script>
       </Helmet>
       
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden w-full">
+      <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden w-full">
+        {/* Background image - tropical resort with pool and palm trees */}
         <picture>
-          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.2&con=1.1&bright=1.2" type="image/webp" />
+          <source srcSet="https://images.unsplash.com/photo-1545579133-99bb5ab189bd?fm=webp&q=95&auto=format&fit=crop&w=2000&h=1200&sat=1.3&con=1.1&bright=1.1" type="image/webp" />
           <img 
-            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.2&con=1.1&bright=1.2" 
-            alt="Allergy-friendly travel destination - Luxury resort pool with palm trees" 
-            className="absolute inset-0 w-full h-full object-cover object-center brightness-105 saturate-105" 
+            src="https://images.unsplash.com/photo-1545579133-99bb5ab189bd?q=95&auto=format&fit=crop&w=2000&h=1200&sat=1.3&con=1.1&bright=1.1" 
+            alt="Tropical resort with pool and palm trees - allergy-friendly destination" 
+            className="absolute inset-0 w-full h-full object-cover object-center" 
             loading="eager" 
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/20"></div>
         </picture>
         
-        <div className="relative z-10 container mx-auto px-4 text-center w-full pt-8 sm:pt-12">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-10 shadow-lg">
-              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 md:mb-8 leading-tight text-gray-800">
+        <div className="relative z-10 container mx-auto px-4 text-center w-full">
+          <div className="max-w-xl mx-auto">
+            {/* Semi-transparent teal/blue overlay box */}
+            <div className="bg-[#1e5f7a]/70 backdrop-blur-md rounded-3xl p-8 sm:p-10 shadow-lg text-white">
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 md:mb-8 leading-tight text-white">
                 <span className="block font-bold">{HOME_CONTENT.hero.title.line1}</span>
                 <span className="block mt-1 sm:mt-2 font-bold">
-                  {HOME_CONTENT.hero.title.line2}
+                  Food Allergy Friendly
+                </span>
+                <span className="block mt-1 sm:mt-2 font-bold">
+                  Hotel
                 </span>
               </h1>
-              <h2 className="font-display text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto leading-snug">
+              <h2 className="font-display text-xl sm:text-2xl text-white mb-8 sm:mb-10 mx-auto leading-snug">
                 Find hotels that understand your allergy needs for a safe and enjoyable stay
               </h2>
-              <div className="bg-white rounded-lg shadow-sm border border-gray-100 max-w-4xl mx-auto p-4 sm:p-5">
-                <SearchBar />
+              
+              {/* Custom search form to match the design */}
+              <div className="flex flex-col gap-3 mt-6">
+                <input
+                  type="text"
+                  placeholder="Enter destination"
+                  className="w-full p-4 rounded-lg text-gray-800 text-lg focus:outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Type of allergies"
+                  className="w-full p-4 rounded-lg text-gray-800 text-lg focus:outline-none"
+                />
+                <button 
+                  className="w-full p-4 bg-[#00b3b3] hover:bg-[#009999] text-white rounded-lg flex items-center justify-center gap-2 text-lg"
+                >
+                  <span className="inline-block w-6 h-6">⌕</span> 
+                  <span>Search Now</span>
+                </button>
               </div>
             </div>
           </div>
