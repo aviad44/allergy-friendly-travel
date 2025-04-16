@@ -11,3 +11,4 @@ https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:s
 
 # Redirect URL normalization - ensure /destinations/abu-dhabi is the canonical path 
 /destinations/abudhabi /destinations/abu-dhabi 301
+

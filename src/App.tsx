@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -79,6 +78,7 @@ const AppContent = () => {
           <Route path="/destinations/paris" element={<Paris />} />
           <Route path="/destinations/barcelona" element={<Barcelona />} />
           <Route path="/destinations/cyprus" element={<Cyprus />} />
+          <Route path="/destinations/abu-dhabi" element={<AbuDhabi />} />
           <Route path="/destinations/abudhabi" element={<AbuDhabi />} />
           <Route path="/destinations/crete" element={<Crete />} />
           <Route path="/destinations/newyork" element={<NewYork />} />
