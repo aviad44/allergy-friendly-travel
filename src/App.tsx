@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -40,6 +41,17 @@ import KohSamui from '@/pages/destinations/KohSamui';
 import Privacy from '@/pages/Privacy';
 import Turkey from '@/pages/destinations/Turkey';
 
+// ScrollToTop component to handle scroll restoration
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+};
+
 const AppContent = () => {
   const { theme, setTheme } = useTheme();
   const location = useLocation();
@@ -57,6 +69,7 @@ const AppContent = () => {
 
   return (
     <>
+      <ScrollToTop />
       <Toaster />
       <Routes>
         <Route element={<MainLayout />}>
