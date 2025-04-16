@@ -49,29 +49,31 @@ export default function Index() {
       
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden w-full">
         <picture>
-          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.3&con=1.05&bright=1.2" type="image/webp" />
+          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.2&con=1.1&bright=1.2" type="image/webp" />
           <img 
-            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.3&con=1.05&bright=1.2" 
-            alt="Allergy-friendly travel destination" 
-            className="absolute inset-0 w-full h-full object-cover object-center brightness-110 saturate-110" 
+            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.2&con=1.1&bright=1.2" 
+            alt="Allergy-friendly travel destination - Luxury resort pool with palm trees" 
+            className="absolute inset-0 w-full h-full object-cover object-center brightness-105 saturate-105" 
             loading="eager" 
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/25 to-black/45"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/20"></div>
         </picture>
         
         <div className="relative z-10 container mx-auto px-4 text-center w-full pt-8 sm:pt-12">
           <div className="max-w-4xl mx-auto">
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 md:mb-8 leading-tight drop-shadow-lg">
-              <span className="text-sky-200 font-bold">{HOME_CONTENT.hero.title.line1}</span>
-              <span className="block mt-1 sm:mt-2 text-teal-300 font-bold">
-                {HOME_CONTENT.hero.title.line2}
-              </span>
-            </h1>
-            <h2 className="font-display text-lg sm:text-xl text-sky-100 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto leading-snug drop-shadow-md">
-              Find hotels that understand your allergy needs for a safe and enjoyable stay
-            </h2>
-            <div className="bg-white rounded-lg shadow-lg border border-gray-200 max-w-4xl mx-auto p-4 sm:p-5">
-              <SearchBar />
+            <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-10 shadow-lg">
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 md:mb-8 leading-tight text-gray-800">
+                <span className="block font-bold">{HOME_CONTENT.hero.title.line1}</span>
+                <span className="block mt-1 sm:mt-2 font-bold">
+                  {HOME_CONTENT.hero.title.line2}
+                </span>
+              </h1>
+              <h2 className="font-display text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto leading-snug">
+                Find hotels that understand your allergy needs for a safe and enjoyable stay
+              </h2>
+              <div className="bg-white rounded-lg shadow-sm border border-gray-100 max-w-4xl mx-auto p-4 sm:p-5">
+                <SearchBar />
+              </div>
             </div>
           </div>
         </div>
