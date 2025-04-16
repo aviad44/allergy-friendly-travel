@@ -1,7 +1,7 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Star, ExternalLink, Check, Bed, Home } from "lucide-react";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export interface HotelCardProps {
   name: string;
@@ -10,12 +10,11 @@ export interface HotelCardProps {
   description?: string;
   quote?: string;
   bookingUrl: string;
-  imageUrl?: string;
 }
 
-export const HotelCard = ({ name, address, features, description, quote, bookingUrl, imageUrl }: HotelCardProps) => {
+export const HotelCard = ({ name, address, features, description, quote, bookingUrl }: HotelCardProps) => {
   // Debug log for individual hotel data rendering
-  console.log("Rendering HotelCard:", { name, address, imageUrl });
+  console.log("Rendering HotelCard:", { name, address });
   
   const getCleanUrl = (url: string) => {
     // Clean up URL if needed and ensure it starts with http/https
@@ -46,21 +45,6 @@ export const HotelCard = ({ name, address, features, description, quote, booking
   return (
     <Card className="w-full transition-all duration-300 hover:shadow-lg border-primary/20 overflow-hidden group">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 h-2"></div>
-      
-      {/* Hotel Image */}
-      {imageUrl && (
-        <AspectRatio ratio={16/9} className="w-full overflow-hidden">
-          <img 
-            src={imageUrl} 
-            alt={`${cleanName}`}
-            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-            }}
-          />
-        </AspectRatio>
-      )}
-      
       <CardHeader className="space-y-2 sm:space-y-3 pt-6">
         <div className="flex justify-between items-start">
           <CardTitle className="text-xl sm:text-2xl font-display text-primary/90 flex items-center gap-2">
@@ -82,7 +66,6 @@ export const HotelCard = ({ name, address, features, description, quote, booking
           </div>
         </CardDescription>
       </CardHeader>
-      
       <CardContent className="space-y-4">
         <div className="flex flex-wrap gap-2 mt-2">
           {features.map((feature, index) => (

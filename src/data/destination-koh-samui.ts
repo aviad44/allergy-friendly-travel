@@ -17,8 +17,7 @@ export const kohSamuiContent: DestinationContent = {
       ],
       description: "Luxury resort offering exceptional allergy-friendly dining options and stunning ocean views. Famous as the filming location for White Lotus Season 3.",
       quote: "My daughter has severe nut and dairy allergies. The staff reviewed every meal in advance, and we felt completely safe throughout our stay.",
-      bookingUrl: "https://www.fourseasons.com/kohsamui/",
-      imageUrl: "https://www.fourseasons.com/alt/img-opt/~70.1530.0,0000-313,2500-2000,0000-1125,0000/publish/content/dam/fourseasons/images/web/KOS/KOS_006_original.jpg"
+      bookingUrl: "https://www.fourseasons.com/kohsamui/"
     }
   ],
   faqs: [
