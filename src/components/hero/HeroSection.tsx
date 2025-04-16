@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { SearchBar } from '@/components/search/SearchBar';
 
 export const HeroSection = () => {
   return (
@@ -32,6 +33,9 @@ export const HeroSection = () => {
             <p className="text-base sm:text-[1.1em] mb-8 text-white drop-shadow-[1px_1px_3px_rgba(0,0,0,0.5)]">
               Find hotels that understand your allergy needs for a safe and enjoyable stay
             </p>
+            
+            {/* Search bar component */}
+            <SearchBar />
           </div>
         </div>
       </div>

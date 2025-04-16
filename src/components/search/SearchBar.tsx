@@ -34,14 +34,15 @@ export const SearchBar = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-2">
-      <div className="flex flex-col sm:flex-row gap-2 flex-grow">
+    <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col sm:flex-row gap-4">
         {/* Destination input with autocomplete */}
         <Autocomplete
           placeholder="Enter destination"
           value={destination}
           onChange={setDestination}
           suggestions={destinationSuggestions}
+          className="bg-white/90 backdrop-blur-sm"
         />
         
         {/* Allergy input with autocomplete */}
@@ -50,16 +51,17 @@ export const SearchBar = () => {
           value={allergies}
           onChange={setAllergies}
           suggestions={allergySuggestions}
+          className="bg-white/90 backdrop-blur-sm"
         />
       </div>
       
       {/* Search button */}
       <Button 
-        className="h-9 sm:h-9 px-4 md:px-6 text-white bg-teal-500 hover:bg-teal-600 rounded-md" 
+        className="w-full p-4 bg-[#00b397] hover:bg-[#009f84] text-white text-[1.1em] transition-colors duration-300 flex items-center justify-center gap-2"
         onClick={handleSearch} 
         disabled={isSearching}
       >
-        <Search className="mr-2 h-5 w-5" />
+        <Search className="h-5 w-5" />
         <span>Search Now</span>
       </Button>
     </div>

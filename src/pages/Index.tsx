@@ -2,7 +2,6 @@ import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
 import { HeroSection } from "@/components/hero/HeroSection";
-import { SearchSection } from "@/components/search/SearchSection";
 
 export default function Index() {
   // Define currentDate for use in the JSON-LD schema
@@ -40,7 +39,6 @@ export default function Index() {
       </Helmet>
       
       <HeroSection />
-      <SearchSection />
       
       <section className="py-10 sm:py-16 md:py-20 px-4 bg-gray-50 w-full">
         <div className="container mx-auto max-w-[1400px]">
