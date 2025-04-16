@@ -46,18 +46,14 @@ export default function Index() {
         </script>
       </Helmet>
       
-      <section className="relative h-screen flex items-center justify-center overflow-hidden w-full font-['Poppins']">
-        {/* Background image */}
-        <picture>
-          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000" type="image/webp" />
-          <img 
-            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000" 
-            alt="Allergy-friendly travel destination - Luxury resort pool with palm trees" 
-            className="absolute inset-0 w-full h-full object-cover object-center" 
-            loading="eager" 
-          />
-        </picture>
-
+      <section 
+        className="hero-section relative h-[600px] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/30 z-10"></div>
         
