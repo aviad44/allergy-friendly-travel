@@ -7,7 +7,7 @@ export const HeroSection = () => {
     <section 
       className="relative min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
       style={{
-        backgroundImage: 'url("https://images.unsplash.com/photo-1566073771259-6a8506099945")',
+        backgroundImage: 'url("/lovable-uploads/4947cdd5-ba7b-4184-82a1-194a47b9a29a.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '110vh',
