@@ -47,45 +47,46 @@ export default function Index() {
       </Helmet>
       
       <section 
-        className="hero-section relative h-[600px] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden w-full font-['Poppins']"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000')`,
+          backgroundImage: `url('https://i.imgur.com/2Tzy9gP.jpeg')`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundPosition: 'center center',
+          height: '100vh'
         }}
       >
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/30 z-10"></div>
+        <div className="absolute inset-0 bg-black/30"></div>
         
-        <div className="relative z-20 container mx-auto px-4">
-          <div className="mx-auto" style={{ maxWidth: "700px" }}>
+        <div className="relative z-10 container mx-auto px-4">
+          <div className="mx-auto max-w-[700px]">
             {/* Hero content with semi-transparent teal background */}
             <div 
-              className="text-center p-10 sm:p-[40px] rounded-2xl"
+              className="text-center p-6 sm:p-10 rounded-2xl"
               style={{ backgroundColor: 'rgba(0, 85, 102, 0.5)' }}
             >
-              <h1 className="text-[1.8em] sm:text-[2.2em] font-semibold leading-[1.4] mb-5 text-white">
+              <h1 className="text-[1.5em] sm:text-[2.2em] font-semibold leading-relaxed mb-6 text-white">
                 <span className="block">Find Your Perfect</span>
                 <span className="block font-bold">
                   Food Allergy Friendly Hotel
                 </span>
               </h1>
               
-              <p className="text-[1em] sm:text-[1.1em] mb-8 text-white drop-shadow-[1px_1px_3px_rgba(0,0,0,0.5)]">
+              <p className="text-base sm:text-[1.1em] mb-8 text-white drop-shadow-[1px_1px_3px_rgba(0,0,0,0.5)]">
                 Find hotels that understand your allergy needs for a safe and enjoyable stay
               </p>
               
-              {/* Search form */}
+              {/* Search form with responsive padding and spacing */}
               <div className="flex flex-col gap-4">
                 <input
                   type="text"
                   placeholder="Enter destination"
-                  className="w-full p-3 rounded-lg text-gray-800 text-base border-none"
+                  className="w-full p-3 rounded-lg text-gray-800 text-base border-none bg-white/90"
                 />
                 <input
                   type="text"
                   placeholder="Type of allergies"
-                  className="w-full p-3 rounded-lg text-gray-800 text-base border-none"
+                  className="w-full p-3 rounded-lg text-gray-800 text-base border-none bg-white/90"
                 />
                 <button 
                   className="w-full p-3 bg-[#00b397] hover:bg-[#009f84] text-white rounded-lg text-[1.1em] transition-colors duration-300"
