@@ -7,20 +7,20 @@ export const HeroSection = () => {
     <section 
       className="relative min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
       style={{
-        backgroundImage: 'url("https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&w=1920&h=1080&q=85")',
+        backgroundImage: 'url("/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '110vh',
         opacity: 1
       }}
     >
-      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]"></div>
       
       <div className="relative z-10 container mx-auto px-4 -mt-16 sm:mt-0">
         <div className="mx-auto max-w-[90%] sm:max-w-[700px]">
           <div 
             className="text-center p-6 sm:p-10 rounded-2xl backdrop-blur-sm transition-all duration-300 ease-in-out"
-            style={{ backgroundColor: 'rgba(0, 85, 102, 0.5)' }}
+            style={{ backgroundColor: 'rgba(0, 85, 102, 0.4)' }}
           >
             <h1 className="text-[1.75rem] sm:text-[2.2rem] font-bold leading-tight sm:leading-relaxed mb-4 text-white drop-shadow-md">
               <span className="block">Find Your Perfect</span>
