@@ -1,20 +1,10 @@
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
-import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
+import { Search } from "lucide-react";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
 
 export default function Index() {
-  const iconComponents = {
-    MapPin,
-    Star,
-    Shield,
-    Info,
-    HelpCircle
-  };
-
-  const currentDate = new Date().toISOString().split('T')[0];
-
   return (
     <>
       <Helmet>
@@ -89,9 +79,9 @@ export default function Index() {
                   className="w-full p-3 rounded-lg text-gray-800 text-base border-none bg-white/90"
                 />
                 <button 
-                  className="w-full p-3 bg-[#00b397] hover:bg-[#009f84] text-white rounded-lg text-[1.1em] transition-colors duration-300"
+                  className="w-full p-3 bg-[#00b397] hover:bg-[#009f84] text-white rounded-lg text-[1.1em] transition-colors duration-300 flex items-center justify-center gap-2"
                 >
-                  <span className="inline-block w-6 h-6">⌕</span>
+                  <Search className="h-5 w-5" />
                   <span>Search Now</span>
                 </button>
               </div>
