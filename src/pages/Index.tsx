@@ -1,4 +1,3 @@
-
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { MapPin, Star, Shield, Info, HelpCircle, Rocket } from "lucide-react";
@@ -47,51 +46,55 @@ export default function Index() {
         </script>
       </Helmet>
       
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden w-full">
-        {/* Background image - original hotel image */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden w-full font-['Poppins']">
+        {/* Background image */}
         <picture>
-          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.2&con=1.1&bright=1.2" type="image/webp" />
+          <source srcSet="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?fm=webp&q=90&auto=format&fit=crop&w=2000" type="image/webp" />
           <img 
-            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000&h=1200&sat=1.2&con=1.1&bright=1.2" 
+            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=90&auto=format&fit=crop&w=2000" 
             alt="Allergy-friendly travel destination - Luxury resort pool with palm trees" 
-            className="absolute inset-0 w-full h-full object-cover object-center brightness-105" 
+            className="absolute inset-0 w-full h-full object-cover object-center" 
             loading="eager" 
           />
         </picture>
+
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/30 z-10"></div>
         
-        <div className="relative z-10 container mx-auto px-4 text-center w-full">
-          <div className="max-w-xl mx-auto">
-            {/* Semi-transparent teal/blue overlay box - exact match to design */}
-            <div className="bg-[#1e5f7a]/70 backdrop-blur-md rounded-3xl p-8 sm:p-10 shadow-lg text-white">
-              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 md:mb-8 leading-tight text-white">
+        <div className="relative z-20 container mx-auto px-4 text-center">
+          <div className="mx-auto" style={{ maxWidth: "600px" }}>
+            {/* Hero content with semi-transparent teal background */}
+            <div className="bg-[#005566]/50 rounded-2xl p-8 sm:p-10 text-white">
+              <h1 className="text-[2.2em] font-semibold leading-[1.4] mb-5">
                 <span className="block font-bold">{HOME_CONTENT.hero.title.line1}</span>
-                <span className="block mt-1 sm:mt-2 font-bold">
+                <span className="block font-bold">
                   Food Allergy Friendly
                 </span>
-                <span className="block mt-1 sm:mt-2 font-bold">
+                <span className="block font-bold">
                   Hotel
                 </span>
               </h1>
-              <h2 className="font-display text-xl sm:text-2xl text-white mb-8 sm:mb-10 mx-auto leading-snug">
-                Find hotels that understand your allergy needs for a safe and enjoyable stay
-              </h2>
               
-              {/* Custom search form to match the design exactly */}
-              <div className="flex flex-col gap-3 mt-6">
+              <p className="text-[1.1em] mb-8 text-white drop-shadow-[1px_1px_3px_rgba(0,0,0,0.5)]">
+                Find hotels that understand your allergy needs for a safe and enjoyable stay
+              </p>
+              
+              {/* Search form */}
+              <div className="flex flex-col gap-4">
                 <input
                   type="text"
                   placeholder="Enter destination"
-                  className="w-full p-4 rounded-lg text-gray-800 text-lg focus:outline-none"
+                  className="w-full p-3 rounded-lg text-gray-800 text-base border-none"
                 />
                 <input
                   type="text"
                   placeholder="Type of allergies"
-                  className="w-full p-4 rounded-lg text-gray-800 text-lg focus:outline-none"
+                  className="w-full p-3 rounded-lg text-gray-800 text-base border-none"
                 />
                 <button 
-                  className="w-full p-4 bg-[#00b3b3] hover:bg-[#009999] text-white rounded-lg flex items-center justify-center gap-2 text-lg"
+                  className="w-full p-3 bg-[#00b397] hover:bg-[#009f84] text-white rounded-lg text-[1.1em] transition-colors duration-300"
                 >
-                  <span className="inline-block w-6 h-6">⌕</span> 
+                  <span className="inline-block w-6 h-6">⌕</span>
                   <span>Search Now</span>
                 </button>
               </div>
