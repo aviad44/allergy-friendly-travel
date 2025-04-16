@@ -57,21 +57,21 @@ export default function Index() {
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/30 z-10"></div>
         
-        <div className="relative z-20 container mx-auto px-4 text-center">
-          <div className="mx-auto" style={{ maxWidth: "600px" }}>
+        <div className="relative z-20 container mx-auto px-4">
+          <div className="mx-auto" style={{ maxWidth: "700px" }}>
             {/* Hero content with semi-transparent teal background */}
-            <div className="bg-[#005566]/50 rounded-2xl p-8 sm:p-10 text-white">
-              <h1 className="text-[2.2em] font-semibold leading-[1.4] mb-5">
-                <span className="block font-bold">{HOME_CONTENT.hero.title.line1}</span>
+            <div 
+              className="text-center p-10 sm:p-[40px] rounded-2xl"
+              style={{ backgroundColor: 'rgba(0, 85, 102, 0.5)' }}
+            >
+              <h1 className="text-[1.8em] sm:text-[2.2em] font-semibold leading-[1.4] mb-5 text-white">
+                <span className="block">Find Your Perfect</span>
                 <span className="block font-bold">
-                  Food Allergy Friendly
-                </span>
-                <span className="block font-bold">
-                  Hotel
+                  Food Allergy Friendly Hotel
                 </span>
               </h1>
               
-              <p className="text-[1.1em] mb-8 text-white drop-shadow-[1px_1px_3px_rgba(0,0,0,0.5)]">
+              <p className="text-[1em] sm:text-[1.1em] mb-8 text-white drop-shadow-[1px_1px_3px_rgba(0,0,0,0.5)]">
                 Find hotels that understand your allergy needs for a safe and enjoyable stay
               </p>
               
