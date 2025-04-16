@@ -42,27 +42,27 @@ export const HotelHeader: React.FC<HotelHeaderProps> = ({ name, location, price,
     .trim();
 
   return (
-    <div className="flex flex-wrap items-start justify-between border-b pb-4">
+    <div className="flex flex-wrap items-start justify-between border-b pb-3">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">{cleanHotelName}</h2>
+        <h2 className="text-xl font-bold text-gray-900 line-clamp-1">{cleanHotelName}</h2>
         {location && (
           <a 
             href={getGoogleMapsUrl(cleanHotelName, location)} 
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center mt-1.5 text-gray-600 hover:text-primary"
+            className="flex items-center mt-1 text-gray-600 hover:text-primary text-sm"
           >
-            <MapPin className="h-4 w-4 mr-1.5" />
-            <span>{location}</span>
-            <ExternalLink className="h-3 w-3 ml-1.5 opacity-70" />
+            <MapPin className="h-3.5 w-3.5 mr-1 shrink-0" />
+            <span className="line-clamp-1">{location}</span>
+            <ExternalLink className="h-3 w-3 ml-1 opacity-70 shrink-0" />
           </a>
         )}
         
         {/* Star Rating display */}
-        <div className="flex items-center mt-2">
+        <div className="flex items-center mt-1.5">
           <div className="flex items-center">
             {Array.from({ length: starRating }).map((_, i) => (
-              <Star key={i} className="h-4 w-4 text-amber-500 fill-amber-500" />
+              <Star key={i} className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
             ))}
           </div>
         </div>

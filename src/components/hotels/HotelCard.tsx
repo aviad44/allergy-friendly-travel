@@ -81,33 +81,33 @@ export const HotelCard = ({
         </div>
       )}
       
-      <CardHeader className="space-y-2 sm:space-y-3 pt-6">
+      <CardHeader className="space-y-2 sm:space-y-3 pt-5 pb-2 px-4">
         <div className="flex justify-between items-start">
-          <CardTitle className="text-xl sm:text-2xl font-display text-primary/90 flex items-center gap-2">
-            <CardIcon className="h-5 w-5 text-primary/70" />
+          <CardTitle className="text-lg font-display text-primary/90 flex items-center gap-2 line-clamp-1">
+            <CardIcon className="h-4 w-4 shrink-0 text-primary/70" />
             <span>{cleanName}</span>
           </CardTitle>
           {starRating > 0 && (
-            <div className="flex space-x-0.5">
+            <div className="flex space-x-0.5 shrink-0 ml-1">
               {Array(starRating).fill(0).map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
               ))}
             </div>
           )}
         </div>
         <CardDescription>
-          <div className="flex items-center text-sm mt-2 text-muted-foreground">
-            <MapPin className="h-4 w-4 mr-1 text-primary/70" />
-            <span>{address}</span>
+          <div className="flex items-center text-xs text-muted-foreground">
+            <MapPin className="h-3.5 w-3.5 mr-1 shrink-0 text-primary/70" />
+            <span className="truncate">{address}</span>
           </div>
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex flex-wrap gap-2 mt-2">
+      <CardContent className="space-y-3 px-4 py-2">
+        <div className="flex flex-wrap gap-1.5 mt-1">
           {features.map((feature, index) => (
             <span 
               key={index} 
-              className="text-xs sm:text-sm bg-primary/5 text-primary/80 px-2 sm:px-3 py-1 rounded-full flex items-center"
+              className="text-xs bg-primary/5 text-primary/80 px-2 py-0.5 rounded-full flex items-center"
             >
               {feature}
             </span>
@@ -115,33 +115,31 @@ export const HotelCard = ({
         </div>
         
         {description && (
-          <p className="text-sm sm:text-base text-muted-foreground">{description}</p>
+          <p className="text-xs text-muted-foreground line-clamp-2">{description}</p>
         )}
         
         {quote && (
-          <div className="bg-primary/5 rounded-lg p-4 relative mt-2">
-            <div className="absolute top-0 left-0 transform -translate-x-2 -translate-y-2 text-primary/20 text-4xl">"</div>
-            <p className="pl-4 italic text-sm sm:text-base text-primary/90 relative z-10">
+          <div className="bg-primary/5 rounded-lg p-3 relative mt-1">
+            <p className="text-xs italic text-primary/90 relative z-10 line-clamp-2">
               {quote}
             </p>
-            <div className="absolute bottom-0 right-0 transform translate-x-2 translate-y-2 text-primary/20 text-4xl">"</div>
           </div>
         )}
       </CardContent>
-      <CardFooter className="pb-6">
+      <CardFooter className="pt-0 pb-4 px-4">
         <Button 
           asChild 
-          className="w-full sm:w-auto transition-all duration-300 hover:scale-105 bg-primary/90 hover:bg-primary"
+          className="w-full sm:w-auto transition-all duration-300 hover:scale-105 bg-primary/90 hover:bg-primary text-sm h-9"
           disabled={!bookingUrl || bookingUrl === '#'}
         >
           <a 
             href={getCleanUrl(bookingUrl)} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2"
+            className="flex items-center justify-center gap-1"
           >
-            Visit Hotel Website
-            <ExternalLink className="h-4 w-4" />
+            Visit Website
+            <ExternalLink className="h-3.5 w-3.5" />
           </a>
         </Button>
       </CardFooter>

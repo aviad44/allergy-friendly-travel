@@ -50,7 +50,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
     if (hotel.rating) {
       const starCount = Math.round(hotel.rating);
       return Array.from({ length: starCount }).map((_, i) => (
-        <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+        <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
       ));
     } else if (hotel.starRating) {
       return <span className="text-amber-500">{hotel.starRating}</span>;
@@ -61,13 +61,14 @@ export const HotelCard: React.FC<HotelCardProps> = ({
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <div className="flex flex-col md:flex-row">
-        {/* Hotel Image (if available) */}
+        {/* Hotel Image (if available) - reduced height on mobile */}
         {hotel.imageUrl && (
-          <div className="w-full md:w-1/3 h-48 md:h-auto overflow-hidden">
+          <div className="w-full md:w-1/3 h-36 md:h-auto overflow-hidden">
             <img 
               src={hotel.imageUrl} 
               alt={`${cleanHotelName} exterior`} 
               className="w-full h-full object-cover"
+              loading="lazy"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
@@ -75,11 +76,11 @@ export const HotelCard: React.FC<HotelCardProps> = ({
           </div>
         )}
         
-        <div className="p-5 flex-1 flex flex-col">
-          {/* Hotel Name and Stars - ONLY SHOW STARS HERE */}
-          <div className="flex justify-between items-start mb-2">
-            <h2 className="text-lg font-bold text-gray-900">{cleanHotelName}</h2>
-            <div className="flex ml-2 shrink-0">
+        <div className="p-4 flex-1 flex flex-col">
+          {/* Hotel Name and Stars - MORE COMPACT */}
+          <div className="flex justify-between items-start mb-1.5">
+            <h2 className="text-base font-bold text-gray-900 line-clamp-1">{cleanHotelName}</h2>
+            <div className="flex ml-1.5 shrink-0">
               {renderStars()}
             </div>
           </div>
@@ -90,24 +91,24 @@ export const HotelCard: React.FC<HotelCardProps> = ({
               href={getGoogleMapsUrl(cleanHotelName, hotel.location || '')}
               target="_blank" 
               rel="noopener noreferrer" 
-              className="flex items-center text-gray-500 text-sm mb-3 hover:text-primary"
+              className="flex items-center text-gray-500 text-xs mb-2 hover:text-primary"
             >
-              <MapPin className="h-3.5 w-3.5 mr-1.5" />
-              <span>{simplifiedLocation}</span>
+              <MapPin className="h-3 w-3 mr-1 shrink-0" />
+              <span className="truncate">{simplifiedLocation}</span>
             </a>
           )}
           
           {/* Hotel Description with Truncation */}
           {hotel.description && (
-            <div className="mb-3">
-              <p className={`text-sm text-gray-600 ${!isExpanded ? 'line-clamp-3' : ''}`}>
+            <div className="mb-2">
+              <p className={`text-xs text-gray-600 ${!isExpanded ? 'line-clamp-2' : ''}`}>
                 {hotel.description}
               </p>
-              {hotel.description.length > 150 && (
+              {hotel.description.length > 100 && (
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-xs text-primary flex items-center gap-1 p-0 h-6 mt-1"
+                  className="text-xs text-primary flex items-center gap-1 p-0 h-5 mt-0.5"
                   onClick={() => setIsExpanded(!isExpanded)}
                 >
                   {isExpanded ? (
@@ -120,45 +121,34 @@ export const HotelCard: React.FC<HotelCardProps> = ({
             </div>
           )}
           
-          {/* Allergy Features */}
+          {/* Allergy Features - SIMPLIFIED */}
           {hotel.allergyFeatures && hotel.allergyFeatures.length > 0 && (
-            <div className="mb-4">
-              <ul className="text-sm space-y-1">
-                {hotel.allergyFeatures.slice(0, 3).map((feature, index) => (
+            <div className="mb-3">
+              <ul className="text-xs space-y-0.5">
+                {hotel.allergyFeatures.slice(0, 2).map((feature, index) => (
                   <li key={index} className="flex items-start">
-                    <span className="text-teal-600 mr-2 text-sm">✓</span>
-                    <span className="text-gray-600">{feature}</span>
+                    <span className="text-teal-600 mr-1.5 text-xs">✓</span>
+                    <span className="text-gray-600 line-clamp-1">{feature}</span>
                   </li>
                 ))}
-                {hotel.allergyFeatures.length > 3 && (
-                  <li className="text-xs text-primary mt-1">+{hotel.allergyFeatures.length - 3} more features</li>
+                {hotel.allergyFeatures.length > 2 && (
+                  <li className="text-xs text-primary">+{hotel.allergyFeatures.length - 2} more features</li>
                 )}
               </ul>
             </div>
           )}
           
-          {/* Guest Review - Full display with quote styling */}
-          {hotel.reviews && hotel.reviews.length > 0 && hotel.reviews[0] && (
-            <div className="mb-4 bg-gray-50 p-4 rounded-md relative border-l-4 border-primary/40">
-              <div className="absolute top-1 left-2 text-primary/20 text-3xl">"</div>
-              <p className="text-sm text-gray-700 italic pl-4 pr-4">
-                {hotel.reviews[0]}
-              </p>
-              <div className="absolute bottom-1 right-2 text-primary/20 text-3xl">"</div>
-            </div>
-          )}
-          
-          {/* Action buttons */}
-          <div className="flex flex-wrap gap-3 mt-auto pt-3 border-t">
+          {/* Action buttons - MORE COMPACT */}
+          <div className="flex flex-wrap gap-2 mt-auto pt-2 border-t">
             {hotel.url && (
-              <Button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-sm h-9" onClick={() => window.open(hotel.url, "_blank")}>
+              <Button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-xs h-8" onClick={() => window.open(hotel.url, "_blank")}>
                 Book Now
-                <ExternalLink className="h-3.5 w-3.5 ml-1.5" />
+                <ExternalLink className="h-3 w-3 ml-1.5" />
               </Button>
             )}
             
             {onViewDetails && (
-              <Button variant="outline" className="flex-1 border-teal-600 text-teal-600 hover:bg-teal-50 text-sm h-9" onClick={onViewDetails}>
+              <Button variant="outline" className="flex-1 border-teal-600 text-teal-600 hover:bg-teal-50 text-xs h-8" onClick={onViewDetails}>
                 View Details
               </Button>
             )}

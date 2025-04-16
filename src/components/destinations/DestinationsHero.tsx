@@ -12,7 +12,7 @@ export const DestinationsHero = () => {
   }, []);
 
   return (
-    <section className="relative py-12 md:py-16 mt-0">
+    <section className="relative py-10 md:py-16 mt-0">
       <div className="absolute inset-0 overflow-hidden">
         {/* Show low quality placeholder while image loads */}
         <div 
@@ -32,11 +32,11 @@ export const DestinationsHero = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
       </div>
       <div className="relative z-10 container mx-auto px-4 text-center">
-        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
+        <h1 className="font-display text-3xl sm:text-5xl md:text-6xl mb-3 sm:mb-6 leading-tight">
           <span className="text-sky-200 font-bold">Discover</span>
-          <span className="block mt-2 text-teal-300 font-bold">Allergy-Friendly Destinations</span>
+          <span className="block mt-1 sm:mt-2 text-teal-300 font-bold">Allergy-Friendly Destinations</span>
         </h1>
-        <p className="text-white text-lg md:text-xl mx-auto">
+        <p className="text-white text-base md:text-xl mx-auto">
           Find the perfect accommodation that caters to your specific allergy needs
         </p>
       </div>
