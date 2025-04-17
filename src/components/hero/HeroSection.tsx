@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { SearchBar } from '@/components/search/SearchBar';
+import { SearchBar } from '@/components/SearchBar';
 
 export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -8,7 +8,7 @@ export const HeroSection = () => {
   // Preload hero image
   useEffect(() => {
     const img = new Image();
-    img.src = "/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.webp";
+    img.src = "/lovable-uploads/cf3c0a43-1695-413d-b297-1ba363ee2b56.png";
     img.onload = () => setImageLoaded(true);
   }, []);
 
@@ -16,23 +16,23 @@ export const HeroSection = () => {
     <section 
       className="relative min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
       style={{
-        backgroundImage: `url("/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.webp")`,
+        backgroundImage: `url("/lovable-uploads/cf3c0a43-1695-413d-b297-1ba363ee2b56.png")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '110vh',
         opacity: imageLoaded ? 1 : 0,
-        transition: 'opacity 0.3s ease-in'
+        transition: 'opacity 0.5s ease-in'
       }}
     >
       {/* Lightweight placeholder while image loads */}
       {!imageLoaded && (
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-sky-400 to-blue-600"
+          className="absolute inset-0 bg-gradient-to-b from-sky-400 to-blue-500"
           aria-hidden="true"
         ></div>
       )}
       
-      <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]"></div>
+      <div className="absolute inset-0 bg-black/5 backdrop-blur-[1px]"></div>
       
       <div className="relative z-10 container mx-auto px-4 -mt-16 sm:mt-0">
         <div className="mx-auto max-w-[90%] sm:max-w-[700px]">
