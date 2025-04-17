@@ -1,3 +1,4 @@
+
 import { toast } from "sonner";
 import { copyToClipboard, downloadAsPDF, downloadAsPNG, shareToWhatsApp } from '../utils/cardGeneration';
 
@@ -28,7 +29,7 @@ export function useAllergyCardSharing() {
     // Add meta tags temporarily to enhance sharing
     const ensureMetaTags = () => {
       const baseUrl = 'https://www.allergy-free-travel.com';
-      const imagePath = `${baseUrl}/lovable-uploads/c0d4e111-501f-46b3-94ad-23c5b56f9736.png';
+      const imagePath = `${baseUrl}/lovable-uploads/c0d4e111-501f-46b3-94ad-23c5b56f9736.png`;
       const title = "My Allergy Translation Card";
       const description = "Custom allergy translation card from Allergy-Free Travel";
       
