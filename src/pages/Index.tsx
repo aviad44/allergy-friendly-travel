@@ -1,3 +1,4 @@
+
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
@@ -7,7 +8,7 @@ import { initPerformanceMonitoring } from "@/utils/performanceMonitoring";
 
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
-  const baseUrl = process.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
+  const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
   const mainImage = '/lovable-uploads/e8b4dc3d-60a2-4fb7-bc33-77580f4d249c.png';
   
   // Initialize performance monitoring

@@ -95,7 +95,7 @@ const logPerformanceIssue = (data: Record<string, any>) => {
   console.warn('Performance issue detected:', data);
   
   // Example of sending to a backend service:
-  // if (process.env.NODE_ENV === 'production') {
+  // if (import.meta.env.MODE === 'production') {
   //   fetch('/api/performance-log', {
   //     method: 'POST',
   //     headers: { 'Content-Type': 'application/json' },
@@ -107,7 +107,7 @@ const logPerformanceIssue = (data: Record<string, any>) => {
 // Initialize all performance tracking
 export const initPerformanceMonitoring = () => {
   // Only run in production to avoid dev tool impact
-  if (process.env.NODE_ENV === 'production') {
+  if (import.meta.env.MODE === 'production') {
     // Run after page load
     window.addEventListener('load', () => {
       // Use setTimeout to not compete with critical rendering

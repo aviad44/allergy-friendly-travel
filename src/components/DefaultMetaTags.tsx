@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 
 export const DefaultMetaTags = () => {
   const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.allergy-free-travel.com';
-  const baseUrl = process.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
+  const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
   const defaultImage = '/lovable-uploads/e8b4dc3d-60a2-4fb7-bc33-77580f4d249c.png';
   
   return (
