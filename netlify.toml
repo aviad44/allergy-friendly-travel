@@ -22,59 +22,12 @@
   changeFreq = "weekly"
   priority = 0.5
 
-# Enable prerendering for social media crawlers
 [[plugins]]
   package = "netlify-plugin-prerender-spa"
 
   [plugins.inputs]
-    # Paths that should be prerendered
-    paths = [
-      "/",
-      "/destinations/barcelona",
-      "/destinations/new-york",
-      "/destinations/paris",
-      "/destinations/london",
-      "/destinations/tokyo",
-      "/destinations/crete",
-      "/destinations/abu-dhabi",
-      "/destinations/cyprus",
-      "/destinations/thailand",
-      "/destinations/ayia-napa",
-      "/destinations/portugal",
-      "/destinations/swiss-alps",
-      "/destinations/turkey"
-    ]
-    # Detect bot user agents that should receive prerendered pages
-    userAgents = [
-      "googlebot",
-      "bingbot",
-      "yandex",
-      "baiduspider",
-      "facebookexternalhit",
-      "twitterbot",
-      "rogerbot",
-      "linkedinbot",
-      "embedly",
-      "quora link preview",
-      "showyoubot",
-      "outbrain",
-      "pinterest/0.",
-      "developers.google.com/+/web/snippet",
-      "slackbot",
-      "vkShare",
-      "W3C_Validator",
-      "redditbot",
-      "Applebot",
-      "WhatsApp",
-      "flipboard",
-      "tumblr",
-      "bitlybot",
-      "SkypeUriPreview",
-      "nuzzel",
-      "Discordbot",
-      "Google Page Speed",
-      "Qwantify"
-    ]
+  source = "dist"
+  minifyHTML = true
 
 # Enable optimizations for better performance
 [build.processing]
@@ -142,4 +95,3 @@
 [[edge_functions]]
   path = "/*"
   function = "optimize-static-assets"
-
