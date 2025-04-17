@@ -1,4 +1,3 @@
-
 [build]
   command = "npm run build"
   publish = "dist"
@@ -27,7 +26,6 @@
 
   [plugins.inputs]
   source = "dist"
-  minifyHTML = true
 
 # Enable optimizations for better performance
 [build.processing]
