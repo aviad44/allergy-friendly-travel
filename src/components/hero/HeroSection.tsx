@@ -1,9 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { SearchBar } from '@/components/SearchBar';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const isMobile = useIsMobile();
   
   // Preload hero image
   useEffect(() => {
@@ -14,12 +16,12 @@ export const HeroSection = () => {
 
   return (
     <section 
-      className="relative min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
+      className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
       style={{
         backgroundImage: `url("/lovable-uploads/cf3c0a43-1695-413d-b297-1ba363ee2b56.png")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        height: '110vh',
+        height: isMobile ? '100vh' : '110vh',
         opacity: imageLoaded ? 1 : 0,
         transition: 'opacity 0.5s ease-in'
       }}
@@ -34,7 +36,7 @@ export const HeroSection = () => {
       
       <div className="absolute inset-0 bg-black/5 backdrop-blur-[1px]"></div>
       
-      <div className="relative z-10 container mx-auto px-4 -mt-16 sm:mt-0">
+      <div className="relative z-10 container mx-auto px-4 -mt-0 sm:-mt-16">
         <div className="mx-auto max-w-[90%] sm:max-w-[700px]">
           <div 
             className="text-center p-6 sm:p-10 rounded-2xl backdrop-blur-sm transition-all duration-300 ease-in-out"

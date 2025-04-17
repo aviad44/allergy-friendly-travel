@@ -6,6 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
 import { Autocomplete } from "./search/Autocomplete";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Memoized Autocomplete to prevent unnecessary re-renders
 const MemoizedAutocomplete = memo(Autocomplete);
@@ -14,6 +15,7 @@ export const SearchBar = () => {
   const [destination, setDestination] = useState("");
   const [allergies, setAllergies] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const isMobile = useIsMobile();
   
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -46,8 +48,8 @@ export const SearchBar = () => {
   }, [destination, allergies, navigate, toast]);
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <div className="flex flex-col sm:flex-row gap-4">
+    <div className="flex flex-col gap-3 w-full">
+      <div className="flex flex-col sm:flex-row gap-3">
         {/* Destination input with autocomplete */}
         <MemoizedAutocomplete
           placeholder="Enter destination"
@@ -69,7 +71,7 @@ export const SearchBar = () => {
       
       {/* Search button */}
       <Button 
-        className="w-full p-4 bg-[#00b397] hover:bg-[#009f84] text-white text-[1.1em] transition-colors duration-300 flex items-center justify-center gap-2"
+        className="w-full p-3 md:p-4 bg-[#00b397] hover:bg-[#009f84] text-white text-[1.1em] transition-colors duration-300 flex items-center justify-center gap-2"
         onClick={handleSearch} 
         disabled={isSearching}
       >

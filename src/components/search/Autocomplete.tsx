@@ -1,7 +1,7 @@
 
 import { Input } from "@/components/ui/input";
-import { SearchSuggestion } from "./types";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AutocompleteProps {
   placeholder: string;
@@ -15,6 +15,7 @@ export const Autocomplete = forwardRef<HTMLDivElement, AutocompleteProps>(
   ({ placeholder, value, onChange, suggestions, className = "" }, ref) => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+    const isMobile = useIsMobile();
 
     useEffect(() => {
       if (value) {
@@ -36,10 +37,11 @@ export const Autocomplete = forwardRef<HTMLDivElement, AutocompleteProps>(
       <div ref={ref} className="relative flex-1">
         <Input 
           placeholder={placeholder}
-          className={`h-9 sm:h-12 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm ${className}`}
+          className={`h-9 sm:h-11 text-sm sm:text-base border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm ${className}`}
           value={value}
           onChange={e => onChange(e.target.value)}
           onFocus={() => setShowSuggestions(true)}
+          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           aria-autocomplete="list"
           aria-controls={`${placeholder}-suggestions`}
           aria-expanded={showSuggestions}
@@ -49,7 +51,7 @@ export const Autocomplete = forwardRef<HTMLDivElement, AutocompleteProps>(
         {showSuggestions && filteredSuggestions.length > 0 && (
           <ul 
             id={`${placeholder}-suggestions`}
-            className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50"
+            className="absolute left-0 right-0 mt-1 max-h-40 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50"
             role="listbox"
           >
             {filteredSuggestions.map((item, index) => (
