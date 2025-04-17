@@ -26,7 +26,29 @@ export function useAllergyCardSharing() {
       return;
     }
     
-    shareToWhatsApp(generatedCard, translatedCard);
+    // Use navigator.share API if available for better sharing experience
+    if (navigator.share) {
+      try {
+        navigator.share({
+          title: 'My Allergy Translation Card',
+          text: generatedCard + (translatedCard ? '\n\n' + translatedCard : ''),
+          url: window.location.href
+        }).then(() => {
+          toast.success("Successfully shared!");
+        }).catch((error) => {
+          console.error('Sharing failed:', error);
+          // Fall back to WhatsApp if sharing API fails
+          shareToWhatsApp(generatedCard, translatedCard);
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+        // Fall back to WhatsApp if sharing API errors
+        shareToWhatsApp(generatedCard, translatedCard);
+      }
+    } else {
+      // Use direct WhatsApp sharing as fallback
+      shareToWhatsApp(generatedCard, translatedCard);
+    }
   };
 
   return {

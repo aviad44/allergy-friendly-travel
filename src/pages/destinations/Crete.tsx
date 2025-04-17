@@ -25,8 +25,10 @@ const Crete = () => {
         <meta property="og:image" content={imageUrl} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Allergy-Free Travel" />
         
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -43,7 +45,12 @@ const Crete = () => {
             "description": pageDescription,
             "datePublished": "2024-06-10",
             "dateModified": "2024-06-10",
-            "image": imageUrl,
+            "image": {
+              "@type": "ImageObject",
+              "url": imageUrl,
+              "width": "1200",
+              "height": "630"
+            },
             "about": {
               "@type": "Place",
               "name": "Crete",
