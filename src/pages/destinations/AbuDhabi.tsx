@@ -1,6 +1,6 @@
 
 import { DestinationReviews } from "@/components/reviews/DestinationReviews";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 
 const AbuDhabi = () => {
   // SEO metadata

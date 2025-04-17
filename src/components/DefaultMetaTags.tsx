@@ -6,7 +6,7 @@ export const DefaultMetaTags = () => {
   const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.allergy-free-travel.com';
   
   return (
-    <Helmet>
+    <Helmet defaultTitle="Allergy-Free Travel – Safe Hotels for People with Food Allergies">
       {/* Default Open Graph tags for social sharing */}
       <meta property="og:title" content="Allergy-Free Travel – Safe Hotels for People with Food Allergies" />
       <meta property="og:description" content="Discover allergy-friendly hotels and travel tips for Portugal and beyond." />
