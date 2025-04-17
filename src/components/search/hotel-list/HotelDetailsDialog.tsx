@@ -40,6 +40,7 @@ export const HotelDetailsDialog: React.FC<HotelDetailsDialogProps> = ({
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center text-sm text-muted-foreground hover:text-primary mt-1 gap-1"
+              aria-label={`View ${cleanHotelName} on Google Maps`}
             >
               <MapPin className="h-3.5 w-3.5" />
               <span>{selectedHotel.location}</span>

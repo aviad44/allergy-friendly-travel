@@ -18,6 +18,7 @@ const Barcelona = () => {
         <meta name="keywords" content={pageKeywords} />
         <link rel="canonical" href={canonicalUrl} />
         <meta name="robots" content="index, follow" />
+        <meta name="author" content="Aviad Beit Halachmi" />
         
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
@@ -25,12 +26,14 @@ const Barcelona = () => {
         <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
+        <meta property="article:author" content="Aviad Beit Halachmi" />
         
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={imageUrl} />
+        <meta name="twitter:creator" content="@AviadBeitHalachmi" />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
@@ -41,6 +44,10 @@ const Barcelona = () => {
             "description": pageDescription,
             "datePublished": "2024-06-10",
             "dateModified": "2024-06-10",
+            "author": {
+              "@type": "Person",
+              "name": "Aviad Beit Halachmi"
+            },
             "about": {
               "@type": "City",
               "name": "Barcelona",

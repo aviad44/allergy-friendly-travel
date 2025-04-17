@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { HOME_CONTENT } from "@/constants/home";
 import { Separator } from "@/components/ui/separator";
@@ -19,7 +18,7 @@ export const Footer = () => {
               Helping travelers with allergies and dietary restrictions find safe accommodations worldwide.
             </p>
             <p className="text-sm text-muted-foreground" itemProp="copyrightNotice">
-              © {currentYear} {HOME_CONTENT.navigation.brand}. All rights reserved by Aviad Beit Halachmi
+              © {currentYear} {HOME_CONTENT.navigation.brand}. All rights reserved by <span itemProp="author" itemScope itemType="https://schema.org/Person"><span itemProp="name">Aviad Beit Halachmi</span></span>
             </p>
           </div>
           
