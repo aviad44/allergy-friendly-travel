@@ -1,5 +1,4 @@
-
-export const DESTINATION_IMAGES = {
+export const DESTINATION_IMAGES: Record<string, string> = {
   london: "photo-1513635269975-59663e0ac1ad", // London skyline with Thames river
   paris: "photo-1502602898657-3e91760cbb34", // Wide view of Eiffel Tower
   barcelona: "photo-1583422409516-2895a77efded", // Sagrada Familia image
@@ -13,5 +12,6 @@ export const DESTINATION_IMAGES = {
   'swiss-alps': "photo-1491555103944-7c647fd857e6", // Swiss Alps mountain resort with lake view
   'koh-samui': "photo-1507525428034-b723cf961d3e", // Koh Samui beach - same as used in the article page
   'hotel-chains': "photo-1551882547-ff40c63fe5fa", // Luxury hotel lobby
-  'turkey': "photo-1592305951212-cae76d6119f7" // Beautiful view of Turkey - this is a very reliable Unsplash image
+  'turkey': "photo-1592305951212-cae76d6119f7", // Beautiful view of Turkey - this is a very reliable Unsplash image
+  "cruise-lines": "photo-1548574505-5e239809ee19"
 } as const;
