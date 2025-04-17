@@ -157,6 +157,23 @@ const fixedNewYorkContent: DestinationContent = {
   }
 };
 
+// Add empty content for cruise lines to ensure the destination data is complete
+const cruiseLinesContent: DestinationContent = {
+  intro: "Cruising is a dream vacation for many—but for travelers with food allergies, that dream can quickly turn into a minefield of cross-contamination, unclear labeling, and anxiety. Thankfully, many major cruise lines have stepped up, offering allergy-conscious meal planning, trained staff, and even pre-cruise consultations.",
+  hotels: [],
+  faqs: [],
+  languageTable: {
+    headers: ["English", "Universal"],
+    rows: [
+      ["I have a food allergy", "I have a food allergy (show medical card)"],
+      ["Please no nuts", "No nuts please"],
+      ["Is this gluten-free?", "Gluten-free?"],
+      ["I cannot eat dairy", "No dairy"],
+      ["I have celiac disease", "I have celiac disease"]
+    ]
+  }
+};
+
 export const destinationData: Record<DestinationId, DestinationContent> = {
   london: londonContent,
   paris: parisContent,
@@ -172,5 +189,6 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
   portugal: portugalContent,
   'swiss-alps': swissAlpsContent,
   'koh-samui': kohSamuiContent,
-  'turkey': turkeyContent
+  'turkey': turkeyContent,
+  'cruise-lines': cruiseLinesContent
 };
