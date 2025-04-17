@@ -103,3 +103,9 @@
   [headers.values]
     Content-Type = "image/png"
     Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/lovable-uploads/c0d4e111-501f-46b3-94ad-23c5b56f9736.png"
+  [headers.values]
+    Content-Type = "image/png"
+    Cache-Control = "public, max-age=604800"

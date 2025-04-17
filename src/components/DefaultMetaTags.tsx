@@ -1,11 +1,10 @@
-
 import { Helmet } from "react-helmet";
 
 export const DefaultMetaTags = () => {
   // Get the current URL for the og:url tag
   const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.allergy-free-travel.com';
   const baseUrl = 'https://www.allergy-free-travel.com';
-  const defaultImage = `${baseUrl}/og-image-new.png`;
+  const defaultImage = `${baseUrl}/lovable-uploads/c0d4e111-501f-46b3-94ad-23c5b56f9736.png`;
   
   return (
     <Helmet defaultTitle="Allergy-Free Travel – Hotels for Food Allergies">

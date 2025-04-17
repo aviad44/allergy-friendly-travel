@@ -1,4 +1,3 @@
-
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
@@ -10,7 +9,7 @@ export default function Index() {
   // Define currentDate for use in the JSON-LD schema
   const currentDate = new Date().toISOString().split('T')[0];
   const baseUrl = "https://www.allergy-free-travel.com";
-  const mainImage = `${baseUrl}/og-image-new.png`;
+  const mainImage = `${baseUrl}/lovable-uploads/c0d4e111-501f-46b3-94ad-23c5b56f9736.png`;
   
   // Initialize performance monitoring
   useEffect(() => {
