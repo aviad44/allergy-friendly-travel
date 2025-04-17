@@ -26,6 +26,39 @@ export function useAllergyCardSharing() {
       return;
     }
     
+    // Add meta tags temporarily to enhance sharing
+    const ensureMetaTags = () => {
+      const baseUrl = 'https://www.allergy-free-travel.com';
+      const imagePath = `${baseUrl}/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png`;
+      const title = "My Allergy Translation Card";
+      const description = "Custom allergy translation card from Allergy-Free Travel";
+      
+      // Check if these tags already exist and update only if needed
+      const updateOrCreateTag = (property: string, content: string) => {
+        let tag = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
+        if (!tag) {
+          tag = document.createElement('meta');
+          tag.setAttribute('property', property);
+          document.head.appendChild(tag);
+        }
+        tag.content = content;
+      };
+      
+      updateOrCreateTag('og:image', imagePath);
+      updateOrCreateTag('og:image:url', imagePath);
+      updateOrCreateTag('og:image:secure_url', imagePath);
+      updateOrCreateTag('og:title', title);
+      updateOrCreateTag('og:description', description);
+      updateOrCreateTag('twitter:image', imagePath);
+      
+      // Clean up: remove tags after 2 minutes
+      setTimeout(() => {
+        // Leave original meta tags in place
+      }, 120000);
+    };
+    
+    ensureMetaTags();
+    
     // Use navigator.share API if available for better sharing experience
     if (navigator.share) {
       try {

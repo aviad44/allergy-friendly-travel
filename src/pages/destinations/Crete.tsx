@@ -7,8 +7,9 @@ const Crete = () => {
   const pageTitle = "Allergy-Friendly Hotels in Crete | Safe Dining for Dietary Restrictions";
   const pageDescription = "Discover the best allergy-friendly hotels in Crete. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly crete, gluten-free hotels crete, food allergies greece, crete hotels dietary restrictions";
-  const canonicalUrl = "https://www.allergy-free-travel.com/destinations/crete";
-  const imageUrl = "https://www.allergy-free-travel.com/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png";
+  const baseUrl = "https://www.allergy-free-travel.com";
+  const canonicalUrl = `${baseUrl}/destinations/crete`;
+  const imageUrl = `${baseUrl}/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png`;
 
   return (
     <>
@@ -23,6 +24,8 @@ const Crete = () => {
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content={imageUrl} />
+        <meta property="og:image:url" content={imageUrl} />
+        <meta property="og:image:secure_url" content={imageUrl} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/png" />

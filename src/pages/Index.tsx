@@ -9,6 +9,8 @@ import { initPerformanceMonitoring } from "@/utils/performanceMonitoring";
 export default function Index() {
   // Define currentDate for use in the JSON-LD schema
   const currentDate = new Date().toISOString().split('T')[0];
+  const baseUrl = "https://www.allergy-free-travel.com";
+  const mainImage = `${baseUrl}/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png`;
   
   // Initialize performance monitoring
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function Index() {
         <title>Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions</title>
         <meta name="description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
         <meta name="keywords" content="allergy-friendly travel, food allergy hotels, gluten-free accommodation, dairy-free travel, nut-free hotels, allergen-free vacation, safe travel with allergies" />
-        <link rel="canonical" href="https://www.allergy-free-travel.com/" />
+        <link rel="canonical" href={`${baseUrl}/`} />
         <meta name="robots" content="index, follow" />
         
         {/* Preload critical resources */}
@@ -31,18 +33,24 @@ export default function Index() {
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions" />
         <meta property="og:description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
-        <meta property="og:url" content="https://www.allergy-free-travel.com/" />
-        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/ea490ba9-d771-4073-8a50-d7f7a7a27a7c.webp" />
+        <meta property="og:url" content={`${baseUrl}/`} />
+        <meta property="og:image" content={mainImage} />
+        <meta property="og:image:url" content={mainImage} />
+        <meta property="og:image:secure_url" content={mainImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:type" content="image/webp" />
+        <meta property="og:image:type" content="image/png" />
         <meta property="og:site_name" content="Allergy-Free Travel" />
+        
+        {/* Facebook specific meta tags */}
+        <meta property="fb:app_id" content="123456789" />
         
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions" />
         <meta name="twitter:description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
-        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/ea490ba9-d771-4073-8a50-d7f7a7a27a7c.webp" />
+        <meta name="twitter:image" content={mainImage} />
+        <meta name="twitter:site" content="@allergyfreetvl" />
         
         {/* Schema.org JSON-LD structured data */}
         <script type="application/ld+json">
@@ -51,8 +59,8 @@ export default function Index() {
             "@type": "TravelAgency",
             "name": "Allergy Free Travel",
             "description": "Helping travelers with food allergies and dietary restrictions find safe accommodations worldwide.",
-            "url": "https://www.allergy-free-travel.com",
-            "logo": "https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.webp",
+            "url": baseUrl,
+            "logo": mainImage,
             "telephone": "+1-123-456-7890",
             "email": "info@allergy-free-travel.com",
             "areaServed": "Worldwide",
@@ -60,7 +68,7 @@ export default function Index() {
             "dateModified": currentDate,
             "image": {
               "@type": "ImageObject",
-              "url": "https://www.allergy-free-travel.com/lovable-uploads/ea490ba9-d771-4073-8a50-d7f7a7a27a7c.webp",
+              "url": mainImage,
               "width": "1200",
               "height": "630"
             }

@@ -4,6 +4,9 @@ import { Helmet } from "react-helmet";
 export const DefaultMetaTags = () => {
   // Get the current URL for the og:url tag
   const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.allergy-free-travel.com';
+  const baseUrl = 'https://www.allergy-free-travel.com';
+  // Default image with absolute URL
+  const defaultImage = `${baseUrl}/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png`;
   
   return (
     <Helmet defaultTitle="Allergy-Free Travel – Hotels for Food Allergies">
@@ -16,7 +19,7 @@ export const DefaultMetaTags = () => {
       <meta property="og:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
       <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta property="og:url" content={currentUrl} />
-      <meta property="og:image" content="https://www.allergy-free-travel.com/og-image.png" />
+      <meta property="og:image" content={defaultImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:type" content="image/png" />
@@ -29,7 +32,7 @@ export const DefaultMetaTags = () => {
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
       <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
-      <meta name="twitter:image" content="https://www.allergy-free-travel.com/og-image.png" />
+      <meta name="twitter:image" content={defaultImage} />
       <meta name="twitter:site" content="@allergyfreetvl" />
     </Helmet>
   );

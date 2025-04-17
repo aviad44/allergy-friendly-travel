@@ -28,6 +28,18 @@ export const MainLayout = () => {
         document.body.removeChild(fbScript);
       };
     }
+    
+    // This helps with refreshing social media cache
+    const metaRefresh = document.createElement('meta');
+    metaRefresh.setAttribute('property', 'og:image:url');
+    metaRefresh.content = `https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png?v=${new Date().getTime()}`;
+    document.head.appendChild(metaRefresh);
+    
+    return () => {
+      if (document.head.contains(metaRefresh)) {
+        document.head.removeChild(metaRefresh);
+      }
+    };
   }, [location]);
   
   return (
