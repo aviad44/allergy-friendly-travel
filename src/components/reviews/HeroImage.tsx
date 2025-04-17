@@ -16,9 +16,12 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
   const optimizeImageUrl = (url: string) => {
     if (!url) return fallbackImage;
     
-    // For Unsplash URLs, use their optimization API
+    // For Unsplash URLs, use their optimization API with smaller image for mobile
     if (url.includes('unsplash.com')) {
-      return `${url.split('?')[0]}?auto=format&fit=crop&w=1200&q=80`;
+      // Use a smaller image size for mobile devices
+      const isMobile = window.innerWidth < 768;
+      const width = isMobile ? 800 : 1200;
+      return `${url.split('?')[0]}?auto=format&fit=crop&w=${width}&q=80`;
     }
     
     // Return original for other URLs
@@ -58,7 +61,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     }
   };
   
-  // Preload image
+  // Preload image with improved error handling
   useEffect(() => {
     if (currentImageUrl) {
       // Create a lightweight placeholder while image loads
@@ -70,19 +73,31 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
       `;
       document.head.appendChild(placeholderStyle);
       
-      // Preload actual image
+      // Preload actual image with timeout for mobile connections
       const img = new Image();
       img.src = currentImageUrl;
+      
+      // Set a timeout to catch hanging requests
+      const timeout = setTimeout(() => {
+        console.log('Image load timeout - trying next alternative');
+        setImageFailed(true);
+        tryNextImage();
+      }, 8000); // 8 second timeout for slow mobile connections
+      
       img.onload = () => {
+        clearTimeout(timeout);
         setImageLoaded(true);
         document.head.removeChild(placeholderStyle);
       };
+      
       img.onerror = () => {
+        clearTimeout(timeout);
         setImageFailed(true);
         tryNextImage();
       };
       
       return () => {
+        clearTimeout(timeout);
         if (document.head.contains(placeholderStyle)) {
           document.head.removeChild(placeholderStyle);
         }
@@ -135,7 +150,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
       {/* Loading state indicator */}
       {!imageLoaded && !imageFailed && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
       

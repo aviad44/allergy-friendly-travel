@@ -1,8 +1,10 @@
+
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield } from "lucide-react";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
+import { useState } from "react";
 
 const FEATURED_DESTINATIONS = [
   {
@@ -80,22 +82,70 @@ const FEATURED_DESTINATIONS = [
 ];
 
 export const FeaturedDestinations = () => {
+  // Track image loading status for each destination
+  const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
+  
+  // Process image URL for optimal loading on mobile
+  const getOptimizedImageUrl = (imageSrc: string) => {
+    if (imageSrc.startsWith('photo-')) {
+      const isMobile = window.innerWidth < 768;
+      const width = isMobile ? 600 : 800;
+      const height = isMobile ? 375 : 500;
+      return `https://images.unsplash.com/${imageSrc}?auto=format&fit=crop&w=${width}&h=${height}&q=80&sat=1.2&con=1.1&bright=1.1`;
+    }
+    return imageSrc;
+  };
+  
+  // Handle image load success
+  const handleImageLoaded = (destId: number) => {
+    setLoadedImages(prev => ({...prev, [destId]: true}));
+  };
+  
+  // Handle image load failure
+  const handleImageError = (destId: number, event: React.SyntheticEvent<HTMLImageElement>) => {
+    console.error(`Failed to load destination image for ID: ${destId}`);
+    
+    // Apply fallback images based on destination
+    const fallbacks: Record<string, string> = {
+      'cyprus': 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=800&h=500&q=80',
+      'crete': 'https://images.unsplash.com/photo-1533760881669-80db4d7b4c15?auto=format&fit=crop&w=800&h=500&q=80',
+      'barcelona': 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=800&h=500&q=80',
+      'default': 'https://images.unsplash.com/photo-1505578183806-3d2c2001570e?auto=format&fit=crop&w=800&h=500&q=80'
+    };
+    
+    const dest = FEATURED_DESTINATIONS.find(d => d.id === destId);
+    const fallbackUrl = dest ? fallbacks[dest.name.toLowerCase()] || fallbacks.default : fallbacks.default;
+    
+    (event.target as HTMLImageElement).src = fallbackUrl;
+    handleImageLoaded(destId);
+  };
+
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {FEATURED_DESTINATIONS.slice(0, 6).map((destination) => (
           <Link to={destination.href} key={destination.id}>
             <Card className="overflow-hidden group cursor-pointer h-full hover:shadow-xl transition-all duration-300 border-gray-200">
-              <div className="relative aspect-[16/10] overflow-hidden">
+              <div className="relative aspect-[16/10] overflow-hidden bg-blue-100">
+                {/* Loading placeholder */}
+                {!loadedImages[destination.id] && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-200 to-blue-100 animate-pulse"></div>
+                )}
+                
                 <img
-                  src={destination.image.startsWith('photo-') 
-                    ? `https://images.unsplash.com/${destination.image}?auto=format&fit=crop&w=800&h=500&q=80&sat=1.2&con=1.1&bright=1.1` 
-                    : destination.image}
+                  src={getOptimizedImageUrl(destination.image.startsWith('photo-') 
+                    ? destination.image 
+                    : destination.image)}
                   alt={destination.name === "Cyprus" 
                     ? "Beautiful beach in Cyprus - Best allergy-friendly destination for family vacations"
                     : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`
                   }
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105"
+                  className={`object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105 ${loadedImages[destination.id] ? 'opacity-100' : 'opacity-0'}`}
+                  onLoad={() => handleImageLoaded(destination.id)}
+                  onError={(e) => handleImageError(destination.id, e)}
+                  loading="lazy"
+                  width="600" 
+                  height="375"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-4 text-white">
