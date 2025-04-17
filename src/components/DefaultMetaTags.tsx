@@ -5,7 +5,6 @@ export const DefaultMetaTags = () => {
   // Get the current URL for the og:url tag
   const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.allergy-free-travel.com';
   const baseUrl = 'https://www.allergy-free-travel.com';
-  // Use the dedicated og-image.png file in the public directory
   const defaultImage = `${baseUrl}/og-image.png`;
   
   return (
@@ -13,6 +12,9 @@ export const DefaultMetaTags = () => {
       {/* Primary Meta Tags */}
       <meta name="description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
+      
+      {/* Canonical URL */}
+      <link rel="canonical" href={currentUrl} />
       
       {/* Open Graph tags for social sharing */}
       <meta property="og:type" content="website" />
@@ -23,6 +25,7 @@ export const DefaultMetaTags = () => {
       <meta property="og:image:type" content="image/png" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content="Poolside vacation scene with palm trees – Allergy-Free Travel" />
       <meta property="og:image:secure_url" content={defaultImage} />
       <meta property="og:site_name" content="Allergy-Free Travel" />
       

@@ -12,6 +12,21 @@ export const MainLayout = () => {
   useEffect(() => {
     console.log("Page changed to:", location.pathname);
     
+    // Update meta tags for the current page
+    if (typeof document !== 'undefined') {
+      // Update canonical URL for the current page
+      const canonicalTag = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+      if (canonicalTag) {
+        canonicalTag.href = window.location.href;
+      }
+      
+      // Update og:url for the current page
+      const ogUrlTag = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
+      if (ogUrlTag) {
+        ogUrlTag.content = window.location.href;
+      }
+    }
+    
     // For Facebook to re-scrape the page
     if (typeof window !== 'undefined') {
       // Force Facebook to re-scrape the page

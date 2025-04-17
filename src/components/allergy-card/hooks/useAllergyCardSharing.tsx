@@ -48,6 +48,7 @@ export function useAllergyCardSharing() {
       updateOrCreateTag('og:image:type', 'image/png');
       updateOrCreateTag('og:image:width', '1200');
       updateOrCreateTag('og:image:height', '630');
+      updateOrCreateTag('og:image:alt', 'Poolside vacation scene with palm trees – Allergy-Free Travel');
       updateOrCreateTag('og:image:secure_url', imagePath);
       updateOrCreateTag('og:title', title);
       updateOrCreateTag('og:description', description);
