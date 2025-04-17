@@ -1,4 +1,5 @@
 
+
 [build]
   command = "npm run build"
   publish = "dist"
@@ -95,3 +96,12 @@
 [[edge_functions]]
   path = "/*"
   function = "optimize-static-assets"
+
+# Prerender.io integration for social media crawlers
+[[redirects]]
+  from = "/*"
+  to = "https://service.prerender.io/https://www.allergy-free-travel.com/:splat"
+  status = 200
+  force = true
+  conditions = {Prerender = true}
+
