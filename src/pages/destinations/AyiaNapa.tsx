@@ -8,6 +8,7 @@ const AyiaNapa = () => {
   const pageDescription = "Discover the best allergy-friendly hotels in Ayia Napa. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly ayia napa, gluten-free hotels ayia napa, food allergies cyprus, ayia napa hotels dietary restrictions";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/ayia-napa";
+  const imageUrl = "https://www.allergy-free-travel.com/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png";
 
   return (
     <>
@@ -21,7 +22,9 @@ const AyiaNapa = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png" />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         
@@ -29,7 +32,7 @@ const AyiaNapa = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png" />
+        <meta name="twitter:image" content={imageUrl} />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
@@ -40,6 +43,7 @@ const AyiaNapa = () => {
             "description": pageDescription,
             "datePublished": "2024-06-10",
             "dateModified": "2024-06-10",
+            "image": imageUrl,
             "about": {
               "@type": "City",
               "name": "Ayia Napa",

@@ -28,7 +28,17 @@ export default function Index() {
         <link rel="preload" href="/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.webp" as="image" />
         
         {/* Open Graph Meta Tags */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions" />
+        <meta property="og:description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
+        <meta property="og:url" content="https://www.allergy-free-travel.com/" />
         <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/ea490ba9-d771-4073-8a50-d7f7a7a27a7c.webp" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions" />
+        <meta name="twitter:description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
         <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/ea490ba9-d771-4073-8a50-d7f7a7a27a7c.webp" />
         
         {/* Schema.org JSON-LD structured data */}
@@ -44,7 +54,8 @@ export default function Index() {
             "email": "info@allergy-free-travel.com",
             "areaServed": "Worldwide",
             "serviceType": "Allergy-Friendly Travel Planning",
-            "dateModified": currentDate
+            "dateModified": currentDate,
+            "image": "https://www.allergy-free-travel.com/lovable-uploads/ea490ba9-d771-4073-8a50-d7f7a7a27a7c.webp"
           })}
         </script>
       </Helmet>

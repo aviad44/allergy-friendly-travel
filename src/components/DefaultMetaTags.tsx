@@ -16,6 +16,8 @@ export const DefaultMetaTags = () => {
       <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta property="og:url" content={currentUrl} />
       <meta property="og:image" content="https://www.allergy-free-travel.com/og-image.png" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta property="og:image:type" content="image/png" />
       
       {/* Twitter Card tags */}
