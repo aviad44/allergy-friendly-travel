@@ -29,7 +29,7 @@ export function useAllergyCardSharing() {
     // Add meta tags temporarily to enhance sharing
     const ensureMetaTags = () => {
       const baseUrl = 'https://www.allergy-free-travel.com';
-      const imagePath = `${baseUrl}/og-image.png`;
+      const imagePath = `${baseUrl}/og-image-new.png`;
       const title = "My Allergy Translation Card";
       const description = "Custom allergy translation card from Allergy-Free Travel";
       

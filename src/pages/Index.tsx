@@ -10,7 +10,7 @@ export default function Index() {
   // Define currentDate for use in the JSON-LD schema
   const currentDate = new Date().toISOString().split('T')[0];
   const baseUrl = "https://www.allergy-free-travel.com";
-  const mainImage = `${baseUrl}/og-image.png`;
+  const mainImage = `${baseUrl}/og-image-new.png`;
   
   // Initialize performance monitoring
   useEffect(() => {
