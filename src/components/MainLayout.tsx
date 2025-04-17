@@ -9,12 +9,12 @@ import { useEffect } from "react";
 export const MainLayout = () => {
   const location = useLocation();
   
-  // This will help debug meta tag issues
   useEffect(() => {
     console.log("Page changed to:", location.pathname);
     
-    // Force Facebook to re-scrape the page when in development
-    if (process.env.NODE_ENV === 'development') {
+    // For Facebook to re-scrape the page
+    if (typeof window !== 'undefined') {
+      // Force Facebook to re-scrape the page
       const fbScript = document.createElement('script');
       fbScript.innerHTML = `
         if (typeof FB !== 'undefined') {
@@ -25,21 +25,11 @@ export const MainLayout = () => {
       document.body.appendChild(fbScript);
       
       return () => {
-        document.body.removeChild(fbScript);
+        if (document.body.contains(fbScript)) {
+          document.body.removeChild(fbScript);
+        }
       };
     }
-    
-    // This helps with refreshing social media cache
-    const metaRefresh = document.createElement('meta');
-    metaRefresh.setAttribute('property', 'og:image:url');
-    metaRefresh.content = `https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png?v=${new Date().getTime()}`;
-    document.head.appendChild(metaRefresh);
-    
-    return () => {
-      if (document.head.contains(metaRefresh)) {
-        document.head.removeChild(metaRefresh);
-      }
-    };
   }, [location]);
   
   return (

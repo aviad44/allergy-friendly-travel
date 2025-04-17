@@ -10,7 +10,7 @@ export default function Index() {
   // Define currentDate for use in the JSON-LD schema
   const currentDate = new Date().toISOString().split('T')[0];
   const baseUrl = "https://www.allergy-free-travel.com";
-  const mainImage = `${baseUrl}/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png`;
+  const mainImage = `${baseUrl}/og-image.png`;
   
   // Initialize performance monitoring
   useEffect(() => {
@@ -31,24 +31,20 @@ export default function Index() {
         
         {/* Open Graph Meta Tags - Absolute URLs for all images */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions" />
-        <meta property="og:description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
+        <meta property="og:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
+        <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
         <meta property="og:url" content={`${baseUrl}/`} />
         <meta property="og:image" content={mainImage} />
-        <meta property="og:image:url" content={mainImage} />
-        <meta property="og:image:secure_url" content={mainImage} />
+        <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:secure_url" content={mainImage} />
         <meta property="og:site_name" content="Allergy-Free Travel" />
-        
-        {/* Facebook specific meta tags */}
-        <meta property="fb:app_id" content="123456789" />
         
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions" />
-        <meta name="twitter:description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
+        <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
+        <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
         <meta name="twitter:image" content={mainImage} />
         <meta name="twitter:site" content="@allergyfreetvl" />
         

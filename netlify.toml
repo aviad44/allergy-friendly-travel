@@ -1,3 +1,4 @@
+
 [build]
   command = "npm run build"
   publish = "dist"
@@ -20,13 +21,6 @@
   ]
   changeFreq = "weekly"
   priority = 0.5
-
-# Temporarily commenting out the prerender plugin that might be causing deployment delays
-# [[plugins]]
-#   package = "netlify-plugin-prerender-spa"
-#
-#   [plugins.inputs]
-#   source = "dist"
 
 # Enable optimizations for better performance
 [build.processing]
@@ -75,6 +69,7 @@
   for = "*.png"
   [headers.values]
     Cache-Control = "public, max-age=604800, immutable"
+    Content-Type = "image/png"
 
 [[headers]]
   for = "*.jpg"
@@ -95,10 +90,17 @@
   path = "/*"
   function = "optimize-static-assets"
 
-# Prerender.io integration for social media crawlers
+# Prerender.io integration for social media crawlers (VERY IMPORTANT)
 [[redirects]]
   from = "/*"
   to = "https://service.prerender.io/https://www.allergy-free-travel.com/:splat"
   status = 200
   force = true
   conditions = {Prerender = true}
+
+# Specific header for the OG image to ensure proper content type
+[[headers]]
+  for = "/og-image.png"
+  [headers.values]
+    Content-Type = "image/png"
+    Cache-Control = "public, max-age=604800"

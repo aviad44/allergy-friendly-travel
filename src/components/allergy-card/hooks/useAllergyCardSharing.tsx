@@ -29,7 +29,7 @@ export function useAllergyCardSharing() {
     // Add meta tags temporarily to enhance sharing
     const ensureMetaTags = () => {
       const baseUrl = 'https://www.allergy-free-travel.com';
-      const imagePath = `${baseUrl}/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png`;
+      const imagePath = `${baseUrl}/og-image.png`;
       const title = "My Allergy Translation Card";
       const description = "Custom allergy translation card from Allergy-Free Travel";
       
@@ -45,16 +45,28 @@ export function useAllergyCardSharing() {
       };
       
       updateOrCreateTag('og:image', imagePath);
-      updateOrCreateTag('og:image:url', imagePath);
+      updateOrCreateTag('og:image:type', 'image/png');
+      updateOrCreateTag('og:image:width', '1200');
+      updateOrCreateTag('og:image:height', '630');
       updateOrCreateTag('og:image:secure_url', imagePath);
       updateOrCreateTag('og:title', title);
       updateOrCreateTag('og:description', description);
-      updateOrCreateTag('twitter:image', imagePath);
       
-      // Clean up: remove tags after 2 minutes
-      setTimeout(() => {
-        // Leave original meta tags in place
-      }, 120000);
+      // Twitter tags
+      const updateOrCreateTwitterTag = (name: string, content: string) => {
+        let tag = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;
+        if (!tag) {
+          tag = document.createElement('meta');
+          tag.setAttribute('name', name);
+          document.head.appendChild(tag);
+        }
+        tag.content = content;
+      };
+      
+      updateOrCreateTwitterTag('twitter:card', 'summary_large_image');
+      updateOrCreateTwitterTag('twitter:image', imagePath);
+      updateOrCreateTwitterTag('twitter:title', title);
+      updateOrCreateTwitterTag('twitter:description', description);
     };
     
     ensureMetaTags();

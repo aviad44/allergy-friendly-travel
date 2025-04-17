@@ -5,8 +5,8 @@ export const DefaultMetaTags = () => {
   // Get the current URL for the og:url tag
   const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.allergy-free-travel.com';
   const baseUrl = 'https://www.allergy-free-travel.com';
-  // Default image with absolute URL
-  const defaultImage = `${baseUrl}/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png`;
+  // Use the dedicated og-image.png file in the public directory
+  const defaultImage = `${baseUrl}/og-image.png`;
   
   return (
     <Helmet defaultTitle="Allergy-Free Travel – Hotels for Food Allergies">
@@ -20,13 +20,11 @@ export const DefaultMetaTags = () => {
       <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta property="og:url" content={currentUrl} />
       <meta property="og:image" content={defaultImage} />
+      <meta property="og:image:type" content="image/png" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:secure_url" content={defaultImage} />
       <meta property="og:site_name" content="Allergy-Free Travel" />
-      
-      {/* Facebook specific */}
-      <meta property="fb:app_id" content="123456789" />
       
       {/* Twitter Card tags */}
       <meta name="twitter:card" content="summary_large_image" />
