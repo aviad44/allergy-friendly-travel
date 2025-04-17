@@ -98,5 +98,12 @@ export const destinations: Destination[] = [
     country: 'Turkey',
     description: 'Best Allergy-Friendly Hotels in Turkey',
     subtitle: 'Safe All-Inclusive Resorts for Food Allergies'
+  },
+  {
+    id: 'cruise-lines',
+    name: 'Cruise Lines',
+    country: 'Worldwide',
+    description: 'Best Allergy-Friendly Cruise Lines',
+    subtitle: 'Safe Cruising for Food Allergies'
   }
 ];

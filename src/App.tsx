@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -40,8 +39,8 @@ import AllergyTranslationCard from '@/pages/AllergyTranslationCard';
 import KohSamui from '@/pages/destinations/KohSamui';
 import Privacy from '@/pages/Privacy';
 import Turkey from '@/pages/destinations/Turkey';
+import CruiseLines from '@/pages/destinations/CruiseLines';
 
-// ScrollToTop component to handle scroll restoration
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   
@@ -103,6 +102,7 @@ const AppContent = () => {
           <Route path="/destinations/koh-samui" element={<KohSamui />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/destinations/turkey" element={<Turkey />} />
+          <Route path="/destinations/cruise-lines" element={<CruiseLines />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
