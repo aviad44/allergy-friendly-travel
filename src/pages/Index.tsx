@@ -8,7 +8,7 @@ import { initPerformanceMonitoring } from "@/utils/performanceMonitoring";
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
   const baseUrl = "https://www.allergy-free-travel.com";
-  const mainImage = `/lovable-uploads/3f4d3d83-bbc8-4c3e-b3c6-326433d95ea1.png`;
+  const mainImage = 'https://yourproject.lovable.app/assets/fixed-logo.png';
   
   // Initialize performance monitoring
   useEffect(() => {
@@ -28,19 +28,19 @@ export default function Index() {
         <meta property="og:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
         <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
         <meta property="og:url" content={`${baseUrl}/`} />
-        <meta property="og:image" content={`${baseUrl}${mainImage}`} />
+        <meta property="og:image" content={mainImage} />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Allergy-Free Travel Logo - Suitcase and Eating Utensils" />
-        <meta property="og:image:secure_url" content={`${baseUrl}${mainImage}`} />
+        <meta property="og:image:width" content="600" />
+        <meta property="og:image:height" content="600" />
+        <meta property="og:image:alt" content="Allergy-Free Travel Logo" />
+        <meta property="og:image:secure_url" content={mainImage} />
         <meta property="og:site_name" content="Allergy-Free Travel" />
         
         {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
         <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
-        <meta name="twitter:image" content={`${baseUrl}${mainImage}`} />
+        <meta name="twitter:image" content={mainImage} />
         <meta name="twitter:site" content="@allergyfreetvl" />
         
         {/* Schema.org JSON-LD */}
