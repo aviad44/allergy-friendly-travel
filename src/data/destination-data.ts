@@ -1,4 +1,3 @@
-
 import { DestinationId, DestinationContent } from '@/types/definitions';
 import { parisContent } from './destination-paris';
 import { tokyoContent } from './destination-tokyo';
@@ -91,6 +90,73 @@ const turkeyContent: DestinationContent = {
   }
 };
 
+// Create New York content - restored with proper data
+const fixedNewYorkContent: DestinationContent = {
+  intro: "New York City offers an impressive range of allergy-friendly accommodations catering to travelers with dietary restrictions. From boutique hotels to luxury establishments, many properties in the city have specially trained staff and dedicated kitchen protocols to ensure safe dining experiences for guests with food allergies, celiac disease, and other special dietary requirements.",
+  hotels: [
+    {
+      name: "The Peninsula New York",
+      address: "700 5th Ave, New York, NY 10019, United States",
+      features: ["⭐ 5-star luxury", "🍽️ Allergen-trained kitchen staff", "📋 Detailed ingredient information"],
+      description: "This luxury five-star hotel offers exceptional allergy-friendly dining options across its restaurants. Their kitchen staff undergoes specialized training to handle allergens safely, and they maintain detailed ingredient information for all dishes.",
+      quote: "The staff went above and beyond to accommodate my multiple food allergies. The chef personally prepared my meals and explained every ingredient. – Michelle R.",
+      bookingUrl: "https://www.peninsula.com/en/new-york/5-star-luxury-hotel-midtown-nyc",
+      rating: 5
+    },
+    {
+      name: "The Park Hyatt New York",
+      address: "153 W 57th St, New York, NY 10019, United States",
+      features: ["⭐ 5-star luxury", "🥗 Custom allergy-free menus", "👨‍🍳 Dedicated allergy chef"],
+      description: "Park Hyatt New York takes allergen management seriously with a comprehensive food allergy protocol. Their culinary team can create custom menus for guests with specific dietary requirements, and they maintain strict cross-contamination prevention measures.",
+      quote: "As someone with celiac disease, I felt completely safe dining here. They have a separate prep area for gluten-free meals. – Thomas K.",
+      bookingUrl: "https://www.hyatt.com/en-US/hotel/new-york/park-hyatt-new-york/nycph",
+      rating: 5
+    },
+    {
+      name: "The Langham New York",
+      address: "400 5th Ave, New York, NY 10018, United States",
+      features: ["⭐ 5-star luxury", "🍞 Gluten-free dining options", "🥜 Nut-free meal preparation"],
+      description: "The Langham excels in accommodating dietary restrictions, with their restaurant Ai Fiori offering extensive allergy-friendly options. The hotel provides clear allergen information and can tailor dining experiences to suit individual needs.",
+      quote: "They took my dairy allergy very seriously and created amazing dairy-free versions of their signature dishes. – Sarah J.",
+      bookingUrl: "https://www.langhamhotels.com/en/the-langham/new-york/",
+      rating: 5
+    },
+    {
+      name: "Conrad New York Downtown",
+      address: "102 North End Ave, New York, NY 10282, United States",
+      features: ["⭐ 5-star luxury", "🍽️ Allergen-free room service", "📱 Digital allergen menus"],
+      description: "Conrad New York Downtown offers comprehensive allergen information for all their dining options. Their ATRIO restaurant and in-room dining services can accommodate most dietary restrictions with advance notice.",
+      quote: "Their digital menu system allowed me to filter out all dishes containing my allergens. It made dining so much less stressful! – David M.",
+      bookingUrl: "https://www.hilton.com/en/hotels/nyccici-conrad-new-york-downtown/",
+      rating: 5
+    }
+  ],
+  faqs: [
+    {
+      question: "Which areas of New York City have the most allergy-friendly hotels?",
+      answer: "Midtown Manhattan, particularly around Fifth Avenue and Central Park, has the highest concentration of luxury hotels with comprehensive allergy protocols. The Financial District and SoHo also offer excellent options with trained staff and allergen-aware kitchens."
+    },
+    {
+      question: "Do New York hotels typically provide allergen information for their restaurants?",
+      answer: "Many high-end and mid-range hotels in New York City offer detailed allergen information for their restaurant menus. It's always recommended to call ahead to discuss your specific dietary needs, as most establishments are willing to accommodate with advance notice."
+    },
+    {
+      question: "Are there any New York hotels specializing in gluten-free accommodations?",
+      answer: "While no hotels exclusively specialize in gluten-free dining, many luxury properties like The Peninsula, Park Hyatt, and The Langham have established gluten-free protocols and offer extensive celiac-safe options across their dining venues."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Spanish"],
+    rows: [
+      ["I have a food allergy", "Tengo una alergia alimentaria"],
+      ["Is this gluten-free?", "¿Esto es sin gluten?"],
+      ["I cannot eat dairy", "No puedo comer lácteos"],
+      ["I have celiac disease", "Tengo enfermedad celíaca"],
+      ["Please no nuts in my food", "Por favor, no nueces en mi comida"]
+    ]
+  }
+};
+
 export const destinationData: Record<DestinationId, DestinationContent> = {
   london: londonContent,
   paris: parisContent,
@@ -101,7 +167,7 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
   tokyo: tokyoContent,
   thailand: thailandContent,
   'hotel-chains': hotelChainsContent,
-  'new-york': newYorkContent,
+  'new-york': fixedNewYorkContent,
   'ayia-napa': ayiaNapaContent,
   portugal: portugalContent,
   'swiss-alps': swissAlpsContent,

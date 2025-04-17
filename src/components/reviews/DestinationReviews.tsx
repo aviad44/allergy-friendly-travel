@@ -12,6 +12,7 @@ import { TopHotelsSection } from "./TopHotelsSection";
 import { FAQSection } from "./FAQSection";
 import { ShareExperienceSection } from "./ShareExperienceSection";
 import { Globe } from "lucide-react";
+import { toast } from "sonner";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -35,6 +36,16 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     intro: !!content?.intro,
     destinationData: Object.keys(destinationData)
   });
+
+  useEffect(() => {
+    // Check if content is missing and log warning
+    if (!content || !content.hotels || content.hotels.length === 0) {
+      console.error(`Warning: Missing or incomplete content for destination ${destinationId}`);
+      toast.error(`Some content for ${destination?.name || destinationId} may be unavailable`, {
+        description: "Our team has been notified about this issue."
+      });
+    }
+  }, [destinationId, content, destination?.name]);
 
   if (content?.hotels) {
     console.log(`Hotel data for ${destinationId}:`, content.hotels.slice(0, 1)); // Log first hotel as sample
@@ -79,8 +90,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
       <main className="container mx-auto px-3 sm:px-5 lg:px-6 py-4 sm:py-6 -mt-14 sm:-mt-16 relative z-10 flex-grow">
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-5 sm:p-6">
-          {/* Removed language selector component */}
-          
           <article className="space-y-6 sm:space-y-8 text-left">
             <DestinationHeader 
               destinationName={destination.name}
