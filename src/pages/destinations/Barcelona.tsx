@@ -8,6 +8,7 @@ const Barcelona = () => {
   const pageDescription = "Discover the best allergy-friendly hotels in Barcelona. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly barcelona, gluten-free hotels barcelona, food allergies spain, barcelona hotels dietary restrictions";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/barcelona";
+  const imageUrl = "https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
 
   return (
     <>
@@ -21,7 +22,7 @@ const Barcelona = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" />
+        <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         
@@ -29,7 +30,7 @@ const Barcelona = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" />
+        <meta name="twitter:image" content={imageUrl} />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">

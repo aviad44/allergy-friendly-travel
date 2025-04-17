@@ -21,6 +21,7 @@ const NewYork = () => {
   const pageDescription = "Discover the best allergy-friendly hotels in New York. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly new york, gluten-free hotels new york, food allergies USA, new york hotels dietary restrictions";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/new-york";
+  const imageUrl = "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80";
 
   return (
     <>
@@ -34,7 +35,7 @@ const NewYork = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80" />
+        <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         
@@ -42,7 +43,7 @@ const NewYork = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80" />
+        <meta name="twitter:image" content={imageUrl} />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
