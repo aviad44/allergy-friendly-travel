@@ -1,4 +1,3 @@
-
 import { DestinationId } from "@/types/definitions";
 
 // Get a good image URL for each destination 
@@ -10,11 +9,10 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     return providedSource;
   }
   
-  // For Turkey, use a reliable direct URL 
+  // For Turkey, use the stunning Pamukkale image
   if (destinationId === 'turkey') {
-    console.log("Turkey destination detected - using Cappadocia image");
-    console.log("Turkey detected - using reliable direct URL");
-    return "https://images.unsplash.com/photo-1570654590457-79d7fbe2df62?auto=format&fit=crop&w=2000&h=1000&q=80";
+    console.log("Turkey destination detected - using Pamukkale image");
+    return "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png";
   }
   
   // For specific destinations, use curated images (high reliability)
