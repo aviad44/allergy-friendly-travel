@@ -1,5 +1,3 @@
-
-
 [build]
   command = "npm run build"
   publish = "dist"
@@ -104,4 +102,3 @@
   status = 200
   force = true
   conditions = {Prerender = true}
-
