@@ -1,100 +1,65 @@
 
-import { DESTINATION_IMAGES } from "@/constants/destinations";
+import { DestinationId } from "@/types/definitions";
 
-/**
- * Determines the image URL to use based on destination ID and image source
- * With improved mobile support
- */
-export const getDestinationImageUrl = (destinationId: string, imageSource: string | null): string => {
-  // Special case for Turkey - use a direct, reliable Unsplash URL
+// Get a good image URL for each destination 
+export const getDestinationImageUrl = (destinationId: string, providedSource?: string): string => {
+  console.log("Getting image source for destination:", destinationId);
+  
+  // If a source is provided and it's a complete URL, use it
+  if (providedSource && (providedSource.startsWith('http') || providedSource.startsWith('/'))) {
+    return providedSource;
+  }
+  
+  // For Turkey, use a reliable direct URL 
   if (destinationId === 'turkey') {
+    console.log("Turkey destination detected - using Cappadocia image");
     console.log("Turkey detected - using reliable direct URL");
-    // Direct URL to Istanbul Blue Mosque - very reliable Unsplash image
-    return "https://images.unsplash.com/photo-1592305951212-cae76d6119f7?auto=format&fit=crop&w=2000&h=1000&q=80";
+    return "https://images.unsplash.com/photo-1570654590457-79d7fbe2df62?auto=format&fit=crop&w=2000&h=1000&q=80";
   }
   
-  // Special case for Cyprus - use a direct Unsplash URL to ensure the image loads
-  if (destinationId === 'cyprus') {
-    console.log("Cyprus detected - using direct Unsplash URL");
-    return "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&h=1000&q=80";
+  // For specific destinations, use curated images (high reliability)
+  const destinationImageMap: Record<string, string> = {
+    'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'paris': "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'cyprus': "https://images.unsplash.com/photo-1518358246973-95637f473611?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'swiss-alps': "https://images.unsplash.com/photo-1527784281695-866fa715d9d8?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'koh-samui': "https://images.unsplash.com/photo-1537956965359-7573183d1f57?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'cruise-lines': "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=2000&h=1000&q=80",
+  };
+  
+  // Use destination specific image if available
+  if (destinationId in destinationImageMap) {
+    return destinationImageMap[destinationId];
   }
   
-  // Default fallback image if there's no image defined
-  const defaultImage = "photo-1505578183806-3d2c2001570e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80";
-  
-  // Use custom image if available, otherwise fall back to provided image or default
-  const finalImageSource = imageSource || defaultImage;
-  
-  // Determine the image URL based on format
-  if (finalImageSource.startsWith('photo-')) {
-    // For Unsplash photos, make sure to use their CDN properly
-    // Ensure images load on mobile by using appropriate size and format
-    const isMobile = window.innerWidth < 768;
-    const width = isMobile ? 800 : 2000;
-    const height = isMobile ? 500 : 1000;
-    return `https://images.unsplash.com/${finalImageSource}?auto=format&fit=crop&w=${width}&h=${height}&q=80`;
-  } else if (finalImageSource.startsWith('/lovable-uploads/')) {
-    return finalImageSource;
-  } else {
-    return finalImageSource;
-  }
+  // Generic travel image as final fallback
+  return "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=2000&h=1000&q=80";
 };
 
-/**
- * Returns a descriptive alt text for the destination image
- */
+// Define descriptive alt text for images
 export const getDestinationAltText = (destinationName: string): string => {
-  if (destinationName === 'Cyprus') {
-    return "Beautiful beach in Cyprus with crystal clear turquoise waters - perfect for allergy-friendly vacations";
-  }
-  
-  if (destinationName === 'Turkey') {
-    return "Beautiful view of the Blue Mosque in Istanbul, Turkey - a popular destination with allergy-friendly hotels and resorts";
-  }
-  
-  return destinationName 
-    ? `Scenic view of ${destinationName} - allergy-friendly travel destination with hotels and accommodations for travelers with dietary restrictions`
-    : "Beautiful travel destination for allergy-friendly accommodation";
+  return `Scenic view of ${destinationName} - Allergy-friendly travel destination`;
 };
 
-/**
- * Gets the image source based on destination ID
- * With improved error handling for mobile
- */
-export const getImageSource = (destinationId: string, fallbackImage: string | null): string | null => {
-  console.log(`Getting image source for destination: ${destinationId}`);
+// Get image source considering destination and fallbacks
+export const getImageSource = (destinationId: string, providedImage?: string): string => {
+  // If we have a valid image provided, use it
+  if (providedImage && providedImage.trim() !== '') {
+    return providedImage;
+  }
   
-  // Special handling for problematic destinations
+  // Special handling for Turkey - use photo ID
   if (destinationId === 'turkey') {
-    console.log("Turkey destination detected - using Blue Mosque image");
-    return "photo-1592305951212-cae76d6119f7";
+    return 'photo-1570654590457-79d7fbe2df62';
   }
   
-  if (destinationId === 'cyprus') {
-    console.log("Cyprus destination detected - using special image source");
-    return "photo-1500375592092-40eb2168fd21";
+  // For cruise lines, use a specific cruise ship photo
+  if (destinationId === 'cruise-lines') {
+    return 'photo-1548574505-5e239809ee19';
   }
   
-  if (destinationId === 'crete') {
-    console.log("Crete destination detected - using special image source");
-    return "photo-1533760881669-80db4d7b4c15";
-  }
-  
-  if (destinationId === 'barcelona') {
-    console.log("Barcelona destination detected - using special image source");
-    return "photo-1539037116277-4db20889f2d4";
-  }
-  
-  // Try to get image from constants
-  const destinationKey = destinationId as keyof typeof DESTINATION_IMAGES;
-  const result = destinationKey in DESTINATION_IMAGES ? DESTINATION_IMAGES[destinationKey] : fallbackImage;
-  console.log(`Image source result: ${result}`);
-  
-  // If we still don't have a valid image, use a reliable fallback
-  if (!result) {
-    console.log("No image found in constants, using fallback");
-    return "photo-1505578183806-3d2c2001570e"; // Generic travel image
-  }
-  
-  return result;
+  // Default to using the destination ID as the key
+  return destinationId;
 };
