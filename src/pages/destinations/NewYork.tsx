@@ -1,13 +1,26 @@
 
 import { DestinationReviews } from "@/components/reviews/DestinationReviews";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const NewYork = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Redirect handling to ensure consistent URL structure
+  useEffect(() => {
+    // If accessed via /destinations/newyork, redirect to /destinations/new-york
+    if (location.pathname === "/destinations/newyork") {
+      navigate("/destinations/new-york", { replace: true });
+    }
+  }, [location.pathname, navigate]);
+
   // SEO metadata
   const pageTitle = "Allergy-Friendly Hotels in New York | Safe Dining for Dietary Restrictions";
   const pageDescription = "Discover the best allergy-friendly hotels in New York. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly new york, gluten-free hotels new york, food allergies USA, new york hotels dietary restrictions";
-  const canonicalUrl = "https://www.allergy-free-travel.com/destinations/newyork";
+  const canonicalUrl = "https://www.allergy-free-travel.com/destinations/new-york";
 
   return (
     <>

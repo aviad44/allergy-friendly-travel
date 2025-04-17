@@ -13,6 +13,7 @@ import { FAQSection } from "./FAQSection";
 import { ShareExperienceSection } from "./ShareExperienceSection";
 import { Globe } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -20,6 +21,7 @@ interface DestinationPageProps {
 
 export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
+  const navigate = useNavigate();
   const destination = destinations.find(d => d.id === destinationId);
   const isRTL = currentLanguage === 'he';
   const content = destinationData[destinationId];
@@ -46,6 +48,14 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
       });
     }
   }, [destinationId, content, destination?.name]);
+
+  // If destination doesn't exist, redirect to 404
+  useEffect(() => {
+    if (!destination) {
+      console.error(`Destination not found: ${destinationId}`);
+      navigate('/not-found', { replace: true });
+    }
+  }, [destination, destinationId, navigate]);
 
   if (content?.hotels) {
     console.log(`Hotel data for ${destinationId}:`, content.hotels.slice(0, 1)); // Log first hotel as sample

@@ -9,6 +9,7 @@ https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:s
 # Handle 404 errors
 /*    /index.html   200
 
-# Redirect URL normalization - ensure /destinations/abu-dhabi is the canonical path 
+# Redirect URL normalization - ensure canonical paths
 /destinations/abudhabi /destinations/abu-dhabi 301
+/destinations/newyork /destinations/new-york 301
 
