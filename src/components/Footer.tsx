@@ -18,8 +18,8 @@ export const Footer = () => {
             <p className="text-sm text-muted-foreground mb-4">
               Helping travelers with allergies and dietary restrictions find safe accommodations worldwide.
             </p>
-            <p className="text-sm text-muted-foreground" itemProp="copyrightNotice">
-              © {currentYear} {HOME_CONTENT.navigation.brand}. All rights reserved by Aviad Beit Halachmi
+            <p className="text-sm text-muted-foreground">
+              © {currentYear} {HOME_CONTENT.navigation.brand}. All rights reserved.
             </p>
           </div>
           

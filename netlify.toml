@@ -21,12 +21,11 @@
   changeFreq = "weekly"
   priority = 0.5
 
-# Temporarily commenting out the prerender plugin that might be causing deployment delays
-# [[plugins]]
-#   package = "netlify-plugin-prerender-spa"
-#
-#   [plugins.inputs]
-#   source = "dist"
+[[plugins]]
+  package = "netlify-plugin-prerender-spa"
+
+  [plugins.inputs]
+  source = "dist"
 
 # Enable optimizations for better performance
 [build.processing]
@@ -94,11 +93,3 @@
 [[edge_functions]]
   path = "/*"
   function = "optimize-static-assets"
-
-# Prerender.io integration for social media crawlers
-[[redirects]]
-  from = "/*"
-  to = "https://service.prerender.io/https://www.allergy-free-travel.com/:splat"
-  status = 200
-  force = true
-  conditions = {Prerender = true}
