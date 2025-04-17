@@ -134,7 +134,7 @@ const CruiseLines = () => {
       {/* Hero image section */}
       <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] overflow-hidden">
         <img 
-          src="https://images.unsplash.com/photo-1518877593221-1f28583780b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
+          src="https://images.unsplash.com/photo-1580775194414-298f665ede0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
           alt="Luxury cruise ship sailing on blue ocean - allergy-friendly cruising" 
           className="absolute inset-0 w-full h-full object-cover"
         />
