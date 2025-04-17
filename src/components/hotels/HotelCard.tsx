@@ -46,6 +46,12 @@ export const HotelCard = ({
     }
   };
 
+  // Generate Google Maps URL for the hotel location
+  const getGoogleMapsUrl = (hotelName: string, hotelAddress: string) => {
+    const query = encodeURIComponent(`${hotelName}, ${hotelAddress}`);
+    return `https://www.google.com/maps/search/?api=1&query=${query}`;
+  };
+
   // Extract star rating from name if available
   const starRating = name.includes('★') ? name.split('★').length - 1 : 0;
   const cleanName = name.replace(/★+$/, '').trim();
@@ -96,10 +102,16 @@ export const HotelCard = ({
           )}
         </div>
         <CardDescription>
-          <div className="flex items-center text-xs text-muted-foreground">
+          <a 
+            href={getGoogleMapsUrl(cleanName, address)}
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="flex items-center text-xs text-muted-foreground hover:text-primary transition-colors"
+          >
             <MapPin className="h-3.5 w-3.5 mr-1 shrink-0 text-primary/70" />
             <span className="truncate">{address}</span>
-          </div>
+            <ExternalLink className="h-3 w-3 ml-1 opacity-70 shrink-0" />
+          </a>
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 px-4 py-2">

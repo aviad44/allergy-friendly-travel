@@ -95,6 +95,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
             >
               <MapPin className="h-3 w-3 mr-1 shrink-0" />
               <span className="truncate">{simplifiedLocation}</span>
+              <ExternalLink className="h-2.5 w-2.5 ml-1 opacity-70 shrink-0" />
             </a>
           )}
           
