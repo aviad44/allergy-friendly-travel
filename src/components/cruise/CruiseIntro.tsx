@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Ship, Clipboard, Globe } from 'lucide-react';
+import { Ship, Clipboard, Globe, Check } from 'lucide-react';
 
 export const CruiseIntro: React.FC = () => {
   return (
@@ -62,3 +62,4 @@ export const CruiseIntro: React.FC = () => {
     </div>
   );
 };
+
