@@ -43,12 +43,15 @@ export default async function handler(request, context) {
       context.log('Warning: PRERENDER_TOKEN is not set in environment variables');
     }
     
+    // Generate a unique request ID for tracking
+    const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
     // Add Prerender header to trigger the redirect in netlify.toml
     return context.next({
       headers: {
         'Prerender': 'true',
         'X-Prerender-Token': prerenderToken,
-        'x-prerender-requestid': `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        'x-prerender-requestid': requestId
       }
     });
   }
