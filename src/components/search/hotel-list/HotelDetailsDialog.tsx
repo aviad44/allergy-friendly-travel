@@ -51,7 +51,7 @@ export const HotelDetailsDialog: React.FC<HotelDetailsDialogProps> = ({
         
         {selectedHotel && (
           <div className="mt-2">
-            <HotelDetails hotel={selectedHotel} />
+            <HotelDetails hotel={selectedHotel} showHeader={false} />
           </div>
         )}
       </DialogContent>

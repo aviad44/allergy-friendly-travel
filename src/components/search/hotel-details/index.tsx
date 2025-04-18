@@ -9,15 +9,21 @@ import { HotelInfo } from '@/types/search';
 
 interface HotelDetailsProps {
   hotel: HotelInfo;
+  showHeader?: boolean;
 }
 
-export const HotelDetails: React.FC<HotelDetailsProps> = ({ hotel }) => {
+export const HotelDetails: React.FC<HotelDetailsProps> = ({ 
+  hotel, 
+  showHeader = true 
+}) => {
   // Clean hotel name by removing star indicators
   const cleanHotelName = hotel.name.replace(/\d+[\s-]stars?/i, '').replace(/★+/g, '').trim();
   
   return (
     <div className="space-y-4">
-      <HotelHeader name={cleanHotelName} location={hotel.location} rating={hotel.rating} />
+      {showHeader && (
+        <HotelHeader name={cleanHotelName} location={hotel.location} rating={hotel.rating} />
+      )}
       
       <AllergyAmenities allergyAmenities={hotel.allergyAmenities} />
       
