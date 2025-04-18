@@ -7,7 +7,7 @@ export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const isMobile = useIsMobile();
   
-  // Preload hero image
+  // Preload hero image with higher quality settings
   useEffect(() => {
     const img = new Image();
     img.src = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
@@ -21,9 +21,11 @@ export const HeroSection = () => {
         backgroundImage: `url("/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         height: isMobile ? '100vh' : '110vh',
         opacity: imageLoaded ? 1 : 0,
-        transition: 'opacity 0.5s ease-in'
+        transition: 'opacity 0.5s ease-in',
+        imageRendering: 'crisp-edges',
       }}
     >
       {/* Lightweight placeholder while image loads */}
@@ -34,7 +36,7 @@ export const HeroSection = () => {
         ></div>
       )}
       
-      <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]"></div>
+      <div className="absolute inset-0 bg-black/5 backdrop-blur-[0px]"></div>
       
       <div className="relative z-10 container mx-auto px-4 -mt-0 sm:-mt-16">
         <div className="mx-auto max-w-[90%] sm:max-w-[700px]">
