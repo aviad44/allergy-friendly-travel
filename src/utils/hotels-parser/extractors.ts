@@ -1,7 +1,14 @@
 
-import { HotelExtractor } from './types';
+import { 
+  HotelNameExtractor, 
+  LocationExtractor, 
+  StarRatingExtractor,
+  AllergyFeaturesExtractor,
+  UrlExtractor,
+  ReviewExtractor
+} from './types';
 
-export const extractHotelName: HotelExtractor = (entry: string): string => {
+export const extractHotelName: HotelNameExtractor = (entry: string): string => {
   const namePatterns = [
     /1️⃣\s*\*\*Hotel Name\*\*:\s*(.*?)(?=\n|$)/i,
     /\*\*Hotel Name\*\*:\s*(.*?)(?=\n|$)/i,
@@ -24,7 +31,7 @@ export const extractHotelName: HotelExtractor = (entry: string): string => {
   return firstLine ? firstLine.replace(/^\d+\.\s*/, '').trim() : 'Unknown Hotel';
 };
 
-export const extractLocation: HotelExtractor = (entry: string): string => {
+export const extractLocation: LocationExtractor = (entry: string): string => {
   const locationPatterns = [
     /2️⃣\s*\*\*City & Country\*\*:\s*(.*?)(?=\n|$)/i,
     /\*\*City & Country\*\*:\s*(.*?)(?=\n|$)/i,
@@ -43,7 +50,7 @@ export const extractLocation: HotelExtractor = (entry: string): string => {
   return '';
 };
 
-export const extractStarRating: HotelExtractor = (entry: string): string => {
+export const extractStarRating: StarRatingExtractor = (entry: string): string => {
   const ratingPatterns = [
     /3️⃣\s*\*\*Star Rating\*\*:\s*(.*?)(?=\n|$)/i,
     /\*\*Star Rating\*\*:\s*(.*?)(?=\n|$)/i,
@@ -66,7 +73,7 @@ export const extractStarRating: HotelExtractor = (entry: string): string => {
   return '';
 };
 
-export const extractAllergyFeatures: HotelExtractor = (entry: string): string[] => {
+export const extractAllergyFeatures: AllergyFeaturesExtractor = (entry: string): string[] => {
   const allergySection = entry.match(/5️⃣\s*\*\*Why This Hotel is Suitable[^]*?(?=6️⃣|\n\n|$)/i) ||
                         entry.match(/\*\*Why This Hotel is Suitable[^]*?(?=\*\*Direct|\*\*Guest|\n\n|$)/i) ||
                         entry.match(/🌟\s*Why it['']s great for[^]*?(?=💬|\n\n|$)/i) ||
@@ -93,7 +100,7 @@ export const extractAllergyFeatures: HotelExtractor = (entry: string): string[] 
     .map(line => line.replace(/^[-•*]\s*/, '').trim());
 };
 
-export const extractUrl: HotelExtractor = (entry: string): string => {
+export const extractUrl: UrlExtractor = (entry: string): string => {
   const urlPatterns = [
     /6️⃣\s*\*\*Direct Booking Link\*\*:\s*(https?:\/\/[^\s]+)/i,
     /\*\*Direct Booking Link\*\*:\s*(https?:\/\/[^\s]+)/i,
@@ -114,7 +121,7 @@ export const extractUrl: HotelExtractor = (entry: string): string => {
   return '';
 };
 
-export const extractReview: HotelExtractor = (entry: string): string => {
+export const extractReview: ReviewExtractor = (entry: string): string | null => {
   const reviewPatterns = [
     /7️⃣\s*\*\*Guest Review\*\*:\s*"([^"]*)"/i,
     /\*\*Guest Review\*\*:\s*"([^"]*)"/i,
@@ -131,5 +138,5 @@ export const extractReview: HotelExtractor = (entry: string): string => {
     }
   }
   
-  return '';
+  return null;
 };

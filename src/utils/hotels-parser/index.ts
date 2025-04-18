@@ -32,10 +32,11 @@ export const parseHotelsFromMarkdown = (markdownText: string): ParsedHotel[] => 
           const rating = (starRating.match(/⭐/g) || []).length || parseFloat(starRating) || 0;
           const allergyFeatures = extractAllergyFeatures(entry);
           const review = extractReview(entry);
+          const location = extractLocation(entry);
           
           const hotel: ParsedHotel = {
             name,
-            location: extractLocation(entry) || '',
+            location: location || '',
             starRating,
             rating,
             address: '',  // Address is optional and defaults to location
