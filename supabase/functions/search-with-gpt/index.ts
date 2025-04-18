@@ -62,18 +62,20 @@ serve(async (req) => {
             IMPORTANT:
             1. Make sure EVERY hotel includes the hotel name, address, allergy features, guest review, and website URL
             2. Format needs to be EXACTLY as shown with markdown headers and emoji
-            3. Include 2-4 hotels for the given destination that truly accommodate the specific allergies
-            4. Only include accurate information and working URLs
-            5. Be concise but thorough in your descriptions
-            6. Always use the ## header format for hotel names and --- separators between hotels`
+            3. Include up to 10 hotels for the given destination that truly accommodate the specific allergies
+            4. Only include hotels with strong evidence of genuine allergy accommodation
+            5. Only include accurate information and working URLs
+            6. Be concise but thorough in your descriptions
+            7. Use authentic, realistic guest reviews that reflect real experiences with the specific allergies
+            8. Always use the ## header format for hotel names and --- separators between hotels`
           },
           {
             role: 'user',
-            content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide 2-4 hotels with their full details.`
+            content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide up to 10 hotels with their full details, focusing only on hotels with strong evidence of properly accommodating ${allergies} allergies.`
           },
         ],
         temperature: 0.3,
-        max_tokens: 2000,
+        max_tokens: 3000, // Increased token limit to handle more hotels
       }),
     });
 

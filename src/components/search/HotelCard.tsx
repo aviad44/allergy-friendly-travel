@@ -34,11 +34,12 @@ export const HotelCard: React.FC<HotelCardProps> = ({
     return `https://www.google.com/maps/search/?api=1&query=${query}`;
   };
 
-  // Clean hotel name by removing any numbering or formatting
+  // Clean hotel name by removing any numbering, stars and formatting
   const cleanHotelName = hotel.name
     ? hotel.name
         .replace(/^\d️⃣\s*\*\*Hotel Name\*\*:\s*/i, '')
         .replace(/\*\*/g, '')
+        .replace(/★+/g, '') // Remove star symbols from the name
         .trim()
     : 'Allergy-Friendly Hotel';
   
@@ -47,14 +48,25 @@ export const HotelCard: React.FC<HotelCardProps> = ({
   
   // Extract star rating from hotel data
   const renderStars = () => {
-    if (hotel.rating) {
-      const starCount = Math.round(hotel.rating);
+    // Extract star rating from the name if present (e.g., "Hotel Name ★★★★★")
+    let starCount = 0;
+    const starsInName = (hotel.name || '').match(/★/g);
+    if (starsInName) {
+      starCount = starsInName.length;
+    } else if (hotel.rating) {
+      // Use numeric rating if available
+      starCount = Math.round(hotel.rating);
+    } else if (hotel.starRating) {
+      // Use star rating text if available (fallback)
+      return <span className="text-amber-500">{hotel.starRating}</span>;
+    }
+
+    if (starCount > 0) {
       return Array.from({ length: starCount }).map((_, i) => (
         <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
       ));
-    } else if (hotel.starRating) {
-      return <span className="text-amber-500">{hotel.starRating}</span>;
     }
+    
     return null;
   };
   

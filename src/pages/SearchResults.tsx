@@ -139,15 +139,7 @@ const SearchResults = () => {
               </Alert>
             )}
 
-            {/* Title section */}
-            <div className="mb-6 mt-4">
-              <h1 className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2">
-                Allergy-Friendly Hotels in {destination}
-              </h1>
-              <p className="text-gray-600">
-                Safe accommodations for visitors with {allergies} allergies
-              </p>
-            </div>
+            {/* No title here - we'll only use the title in the HotelList component */}
 
             {isSearching ? (
               <LoadingState />
