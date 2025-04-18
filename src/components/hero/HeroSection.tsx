@@ -10,7 +10,7 @@ export const HeroSection = () => {
   // Preload hero image
   useEffect(() => {
     const img = new Image();
-    img.src = "/lovable-uploads/09304197-5a08-4f0a-812c-073d26537ba5.png";
+    img.src = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
     img.onload = () => setImageLoaded(true);
   }, []);
 
@@ -18,7 +18,7 @@ export const HeroSection = () => {
     <section 
       className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
       style={{
-        backgroundImage: `url("/lovable-uploads/09304197-5a08-4f0a-812c-073d26537ba5.png")`,
+        backgroundImage: `url("/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: isMobile ? '100vh' : '110vh',
