@@ -10,7 +10,7 @@ export const HeroSection = () => {
   // Preload hero image
   useEffect(() => {
     const img = new Image();
-    img.src = "/lovable-uploads/cf3c0a43-1695-413d-b297-1ba363ee2b56.png";
+    img.src = "/lovable-uploads/09304197-5a08-4f0a-812c-073d26537ba5.png";
     img.onload = () => setImageLoaded(true);
   }, []);
 
@@ -18,7 +18,7 @@ export const HeroSection = () => {
     <section 
       className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
       style={{
-        backgroundImage: `url("/lovable-uploads/cf3c0a43-1695-413d-b297-1ba363ee2b56.png")`,
+        backgroundImage: `url("/lovable-uploads/09304197-5a08-4f0a-812c-073d26537ba5.png")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: isMobile ? '100vh' : '110vh',
@@ -29,12 +29,12 @@ export const HeroSection = () => {
       {/* Lightweight placeholder while image loads */}
       {!imageLoaded && (
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-sky-400 to-blue-500"
+          className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600"
           aria-hidden="true"
         ></div>
       )}
       
-      <div className="absolute inset-0 bg-black/5 backdrop-blur-[1px]"></div>
+      <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]"></div>
       
       <div className="relative z-10 container mx-auto px-4 -mt-0 sm:-mt-16">
         <div className="mx-auto max-w-[90%] sm:max-w-[700px]">
