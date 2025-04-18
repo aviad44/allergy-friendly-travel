@@ -38,15 +38,40 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     setCurrentImageUrl(optimizeImageUrl(imageUrl));
   }, [imageUrl]);
   
+  // Destination-specific fallbacks to ensure we don't show generic mountain image
+  const getFallbackForDestination = () => {
+    const destinationName = altText.split(' - ')[0].replace('Scenic view of ', '').toLowerCase();
+    
+    // Map of reliable fallback images by destination name fragment
+    const fallbackMap: Record<string, string> = {
+      'paris': "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
+      'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80",
+      'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
+      'cyprus': "https://images.unsplash.com/photo-1518358246973-95637f473611?auto=format&fit=crop&w=1200&q=80",
+      'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
+      'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
+      'thailand': "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80",
+      'default': "https://placehold.co/1200x600/1e3a8a/ffffff?text=Loading+Destination"
+    };
+    
+    // Try to find a matching destination
+    for (const [key, url] of Object.entries(fallbackMap)) {
+      if (destinationName.includes(key)) {
+        return url;
+      }
+    }
+    
+    return fallbackMap.default;
+  };
+
+  // Get destination-specific fallbacks
+  const destinationFallback = getFallbackForDestination();
+  
   // Alternate image URLs in case the first one fails
-  // Using known working image IDs for reliability
   const alternateImageUrls = [
-    // Generic Turkey image - Cappadocia balloons
-    "https://images.unsplash.com/photo-1570654590457-79d7fbe2df62?auto=format&fit=crop&w=1200&q=80",
-    // Generic travel image as fallback
-    "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=1200&q=80",
-    // Last resort fallback
-    fallbackImage
+    destinationFallback, // Use destination-specific fallback first
+    "https://placehold.co/1200x600/1e3a8a/ffffff?text=Destination+Image", // Branded placeholder
+    fallbackImage // Last resort fallback
   ];
 
   const tryNextImage = () => {
@@ -62,14 +87,19 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     }
   };
   
-  // Preload image with improved error handling
+  // Preload image to avoid the flash of default content
   useEffect(() => {
     if (currentImageUrl) {
-      // Create a lightweight placeholder while image loads
+      // Create colored placeholder while image loads - based on destination
+      const destinationColor = altText.toLowerCase().includes('paris') ? '#3f51b5' : 
+                              altText.toLowerCase().includes('london') ? '#1e88e5' :
+                              altText.toLowerCase().includes('barcelona') ? '#e53935' : '#1e3a8a';
+      
+      // Add destination-specific placeholder style
       const placeholderStyle = document.createElement('style');
       placeholderStyle.innerHTML = `
         .image-placeholder-${imageUrl.replace(/[^a-zA-Z0-9]/g, '')} {
-          background: linear-gradient(to bottom, #add8e6, #4682b4);
+          background: linear-gradient(to bottom, ${destinationColor}, #0f172a);
         }
       `;
       document.head.appendChild(placeholderStyle);
@@ -83,7 +113,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
         console.log('Image load timeout - trying next alternative');
         setImageFailed(true);
         tryNextImage();
-      }, 8000); // 8 second timeout for slow mobile connections
+      }, 5000); // 5 second timeout for better mobile experience
       
       img.onload = () => {
         clearTimeout(timeout);
@@ -109,7 +139,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
 
   return (
     <div className="absolute inset-0">
-      {/* Placeholder gradient while image loads */}
+      {/* Destination-colored placeholder while image loads */}
       {!imageLoaded && !imageFailed && (
         <div 
           className={`absolute inset-0 image-placeholder-${imageUrl.replace(/[^a-zA-Z0-9]/g, '')}`} 
@@ -117,12 +147,13 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
         ></div>
       )}
       
+      {/* Main image */}
       {!imageFailed && (
         <img 
           src={currentImageUrl}
           alt={altText}
           className={`w-full h-full object-cover transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          loading="lazy"
+          loading="eager" // Change to eager for hero images
           width="1200"
           height="600"
           onLoad={() => {
@@ -137,25 +168,16 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
         />
       )}
       
-      {/* Fallback image rendered when all image attempts fail */}
+      {/* Fallback colored placeholder when all image attempts fail */}
       {(imageFailed && alternateImageUrls.length === 0) && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-400 to-blue-600 flex items-center justify-center">
-          <img 
-            src={fallbackImage}
-            alt={`Fallback image for ${altText}`}
-            className="max-w-[50%] max-h-[50%] object-contain"
-            loading="lazy"
-          />
+        <div className="w-full h-full bg-gradient-to-b from-blue-600 to-blue-900 flex items-center justify-center">
+          <div className="text-white text-xl font-bold text-center px-4">
+            {altText.split(' - ')[0]}
+          </div>
         </div>
       )}
       
-      {/* Loading state indicator */}
-      {!imageLoaded && !imageFailed && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50">
-          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
-      
+      {/* Subtle overlay gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-sky-500/10 via-transparent to-transparent pointer-events-none"></div>
     </div>
   );
