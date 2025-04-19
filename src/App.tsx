@@ -40,6 +40,7 @@ import KohSamui from '@/pages/destinations/KohSamui';
 import Privacy from '@/pages/Privacy';
 import Turkey from '@/pages/destinations/Turkey';
 import CruiseLines from '@/pages/destinations/CruiseLines';
+import Toronto from '@/pages/destinations/Toronto';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -103,6 +104,7 @@ const AppContent = () => {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/destinations/turkey" element={<Turkey />} />
           <Route path="/destinations/cruise-lines" element={<CruiseLines />} />
+          <Route path="/destinations/toronto" element={<Toronto />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

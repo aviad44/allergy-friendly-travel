@@ -1,3 +1,4 @@
+
 import { Destination } from '@/types/definitions';
 
 export const destinations: Destination[] = [

@@ -192,5 +192,5 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
   'koh-samui': kohSamuiContent,
   'turkey': turkeyContent,
   'cruise-lines': cruiseLinesContent,
-  'toronto': torontoContent
+  toronto: torontoContent
 };
