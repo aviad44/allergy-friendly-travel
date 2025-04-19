@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
@@ -25,10 +24,8 @@ export const DestinationCard = ({
   const [imageError, setImageError] = useState(false);
   const [imgSrc, setImgSrc] = useState('');
   
-  // Process image URL for optimal loading
   const processImageUrl = (imgSrc: string) => {
     if (imgSrc.startsWith('photo-')) {
-      // For Unsplash URLs, optimize for device
       const isMobile = window.innerWidth < 768;
       const width = isMobile ? 400 : 800;
       return `https://images.unsplash.com/${imgSrc}?auto=format&fit=crop&w=${width}&q=80`;
@@ -36,9 +33,7 @@ export const DestinationCard = ({
     return imgSrc;
   };
   
-  // Get fallback image in case of error
   const getFallbackImage = () => {
-    // Map specific destinations to reliable images
     const fallbacks: Record<string, string> = {
       'paris': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80',
       'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80',
@@ -48,13 +43,13 @@ export const DestinationCard = ({
       'tokyo': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80',
       'thailand': 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80',
       'crete': 'https://images.unsplash.com/photo-1533760881669-80db4d7b4c15?auto=format&fit=crop&w=800&q=80',
+      'toronto': '/lovable-uploads/toronto-skyline.png',
       'default': `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`
     };
     
     return fallbacks[id.toLowerCase()] || fallbacks.default;
   };
   
-  // Set image source on component mount
   useEffect(() => {
     if (image) {
       setImgSrc(processImageUrl(image));
@@ -62,7 +57,6 @@ export const DestinationCard = ({
       setImgSrc(getFallbackImage());
     }
     
-    // Preload the image
     const preloadImage = new Image();
     preloadImage.src = image ? processImageUrl(image) : getFallbackImage();
     
@@ -80,7 +74,6 @@ export const DestinationCard = ({
     <Link to={path} className="group">
       <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
         <div className="relative h-40 overflow-hidden bg-blue-100">
-          {/* Destination-colored placeholder while image loads */}
           {!imageLoaded && (
             <div className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-700 animate-pulse flex items-center justify-center">
               <span className="text-white font-semibold">{name}</span>
@@ -95,12 +88,11 @@ export const DestinationCard = ({
             onError={(e) => {
               console.error(`Failed to load image for ${name}: ${imgSrc}`);
               setImageError(true);
-              setImageLoaded(true); // Treat error as "loaded" to show fallback
+              setImageLoaded(true);
               
-              // Try fallback image
               (e.target as HTMLImageElement).src = getFallbackImage();
             }}
-            loading="eager" // Changed to eager for visible cards
+            loading="eager"
             width="400"
             height="225"
           />

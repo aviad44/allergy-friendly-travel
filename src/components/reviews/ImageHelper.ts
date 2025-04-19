@@ -31,7 +31,7 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     'abu-dhabi': "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=2000&h=1000&q=80",
     'crete': "https://images.unsplash.com/photo-1533760881669-80db4d7b4c15?auto=format&fit=crop&w=2000&h=1000&q=80",
     'hotel-chains': "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=2000&h=1000&q=80",
-    'toronto': "https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'toronto': "/lovable-uploads/toronto-skyline.png",
   };
   
   // Use destination specific image if available
@@ -76,6 +76,7 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     'abu-dhabi': "photo-1512632578888-169bbbc64f33",
     'crete': "photo-1533760881669-80db4d7b4c15",
     'hotel-chains': "photo-1551882547-ff40c63fe5fa",
+    'toronto': "toronto-skyline",
   };
   
   return photoIdMap[destinationId] || destinationId;
