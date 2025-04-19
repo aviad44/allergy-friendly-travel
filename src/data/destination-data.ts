@@ -16,6 +16,7 @@ import {
   ayiaNapaContent,
   portugalContent
 } from './destination-generic';
+import { torontoContent } from './destination-toronto';
 
 // Log the content of destinations for debugging
 console.log('Paris content:', parisContent);
@@ -190,5 +191,6 @@ export const destinationData: Record<DestinationId, DestinationContent> = {
   'swiss-alps': swissAlpsContent,
   'koh-samui': kohSamuiContent,
   'turkey': turkeyContent,
-  'cruise-lines': cruiseLinesContent
+  'cruise-lines': cruiseLinesContent,
+  'toronto': torontoContent
 };

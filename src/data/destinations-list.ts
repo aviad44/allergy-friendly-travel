@@ -105,5 +105,12 @@ export const destinations: Destination[] = [
     country: 'Worldwide',
     description: 'Best Allergy-Friendly Cruise Lines',
     subtitle: 'Safe Cruising for Food Allergies'
+  },
+  {
+    id: 'toronto',
+    name: 'Toronto',
+    country: 'Canada',
+    description: 'Best Allergy-Friendly Hotels in Toronto',
+    subtitle: 'Safe Accommodations for Food Allergies'
   }
 ];
