@@ -1,5 +1,4 @@
-
-export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'abu-dhabi' | 'crete' | 'tokyo' | 'thailand' | 'hotel-chains' | 'new-york' | 'ayia-napa' | 'portugal' | 'swiss-alps' | 'koh-samui' | 'turkey' | 'cruise-lines';
+export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'abu-dhabi' | 'crete' | 'tokyo' | 'thailand' | 'hotel-chains' | 'new-york' | 'ayia-napa' | 'portugal' | 'swiss-alps' | 'koh-samui' | 'turkey' | 'cruise-lines' | 'toronto';
 
 export interface Destination {
   id: DestinationId;
