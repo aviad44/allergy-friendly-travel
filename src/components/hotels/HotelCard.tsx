@@ -2,8 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Star, ExternalLink, Check, Bed, Home } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
-import { createSrcSet, createSizesAttribute } from "@/utils/optimize-image";
+import { useState, useEffect } from "react";
 
 export interface HotelCardProps {
   name: string;
@@ -24,9 +23,11 @@ export const HotelCard = ({
   bookingUrl,
   imageUrl
 }: HotelCardProps) => {
+  // Debug log for individual hotel data rendering
+  console.log("Rendering HotelCard:", { name, address });
+  
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
   
   const getCleanUrl = (url: string) => {
     // Clean up URL if needed and ensure it starts with http/https
@@ -40,6 +41,7 @@ export const HotelCard = ({
     try {
       return new URL(cleanUrl).toString();
     } catch (e) {
+      console.error('Invalid URL:', url);
       return '#';
     }
   };
@@ -58,46 +60,9 @@ export const HotelCard = ({
   const isResort = name.toLowerCase().includes('resort') || name.toLowerCase().includes('palace');
   const isChalet = name.toLowerCase().includes('chalet') || name.toLowerCase().includes('airbnb');
   const CardIcon = isChalet ? Home : isResort ? Bed : Bed;
-  
-  // Load the image lazily when the card comes into view
-  useEffect(() => {
-    if (!imageUrl || !cardRef.current) return;
-    
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          const img = new Image();
-          
-          // Optimize the image URL if it's from Unsplash
-          const optimizedUrl = imageUrl.includes('unsplash.com') 
-            ? `${imageUrl.split('?')[0]}?auto=format&fm=webp&w=400&q=75` 
-            : imageUrl;
-            
-          img.src = optimizedUrl;
-          
-          img.onload = () => {
-            setImgLoaded(true);
-          };
-          
-          img.onerror = () => {
-            setImgError(true);
-          };
-          
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1, rootMargin: '200px 0px' }
-    );
-    
-    observer.observe(cardRef.current);
-    
-    return () => {
-      observer.disconnect();
-    };
-  }, [imageUrl]);
 
   return (
-    <Card ref={cardRef} className="w-full transition-all duration-300 hover:shadow-lg border-primary/20 overflow-hidden group">
+    <Card className="w-full transition-all duration-300 hover:shadow-lg border-primary/20 overflow-hidden group">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 h-2"></div>
       
       {/* Optional Hotel Image with lazy loading */}
@@ -111,22 +76,14 @@ export const HotelCard = ({
           )}
           
           {/* Actual image with lazy loading */}
-          {(imgLoaded || !imgError) && (
-            <img 
-              src={imgLoaded ? imageUrl : ''}
-              data-src={imageUrl}
-              srcSet={imgLoaded ? createSrcSet(imageUrl, [400, 600, 800]) : ''}
-              sizes={createSizesAttribute()}
-              alt={`View of ${cleanName}`}
-              className={`w-full h-full object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-              loading="lazy"
-              width="400"
-              height="225"
-              fetchPriority="low"
-              onLoad={() => setImgLoaded(true)}
-              onError={() => setImgError(true)}
-            />
-          )}
+          <img 
+            src={imageUrl}
+            alt={`View of ${cleanName}`}
+            className={`w-full h-full object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            loading="lazy"
+            onLoad={() => setImgLoaded(true)}
+            onError={() => setImgError(true)}
+          />
         </div>
       )}
       

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
@@ -29,22 +28,21 @@ export const DestinationCard = ({
     if (imgSrc.startsWith('photo-')) {
       const isMobile = window.innerWidth < 768;
       const width = isMobile ? 400 : 800;
-      // Request WebP format explicitly for better compression
-      return `https://images.unsplash.com/${imgSrc}?auto=format&fm=webp&fit=crop&w=${width}&q=75`;
+      return `https://images.unsplash.com/${imgSrc}?auto=format&fit=crop&w=${width}&q=80`;
     }
     return imgSrc;
   };
   
   const getFallbackImage = () => {
     const fallbacks: Record<string, string> = {
-      'paris': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fm=webp&fit=crop&w=800&q=75',
-      'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fm=webp&fit=crop&w=800&q=75',
-      'cyprus': 'https://images.unsplash.com/photo-1518358246973-95637f473611?auto=format&fm=webp&fit=crop&w=800&q=75',
-      'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fm=webp&fit=crop&w=800&q=75',
+      'paris': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80',
+      'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80',
+      'cyprus': 'https://images.unsplash.com/photo-1518358246973-95637f473611?auto=format&fit=crop&w=800&q=80',
+      'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80',
       'turkey': '/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png',
-      'tokyo': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fm=webp&fit=crop&w=800&q=75',
-      'thailand': 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fm=webp&fit=crop&w=800&q=75',
-      'crete': 'https://images.unsplash.com/photo-1533760881669-80db4d7b4c15?auto=format&fm=webp&fit=crop&w=800&q=75',
+      'tokyo': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80',
+      'thailand': 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80',
+      'crete': 'https://images.unsplash.com/photo-1533760881669-80db4d7b4c15?auto=format&fit=crop&w=800&q=80',
       'toronto': '/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png',
       'default': `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`
     };
@@ -59,54 +57,21 @@ export const DestinationCard = ({
       setImgSrc(getFallbackImage());
     }
     
-    // Only preload images for visible cards (avoid loading offscreen images)
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const preloadImage = new Image();
-            preloadImage.src = image ? processImageUrl(image) : getFallbackImage();
-            
-            preloadImage.onload = () => {
-              setImageLoaded(true);
-            };
-            
-            preloadImage.onerror = () => {
-              console.error(`Failed to preload image for ${name}`);
-              setImgSrc(getFallbackImage());
-            };
-            
-            observer.disconnect();
-          }
-        });
-      });
-      
-      const currentCardElement = document.getElementById(`destination-card-${id}`);
-      if (currentCardElement) {
-        observer.observe(currentCardElement);
-      }
-      
-      return () => {
-        observer.disconnect();
-      };
-    } else {
-      // Fallback for browsers without IntersectionObserver
-      const preloadImage = new Image();
-      preloadImage.src = image ? processImageUrl(image) : getFallbackImage();
-      
-      preloadImage.onload = () => {
-        setImageLoaded(true);
-      };
-      
-      preloadImage.onerror = () => {
-        console.error(`Failed to preload image for ${name}`);
-        setImgSrc(getFallbackImage());
-      };
-    }
+    const preloadImage = new Image();
+    preloadImage.src = image ? processImageUrl(image) : getFallbackImage();
+    
+    preloadImage.onload = () => {
+      setImageLoaded(true);
+    };
+    
+    preloadImage.onerror = () => {
+      console.error(`Failed to preload image for ${name}`);
+      setImgSrc(getFallbackImage());
+    };
   }, [image, id, name]);
 
   return (
-    <Link to={path} className="group" id={`destination-card-${id}`}>
+    <Link to={path} className="group">
       <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
         <div className="relative h-40 overflow-hidden bg-blue-100">
           {!imageLoaded && (
@@ -117,7 +82,7 @@ export const DestinationCard = ({
           
           <img
             src={!imageError ? imgSrc : getFallbackImage()}
-            alt={`${name}, ${country} - Allergy-friendly travel destination`}
+            alt={name}
             className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImageLoaded(true)}
             onError={(e) => {
@@ -127,10 +92,9 @@ export const DestinationCard = ({
               
               (e.target as HTMLImageElement).src = getFallbackImage();
             }}
-            loading="lazy"
+            loading="eager"
             width="400"
             height="225"
-            fetchPriority="low"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
           <div className="absolute bottom-3 left-3 right-3">

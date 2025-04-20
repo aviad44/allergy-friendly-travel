@@ -1,38 +1,36 @@
-
 import { DestinationId } from "@/types/definitions";
 
-// Get an optimized image URL for each destination with WebP support
+// Get a good image URL for each destination 
 export const getDestinationImageUrl = (destinationId: string, providedSource?: string): string => {
+  console.log("Getting image source for destination:", destinationId);
+  
   // If a source is provided and it's a complete URL, use it
   if (providedSource && (providedSource.startsWith('http') || providedSource.startsWith('/'))) {
-    // If it's an Unsplash URL, optimize it
-    if (providedSource.includes('unsplash.com')) {
-      return optimizeUnsplashUrl(providedSource);
-    }
     return providedSource;
   }
   
-  // For Turkey, use the uploaded image
+  // For Turkey, use the stunning Pamukkale image
   if (destinationId === 'turkey') {
+    console.log("Turkey destination detected - using Pamukkale image");
     return "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png";
   }
   
   // For specific destinations, use curated images (high reliability)
   const destinationImageMap: Record<string, string> = {
-    'london': optimizeUnsplashUrl("https://images.unsplash.com/photo-1513635269975-59663e0ac1ad"),
-    'paris': optimizeUnsplashUrl("https://images.unsplash.com/photo-1502602898657-3e91760cbb34"),
-    'barcelona': optimizeUnsplashUrl("https://images.unsplash.com/photo-1583422409516-2895a77efded"),
-    'cyprus': optimizeUnsplashUrl("https://images.unsplash.com/photo-1518358246973-95637f473611"),
-    'new-york': optimizeUnsplashUrl("https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9"),
-    'swiss-alps': optimizeUnsplashUrl("https://images.unsplash.com/photo-1527784281695-866fa715d9d8"),
-    'koh-samui': optimizeUnsplashUrl("https://images.unsplash.com/photo-1537956965359-7573183d1f57"),
-    'cruise-lines': optimizeUnsplashUrl("https://images.unsplash.com/photo-1548574505-5e239809ee19"),
-    'tokyo': optimizeUnsplashUrl("https://images.unsplash.com/photo-1542051841857-5f90071e7989"),
-    'thailand': optimizeUnsplashUrl("https://images.unsplash.com/photo-1552465011-b4e21bf6e79a"),
-    'portugal': optimizeUnsplashUrl("https://images.unsplash.com/photo-1555881400-74d7acaacd8b"),
-    'abu-dhabi': optimizeUnsplashUrl("https://images.unsplash.com/photo-1512632578888-169bbbc64f33"),
-    'crete': optimizeUnsplashUrl("https://images.unsplash.com/photo-1533760881669-80db4d7b4c15"),
-    'hotel-chains': optimizeUnsplashUrl("https://images.unsplash.com/photo-1551882547-ff40c63fe5fa"),
+    'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'paris': "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'cyprus': "https://images.unsplash.com/photo-1518358246973-95637f473611?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'swiss-alps': "https://images.unsplash.com/photo-1527784281695-866fa715d9d8?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'koh-samui': "https://images.unsplash.com/photo-1537956965359-7573183d1f57?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'cruise-lines': "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'thailand': "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'portugal': "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'abu-dhabi': "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'crete': "https://images.unsplash.com/photo-1533760881669-80db4d7b4c15?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'hotel-chains': "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=2000&h=1000&q=80",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
   };
   
@@ -43,19 +41,6 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
   
   // Return a colored placeholder instead of a generic image
   return `https://placehold.co/2000x1000/1e3a8a/ffffff?text=${destinationId.replace(/-/g, ' ')}`;
-};
-
-// Optimize Unsplash URLs to use WebP format and responsive sizes
-const optimizeUnsplashUrl = (url: string): string => {
-  if (!url.includes('unsplash.com')) return url;
-  
-  // Parse URL to remove any existing query parameters
-  const baseUrl = url.split('?')[0];
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const width = isMobile ? 1000 : 2000;
-  
-  // Add optimization parameters for WebP format, quality and responsive sizing
-  return `${baseUrl}?auto=format&fm=webp&fit=crop&w=${width}&q=75`;
 };
 
 // Define descriptive alt text for images

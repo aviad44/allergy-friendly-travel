@@ -1,63 +1,47 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const DestinationsHero = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
   
-  // Determine image URL based on device type with WebP support
+  // Determine image URL based on device type
   const getResponsiveImageUrl = () => {
     const isMobile = window.innerWidth < 768;
     const baseUrl = "https://images.unsplash.com/photo-1488085061387-422e29b40080";
-    // Request WebP format for better compression
     const params = isMobile 
-      ? "?ixlib=rb-4.0.3&auto=format&fm=webp&fit=crop&w=800&q=75" 
-      : "?ixlib=rb-4.0.3&auto=format&fm=webp&fit=crop&w=1200&q=75";
+      ? "?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+      : "?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
     return baseUrl + params;
   };
   
   useEffect(() => {
-    // Only load the image when the hero section is about to come into view
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          // Preload image with timeout for mobile
-          const img = new Image();
-          img.src = getResponsiveImageUrl();
-          
-          // Set timeout for slow connections
-          const timeout = setTimeout(() => {
-            setImageFailed(true);
-          }, 8000);
-          
-          img.onload = () => {
-            clearTimeout(timeout);
-            setImageLoaded(true);
-          };
-          
-          img.onerror = () => {
-            clearTimeout(timeout);
-            setImageFailed(true);
-          };
-          
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
+    // Preload image with timeout for mobile
+    const img = new Image();
+    img.src = getResponsiveImageUrl();
     
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-    }
+    // Set timeout for slow connections
+    const timeout = setTimeout(() => {
+      console.log('Destinations hero image load timeout - using fallback');
+      setImageFailed(true);
+    }, 8000);
     
-    return () => {
-      observer.disconnect();
+    img.onload = () => {
+      clearTimeout(timeout);
+      setImageLoaded(true);
     };
+    
+    img.onerror = () => {
+      clearTimeout(timeout);
+      setImageFailed(true);
+      console.error('Failed to load destinations hero image');
+    };
+    
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
-    <section className="relative py-10 md:py-16 mt-0" ref={heroRef}>
+    <section className="relative py-10 md:py-16 mt-0">
       <div className="absolute inset-0 overflow-hidden">
         {/* Show low quality placeholder while image loads */}
         <div 
@@ -68,15 +52,12 @@ export const DestinationsHero = () => {
         {/* Main image with optimized loading */}
         {!imageFailed ? (
           <img 
-            src={imageLoaded ? getResponsiveImageUrl() : ''}
+            src={getResponsiveImageUrl()} 
             alt="Travel destinations" 
             className={`w-full h-full object-cover object-center transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-            loading="lazy"
+            loading="eager" // This is a hero image so eager loading is appropriate
             width={window.innerWidth < 768 ? 800 : 1200}
             height={window.innerWidth < 768 ? 400 : 600}
-            onLoad={() => setImageLoaded(true)}
-            onError={() => setImageFailed(true)}
-            fetchPriority="low"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600"></div>

@@ -11,23 +11,11 @@
       /* Critical path CSS for fastest rendering */
       body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fff}
       .hero-section{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center}
-      .nav-container{position:fixed;top:0;left:0;right:0;z-index:40;background-color:rgba(255,255,255,0.9);backdrop-filter:blur(8px)}
-      a{color:inherit;text-decoration:none}
-      .bg-white{background-color:#fff}
-      .text-blue-600{color:#2563eb}
-      .font-bold{font-weight:700}
-      .container{width:100%;margin-left:auto;margin-right:auto;padding-left:1rem;padding-right:1rem}
-      @media (min-width:640px){.container{max-width:640px}}
-      @media (min-width:768px){.container{max-width:768px}}
-      @media (min-width:1024px){.container{max-width:1024px}}
-      @media (min-width:1280px){.container{max-width:1280px}}
     </style>
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" as="image" fetchpriority="high" />
+    <link rel="preload" href="/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.webp" as="image" />
     <link rel="preload" href="/src/index.css" as="style" />
-    <link rel="preload" href="/assets/js/vendor-react.js" as="script" fetchpriority="high" />
-    <link rel="preload" href="/assets/js/main.js" as="script" fetchpriority="high" />
     
     <!-- Primary Meta Tags -->
     <meta name="description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more dietary restrictions worldwide." />
@@ -57,29 +45,16 @@
     <link rel="icon" type="image/png" href="/lovable-uploads/8c964a5b-79de-43e2-a98f-3ec246433861.png" />
     <link rel="apple-touch-icon" href="/lovable-uploads/8c964a5b-79de-43e2-a98f-3ec246433861.png" />
     
-    <!-- DNS prefetch and preconnect for external resources -->
-    <link rel="dns-prefetch" href="//images.unsplash.com" />
-    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
     <!-- Deferred/Async Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5PWZX00PL4"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-5PWZX00PL4', { 
-        'send_page_view': false,
-        'transport_type': 'beacon'
-      });
+      gtag('config', 'G-5PWZX00PL4', { 'send_page_view': false });
       // Defer full pageview tracking until after critical content loads
       window.addEventListener('load', function() {
-        setTimeout(function() {
-          gtag('event', 'page_view');
-        }, 1000);
+        gtag('event', 'page_view');
       });
     </script>
     
@@ -91,10 +66,6 @@
     
     <!-- Non-critical CSS loaded with low priority -->
     <link rel="stylesheet" href="/src/index.css" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
-
-    <!-- Web font loading optimized -->
-    <link rel="preload" as="font" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" crossorigin />
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -151,9 +122,8 @@
 
 <body>
     <div id="root"></div>
-    
-    <!-- Non-critical scripts loaded at the end of body with defer -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module" defer></script>
+    <!-- Non-critical scripts loaded at the end of body -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

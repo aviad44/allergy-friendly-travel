@@ -1,49 +1,31 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const isMobile = useIsMobile();
-  const sectionRef = useRef<HTMLElement>(null);
   
-  // Use Intersection Observer to load hero image only when in view
+  // Preload hero image with higher quality settings
   useEffect(() => {
-    if (!sectionRef.current) return;
-    
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          // Preload hero image with higher quality settings
-          const img = new Image();
-          img.src = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
-          img.onload = () => setImageLoaded(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    
-    observer.observe(sectionRef.current);
-    
-    return () => {
-      observer.disconnect();
-    };
+    const img = new Image();
+    img.src = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
+    img.onload = () => setImageLoaded(true);
   }, []);
 
   return (
     <section 
-      ref={sectionRef}
       className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
       style={{
-        backgroundImage: imageLoaded ? `url("/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png")` : 'none',
+        backgroundImage: `url("/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         height: isMobile ? '100vh' : '110vh',
         opacity: imageLoaded ? 1 : 0,
         transition: 'opacity 0.5s ease-in',
+        imageRendering: 'crisp-edges',
       }}
     >
       {/* Lightweight placeholder while image loads */}
