@@ -3,7 +3,7 @@
  * Resource monitoring module
  */
 
-import { logPerformanceIssue } from './utils';
+import { logPerformanceIssue } from './performance/utils';
 
 // Track Long Tasks that could affect responsiveness
 export const trackLongTasks = () => {

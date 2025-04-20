@@ -4,8 +4,9 @@
  */
 
 import { trackLCP, trackCLS, trackFID, trackNavigationTiming } from './core-vitals';
-import { trackLongTasks, trackResourceTiming } from './resource-monitoring';
+import { trackLongTasks, trackResourceTiming } from '../resource-monitoring';
 import { getDeviceInfo } from './device-info';
+import { logPerformanceIssue } from './utils';
 
 // Initialize all performance tracking
 export const initPerformanceMonitoring = () => {
@@ -48,6 +49,6 @@ export const initLightPerformanceMonitoring = () => {
 
 // Export everything for individual usage
 export * from './core-vitals';
-export * from './resource-monitoring';
+export * from '../resource-monitoring';
 export * from './device-info';
 export * from './utils';
