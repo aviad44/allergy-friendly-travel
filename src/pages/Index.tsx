@@ -4,7 +4,7 @@ import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { useEffect } from "react";
-import { initPerformanceMonitoring } from "@/utils/performanceMonitoring";
+import { initPerformanceMonitoring } from "@/utils/performance"; // Fixed import path
 
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
