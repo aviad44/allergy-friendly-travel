@@ -5,86 +5,108 @@
 
 import { logPerformanceIssue } from './utils';
 
-// Track Largest Contentful Paint
+// Track Largest Contentful Paint (LCP)
 export const trackLCP = () => {
   if ('PerformanceObserver' in window) {
     try {
-      const observer = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
+      const observer = new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
         const lastEntry = entries[entries.length - 1];
         
-        if (import.meta.env.MODE === 'development') {
-          console.log(`📊 LCP: ${lastEntry.startTime.toFixed(1)}ms`);
-        }
+        // Type assertion for LCP-specific properties
+        const lcpEntry = lastEntry as PerformanceEntry & { 
+          startTime: number 
+        };
         
-        if (lastEntry.startTime > 2500) {
+        const lcp = lcpEntry.startTime;
+        
+        if (lcp > 2500) {
+          if (import.meta.env.MODE === 'development') {
+            console.warn(`⚠️ Poor LCP detected: ${lcp.toFixed(1)}ms`);
+          }
+          
           logPerformanceIssue({
-            metric: 'poor-lcp',
-            value: lastEntry.startTime.toFixed(1),
-            url: window.location.pathname
+            metric: 'LCP',
+            value: lcp.toFixed(1),
+            status: lcp > 4000 ? 'poor' : 'needs-improvement'
           });
         }
       });
       
       observer.observe({ type: 'largest-contentful-paint', buffered: true });
     } catch (e) {
-      // Silently fail if not supported
+      console.error('Failed to observe LCP:', e);
     }
   }
 };
 
-// Track Cumulative Layout Shift
+// Track Cumulative Layout Shift (CLS)
 export const trackCLS = () => {
   if ('PerformanceObserver' in window) {
     try {
       let clsValue = 0;
       let clsEntries = [];
       
-      const observer = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-          if (!(entry as any).hadRecentInput) {
-            clsValue += (entry as any).value;
-            clsEntries.push(entry);
-          }
-        }
+      const observer = new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
         
-        if (import.meta.env.MODE === 'development') {
-          console.log(`📊 Current CLS: ${clsValue.toFixed(3)}`);
-        }
+        entries.forEach(entry => {
+          // Type assertion for CLS-specific properties
+          const clsEntry = entry as PerformanceEntry & { 
+            hadRecentInput: boolean,
+            value: number 
+          };
+          
+          if (!clsEntry.hadRecentInput) {
+            clsValue += clsEntry.value;
+            clsEntries.push(clsEntry);
+          }
+        });
         
         if (clsValue > 0.1) {
+          if (import.meta.env.MODE === 'development') {
+            console.warn(`⚠️ Poor CLS detected: ${clsValue.toFixed(3)}`);
+          }
+          
           logPerformanceIssue({
-            metric: 'high-cls',
+            metric: 'CLS',
             value: clsValue.toFixed(3),
-            url: window.location.pathname
+            status: clsValue > 0.25 ? 'poor' : 'needs-improvement'
           });
         }
       });
       
       observer.observe({ type: 'layout-shift', buffered: true });
     } catch (e) {
-      // Silently fail if not supported
+      console.error('Failed to observe CLS:', e);
     }
   }
 };
 
-// Track First Input Delay
+// Track First Input Delay (FID)
 export const trackFID = () => {
   if ('PerformanceObserver' in window) {
     try {
-      const observer = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry) => {
-          const delay = (entry as any).processingStart - entry.startTime;
+      const observer = new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        entries.forEach(entry => {
+          // Type assertion for FID-specific properties
+          const fidEntry = entry as PerformanceEntry & { 
+            processingStart: number,
+            startTime: number 
+          };
           
-          if (import.meta.env.MODE === 'development') {
-            console.log(`📊 FID: ${delay.toFixed(1)}ms`);
-          }
+          const fid = fidEntry.processingStart - fidEntry.startTime;
           
-          if (delay > 100) {
+          if (fid > 100) {
+            if (import.meta.env.MODE === 'development') {
+              console.warn(`⚠️ Poor FID detected: ${fid.toFixed(1)}ms`);
+            }
+            
             logPerformanceIssue({
-              metric: 'high-fid',
-              value: delay.toFixed(1),
-              url: window.location.pathname
+              metric: 'FID',
+              value: fid.toFixed(1),
+              status: fid > 300 ? 'poor' : 'needs-improvement'
             });
           }
         });
@@ -92,42 +114,38 @@ export const trackFID = () => {
       
       observer.observe({ type: 'first-input', buffered: true });
     } catch (e) {
-      // Silently fail if not supported
+      console.error('Failed to observe FID:', e);
     }
   }
 };
 
-// Track navigation timing metrics
+// Track Navigation Timing API metrics
 export const trackNavigationTiming = () => {
-  if ('performance' in window && 'getEntriesByType' in performance) {
-    performance.getEntriesByType('navigation').forEach(entry => {
-      if (entry instanceof PerformanceNavigationTiming) {
-        const navigationStart = entry.startTime;
-        const responseStart = entry.responseStart;
-        const responseEnd = entry.responseEnd;
-        const domComplete = entry.domComplete;
-        const loadEventEnd = entry.loadEventEnd;
+  if ('performance' in window && 'timing' in performance) {
+    setTimeout(() => {
+      if ('getEntriesByType' in performance) {
+        const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
         
-        const ttfb = responseStart - navigationStart;
-        const loadTime = domComplete - navigationStart;
-        const totalLoadTime = loadEventEnd - navigationStart;
-        
-        if (import.meta.env.MODE === 'development') {
-          console.log(`📊 Performance Metrics:
-          - TTFB: ${ttfb.toFixed(1)}ms
-          - DOM Complete: ${loadTime.toFixed(1)}ms
-          - Total Load: ${totalLoadTime.toFixed(1)}ms`);
-        }
-        
-        if (ttfb > 600 || loadTime > 3000) {
-          logPerformanceIssue({
-            metric: 'slow-load',
-            ttfb: ttfb.toFixed(1),
-            load: loadTime.toFixed(1),
-            url: window.location.pathname
-          });
+        if (navEntry) {
+          const timeToInteractive = navEntry.domInteractive - navEntry.startTime;
+          const domContentLoaded = navEntry.domContentLoadedEventEnd - navEntry.startTime;
+          const loadTime = navEntry.loadEventEnd - navEntry.startTime;
+          
+          if (loadTime > 3000) {
+            if (import.meta.env.MODE === 'development') {
+              console.warn(`⚠️ Slow page load: ${loadTime.toFixed(0)}ms`);
+            }
+            
+            logPerformanceIssue({
+              metric: 'page-load',
+              value: loadTime.toFixed(0),
+              ttfb: (navEntry.responseStart - navEntry.requestStart).toFixed(0),
+              interactive: timeToInteractive.toFixed(0),
+              dcl: domContentLoaded.toFixed(0)
+            });
+          }
         }
       }
-    });
+    }, 0);
   }
 };
