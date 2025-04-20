@@ -1,3 +1,4 @@
+
 [build]
   command = "npm run build"
   publish = "dist"
@@ -35,7 +36,7 @@
 [build.processing.images]
   compress = true
 
-# Add security headers
+# Add security headers with improved performance
 [[headers]]
   for = "/*"
   [headers.values]
@@ -45,35 +46,37 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Content-Security-Policy = "upgrade-insecure-requests"
-    # Enable HTTP/2 Server Push
+    # Enable HTTP/2 Server Push for critical resources
     Link = "</src/index.css>; rel=preload; as=style, </src/main.tsx>; rel=preload; as=script"
+    # Enhanced cache control for HTML - short cache to allow updates
+    Cache-Control = "public, max-age=0, must-revalidate"
 
-# Add improved cache control for static assets (7+ days)
+# Improved cache control for static assets (1 year for immutable assets)
 [[headers]]
   for = "*.js"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "*.css"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "*.webp"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "*.png"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "image/png"
 
 [[headers]]
   for = "*.jpg"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "*.woff2"
@@ -84,12 +87,12 @@
 [build.processing.brotli]
   enabled = true
   
-# Additional optimizations via Edge Functions
+# Optimize Edge Functions
 [[edge_functions]]
   path = "/*"
   function = "optimize-static-assets"
 
-# Prerender.io integration for social media crawlers (VERY IMPORTANT)
+# Prerender.io integration for social media crawlers
 [[redirects]]
   from = "/*"
   to = "https://service.prerender.io/https://www.allergy-free-travel.com/:splat"
@@ -105,7 +108,6 @@
     Cache-Control = "public, max-age=604800"
 
 [[headers]]
-  for = "/lovable-uploads/c0d4e111-501f-46b3-94ad-23c5b56f9736.png"
+  for = "/lovable-uploads/*"
   [headers.values]
-    Content-Type = "image/png"
-    Cache-Control = "public, max-age=604800"
+    Cache-Control = "public, max-age=31536000, immutable"
