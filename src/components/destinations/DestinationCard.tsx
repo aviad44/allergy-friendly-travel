@@ -43,7 +43,7 @@ export const DestinationCard = ({
       'tokyo': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80',
       'thailand': 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80',
       'crete': 'https://images.unsplash.com/photo-1533760881669-80db4d7b4c15?auto=format&fit=crop&w=800&q=80',
-      'toronto': '/lovable-uploads/toronto-skyline.png',
+      'toronto': '/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png',
       'default': `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`
     };
     
