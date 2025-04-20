@@ -1,9 +1,11 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { visualizer } from "rollup-plugin-visualizer";
 import { splitVendorChunkPlugin } from 'vite';
+// Import vite-plugin-static-copy with the correct syntax
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 // https://vitejs.dev/config/

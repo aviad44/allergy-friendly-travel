@@ -130,7 +130,7 @@ export const DestinationCard = ({
             loading="lazy"
             width="400"
             height="225"
-            fetchpriority="low"
+            fetchPriority="low"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
           <div className="absolute bottom-3 left-3 right-3">

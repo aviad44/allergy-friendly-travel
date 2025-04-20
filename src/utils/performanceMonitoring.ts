@@ -117,8 +117,9 @@ export const trackCLS = () => {
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           // Only count layout shifts without recent user input
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+          // Use type assertion for LayoutShift entries
+          if (!(entry as any).hadRecentInput) {
+            clsValue += (entry as any).value;
             clsEntries.push(entry);
           }
         }
@@ -151,7 +152,8 @@ export const trackFID = () => {
     try {
       const observer = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
-          const delay = entry.processingStart - entry.startTime;
+          // Use type assertion for first input entries
+          const delay = (entry as any).processingStart - entry.startTime;
           
           // Log in development only to avoid console pollution
           if (import.meta.env.MODE === 'development') {
@@ -222,7 +224,7 @@ export const trackResourceTiming = () => {
       console.warn('Slow resources detected:', slowResources.map(r => ({
         name: r.name,
         duration: `${r.duration.toFixed(0)}ms`,
-        size: r.transferSize ? `${(r.transferSize / 1024).toFixed(1)}KB` : 'unknown'
+        size: (r as any).transferSize ? `${((r as any).transferSize / 1024).toFixed(1)}KB` : 'unknown'
       })));
     }
   }

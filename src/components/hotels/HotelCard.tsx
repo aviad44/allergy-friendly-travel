@@ -122,7 +122,7 @@ export const HotelCard = ({
               loading="lazy"
               width="400"
               height="225"
-              fetchpriority="low"
+              fetchPriority="low"
               onLoad={() => setImgLoaded(true)}
               onError={() => setImgError(true)}
             />

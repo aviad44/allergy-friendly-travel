@@ -76,7 +76,7 @@ export const DestinationsHero = () => {
             height={window.innerWidth < 768 ? 400 : 600}
             onLoad={() => setImageLoaded(true)}
             onError={() => setImageFailed(true)}
-            fetchpriority="low"
+            fetchPriority="low"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600"></div>
