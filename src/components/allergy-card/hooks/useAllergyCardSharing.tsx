@@ -55,6 +55,34 @@ export function useAllergyCardSharing() {
       updateOrCreateTag('og:site_name', 'Allergy-Free Travel');
       updateOrCreateTag('og:locale', 'en_US');
       
+      // WhatsApp specific meta tags with itemprop
+      const addItemPropTags = () => {
+        // Remove any existing itemprop tags
+        const existingTags = document.querySelectorAll('[itemprop="thumbnailUrl"], [itemprop="thumbnail"]');
+        existingTags.forEach(tag => tag.remove());
+        
+        // Add thumbnailUrl
+        const thumbLink = document.createElement('link');
+        thumbLink.setAttribute('itemprop', 'thumbnailUrl');
+        thumbLink.setAttribute('href', imagePath);
+        document.head.appendChild(thumbLink);
+        
+        // Add thumbnail object
+        const thumbSpan = document.createElement('span');
+        thumbSpan.setAttribute('itemprop', 'thumbnail');
+        thumbSpan.setAttribute('itemscope', '');
+        thumbSpan.setAttribute('itemtype', 'http://schema.org/ImageObject');
+        
+        const urlLink = document.createElement('link');
+        urlLink.setAttribute('itemprop', 'url');
+        urlLink.setAttribute('href', imagePath);
+        
+        thumbSpan.appendChild(urlLink);
+        document.head.appendChild(thumbSpan);
+      };
+      
+      addItemPropTags();
+      
       // Twitter tags
       const updateOrCreateTwitterTag = (name: string, content: string) => {
         let tag = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;

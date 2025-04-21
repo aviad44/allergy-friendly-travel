@@ -48,7 +48,34 @@ export const MainLayout = () => {
             document.head.appendChild(metaTag);
           }
         }
-      }
+        
+        // Add itemprop thumbnail for WhatsApp
+        const addThumbnailItemprop = () => {
+          const ogImageTag = document.querySelector('meta[property="og:image"]') as HTMLMetaElement;
+          if (ogImageTag && !document.querySelector('[itemprop="thumbnailUrl"]')) {
+            // Add thumbnail URL
+            const thumbUrlLink = document.createElement('link');
+            thumbUrlLink.setAttribute('itemprop', 'thumbnailUrl');
+            thumbUrlLink.setAttribute('href', ogImageTag.content);
+            document.head.appendChild(thumbUrlLink);
+            
+            // Add thumbnail object
+            const thumbSpan = document.createElement('span');
+            thumbSpan.setAttribute('itemprop', 'thumbnail');
+            thumbSpan.setAttribute('itemscope', '');
+            thumbSpan.setAttribute('itemtype', 'http://schema.org/ImageObject');
+            
+            const thumbLink = document.createElement('link');
+            thumbLink.setAttribute('itemprop', 'url');
+            thumbLink.setAttribute('href', ogImageTag.content);
+            
+            thumbSpan.appendChild(thumbLink);
+            document.head.appendChild(thumbSpan);
+          }
+        };
+        
+        addThumbnailItemprop();
+      };
       
       ensureWhatsAppCompatibility();
     }

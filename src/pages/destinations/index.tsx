@@ -12,6 +12,7 @@ const DestinationsIndex = () => {
   const pageKeywords = "allergy-friendly destinations, food allergy travel, gluten-free travel destinations, allergy-conscious hotels worldwide";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations";
   const currentDate = new Date().toISOString().split('T')[0];
+  const imageUrl = "https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png";
   
   return (
     <div className="min-h-screen bg-gray-50">
@@ -25,15 +26,24 @@ const DestinationsIndex = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
+        <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
+        <meta property="og:image:secure_url" content={imageUrl} />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:site_name" content="Allergy-Free Travel" />
+        
+        {/* WhatsApp specific meta tags */}
+        <link itemProp="thumbnailUrl" href={imageUrl} />
+        <span itemProp="thumbnail" itemScope itemType="http://schema.org/ImageObject">
+          <link itemProp="url" href={imageUrl} />
+        </span>
         
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
+        <meta name="twitter:image" content={imageUrl} />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
@@ -56,7 +66,13 @@ const DestinationsIndex = () => {
             "name": pageTitle,
             "description": pageDescription,
             "url": canonicalUrl,
-            "dateModified": currentDate
+            "dateModified": currentDate,
+            "image": {
+              "@type": "ImageObject",
+              "url": imageUrl,
+              "width": "1200",
+              "height": "630"
+            }
           })}
         </script>
       </Helmet>

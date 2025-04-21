@@ -33,6 +33,11 @@ export default async function handler(request, context) {
     userAgent.toLowerCase().includes(botAgent.toLowerCase())
   );
 
+  // For debugging, log all incoming requests from potential WhatsApp agents
+  if (userAgent.toLowerCase().includes('whatsapp')) {
+    context.log(`WhatsApp detected: ${userAgent} for URL: ${url}`);
+  }
+
   // Add the Prerender header for bots
   if (isBot) {
     context.log(`Bot detected: ${userAgent} for URL: ${url}`);

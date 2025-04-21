@@ -39,6 +39,10 @@ export default function Index() {
         
         {/* WhatsApp specific meta - additional tags to ensure compatibility */}
         <meta property="og:image:secure_url" content={`${baseUrl}${mainImage}`} />
+        <link itemProp="thumbnailUrl" href={`${baseUrl}${mainImage}`} />
+        <span itemProp="thumbnail" itemScope itemType="http://schema.org/ImageObject">
+          <link itemProp="url" href={`${baseUrl}${mainImage}`} />
+        </span>
         
         {/* Schema.org JSON-LD */}
         <script type="application/ld+json">

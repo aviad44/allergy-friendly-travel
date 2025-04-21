@@ -27,6 +27,7 @@ export const DefaultMetaTags = () => {
       <meta property="og:image:alt" content="Allergy-Free Travel Logo" />
       <meta property="og:site_name" content="Allergy Free Travel" />
       <meta property="og:locale" content="en_US" />
+      <meta property="og:image:secure_url" content={`${baseUrl}${defaultImage}`} />
       
       {/* Twitter Card tags */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -34,7 +35,12 @@ export const DefaultMetaTags = () => {
       <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta name="twitter:image" content={`${baseUrl}${defaultImage}`} />
       <meta name="twitter:image:alt" content="Allergy-Free Travel Logo" />
-      <meta name="twitter:site" content="@allergyfreetvl" />
+      
+      {/* WhatsApp specific meta tags */}
+      <link itemProp="thumbnailUrl" href={`${baseUrl}${defaultImage}`} />
+      <span itemProp="thumbnail" itemScope itemType="http://schema.org/ImageObject">
+        <link itemProp="url" href={`${baseUrl}${defaultImage}`} />
+      </span>
     </Helmet>
   );
 };
