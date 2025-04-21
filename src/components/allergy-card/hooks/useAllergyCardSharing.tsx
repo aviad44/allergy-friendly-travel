@@ -52,6 +52,8 @@ export function useAllergyCardSharing() {
       updateOrCreateTag('og:image:secure_url', imagePath);
       updateOrCreateTag('og:title', title);
       updateOrCreateTag('og:description', description);
+      updateOrCreateTag('og:site_name', 'Allergy-Free Travel');
+      updateOrCreateTag('og:locale', 'en_US');
       
       // Twitter tags
       const updateOrCreateTwitterTag = (name: string, content: string) => {

@@ -25,10 +25,11 @@ export const DefaultMetaTags = () => {
       <meta property="og:image:width" content="600" />
       <meta property="og:image:height" content="600" />
       <meta property="og:image:alt" content="Allergy-Free Travel Logo" />
-      <meta property="og:site_name" content="Allergy-Free Travel" />
+      <meta property="og:site_name" content="Allergy Free Travel" />
+      <meta property="og:locale" content="en_US" />
       
       {/* Twitter Card tags */}
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
       <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta name="twitter:image" content={`${baseUrl}${defaultImage}`} />

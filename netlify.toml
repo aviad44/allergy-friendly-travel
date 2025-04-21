@@ -1,3 +1,4 @@
+
 [build]
   command = "npm run build"
   publish = "dist"
@@ -109,3 +110,9 @@
   [headers.values]
     Content-Type = "image/png"
     Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/lovable-uploads/e8b4dc3d-60a2-4fb7-bc33-77580f4d249c.png"
+  [headers.values]
+    Content-Type = "image/png"
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"

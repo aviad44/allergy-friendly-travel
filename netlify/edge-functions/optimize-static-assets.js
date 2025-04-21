@@ -4,6 +4,7 @@ export default async function handler(request, context) {
   const botUserAgents = [
     'facebookexternalhit',
     'WhatsApp',
+    'whatsapp',
     'Twitterbot',
     'Pinterest',
     'LinkedInBot',

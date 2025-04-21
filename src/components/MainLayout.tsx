@@ -25,6 +25,32 @@ export const MainLayout = () => {
       if (ogUrlTag) {
         ogUrlTag.content = window.location.href;
       }
+      
+      // Ensure WhatsApp specific tags are present
+      const ensureWhatsAppCompatibility = () => {
+        // Check if og:locale exists
+        const ogLocaleTag = document.querySelector('meta[property="og:locale"]');
+        if (!ogLocaleTag) {
+          const metaTag = document.createElement('meta');
+          metaTag.setAttribute('property', 'og:locale');
+          metaTag.setAttribute('content', 'en_US');
+          document.head.appendChild(metaTag);
+        }
+        
+        // Ensure image secure_url exists
+        const ogImageTag = document.querySelector('meta[property="og:image"]') as HTMLMetaElement;
+        if (ogImageTag) {
+          const secureUrlTag = document.querySelector('meta[property="og:image:secure_url"]');
+          if (!secureUrlTag) {
+            const metaTag = document.createElement('meta');
+            metaTag.setAttribute('property', 'og:image:secure_url');
+            metaTag.setAttribute('content', ogImageTag.content);
+            document.head.appendChild(metaTag);
+          }
+        }
+      }
+      
+      ensureWhatsAppCompatibility();
     }
     
     // For Facebook to re-scrape the page

@@ -3,18 +3,11 @@ import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
 import { HeroSection } from "@/components/hero/HeroSection";
-import { useEffect } from "react";
-import { initPerformanceMonitoring } from "@/utils/performanceMonitoring";
 
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
   const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
   const mainImage = '/lovable-uploads/e8b4dc3d-60a2-4fb7-bc33-77580f4d249c.png';
-  
-  // Initialize performance monitoring
-  useEffect(() => {
-    initPerformanceMonitoring();
-  }, []);
   
   return (
     <>
@@ -35,13 +28,17 @@ export default function Index() {
         <meta property="og:image:height" content="600" />
         <meta property="og:image:alt" content="Allergy-Free Travel Logo" />
         <meta property="og:site_name" content="Allergy-Free Travel" />
+        <meta property="og:locale" content="en_US" />
         
         {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
         <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
         <meta name="twitter:image" content={`${baseUrl}${mainImage}`} />
         <meta name="twitter:image:alt" content="Allergy-Free Travel Logo" />
+        
+        {/* WhatsApp specific meta - additional tags to ensure compatibility */}
+        <meta property="og:image:secure_url" content={`${baseUrl}${mainImage}`} />
         
         {/* Schema.org JSON-LD */}
         <script type="application/ld+json">
