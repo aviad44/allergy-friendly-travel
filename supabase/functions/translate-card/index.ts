@@ -63,6 +63,16 @@ serve(async (req) => {
         console.error('OpenAI API Error:', errorText)
         try {
           const errorData = JSON.parse(errorText)
+          // Check if the error is related to the API key
+          if (errorData.error && errorData.error.message && errorData.error.message.toLowerCase().includes('api key')) {
+            return new Response(
+              JSON.stringify({ error: 'Server configuration error - API key missing or invalid' }), 
+              { 
+                status: 500,
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+              }
+            )
+          }
           return new Response(
             JSON.stringify({ error: errorData.error?.message || `Translation failed: ${response.status} ${response.statusText}` }), 
             { 

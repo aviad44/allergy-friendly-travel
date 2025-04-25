@@ -72,6 +72,17 @@ const handler = async (event) => {
         console.error('OpenAI API Error:', errorData);
         try {
           const parsedError = JSON.parse(errorData);
+          // Check if the error is related to the API key
+          if (parsedError.error && parsedError.error.message && parsedError.error.message.toLowerCase().includes('api key')) {
+            return {
+              statusCode: 500,
+              body: JSON.stringify({ error: 'Server configuration error - API key missing or invalid' }),
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+              },
+            };
+          }
           return {
             statusCode: 500,
             body: JSON.stringify({ 
