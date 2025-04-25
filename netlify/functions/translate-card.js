@@ -89,6 +89,23 @@ const handler = async (event) => {
 
     try {
       console.log("Sending request to OpenAI API");
+      
+      // For development fallback if needed
+      if (process.env.NODE_ENV === 'development' && process.env.VITE_DEBUG_TRANSLATION === 'true') {
+        console.log("Using debug mock translation");
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ 
+            translation: `[${targetLanguage.toUpperCase()} TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)` 
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        };
+      }
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -127,7 +144,7 @@ const handler = async (event) => {
             statusCode: 500,
             body: JSON.stringify({ 
               error: `Translation service error: ${response.statusText}`,
-              rawError: errorData
+              rawError: errorData || "No error details available"
             }),
             headers: {
               'Content-Type': 'application/json',
@@ -137,7 +154,27 @@ const handler = async (event) => {
         }
       }
 
-      const data = await response.json();
+      const responseText = await response.text();
+      let data;
+      
+      try {
+        // Try to parse the OpenAI response as JSON
+        data = JSON.parse(responseText);
+      } catch (jsonError) {
+        console.error("Failed to parse OpenAI response:", jsonError, responseText);
+        return {
+          statusCode: 500,
+          body: JSON.stringify({ 
+            error: "Invalid response from translation service", 
+            responseText: responseText.substring(0, 200) // Include the first part of the response for debugging
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        };
+      }
+
       const translatedText = data.choices?.[0]?.message?.content?.trim();
 
       if (!translatedText) {
