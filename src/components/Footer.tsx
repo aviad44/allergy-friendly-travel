@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { HOME_CONTENT } from "@/constants/home";
 import { Separator } from "@/components/ui/separator";
+import { Facebook } from "lucide-react";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -81,7 +82,7 @@ export const Footer = () => {
         <Separator className="my-6" />
         
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
             <Link to="/privacy" className="text-xs text-muted-foreground hover:text-primary transition-colors">
               Privacy Policy
             </Link>
@@ -91,6 +92,15 @@ export const Footer = () => {
             <Link to="/sitemap" className="text-xs text-muted-foreground hover:text-primary transition-colors">
               Sitemap
             </Link>
+            <a 
+              href="https://www.facebook.com/profile.php?id=61575678085420" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-muted-foreground hover:text-blue-600 transition-colors"
+              aria-label="Allergy Free Travel Facebook Page"
+            >
+              <Facebook size={20} />
+            </a>
           </div>
           <p className="text-xs text-muted-foreground">
             Last updated: {new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}
