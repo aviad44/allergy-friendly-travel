@@ -83,7 +83,16 @@ export const translateText = async (
         textPreview: text.substring(0, 50) + "..."
       });
       
-      const response = await fetch("/api/functions/v1/translate-card", {
+      // FIX: Use the correct URL for the edge function
+      // The previous URL "/api/functions/v1/translate-card" might not be correctly resolving
+      
+      // Use the fully qualified URL to ensure we're hitting the right endpoint
+      const baseUrl = window.location.origin;
+      const functionUrl = `${baseUrl}/.netlify/functions/translate-card`;
+      
+      console.log(`Calling translation function at: ${functionUrl}`);
+      
+      const response = await fetch(functionUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
