@@ -91,9 +91,6 @@ export const translateText = async (
       };
     }
 
-    // Try both translation functions - first try Netlify, then fall back to Supabase Edge
-    // This dual-approach increases the chance of successful translation
-    
     // First, try Netlify function
     const baseUrl = window.location.origin;
     const netlifyFunctionUrl = `${baseUrl}/.netlify/functions/translate-card`;
@@ -101,6 +98,7 @@ export const translateText = async (
     console.log(`Calling Netlify translation function at: ${netlifyFunctionUrl}`);
     
     try {
+      // Ensure we're making a POST request with the correct headers and body structure
       const netlifyResponse = await fetch(netlifyFunctionUrl, {
         method: "POST",
         headers: {
@@ -114,6 +112,8 @@ export const translateText = async (
         signal: AbortSignal.timeout(10000),
       });
       
+      console.log("Netlify response status:", netlifyResponse.status);
+      
       // If Netlify function succeeds, use its result
       if (netlifyResponse.ok) {
         const data = await netlifyResponse.json();
@@ -121,9 +121,14 @@ export const translateText = async (
         if (data.translation) {
           console.log("Netlify translation succeeded");
           return { translatedText: data.translation };
+        } else if (data.error) {
+          console.warn("Netlify translation returned error:", data.error);
+          throw new Error(data.error);
         }
       } else {
-        console.warn("Netlify translation failed, falling back to Supabase function");
+        const errorText = await netlifyResponse.text();
+        console.warn("Netlify translation failed:", netlifyResponse.status, errorText);
+        throw new Error(`Netlify translation failed: ${netlifyResponse.status} - ${errorText}`);
       }
     } catch (netlifyError) {
       console.warn("Netlify function error:", netlifyError);
@@ -145,6 +150,8 @@ export const translateText = async (
         targetLanguage: languageName
       }),
     });
+
+    console.log("Supabase response status:", response.status);
 
     // Parse the response JSON
     const data = await response.json();

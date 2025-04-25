@@ -3,8 +3,14 @@
 // This function serves as a proxy to the OpenAI API for translations
 
 const handler = async (event) => {
+  // Add detailed request logging
+  console.log(`Received ${event.httpMethod} request with headers:`, 
+              JSON.stringify(event.headers));
+  console.log(`Request body: ${event.body ? event.body.substring(0, 100) + '...' : 'empty'}`);
+  
   // Check if this is a POST request
   if (event.httpMethod !== 'POST') {
+    console.error(`Method Not Allowed: ${event.httpMethod}`);
     return {
       statusCode: 405,
       body: JSON.stringify({ error: 'Method Not Allowed' }),
@@ -13,15 +19,47 @@ const handler = async (event) => {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
       },
+    };
+  }
+
+  // Handle OPTIONS request for CORS preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 204, // No content for OPTIONS
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Content-Length': '0',
+      },
+      body: '',
     };
   }
 
   try {
     // Parse the request body
-    const { text, targetLanguage } = JSON.parse(event.body);
+    let parsedBody;
+    try {
+      parsedBody = JSON.parse(event.body);
+      console.log("Successfully parsed request body");
+    } catch (parseError) {
+      console.error("Failed to parse request body:", parseError);
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Invalid JSON in request body' }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      };
+    }
+
+    const { text, targetLanguage } = parsedBody;
 
     if (!text || !targetLanguage) {
+      console.error("Missing required fields:", { text: !!text, targetLanguage: !!targetLanguage });
       return {
         statusCode: 400,
         body: JSON.stringify({ error: 'Missing text or target language' }),
@@ -50,6 +88,7 @@ const handler = async (event) => {
     const prompt = `Translate the following allergy warning into ${targetLanguage}. Keep it polite, clear, and medically accurate:\n\n${text}`;
 
     try {
+      console.log("Sending request to OpenAI API");
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -102,6 +141,7 @@ const handler = async (event) => {
       const translatedText = data.choices?.[0]?.message?.content?.trim();
 
       if (!translatedText) {
+        console.error("Empty translation result from OpenAI");
         return {
           statusCode: 500,
           body: JSON.stringify({ error: 'Empty translation result' }),
@@ -112,6 +152,7 @@ const handler = async (event) => {
         };
       }
 
+      console.log("Translation successful, returning response");
       return {
         statusCode: 200,
         body: JSON.stringify({ translation: translatedText }),

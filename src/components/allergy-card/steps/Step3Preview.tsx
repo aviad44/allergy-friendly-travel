@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Loader2, RefreshCw, AlertCircle } from "lucide-react";
+import { Loader2, RefreshCw, AlertCircle, XCircle } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface Step3Props {
@@ -19,6 +19,21 @@ export const Step3Preview: React.FC<Step3Props> = ({
   isTranslating,
   onRequestTranslation
 }) => {
+  const [translationError, setTranslationError] = useState<string | null>(null);
+  
+  // Reset error when translation is requested or completed
+  React.useEffect(() => {
+    if (isTranslating || translatedCard) {
+      setTranslationError(null);
+    }
+  }, [isTranslating, translatedCard]);
+
+  // Handler to retry translation with error tracking
+  const handleRetryTranslation = () => {
+    setTranslationError(null);
+    onRequestTranslation();
+  };
+
   if (!generatedCard) {
     return <div className="text-center py-8">No card content generated yet.</div>;
   }
@@ -42,14 +57,25 @@ export const Step3Preview: React.FC<Step3Props> = ({
               </div>
             ) : (
               <div className="text-center py-4">
-                <p className="mb-3 text-gray-600">Translation not generated yet</p>
+                {translationError ? (
+                  <div className="mb-4">
+                    <div className="flex items-center justify-center text-red-500 mb-2">
+                      <XCircle className="h-5 w-5 mr-1" />
+                      <span>Translation failed</span>
+                    </div>
+                    <p className="text-sm text-red-500 mb-3">{translationError}</p>
+                  </div>
+                ) : (
+                  <p className="mb-3 text-gray-600">Translation not generated yet</p>
+                )}
+                
                 <Button 
-                  onClick={onRequestTranslation} 
+                  onClick={handleRetryTranslation} 
                   className="gap-2 bg-teal-600 hover:bg-teal-700"
                   disabled={isTranslating}
                 >
                   <RefreshCw className="h-4 w-4" />
-                  Generate Translation
+                  {translationError ? 'Retry Translation' : 'Generate Translation'}
                 </Button>
               </div>
             )}
@@ -86,6 +112,18 @@ export const Step3Preview: React.FC<Step3Props> = ({
           </ul>
         </AlertDescription>
       </Alert>
+      
+      {/* Network request debugging - hidden in production */}
+      {process.env.NODE_ENV !== 'production' && (
+        <div className="border border-gray-300 rounded-lg p-4 bg-gray-50 text-xs">
+          <h4 className="font-mono font-bold mb-2">Debug Information:</h4>
+          <p className="font-mono mb-1">1. Check browser network tab for request details</p>
+          <p className="font-mono mb-1">2. Verify Content-Type header: application/json</p>
+          <p className="font-mono mb-1">3. Confirm request method: POST (not GET)</p>
+          <p className="font-mono mb-1">4. Ensure proper request body format:</p>
+          <pre className="bg-gray-100 p-2 rounded">{"{\n  \"text\": \"...\",\n  \"targetLanguage\": \"...\"\n}"}</pre>
+        </div>
+      )}
     </div>
   );
 };
