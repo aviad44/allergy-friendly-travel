@@ -13,7 +13,7 @@ const handler = async (event) => {
     console.error(`Method Not Allowed: ${event.httpMethod}`);
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: 'Method Not Allowed' }),
+      body: JSON.stringify({ error: 'Method Not Allowed', translatedText: null }),
       headers: {
         'Allow': 'POST',
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const handler = async (event) => {
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Content-Length': '0',
       },
-      body: '',
+      body: JSON.stringify({}), // Always return valid JSON
     };
   }
 
@@ -48,7 +48,7 @@ const handler = async (event) => {
       console.error("Failed to parse request body:", parseError);
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Invalid JSON in request body' }),
+        body: JSON.stringify({ error: 'Invalid JSON in request body', translatedText: null }),
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
@@ -62,7 +62,7 @@ const handler = async (event) => {
       console.error("Missing required fields:", { text: !!text, targetLanguage: !!targetLanguage });
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Missing text or target language' }),
+        body: JSON.stringify({ error: 'Missing text or target language', translatedText: null }),
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
@@ -76,7 +76,7 @@ const handler = async (event) => {
       console.error('Missing OpenAI API key in environment variables');
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: 'Server configuration error - API key missing' }),
+        body: JSON.stringify({ error: 'Server configuration error - API key missing', translatedText: null }),
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
@@ -97,7 +97,8 @@ const handler = async (event) => {
         return {
           statusCode: 200,
           body: JSON.stringify({ 
-            translation: `[${targetLanguage.toUpperCase()} TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)` 
+            translation: `[${targetLanguage.toUpperCase()} TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)`,
+            translatedText: `[${targetLanguage.toUpperCase()} TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)` 
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -132,7 +133,8 @@ const handler = async (event) => {
             statusCode: 500,
             body: JSON.stringify({ 
               error: parsedError.error?.message || `Translation service error: ${response.statusText}`,
-              details: parsedError
+              details: parsedError,
+              translatedText: null
             }),
             headers: {
               'Content-Type': 'application/json',
@@ -144,7 +146,8 @@ const handler = async (event) => {
             statusCode: 500,
             body: JSON.stringify({ 
               error: `Translation service error: ${response.statusText}`,
-              rawError: errorData || "No error details available"
+              rawError: errorData || "No error details available",
+              translatedText: null
             }),
             headers: {
               'Content-Type': 'application/json',
@@ -166,7 +169,8 @@ const handler = async (event) => {
           statusCode: 500,
           body: JSON.stringify({ 
             error: "Invalid response from translation service", 
-            responseText: responseText.substring(0, 200) // Include the first part of the response for debugging
+            responseText: responseText.substring(0, 200),
+            translatedText: null
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -181,7 +185,7 @@ const handler = async (event) => {
         console.error("Empty translation result from OpenAI");
         return {
           statusCode: 500,
-          body: JSON.stringify({ error: 'Empty translation result' }),
+          body: JSON.stringify({ error: 'Empty translation result', translatedText: null }),
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -192,7 +196,10 @@ const handler = async (event) => {
       console.log("Translation successful, returning response");
       return {
         statusCode: 200,
-        body: JSON.stringify({ translation: translatedText }),
+        body: JSON.stringify({ 
+          translation: translatedText,
+          translatedText: translatedText 
+        }),
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
@@ -203,7 +210,8 @@ const handler = async (event) => {
       return {
         statusCode: 500,
         body: JSON.stringify({ 
-          error: `Translation service error: ${fetchError.message}` 
+          error: `Translation service error: ${fetchError.message}`,
+          translatedText: null
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -215,7 +223,10 @@ const handler = async (event) => {
     console.error('Translation Error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: `Server error during translation: ${error.message}` }),
+      body: JSON.stringify({ 
+        error: `Server error during translation: ${error.message}`,
+        translatedText: null
+      }),
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

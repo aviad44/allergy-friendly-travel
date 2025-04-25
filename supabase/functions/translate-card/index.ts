@@ -5,6 +5,15 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Content-Type': 'application/json'
+}
+
+// Helper function to always return properly formatted JSON responses
+const createJsonResponse = (data: any, status = 200) => {
+  return new Response(JSON.stringify(data), { 
+    status, 
+    headers: corsHeaders
+  });
 }
 
 serve(async (req) => {
@@ -13,18 +22,15 @@ serve(async (req) => {
   
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(JSON.stringify({}), { headers: corsHeaders });
   }
 
   // Only allow POST requests
   if (req.method !== 'POST') {
     console.error(`Method Not Allowed: ${req.method}`);
-    return new Response(
-      JSON.stringify({ error: 'Method Not Allowed' }),
-      { 
-        status: 405,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Allow': 'POST' }
-      }
+    return createJsonResponse(
+      { error: 'Method Not Allowed', translatedText: null },
+      405
     );
   }
 
@@ -38,15 +44,13 @@ serve(async (req) => {
       console.log("Successfully parsed request body");
     } catch (parseError) {
       console.error("Failed to parse request body:", parseError);
-      return new Response(
-        JSON.stringify({ 
+      return createJsonResponse(
+        {
           error: 'Invalid JSON in request body',
-          receivedText: requestBody.substring(0, 100) // First 100 chars for debug
-        }),
-        { 
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
+          receivedText: requestBody.substring(0, 100), // First 100 chars for debug
+          translatedText: null
+        },
+        400
       );
     }
     
@@ -54,24 +58,18 @@ serve(async (req) => {
 
     if (!text || !targetLanguage) {
       console.error("Missing required fields:", { hasText: !!text, hasTargetLanguage: !!targetLanguage });
-      return new Response(
-        JSON.stringify({ error: 'Missing text or target language' }),
-        { 
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
+      return createJsonResponse(
+        { error: 'Missing text or target language', translatedText: null },
+        400
       );
     }
 
     const apiKey = Deno.env.get('OPENAI_API_KEY');
     if (!apiKey) {
       console.error('Missing OpenAI API key in environment variables');
-      return new Response(
-        JSON.stringify({ error: 'Server configuration error - API key missing' }),
-        { 
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
+      return createJsonResponse(
+        { error: 'Server configuration error - API key missing', translatedText: null },
+        500
       );
     }
 
@@ -83,14 +81,10 @@ serve(async (req) => {
       console.log("Using debug mock translation");
       // Simulate delay to mimic API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      return new Response(
-        JSON.stringify({ 
-          translation: `[${targetLanguage.toUpperCase()} MOCK TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)` 
-        }), 
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
+      return createJsonResponse({
+        translation: `[${targetLanguage.toUpperCase()} MOCK TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)`,
+        translatedText: `[${targetLanguage.toUpperCase()} MOCK TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)`
+      });
     }
 
     try {
@@ -119,26 +113,22 @@ serve(async (req) => {
         console.error('OpenAI API Error:', responseText);
         try {
           const errorData = JSON.parse(responseText);
-          return new Response(
-            JSON.stringify({ 
+          return createJsonResponse(
+            {
               error: errorData.error?.message || `Translation failed: ${response.status} ${response.statusText}`,
-              details: errorData
-            }), 
-            { 
-              status: 500,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            }
+              details: errorData,
+              translatedText: null
+            },
+            500
           );
         } catch (parseError) {
-          return new Response(
-            JSON.stringify({ 
+          return createJsonResponse(
+            {
               error: `Translation failed: ${response.status} ${response.statusText}`,
-              rawError: responseText || "No error details available"
-            }), 
-            { 
-              status: 500,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            }
+              rawError: responseText || "No error details available",
+              translatedText: null
+            },
+            500
           );
         }
       }
@@ -148,15 +138,13 @@ serve(async (req) => {
         data = JSON.parse(responseText);
       } catch (jsonError) {
         console.error("Failed to parse OpenAI response:", jsonError, responseText.substring(0, 200));
-        return new Response(
-          JSON.stringify({ 
-            error: "Invalid response from translation service", 
-            responseText: responseText.substring(0, 200) // Just include the first part of the response
-          }), 
-          { 
-            status: 500,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-          }
+        return createJsonResponse(
+          {
+            error: "Invalid response from translation service",
+            responseText: responseText.substring(0, 200),
+            translatedText: null
+          },
+          500
         );
       }
 
@@ -164,41 +152,35 @@ serve(async (req) => {
       
       if (!translatedText) {
         console.error("Empty translation result from OpenAI");
-        return new Response(
-          JSON.stringify({ error: 'Empty translation result' }), 
-          { 
-            status: 500,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-          }
+        return createJsonResponse(
+          { error: 'Empty translation result', translatedText: null },
+          500
         );
       }
       
       console.log('Translation successful, returning response');
-
-      return new Response(
-        JSON.stringify({ translation: translatedText }), 
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
+      return createJsonResponse({
+        translation: translatedText,
+        translatedText: translatedText
+      });
     } catch (fetchError) {
       console.error('Fetch Error:', fetchError);
-      return new Response(
-        JSON.stringify({ error: `Translation service error: ${fetchError.message}` }), 
+      return createJsonResponse(
         { 
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
+          error: `Translation service error: ${fetchError.message}`,
+          translatedText: null
+        },
+        500
       );
     }
   } catch (err) {
     console.error('Unexpected Error:', err);
-    return new Response(
-      JSON.stringify({ error: `Unexpected server error: ${err.message}` }),
+    return createJsonResponse(
       { 
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
+        error: `Unexpected server error: ${err.message}`,
+        translatedText: null
+      },
+      500
     );
   }
 });
