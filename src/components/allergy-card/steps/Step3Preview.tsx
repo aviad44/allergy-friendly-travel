@@ -42,7 +42,11 @@ export const Step3Preview: React.FC<Step3Props> = ({
             ) : (
               <div className="text-center py-4">
                 <p className="mb-3 text-gray-600">Translation not generated yet</p>
-                <Button onClick={onRequestTranslation} className="gap-2 bg-teal-600 hover:bg-teal-700">
+                <Button 
+                  onClick={onRequestTranslation} 
+                  className="gap-2 bg-teal-600 hover:bg-teal-700"
+                  disabled={isTranslating}
+                >
                   <RefreshCw className="h-4 w-4" />
                   Generate Translation
                 </Button>

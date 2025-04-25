@@ -39,14 +39,13 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
       toast.loading("Translating your card...", { id: "translation" });
       
       const result = await translateText(text, targetLanguage);
-      console.log("Translation result:", result);
       
       if (result.translatedText) {
         setTranslatedCard(result.translatedText);
         toast.success("Translation completed successfully!", { id: "translation" });
       } else {
         console.error("Translation failed:", result.error);
-        toast.error("Translation failed: " + (result.error || "Unknown error"), { id: "translation" });
+        toast.error(result.error || "Unknown translation error", { id: "translation" });
       }
     } catch (error) {
       console.error("Translation error in hook:", error);
@@ -111,6 +110,12 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
           console.log("Language changed, auto-translating");
           performTranslation(generatedCard, targetLang);
         }
+      }
+      
+      // If source language changes and we're on the preview step, regenerate card
+      if (name === 'sourceLanguage' && step === Step.Preview) {
+        console.log("Source language changed, regenerating card");
+        generateCardContent();
       }
     });
     

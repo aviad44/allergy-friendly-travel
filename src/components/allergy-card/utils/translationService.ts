@@ -44,12 +44,29 @@ const languageMap: Record<string, string> = {
 /**
  * Helper to get the full language name from language code
  */
-const getLanguageNameFromCode = (code: string): string => {
+export const getLanguageNameFromCode = (code: string): string => {
   return languageMap[code] || code;
 };
 
 /**
- * Translates text using our translate-card edge function
+ * Get available language codes
+ */
+export const getAvailableLanguageCodes = (): string[] => {
+  return Object.keys(languageMap);
+};
+
+/**
+ * Get language map for dropdowns
+ */
+export const getLanguageOptions = () => {
+  return Object.entries(languageMap).map(([code, name]) => ({
+    value: code,
+    label: name
+  }));
+};
+
+/**
+ * Translates text using our translate-card netlify function
  */
 export const translateText = async (
   text: string,
@@ -74,77 +91,60 @@ export const translateText = async (
       };
     }
 
-    try {
-      // Add detailed logging before making the request
-      console.log("Sending translation request to translate-card function:", {
-        targetLanguage,
-        languageName,
-        textLength: text.length,
-        textPreview: text.substring(0, 50) + "..."
-      });
-      
-      // FIX: Use the correct URL for the edge function
-      // The previous URL "/api/functions/v1/translate-card" might not be correctly resolving
-      
-      // Use the fully qualified URL to ensure we're hitting the right endpoint
-      const baseUrl = window.location.origin;
-      const functionUrl = `${baseUrl}/.netlify/functions/translate-card`;
-      
-      console.log(`Calling translation function at: ${functionUrl}`);
-      
-      const response = await fetch(functionUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text,
-          targetLanguage: languageName
-        }),
-      });
+    // Use the Netlify function for translation
+    const baseUrl = window.location.origin;
+    const functionUrl = `${baseUrl}/.netlify/functions/translate-card`;
+    
+    console.log(`Calling translation function at: ${functionUrl}`);
+    
+    const response = await fetch(functionUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text,
+        targetLanguage: languageName
+      }),
+    });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Translation API error response:", errorText);
-        try {
-          const errorData = JSON.parse(errorText);
-          throw new Error(errorData.error || `Translation failed: ${response.statusText}`);
-        } catch (parseError) {
-          throw new Error(`Translation failed: ${response.statusText} (${errorText.substring(0, 100)}...)`);
-        }
-      }
-
-      const data = await response.json();
-      console.log("Translation success, result:", data.translation);
-      if (!data.translation) {
-        throw new Error("Translation API returned empty result");
-      }
-      return { translatedText: data.translation };
-    } catch (error) {
-      console.error("Translation API error details:", error);
-      
-      // Show user-facing error message
-      toast.error(`Translation error: ${error.message || "Unknown error"}. Please try again later.`, {
+    // Parse the response JSON
+    const data = await response.json();
+    
+    if (!response.ok || data.error) {
+      const errorMessage = data.error || `Translation failed: ${response.statusText}`;
+      console.error("Translation API error:", errorMessage);
+      toast.error(`Translation error: ${errorMessage}. Please try again later.`, {
         duration: 5000,
         id: "translation-error"
       });
-      
-      // For development, provide a mock translation after API failure
-      if (process.env.NODE_ENV === 'development') {
-        console.warn("Translation API failed, using mock translation for development");
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
-        return { 
-          translatedText: `[${languageName.toUpperCase()} MOCK TRANSLATION]\n\n${text}\n\n(This is a mock translation because the API failed)` 
-        };
-      }
-      
-      return { translatedText: null, error: error.message || "Translation API error" };
+      return { translatedText: null, error: errorMessage };
     }
+
+    console.log("Translation success, result:", data.translation);
+    if (!data.translation) {
+      throw new Error("Translation API returned empty result");
+    }
+    return { translatedText: data.translation };
   } catch (error) {
     console.error("Translation error:", error);
-    toast.error("Translation failed. Please try again.", {
-      duration: 5000
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    
+    toast.error(`Translation failed: ${errorMessage}. Please try again later.`, {
+      duration: 5000,
+      id: "translation-error"
     });
-    return { translatedText: null, error: error instanceof Error ? error.message : "Unknown error" };
+    
+    // For development, provide a mock translation after API failure
+    if (process.env.NODE_ENV === 'development') {
+      console.warn("Translation API failed, using mock translation for development");
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
+      const languageName = getLanguageNameFromCode(targetLanguage);
+      return { 
+        translatedText: `[${languageName.toUpperCase()} MOCK TRANSLATION]\n\n${text}\n\n(This is a mock translation because the API failed)` 
+      };
+    }
+    
+    return { translatedText: null, error: errorMessage };
   }
 };

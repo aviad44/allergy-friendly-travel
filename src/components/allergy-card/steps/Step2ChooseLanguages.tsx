@@ -6,43 +6,15 @@ import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
-
-const sourceLanguages = [
-  { value: 'en', label: 'English' },
-];
-
-const targetLanguages = [
-  { value: 'ar', label: 'Arabic' },
-  { value: 'zh', label: 'Chinese (Simplified)' },
-  { value: 'cs', label: 'Czech' },
-  { value: 'da', label: 'Danish' },
-  { value: 'nl', label: 'Dutch' },
-  { value: 'fi', label: 'Finnish' },
-  { value: 'fr', label: 'French' },
-  { value: 'de', label: 'German' },
-  { value: 'el', label: 'Greek' },
-  { value: 'he', label: 'Hebrew' },
-  { value: 'hi', label: 'Hindi' },
-  { value: 'hu', label: 'Hungarian' },
-  { value: 'it', label: 'Italian' },
-  { value: 'ja', label: 'Japanese' },
-  { value: 'ko', label: 'Korean' },
-  { value: 'no', label: 'Norwegian' },
-  { value: 'pl', label: 'Polish' },
-  { value: 'pt', label: 'Portuguese' },
-  { value: 'ru', label: 'Russian' },
-  { value: 'es', label: 'Spanish' },
-  { value: 'sv', label: 'Swedish' },
-  { value: 'th', label: 'Thai' },
-  { value: 'tr', label: 'Turkish' },
-  { value: 'vi', label: 'Vietnamese' },
-];
+import { getLanguageOptions } from '../utils/translationService';
 
 interface Step2Props {
   form: UseFormReturn<FormValues>;
 }
 
 export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
+  const languageOptions = getLanguageOptions();
+  
   // Set default source language if it's not already set
   React.useEffect(() => {
     const sourceLanguage = form.getValues().sourceLanguage;
@@ -80,7 +52,7 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        {sourceLanguages.map((language) => (
+                        {languageOptions.map((language) => (
                           <SelectItem key={language.value} value={language.value}>
                             {language.label}
                           </SelectItem>
@@ -90,7 +62,7 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
                   </Select>
                 </FormControl>
                 <FormDescription>
-                  Currently, cards can only be created in English.
+                  Select the language your card will be written in.
                 </FormDescription>
               </FormItem>
             )}
@@ -115,7 +87,7 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        {targetLanguages.map((language) => (
+                        {languageOptions.map((language) => (
                           <SelectItem key={language.value} value={language.value}>
                             {language.label}
                           </SelectItem>
