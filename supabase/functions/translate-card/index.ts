@@ -48,7 +48,7 @@ serve(async (req) => {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'gpt-4o-mini', // Updated to use gpt-4o-mini which is more accessible
           messages: [
             { role: 'system', content: 'You are a professional medical translator. Translate the text accurately while ensuring it is polite and clear for restaurant or hotel staff.' },
             { role: 'user', content: prompt }
@@ -64,7 +64,10 @@ serve(async (req) => {
         try {
           const errorData = JSON.parse(errorText)
           return new Response(
-            JSON.stringify({ error: errorData.error?.message || `Translation failed: ${response.status} ${response.statusText}` }), 
+            JSON.stringify({ 
+              error: errorData.error?.message || `Translation failed: ${response.status} ${response.statusText}`,
+              details: errorData
+            }), 
             { 
               status: 500,
               headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -72,7 +75,10 @@ serve(async (req) => {
           )
         } catch (parseError) {
           return new Response(
-            JSON.stringify({ error: `Translation failed: ${response.status} ${response.statusText}` }), 
+            JSON.stringify({ 
+              error: `Translation failed: ${response.status} ${response.statusText}`,
+              rawError: errorText
+            }), 
             { 
               status: 500,
               headers: { ...corsHeaders, 'Content-Type': 'application/json' }

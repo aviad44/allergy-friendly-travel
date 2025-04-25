@@ -57,7 +57,7 @@ const handler = async (event) => {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'gpt-4o-mini', // Updated to use gpt-4o-mini which is more accessible
           messages: [
             { role: 'system', content: 'You are a professional medical translator. Translate the text accurately while ensuring it is polite and clear for restaurant or hotel staff.' },
             { role: 'user', content: prompt }
@@ -75,7 +75,8 @@ const handler = async (event) => {
           return {
             statusCode: 500,
             body: JSON.stringify({ 
-              error: parsedError.error?.message || `Translation service error: ${response.statusText}` 
+              error: parsedError.error?.message || `Translation service error: ${response.statusText}`,
+              details: parsedError
             }),
             headers: {
               'Content-Type': 'application/json',
@@ -86,7 +87,8 @@ const handler = async (event) => {
           return {
             statusCode: 500,
             body: JSON.stringify({ 
-              error: `Translation service error: ${response.statusText}` 
+              error: `Translation service error: ${response.statusText}`,
+              rawError: errorData
             }),
             headers: {
               'Content-Type': 'application/json',

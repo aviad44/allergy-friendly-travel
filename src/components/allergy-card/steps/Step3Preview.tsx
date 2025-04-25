@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2, RefreshCw, AlertCircle } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface Step3Props {
   generatedCard: string | null;
@@ -71,6 +72,20 @@ export const Step3Preview: React.FC<Step3Props> = ({
           This is how your allergy card will appear when downloaded or shared.
         </p>
       </div>
+
+      {/* Translation troubleshooting tips */}
+      <Alert className="bg-yellow-50 border-yellow-200">
+        <AlertCircle className="h-4 w-4 text-yellow-600" />
+        <AlertTitle className="text-yellow-700">Translation Troubleshooting</AlertTitle>
+        <AlertDescription className="text-yellow-600 text-sm">
+          If translation fails, check that you have:
+          <ul className="list-disc pl-5 mt-1 space-y-1">
+            <li>A valid OpenAI API key set in your environment</li>
+            <li>Selected a language that is supported</li>
+            <li>Try again in a few moments - API services may be temporarily busy</li>
+          </ul>
+        </AlertDescription>
+      </Alert>
     </div>
   );
 };

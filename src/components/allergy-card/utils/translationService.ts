@@ -66,7 +66,7 @@ export const getLanguageOptions = () => {
 };
 
 /**
- * Translates text using our translate-card netlify function
+ * Translates text using our translation function
  */
 export const translateText = async (
   text: string,
@@ -91,13 +91,51 @@ export const translateText = async (
       };
     }
 
-    // Use the Netlify function for translation
+    // Try both translation functions - first try Netlify, then fall back to Supabase Edge
+    // This dual-approach increases the chance of successful translation
+    
+    // First, try Netlify function
     const baseUrl = window.location.origin;
-    const functionUrl = `${baseUrl}/.netlify/functions/translate-card`;
+    const netlifyFunctionUrl = `${baseUrl}/.netlify/functions/translate-card`;
     
-    console.log(`Calling translation function at: ${functionUrl}`);
+    console.log(`Calling Netlify translation function at: ${netlifyFunctionUrl}`);
     
-    const response = await fetch(functionUrl, {
+    try {
+      const netlifyResponse = await fetch(netlifyFunctionUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text,
+          targetLanguage: languageName
+        }),
+        // Set a shorter timeout for the Netlify function
+        signal: AbortSignal.timeout(10000),
+      });
+      
+      // If Netlify function succeeds, use its result
+      if (netlifyResponse.ok) {
+        const data = await netlifyResponse.json();
+        
+        if (data.translation) {
+          console.log("Netlify translation succeeded");
+          return { translatedText: data.translation };
+        }
+      } else {
+        console.warn("Netlify translation failed, falling back to Supabase function");
+      }
+    } catch (netlifyError) {
+      console.warn("Netlify function error:", netlifyError);
+      // Continue to try Supabase function
+    }
+    
+    // If Netlify function fails, try Supabase Edge Function
+    const supabaseUrl = `${baseUrl}/functions/v1/translate-card`;
+    
+    console.log(`Falling back to Supabase translation function at: ${supabaseUrl}`);
+    
+    const response = await fetch(supabaseUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -113,7 +151,7 @@ export const translateText = async (
     
     if (!response.ok || data.error) {
       const errorMessage = data.error || `Translation failed: ${response.statusText}`;
-      console.error("Translation API error:", errorMessage);
+      console.error("Translation API error:", errorMessage, data);
       toast.error(`Translation error: ${errorMessage}. Please try again later.`, {
         duration: 5000,
         id: "translation-error"
