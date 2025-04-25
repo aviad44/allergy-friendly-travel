@@ -41,7 +41,7 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
                 <FormLabel className="text-base">Source Language</FormLabel>
                 <FormControl>
                   <Select
-                    value={field.value}
+                    value={field.value || 'en'}  // Ensure a default of English if no value
                     onValueChange={(value) => {
                       console.log("Source language changed to:", value);
                       field.onChange(value);
