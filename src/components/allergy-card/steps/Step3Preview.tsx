@@ -143,13 +143,24 @@ export const Step3Preview: React.FC<Step3Props> = ({
           {showDebug && (
             <div className="mt-3 border border-gray-300 rounded-lg p-3 bg-gray-50 text-xs">
               <h4 className="font-mono font-bold mb-2">Debug Information:</h4>
-              <p className="font-mono mb-1">1. Check network tab for translation request (POST only)</p>
+              <p className="font-mono mb-1">1. Check Network tab for translation request (POST only)</p>
               <p className="font-mono mb-1">2. Verify Content-Type header: application/json</p>
               <p className="font-mono mb-1">3. Check if the response contains valid JSON</p>
               <p className="font-mono mb-1">4. Expected response format:</p>
-              <pre className="bg-gray-100 p-2 rounded overflow-x-auto">{"{\n  \"translation\": \"...\",\n  \"translatedText\": \"...\"\n}"}</pre>
+              <pre className="bg-gray-100 p-2 rounded overflow-x-auto">{"{\n  \"translatedText\": \"...\"\n}"}</pre>
               <p className="font-mono mt-2">5. Error response format:</p>
               <pre className="bg-gray-100 p-2 rounded overflow-x-auto">{"{\n  \"error\": \"Error message\",\n  \"translatedText\": null\n}"}</pre>
+              <p className="font-mono mt-2">6. Test endpoint manually:</p>
+              <pre className="bg-gray-100 p-2 rounded overflow-x-auto">
+{`fetch("/.netlify/functions/translate-card", {
+  method: "POST",
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify({
+    text: "Test allergy text",
+    targetLanguage: "Spanish"
+  })
+})`}
+              </pre>
             </div>
           )}
         </AlertDescription>

@@ -10,7 +10,21 @@ const corsHeaders = {
 
 // Helper function to always return properly formatted JSON responses
 const createJsonResponse = (data: any, status = 200) => {
-  return new Response(JSON.stringify(data), { 
+  // Always ensure we have a valid JSON string to return
+  let responseBody: string;
+  
+  try {
+    responseBody = JSON.stringify(data);
+  } catch (stringifyError) {
+    console.error("Failed to stringify response data:", stringifyError);
+    // Fallback response if JSON.stringify fails
+    responseBody = JSON.stringify({
+      error: "Failed to generate response",
+      translatedText: null
+    });
+  }
+  
+  return new Response(responseBody, { 
     status, 
     headers: corsHeaders
   });
@@ -36,7 +50,18 @@ serve(async (req) => {
 
   try {
     // Get request body and convert to text for safe parsing
-    const requestBody = await req.text();
+    let requestBody: string;
+    try {
+      requestBody = await req.text();
+      console.log("Received request body length:", requestBody.length);
+    } catch (textError) {
+      console.error("Failed to get request body as text:", textError);
+      return createJsonResponse(
+        { error: 'Failed to read request body', translatedText: null },
+        400
+      );
+    }
+    
     let requestData;
     
     try {
@@ -82,7 +107,6 @@ serve(async (req) => {
       // Simulate delay to mimic API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       return createJsonResponse({
-        translation: `[${targetLanguage.toUpperCase()} MOCK TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)`,
         translatedText: `[${targetLanguage.toUpperCase()} MOCK TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)`
       });
     }
@@ -107,7 +131,17 @@ serve(async (req) => {
       });
 
       // Get the response text first, then try to parse as JSON
-      const responseText = await response.text();
+      let responseText: string;
+      try {
+        responseText = await response.text();
+        console.log("OpenAI response received, length:", responseText.length);
+      } catch (responseError) {
+        console.error("Failed to get OpenAI response text:", responseError);
+        return createJsonResponse(
+          { error: 'Failed to read OpenAI response', translatedText: null },
+          500
+        );
+      }
       
       if (!response.ok) {
         console.error('OpenAI API Error:', responseText);
@@ -160,7 +194,6 @@ serve(async (req) => {
       
       console.log('Translation successful, returning response');
       return createJsonResponse({
-        translation: translatedText,
         translatedText: translatedText
       });
     } catch (fetchError) {
