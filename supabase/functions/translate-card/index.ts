@@ -131,7 +131,7 @@ serve(async (req) => {
       });
 
       // Get the response text first, then try to parse as JSON
-      let responseText: string;
+      let responseText: string = "";
       try {
         responseText = await response.text();
         console.log("OpenAI response received, length:", responseText.length);
@@ -146,7 +146,8 @@ serve(async (req) => {
       if (!response.ok) {
         console.error('OpenAI API Error:', responseText);
         try {
-          const errorData = JSON.parse(responseText);
+          // Try to parse response as JSON, but provide fallback if it's not valid JSON
+          const errorData = responseText ? JSON.parse(responseText) : { error: "Unknown error" };
           return createJsonResponse(
             {
               error: errorData.error?.message || `Translation failed: ${response.status} ${response.statusText}`,
@@ -156,6 +157,7 @@ serve(async (req) => {
             500
           );
         } catch (parseError) {
+          // If we can't parse response as JSON, return the raw text
           return createJsonResponse(
             {
               error: `Translation failed: ${response.status} ${response.statusText}`,
@@ -169,7 +171,15 @@ serve(async (req) => {
       
       let data;
       try {
-        data = JSON.parse(responseText);
+        // Try to parse the OpenAI response as JSON
+        data = responseText ? JSON.parse(responseText) : null;
+        if (!data) {
+          console.error("Empty or null response from OpenAI");
+          return createJsonResponse(
+            { error: "Empty response from translation service", translatedText: null },
+            500
+          );
+        }
       } catch (jsonError) {
         console.error("Failed to parse OpenAI response:", jsonError, responseText.substring(0, 200));
         return createJsonResponse(
@@ -198,6 +208,14 @@ serve(async (req) => {
       });
     } catch (fetchError) {
       console.error('Fetch Error:', fetchError);
+      // Generate a fallback translation for development purposes
+      if (Deno.env.get('DEBUG_MODE') === 'true') {
+        console.log("Using emergency fallback mock translation after error");
+        return createJsonResponse({
+          translatedText: `[${targetLanguage.toUpperCase()} EMERGENCY FALLBACK]\n\n${text}\n\n(Service error: ${fetchError.message})`,
+          error: fetchError.message
+        });
+      }
       return createJsonResponse(
         { 
           error: `Translation service error: ${fetchError.message}`,
@@ -208,6 +226,7 @@ serve(async (req) => {
     }
   } catch (err) {
     console.error('Unexpected Error:', err);
+    // Always return a valid response even in case of unexpected errors
     return createJsonResponse(
       { 
         error: `Unexpected server error: ${err.message}`,

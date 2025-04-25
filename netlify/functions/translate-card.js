@@ -121,7 +121,7 @@ const handler = async (event) => {
         }),
       });
 
-      let responseText;
+      let responseText = "";
       try {
         responseText = await response.text();
         console.log("OpenAI response received, length:", responseText ? responseText.length : 0);
@@ -136,13 +136,15 @@ const handler = async (event) => {
       if (!response.ok) {
         console.error('OpenAI API Error:', responseText);
         try {
-          const parsedError = JSON.parse(responseText);
+          // Try to parse response as JSON, but provide fallback if it's not valid JSON
+          const parsedError = responseText ? JSON.parse(responseText) : { error: "Unknown error" };
           return createResponse({ 
             error: parsedError.error?.message || `Translation service error: ${response.statusText}`,
             details: parsedError,
             translatedText: null
           }, 500);
         } catch (parseError) {
+          // If we can't parse response as JSON, return the raw text
           return createResponse({ 
             error: `Translation service error: ${response.statusText}`,
             rawError: responseText || "No error details available",
@@ -154,7 +156,14 @@ const handler = async (event) => {
       let data;
       try {
         // Try to parse the OpenAI response as JSON
-        data = JSON.parse(responseText);
+        data = responseText ? JSON.parse(responseText) : null;
+        if (!data) {
+          console.error("Empty or null response from OpenAI");
+          return createResponse({
+            error: "Empty response from translation service",
+            translatedText: null
+          }, 500);
+        }
       } catch (jsonError) {
         console.error("Failed to parse OpenAI response:", jsonError, responseText ? responseText.substring(0, 200) : "empty");
         return createResponse({ 
@@ -180,6 +189,14 @@ const handler = async (event) => {
       });
     } catch (fetchError) {
       console.error('Fetch Error:', fetchError);
+      // Generate a fallback translation for development purposes
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Using emergency fallback mock translation after error");
+        return createResponse({
+          translatedText: `[${targetLanguage.toUpperCase()} EMERGENCY FALLBACK]\n\n${text}\n\n(Service error occurred: ${fetchError.message})`,
+          error: fetchError.message
+        });
+      }
       return createResponse({ 
         error: `Translation service error: ${fetchError.message}`,
         translatedText: null
@@ -187,6 +204,7 @@ const handler = async (event) => {
     }
   } catch (error) {
     console.error('Translation Error:', error);
+    // Always return a valid response even in case of unexpected errors
     return createResponse({ 
       error: `Server error during translation: ${error.message}`,
       translatedText: null
