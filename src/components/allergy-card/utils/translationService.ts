@@ -114,16 +114,6 @@ export const translateText = async (
     if (!response.ok || data.error) {
       const errorMessage = data.error || `Translation failed: ${response.statusText}`;
       console.error("Translation API error:", errorMessage);
-      
-      // Improved error message for API key missing
-      if (errorMessage.includes("API key missing") || errorMessage.includes("Missing OpenAI API key")) {
-        toast.error("Translation error: Server configuration error - API key missing. Please try again later.", {
-          duration: 5000,
-          id: "translation-error"
-        });
-        return { translatedText: null, error: "Server configuration error - API key missing. Please try again later." };
-      }
-      
       toast.error(`Translation error: ${errorMessage}. Please try again later.`, {
         duration: 5000,
         id: "translation-error"
@@ -139,15 +129,6 @@ export const translateText = async (
   } catch (error) {
     console.error("Translation error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    
-    // Show specific message for API key errors
-    if (errorMessage.includes("API key") || errorMessage.includes("authorization")) {
-      toast.error("Translation error: Server configuration error - API key missing. Please try again later.", {
-        duration: 5000,
-        id: "translation-error"
-      });
-      return { translatedText: null, error: "Server configuration error - API key missing. Please try again later." };
-    }
     
     toast.error(`Translation failed: ${errorMessage}. Please try again later.`, {
       duration: 5000,
