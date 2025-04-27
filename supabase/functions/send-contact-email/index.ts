@@ -51,7 +51,8 @@ serve(async (req) => {
         console.error("❌ RESEND_API_KEY is not defined");
         return new Response(
           JSON.stringify({ 
-            error: "Server configuration error: Resend API key is missing" 
+            error: "Server configuration error: Resend API key is missing",
+            success: false
           }),
           {
             status: 500,
@@ -85,8 +86,9 @@ serve(async (req) => {
 
         // Send confirmation email to user
         console.log("📧 Sending user confirmation email...");
+        let userEmailResponse;
         try {
-          const userEmailResponse = await resend.emails.send({
+          userEmailResponse = await resend.emails.send({
             from: "Allergy Free Travel <onboarding@resend.dev>",
             to: [email],
             subject: "We've received your message - Allergy Free Travel",
@@ -111,6 +113,7 @@ serve(async (req) => {
         } catch (userEmailError) {
           console.error("❌ Error sending user confirmation email:", userEmailError);
           // We don't throw here because we still want to return success if admin email was sent
+          userEmailResponse = { error: userEmailError.message || "Failed to send confirmation email" };
         }
 
         return new Response(
@@ -118,6 +121,7 @@ serve(async (req) => {
             success: true,
             message: "Contact form submitted successfully",
             adminEmailId: adminEmailResponse.id,
+            userEmailStatus: userEmailResponse?.error ? "failed" : "sent"
           }),
           {
             status: 200,
@@ -126,14 +130,24 @@ serve(async (req) => {
         );
       } catch (emailError) {
         console.error("❌ Error sending admin email:", emailError);
-        throw emailError;
+        return new Response(
+          JSON.stringify({ 
+            error: emailError instanceof Error ? emailError.message : "Failed to send email",
+            success: false
+          }),
+          {
+            status: 500,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
       }
     } catch (parseError) {
       console.error("❌ Failed to parse request body:", parseError);
       return new Response(
         JSON.stringify({ 
           error: "Invalid request body", 
-          details: parseError instanceof Error ? parseError.message : 'Unknown parsing error' 
+          details: parseError instanceof Error ? parseError.message : 'Unknown parsing error',
+          success: false
         }),
         {
           status: 400,
@@ -147,6 +161,7 @@ serve(async (req) => {
       JSON.stringify({ 
         error: "An unexpected error occurred",
         details: error instanceof Error ? error.message : 'Unknown error',
+        success: false
       }),
       {
         status: 500,

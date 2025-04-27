@@ -38,29 +38,34 @@ export function ContactForm() {
       
       // Call our Supabase Edge Function to send the email
       console.log("Calling Supabase edge function: send-contact-email");
-      const response = await supabase.functions.invoke('send-contact-email', {
-        body: { name, email, message }
-      });
-
-      console.log("Response from edge function:", response);
-
-      if (response.error) {
-        console.error('Edge function invocation error:', response.error);
-        throw new Error(response.error.message || 'Failed to send message');
+      try {
+        const response = await supabase.functions.invoke('send-contact-email', {
+          body: { name, email, message }
+        });
+  
+        console.log("Response from edge function:", response);
+  
+        if (response.error) {
+          console.error('Edge function invocation error:', response.error);
+          throw new Error(response.error.message || 'Failed to send message');
+        }
+  
+        if (response.data?.error) {
+          console.error('Edge function returned error:', response.data.error);
+          throw new Error(response.data.error);
+        }
+  
+        // Set submitted state instead of clearing form
+        setIsSubmitted(true);
+        
+        toast({
+          title: "Message sent!",
+          description: "We'll get back to you as soon as possible.",
+        });
+      } catch (invokeError) {
+        console.error('Error invoking edge function:', invokeError);
+        throw new Error(invokeError instanceof Error ? invokeError.message : 'Failed to send message');
       }
-
-      if (response.data?.error) {
-        console.error('Edge function returned error:', response.data.error);
-        throw new Error(response.data.error);
-      }
-
-      // Set submitted state instead of clearing form
-      setIsSubmitted(true);
-      
-      toast({
-        title: "Message sent!",
-        description: "We'll get back to you as soon as possible.",
-      });
     } catch (error: any) {
       console.error('Contact form submission error:', error);
       

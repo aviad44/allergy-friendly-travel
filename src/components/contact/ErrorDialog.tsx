@@ -26,7 +26,7 @@ export function ErrorDialog({ open, onOpenChange, errorDetails }: ErrorDialogPro
             Error Sending Message
           </DialogTitle>
           <DialogDescription>
-            We encountered a problem while trying to send your message.
+            We encountered a problem while trying to send your message. Please try again later or contact us directly.
           </DialogDescription>
         </DialogHeader>
         
@@ -34,7 +34,7 @@ export function ErrorDialog({ open, onOpenChange, errorDetails }: ErrorDialogPro
           <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
           <div className="text-sm text-destructive">
             <p className="font-semibold">Error details:</p>
-            <p className="font-mono text-xs break-all">{errorDetails}</p>
+            <p className="font-mono text-xs break-all overflow-x-auto max-h-40 overflow-y-auto">{errorDetails}</p>
           </div>
         </div>
         
