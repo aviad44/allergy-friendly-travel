@@ -35,7 +35,8 @@ serve(async (req) => {
         console.error("❌ Missing required fields", { name, email, message: message ? "provided" : "missing" });
         return new Response(
           JSON.stringify({ 
-            error: "Missing required fields: name, email, and message are required"
+            error: "Missing required fields: name, email, and message are required",
+            success: false 
           }),
           {
             status: 400,
@@ -81,7 +82,17 @@ serve(async (req) => {
         
         // If there was an error in the response
         if ('error' in adminEmailResponse && adminEmailResponse.error) {
-          throw new Error(`Resend API error: ${JSON.stringify(adminEmailResponse.error)}`);
+          console.error("❌ Resend API error:", adminEmailResponse.error);
+          return new Response(
+            JSON.stringify({ 
+              error: `Email service error: ${JSON.stringify(adminEmailResponse.error)}`,
+              success: false
+            }),
+            {
+              status: 500,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            }
+          );
         }
 
         // Send confirmation email to user

@@ -21,6 +21,11 @@ export function ContactForm() {
   const [formError, setFormError] = useState<string | null>(null);
   const { toast } = useToast();
 
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email.toLowerCase());
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -32,6 +37,13 @@ export function ContactForm() {
       // Validate form fields
       if (!name.trim() || !email.trim() || !message.trim()) {
         setFormError("Please fill out all fields before submitting.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Validate email format
+      if (!validateEmail(email.trim())) {
+        setFormError("Please enter a valid email address.");
         setIsSubmitting(false);
         return;
       }
@@ -53,6 +65,11 @@ export function ContactForm() {
         if (response.data?.error) {
           console.error('Edge function returned error:', response.data.error);
           throw new Error(response.data.error);
+        }
+
+        if (!response.data || response.data.success === false) {
+          console.error('Edge function returned unsuccessful status:', response.data);
+          throw new Error(response.data?.error || 'Server returned unsuccessful status');
         }
   
         // Set submitted state instead of clearing form
@@ -76,8 +93,19 @@ export function ContactForm() {
         variant: "destructive"
       });
       
+      // Prepare error details for dialog
+      let errorMessage = "Unknown error";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (typeof error === 'object' && error !== null) {
+        errorMessage = JSON.stringify(error);
+      }
+      
       // Show detailed error in dialog
-      setErrorDetails(error instanceof Error ? error.message : String(error));
+      setErrorDetails(errorMessage);
       setShowErrorDialog(true);
     } finally {
       setIsSubmitting(false);

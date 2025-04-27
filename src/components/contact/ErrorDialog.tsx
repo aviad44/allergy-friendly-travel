@@ -17,6 +17,25 @@ interface ErrorDialogProps {
 }
 
 export function ErrorDialog({ open, onOpenChange, errorDetails }: ErrorDialogProps) {
+  // Function to format error details
+  const formatErrorDetails = (details: string) => {
+    try {
+      // Check if the details are JSON
+      if (details.includes('{') && details.includes('}')) {
+        try {
+          const parsedError = JSON.parse(details);
+          return JSON.stringify(parsedError, null, 2);
+        } catch {
+          // If parsing fails, return as is
+          return details;
+        }
+      }
+      return details;
+    } catch (error) {
+      return `Error formatting details: ${String(error)}`;
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -34,7 +53,9 @@ export function ErrorDialog({ open, onOpenChange, errorDetails }: ErrorDialogPro
           <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
           <div className="text-sm text-destructive">
             <p className="font-semibold">Error details:</p>
-            <p className="font-mono text-xs break-all overflow-x-auto max-h-40 overflow-y-auto">{errorDetails}</p>
+            <p className="font-mono text-xs break-all overflow-x-auto max-h-40 overflow-y-auto">
+              {formatErrorDetails(errorDetails)}
+            </p>
           </div>
         </div>
         
