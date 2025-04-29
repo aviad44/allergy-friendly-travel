@@ -5,9 +5,14 @@ export const DefaultMetaTags = () => {
   const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.allergy-free-travel.com';
   const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
   const defaultImage = '/lovable-uploads/e8b4dc3d-60a2-4fb7-bc33-77580f4d249c.png';
+  const favicon = '/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png';
   
   return (
     <Helmet defaultTitle="Allergy-Free Travel – Hotels for Food Allergies">
+      {/* Favicon */}
+      <link rel="icon" href={favicon} type="image/png" />
+      <link rel="apple-touch-icon" href={favicon} />
+      
       {/* Primary Meta Tags */}
       <meta name="description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,3 +49,4 @@ export const DefaultMetaTags = () => {
     </Helmet>
   );
 };
+
