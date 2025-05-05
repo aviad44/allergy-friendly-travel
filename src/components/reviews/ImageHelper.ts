@@ -1,3 +1,4 @@
+
 import { DestinationId } from "@/types/definitions";
 
 // Get a good image URL for each destination 
@@ -20,7 +21,7 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=2000&h=1000&q=80",
     'paris': "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&h=1000&q=80",
     'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&h=1000&q=80",
-    'cyprus': "https://images.unsplash.com/photo-1518358246973-95637f473611?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'cyprus': "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&h=1000&q=80",
     'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=2000&h=1000&q=80",
     'swiss-alps': "https://images.unsplash.com/photo-1527784281695-866fa715d9d8?auto=format&fit=crop&w=2000&h=1000&q=80",
     'koh-samui': "https://images.unsplash.com/photo-1537956965359-7573183d1f57?auto=format&fit=crop&w=2000&h=1000&q=80",
@@ -29,9 +30,10 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     'thailand': "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=2000&h=1000&q=80",
     'portugal': "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=2000&h=1000&q=80",
     'abu-dhabi': "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=2000&h=1000&q=80",
-    'crete': "https://images.unsplash.com/photo-1533760881669-80db4d7b4c15?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=2000&h=1000&q=80",
     'hotel-chains': "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=2000&h=1000&q=80",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
+    'ayia-napa': "https://images.unsplash.com/photo-1518358246973-95637f473611?auto=format&fit=crop&w=2000&h=1000&q=80",
   };
   
   // Use destination specific image if available
@@ -65,7 +67,7 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     'london': "photo-1513635269975-59663e0ac1ad",
     'paris': "photo-1502602898657-3e91760cbb34", 
     'barcelona': "photo-1583422409516-2895a77efded",
-    'cyprus': "photo-1518358246973-95637f473611",
+    'cyprus': "photo-1500375592092-40eb2168fd21",
     'new-york': "photo-1496442226666-8d4d0e62e6e9",
     'swiss-alps': "photo-1527784281695-866fa715d9d8",
     'koh-samui': "photo-1537956965359-7573183d1f57",
@@ -74,9 +76,10 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     'thailand': "photo-1552465011-b4e21bf6e79a",
     'portugal': "photo-1555881400-74d7acaacd8b",
     'abu-dhabi': "photo-1512632578888-169bbbc64f33",
-    'crete': "photo-1533760881669-80db4d7b4c15",
+    'crete': "photo-1469796466635-455ede028aca",
     'hotel-chains': "photo-1551882547-ff40c63fe5fa",
     'toronto': "e6eaaffe-010b-46ee-859c-aacff4659ad1",
+    'ayia-napa': "photo-1518358246973-95637f473611",
   };
   
   return photoIdMap[destinationId] || destinationId;

@@ -1,3 +1,4 @@
+
 export const DESTINATION_IMAGES: Record<string, string> = {
   london: "photo-1513635269975-59663e0ac1ad", // London skyline with Thames river
   paris: "photo-1502602898657-3e91760cbb34", // Wide view of Eiffel Tower

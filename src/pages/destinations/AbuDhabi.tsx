@@ -8,6 +8,7 @@ const AbuDhabi = () => {
   const pageDescription = "Discover the best allergy-friendly hotels in Abu Dhabi. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly abu dhabi, gluten-free hotels abu dhabi, food allergies uae, abu dhabi hotels dietary restrictions";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/abu-dhabi";
+  const imageUrl = "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=1200&q=80";
 
   return (
     <>
@@ -21,7 +22,9 @@ const AbuDhabi = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         
@@ -29,7 +32,7 @@ const AbuDhabi = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" />
+        <meta name="twitter:image" content={imageUrl} />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
@@ -40,6 +43,12 @@ const AbuDhabi = () => {
             "description": pageDescription,
             "datePublished": "2024-06-10",
             "dateModified": "2024-06-10",
+            "image": {
+              "@type": "ImageObject",
+              "url": imageUrl,
+              "width": "1200",
+              "height": "630"
+            },
             "about": {
               "@type": "City",
               "name": "Abu Dhabi",

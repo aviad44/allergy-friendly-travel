@@ -7,9 +7,8 @@ const Crete = () => {
   const pageTitle = "Allergy-Friendly Hotels in Crete | Safe Dining for Dietary Restrictions";
   const pageDescription = "Discover the best allergy-friendly hotels in Crete. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly crete, gluten-free hotels crete, food allergies greece, crete hotels dietary restrictions";
-  const baseUrl = "https://www.allergy-free-travel.com";
-  const canonicalUrl = `${baseUrl}/destinations/crete`;
-  const imageUrl = `${baseUrl}/og-image.png`;
+  const canonicalUrl = "https://www.allergy-free-travel.com/destinations/crete";
+  const imageUrl = "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80";
 
   return (
     <>
@@ -21,21 +20,19 @@ const Crete = () => {
         <meta name="robots" content="index, follow" />
         
         {/* Open Graph Meta Tags */}
-        <meta property="og:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
-        <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content={imageUrl} />
-        <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:secure_url" content={imageUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Allergy-Free Travel" />
         
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
-        <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={imageUrl} />
         
         {/* Schema.org markup */}
