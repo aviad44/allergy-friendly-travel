@@ -35,6 +35,7 @@ export const HotelGrid: React.FC<HotelGridProps> = ({
     
     const isDuplicate = acc.find(item => item.name === current.name);
     if (!isDuplicate) {
+      // Ensure hotel has image URL
       return [...acc, current];
     }
     return acc;

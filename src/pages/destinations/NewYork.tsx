@@ -3,6 +3,7 @@ import { DestinationReviews } from "@/components/reviews/DestinationReviews";
 import { Helmet } from "react-helmet";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 const NewYork = () => {
   const location = useLocation();
@@ -16,12 +17,16 @@ const NewYork = () => {
     }
   }, [location.pathname, navigate]);
 
+  // Get image URL from constants
+  const imageUrl = DESTINATION_IMAGES["new-york"]?.startsWith("photo-") 
+    ? `https://images.unsplash.com/${DESTINATION_IMAGES["new-york"]}?auto=format&fit=crop&w=1200&q=80`
+    : DESTINATION_IMAGES["new-york"] || "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80";
+
   // SEO metadata
   const pageTitle = "Allergy-Friendly Hotels in New York | Safe Dining for Dietary Restrictions";
   const pageDescription = "Discover the best allergy-friendly hotels in New York. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly new york, gluten-free hotels new york, food allergies USA, new york hotels dietary restrictions";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/new-york";
-  const imageUrl = "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80";
 
   return (
     <>

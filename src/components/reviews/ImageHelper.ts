@@ -10,10 +10,14 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     return providedSource;
   }
   
-  // For Turkey, use the stunning Pamukkale image
+  // For special destinations, use custom images
   if (destinationId === 'turkey') {
     console.log("Turkey destination detected - using Pamukkale image");
     return "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png";
+  }
+  
+  if (destinationId === 'hotel-chains') {
+    return "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
   }
   
   // For specific destinations, use curated images (high reliability)
@@ -23,15 +27,15 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&h=1000&q=80",
     'cyprus': "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&h=1000&q=80",
     'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=2000&h=1000&q=80",
-    'swiss-alps': "https://images.unsplash.com/photo-1527784281695-866fa715d9d8?auto=format&fit=crop&w=2000&h=1000&q=80",
-    'koh-samui': "https://images.unsplash.com/photo-1537956965359-7573183d1f57?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'swiss-alps': "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'koh-samui': "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&h=1000&q=80",
     'cruise-lines': "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=2000&h=1000&q=80",
     'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=2000&h=1000&q=80",
     'thailand': "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=2000&h=1000&q=80",
     'portugal': "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=2000&h=1000&q=80",
     'abu-dhabi': "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=2000&h=1000&q=80",
     'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=2000&h=1000&q=80",
-    'hotel-chains': "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
     'ayia-napa': "https://images.unsplash.com/photo-1518358246973-95637f473611?auto=format&fit=crop&w=2000&h=1000&q=80",
   };
@@ -57,9 +61,17 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     return providedImage;
   }
   
-  // Get from the destination images constants
+  // Special cases for certain destinations
   if (destinationId === 'turkey') {
     return '/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png';
+  }
+  
+  if (destinationId === 'hotel-chains') {
+    return '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png';
+  }
+  
+  if (destinationId === 'toronto') {
+    return '/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png';
   }
   
   // Map destinations to their specific photo IDs for consistency
@@ -69,15 +81,15 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     'barcelona': "photo-1583422409516-2895a77efded",
     'cyprus': "photo-1500375592092-40eb2168fd21",
     'new-york': "photo-1496442226666-8d4d0e62e6e9",
-    'swiss-alps': "photo-1527784281695-866fa715d9d8",
-    'koh-samui': "photo-1537956965359-7573183d1f57",
+    'swiss-alps': "photo-1491555103944-7c647fd857e6",
+    'koh-samui': "photo-1507525428034-b723cf961d3e",
     'cruise-lines': "photo-1548574505-5e239809ee19",
     'tokyo': "photo-1542051841857-5f90071e7989",
     'thailand': "photo-1552465011-b4e21bf6e79a",
     'portugal': "photo-1555881400-74d7acaacd8b",
     'abu-dhabi': "photo-1512632578888-169bbbc64f33",
     'crete': "photo-1469796466635-455ede028aca",
-    'hotel-chains': "photo-1551882547-ff40c63fe5fa",
+    'hotel-chains': "1e92be73-4bcc-4e75-9bb4-b500ed1ecd63", // Using the uploaded image ID
     'toronto': "e6eaaffe-010b-46ee-859c-aacff4659ad1",
     'ayia-napa': "photo-1518358246973-95637f473611",
   };
