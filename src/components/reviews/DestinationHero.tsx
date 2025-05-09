@@ -4,18 +4,19 @@ import { Destination } from "@/types/reviews";
 import { HeroImage } from "./HeroImage";
 import { HeroGradient } from "./HeroGradient";
 import { DestinationInfo } from "./DestinationInfo";
-import { getDestinationImageUrl, getDestinationAltText, getImageSource } from "./ImageHelper";
+import { getDestinationImageUrl, getDestinationAltText } from "./ImageHelper";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 interface DestinationHeroProps {
   destination: Destination;
 }
 
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
-  // Get image source from constants or fall back to destination image
-  const imageSource = getImageSource(destination.id, destination.image);
-  
-  // Determine final image URL
-  const imageUrl = getDestinationImageUrl(destination.id, imageSource);
+  // Get image directly from constants
+  const destKey = destination.id as keyof typeof DESTINATION_IMAGES;
+  const imageUrl = destKey in DESTINATION_IMAGES ? 
+    DESTINATION_IMAGES[destKey] : 
+    getDestinationImageUrl(destination.id, destination.image);
   
   // Define a descriptive alt text
   const altText = getDestinationAltText(destination.name);
@@ -23,9 +24,8 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   // Log image info for debugging
   useEffect(() => {
     console.log("Destination ID:", destination.id);
-    console.log("Image source:", imageSource);
     console.log("Image URL used:", imageUrl);
-  }, [destination.id, imageSource, imageUrl]);
+  }, [destination.id, imageUrl]);
 
   return (
     <div 

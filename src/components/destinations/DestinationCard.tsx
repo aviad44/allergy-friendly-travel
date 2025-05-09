@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
+import { DESTINATION_IMAGES } from '@/constants/destinations';
 
 interface DestinationCardProps {
   id: string;
@@ -22,39 +23,21 @@ export const DestinationCard = ({
   path
 }: DestinationCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
   const [imgSrc, setImgSrc] = useState('');
   
   // Process image URL based on the type of image reference
   useEffect(() => {
     const processImageUrl = () => {
-      // Define direct hardcoded paths for ALL problematic destinations
-      const directImageMap: Record<string, string> = {
-        'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-        'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-        'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
-        'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
-        'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
-        'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-        'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80"
-      };
-      
-      // Always check if the ID directly matches our hardcoded map first
-      if (id in directImageMap) {
-        console.log(`Using direct hardcoded image for ${id} in DestinationCard: ${directImageMap[id]}`);
-        return directImageMap[id];
+      // First, check if the ID is directly in our constants
+      const destKey = id as keyof typeof DESTINATION_IMAGES;
+      if (destKey in DESTINATION_IMAGES) {
+        console.log(`DestinationCard: Using constant image for ${id}: ${DESTINATION_IMAGES[destKey]}`);
+        return DESTINATION_IMAGES[destKey];
       }
       
       // If we have a direct URL from props, use it
       if (image && (image.startsWith('/') || image.startsWith('http'))) {
         return image;
-      }
-      
-      // For Unsplash photo IDs
-      if (image && image.startsWith('photo-')) {
-        const isMobile = window.innerWidth < 768;
-        const width = isMobile ? 400 : 800;
-        return `https://images.unsplash.com/${image}?auto=format&fit=crop&w=${width}&q=80`;
       }
       
       // Final fallback - use placeholder with name
@@ -85,32 +68,12 @@ export const DestinationCard = ({
             onLoad={() => {
               console.log(`DestinationCard: Successfully loaded image for ${name}: ${imgSrc}`);
               setImageLoaded(true);
-              setImageError(false);
             }}
             onError={(e) => {
               console.error(`DestinationCard: Failed to load image for ${name}: ${imgSrc}`);
-              setImageError(true);
               
-              // Dedicated fallback handling using hardcoded values for known problematic destinations
-              const errorFallbacks: Record<string, string> = {
-                'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-                'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-                'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png", 
-                'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
-                'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
-                'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-                'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80"
-              };
-              
-              let fallbackSrc;
-              if (id in errorFallbacks) {
-                console.log(`DestinationCard: Using fallback for ${id}: ${errorFallbacks[id]}`);
-                fallbackSrc = errorFallbacks[id];
-              } else {
-                fallbackSrc = `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
-              }
-              
-              // Apply the fallback directly
+              // Fall back to a placeholder
+              const fallbackSrc = `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
               (e.target as HTMLImageElement).src = fallbackSrc;
               
               // Give the new image a chance to load
@@ -118,7 +81,7 @@ export const DestinationCard = ({
                 setImageLoaded(true);
               }, 100);
             }}
-            loading="eager" // Use eager for important above-the-fold images
+            loading="eager" 
             width="400"
             height="225"
           />

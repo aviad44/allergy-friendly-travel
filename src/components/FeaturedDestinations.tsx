@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield } from "lucide-react";
 import { useState } from "react";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 const FEATURED_DESTINATIONS = [
   {
     id: 1,
     name: "Paris",
     country: "France",
-    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
     description: "Discover allergy-friendly luxury in the City of Light",
     commonAllergies: ["Gluten", "Dairy", "Nuts"],
     href: "/destinations/paris",
@@ -20,7 +20,6 @@ const FEATURED_DESTINATIONS = [
     id: 2,
     name: "London",
     country: "United Kingdom",
-    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80",
     description: "Experience safe dining in Britain's capital",
     commonAllergies: ["Dairy", "Seafood"],
     href: "/destinations/london",
@@ -30,7 +29,6 @@ const FEATURED_DESTINATIONS = [
     id: 3,
     name: "New York",
     country: "United States",
-    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80",
     description: "Explore allergy-friendly dining in the Big Apple",
     commonAllergies: ["Gluten", "Nuts"],
     href: "/destinations/new-york",
@@ -40,7 +38,6 @@ const FEATURED_DESTINATIONS = [
     id: 4,
     name: "Portugal",
     country: "Portugal",
-    image: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80",
     description: "Family and couple-friendly allergy-aware destinations",
     commonAllergies: ["Gluten", "Dairy"],
     href: "/destinations/portugal",
@@ -50,7 +47,6 @@ const FEATURED_DESTINATIONS = [
     id: 5,
     name: "Cyprus",
     country: "Cyprus",
-    image: "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
     description: "Mediterranean cuisine adapted for your needs",
     commonAllergies: ["Gluten", "Nuts"],
     href: "/destinations/cyprus",
@@ -60,7 +56,6 @@ const FEATURED_DESTINATIONS = [
     id: 6,
     name: "Barcelona",
     country: "Spain",
-    image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
     description: "Allergy-friendly tapas and Mediterranean delights",
     commonAllergies: ["Gluten", "Shellfish"],
     href: "/destinations/barcelona",
@@ -70,7 +65,6 @@ const FEATURED_DESTINATIONS = [
     id: 7,
     name: "Crete",
     country: "Greece",
-    image: "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
     description: "Traditional Greek cuisine with allergy awareness",
     commonAllergies: ["Dairy", "Nuts"],
     href: "/destinations/crete",
@@ -80,7 +74,6 @@ const FEATURED_DESTINATIONS = [
     id: 8,
     name: "Abu Dhabi",
     country: "United Arab Emirates",
-    image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=800&q=80",
     description: "Luxurious stays with world-class allergy care",
     commonAllergies: ["Gluten", "Dairy"],
     href: "/destinations/abu-dhabi",
@@ -92,12 +85,21 @@ export const FeaturedDestinations = () => {
   // Track image loading status for each destination
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
   
+  // Get image source from our constants
+  const getDestinationImage = (destId: string): string => {
+    const key = destId as keyof typeof DESTINATION_IMAGES;
+    if (key in DESTINATION_IMAGES) {
+      return DESTINATION_IMAGES[key];
+    }
+    return `https://placehold.co/800x500/1e3a8a/ffffff?text=${destId.replace(/-/g, ' ')}`;
+  };
+  
   // Handle image load success
   const handleImageLoaded = (destId: number) => {
     setLoadedImages(prev => ({...prev, [destId]: true}));
   };
   
-  // Handle image load failure - specific fallbacks for each destination
+  // Handle image load failure - get from constants
   const handleImageError = (destId: number, event: React.SyntheticEvent<HTMLImageElement>) => {
     console.error(`FeaturedDestinations: Failed to load destination image for ID: ${destId}`);
     
@@ -105,25 +107,30 @@ export const FeaturedDestinations = () => {
     const dest = FEATURED_DESTINATIONS.find(d => d.id === destId);
     if (!dest) return;
     
-    // Apply fallback images based on destination
-    const fallbacks: Record<string, string> = {
-      'cyprus': '/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png',
-      'crete': 'https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&h=500&q=80',
-      'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&h=500&q=80',
-      'default': 'https://placehold.co/800x500/1e3a8a/ffffff?text=' + (dest ? dest.name : 'Destination')
-    };
-    
-    // Use destination-specific fallback or default
-    const fallbackUrl = dest.destId in fallbacks ? fallbacks[dest.destId] : fallbacks.default;
-    
-    console.log(`FeaturedDestinations: Using fallback for ${dest.name}: ${fallbackUrl}`);
-    (event.target as HTMLImageElement).src = fallbackUrl;
+    // Get from our constants file
+    if (dest.destId) {
+      const fallbackUrl = getDestinationImage(dest.destId);
+      console.log(`FeaturedDestinations: Using fallback from constants for ${dest.name}: ${fallbackUrl}`);
+      (event.target as HTMLImageElement).src = fallbackUrl;
+    }
     
     // Mark as loaded after a brief delay to allow fallback to load
     setTimeout(() => {
       handleImageLoaded(destId);
     }, 100);
   };
+
+  // Preload all images
+  React.useEffect(() => {
+    FEATURED_DESTINATIONS.forEach(dest => {
+      if (dest.destId) {
+        const img = new Image();
+        const imgSrc = getDestinationImage(dest.destId);
+        img.src = imgSrc;
+        console.log(`Preloading: ${dest.name} - ${imgSrc}`);
+      }
+    });
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -138,7 +145,7 @@ export const FeaturedDestinations = () => {
                 )}
                 
                 <img
-                  src={destination.image}
+                  src={destination.destId ? getDestinationImage(destination.destId) : ''}
                   alt={destination.name === "Cyprus" 
                     ? "Beautiful beach in Cyprus - Best allergy-friendly destination for family vacations"
                     : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`
@@ -146,7 +153,7 @@ export const FeaturedDestinations = () => {
                   className={`object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105 ${loadedImages[destination.id] ? 'opacity-100' : 'opacity-0'}`}
                   onLoad={() => handleImageLoaded(destination.id)}
                   onError={(e) => handleImageError(destination.id, e)}
-                  loading="eager" // Use eager loading for featured destinations
+                  loading="eager" 
                   width="600" 
                   height="375"
                 />
