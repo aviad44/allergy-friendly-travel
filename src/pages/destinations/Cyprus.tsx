@@ -1,7 +1,6 @@
 
 import { DestinationReviews } from "@/components/reviews/DestinationReviews";
 import { Helmet } from "react-helmet";
-import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 const Cyprus = () => {
   // SEO metadata
@@ -9,7 +8,7 @@ const Cyprus = () => {
   const pageDescription = "Discover the best allergy-friendly hotels in Cyprus. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly cyprus, gluten-free hotels cyprus, food allergies cyprus, cyprus hotels dietary restrictions";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/cyprus";
-  const imageUrl = DESTINATION_IMAGES['cyprus']; // Use constant directly
+  const imageUrl = "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png";
 
   return (
     <>

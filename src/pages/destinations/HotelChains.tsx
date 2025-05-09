@@ -1,3 +1,4 @@
+
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Rocket, ExternalLink, Hotel, Star, Search } from "lucide-react";
@@ -5,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
-import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 export default function HotelChains() {
   // SEO metadata
@@ -13,7 +13,7 @@ export default function HotelChains() {
   const pageDescription = "Discover the top global hotel chains with allergy-friendly and celiac-safe food policies. Learn which hotels accommodate food allergies and offer certified allergy-safe services.";
   const pageKeywords = "Allergy Friendly Hotels, Gluten Free Hotels, Celiac Safe Travel, Food Allergies, Hotel Chains with Allergy Policies";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
-  const imageUrl = DESTINATION_IMAGES['hotel-chains']; // Use our constants
+  const imageUrl = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   
   // Current date for schema metadata
@@ -89,7 +89,6 @@ export default function HotelChains() {
           className="w-full h-full object-cover object-center"
           onError={(e) => {
             console.error("Failed to load hotel chains hero image");
-            // Use another direct image path as fallback
             (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80";
           }}
         />
