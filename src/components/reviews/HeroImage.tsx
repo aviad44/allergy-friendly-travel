@@ -47,8 +47,9 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
       'paris': "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
       'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80",
       'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
-      'cyprus': "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80",
+      'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
       'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
+      'hotel chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
       'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
       'thailand': "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80",
       'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
@@ -59,6 +60,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     // Try to find a matching destination
     for (const [key, url] of Object.entries(fallbackMap)) {
       if (destinationName.includes(key)) {
+        console.log(`Using destination-specific fallback for ${destinationName}: ${url}`);
         return url;
       }
     }
