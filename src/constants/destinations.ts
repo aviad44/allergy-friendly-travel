@@ -15,5 +15,7 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png", // Using the specific hotel chains image
   'turkey': '/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png', // Turkey Pamukkale image
   "cruise-lines": "photo-1548574505-5e239809ee19", // Cruise ship on ocean
-  'toronto': '/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png' // Toronto skyline
+  'toronto': '/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png', // Toronto skyline
+  // Additional backup entries for problematic destinations
+  'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png", // Alternative key for hotel chains
 } as const;

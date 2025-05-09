@@ -28,6 +28,23 @@ export const DestinationCard = ({
   // Process image URL based on the type of image reference
   useEffect(() => {
     const processImageUrl = () => {
+      console.log(`Processing image for ${name} (${id}): ${image}`);
+      
+      // Special handling for problematic destinations
+      const directImageMap: Record<string, string> = {
+        'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
+        'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+        'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
+        'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
+        'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png"
+      };
+      
+      // Always prioritize our special cases first
+      if (id in directImageMap) {
+        console.log(`Using direct image for ${id}: ${directImageMap[id]}`);
+        return directImageMap[id];
+      }
+      
       // For direct uploaded files (absolute paths)
       if (image.startsWith('/')) {
         return image;
@@ -43,17 +60,6 @@ export const DestinationCard = ({
         const isMobile = window.innerWidth < 768;
         const width = isMobile ? 400 : 800;
         return `https://images.unsplash.com/${image}?auto=format&fit=crop&w=${width}&q=80`;
-      }
-      
-      // Fallback for specific destinations
-      const fallbacks: Record<string, string> = {
-        'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png", 
-        'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
-        'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png"
-      };
-      
-      if (id in fallbacks) {
-        return fallbacks[id];
       }
       
       // Default fallback
@@ -84,18 +90,26 @@ export const DestinationCard = ({
               console.error(`Failed to load image for ${name}:`, imgSrc);
               setImageError(true);
               
-              // Special fallback handling for problematic destinations
-              if (id === 'cyprus') {
-                (e.target as HTMLImageElement).src = "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png";
-              } else if (id === 'crete') {
-                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80";
-              } else if (id === 'hotel-chains') {
-                (e.target as HTMLImageElement).src = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
+              // Dedicated fallback handling for problematic destinations
+              const errorFallbacks: Record<string, string> = {
+                'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
+                'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png", 
+                'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
+                'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
+                'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png"
+              };
+              
+              if (id in errorFallbacks) {
+                console.log(`Using fallback for ${id}: ${errorFallbacks[id]}`);
+                (e.target as HTMLImageElement).src = errorFallbacks[id];
               } else {
                 (e.target as HTMLImageElement).src = `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
               }
               
-              setImageLoaded(true);
+              // Give the new image a chance to load
+              setTimeout(() => {
+                setImageLoaded(true);
+              }, 100);
             }}
             loading="eager"
             width="400"
