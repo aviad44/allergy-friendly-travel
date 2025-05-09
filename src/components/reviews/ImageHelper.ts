@@ -20,6 +20,14 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     return "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
   }
   
+  if (destinationId === 'crete') {
+    return "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=2000&h=1000&q=80";
+  }
+  
+  if (destinationId === 'cyprus') {
+    return "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&h=1000&q=80";
+  }
+  
   // For specific destinations, use curated images (high reliability)
   const destinationImageMap: Record<string, string> = {
     'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=2000&h=1000&q=80",
@@ -68,6 +76,14 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
   
   if (destinationId === 'hotel-chains') {
     return '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png';
+  }
+  
+  if (destinationId === 'crete') {
+    return 'photo-1469796466635-455ede028aca';
+  }
+  
+  if (destinationId === 'cyprus') {
+    return 'photo-1500375592092-40eb2168fd21';
   }
   
   if (destinationId === 'toronto') {

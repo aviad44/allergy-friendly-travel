@@ -18,13 +18,11 @@ export const DestinationsList = () => {
           if (typeof imgSrc === 'string' && imgSrc.startsWith('photo-')) {
             const img = new Image();
             img.src = `https://images.unsplash.com/${imgSrc}?auto=format&fit=crop&w=800&q=80`;
-            console.log(`Preloading ${destination.name} image: ${img.src}`);
           } 
-          // For direct URLs (like Turkey)
+          // For direct URLs (like hotel-chains, turkey, toronto)
           else if (typeof imgSrc === 'string' && (imgSrc.startsWith('/') || imgSrc.startsWith('http'))) {
             const img = new Image();
             img.src = imgSrc;
-            console.log(`Preloading ${destination.name} direct image: ${img.src}`);
           }
         }
       });

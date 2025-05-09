@@ -12,7 +12,7 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   portugal: "photo-1555881400-74d7acaacd8b", // Colorful houses in Porto, Portugal
   'swiss-alps': "photo-1491555103944-7c647fd857e6", // Swiss Alps mountain resort with lake view
   'koh-samui': "photo-1507525428034-b723cf961d3e", // Koh Samui beach - reliable beach image
-  'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png", // Using the newly uploaded image
+  'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png", // Using the specific hotel chains image
   'turkey': '/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png',
   "cruise-lines": "photo-1548574505-5e239809ee19", // Cruise ship on ocean
   'toronto': '/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png'

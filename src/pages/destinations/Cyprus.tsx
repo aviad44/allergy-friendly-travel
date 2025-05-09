@@ -48,7 +48,8 @@ const Cyprus = () => {
               "name": "Cyprus",
               "description": "Island country in the Mediterranean Sea with beautiful beaches"
             },
-            "audience": "Travelers with food allergies or dietary restrictions"
+            "audience": "Travelers with food allergies or dietary restrictions",
+            "image": imageUrl
           })}
         </script>
       </Helmet>

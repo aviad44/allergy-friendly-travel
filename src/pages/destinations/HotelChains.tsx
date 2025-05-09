@@ -12,6 +12,7 @@ export default function HotelChains() {
   const pageDescription = "Discover the top global hotel chains with allergy-friendly and celiac-safe food policies. Learn which hotels accommodate food allergies and offer certified allergy-safe services.";
   const pageKeywords = "Allergy Friendly Hotels, Gluten Free Hotels, Celiac Safe Travel, Food Allergies, Hotel Chains with Allergy Policies";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
+  const imageUrl = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
   
   // Current date for schema metadata
   const currentDate = new Date().toISOString().split('T')[0];
@@ -28,7 +29,7 @@ export default function HotelChains() {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
+        <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
         
@@ -36,7 +37,7 @@ export default function HotelChains() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
+        <meta name="twitter:image" content={imageUrl} />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
@@ -45,7 +46,7 @@ export default function HotelChains() {
             "@type": "Article",
             "headline": pageTitle,
             "description": pageDescription,
-            "image": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            "image": imageUrl,
             "author": {
               "@type": "Organization",
               "name": "Allergy-Free Travel"
@@ -67,9 +68,13 @@ export default function HotelChains() {
       {/* Hero Image */}
       <div className="relative h-60 sm:h-72 md:h-96 overflow-hidden">
         <img 
-          src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" 
+          src={imageUrl} 
           alt="Luxurious hotel lobby with comfortable seating and high ceilings" 
           className="w-full h-full object-cover object-center"
+          onError={(e) => {
+            console.error("Failed to load hotel chains hero image");
+            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80";
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
         <div className="absolute inset-0 flex items-center justify-center text-center px-4">
@@ -305,4 +310,4 @@ export default function HotelChains() {
       </main>
     </div>
   );
-}
+};
