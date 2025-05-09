@@ -12,177 +12,211 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
   const [imageFailed, setImageFailed] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
   
-  // Convert to WebP if supported and add responsive sizing
-  const optimizeImageUrl = (url: string) => {
-    if (!url) return fallbackImage;
-    
-    // For Unsplash URLs, use their optimization API with smaller image for mobile
-    if (url.includes('unsplash.com')) {
-      // Use a smaller image size for mobile devices
-      const isMobile = window.innerWidth < 768;
-      const width = isMobile ? 800 : 1200;
-      
-      // Remove any existing query parameters and add our own
-      const baseUrl = url.split('?')[0];
-      return `${baseUrl}?auto=format&fit=crop&w=${width}&q=80`;
-    }
-    
-    // Return original for other URLs
-    return url;
-  };
-  
-  // Add debug logging
+  // Enhanced debug logging
   useEffect(() => {
     console.log(`HeroImage attempting to load: ${imageUrl}`);
-    // Set optimized URL
-    setCurrentImageUrl(optimizeImageUrl(imageUrl));
-  }, [imageUrl]);
-  
-  // Destination-specific fallbacks to ensure we don't show generic mountain image
-  const getFallbackForDestination = () => {
-    const destinationName = altText.split(' - ')[0].replace('Scenic view of ', '').toLowerCase();
     
-    // Map of reliable fallback images by destination name fragment
-    const fallbackMap: Record<string, string> = {
-      'paris': "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
-      'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80",
-      'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
+    // Handle direct paths for problematic destinations first
+    const specialDestinations: Record<string, string> = {
+      'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
+      'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
       'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
-      'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
-      'hotel chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-      'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
-      'thailand': "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80",
       'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
-      'abu dhabi': "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=1200&q=80",
-      'default': "https://placehold.co/1200x600/1e3a8a/ffffff?text=Loading+Destination"
+      'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
+      'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
+      'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80"
     };
     
-    // Try to find a matching destination
-    for (const [key, url] of Object.entries(fallbackMap)) {
-      if (destinationName.includes(key)) {
-        console.log(`Using destination-specific fallback for ${destinationName}: ${url}`);
-        return url;
+    // Extract destination ID from URL or alt text
+    let destinationId = '';
+    
+    // Check if URL contains a destination ID
+    for (const id of Object.keys(specialDestinations)) {
+      if (imageUrl.includes(id)) {
+        destinationId = id;
+        break;
       }
     }
     
-    return fallbackMap.default;
-  };
-
-  // Get destination-specific fallbacks
-  const destinationFallback = getFallbackForDestination();
-  
-  // Alternate image URLs in case the first one fails
-  const alternateImageUrls = [
-    destinationFallback, // Use destination-specific fallback first
-    "https://placehold.co/1200x600/1e3a8a/ffffff?text=Destination+Image", // Branded placeholder
-    fallbackImage // Last resort fallback
-  ];
-
-  const tryNextImage = () => {
-    const nextUrl = alternateImageUrls.shift();
-    if (nextUrl) {
-      console.log(`Trying alternate image: ${nextUrl}`);
-      setCurrentImageUrl(nextUrl);
-      setImageFailed(false);
-    } else {
-      // If all alternates fail, use the fallback
-      console.log(`All alternatives failed, using fallback: ${fallbackImage}`);
-      setCurrentImageUrl(fallbackImage);
-    }
-  };
-  
-  // Preload image to avoid the flash of default content
-  useEffect(() => {
-    if (currentImageUrl) {
-      // Create colored placeholder while image loads - based on destination
-      const destinationColor = altText.toLowerCase().includes('paris') ? '#3f51b5' : 
-                              altText.toLowerCase().includes('london') ? '#1e88e5' :
-                              altText.toLowerCase().includes('barcelona') ? '#e53935' : '#1e3a8a';
-      
-      // Add destination-specific placeholder style
-      const placeholderStyle = document.createElement('style');
-      placeholderStyle.innerHTML = `
-        .image-placeholder-${imageUrl.replace(/[^a-zA-Z0-9]/g, '')} {
-          background: linear-gradient(to bottom, ${destinationColor}, #0f172a);
+    // Also check alt text for destination name
+    if (!destinationId) {
+      const destName = altText.replace('Scenic view of ', '').replace(' - Allergy-friendly travel destination', '').toLowerCase();
+      Object.keys(specialDestinations).forEach(id => {
+        if (id.replace('-', ' ') === destName || id.replace('_', ' ') === destName) {
+          destinationId = id;
         }
-      `;
-      document.head.appendChild(placeholderStyle);
+      });
+    }
+    
+    // If destination is one of our special cases, use its hardcoded path
+    if (destinationId && specialDestinations[destinationId]) {
+      console.log(`HeroImage: Using special destination direct path: ${specialDestinations[destinationId]}`);
+      setCurrentImageUrl(specialDestinations[destinationId]);
+      return;
+    }
+    
+    // For Unsplash URLs, optimize them
+    if (imageUrl.includes('unsplash.com')) {
+      const isMobile = window.innerWidth < 768;
+      const width = isMobile ? 800 : 1200;
+      // Remove any existing query parameters and add our own
+      const baseUrl = imageUrl.split('?')[0];
+      const optimizedUrl = `${baseUrl}?auto=format&fit=crop&w=${width}&q=80`;
+      console.log(`HeroImage: Optimized Unsplash URL: ${optimizedUrl}`);
+      setCurrentImageUrl(optimizedUrl);
+      return;
+    }
+    
+    // For direct paths (uploaded files)
+    if (imageUrl.startsWith('/')) {
+      console.log(`HeroImage: Using direct uploaded file: ${imageUrl}`);
+      setCurrentImageUrl(imageUrl);
+      return;
+    }
+    
+    // For Unsplash photo IDs
+    if (imageUrl.startsWith('photo-')) {
+      const optimizedUrl = `https://images.unsplash.com/${imageUrl}?auto=format&fit=crop&w=1200&q=80`;
+      console.log(`HeroImage: Using Unsplash photo ID: ${optimizedUrl}`);
+      setCurrentImageUrl(optimizedUrl);
+      return;
+    }
+    
+    // Default case - just use the URL as is
+    console.log(`HeroImage: Using original URL: ${imageUrl}`);
+    setCurrentImageUrl(imageUrl);
+    
+  }, [imageUrl, altText]);
+  
+  // Prepare fallback images if needed
+  const getFallbackImages = () => {
+    // Extract destination name from alt text
+    const destinationName = altText.split(' - ')[0].replace('Scenic view of ', '').toLowerCase();
+    
+    // Map of reliable fallback images by destination name fragment
+    const fallbacks = [
+      // First try special destinations with direct paths
+      '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png', // Hotel Chains
+      '/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png', // Cyprus
+      "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80", // Crete
+      "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png", // Turkey
+      "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png", // Toronto
       
-      // Preload actual image with timeout for mobile connections
+      // General destination images as additional fallbacks
+      "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80", // London
+      "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80", // Paris
+      "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80", // Barcelona
+      
+      // Generic travel image as final fallback
+      "https://images.unsplash.com/photo-1505578183806-3d2c2001570e?auto=format&fit=crop&w=1200&q=80",
+      
+      // Last resort placeholder
+      `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destinationName || 'Travel Destination'}`
+    ];
+    
+    return fallbacks;
+  };
+  
+  // Handle loading and fallbacks
+  useEffect(() => {
+    if (!currentImageUrl) return;
+    
+    const fallbackImages = getFallbackImages();
+    let fallbackIndex = 0;
+    
+    // Function to try loading the current image
+    const tryLoadImage = (url: string) => {
+      console.log(`HeroImage: Trying to load: ${url}`);
       const img = new Image();
-      img.src = currentImageUrl;
+      img.src = url;
       
       // Set a timeout to catch hanging requests
       const timeout = setTimeout(() => {
-        console.log('Image load timeout - trying next alternative');
-        setImageFailed(true);
-        tryNextImage();
+        console.log('HeroImage: Image load timeout - trying next alternative');
+        tryNextFallback();
       }, 5000); // 5 second timeout for better mobile experience
       
       img.onload = () => {
         clearTimeout(timeout);
+        console.log(`HeroImage: Successfully loaded ${url}`);
         setImageLoaded(true);
-        document.head.removeChild(placeholderStyle);
+        setImageFailed(false);
       };
       
       img.onerror = () => {
         clearTimeout(timeout);
-        console.error(`Failed to load image: ${currentImageUrl}`);
-        setImageFailed(true);
-        tryNextImage();
+        console.error(`HeroImage: Failed to load image: ${url}`);
+        tryNextFallback();
       };
+      
+      // Function to try the next fallback image
+      function tryNextFallback() {
+        if (fallbackIndex < fallbackImages.length) {
+          const nextUrl = fallbackImages[fallbackIndex++];
+          console.log(`HeroImage: Trying fallback #${fallbackIndex}: ${nextUrl}`);
+          setCurrentImageUrl(nextUrl);
+          // The effect will run again with the new URL
+        } else {
+          console.log('HeroImage: All fallbacks failed');
+          setImageFailed(true);
+          setImageLoaded(true); // Show something at least
+        }
+      }
       
       return () => {
         clearTimeout(timeout);
-        if (document.head.contains(placeholderStyle)) {
-          document.head.removeChild(placeholderStyle);
-        }
       };
-    }
+    };
+    
+    return tryLoadImage(currentImageUrl);
   }, [currentImageUrl]);
 
   return (
     <div className="absolute inset-0">
-      {/* Destination-colored placeholder while image loads */}
-      {!imageLoaded && !imageFailed && (
+      {/* Colored placeholder while image loads */}
+      {!imageLoaded && (
         <div 
-          className={`absolute inset-0 image-placeholder-${imageUrl.replace(/[^a-zA-Z0-9]/g, '')}`} 
+          className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-800 animate-pulse flex items-center justify-center"
           aria-hidden="true"
-        ></div>
+        >
+          <span className="text-white font-semibold text-lg px-4 text-center">
+            {altText.split(' - ')[0]}
+          </span>
+        </div>
       )}
       
       {/* Main image */}
-      {!imageFailed && (
+      {currentImageUrl && (
         <img 
           src={currentImageUrl}
           alt={altText}
           className={`w-full h-full object-cover transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          loading="eager" // Change to eager for hero images
+          loading="eager" // Important for hero images
           width="1200"
           height="600"
           onLoad={() => {
-            console.log(`Successfully loaded image: ${currentImageUrl}`);
+            console.log(`HeroImage: Successfully loaded image: ${currentImageUrl}`);
             setImageLoaded(true);
+            setImageFailed(false);
           }}
-          onError={() => {
-            console.error(`Failed to load image: ${currentImageUrl}`);
-            setImageFailed(true);
-            tryNextImage();
+          onError={(e) => {
+            console.error(`HeroImage: Failed to load image: ${currentImageUrl}`);
+            // The useEffect will handle fallbacks, so we don't need to do anything here
           }}
         />
       )}
       
-      {/* Fallback colored placeholder when all image attempts fail */}
-      {(imageFailed && alternateImageUrls.length === 0) && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-600 to-blue-900 flex items-center justify-center">
-          <div className="text-white text-xl font-bold text-center px-4">
+      {/* Fallback when all images fail */}
+      {imageFailed && (
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-500 to-blue-900 flex items-center justify-center">
+          <div className="text-white text-xl font-bold text-center px-6">
             {altText.split(' - ')[0]}
           </div>
         </div>
       )}
       
-      {/* Subtle overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-sky-500/10 via-transparent to-transparent pointer-events-none"></div>
+      {/* Subtle overlay gradient for text visibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40 pointer-events-none"></div>
     </div>
   );
 };

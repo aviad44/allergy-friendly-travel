@@ -28,31 +28,25 @@ export const DestinationCard = ({
   // Process image URL based on the type of image reference
   useEffect(() => {
     const processImageUrl = () => {
-      console.log(`Processing image for ${name} (${id}): ${image}`);
-      
-      // Hardcoded direct image paths for all problematic destinations
+      // Define direct hardcoded paths for ALL problematic destinations
       const directImageMap: Record<string, string> = {
         'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
         'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
         'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
-        'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
         'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
-        'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png"
+        'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
+        'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
+        'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80"
       };
       
-      // Always prioritize our hardcoded cases first
+      // Always check if the ID directly matches our hardcoded map first
       if (id in directImageMap) {
-        console.log(`Using direct hardcoded image for ${id}: ${directImageMap[id]}`);
+        console.log(`Using direct hardcoded image for ${id} in DestinationCard: ${directImageMap[id]}`);
         return directImageMap[id];
       }
       
-      // For direct uploaded files (absolute paths)
-      if (image && image.startsWith('/')) {
-        return image;
-      }
-      
-      // For full URLs
-      if (image && image.startsWith('http')) {
+      // If we have a direct URL from props, use it
+      if (image && (image.startsWith('/') || image.startsWith('http'))) {
         return image;
       }
       
@@ -63,66 +57,76 @@ export const DestinationCard = ({
         return `https://images.unsplash.com/${image}?auto=format&fit=crop&w=${width}&q=80`;
       }
       
-      // Default fallback - try the processed constants first
+      // Final fallback - use placeholder with name
       return `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
     };
     
     const url = processImageUrl();
-    console.log(`Final image URL for ${name}: ${url}`);
+    console.log(`DestinationCard: Final image URL for ${name} (${id}): ${url}`);
     setImgSrc(url);
-    setImageLoaded(false);
-    setImageError(false);
   }, [image, id, name]);
 
   return (
     <Link to={path} className="group">
       <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
         <div className="relative h-40 overflow-hidden bg-blue-100">
+          {/* Loading state */}
           {!imageLoaded && (
             <div className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-700 animate-pulse flex items-center justify-center">
               <span className="text-white font-semibold">{name}</span>
             </div>
           )}
           
+          {/* Main image */}
           <img
             src={imgSrc}
-            alt={name}
+            alt={`${name}, ${country} - Allergy-friendly destination`}
             className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => {
-              console.log(`Successfully loaded image for ${name}: ${imgSrc}`);
+              console.log(`DestinationCard: Successfully loaded image for ${name}: ${imgSrc}`);
               setImageLoaded(true);
+              setImageError(false);
             }}
             onError={(e) => {
-              console.error(`Failed to load image for ${name}:`, imgSrc);
+              console.error(`DestinationCard: Failed to load image for ${name}: ${imgSrc}`);
               setImageError(true);
               
-              // Dedicated fallback handling using hardcoded values for problematic destinations
+              // Dedicated fallback handling using hardcoded values for known problematic destinations
               const errorFallbacks: Record<string, string> = {
                 'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
                 'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
                 'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png", 
                 'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
                 'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
-                'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png"
+                'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
+                'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80"
               };
               
+              let fallbackSrc;
               if (id in errorFallbacks) {
-                console.log(`Using fallback for ${id}: ${errorFallbacks[id]}`);
-                (e.target as HTMLImageElement).src = errorFallbacks[id];
+                console.log(`DestinationCard: Using fallback for ${id}: ${errorFallbacks[id]}`);
+                fallbackSrc = errorFallbacks[id];
               } else {
-                (e.target as HTMLImageElement).src = `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
+                fallbackSrc = `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
               }
+              
+              // Apply the fallback directly
+              (e.target as HTMLImageElement).src = fallbackSrc;
               
               // Give the new image a chance to load
               setTimeout(() => {
                 setImageLoaded(true);
               }, 100);
             }}
-            loading="eager"
+            loading="eager" // Use eager for important above-the-fold images
             width="400"
             height="225"
           />
+          
+          {/* Gradient overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
+          
+          {/* Destination title overlay */}
           <div className="absolute bottom-3 left-3 right-3">
             <h3 className="text-white font-bold text-xl">{name}</h3>
             <p className="text-gray-200 text-sm">{country}</p>

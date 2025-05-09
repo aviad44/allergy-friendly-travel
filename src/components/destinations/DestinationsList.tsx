@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { DestinationCard } from './DestinationCard';
 import { DESTINATION_IMAGES } from '@/constants/destinations';

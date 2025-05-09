@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield } from "lucide-react";
-import { DESTINATION_IMAGES } from "@/constants/destinations";
 import { useState } from "react";
 
 const FEATURED_DESTINATIONS = [
@@ -11,73 +10,81 @@ const FEATURED_DESTINATIONS = [
     id: 1,
     name: "Paris",
     country: "France",
-    image: DESTINATION_IMAGES.paris,
+    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
     description: "Discover allergy-friendly luxury in the City of Light",
     commonAllergies: ["Gluten", "Dairy", "Nuts"],
-    href: "/destinations/paris"
+    href: "/destinations/paris",
+    destId: "paris"
   },
   {
     id: 2,
     name: "London",
     country: "United Kingdom",
-    image: DESTINATION_IMAGES.london,
+    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80",
     description: "Experience safe dining in Britain's capital",
     commonAllergies: ["Dairy", "Seafood"],
-    href: "/destinations/london"
+    href: "/destinations/london",
+    destId: "london"
   },
   {
     id: 3,
     name: "New York",
     country: "United States",
-    image: DESTINATION_IMAGES["new-york"],
+    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80",
     description: "Explore allergy-friendly dining in the Big Apple",
     commonAllergies: ["Gluten", "Nuts"],
-    href: "/destinations/newyork"
+    href: "/destinations/new-york",
+    destId: "new-york"
   },
   {
     id: 4,
     name: "Portugal",
     country: "Portugal",
-    image: DESTINATION_IMAGES.portugal,
+    image: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80",
     description: "Family and couple-friendly allergy-aware destinations",
     commonAllergies: ["Gluten", "Dairy"],
-    href: "/destinations/portugal"
+    href: "/destinations/portugal",
+    destId: "portugal"
   },
   {
     id: 5,
     name: "Cyprus",
     country: "Cyprus",
-    image: DESTINATION_IMAGES.cyprus,
+    image: "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
     description: "Mediterranean cuisine adapted for your needs",
     commonAllergies: ["Gluten", "Nuts"],
-    href: "/destinations/cyprus"
+    href: "/destinations/cyprus",
+    destId: "cyprus"
   },
   {
     id: 6,
     name: "Barcelona",
     country: "Spain",
-    image: DESTINATION_IMAGES.barcelona,
+    image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
     description: "Allergy-friendly tapas and Mediterranean delights",
     commonAllergies: ["Gluten", "Shellfish"],
-    href: "/destinations/barcelona"
+    href: "/destinations/barcelona",
+    destId: "barcelona"
   },
   {
     id: 7,
     name: "Crete",
     country: "Greece",
-    image: DESTINATION_IMAGES.crete,
+    image: "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
     description: "Traditional Greek cuisine with allergy awareness",
     commonAllergies: ["Dairy", "Nuts"],
-    href: "/destinations/crete"
+    href: "/destinations/crete",
+    destId: "crete"
   },
   {
     id: 8,
     name: "Abu Dhabi",
     country: "United Arab Emirates",
-    image: DESTINATION_IMAGES["abu-dhabi"],
+    image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=800&q=80",
     description: "Luxurious stays with world-class allergy care",
     commonAllergies: ["Gluten", "Dairy"],
-    href: "/destinations/abu-dhabi"
+    href: "/destinations/abu-dhabi",
+    destId: "abu-dhabi"
   }
 ];
 
@@ -85,39 +92,37 @@ export const FeaturedDestinations = () => {
   // Track image loading status for each destination
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
   
-  // Process image URL for optimal loading on mobile
-  const getOptimizedImageUrl = (imageSrc: string) => {
-    if (imageSrc.startsWith('photo-')) {
-      const isMobile = window.innerWidth < 768;
-      const width = isMobile ? 600 : 800;
-      const height = isMobile ? 375 : 500;
-      return `https://images.unsplash.com/${imageSrc}?auto=format&fit=crop&w=${width}&h=${height}&q=80&sat=1.2&con=1.1&bright=1.1`;
-    }
-    return imageSrc;
-  };
-  
   // Handle image load success
   const handleImageLoaded = (destId: number) => {
     setLoadedImages(prev => ({...prev, [destId]: true}));
   };
   
-  // Handle image load failure
+  // Handle image load failure - specific fallbacks for each destination
   const handleImageError = (destId: number, event: React.SyntheticEvent<HTMLImageElement>) => {
-    console.error(`Failed to load destination image for ID: ${destId}`);
+    console.error(`FeaturedDestinations: Failed to load destination image for ID: ${destId}`);
+    
+    // Get the destination object
+    const dest = FEATURED_DESTINATIONS.find(d => d.id === destId);
+    if (!dest) return;
     
     // Apply fallback images based on destination
     const fallbacks: Record<string, string> = {
-      'cyprus': 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=800&h=500&q=80',
-      'crete': 'https://images.unsplash.com/photo-1533760881669-80db4d7b4c15?auto=format&fit=crop&w=800&h=500&q=80',
-      'barcelona': 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=800&h=500&q=80',
-      'default': 'https://images.unsplash.com/photo-1505578183806-3d2c2001570e?auto=format&fit=crop&w=800&h=500&q=80'
+      'cyprus': '/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png',
+      'crete': 'https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&h=500&q=80',
+      'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&h=500&q=80',
+      'default': 'https://placehold.co/800x500/1e3a8a/ffffff?text=' + (dest ? dest.name : 'Destination')
     };
     
-    const dest = FEATURED_DESTINATIONS.find(d => d.id === destId);
-    const fallbackUrl = dest ? fallbacks[dest.name.toLowerCase()] || fallbacks.default : fallbacks.default;
+    // Use destination-specific fallback or default
+    const fallbackUrl = dest.destId in fallbacks ? fallbacks[dest.destId] : fallbacks.default;
     
+    console.log(`FeaturedDestinations: Using fallback for ${dest.name}: ${fallbackUrl}`);
     (event.target as HTMLImageElement).src = fallbackUrl;
-    handleImageLoaded(destId);
+    
+    // Mark as loaded after a brief delay to allow fallback to load
+    setTimeout(() => {
+      handleImageLoaded(destId);
+    }, 100);
   };
 
   return (
@@ -133,9 +138,7 @@ export const FeaturedDestinations = () => {
                 )}
                 
                 <img
-                  src={getOptimizedImageUrl(destination.image.startsWith('photo-') 
-                    ? destination.image 
-                    : destination.image)}
+                  src={destination.image}
                   alt={destination.name === "Cyprus" 
                     ? "Beautiful beach in Cyprus - Best allergy-friendly destination for family vacations"
                     : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`
@@ -143,7 +146,7 @@ export const FeaturedDestinations = () => {
                   className={`object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105 ${loadedImages[destination.id] ? 'opacity-100' : 'opacity-0'}`}
                   onLoad={() => handleImageLoaded(destination.id)}
                   onError={(e) => handleImageError(destination.id, e)}
-                  loading="lazy"
+                  loading="eager" // Use eager loading for featured destinations
                   width="600" 
                   height="375"
                 />
