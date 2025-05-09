@@ -27,18 +27,32 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {randomDestinations.map(destination => {
-          // Get image from DESTINATION_IMAGES or use default
-          const destinationKey = destination.id as keyof typeof DESTINATION_IMAGES;
-          const imageSource = DESTINATION_IMAGES[destinationKey] || '';
-          
-          // Process image URL based on format
+          // Get the proper image source with special case handling
           let imageUrl;
-          if (imageSource.startsWith('photo-')) {
-            imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=600&h=400&q=80`;
-          } else if (imageSource.startsWith('/lovable-uploads/')) {
-            imageUrl = imageSource;
+          
+          // Special handling for problematic destinations
+          if (destination.id === 'hotel-chains') {
+            imageUrl = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
+          } else if (destination.id === 'cyprus') {
+            imageUrl = "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png";
+          } else if (destination.id === 'crete') {
+            imageUrl = "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=600&h=400&q=80";
+          } else if (destination.id === 'turkey') {
+            imageUrl = "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png";
+          } else if (destination.id === 'toronto') {
+            imageUrl = "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png";
           } else {
-            imageUrl = imageSource;
+            // Standard processing for other destinations
+            const destinationKey = destination.id as keyof typeof DESTINATION_IMAGES;
+            const imageSource = DESTINATION_IMAGES[destinationKey] || '';
+            
+            if (imageSource.startsWith('photo-')) {
+              imageUrl = `https://images.unsplash.com/${imageSource}?auto=format&fit=crop&w=600&h=400&q=80`;
+            } else if (imageSource.startsWith('/lovable-uploads/') || imageSource.startsWith('http')) {
+              imageUrl = imageSource;
+            } else {
+              imageUrl = `https://placehold.co/600x400/1e3a8a/ffffff?text=${destination.name}`;
+            }
           }
 
           return (

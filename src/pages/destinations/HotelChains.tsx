@@ -5,6 +5,7 @@ import { Rocket, ExternalLink, Hotel, Star, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useEffect, useState } from "react";
 
 export default function HotelChains() {
   // SEO metadata
@@ -13,9 +14,24 @@ export default function HotelChains() {
   const pageKeywords = "Allergy Friendly Hotels, Gluten Free Hotels, Celiac Safe Travel, Food Allergies, Hotel Chains with Allergy Policies";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
   const imageUrl = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   
   // Current date for schema metadata
   const currentDate = new Date().toISOString().split('T')[0];
+
+  // Preload hero image
+  useEffect(() => {
+    const img = new Image();
+    img.src = imageUrl;
+    img.onload = () => {
+      console.log("Hotel chains hero image preloaded successfully");
+      setHeroImageLoaded(true);
+    };
+    img.onerror = (e) => {
+      console.error("Failed to load hotel chains hero image:", e);
+      // We don't set loaded to true here so the fallback can be displayed
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">

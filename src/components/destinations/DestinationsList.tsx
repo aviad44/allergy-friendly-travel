@@ -9,18 +9,18 @@ export const DestinationsList = () => {
   useEffect(() => {
     const preloadImages = () => {
       // Define critical destinations that need special attention
-      const criticalDestinations = ['cyprus', 'crete', 'hotel-chains', 'turkey', 'toronto'];
+      const criticalDestinations = ['cyprus', 'crete', 'hotel-chains', 'hotel_chains', 'turkey', 'toronto'];
       
       // Special handling for problematic destinations first
       criticalDestinations.forEach(destId => {
-        const destination = destinations.find(d => d.id === destId);
+        const destination = destinations.find(d => d.id === destId || (destId === 'hotel_chains' && d.id === 'hotel-chains'));
         if (!destination) return;
         
         const imgKey = destination.id as keyof typeof DESTINATION_IMAGES;
         let imgSrc = '';
         
         // Use hardcoded paths for critical destinations
-        if (destId === 'hotel-chains') {
+        if (destId === 'hotel-chains' || destId === 'hotel_chains') {
           imgSrc = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
         } else if (destId === 'cyprus') {
           imgSrc = "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png";
@@ -82,7 +82,7 @@ export const DestinationsList = () => {
         {destinations.map((destination) => {
           let imageValue = '';
           
-          // Special handling for problematic destinations
+          // Special handling for problematic destinations with hardcoded values
           if (destination.id === 'hotel-chains') {
             imageValue = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
           } else if (destination.id === 'cyprus') {
