@@ -8,7 +8,7 @@ const Cyprus = () => {
   const pageDescription = "Discover the best allergy-friendly hotels in Cyprus. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const pageKeywords = "allergy-friendly cyprus, gluten-free hotels cyprus, food allergies cyprus, cyprus hotels dietary restrictions";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/cyprus";
-  const imageUrl = "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80";
+  const imageUrl = "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png";
 
   return (
     <>

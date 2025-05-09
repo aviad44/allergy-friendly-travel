@@ -24,91 +24,46 @@ export const DestinationCard = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [imgSrc, setImgSrc] = useState('');
-  const [retryCount, setRetryCount] = useState(0);
   
-  // Process image URL for optimal loading
-  const processImageUrl = (imgSrc: string) => {
-    if (!imgSrc) return '';
-    
-    // If it's already a full URL or local path
-    if (imgSrc.startsWith('http') || imgSrc.startsWith('/')) {
-      return imgSrc;
-    }
-    
-    // For Unsplash photo IDs
-    if (imgSrc.startsWith('photo-')) {
-      const isMobile = window.innerWidth < 768;
-      const width = isMobile ? 400 : 800;
-      return `https://images.unsplash.com/${imgSrc}?auto=format&fit=crop&w=${width}&q=80`;
-    }
-    
-    // Default case
-    return imgSrc;
-  };
-  
-  // Get reliable fallback image for each destination
-  const getFallbackImage = () => {
-    const fallbacks: Record<string, string> = {
-      'paris': "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
-      'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80",
-      'cyprus': "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=800&q=80",
-      'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
-      'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
-      'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80",
-      'thailand': "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
-      'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
-      'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-      'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80",
-      'swiss-alps': "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?auto=format&fit=crop&w=800&q=80",
-      'koh-samui': "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
-      'cruise-lines': "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=800&q=80",
-      'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-      'abu-dhabi': "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=800&q=80",
-      'portugal': "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80",
-      'default': `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`
+  // Process image URL based on the type of image reference
+  useEffect(() => {
+    const processImageUrl = () => {
+      // For direct uploaded files (absolute paths)
+      if (image.startsWith('/')) {
+        return image;
+      }
+      
+      // For full URLs
+      if (image.startsWith('http')) {
+        return image;
+      }
+      
+      // For Unsplash photo IDs
+      if (image.startsWith('photo-')) {
+        const isMobile = window.innerWidth < 768;
+        const width = isMobile ? 400 : 800;
+        return `https://images.unsplash.com/${image}?auto=format&fit=crop&w=${width}&q=80`;
+      }
+      
+      // Fallback for specific destinations
+      const fallbacks: Record<string, string> = {
+        'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png", 
+        'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
+        'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png"
+      };
+      
+      if (id in fallbacks) {
+        return fallbacks[id];
+      }
+      
+      // Default fallback
+      return `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
     };
     
-    return fallbacks[id.toLowerCase()] || fallbacks.default;
-  };
-  
-  useEffect(() => {
-    if (image) {
-      setImgSrc(processImageUrl(image));
-    } else {
-      setImgSrc(getFallbackImage());
-    }
-    
-    // Reset loaded state when image changes
+    setImgSrc(processImageUrl());
     setImageLoaded(false);
     setImageError(false);
-    
-    // Preload image
-    const preloadImage = new Image();
-    preloadImage.src = image ? processImageUrl(image) : getFallbackImage();
-    
-    preloadImage.onload = () => {
-      setImageLoaded(true);
-    };
-    
-    preloadImage.onerror = () => {
-      console.error(`Failed to preload image for ${name}:`, image);
-      
-      if (retryCount < 1) {
-        // Try one more time
-        setRetryCount(prev => prev + 1);
-      } else {
-        // Use fallback after retry
-        setImgSrc(getFallbackImage());
-        setImageError(true);
-      }
-    };
-    
-    // Cleanup
-    return () => {
-      preloadImage.onload = null;
-      preloadImage.onerror = null;
-    };
-  }, [image, id, name, retryCount]);
+  }, [image, id, name]);
 
   return (
     <Link to={path} className="group">
@@ -121,16 +76,26 @@ export const DestinationCard = ({
           )}
           
           <img
-            src={!imageError ? imgSrc : getFallbackImage()}
+            src={imgSrc}
             alt={name}
             className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImageLoaded(true)}
             onError={(e) => {
               console.error(`Failed to load image for ${name}:`, imgSrc);
               setImageError(true);
-              setImageLoaded(true);
               
-              (e.target as HTMLImageElement).src = getFallbackImage();
+              // Special fallback handling for problematic destinations
+              if (id === 'cyprus') {
+                (e.target as HTMLImageElement).src = "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png";
+              } else if (id === 'crete') {
+                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80";
+              } else if (id === 'hotel-chains') {
+                (e.target as HTMLImageElement).src = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
+              } else {
+                (e.target as HTMLImageElement).src = `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
+              }
+              
+              setImageLoaded(true);
             }}
             loading="eager"
             width="400"

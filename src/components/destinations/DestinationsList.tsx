@@ -14,16 +14,20 @@ export const DestinationsList = () => {
         const imgSrc = DESTINATION_IMAGES[imgKey];
         
         if (imgSrc) {
+          const img = new Image();
+          
           // For Unsplash photo IDs
           if (typeof imgSrc === 'string' && imgSrc.startsWith('photo-')) {
-            const img = new Image();
             img.src = `https://images.unsplash.com/${imgSrc}?auto=format&fit=crop&w=800&q=80`;
           } 
-          // For direct URLs (like hotel-chains, turkey, toronto)
+          // For direct URLs (like Cyprus, hotel-chains, turkey, toronto)
           else if (typeof imgSrc === 'string' && (imgSrc.startsWith('/') || imgSrc.startsWith('http'))) {
-            const img = new Image();
             img.src = imgSrc;
           }
+          
+          // Log success or failure for debugging
+          img.onload = () => console.log(`Successfully preloaded image for ${destination.name}`);
+          img.onerror = () => console.error(`Failed to preload image for ${destination.name}: ${imgSrc}`);
         }
       });
     };

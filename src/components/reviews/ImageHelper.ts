@@ -20,12 +20,12 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     return "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
   }
   
-  if (destinationId === 'crete') {
-    return "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=2000&h=1000&q=80";
+  if (destinationId === 'cyprus') {
+    return "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png";
   }
   
-  if (destinationId === 'cyprus') {
-    return "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&h=1000&q=80";
+  if (destinationId === 'crete') {
+    return "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=2000&h=1000&q=80";
   }
   
   // For specific destinations, use curated images (high reliability)
@@ -33,7 +33,7 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=2000&h=1000&q=80",
     'paris': "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&h=1000&q=80",
     'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&h=1000&q=80",
-    'cyprus': "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2000&h=1000&q=80",
+    'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
     'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=2000&h=1000&q=80",
     'swiss-alps': "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?auto=format&fit=crop&w=2000&h=1000&q=80",
     'koh-samui': "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&h=1000&q=80",
@@ -78,12 +78,12 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     return '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png';
   }
   
-  if (destinationId === 'crete') {
-    return 'photo-1469796466635-455ede028aca';
+  if (destinationId === 'cyprus') {
+    return '/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png';
   }
   
-  if (destinationId === 'cyprus') {
-    return 'photo-1500375592092-40eb2168fd21';
+  if (destinationId === 'crete') {
+    return 'photo-1469796466635-455ede028aca';
   }
   
   if (destinationId === 'toronto') {
@@ -95,7 +95,7 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     'london': "photo-1513635269975-59663e0ac1ad",
     'paris': "photo-1502602898657-3e91760cbb34", 
     'barcelona': "photo-1583422409516-2895a77efded",
-    'cyprus': "photo-1500375592092-40eb2168fd21",
+    'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
     'new-york': "photo-1496442226666-8d4d0e62e6e9",
     'swiss-alps': "photo-1491555103944-7c647fd857e6",
     'koh-samui': "photo-1507525428034-b723cf961d3e",
@@ -105,8 +105,8 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     'portugal': "photo-1555881400-74d7acaacd8b",
     'abu-dhabi': "photo-1512632578888-169bbbc64f33",
     'crete': "photo-1469796466635-455ede028aca",
-    'hotel-chains': "1e92be73-4bcc-4e75-9bb4-b500ed1ecd63", // Using the uploaded image ID
-    'toronto': "e6eaaffe-010b-46ee-859c-aacff4659ad1",
+    'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
+    'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
     'ayia-napa': "photo-1518358246973-95637f473611",
   };
   
