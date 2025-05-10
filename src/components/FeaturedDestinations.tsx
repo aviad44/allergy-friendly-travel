@@ -51,7 +51,7 @@ const FEATURED_DESTINATIONS = [
     id: 5,
     name: "Cyprus",
     country: "Cyprus",
-    image: "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+    image: "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
     description: "Mediterranean cuisine adapted for your needs",
     commonAllergies: ["Gluten", "Nuts"],
     href: "/destinations/cyprus",
@@ -174,7 +174,7 @@ export const FeaturedDestinations = () => {
                   <img
                     src={imageToUse}
                     alt={destination.name === "Cyprus" 
-                      ? "Beautiful beach in Cyprus - Best allergy-friendly destination for family vacations"
+                      ? "Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination"
                       : destination.name === "Hotel Chains"
                         ? "Luxury hotel exterior with swimming pool - Top allergy-friendly hotel chains worldwide"
                         : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`

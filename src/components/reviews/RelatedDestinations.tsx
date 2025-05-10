@@ -25,7 +25,7 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
     // CRITICAL: Define direct hardcoded paths for problematic destinations - highest priority
     const criticalDestinations: Record<string, string> = {
       'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated to use new uploaded resort image
-      'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+      'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
       'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=600&h=400&q=80",
       'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
       'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
@@ -71,6 +71,9 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
           let altText = `${destination.name} - Allergy-friendly destination in ${destination.country}`;
           if (destination.id === 'hotel-chains') {
             altText = `Luxury resort with swimming pool - Top allergy-friendly hotel chains worldwide`;
+          }
+          if (destination.id === 'cyprus') {
+            altText = `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`;
           }
           
           return (

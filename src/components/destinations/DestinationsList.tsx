@@ -13,8 +13,8 @@ export const DestinationsList = () => {
       
       // Special handling for critical destinations with direct hardcoded paths
       const criticalImageMap: Record<string, string> = {
-        'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated hotel chains image
-        'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+        'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
+        'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
         'crete': DESTINATION_IMAGES['crete'], 
         'turkey': DESTINATION_IMAGES['turkey'],
         'toronto': DESTINATION_IMAGES['toronto'], 
@@ -68,8 +68,8 @@ export const DestinationsList = () => {
         {destinations.map((destination) => {
           // CRITICAL: Hardcoded paths for specific destinations
           const criticalImageMap: Record<string, string> = {
-            'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated hotel chains image
-            'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+            'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
+            'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
             'crete': DESTINATION_IMAGES['crete'], 
             'turkey': DESTINATION_IMAGES['turkey'],
             'toronto': DESTINATION_IMAGES['toronto'], 

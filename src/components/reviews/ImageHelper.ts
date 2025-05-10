@@ -9,7 +9,7 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
   // CRITICAL: Define hardcoded paths for essential destinations - highest priority
   const criticalDestinations: Record<string, string> = {
     'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
-    'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+    'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png",
     'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
@@ -48,7 +48,7 @@ export const getDestinationAltText = (destinationName: string): string => {
   }
   
   if (destinationName.toLowerCase().includes('cyprus')) {
-    return `Beautiful beach in Cyprus - Allergy-friendly Mediterranean destination`;
+    return `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`;
   }
   
   return `Scenic view of ${destinationName} - Allergy-friendly travel destination`;
@@ -61,7 +61,7 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
   // CRITICAL: Define hardcoded paths for essential destinations - highest priority  
   const criticalDestinations: Record<string, string> = {
     'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
-    'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+    'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png",
     'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",

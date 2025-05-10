@@ -9,9 +9,8 @@ const Cyprus = () => {
   const pageKeywords = "allergy-friendly cyprus, gluten-free hotels cyprus, food allergies cyprus, cyprus hotels dietary restrictions";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/cyprus";
   
-  // CRITICAL: Using a reliable Ayia Napa image for Cyprus
-  // Updated to use Unsplash image that's guaranteed to load
-  const imageUrl = "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80";
+  // CRITICAL: Using the new uploaded Cyprus beach resort image
+  const imageUrl = "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png";
   
   console.log("Cyprus page rendering with image:", imageUrl);
 
@@ -51,7 +50,7 @@ const Cyprus = () => {
             "about": {
               "@type": "Country",
               "name": "Cyprus",
-              "description": "Island country in the Mediterranean Sea with beautiful beaches"
+              "description": "Island country in the Mediterranean Sea with beautiful beaches and resorts"
             },
             "audience": "Travelers with food allergies or dietary restrictions",
             "image": imageUrl

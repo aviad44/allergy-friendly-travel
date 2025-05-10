@@ -2,14 +2,14 @@
 export const DESTINATION_IMAGES: Record<string, string> = {
   // Direct hardcoded paths for critical destinations - these are the PRIMARY sources
   'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated to use new uploaded resort image
-  'cyprus': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80", // Ayia Napa Unsplash image
+  'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
   'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
   'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
   'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
   'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
   
   // Adding Ayia Napa as an alternative image for Cyprus
-  'ayia-napa': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80",
+  'ayia-napa': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Using the same new Cyprus image for Ayia Napa
   
   // Standard Unsplash photo IDs with complete URLs for other destinations
   'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80",

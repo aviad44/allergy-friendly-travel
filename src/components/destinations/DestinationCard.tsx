@@ -33,7 +33,7 @@ export const DestinationCard = ({
       // This is our highest priority source of truth for these specific destinations
       const criticalDestinations: Record<string, string> = {
         'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
-        'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+        'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
         'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
         'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
         'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
@@ -87,7 +87,9 @@ export const DestinationCard = ({
           {/* Main image */}
           <img
             src={imgSrc}
-            alt={`${name}, ${country} - Allergy-friendly destination`}
+            alt={id === 'cyprus' 
+              ? `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`
+              : `${name}, ${country} - Allergy-friendly destination`}
             className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => {
               console.log(`DestinationCard: Successfully loaded image for ${name}: ${imgSrc}`);
@@ -101,7 +103,7 @@ export const DestinationCard = ({
               // Critical fallbacks using hardcoded values for known problematic destinations
               const errorFallbacks: Record<string, string> = {
                 'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
-                'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png", 
+                'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", 
                 'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
                 'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
                 'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
