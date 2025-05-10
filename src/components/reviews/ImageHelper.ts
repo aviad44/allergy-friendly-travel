@@ -10,7 +10,7 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
   const criticalDestinations: Record<string, string> = {
     'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
     'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png", 
-    'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+    'cyprus': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80", // Updated to Ayia Napa image
     'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
@@ -38,8 +38,9 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
   }
   
   // Return a colored placeholder with destination name
-  console.log(`ImageHelper: Using placeholder for ${destinationId}`);
-  return `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destinationId.replace(/-/g, ' ')}`;
+  const placeholderUrl = `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destinationId.replace(/-/g, ' ')}`;
+  console.log(`ImageHelper: Using placeholder for ${destinationId}: ${placeholderUrl}`);
+  return placeholderUrl;
 };
 
 // Define descriptive alt text for images
@@ -55,7 +56,7 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
   const criticalDestinations: Record<string, string> = {
     'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
     'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-    'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+    'cyprus': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80", // Updated to Ayia Napa image
     'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
@@ -80,6 +81,8 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     return DESTINATION_IMAGES[destinationKey];
   }
   
-  // Return the destination ID as is (will be processed later in the component)
-  return destinationId;
+  // Create a placeholder using the destination ID
+  const placeholderUrl = `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destinationId.replace(/-/g, ' ')}`;
+  console.log(`ImageHelper: Using generated placeholder for ${destinationId}: ${placeholderUrl}`);
+  return placeholderUrl;
 };

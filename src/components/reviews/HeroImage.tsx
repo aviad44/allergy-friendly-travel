@@ -13,6 +13,9 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
   // Use the extracted hook for image loading logic
   const { imageLoaded, imageFailed, currentImageUrl, setImageLoaded, setImageFailed } = 
     useImageLoader({ imageUrl, altText, fallbackImage });
+    
+  // Add more debug logging
+  console.log(`HeroImage: Rendering with URL: ${imageUrl}, current: ${currentImageUrl}, loaded: ${imageLoaded}, failed: ${imageFailed}`);
 
   return (
     <div className="absolute inset-0">
@@ -35,9 +38,14 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
             setImageLoaded(true);
             setImageFailed(false);
           }}
-          onError={() => {
+          onError={(e) => {
             console.error(`HeroImage: Failed to load image: ${currentImageUrl}`);
-            // The useEffect will handle fallbacks, so we don't need to do anything here
+            setImageFailed(true);
+            
+            // Try using a placeholder directly
+            const placeholderUrl = `https://placehold.co/1200x600/1e3a8a/ffffff?text=${altText.split(' - ')[0]}`;
+            console.log(`HeroImage: Attempting emergency fallback: ${placeholderUrl}`);
+            (e.target as HTMLImageElement).src = placeholderUrl;
           }}
         />
       )}

@@ -14,13 +14,15 @@ export default function HotelChains() {
   const pageKeywords = "Allergy Friendly Hotels, Gluten Free Hotels, Celiac Safe Travel, Food Allergies, Hotel Chains with Allergy Policies";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
   
-  // CRITICAL: Direct hardcoded path for hotel chains image - HIGHEST PRIORITY
-  const imageUrl = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
+  // CRITICAL: Using a reliable hotel chains image that's guaranteed to load
+  const imageUrl = "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80";
   
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   
   // Current date for schema metadata
   const currentDate = new Date().toISOString().split('T')[0];
+  
+  console.log("HotelChains page rendering with image:", imageUrl);
 
   // Preload hero image
   useEffect(() => {
@@ -32,7 +34,12 @@ export default function HotelChains() {
     };
     img.onerror = (e) => {
       console.error("Failed to load hotel chains hero image:", e);
-      // We don't set loaded to true here so the fallback can be displayed
+      // Fall back to another reliable Unsplash image
+      const fallbackUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1170&q=80";
+      console.log("Trying fallback hotel image:", fallbackUrl);
+      const fallbackImg = new Image();
+      fallbackImg.src = fallbackUrl;
+      fallbackImg.onload = () => setHeroImageLoaded(true);
     };
   }, []);
 
@@ -92,7 +99,8 @@ export default function HotelChains() {
           className="w-full h-full object-cover object-center"
           onError={(e) => {
             console.error("Failed to load hotel chains hero image");
-            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80";
+            // Fall back to another reliable Unsplash image
+            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1170&q=80";
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>

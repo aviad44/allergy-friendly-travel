@@ -9,9 +9,11 @@ const Cyprus = () => {
   const pageKeywords = "allergy-friendly cyprus, gluten-free hotels cyprus, food allergies cyprus, cyprus hotels dietary restrictions";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/cyprus";
   
-  // CRITICAL: Using a hardcoded, direct path for the Cyprus image
-  // This is explicitly set here rather than relying on any helper functions
-  const imageUrl = "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png";
+  // CRITICAL: Using a reliable Ayia Napa image for Cyprus
+  // Updated to use Unsplash image that's guaranteed to load
+  const imageUrl = "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80";
+  
+  console.log("Cyprus page rendering with image:", imageUrl);
 
   return (
     <>

@@ -12,6 +12,7 @@ export const useImageLoader = ({ imageUrl, altText, fallbackImage = "/placeholde
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
+  const [fallbackAttempts, setFallbackAttempts] = useState(0); // Track fallback attempts
   
   // Process the image URL and find the best source
   useEffect(() => {
@@ -19,13 +20,14 @@ export const useImageLoader = ({ imageUrl, altText, fallbackImage = "/placeholde
     
     // Handle direct paths for critical destinations first - HIGHEST PRIORITY
     const criticalDestinations: Record<string, string> = {
-      'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-      'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-      'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+      'hotel-chains': "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", // Updated to reliable Unsplash
+      'hotel_chains': "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", // Updated to reliable Unsplash
+      'cyprus': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80", // Ayia Napa image
       'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
       'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
       'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-      'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80"
+      'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
+      'ayia-napa': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80"
     };
     
     // Extract destination ID from URL or alt text
@@ -33,18 +35,20 @@ export const useImageLoader = ({ imageUrl, altText, fallbackImage = "/placeholde
     
     // Check if URL contains a destination ID
     for (const id of Object.keys(criticalDestinations)) {
-      if (imageUrl.includes(id)) {
+      if (imageUrl.includes(id) || (altText && altText.toLowerCase().includes(id))) {
         destinationId = id;
+        console.log(`useImageLoader: Extracted destination ID from URL/alt text: ${destinationId}`);
         break;
       }
     }
     
     // Also check alt text for destination name
-    if (!destinationId) {
+    if (!destinationId && altText) {
       const destName = altText.replace('Scenic view of ', '').replace(' - Allergy-friendly travel destination', '').toLowerCase();
       Object.keys(criticalDestinations).forEach(id => {
         if (id.replace('-', ' ') === destName || id.replace('_', ' ') === destName) {
           destinationId = id;
+          console.log(`useImageLoader: Extracted destination ID from alt text name match: ${destinationId}`);
         }
       });
     }
@@ -105,17 +109,15 @@ export const useImageLoader = ({ imageUrl, altText, fallbackImage = "/placeholde
     
     // Map of reliable fallback images by destination name fragment
     const fallbacks = [
-      // First try special destinations with direct paths - HIGHEST PRIORITY
-      '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png', // Hotel Chains
-      '/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png', // Cyprus
+      // First try known reliable Unsplash images - HIGHEST PRIORITY
+      "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80", // Cyprus/Ayia Napa
+      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", // Hotel
       "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80", // Crete
-      "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png", // Turkey
-      "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png", // Toronto
+      "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80", // Barcelona
       
       // General destination images as additional fallbacks
       "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80", // London
       "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80", // Paris
-      "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80", // Barcelona
       
       // Generic travel image as final fallback
       "https://images.unsplash.com/photo-1505578183806-3d2c2001570e?auto=format&fit=crop&w=1200&q=80",
@@ -132,11 +134,11 @@ export const useImageLoader = ({ imageUrl, altText, fallbackImage = "/placeholde
     if (!currentImageUrl) return;
     
     const fallbackImages = getFallbackImages();
-    let fallbackIndex = 0;
+    let fallbackIndex = fallbackAttempts;
     
     // Function to try loading the current image
     const tryLoadImage = (url: string) => {
-      console.log(`useImageLoader: Trying to load: ${url}`);
+      console.log(`useImageLoader: Trying to load (attempt ${fallbackAttempts + 1}): ${url}`);
       const img = new Image();
       img.src = url;
       
@@ -162,14 +164,21 @@ export const useImageLoader = ({ imageUrl, altText, fallbackImage = "/placeholde
       // Function to try the next fallback image
       function tryNextFallback() {
         if (fallbackIndex < fallbackImages.length) {
-          const nextUrl = fallbackImages[fallbackIndex++];
-          console.log(`useImageLoader: Trying fallback #${fallbackIndex}: ${nextUrl}`);
+          const nextUrl = fallbackImages[fallbackIndex];
+          console.log(`useImageLoader: Trying fallback #${fallbackIndex + 1}: ${nextUrl}`);
+          setFallbackAttempts(fallbackIndex + 1);
           setCurrentImageUrl(nextUrl);
           // The effect will run again with the new URL
         } else {
           console.log('useImageLoader: All fallbacks failed');
           setImageFailed(true);
           setImageLoaded(true); // Show something at least
+          
+          // As a last resort, use a placeholder with the destination name
+          const destinationName = altText.split(' - ')[0].replace('Scenic view of ', '');
+          const lastResortUrl = `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destinationName}`;
+          console.log(`useImageLoader: Using last resort placeholder: ${lastResortUrl}`);
+          setCurrentImageUrl(lastResortUrl);
         }
       }
       
@@ -179,7 +188,13 @@ export const useImageLoader = ({ imageUrl, altText, fallbackImage = "/placeholde
     };
     
     return tryLoadImage(currentImageUrl);
-  }, [currentImageUrl]);
+  }, [currentImageUrl, fallbackAttempts, altText]);
 
-  return { imageLoaded, imageFailed, currentImageUrl, setImageLoaded, setImageFailed };
+  return { 
+    imageLoaded, 
+    imageFailed, 
+    currentImageUrl, 
+    setImageLoaded, 
+    setImageFailed 
+  };
 };
