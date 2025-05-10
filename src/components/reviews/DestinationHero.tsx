@@ -1,9 +1,8 @@
+
 import { useState, useEffect } from "react";
 import { Destination } from "@/types/reviews";
 import { HeroImage } from "./HeroImage";
-import { HeroGradient } from "./HeroGradient";
 import { DestinationInfo } from "./DestinationInfo";
-import { getDestinationImageUrl, getDestinationAltText, getImageSource } from "./ImageHelper";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 interface DestinationHeroProps {
@@ -11,7 +10,7 @@ interface DestinationHeroProps {
 }
 
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
-  // CRITICAL: Handle special cases like Cyprus and Hotel Chains with direct paths
+  // Define critical destinations with direct paths for reliable image display
   const criticalDestinations: Record<string, string> = {
     'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
     'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
@@ -19,47 +18,57 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80"
+    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
+    'ayia-napa': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80"
   };
   
-  let imageSource = '';
+  // Always prioritize critical destinations - use DIRECT paths for these specific cases
   let imageUrl = '';
   
-  // First, check if it's a critical destination - HIGHEST PRIORITY
+  // Direct image assignment for critical destinations - highest priority
   if (destination.id in criticalDestinations) {
-    imageSource = criticalDestinations[destination.id];
     imageUrl = criticalDestinations[destination.id];
     console.log(`DestinationHero: Using critical destination path for ${destination.id}: ${imageUrl}`);
-  } else {
-    // Otherwise, use standard helpers
-    imageSource = getImageSource(destination.id, destination.image);
-    imageUrl = getDestinationImageUrl(destination.id, imageSource);
+  } 
+  // Check our central image constants - second priority
+  else if (destination.id in DESTINATION_IMAGES) {
+    const key = destination.id as keyof typeof DESTINATION_IMAGES;
+    imageUrl = DESTINATION_IMAGES[key];
+    console.log(`DestinationHero: Using DESTINATION_IMAGES for ${destination.id}: ${imageUrl}`);
+  } 
+  // Use destination's image if available - third priority
+  else if (destination.image && (destination.image.startsWith('http') || destination.image.startsWith('/'))) {
+    imageUrl = destination.image;
+    console.log(`DestinationHero: Using destination.image for ${destination.id}: ${imageUrl}`);
+  } 
+  // Final fallback - placeholder
+  else {
+    imageUrl = `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destination.name}`;
+    console.log(`DestinationHero: Using fallback for ${destination.id}: ${imageUrl}`);
   }
   
   // Define a descriptive alt text
-  const altText = getDestinationAltText(destination.name);
+  const altText = `Scenic view of ${destination.name} - Allergy-friendly travel destination`;
   
   // Preload the image
   useEffect(() => {
+    // Preload main image
     const img = new Image();
     img.src = imageUrl;
+    console.log(`DestinationHero: Preloading main image: ${imageUrl}`);
     
-    // Preload fallbacks too
+    // Also preload a fallback
     const fallbackUrl = criticalDestinations[destination.id] || 
-                        DESTINATION_IMAGES[destination.id as keyof typeof DESTINATION_IMAGES] || 
-                        `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destination.name}`;
+                        (destination.id in DESTINATION_IMAGES ? 
+                          DESTINATION_IMAGES[destination.id as keyof typeof DESTINATION_IMAGES] : 
+                          `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destination.name}`);
     
-    const fallbackImg = new Image();
-    fallbackImg.src = fallbackUrl;
-    
+    if (fallbackUrl !== imageUrl) {
+      const fallbackImg = new Image();
+      fallbackImg.src = fallbackUrl;
+      console.log(`DestinationHero: Preloading fallback image: ${fallbackUrl}`);
+    }
   }, [destination.id, imageUrl, destination.name]);
-  
-  // Log image info for debugging
-  useEffect(() => {
-    console.log("DestinationHero: Destination ID:", destination.id);
-    console.log("DestinationHero: Image source:", imageSource);
-    console.log("DestinationHero: Image URL used:", imageUrl);
-  }, [destination.id, imageSource, imageUrl]);
 
   return (
     <div 
@@ -72,9 +81,6 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
         altText={altText}
         fallbackImage="/placeholder.svg"
       />
-      
-      {/* Using a lighter gradient to allow more natural sky color */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/40"></div>
       
       <DestinationInfo 
         name={destination.name}

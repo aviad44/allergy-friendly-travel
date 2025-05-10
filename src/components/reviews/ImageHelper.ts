@@ -6,11 +6,6 @@ import { DESTINATION_IMAGES } from "@/constants/destinations";
 export const getDestinationImageUrl = (destinationId: string, providedSource?: string): string => {
   console.log("ImageHelper: Getting image source for destination:", destinationId);
   
-  // If a source is provided and it's a complete URL, use it
-  if (providedSource && (providedSource.startsWith('http') || providedSource.startsWith('/'))) {
-    return providedSource;
-  }
-  
   // Critical destinations with hardcoded paths - HIGHEST PRIORITY!
   const criticalDestinations: Record<string, string> = {
     'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
@@ -19,13 +14,20 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
     'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80"
+    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
+    'ayia-napa': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80"
   };
   
   // Always use critical destination paths when available - highest priority
   if (destinationId in criticalDestinations) {
     console.log(`ImageHelper: Using critical destination direct path: ${criticalDestinations[destinationId]}`);
     return criticalDestinations[destinationId];
+  }
+  
+  // If a source is provided and it's a complete URL, use it
+  if (providedSource && (providedSource.startsWith('http') || providedSource.startsWith('/'))) {
+    console.log(`ImageHelper: Using provided source: ${providedSource}`);
+    return providedSource;
   }
   
   // Look up in our central constants file
@@ -49,11 +51,6 @@ export const getDestinationAltText = (destinationName: string): string => {
 export const getImageSource = (destinationId: string, providedImage?: string): string => {
   console.log(`ImageHelper: Getting image source for ${destinationId} with provided: ${providedImage || 'none'}`);
   
-  // If we have a valid image provided, use it
-  if (providedImage && providedImage.trim() !== '') {
-    return providedImage;
-  }
-  
   // Critical destinations - HIGHEST PRIORITY
   const criticalDestinations: Record<string, string> = {
     'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
@@ -62,13 +59,19 @@ export const getImageSource = (destinationId: string, providedImage?: string): s
     'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80"
+    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
+    'ayia-napa': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80"
   };
   
   // Always use critical destination paths when available
   if (destinationId in criticalDestinations) {
     console.log(`ImageHelper: Using critical direct path for ${destinationId}: ${criticalDestinations[destinationId]}`);
     return criticalDestinations[destinationId];
+  }
+  
+  // If we have a valid image provided, use it
+  if (providedImage && providedImage.trim() !== '') {
+    return providedImage;
   }
   
   // Look up in our constants
