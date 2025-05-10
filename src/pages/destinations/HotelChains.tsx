@@ -13,7 +13,10 @@ export default function HotelChains() {
   const pageDescription = "Discover the top global hotel chains with allergy-friendly and celiac-safe food policies. Learn which hotels accommodate food allergies and offer certified allergy-safe services.";
   const pageKeywords = "Allergy Friendly Hotels, Gluten Free Hotels, Celiac Safe Travel, Food Allergies, Hotel Chains with Allergy Policies";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
+  
+  // CRITICAL: Direct hardcoded path for hotel chains image - HIGHEST PRIORITY
   const imageUrl = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
+  
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   
   // Current date for schema metadata

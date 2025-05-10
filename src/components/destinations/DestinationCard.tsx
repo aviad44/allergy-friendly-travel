@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
+import { DESTINATION_IMAGES } from '@/constants/destinations';
 
 interface DestinationCardProps {
   id: string;
@@ -28,8 +29,9 @@ export const DestinationCard = ({
   // Process image URL based on the type of image reference
   useEffect(() => {
     const processImageUrl = () => {
-      // Define direct hardcoded paths for ALL problematic destinations
-      const directImageMap: Record<string, string> = {
+      // CRITICAL: Define direct hardcoded paths for problematic destinations
+      // This is our highest priority source of truth for these specific destinations
+      const criticalDestinations: Record<string, string> = {
         'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
         'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
         'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
@@ -39,22 +41,28 @@ export const DestinationCard = ({
         'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80"
       };
       
-      // Always check if the ID directly matches our hardcoded map first
-      if (id in directImageMap) {
-        console.log(`Using direct hardcoded image for ${id} in DestinationCard: ${directImageMap[id]}`);
-        return directImageMap[id];
+      // ALWAYS check if the ID directly matches our critical destinations first
+      if (id in criticalDestinations) {
+        console.log(`DestinationCard: Using critical hardcoded image for ${id}: ${criticalDestinations[id]}`);
+        return criticalDestinations[id];
       }
       
-      // If we have a direct URL from props, use it
+      // If we have a direct URL from props, use it (second priority)
       if (image && (image.startsWith('/') || image.startsWith('http'))) {
         return image;
       }
       
-      // For Unsplash photo IDs
+      // For Unsplash photo IDs (third priority)
       if (image && image.startsWith('photo-')) {
         const isMobile = window.innerWidth < 768;
         const width = isMobile ? 400 : 800;
         return `https://images.unsplash.com/${image}?auto=format&fit=crop&w=${width}&q=80`;
+      }
+      
+      // Look up in our destination constants (fourth priority)
+      const destKey = id as keyof typeof DESTINATION_IMAGES;
+      if (DESTINATION_IMAGES[destKey]) {
+        return DESTINATION_IMAGES[destKey];
       }
       
       // Final fallback - use placeholder with name
@@ -91,7 +99,7 @@ export const DestinationCard = ({
               console.error(`DestinationCard: Failed to load image for ${name}: ${imgSrc}`);
               setImageError(true);
               
-              // Dedicated fallback handling using hardcoded values for known problematic destinations
+              // Critical fallbacks using hardcoded values for known problematic destinations
               const errorFallbacks: Record<string, string> = {
                 'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
                 'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",

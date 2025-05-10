@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield } from "lucide-react";
 import { useState } from "react";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 const FEATURED_DESTINATIONS = [
   {
@@ -105,16 +106,25 @@ export const FeaturedDestinations = () => {
     const dest = FEATURED_DESTINATIONS.find(d => d.id === destId);
     if (!dest) return;
     
-    // Apply fallback images based on destination
-    const fallbacks: Record<string, string> = {
+    // Apply critical fallback images based on destination
+    const criticalFallbacks: Record<string, string> = {
       'cyprus': '/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png',
-      'crete': 'https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&h=500&q=80',
-      'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&h=500&q=80',
-      'default': 'https://placehold.co/800x500/1e3a8a/ffffff?text=' + (dest ? dest.name : 'Destination')
+      'crete': 'https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80',
+      'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80',
+      'hotel-chains': '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png',
+      'hotel_chains': '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png',
     };
     
     // Use destination-specific fallback or default
-    const fallbackUrl = dest.destId in fallbacks ? fallbacks[dest.destId] : fallbacks.default;
+    let fallbackUrl;
+    if (dest.destId in criticalFallbacks) {
+      fallbackUrl = criticalFallbacks[dest.destId];
+    } else if (dest.destId in DESTINATION_IMAGES) {
+      const key = dest.destId as keyof typeof DESTINATION_IMAGES;
+      fallbackUrl = DESTINATION_IMAGES[key];
+    } else {
+      fallbackUrl = 'https://placehold.co/800x500/1e3a8a/ffffff?text=' + (dest ? dest.name : 'Destination');
+    }
     
     console.log(`FeaturedDestinations: Using fallback for ${dest.name}: ${fallbackUrl}`);
     (event.target as HTMLImageElement).src = fallbackUrl;

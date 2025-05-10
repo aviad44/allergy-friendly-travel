@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 interface HeroImageProps {
   imageUrl: string;
@@ -12,12 +13,12 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
   const [imageFailed, setImageFailed] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
   
-  // Enhanced debug logging
+  // Enhanced image handling - highest priority for critical destinations
   useEffect(() => {
     console.log(`HeroImage attempting to load: ${imageUrl}`);
     
-    // Handle direct paths for problematic destinations first
-    const specialDestinations: Record<string, string> = {
+    // Handle direct paths for critical destinations first - HIGHEST PRIORITY
+    const criticalDestinations: Record<string, string> = {
       'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
       'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
       'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
@@ -31,7 +32,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     let destinationId = '';
     
     // Check if URL contains a destination ID
-    for (const id of Object.keys(specialDestinations)) {
+    for (const id of Object.keys(criticalDestinations)) {
       if (imageUrl.includes(id)) {
         destinationId = id;
         break;
@@ -41,18 +42,27 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     // Also check alt text for destination name
     if (!destinationId) {
       const destName = altText.replace('Scenic view of ', '').replace(' - Allergy-friendly travel destination', '').toLowerCase();
-      Object.keys(specialDestinations).forEach(id => {
+      Object.keys(criticalDestinations).forEach(id => {
         if (id.replace('-', ' ') === destName || id.replace('_', ' ') === destName) {
           destinationId = id;
         }
       });
     }
     
-    // If destination is one of our special cases, use its hardcoded path
-    if (destinationId && specialDestinations[destinationId]) {
-      console.log(`HeroImage: Using special destination direct path: ${specialDestinations[destinationId]}`);
-      setCurrentImageUrl(specialDestinations[destinationId]);
+    // If destination is one of our critical cases, use its hardcoded path - HIGHEST PRIORITY!
+    if (destinationId && criticalDestinations[destinationId]) {
+      console.log(`HeroImage: Using critical destination direct path: ${criticalDestinations[destinationId]}`);
+      setCurrentImageUrl(criticalDestinations[destinationId]);
       return;
+    }
+    
+    // Check if the URL matches any key in our DESTINATION_IMAGES constants
+    for (const [key, value] of Object.entries(DESTINATION_IMAGES)) {
+      if (imageUrl === key || imageUrl.includes(key)) {
+        console.log(`HeroImage: Found destination match in DESTINATION_IMAGES: ${value}`);
+        setCurrentImageUrl(value);
+        return;
+      }
     }
     
     // For Unsplash URLs, optimize them
@@ -95,7 +105,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     
     // Map of reliable fallback images by destination name fragment
     const fallbacks = [
-      // First try special destinations with direct paths
+      // First try special destinations with direct paths - HIGHEST PRIORITY
       '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png', // Hotel Chains
       '/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png', // Cyprus
       "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80", // Crete
