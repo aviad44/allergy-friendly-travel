@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Rocket, ExternalLink, Hotel, Star, Search } from "lucide-react";
@@ -16,8 +15,7 @@ export default function HotelChains() {
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
   
   // CRITICAL: Using a reliable hotel chains image that's guaranteed to load
-  // Get the image from our centralized constants - updated to use uploaded resort image
-  const imageUrl = DESTINATION_IMAGES['hotel-chains'];
+  const imageUrl = "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png";
   
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   

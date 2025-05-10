@@ -22,7 +22,23 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
   
   // Get reliable image source for each destination
   const getImageSource = (destinationId: string): string => {
-    // Get image from our centralized constants - primary source
+    // CRITICAL: Define direct hardcoded paths for problematic destinations - highest priority
+    const criticalDestinations: Record<string, string> = {
+      'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated to use new uploaded resort image
+      'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+      'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=600&h=400&q=80",
+      'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
+      'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
+      'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=600&h=400&q=80"
+    };
+    
+    // Always check hardcoded paths first for critical destinations
+    if (destinationId in criticalDestinations) {
+      console.log(`RelatedDestinations: Using critical path for ${destinationId}: ${criticalDestinations[destinationId]}`);
+      return criticalDestinations[destinationId];
+    }
+    
+    // Get image from our centralized constants - second priority
     const destKey = destinationId as keyof typeof DESTINATION_IMAGES;
     if (DESTINATION_IMAGES[destKey]) {
       console.log(`RelatedDestinations: Using DESTINATION_IMAGES for ${destinationId}: ${DESTINATION_IMAGES[destKey]}`);

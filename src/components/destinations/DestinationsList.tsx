@@ -9,17 +9,16 @@ export const DestinationsList = () => {
   useEffect(() => {
     const preloadImages = () => {
       // Define all critical destinations that need special attention
-      const criticalDestinations = ['cyprus', 'crete', 'hotel-chains', 'hotel_chains', 'turkey', 'toronto', 'barcelona'];
+      const criticalDestinations = ['cyprus', 'crete', 'hotel-chains', 'turkey', 'toronto', 'barcelona'];
       
       // Special handling for critical destinations with direct hardcoded paths
       const criticalImageMap: Record<string, string> = {
-        'hotel-chains': DESTINATION_IMAGES['hotel-chains'], // Use centralized image constants
-        'hotel_chains': DESTINATION_IMAGES['hotel_chains'], // Use centralized image constants
-        'cyprus': DESTINATION_IMAGES['cyprus'], // Use centralized image constants
-        'crete': DESTINATION_IMAGES['crete'], // Use centralized image constants
-        'turkey': DESTINATION_IMAGES['turkey'], // Use centralized image constants
-        'toronto': DESTINATION_IMAGES['toronto'], // Use centralized image constants
-        'barcelona': DESTINATION_IMAGES['barcelona'] // Use centralized image constants
+        'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated hotel chains image
+        'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+        'crete': DESTINATION_IMAGES['crete'], 
+        'turkey': DESTINATION_IMAGES['turkey'],
+        'toronto': DESTINATION_IMAGES['toronto'], 
+        'barcelona': DESTINATION_IMAGES['barcelona']
       };
       
       // First preload critical destinations with direct hardcoded paths
@@ -67,12 +66,28 @@ export const DestinationsList = () => {
     <section className="py-8 md:py-12 container mx-auto px-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {destinations.map((destination) => {
-          // Always use the central DESTINATION_IMAGES for reliable image paths
+          // CRITICAL: Hardcoded paths for specific destinations
+          const criticalImageMap: Record<string, string> = {
+            'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated hotel chains image
+            'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+            'crete': DESTINATION_IMAGES['crete'], 
+            'turkey': DESTINATION_IMAGES['turkey'],
+            'toronto': DESTINATION_IMAGES['toronto'], 
+            'barcelona': DESTINATION_IMAGES['barcelona']
+          };
+          
+          // Get image value with fallbacks
           let imageValue = '';
           
-          // Get image directly from our centralized constants
-          const imageKey = destination.id as keyof typeof DESTINATION_IMAGES;
-          imageValue = DESTINATION_IMAGES[imageKey] || '';
+          // First check critical destinations mapping
+          if (destination.id in criticalImageMap) {
+            imageValue = criticalImageMap[destination.id];
+          }
+          // Then try central DESTINATION_IMAGES
+          else {
+            const imageKey = destination.id as keyof typeof DESTINATION_IMAGES;
+            imageValue = DESTINATION_IMAGES[imageKey] || '';
+          }
           
           // If still no image, use a placeholder
           if (!imageValue) {
