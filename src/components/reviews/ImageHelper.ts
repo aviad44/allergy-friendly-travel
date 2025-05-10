@@ -28,7 +28,7 @@ export const getDestinationImageUrl = (destinationId: string, providedSource?: s
 // Define descriptive alt text for images
 export const getDestinationAltText = (destinationName: string): string => {
   if (destinationName.toLowerCase().includes('hotel chains')) {
-    return `Luxury resort - Top allergy-friendly hotel chains worldwide`;
+    return `Luxury resort with swimming pool - Top allergy-friendly hotel chains worldwide`;
   }
   
   if (destinationName.toLowerCase().includes('cyprus')) {

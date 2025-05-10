@@ -1,3 +1,4 @@
+
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Rocket, ExternalLink, Hotel, Star, Search } from "lucide-react";
@@ -15,7 +16,7 @@ export default function HotelChains() {
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
   
   // CRITICAL: Using a reliable hotel chains image that's guaranteed to load
-  // Get the image from our centralized constants
+  // Get the image from our centralized constants - updated to use uploaded resort image
   const imageUrl = DESTINATION_IMAGES['hotel-chains'];
   
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
@@ -35,8 +36,8 @@ export default function HotelChains() {
     };
     img.onerror = (e) => {
       console.error("Failed to load hotel chains hero image:", e);
-      // Fall back to another reliable Pexels image
-      const fallbackUrl = "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1";
+      // Fall back to another reliable image if needed
+      const fallbackUrl = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
       console.log("Trying fallback hotel image:", fallbackUrl);
       const fallbackImg = new Image();
       fallbackImg.src = fallbackUrl;

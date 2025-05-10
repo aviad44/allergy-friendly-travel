@@ -1,8 +1,8 @@
 
 export const DESTINATION_IMAGES: Record<string, string> = {
   // Direct hardcoded paths for critical destinations - these are the PRIMARY sources
-  'hotel-chains': "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1", // Updated to Pexels image
-  'hotel_chains': "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1", // Updated to Pexels image
+  'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated to use new uploaded resort image
+  'hotel_chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated to use new uploaded resort image
   'cyprus': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80", // Ayia Napa Unsplash image
   'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
   'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",

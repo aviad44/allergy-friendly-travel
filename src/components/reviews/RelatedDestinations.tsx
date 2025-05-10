@@ -54,7 +54,7 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
           // Determine the appropriate alt text
           let altText = `${destination.name} - Allergy-friendly destination in ${destination.country}`;
           if (destination.id === 'hotel-chains') {
-            altText = `Luxury resort - Top allergy-friendly hotel chains worldwide`;
+            altText = `Luxury resort with swimming pool - Top allergy-friendly hotel chains worldwide`;
           }
           
           return (

@@ -12,8 +12,8 @@ interface DestinationHeroProps {
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   // Define critical destinations with direct paths for reliable image display
   const criticalDestinations: Record<string, string> = {
-    'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-    'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
+    'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated to use new uploaded resort image
+    'hotel_chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated to use new uploaded resort image
     'cyprus': "https://images.unsplash.com/photo-1582650844513-5a19b5ba61d6?auto=format&fit=crop&w=1200&q=80", // Updated to Ayia Napa image
     'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
@@ -51,7 +51,10 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   console.log(`DestinationHero: Final image URL for ${destination.id}: ${imageUrl}`);
   
   // Define a descriptive alt text
-  const altText = `Scenic view of ${destination.name} - Allergy-friendly travel destination`;
+  let altText = `Scenic view of ${destination.name} - Allergy-friendly travel destination`;
+  if (destination.id === 'hotel-chains' || destination.id === 'hotel_chains') {
+    altText = `Luxury resort with swimming pool - Top allergy-friendly hotel chains worldwide`;
+  }
   
   // Preload the image
   useEffect(() => {
