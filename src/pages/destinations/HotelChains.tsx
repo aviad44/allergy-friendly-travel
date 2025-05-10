@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Rocket, ExternalLink, Hotel, Star, Search } from "lucide-react";
@@ -6,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
+import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 export default function HotelChains() {
   // SEO metadata
@@ -15,7 +15,8 @@ export default function HotelChains() {
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
   
   // CRITICAL: Using a reliable hotel chains image that's guaranteed to load
-  const imageUrl = "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80";
+  // Get the image from our centralized constants
+  const imageUrl = DESTINATION_IMAGES['hotel-chains'];
   
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   
@@ -34,14 +35,14 @@ export default function HotelChains() {
     };
     img.onerror = (e) => {
       console.error("Failed to load hotel chains hero image:", e);
-      // Fall back to another reliable Unsplash image
-      const fallbackUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1170&q=80";
+      // Fall back to another reliable Pexels image
+      const fallbackUrl = "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1";
       console.log("Trying fallback hotel image:", fallbackUrl);
       const fallbackImg = new Image();
       fallbackImg.src = fallbackUrl;
       fallbackImg.onload = () => setHeroImageLoaded(true);
     };
-  }, []);
+  }, [imageUrl]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -99,8 +100,8 @@ export default function HotelChains() {
           className="w-full h-full object-cover object-center"
           onError={(e) => {
             console.error("Failed to load hotel chains hero image");
-            // Fall back to another reliable Unsplash image
-            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1170&q=80";
+            // Fall back to another reliable Pexels image
+            (e.target as HTMLImageElement).src = "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1";
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>

@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 const FEATURED_DESTINATIONS = [
@@ -92,6 +92,32 @@ const FEATURED_DESTINATIONS = [
 export const FeaturedDestinations = () => {
   // Track image loading status for each destination
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
+  const [destinationImages, setDestinationImages] = useState<Record<string, string>>({});
+  
+  // Load all destination images from the central constants
+  useEffect(() => {
+    // Create a mapping of destination IDs to their correct images
+    const imageMap: Record<string, string> = {};
+    FEATURED_DESTINATIONS.forEach(dest => {
+      if (dest.destId) {
+        const key = dest.destId as keyof typeof DESTINATION_IMAGES;
+        if (DESTINATION_IMAGES[key]) {
+          imageMap[dest.destId] = DESTINATION_IMAGES[key];
+        } else {
+          imageMap[dest.destId] = dest.image; // Fallback to the hardcoded image
+        }
+      }
+    });
+    
+    setDestinationImages(imageMap);
+    
+    // Preload the images
+    Object.entries(imageMap).forEach(([destId, imageUrl]) => {
+      const img = new Image();
+      img.src = imageUrl;
+      console.log(`FeaturedDestinations: Preloading image for ${destId}: ${imageUrl}`);
+    });
+  }, []);
   
   // Handle image load success
   const handleImageLoaded = (destId: number) => {
@@ -106,24 +132,16 @@ export const FeaturedDestinations = () => {
     const dest = FEATURED_DESTINATIONS.find(d => d.id === destId);
     if (!dest) return;
     
-    // Apply critical fallback images based on destination
-    const criticalFallbacks: Record<string, string> = {
-      'cyprus': '/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png',
-      'crete': 'https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80',
-      'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80',
-      'hotel-chains': '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png',
-      'hotel_chains': '/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png',
-    };
-    
-    // Use destination-specific fallback or default
+    // Try to get image from the centralized constants
     let fallbackUrl;
-    if (dest.destId in criticalFallbacks) {
-      fallbackUrl = criticalFallbacks[dest.destId];
-    } else if (dest.destId in DESTINATION_IMAGES) {
+    if (dest.destId) {
       const key = dest.destId as keyof typeof DESTINATION_IMAGES;
       fallbackUrl = DESTINATION_IMAGES[key];
-    } else {
-      fallbackUrl = 'https://placehold.co/800x500/1e3a8a/ffffff?text=' + (dest ? dest.name : 'Destination');
+    }
+    
+    // If still no image, use a placeholder
+    if (!fallbackUrl) {
+      fallbackUrl = `https://placehold.co/800x500/1e3a8a/ffffff?text=${dest.name}`;
     }
     
     console.log(`FeaturedDestinations: Using fallback for ${dest.name}: ${fallbackUrl}`);
@@ -138,51 +156,60 @@ export const FeaturedDestinations = () => {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {FEATURED_DESTINATIONS.slice(0, 6).map((destination) => (
-          <Link to={destination.href} key={destination.id}>
-            <Card className="overflow-hidden group cursor-pointer h-full hover:shadow-xl transition-all duration-300 border-gray-200">
-              <div className="relative aspect-[16/10] overflow-hidden bg-blue-100">
-                {/* Loading placeholder */}
-                {!loadedImages[destination.id] && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-blue-200 to-blue-100 animate-pulse"></div>
-                )}
-                
-                <img
-                  src={destination.image}
-                  alt={destination.name === "Cyprus" 
-                    ? "Beautiful beach in Cyprus - Best allergy-friendly destination for family vacations"
-                    : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`
-                  }
-                  className={`object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105 ${loadedImages[destination.id] ? 'opacity-100' : 'opacity-0'}`}
-                  onLoad={() => handleImageLoaded(destination.id)}
-                  onError={(e) => handleImageError(destination.id, e)}
-                  loading="eager" // Use eager loading for featured destinations
-                  width="600" 
-                  height="375"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div className="absolute bottom-0 left-0 p-4 text-white">
-                  <h3 className="font-display text-2xl md:text-2xl lg:text-3xl font-bold mb-1 drop-shadow-md">{destination.name}</h3>
-                  <p className="text-sm md:text-base text-white/90">{destination.country}</p>
+        {FEATURED_DESTINATIONS.slice(0, 6).map((destination) => {
+          // Get the image from our centralized constants if available
+          const imageToUse = destination.destId && destinationImages[destination.destId] 
+            ? destinationImages[destination.destId] 
+            : destination.image;
+            
+          return (
+            <Link to={destination.href} key={destination.id}>
+              <Card className="overflow-hidden group cursor-pointer h-full hover:shadow-xl transition-all duration-300 border-gray-200">
+                <div className="relative aspect-[16/10] overflow-hidden bg-blue-100">
+                  {/* Loading placeholder */}
+                  {!loadedImages[destination.id] && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-200 to-blue-100 animate-pulse"></div>
+                  )}
+                  
+                  <img
+                    src={imageToUse}
+                    alt={destination.name === "Cyprus" 
+                      ? "Beautiful beach in Cyprus - Best allergy-friendly destination for family vacations"
+                      : destination.name === "Hotel Chains"
+                        ? "Luxury hotel exterior with swimming pool - Top allergy-friendly hotel chains worldwide"
+                        : `${destination.name}, ${destination.country} - Allergy-friendly travel destination with ${destination.commonAllergies.join(" and ")} free options`
+                    }
+                    className={`object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105 ${loadedImages[destination.id] ? 'opacity-100' : 'opacity-0'}`}
+                    onLoad={() => handleImageLoaded(destination.id)}
+                    onError={(e) => handleImageError(destination.id, e)}
+                    loading="eager" // Use eager loading for featured destinations
+                    width="600" 
+                    height="375"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-4 text-white">
+                    <h3 className="font-display text-2xl md:text-2xl lg:text-3xl font-bold mb-1 drop-shadow-md">{destination.name}</h3>
+                    <p className="text-sm md:text-base text-white/90">{destination.country}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="p-4">
-                <p className="text-muted-foreground mb-3 text-sm md:text-base">{destination.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {destination.commonAllergies.map((allergy) => (
-                    <span
-                      key={allergy}
-                      className="text-xs flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-full"
-                    >
-                      <Shield className="h-3 w-3" />
-                      {allergy}-free options
-                    </span>
-                  ))}
+                <div className="p-4">
+                  <p className="text-muted-foreground mb-3 text-sm md:text-base">{destination.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {destination.commonAllergies.map((allergy) => (
+                      <span
+                        key={allergy}
+                        className="text-xs flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-full"
+                      >
+                        <Shield className="h-3 w-3" />
+                        {allergy}-free options
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </Link>
-        ))}
+              </Card>
+            </Link>
+          );
+        })}
       </div>
       <div className="flex justify-center">
         <Link to="/destinations">

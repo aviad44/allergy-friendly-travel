@@ -22,32 +22,17 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
   
   // Get reliable image source for each destination
   const getImageSource = (destinationId: string): string => {
-    // Critical destinations with direct hardcoded paths - HIGHEST PRIORITY
-    const criticalImageMap: Record<string, string> = {
-      'hotel-chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-      'hotel_chains': "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
-      'cyprus': "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
-      'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=600&h=400&q=80",
-      'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
-      'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-      'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=600&h=400&q=80"
-    };
-    
-    // Always check our critical destinations first
-    if (destinationId in criticalImageMap) {
-      console.log(`RelatedDestinations: Using critical direct image for ${destinationId}: ${criticalImageMap[destinationId]}`);
-      return criticalImageMap[destinationId];
-    }
-    
-    // Look up in our centralized constants - second priority
-    if (destinationId in DESTINATION_IMAGES) {
-      const key = destinationId as keyof typeof DESTINATION_IMAGES;
-      console.log(`RelatedDestinations: Using DESTINATION_IMAGES for ${destinationId}: ${DESTINATION_IMAGES[key]}`);
+    // Get image from our centralized constants - primary source
+    const destKey = destinationId as keyof typeof DESTINATION_IMAGES;
+    if (DESTINATION_IMAGES[destKey]) {
+      console.log(`RelatedDestinations: Using DESTINATION_IMAGES for ${destinationId}: ${DESTINATION_IMAGES[destKey]}`);
       
       // For Unsplash URLs, ensure we have the right size parameters
-      let imgSrc = DESTINATION_IMAGES[key];
+      let imgSrc = DESTINATION_IMAGES[destKey];
       if (imgSrc.includes('unsplash.com') && !imgSrc.includes('?')) {
         imgSrc += '?auto=format&fit=crop&w=600&h=400&q=80';
+      } else if (imgSrc.includes('pexels.com') && !imgSrc.includes('?')) {
+        imgSrc += '?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1';
       }
       return imgSrc;
     }
@@ -66,6 +51,12 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
           // Always get image from our reliable mapping function
           const imageUrl = getImageSource(destination.id);
           
+          // Determine the appropriate alt text
+          let altText = `${destination.name} - Allergy-friendly destination in ${destination.country}`;
+          if (destination.id === 'hotel-chains' || destination.id === 'hotel_chains') {
+            altText = `Luxury resort - Top allergy-friendly hotel chains worldwide`;
+          }
+          
           return (
             <Link 
               key={destination.id} 
@@ -77,7 +68,7 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
                   {/* Use an error handler to ensure fallbacks */}
                   <img 
                     src={imageUrl}
-                    alt={`${destination.name} - Allergy-friendly destination in ${destination.country}`}
+                    alt={altText}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       console.error(`Failed to load image for ${destination.name}`);
