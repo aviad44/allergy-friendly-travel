@@ -16,8 +16,7 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Located in the heart of Barcelona, this luxury hotel prioritizes guest well-being with exceptional allergy-aware dining options.",
       quote: "Absolutely loved this hotel. From the moment I arrived, they ensured all my dietary needs were met.",
-      bookingUrl: "https://www.grandhotelcentral.com/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/39748592.jpg?k=3757f4df76171d71459a74bb7bd93d494c58c002fcc2be1d3763ecee42b72b4c&o=&hp=1"
+      bookingUrl: "https://www.grandhotelcentral.com/"
     },
     {
       name: "Mercer Hotel Barcelona",
@@ -31,8 +30,7 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Renowned for its exceptional service, Mercer Hotel provides tailored meals for guests with allergies in a stunning historic setting.",
       quote: "The staff was incredibly attentive to my son's peanut allergy, making our stay stress-free.",
-      bookingUrl: "https://www.mercerbarcelona.com/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/33701343.jpg?k=b434d53e84a101ef9cdc8a7c3c263d2a1a9461df7469183f591536bd2b742049&o=&hp=1"
+      bookingUrl: "https://www.mercerbarcelona.com/"
     },
     {
       name: "Hotel Arts Barcelona",
@@ -46,8 +44,7 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Overlooking the marina, Hotel Arts offers allergy-conscious dining options with stunning Mediterranean views.",
       quote: "The staff took my allergies seriously and ensured every meal was prepared safely.",
-      bookingUrl: "https://www.hotelartsbarcelona.com/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/9518588.jpg?k=f761b6a12e71a67c9ada9635a68f4d8527024ecd241c06c7660761aac42f447c&o=&hp=1"
+      bookingUrl: "https://www.hotelartsbarcelona.com/"
     },
     {
       name: "Nobu Hotel Barcelona",
@@ -61,8 +58,7 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Combining Japanese-inspired luxury with dietary sensitivity, Nobu Hotel is a top pick for allergy-conscious travelers.",
       quote: "The chef personally ensured that my meals were allergy-safe, and the service was impeccable.",
-      bookingUrl: "https://barcelona.nobuhotels.com/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/325037380.jpg?k=9b7e36655862a22e71d60a2a105ad2a7b4617f7e7b245098573dd5524ec3a787&o=&hp=1"
+      bookingUrl: "https://barcelona.nobuhotels.com/"
     },
     {
       name: "Hotel Calipolis Sitges",
@@ -76,8 +72,7 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Situated in Sitges, a short drive from Barcelona, this hotel offers allergy-friendly menus and customized meal plans in a beautiful coastal setting.",
       quote: "I felt completely safe dining here, thanks to their detailed approach to food allergies.",
-      bookingUrl: "https://www.hotelcalipolis.com/en/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/13412037.jpg?k=7e7afb1ce2aff89b36f7af7a41d96536834b5860131c5eba4e56e9233d16f29e&o=&hp=1"
+      bookingUrl: "https://www.hotelcalipolis.com/en/"
     }
   ],
   faqs: [
