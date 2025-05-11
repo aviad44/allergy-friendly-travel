@@ -7,7 +7,13 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 /// <reference path="../vite-env.d.ts" />
-// Removed duplicate FB declaration - now only defined in vite-env.d.ts
+
+// Add direct declaration to fix TypeScript errors
+declare global {
+  interface Window {
+    FB: any;
+  }
+}
 
 export const MainLayout = () => {
   const location = useLocation();
