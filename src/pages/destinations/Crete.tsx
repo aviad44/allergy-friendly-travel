@@ -14,7 +14,7 @@ const Crete = () => {
 
   return (
     <>
-      <Helmet prioritizeSeoTags>
+      <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <meta name="keywords" content={pageKeywords} />

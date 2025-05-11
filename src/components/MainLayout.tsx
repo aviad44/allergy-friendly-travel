@@ -6,16 +6,7 @@ import { DefaultMetaTags } from "@/components/DefaultMetaTags";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
-// Add TypeScript FB declaration
-declare global {
-  interface Window {
-    FB?: {
-      XFBML: {
-        parse: () => void;
-      };
-    };
-  }
-}
+// Removed duplicate FB declaration - now only defined in vite-env.d.ts
 
 export const MainLayout = () => {
   const location = useLocation();
