@@ -9,14 +9,7 @@ import { torontoContent } from './destination-toronto';
 import { parisContent } from './destination-paris';
 import { barcelonaContent } from './destination-barcelona';
 import { cyprusContent } from './destination-cyprus';
-
-// Mock data for missing imports
-// These would normally be imported from their respective files
-const londonData: Partial<DestinationContent> = {
-  intro: "London offers many allergy-friendly hotels and restaurants.",
-  hotels: [],
-  faqs: []
-};
+import { londonContent } from './destination-london';
 
 // Create empty arrays with the right types
 const abudhabiHotels: Hotel[] = [];
@@ -32,7 +25,7 @@ const cruiseLinesIntro: string = "";
 const ayiaNapaHotels: Hotel[] = [];
 
 export const destinationData: Record<DestinationId, Partial<DestinationContent>> = {
-  london: londonData,
+  london: londonContent,
   paris: parisContent,
   barcelona: barcelonaContent,
   cyprus: cyprusContent,

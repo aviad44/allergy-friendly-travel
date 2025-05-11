@@ -27,8 +27,8 @@ export const DefaultMetaTags = () => {
       <meta property="og:url" content={currentUrl} />
       <meta property="og:image" content={`${baseUrl}${defaultImage}`} />
       <meta property="og:image:type" content="image/png" />
-      <meta property="og:image:width" content="600" />
-      <meta property="og:image:height" content="600" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content="Allergy-Free Travel Logo" />
       <meta property="og:site_name" content="Allergy Free Travel" />
       <meta property="og:locale" content="en_US" />
@@ -49,4 +49,3 @@ export const DefaultMetaTags = () => {
     </Helmet>
   );
 };
-
