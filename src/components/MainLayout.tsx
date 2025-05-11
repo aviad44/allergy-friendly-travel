@@ -14,89 +14,54 @@ export const MainLayout = () => {
     
     // Update meta tags for the current page
     if (typeof document !== 'undefined') {
-      // Update canonical URL for the current page
-      const canonicalTag = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-      if (canonicalTag) {
-        canonicalTag.href = window.location.href;
-      }
+      // These functions ensure that the page-specific meta tags take precedence
+      // and are not overwritten by the default ones
       
-      // Update og:url for the current page
-      const ogUrlTag = document.querySelector('meta[property="og:url"]') as HTMLMetaElement;
-      if (ogUrlTag) {
-        ogUrlTag.content = window.location.href;
-      }
-      
-      // Ensure WhatsApp specific tags are present
-      const ensureWhatsAppCompatibility = () => {
-        // Check if og:locale exists
-        const ogLocaleTag = document.querySelector('meta[property="og:locale"]');
-        if (!ogLocaleTag) {
-          const metaTag = document.createElement('meta');
-          metaTag.setAttribute('property', 'og:locale');
-          metaTag.setAttribute('content', 'en_US');
-          document.head.appendChild(metaTag);
-        }
-        
-        // Ensure image secure_url exists
-        const ogImageTag = document.querySelector('meta[property="og:image"]') as HTMLMetaElement;
-        if (ogImageTag) {
-          const secureUrlTag = document.querySelector('meta[property="og:image:secure_url"]');
-          if (!secureUrlTag) {
-            const metaTag = document.createElement('meta');
-            metaTag.setAttribute('property', 'og:image:secure_url');
-            metaTag.setAttribute('content', ogImageTag.content);
-            document.head.appendChild(metaTag);
-          }
-        }
-        
-        // Add itemprop thumbnail for WhatsApp
-        const addThumbnailItemprop = () => {
-          const ogImageTag = document.querySelector('meta[property="og:image"]') as HTMLMetaElement;
-          if (ogImageTag && !document.querySelector('[itemprop="thumbnailUrl"]')) {
-            // Add thumbnail URL
-            const thumbUrlLink = document.createElement('link');
-            thumbUrlLink.setAttribute('itemprop', 'thumbnailUrl');
-            thumbUrlLink.setAttribute('href', ogImageTag.content);
-            document.head.appendChild(thumbUrlLink);
-            
-            // Add thumbnail object
-            const thumbSpan = document.createElement('span');
-            thumbSpan.setAttribute('itemprop', 'thumbnail');
-            thumbSpan.setAttribute('itemscope', '');
-            thumbSpan.setAttribute('itemtype', 'http://schema.org/ImageObject');
-            
-            const thumbLink = document.createElement('link');
-            thumbLink.setAttribute('itemprop', 'url');
-            thumbLink.setAttribute('href', ogImageTag.content);
-            
-            thumbSpan.appendChild(thumbLink);
-            document.head.appendChild(thumbSpan);
-          }
-        };
-        
-        addThumbnailItemprop();
-      };
-      
-      ensureWhatsAppCompatibility();
-    }
-    
-    // For Facebook to re-scrape the page
-    if (typeof window !== 'undefined') {
-      // Force Facebook to re-scrape the page
-      const fbScript = document.createElement('script');
-      fbScript.innerHTML = `
-        if (typeof FB !== 'undefined') {
+      // Force Facebook to re-scrape the page when shared
+      // This is crucial for making sure Facebook picks up the page-specific
+      // og:image rather than caching the default one
+      const fbRefresh = () => {
+        if (typeof window !== 'undefined' && window.FB) {
           console.log("Refreshing Facebook cache");
-          FB.XFBML.parse();
-        }
-      `;
-      document.body.appendChild(fbScript);
-      
-      return () => {
-        if (document.body.contains(fbScript)) {
-          document.body.removeChild(fbScript);
+          window.FB.XFBML.parse();
         }
       };
+      
+      // Add Facebook SDK for re-scraping capability
+      const addFacebookSDK = () => {
+        if (!document.getElementById('facebook-jssdk')) {
+          const fbScript = document.createElement('script');
+          fbScript.id = 'facebook-jssdk';
+          fbScript.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0";
+          fbScript.async = true;
+          fbScript.defer = true;
+          fbScript.crossOrigin = 'anonymous';
+          fbScript.onload = fbRefresh;
+          document.body.appendChild(fbScript);
+        } else {
+          fbRefresh();
+        }
+      };
+      
+      // Wait for the helmet-managed tags to be injected first
+      setTimeout(() => {
+        // Ensure the URL meta tags are correct and absolute
+        // This is especially important for og:url
+        const canonicalTag = document.querySelector('link[rel="canonical"]');
+        const ogUrlTag = document.querySelector('meta[property="og:url"]');
+        const fullUrl = window.location.origin + location.pathname;
+        
+        if (canonicalTag) {
+          canonicalTag.setAttribute('href', fullUrl);
+        }
+        
+        if (ogUrlTag) {
+          ogUrlTag.setAttribute('content', fullUrl);
+        }
+        
+        // Add Facebook SDK for re-scraping
+        addFacebookSDK();
+      }, 100);
     }
   }, [location]);
   

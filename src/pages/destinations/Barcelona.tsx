@@ -20,7 +20,7 @@ const Barcelona = () => {
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Aviad Beit Halachmi" />
         
-        {/* Open Graph Meta Tags */}
+        {/* Open Graph Meta Tags - Critical for Facebook sharing */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content={imageUrl} />
@@ -28,7 +28,10 @@ const Barcelona = () => {
         <meta property="og:type" content="article" />
         <meta property="article:author" content="Aviad Beit Halachmi" />
         
-        {/* Twitter Card Tags */}
+        {/* Explicitly set Facebook-specific tags */}
+        <meta property="fb:app_id" content="your-fb-app-id" /> {/* Add your FB app ID if you have one */}
+        
+        {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />

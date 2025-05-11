@@ -17,10 +17,8 @@ export const DefaultMetaTags = () => {
       <meta name="description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       
-      {/* Canonical URL */}
-      <link rel="canonical" href={currentUrl} />
-      
-      {/* Open Graph tags for social sharing */}
+      {/* These tags will be overridden by page-specific tags */}
+      {/* They only serve as fallbacks */}
       <meta property="og:type" content="website" />
       <meta property="og:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
       <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
