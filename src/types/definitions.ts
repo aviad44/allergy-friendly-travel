@@ -1,4 +1,5 @@
-export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'abu-dhabi' | 'crete' | 'tokyo' | 'thailand' | 'hotel-chains' | 'new-york' | 'ayia-napa' | 'portugal' | 'swiss-alps' | 'koh-samui' | 'turkey' | 'cruise-lines' | 'toronto';
+
+export type DestinationId = 'london' | 'paris' | 'barcelona' | 'cyprus' | 'abu-dhabi' | 'crete' | 'tokyo' | 'thailand' | 'hotel-chains' | 'new-york' | 'ayia-napa' | 'portugal' | 'swiss-alps' | 'koh-samui' | 'turkey' | 'cruise-lines' | 'toronto' | 'tuscany';
 
 export interface Destination {
   id: DestinationId;
@@ -6,17 +7,20 @@ export interface Destination {
   country: string;
   description: string;
   subtitle: string;
-  image?: string; // Add the image property as optional
+  image?: string;
 }
 
 export interface Hotel {
   name: string;
-  address: string;
   features: string[];
-  description: string;
-  quote: string;
-  bookingUrl: string;
-  rating?: number; // Added rating as an optional property
+  rating?: number;
+  location?: string;
+  image?: string;
+  reviews?: {
+    text: string;
+    author: string;
+    rating: number;
+  }[];
 }
 
 export interface FAQ {
@@ -30,7 +34,7 @@ export interface LanguageTable {
 }
 
 export interface Review {
-  id: string; // Changed to string only, as IDs come from database as UUID strings
+  id: string;
   rating: number;
   text: string;
   author_name: string;
@@ -41,10 +45,11 @@ export interface Review {
 }
 
 export interface DestinationContent {
-  intro: string;
+  intro: string | string[];
   hotels: Hotel[];
   faqs: FAQ[];
-  languageTable: LanguageTable;
+  highlights?: string[];
+  languageTable?: LanguageTable;
 }
 
 export type LanguageCode = 'en' | 'fr' | 'de' | 'es' | 'it' | 'he';

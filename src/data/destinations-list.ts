@@ -120,5 +120,12 @@ export const destinations: Destination[] = [
     country: 'Canada',
     description: 'Best Allergy-Friendly Hotels in Toronto',
     subtitle: 'Safe Accommodations for Food Allergies'
+  },
+  {
+    id: 'ayia-napa',
+    name: 'Ayia Napa',
+    country: 'Cyprus',
+    description: 'Best Allergy-Friendly Hotels in Ayia Napa',
+    subtitle: 'Safe Beach Accommodations for Food Allergies'
   }
 ];

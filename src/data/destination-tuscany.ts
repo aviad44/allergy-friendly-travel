@@ -1,5 +1,5 @@
 
-import { DestinationContent, Hotel, FAQ } from '@/types/reviews';
+import { DestinationContent, Hotel, FAQ } from '@/types/definitions';
 
 const hotels: Hotel[] = [
   {
