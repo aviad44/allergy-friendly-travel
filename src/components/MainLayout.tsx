@@ -14,12 +14,7 @@ export const MainLayout = () => {
     
     // Update meta tags for the current page
     if (typeof document !== 'undefined') {
-      // These functions ensure that the page-specific meta tags take precedence
-      // and are not overwritten by the default ones
-      
       // Force Facebook to re-scrape the page when shared
-      // This is crucial for making sure Facebook picks up the page-specific
-      // og:image rather than caching the default one
       const fbRefresh = () => {
         if (typeof window !== 'undefined' && 'FB' in window) {
           console.log("Refreshing Facebook cache");
@@ -43,12 +38,12 @@ export const MainLayout = () => {
         }
       };
       
-      // Wait for the helmet-managed tags to be injected first
+      // Critical fix: Wait for page-specific meta tags to be injected first
       setTimeout(() => {
         // Ensure the URL meta tags are correct and absolute
-        // This is especially important for og:url
         const canonicalTag = document.querySelector('link[rel="canonical"]');
         const ogUrlTag = document.querySelector('meta[property="og:url"]');
+        const ogImageTag = document.querySelector('meta[property="og:image"]');
         const fullUrl = window.location.origin + location.pathname;
         
         if (canonicalTag) {
@@ -57,6 +52,16 @@ export const MainLayout = () => {
         
         if (ogUrlTag) {
           ogUrlTag.setAttribute('content', fullUrl);
+        }
+        
+        // Critical fix: Ensure og:image has absolute URL
+        if (ogImageTag) {
+          const imageUrl = ogImageTag.getAttribute('content');
+          if (imageUrl && !imageUrl.startsWith('http')) {
+            const absoluteImageUrl = window.location.origin + imageUrl;
+            ogImageTag.setAttribute('content', absoluteImageUrl);
+            console.log("Fixed relative og:image URL to absolute:", absoluteImageUrl);
+          }
         }
         
         // Add Facebook SDK for re-scraping

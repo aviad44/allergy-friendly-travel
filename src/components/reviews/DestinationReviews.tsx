@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { DestinationHero } from "./DestinationHero";
 import { LanguageTable } from "./LanguageTable";
@@ -66,19 +65,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   if (content?.intro) {
     introContent = content.intro;
   }
-
-  useEffect(() => {
-    if (destination) {
-      document.title = `Best Allergy-Friendly Hotels in ${destination.name} | Safe Travel for Food Allergies`;
-      
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute("content", 
-          `Discover the best allergy-friendly hotels in ${destination.name}. Safe accommodations for celiac, gluten-free, nut-free, and dairy-free travelers. Read real guest reviews!`
-        );
-      }
-    }
-  }, [destination]);
 
   if (!destination) {
     console.error(`Missing destination data for: ${destinationId}`);
