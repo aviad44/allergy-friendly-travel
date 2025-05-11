@@ -21,7 +21,7 @@ export const MainLayout = () => {
       // This is crucial for making sure Facebook picks up the page-specific
       // og:image rather than caching the default one
       const fbRefresh = () => {
-        if (typeof window !== 'undefined' && window.FB) {
+        if (typeof window !== 'undefined' && 'FB' in window) {
           console.log("Refreshing Facebook cache");
           window.FB.XFBML.parse();
         }
