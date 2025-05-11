@@ -65,7 +65,15 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
         ) : hasHotels ? (
           hotels.map((hotel, index) => (
             <div key={index}>
-              <HotelCard {...hotel} />
+              <HotelCard
+                name={hotel.name}
+                address={hotel.address}
+                features={hotel.features}
+                description={hotel.description}
+                quote={hotel.quote}
+                bookingUrl={hotel.bookingUrl}
+                imageUrl={hotel.image}
+              />
             </div>
           ))
         ) : (

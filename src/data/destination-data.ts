@@ -2,6 +2,7 @@
 import { DestinationContent, Hotel, FAQ, DestinationId } from '@/types/definitions';
 import { tuscanyContent } from './destination-tuscany';
 import { genericFaqs, genericIntro } from './generic-content';
+import { swissAlpsContent } from './destination-swiss-alps';
 
 // Mock data for missing imports
 // These would normally be imported from their respective files
@@ -17,6 +18,7 @@ const parisData: Partial<DestinationContent> = {
   faqs: []
 };
 
+// Create empty arrays with the right types
 const barcelonaHotels: Hotel[] = [];
 const cyprusHotels: Hotel[] = [];
 const abudhabiHotels: Hotel[] = [];
@@ -26,7 +28,6 @@ const thailandHotels: Hotel[] = [];
 const hotelChainsInfo: Hotel[] = [];
 const newYorkHotels: Hotel[] = [];
 const portugalHotels: Hotel[] = [];
-const swissAlpsContent: Partial<DestinationContent> = { intro: "", hotels: [], faqs: [] };
 const kohSamuiContent: Partial<DestinationContent> = { intro: "", hotels: [], faqs: [] };
 const turkeyHotels: Hotel[] = [];
 const cruiseLinesInfo: Hotel[] = [];

@@ -16,6 +16,10 @@ export interface Hotel {
   rating?: number;
   location?: string;
   image?: string;
+  address: string;
+  description?: string;
+  quote?: string;
+  bookingUrl: string;
   reviews?: {
     text: string;
     author: string;
