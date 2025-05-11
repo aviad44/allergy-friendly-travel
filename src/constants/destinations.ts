@@ -7,6 +7,7 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
   'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
   'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
+  'tuscany': "/lovable-uploads/ea1edce9-b144-449c-a4c7-0e3f02c54be9.png", // New Tuscany image with Ponte Vecchio view
   
   // Adding Ayia Napa as an alternative image for Cyprus
   'ayia-napa': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Using the same new Cyprus image for Ayia Napa

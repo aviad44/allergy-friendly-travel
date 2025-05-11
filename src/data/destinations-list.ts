@@ -31,6 +31,13 @@ export const destinations: Destination[] = [
     subtitle: 'Safe Accommodations for Food Allergies'
   },
   {
+    id: 'tuscany',
+    name: 'Tuscany',
+    country: 'Italy', 
+    description: 'Allergy-Friendly 6-Day Tuscany Itinerary',
+    subtitle: 'Safe Accommodations and Restaurants in Tuscany'
+  },
+  {
     id: 'abu-dhabi',
     name: 'Abu Dhabi',
     country: 'UAE',
