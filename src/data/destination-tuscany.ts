@@ -1,4 +1,3 @@
-
 import { DestinationContent, Hotel, FAQ } from '@/types/definitions';
 
 const hotels: Hotel[] = [
@@ -18,7 +17,10 @@ const hotels: Hotel[] = [
         rating: 5
       }
     ],
-    location: "Florence"
+    location: "Florence",
+    address: "Piazza Santa Elisabetta, 3, 50122 Firenze FI, Italy",
+    bookingUrl: "https://www.hotelbrunelleschi.it/",
+    description: "A historic hotel in the center of Florence with exceptional allergy protocols and trained staff."
   },
   {
     name: "Agriturismo Le Cetinelle",
@@ -35,7 +37,10 @@ const hotels: Hotel[] = [
         rating: 5
       }
     ],
-    location: "Chianti Wine Country"
+    location: "Chianti Wine Country",
+    address: "Str. delle Cetinelle, 53017 Radda in Chianti SI, Italy",
+    bookingUrl: "https://www.lecetinelle.it/",
+    description: "A beautiful agriturismo in the heart of Chianti offering personalized allergy accommodations."
   },
   {
     name: "Hotel Garden",
@@ -53,7 +58,10 @@ const hotels: Hotel[] = [
         rating: 4.5
       }
     ],
-    location: "Siena"
+    location: "Siena",
+    address: "Via Custoza, 2, 53100 Siena SI, Italy",
+    bookingUrl: "https://www.gardenhotel.it/",
+    description: "A charming hotel in Siena with beautiful gardens and dedicated allergen-free dining options."
   },
   {
     name: "Hotel Ilaria",
@@ -71,7 +79,10 @@ const hotels: Hotel[] = [
         rating: 4.5
       }
     ],
-    location: "Lucca"
+    location: "Lucca",
+    address: "Via del Fosso, 26, 55100 Lucca LU, Italy",
+    bookingUrl: "https://www.hotelilaria.com/",
+    description: "A boutique hotel in the heart of Lucca with modern amenities and allergy-conscious dining."
   }
 ];
 

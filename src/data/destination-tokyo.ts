@@ -17,7 +17,10 @@ export const tokyoContent: DestinationContent = {
       ],
       description: "Excellent for international travelers with food allergies, offering allergen cards in Japanese to help communicate dietary needs.",
       quote: "The staff provided me with allergen cards I could show at restaurants throughout my stay in Japan!",
-      bookingUrl: "https://www.marriott.com/hotels/travel/tyomc-tokyo-marriott-hotel/"
+      bookingUrl: "https://www.marriott.com/hotels/travel/tyomc-tokyo-marriott-hotel/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/53826815.jpg?k=d9bd2dc2955eb61b79c5765f0a3bc7a0876a1738b07644f5526743daa0668458&o=&hp=1",
+      rating: 4.7,
+      location: "Shinagawa"
     },
     {
       name: "Park Hyatt Tokyo ★★★★★",
@@ -29,7 +32,10 @@ export const tokyoContent: DestinationContent = {
       ],
       description: "Sophisticated accommodation famous from 'Lost in Translation' with exceptional allergy awareness and custom meal preparation.",
       quote: "The chef created special gluten-free versions of traditional Japanese dishes that were incredible.",
-      bookingUrl: "https://www.hyatt.com/en-US/hotel/japan/park-hyatt-tokyo/tyoph"
+      bookingUrl: "https://www.hyatt.com/en-US/hotel/japan/park-hyatt-tokyo/tyoph",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/293146114.jpg?k=6ad9fd9e1378836503fd5d648afe4585644d2af4b81371791895d3b9c2f0d815&o=&hp=1",
+      rating: 4.9,
+      location: "Shinjuku"
     },
     {
       name: "The Peninsula Tokyo ★★★★★",
@@ -41,7 +47,10 @@ export const tokyoContent: DestinationContent = {
       ],
       description: "Luxury hotel near the Imperial Palace with exceptional allergy protocols and multilingual staff to assist with dietary needs.",
       quote: "Every meal was prepared with my dairy and nut allergies in mind, and they even offered gluten-free afternoon tea.",
-      bookingUrl: "https://www.peninsula.com/en/tokyo/5-star-luxury-hotel-ginza"
+      bookingUrl: "https://www.peninsula.com/en/tokyo/5-star-luxury-hotel-ginza",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/41160325.jpg?k=be5a05462f66e8e55f055b7cc8179eb5005e6a1cce90c71307cfeea8941e8a84&o=&hp=1",
+      rating: 4.8,
+      location: "Chiyoda"
     },
     {
       name: "Keio Plaza Hotel Tokyo ★★★★",
@@ -53,7 +62,10 @@ export const tokyoContent: DestinationContent = {
       ],
       description: "Large, business-friendly hotel with designated allergy-friendly floors and restaurants experienced in handling dietary restrictions.",
       quote: "They had comprehensive English ingredient lists for every buffet item and could prepare special meals on request.",
-      bookingUrl: "https://www.keioplaza.com/"
+      bookingUrl: "https://www.keioplaza.com/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/316929364.jpg?k=76996a195bfa3b410b0b80be44088cb1c40c82378648847ccd9acf3626c27a7a&o=&hp=1",
+      rating: 4.5,
+      location: "Shinjuku"
     }
   ],
   faqs: [

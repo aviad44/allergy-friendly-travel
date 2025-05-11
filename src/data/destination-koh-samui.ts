@@ -17,7 +17,36 @@ export const kohSamuiContent: DestinationContent = {
       ],
       description: "Luxury resort offering exceptional allergy-friendly dining options and stunning ocean views. Famous as the filming location for White Lotus Season 3.",
       quote: "My daughter has severe nut and dairy allergies. The staff reviewed every meal in advance, and we felt completely safe throughout our stay.",
-      bookingUrl: "https://www.fourseasons.com/kohsamui/"
+      bookingUrl: "https://www.fourseasons.com/kohsamui/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/347289712.jpg?k=5681cdaf3aad02b2c2440eecb8b974e8a2577a6015937577c3551b901f95b265&o=&hp=1"
+    },
+    {
+      name: "Santiburi Koh Samui",
+      address: "12/12 Moo 1, Mae Nam, Koh Samui, Surat Thani 84330, Thailand",
+      features: [
+        "Full dietary profiling before arrival",
+        "In-house nutritionist",
+        "Personalized meal preparation",
+        "Separate cooking areas for allergies"
+      ],
+      description: "A luxury beachfront retreat with villas surrounded by tropical gardens, offering comprehensive allergy management and personalized dining experiences.",
+      quote: "As someone with celiac disease, I was amazed at how seriously they took my condition. The chef personally showed me their gluten-free preparation area.",
+      bookingUrl: "https://www.santiburisamui.com/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/259356089.jpg?k=3e0f02f4bccd313145dca3748f7af1dea71cee6fd50c2d6207bea8d3cc2b5ce0&o=&hp=1"
+    },
+    {
+      name: "Anantara Bophut Koh Samui Resort",
+      address: "99/9 Bophut Bay, Koh Samui, Surat Thani 84320, Thailand",
+      features: [
+        "Spice Spoons cooking school with allergy options",
+        "Customized dietary menus",
+        "Allergy cards in multiple languages",
+        "Wellness cuisine program"
+      ],
+      description: "A beachfront resort combining Thai-inspired luxury with exceptional allergy-aware dining and personalized culinary experiences.",
+      quote: "The resort provided allergy cards in Thai that I could use throughout my stay. Their attention to detail with my shellfish allergy was impressive.",
+      bookingUrl: "https://www.anantara.com/en/bophut-koh-samui",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/331963356.jpg?k=f9211d1a72e6e1e7151ff73287a18f774e3d2d52598e713112fde7efb68b9bc9&o=&hp=1"
     }
   ],
   faqs: [
@@ -32,6 +61,10 @@ export const kohSamuiContent: DestinationContent = {
     {
       question: "When is the best time to visit Koh Samui?",
       answer: "The best time to visit is from January to May when the weather is dry and sunny with lower humidity."
+    },
+    {
+      question: "Are there good medical facilities nearby for allergy emergencies?",
+      answer: "Yes, Bangkok Hospital Samui is a JCI-accredited facility with 24/7 emergency services and English-speaking doctors experienced in treating severe allergic reactions."
     }
   ],
   languageTable: {

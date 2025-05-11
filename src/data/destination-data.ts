@@ -3,6 +3,10 @@ import { DestinationContent, Hotel, FAQ, DestinationId } from '@/types/definitio
 import { tuscanyContent } from './destination-tuscany';
 import { genericFaqs, genericIntro } from './generic-content';
 import { swissAlpsContent } from './destination-swiss-alps';
+import { kohSamuiContent } from './destination-koh-samui';
+import { tokyoContent } from './destination-tokyo';
+import { torontoContent } from './destination-toronto';
+import { parisContent } from './destination-paris';
 
 // Mock data for missing imports
 // These would normally be imported from their respective files
@@ -12,33 +16,24 @@ const londonData: Partial<DestinationContent> = {
   faqs: []
 };
 
-const parisData: Partial<DestinationContent> = {
-  intro: "Paris offers many allergy-friendly hotels and restaurants.",
-  hotels: [],
-  faqs: []
-};
-
 // Create empty arrays with the right types
 const barcelonaHotels: Hotel[] = [];
 const cyprusHotels: Hotel[] = [];
 const abudhabiHotels: Hotel[] = [];
 const creteHotels: Hotel[] = [];
-const tokyoContent: Partial<DestinationContent> = { intro: "", hotels: [], faqs: [] };
 const thailandHotels: Hotel[] = [];
 const hotelChainsInfo: Hotel[] = [];
 const newYorkHotels: Hotel[] = [];
 const portugalHotels: Hotel[] = [];
-const kohSamuiContent: Partial<DestinationContent> = { intro: "", hotels: [], faqs: [] };
 const turkeyHotels: Hotel[] = [];
 const cruiseLinesInfo: Hotel[] = [];
 const cruiseLinesFaqs: FAQ[] = [];
 const cruiseLinesIntro: string = "";
-const torontoContent: Partial<DestinationContent> = { intro: "", hotels: [], faqs: [] };
 const ayiaNapaHotels: Hotel[] = [];
 
 export const destinationData: Record<DestinationId, Partial<DestinationContent>> = {
   london: londonData,
-  paris: parisData,
+  paris: parisContent,
   barcelona: {
     hotels: barcelonaHotels,
     faqs: genericFaqs,

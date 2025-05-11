@@ -17,7 +17,10 @@ export const parisContent: DestinationContent = {
       ],
       description: "This iconic luxury hotel offers exceptional service for guests with dietary restrictions, including pre-arrival consultations.",
       quote: "The chef personally came to our table to discuss my daughter's gluten allergy. The food was exquisite and completely safe.",
-      bookingUrl: "https://www.oetkercollection.com/hotels/le-bristol-paris/"
+      bookingUrl: "https://www.oetkercollection.com/hotels/le-bristol-paris/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/48011363.jpg?k=7589023adf0c437fc9885894baf6d9f118b905e73ae8443833b90fd8402c1491&o=&hp=1",
+      rating: 5,
+      location: "8th Arrondissement"
     },
     {
       name: "Hôtel Plaza Athénée ★★★★★",
@@ -29,7 +32,10 @@ export const parisContent: DestinationContent = {
       ],
       description: "Upscale accommodation with special attention to food allergies and comprehensive allergen training for all kitchen staff.",
       quote: "They created a custom dairy-free menu for my entire stay, even including French pastries!",
-      bookingUrl: "https://www.dorchestercollection.com/en/paris/hotel-plaza-athenee/"
+      bookingUrl: "https://www.dorchestercollection.com/en/paris/hotel-plaza-athenee/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/258171375.jpg?k=0696d032a8c2612e4f6b9427f599d840e401cb3279df40471f9e36a7454b92a6&o=&hp=1",
+      rating: 5,
+      location: "8th Arrondissement"
     },
     {
       name: "Hôtel de Crillon ★★★★★",
@@ -41,7 +47,10 @@ export const parisContent: DestinationContent = {
       ],
       description: "Elegant and historic Parisian hotel with knowledgeable staff trained to handle various dietary restrictions.",
       quote: "Despite being in the land of gluten, they made my celiac stay wonderful with safe and delicious alternatives.",
-      bookingUrl: "https://www.rosewoodhotels.com/en/hotel-de-crillon"
+      bookingUrl: "https://www.rosewoodhotels.com/en/hotel-de-crillon",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/261241293.jpg?k=11fe9ff22d9347302e750bf03c9f0b3e5be6499ea66a45e61e4536b4dafd096b&o=&hp=1",
+      rating: 5,
+      location: "Place de la Concorde"
     },
     {
       name: "Shangri-La Hotel Paris ★★★★★",
@@ -53,7 +62,10 @@ export const parisContent: DestinationContent = {
       ],
       description: "Offers exceptional luxury accommodations with special attention to guest allergies and multiple dining venues with allergy-aware menus.",
       quote: "The staff went above and beyond to ensure my nut allergy was accommodated throughout my entire stay.",
-      bookingUrl: "https://www.shangri-la.com/paris/shangrila/"
+      bookingUrl: "https://www.shangri-la.com/paris/shangrila/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/261250151.jpg?k=3cc9d34bb3aaf3a3b61e4dab1c1f20a8e19ed3a97b83439c670bbe9a6e8aef2d&o=&hp=1",
+      rating: 4.9,
+      location: "16th Arrondissement"
     }
   ],
   faqs: [
