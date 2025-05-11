@@ -6,6 +6,17 @@ import { DefaultMetaTags } from "@/components/DefaultMetaTags";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
+// Add TypeScript FB declaration
+declare global {
+  interface Window {
+    FB?: {
+      XFBML: {
+        parse: () => void;
+      };
+    };
+  }
+}
+
 export const MainLayout = () => {
   const location = useLocation();
   
@@ -14,59 +25,85 @@ export const MainLayout = () => {
     
     // Update meta tags for the current page
     if (typeof document !== 'undefined') {
-      // Force Facebook to re-scrape the page when shared
-      const fbRefresh = () => {
-        if (typeof window !== 'undefined' && 'FB' in window) {
-          console.log("Refreshing Facebook cache");
-          window.FB.XFBML.parse();
-        }
-      };
-      
-      // Add Facebook SDK for re-scraping capability
-      const addFacebookSDK = () => {
-        if (!document.getElementById('facebook-jssdk')) {
-          const fbScript = document.createElement('script');
-          fbScript.id = 'facebook-jssdk';
-          fbScript.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0";
-          fbScript.async = true;
-          fbScript.defer = true;
-          fbScript.crossOrigin = 'anonymous';
-          fbScript.onload = fbRefresh;
-          document.body.appendChild(fbScript);
-        } else {
-          fbRefresh();
-        }
-      };
-      
-      // Critical fix: Wait for page-specific meta tags to be injected first
+      // Force Facebook to re-scrape the page when shared - Add a delay to ensure all meta tags are loaded
       setTimeout(() => {
-        // Ensure the URL meta tags are correct and absolute
+        // CRITICAL: Ensure the URL meta tags are correct and absolute
         const canonicalTag = document.querySelector('link[rel="canonical"]');
         const ogUrlTag = document.querySelector('meta[property="og:url"]');
         const ogImageTag = document.querySelector('meta[property="og:image"]');
         const fullUrl = window.location.origin + location.pathname;
         
+        console.log("Checking meta tags...");
+        console.log("og:url tag exists:", !!ogUrlTag);
+        console.log("og:image tag exists:", !!ogImageTag);
+        
         if (canonicalTag) {
           canonicalTag.setAttribute('href', fullUrl);
+          console.log("Updated canonical URL to:", fullUrl);
         }
         
         if (ogUrlTag) {
           ogUrlTag.setAttribute('content', fullUrl);
+          console.log("Updated og:url to:", fullUrl);
         }
         
-        // Critical fix: Ensure og:image has absolute URL
+        // CRITICAL: Ensure og:image has absolute URL
         if (ogImageTag) {
           const imageUrl = ogImageTag.getAttribute('content');
-          if (imageUrl && !imageUrl.startsWith('http')) {
-            const absoluteImageUrl = window.location.origin + imageUrl;
-            ogImageTag.setAttribute('content', absoluteImageUrl);
-            console.log("Fixed relative og:image URL to absolute:", absoluteImageUrl);
+          if (imageUrl) {
+            // If the URL is relative (doesn't start with http), make it absolute
+            if (!imageUrl.startsWith('http')) {
+              const absoluteImageUrl = window.location.origin + imageUrl;
+              ogImageTag.setAttribute('content', absoluteImageUrl);
+              console.log("Fixed relative og:image URL to absolute:", absoluteImageUrl);
+            } else {
+              console.log("og:image already absolute:", imageUrl);
+            }
+          } else {
+            console.log("Warning: og:image has no content attribute");
           }
+        } else {
+          console.log("Error: No og:image tag found on page");
         }
         
+        // Debug all meta tags
+        const allMetaTags = document.querySelectorAll('meta[property^="og:"]');
+        console.log(`Found ${allMetaTags.length} OG meta tags:`);
+        allMetaTags.forEach(tag => {
+          const prop = tag.getAttribute('property');
+          const content = tag.getAttribute('content');
+          console.log(`${prop}: ${content}`);
+        });
+        
         // Add Facebook SDK for re-scraping
+        const addFacebookSDK = () => {
+          if (!document.getElementById('facebook-jssdk')) {
+            const fbScript = document.createElement('script');
+            fbScript.id = 'facebook-jssdk';
+            fbScript.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0";
+            fbScript.async = true;
+            fbScript.defer = true;
+            fbScript.crossOrigin = 'anonymous';
+            fbScript.onload = () => {
+              // Safe check for FB object before using it
+              if (window.FB) {
+                console.log("Facebook SDK loaded, refreshing cache");
+                window.FB.XFBML.parse();
+              } else {
+                console.log("Facebook SDK loaded but FB object not available");
+              }
+            };
+            document.body.appendChild(fbScript);
+            console.log("Facebook SDK added to page");
+          } else if (window.FB) {
+            console.log("Facebook SDK already loaded, refreshing cache");
+            window.FB.XFBML.parse();
+          }
+        };
+        
+        // Add Facebook SDK
         addFacebookSDK();
-      }, 100);
+      }, 300); // Increased delay to ensure all meta tags are loaded
     }
   }, [location]);
   

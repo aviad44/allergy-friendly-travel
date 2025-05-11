@@ -11,14 +11,15 @@ interface DestinationHeroProps {
 
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   // Define critical destinations with direct paths for reliable image display
+  // IMPORTANT: These MUST match the image URLs used in the OG tags for each destination
   const criticalDestinations: Record<string, string> = {
-    'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Updated to use new uploaded resort image
-    'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
-    'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
+    'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Resort image
+    'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Cyprus beachfront resort
+    'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80", // Crete image
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80",
-    'ayia-napa': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png" // Using the same new Cyprus image for Ayia Napa
+    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80", // Barcelona image
+    'ayia-napa': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png" // Cyprus image for Ayia Napa
   };
   
   // Always prioritize critical destinations - use DIRECT paths for these specific cases
@@ -58,7 +59,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     altText = `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`;
   }
   
-  // Preload the image
+  // Preload the image to ensure it's cached for sharing
   useEffect(() => {
     // Preload main image
     const img = new Image();
@@ -76,6 +77,29 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
       fallbackImg.src = fallbackUrl;
       console.log(`DestinationHero: Preloading fallback image: ${fallbackUrl}`);
     }
+    
+    // Update document head with page-specific meta tags if needed
+    const ensureOgImage = () => {
+      const ogImageTag = document.querySelector('meta[property="og:image"]');
+      if (ogImageTag) {
+        const currentOgImage = ogImageTag.getAttribute('content');
+        
+        // If OG image is not matching the hero image, update it
+        if (currentOgImage && !currentOgImage.includes(imageUrl) && !imageUrl.includes(currentOgImage)) {
+          console.log(`DestinationHero: OG Image mismatch. Current: ${currentOgImage}, Hero: ${imageUrl}`);
+          // Ensure image URL is absolute
+          const absoluteImageUrl = imageUrl.startsWith('http') ? 
+            imageUrl : 
+            `${window.location.origin}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+          
+          ogImageTag.setAttribute('content', absoluteImageUrl);
+          console.log(`DestinationHero: Updated OG Image to match hero: ${absoluteImageUrl}`);
+        }
+      }
+    };
+    
+    // Run this check after a short delay to ensure Helmet has updated the head
+    setTimeout(ensureOgImage, 500);
   }, [destination.id, imageUrl, destination.name]);
 
   return (

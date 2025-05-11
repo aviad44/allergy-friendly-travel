@@ -17,27 +17,27 @@ export const DefaultMetaTags = () => {
       <meta name="description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       
-      {/* These tags will be overridden by page-specific tags */}
-      {/* They only serve as fallbacks with lower priority */}
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
-      <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
-      <meta property="og:url" content={currentUrl} />
-      <meta property="og:image" content={`${baseUrl}${defaultImage}`} />
-      <meta property="og:image:type" content="image/png" />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta property="og:image:alt" content="Allergy-Free Travel Logo" />
-      <meta property="og:site_name" content="Allergy Free Travel" />
-      <meta property="og:locale" content="en_US" />
-      <meta property="og:image:secure_url" content={`${baseUrl}${defaultImage}`} />
+      {/* FALLBACK ONLY: These Open Graph tags should be overridden by individual pages */}
+      {/* They will only be used if a page doesn't define its own tags */}
+      <meta property="og:type" content="website" data-react-helmet="true" />
+      <meta property="og:title" content="Allergy-Free Travel – Hotels for Food Allergies" data-react-helmet="true" />
+      <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." data-react-helmet="true" />
+      <meta property="og:url" content={currentUrl} data-react-helmet="true" />
+      <meta property="og:image" content={`${baseUrl}${defaultImage}`} data-react-helmet="true" />
+      <meta property="og:image:type" content="image/png" data-react-helmet="true" />
+      <meta property="og:image:width" content="1200" data-react-helmet="true" />
+      <meta property="og:image:height" content="630" data-react-helmet="true" />
+      <meta property="og:image:alt" content="Allergy-Free Travel Logo" data-react-helmet="true" />
+      <meta property="og:site_name" content="Allergy Free Travel" data-react-helmet="true" />
+      <meta property="og:locale" content="en_US" data-react-helmet="true" />
+      <meta property="og:image:secure_url" content={`${baseUrl}${defaultImage}`} data-react-helmet="true" />
       
       {/* Twitter Card tags */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
-      <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
-      <meta name="twitter:image" content={`${baseUrl}${defaultImage}`} />
-      <meta name="twitter:image:alt" content="Allergy-Free Travel Logo" />
+      <meta name="twitter:card" content="summary_large_image" data-react-helmet="true" />
+      <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" data-react-helmet="true" />
+      <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." data-react-helmet="true" />
+      <meta name="twitter:image" content={`${baseUrl}${defaultImage}`} data-react-helmet="true" />
+      <meta name="twitter:image:alt" content="Allergy-Free Travel Logo" data-react-helmet="true" />
       
       {/* WhatsApp specific meta tags */}
       <link itemProp="thumbnailUrl" href={`${baseUrl}${defaultImage}`} />
