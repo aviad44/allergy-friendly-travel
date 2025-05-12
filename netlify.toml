@@ -3,6 +3,15 @@
   command = "npm run build"
   publish = "dist"
 
+# Edge functions with improved bot detection
+[[edge_functions]]
+  path = "/*"
+  function = "translate-card"
+
+[[edge_functions]]
+  path = "/*"
+  function = "optimize-static-assets"
+
 # CRITICAL: Handle crawlers/bots FIRST with specific route matching for Facebook
 [[redirects]]
   from = "/destinations/crete"
@@ -10,7 +19,7 @@
   status = 200
   force = true
   [redirects.conditions]
-    User-Agent = ["facebookexternalhit", "Facebookexternalhit", "FacebookBot", "Facebook", "facebook"]
+    User-Agent = ["facebookexternalhit", "Facebookexternalhit", "FacebookBot", "Facebook", "facebook", "whatsapp", "WhatsApp"]
 
 # CRITICAL: Handle crawlers/bots FIRST - This must come before any other redirects
 [[redirects]]

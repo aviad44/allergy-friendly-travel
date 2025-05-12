@@ -1,9 +1,10 @@
 
-# CRITICAL: Bot detection for social media crawlers - HIGHEST PRIORITY
+# HIGHEST PRIORITY - Social Media Bot Detection for /destinations/crete
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=facebookexternalhit
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=Facebookexternalhit
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=FacebookBot
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=facebook
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=Facebook
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=whatsapp
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=WhatsApp
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=twitterbot
@@ -35,4 +36,3 @@ https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:s
 # Redirect URL normalization - ensure canonical paths
 /destinations/abudhabi /destinations/abu-dhabi 301
 /destinations/newyork /destinations/new-york 301
-

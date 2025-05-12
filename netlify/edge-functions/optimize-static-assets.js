@@ -85,8 +85,8 @@ export default async function handler(request, context) {
       context.log(`CRITICAL: Processing Crete page for bot: ${userAgent}`);
       
       return new Response(null, {
-        status = 302,
-        headers = {
+        status: 302,
+        headers: {
           'Location': `https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete`,
           'Prerender': 'true',
           'X-Prerender-Token': prerenderToken,
