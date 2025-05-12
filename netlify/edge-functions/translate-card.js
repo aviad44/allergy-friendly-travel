@@ -67,26 +67,23 @@ export default async function handler(request, context) {
     const prerenderToken = Deno.env.get("PRERENDER_TOKEN") || '';
     
     if (!prerenderToken) {
-      context.log('Warning: PRERENDER_TOKEN is not set in environment variables');
+      context.log('CRITICAL ERROR: PRERENDER_TOKEN is not set in environment variables');
     }
     
     // Generate a full URL for debugging purposes
     const fullUrl = `https://www.allergy-free-travel.com${new URL(url).pathname}`;
     const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     
-    // For Crete page, ensure we're sending to the exact Prerender URL
+    // For Crete page, ensure we're sending to the exact Prerender URL with token
     if (url.includes('/destinations/crete')) {
       context.log(`CRITICAL: Processing Crete page for bot: ${userAgent}`);
       
-      // Hard-coded response for Crete page
+      // Direct request to Prerender with token in header - Now using 301 redirect
       return new Response(null, {
-        status: 302,
+        status: 301,
         headers: {
-          'Location': `https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete`,
-          'Prerender': 'true',
+          'Location': `https://service.prerender.io/${fullUrl}`,
           'X-Prerender-Token': prerenderToken,
-          'x-prerender-requestid': requestId,
-          'X-Original-User-Agent': userAgent,
           'Cache-Control': 'no-cache, no-store',
           'X-Debug-Social': 'true',
           'X-Debug-Path': 'Crete-specific-path'
@@ -94,15 +91,12 @@ export default async function handler(request, context) {
       });
     }
     
-    // Regular bot handling for other pages
+    // Regular bot handling for other pages - Now using 301 redirect
     return new Response(null, {
-      status: 302,
+      status: 301,
       headers: {
         'Location': `https://service.prerender.io/${fullUrl}`,
-        'Prerender': 'true',
         'X-Prerender-Token': prerenderToken,
-        'x-prerender-requestid': requestId,
-        'X-Original-User-Agent': userAgent,
         'Cache-Control': 'no-cache, no-store',
         'X-Debug-Social': 'true'
       }

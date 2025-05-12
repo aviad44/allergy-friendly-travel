@@ -67,11 +67,11 @@ export default async function handler(request, context) {
   if (isBot) {
     context.log(`BOT DETECTED AND ROUTING TO PRERENDER: ${userAgent} for URL: ${url}`);
     
-    // Get the Prerender token from environment variables
+    // Get the Prerender token from environment variables - CRITICAL: This must be correctly set
     const prerenderToken = Deno.env.get("PRERENDER_TOKEN") || '';
     
     if (!prerenderToken) {
-      context.log('WARNING: PRERENDER_TOKEN is not set in environment variables');
+      context.log('CRITICAL ERROR: PRERENDER_TOKEN is not set in environment variables');
     }
     
     // Full URL with protocol for Prerender.io
@@ -84,14 +84,12 @@ export default async function handler(request, context) {
     if (url.includes('/destinations/crete')) {
       context.log(`CRITICAL: Processing Crete page for bot: ${userAgent}`);
       
+      // CRITICAL: Direct request to Prerender with token in header
       return new Response(null, {
-        status: 302,
+        status: 301,
         headers: {
-          'Location': `https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete`,
-          'Prerender': 'true',
+          'Location': `https://service.prerender.io/${fullUrl}`,
           'X-Prerender-Token': prerenderToken,
-          'x-prerender-requestid': requestId,
-          'X-Original-User-Agent': userAgent,
           'Cache-Control': 'no-cache, no-store',
           'X-Debug-BotDetection': 'true',
           'X-Debug-Path': 'Crete-specific-path',
@@ -100,15 +98,12 @@ export default async function handler(request, context) {
       });
     }
     
-    // CRITICAL FIX: Add Prerender headers and explicitly route to Prerender.io with 302 redirect
+    // CRITICAL FIX: Add Prerender headers and explicitly route to Prerender.io with 301 redirect
     return new Response(null, {
-      status: 302,
+      status: 301,
       headers: {
         'Location': `https://service.prerender.io/${fullUrl}`,
-        'Prerender': 'true',
         'X-Prerender-Token': prerenderToken,
-        'x-prerender-requestid': requestId,
-        'X-Original-User-Agent': userAgent,
         'Cache-Control': 'no-cache, no-store',
         'X-Debug-BotDetection': 'true',
         'X-Bot-UserAgent': userAgent.substring(0, 200) // Truncate if too long
