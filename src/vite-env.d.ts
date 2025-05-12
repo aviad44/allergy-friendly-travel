@@ -12,3 +12,6 @@ declare global {
     }
   }
 }
+
+// Export an empty object to make this a module
+export {}

@@ -8,13 +8,6 @@ import { useEffect } from "react";
 
 /// <reference path="../vite-env.d.ts" />
 
-// Add direct declaration to fix TypeScript errors
-declare global {
-  interface Window {
-    FB: any;
-  }
-}
-
 export const MainLayout = () => {
   const location = useLocation();
   
@@ -29,7 +22,8 @@ export const MainLayout = () => {
         const canonicalTag = document.querySelector('link[rel="canonical"]');
         const ogUrlTag = document.querySelector('meta[property="og:url"]');
         const ogImageTag = document.querySelector('meta[property="og:image"]');
-        const fullUrl = window.location.origin + location.pathname;
+        const baseUrl = "https://www.allergy-free-travel.com";
+        const fullUrl = `${baseUrl}${location.pathname}`;
         
         console.log("Checking meta tags...");
         console.log("og:url tag exists:", !!ogUrlTag);
@@ -51,7 +45,7 @@ export const MainLayout = () => {
           if (imageUrl) {
             // If the URL is relative (doesn't start with http), make it absolute
             if (!imageUrl.startsWith('http')) {
-              const absoluteImageUrl = window.location.origin + imageUrl;
+              const absoluteImageUrl = `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
               ogImageTag.setAttribute('content', absoluteImageUrl);
               console.log("Fixed relative og:image URL to absolute:", absoluteImageUrl);
             } else {

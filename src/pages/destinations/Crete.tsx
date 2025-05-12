@@ -37,6 +37,12 @@ const Crete = () => {
         <meta name="twitter:description" content={pageDescription} data-react-helmet="true" />
         <meta name="twitter:image" content={imageUrl} data-react-helmet="true" />
         
+        {/* WhatsApp specific Meta Tags */}
+        <link itemProp="thumbnailUrl" href={imageUrl} />
+        <span itemProp="thumbnail" itemScope itemType="http://schema.org/ImageObject">
+          <link itemProp="url" href={imageUrl} />
+        </span>
+        
         {/* Schema.org markup */}
         <script type="application/ld+json">
           {JSON.stringify({
