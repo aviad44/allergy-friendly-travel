@@ -2,15 +2,6 @@
 User-agent: *
 Allow: /
 
-# Disallow admin areas and development routes
-Disallow: /admin/
-Disallow: /dev/
-Disallow: /api/private/
-
-# Disallow search pages
-Disallow: /search
-Noindex: /search
-
 # Explicitly allow important pages
 Allow: /about
 Allow: /contact
@@ -27,6 +18,21 @@ Allow: /destinations/thailand
 Allow: /destinations/ayia-napa
 Allow: /hotels/le-petit-palace
 
+# Explicitly ALLOW prerender and social media bots
+User-agent: facebookexternalhit
+Allow: /
+User-agent: FacebookBot
+Allow: /
+User-agent: WhatsApp
+Allow: /
+User-agent: Twitterbot
+Allow: /
+User-agent: LinkedInBot
+Allow: /
+User-agent: PinterestBot  
+Allow: /
+User-agent: prerender
+Allow: /
+
 # Sitemap location
 Sitemap: https://www.allergy-free-travel.com/sitemap.xml
-

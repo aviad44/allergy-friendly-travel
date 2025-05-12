@@ -1,27 +1,27 @@
 
-# HIGHEST PRIORITY - Social Media Bot Detection for /destinations/crete
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=facebookexternalhit
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=Facebookexternalhit
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=FacebookBot
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=facebook
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=Facebook
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=whatsapp
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=WhatsApp
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=twitterbot
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=linkedinbot
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 301! User-Agent=pinterestbot
+# HIGHEST PRIORITY - Social Media Bot Detection
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=facebookexternalhit
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=Facebookexternalhit
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=FacebookBot
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=facebook
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=Facebook
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=whatsapp
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=WhatsApp
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=twitterbot
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=linkedinbot
+/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=pinterestbot
 
 # General bot patterns for ALL routes - after specific cases
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=facebookexternalhit
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=Facebookexternalhit
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=FacebookBot
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=facebook
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=Facebook
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=whatsapp
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=WhatsApp
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=twitterbot
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=linkedinbot
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 301! User-Agent=pinterestbot
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=facebookexternalhit
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=Facebookexternalhit
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=FacebookBot
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=facebook
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=Facebook
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=whatsapp
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=WhatsApp
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=twitterbot
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=linkedinbot
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=pinterestbot
 
 # Redirect domain aliases to primary domain
 https://allergyfreetravel.com/* https://www.allergy-free-travel.com/:splat 301!

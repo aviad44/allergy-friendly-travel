@@ -6,35 +6,15 @@
 # Edge functions with improved bot detection
 [[edge_functions]]
   path = "/*"
-  function = "translate-card"
-
-[[edge_functions]]
-  path = "/*"
   function = "optimize-static-assets"
 
-# CRITICAL: Handle crawlers/bots FIRST with specific route matching for Facebook
-[[redirects]]
-  from = "/destinations/crete"
-  to = "https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete"
-  status = 301
-  force = true
-  [redirects.conditions]
-    User-Agent = ["facebookexternalhit", "Facebookexternalhit", "FacebookBot", "Facebook", "facebook", "whatsapp", "WhatsApp"]
-
-# CRITICAL: Handle crawlers/bots FIRST - This must come before any other redirects
-[[redirects]]
-  from = "/*"
-  to = "https://service.prerender.io/https://www.allergy-free-travel.com/:splat"
-  status = 301
-  force = true
-  [redirects.conditions]
-    User-Agent = ["facebookexternalhit", "Facebookexternalhit", "FacebookBot", "Facebook", "facebook", "Whatsapp", "WhatsApp", "twitter", "Twitter", "Twitterbot", "linkedinbot", "LinkedInBot", "pinterest", "Pinterest", "slack", "telegram", "bot", "preview", "embedly", "quora", "googlebot", "bingbot", "yandex", "duckduckbot"]
-
-# Handle 404 errors for regular users - This must come AFTER the bot redirects
+# Handle 404 errors for regular users
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  [redirects.conditions]
+    User-Agent = ["!facebookexternalhit", "!Facebookexternalhit", "!FacebookBot", "!Facebook", "!facebook", "!Whatsapp", "!WhatsApp", "!twitter", "!Twitter", "!Twitterbot", "!linkedinbot", "!LinkedInBot", "!pinterest", "!Pinterest"]
 
 # Add security headers
 [[headers]]
@@ -46,8 +26,6 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Content-Security-Policy = "upgrade-insecure-requests"
-    # Enable HTTP/2 Server Push
-    Link = "</src/index.css>; rel=preload; as=style, </src/main.tsx>; rel=preload; as=script"
     # CRITICAL: Prerender token header for all requests
     X-Prerender-Token = "${PRERENDER_TOKEN}"
 
@@ -78,41 +56,10 @@
   [headers.values]
     Cache-Control = "public, max-age=604800, immutable"
 
-[[headers]]
-  for = "*.woff2"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Enable Brotli compression for better performance
-[build.processing.brotli]
-  enabled = true
-  
 # WhatsApp specific headers for all PNG images
 [[headers]]
   for = "/*.png"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET"
-    Access-Control-Allow-Headers = "*"
     Cache-Control = "public, max-age=604800"
-
-# Specific header for the OG image to ensure proper content type
-[[headers]]
-  for = "/og-image-new.png"
-  [headers.values]
-    Content-Type = "image/png"
-    Cache-Control = "public, max-age=604800"
-
-[[headers]]
-  for = "/lovable-uploads/c0d4e111-501f-46b3-94ad-23c5b56f9736.png"
-  [headers.values]
-    Content-Type = "image/png"
-    Cache-Control = "public, max-age=604800"
-    Access-Control-Allow-Origin = "*"
-
-[[headers]]
-  for = "/lovable-uploads/e8b4dc3d-60a2-4fb7-bc33-77580f4d249c.png"
-  [headers.values]
-    Content-Type = "image/png"
-    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
-    Access-Control-Allow-Origin = "*"

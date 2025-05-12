@@ -15,29 +15,15 @@ const Crete = () => {
   const imageUrl = "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80";
   const imageAlt = "Beautiful beach resort in Crete, Greece - Allergy-friendly accommodations";
 
-  // Special handler for Facebook sharing
+  // Force preload of crucial images
   useEffect(() => {
     // Force preload of the image for social sharing
     const img = new Image();
     img.src = imageUrl;
-    console.log("Preloading Crete hero image:", imageUrl);
     
     // Debug meta tags
-    console.log("Crete page meta tags set with:", {
-      title: pageTitle,
-      image: imageUrl,
-      url: canonicalUrl
-    });
-    
-    // Attempt to refresh Facebook cache if SDK is available
-    if (typeof window !== 'undefined' && window.FB) {
-      console.log("Attempting to refresh Facebook cache for Crete page");
-      try {
-        window.FB.XFBML.parse();
-      } catch (e) {
-        console.error("Error refreshing Facebook cache:", e);
-      }
-    }
+    console.log("Crete page loaded with image:", imageUrl);
+    console.log("Canonical URL:", canonicalUrl);
   }, [imageUrl]);
 
   return (
@@ -47,7 +33,6 @@ const Crete = () => {
         <meta name="description" content={pageDescription} />
         <meta name="keywords" content={pageKeywords} />
         <link rel="canonical" href={canonicalUrl} />
-        <meta name="robots" content="index, follow" />
         
         {/* Open Graph Meta Tags for Facebook/WhatsApp */}
         <meta property="og:title" content={pageTitle} />
@@ -59,7 +44,6 @@ const Crete = () => {
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Allergy-Free Travel" />
-        <meta property="og:locale" content="en_US" />
         
         {/* Extra tags to force Facebook to recognize the image */}
         <meta property="og:image:secure_url" content={imageUrl} />
@@ -70,7 +54,6 @@ const Crete = () => {
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={imageUrl} />
-        <meta name="twitter:image:alt" content={imageAlt} />
         
         {/* Schema.org markup for rich results */}
         <script type="application/ld+json">
@@ -79,8 +62,6 @@ const Crete = () => {
             "@type": "TravelGuide",
             "name": pageTitle,
             "description": pageDescription,
-            "datePublished": "2024-06-10",
-            "dateModified": "2024-06-10",
             "about": {
               "@type": "Place",
               "name": "Crete",
