@@ -13,9 +13,9 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   // Define critical destinations with direct paths for reliable image display
   // IMPORTANT: These MUST match the image URLs used in the OG tags for each destination
   const criticalDestinations: Record<string, string> = {
+    'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80", // Crete image - MUST match OG tag
     'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Resort image
     'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Cyprus beachfront resort
-    'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80", // Crete image
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
     'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80", // Barcelona image
@@ -54,6 +54,9 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   let altText = `Scenic view of ${destination.name} - Allergy-friendly travel destination`;
   if (destination.id === 'hotel-chains') {
     altText = `Luxury resort with swimming pool - Top allergy-friendly hotel chains worldwide`;
+  }
+  if (destination.id === 'crete') {
+    altText = `Beautiful beach resort in Crete, Greece with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`;
   }
   if (destination.id === 'cyprus') {
     altText = `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`;

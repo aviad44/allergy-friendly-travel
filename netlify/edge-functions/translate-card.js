@@ -43,16 +43,19 @@ export default async function handler(request, context) {
   // Convert user agent to lowercase for case-insensitive matching
   const lowerUserAgent = userAgent.toLowerCase();
   
-  // Check if the user agent is a bot
+  // Check if the user agent is a bot - AGGRESSIVE matching
   const isBot = botUserAgents.some(botAgent => 
     lowerUserAgent.includes(botAgent.toLowerCase())
-  ) || /bot|crawler|spider|facebook|whatsapp/i.test(lowerUserAgent);
+  ) || /bot|crawler|spider|facebook|whatsapp|social|preview/i.test(lowerUserAgent);
   
   // Debug logging for ALL requests to help troubleshoot
   context.log(`Request from UserAgent: ${userAgent.substring(0, 100)}... for URL: ${url}`);
 
-  // For debugging, log all incoming requests from potential WhatsApp/Facebook agents
-  if (lowerUserAgent.includes('whatsapp') || lowerUserAgent.includes('facebook')) {
+  // For debugging, log all incoming requests from potential social media agents
+  if (lowerUserAgent.includes('facebook') || 
+      lowerUserAgent.includes('whatsapp') || 
+      lowerUserAgent.includes('twitter') ||
+      lowerUserAgent.includes('bot')) {
     context.log(`SOCIAL MEDIA detected: ${userAgent} for URL: ${url}`);
   }
 
@@ -71,7 +74,27 @@ export default async function handler(request, context) {
     const fullUrl = `https://www.allergy-free-travel.com${new URL(url).pathname}`;
     const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     
-    // CRITICAL FIX: Force a 302 redirect to Prerender for bots
+    // For Crete page, ensure we're sending to the exact Prerender URL
+    if (url.includes('/destinations/crete')) {
+      context.log(`CRITICAL: Processing Crete page for bot: ${userAgent}`);
+      
+      // Hard-coded response for Crete page
+      return new Response(null, {
+        status: 302,
+        headers: {
+          'Location': `https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete`,
+          'Prerender': 'true',
+          'X-Prerender-Token': prerenderToken,
+          'x-prerender-requestid': requestId,
+          'X-Original-User-Agent': userAgent,
+          'Cache-Control': 'no-cache, no-store',
+          'X-Debug-Social': 'true',
+          'X-Debug-Path': 'Crete-specific-path'
+        }
+      });
+    }
+    
+    // Regular bot handling for other pages
     return new Response(null, {
       status: 302,
       headers: {
@@ -80,7 +103,7 @@ export default async function handler(request, context) {
         'X-Prerender-Token': prerenderToken,
         'x-prerender-requestid': requestId,
         'X-Original-User-Agent': userAgent,
-        'Cache-Control': 'no-cache',
+        'Cache-Control': 'no-cache, no-store',
         'X-Debug-Social': 'true'
       }
     });

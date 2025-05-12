@@ -3,13 +3,23 @@
   command = "npm run build"
   publish = "dist"
 
+# CRITICAL: Handle crawlers/bots FIRST with specific route matching for Facebook
+[[redirects]]
+  from = "/destinations/crete"
+  to = "https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete"
+  status = 200
+  force = true
+  [redirects.conditions]
+    User-Agent = ["facebookexternalhit", "Facebookexternalhit", "FacebookBot", "Facebook", "facebook"]
+
 # CRITICAL: Handle crawlers/bots FIRST - This must come before any other redirects
 [[redirects]]
   from = "/*"
   to = "https://service.prerender.io/https://www.allergy-free-travel.com/:splat"
   status = 200
   force = true
-  conditions = { User-Agent = ["facebookexternalhit", "Facebookexternalhit", "FacebookBot", "Facebook", "Whatsapp", "WhatsApp", "twitter", "Twitter", "Twitterbot", "linkedinbot", "LinkedInBot", "pinterest", "Pinterest", "slack", "telegram", "bot", "preview", "embedly", "quora", "googlebot", "bingbot", "yandex", "duckduckbot"] }
+  [redirects.conditions]
+    User-Agent = ["facebookexternalhit", "Facebookexternalhit", "FacebookBot", "Facebook", "facebook", "Whatsapp", "WhatsApp", "twitter", "Twitter", "Twitterbot", "linkedinbot", "LinkedInBot", "pinterest", "Pinterest", "slack", "telegram", "bot", "preview", "embedly", "quora", "googlebot", "bingbot", "yandex", "duckduckbot"]
 
 # Handle 404 errors for regular users - This must come AFTER the bot redirects
 [[redirects]]

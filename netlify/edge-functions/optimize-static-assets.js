@@ -47,19 +47,19 @@ export default async function handler(request, context) {
   // Convert user agent to lowercase for case-insensitive matching
   const lowerUserAgent = userAgent.toLowerCase();
   
-  // Enhanced bot detection - more comprehensive check
+  // Enhanced bot detection - more aggressive check
   const isBot = botUserAgents.some(botAgent => 
     lowerUserAgent.includes(botAgent.toLowerCase())
-  ) || /bot|crawler|spider|facebook|whatsapp/i.test(lowerUserAgent);
+  ) || /bot|crawler|spider|facebook|whatsapp|social|preview/i.test(lowerUserAgent);
 
   // Enhanced logging for debugging - log ALL requests for troubleshooting
   context.log(`Request from: ${userAgent} for URL: ${url} | isBot: ${isBot}`);
 
   // Enhanced logging for social media platforms
-  if (lowerUserAgent.includes('whatsapp') || 
-      lowerUserAgent.includes('facebook') || 
+  if (lowerUserAgent.includes('facebook') || 
+      lowerUserAgent.includes('whatsapp') || 
       lowerUserAgent.includes('twitter') ||
-      lowerUserAgent.includes('linkedin')) {
+      lowerUserAgent.includes('bot')) {
     context.log(`SOCIAL MEDIA BOT DETECTED: ${userAgent} for URL: ${url}`);
   }
 
@@ -80,6 +80,26 @@ export default async function handler(request, context) {
     // Generate unique request ID for debugging
     const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     
+    // Special handling for Crete page
+    if (url.includes('/destinations/crete')) {
+      context.log(`CRITICAL: Processing Crete page for bot: ${userAgent}`);
+      
+      return new Response(null, {
+        status = 302,
+        headers = {
+          'Location': `https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete`,
+          'Prerender': 'true',
+          'X-Prerender-Token': prerenderToken,
+          'x-prerender-requestid': requestId,
+          'X-Original-User-Agent': userAgent,
+          'Cache-Control': 'no-cache, no-store',
+          'X-Debug-BotDetection': 'true',
+          'X-Debug-Path': 'Crete-specific-path',
+          'X-Bot-UserAgent': userAgent.substring(0, 200) // Truncate if too long
+        }
+      });
+    }
+    
     // CRITICAL FIX: Add Prerender headers and explicitly route to Prerender.io with 302 redirect
     return new Response(null, {
       status: 302,
@@ -89,7 +109,7 @@ export default async function handler(request, context) {
         'X-Prerender-Token': prerenderToken,
         'x-prerender-requestid': requestId,
         'X-Original-User-Agent': userAgent,
-        'Cache-Control': 'no-cache',
+        'Cache-Control': 'no-cache, no-store',
         'X-Debug-BotDetection': 'true',
         'X-Bot-UserAgent': userAgent.substring(0, 200) // Truncate if too long
       }

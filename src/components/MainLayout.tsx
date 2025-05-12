@@ -6,8 +6,6 @@ import { DefaultMetaTags } from "@/components/DefaultMetaTags";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
-/// <reference path="../vite-env.d.ts" />
-
 export const MainLayout = () => {
   const location = useLocation();
   
@@ -66,6 +64,27 @@ export const MainLayout = () => {
           const content = tag.getAttribute('content');
           console.log(`${prop}: ${content}`);
         });
+        
+        // CRITICAL: Special handling for Crete page
+        if (location.pathname === '/destinations/crete') {
+          console.log("CRITICAL: Special handling for Crete page");
+          
+          // Ensure Crete-specific OG tags
+          const creteImage = "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80";
+          const creteTitle = "Allergy-Friendly Hotels in Crete | Safe Dining in Greece";
+          
+          // Update or create OG tags for Crete
+          if (ogImageTag) {
+            ogImageTag.setAttribute('content', creteImage);
+            console.log("Forced Crete image:", creteImage);
+          }
+          
+          const ogTitleTag = document.querySelector('meta[property="og:title"]');
+          if (ogTitleTag) {
+            ogTitleTag.setAttribute('content', creteTitle);
+            console.log("Forced Crete title:", creteTitle);
+          }
+        }
         
         // Add Facebook SDK for re-scraping
         const addFacebookSDK = () => {

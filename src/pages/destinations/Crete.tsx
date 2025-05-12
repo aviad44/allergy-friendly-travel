@@ -28,6 +28,16 @@ const Crete = () => {
       image: imageUrl,
       url: canonicalUrl
     });
+    
+    // Attempt to refresh Facebook cache if SDK is available
+    if (typeof window !== 'undefined' && window.FB) {
+      console.log("Attempting to refresh Facebook cache for Crete page");
+      try {
+        window.FB.XFBML.parse();
+      } catch (e) {
+        console.error("Error refreshing Facebook cache:", e);
+      }
+    }
   }, [imageUrl]);
 
   return (
@@ -50,6 +60,10 @@ const Crete = () => {
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Allergy-Free Travel" />
         <meta property="og:locale" content="en_US" />
+        
+        {/* Extra tags to force Facebook to recognize the image */}
+        <meta property="og:image:secure_url" content={imageUrl} />
+        <meta itemProp="image" content={imageUrl} />
         
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
