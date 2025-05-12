@@ -1,15 +1,17 @@
 
+# CRITICAL: Bot detection for prerendering - This must come BEFORE ANY other redirects
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=facebookexternalhit
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=whatsapp
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=twitterbot
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=linkedinbot
+/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=pinterestbot
+
 # Redirect domain aliases to primary domain
 https://allergyfreetravel.com/* https://www.allergy-free-travel.com/:splat 301!
 https://allergy-free-travel.com/* https://www.allergy-free-travel.com/:splat 301!
 
 # Optional: Redirect default Netlify subdomain to primary domain
 https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:splat 301!
-
-# CRITICAL: Bot detection for prerendering - This must come before SPA handling
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=facebookexternalhit
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=whatsapp
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=twitterbot
 
 # Handle 404 errors - This must come AFTER the bot redirects
 /*    /index.html   200

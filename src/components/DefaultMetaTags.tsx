@@ -17,6 +17,7 @@ export const DefaultMetaTags = () => {
       {/* Primary Meta Tags */}
       <meta name="description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="canonical" href={currentUrl} />
       
       {/* FALLBACK ONLY: These Open Graph tags should be overridden by individual pages */}
       {/* They will only be used if a page doesn't define its own tags */}
@@ -41,10 +42,7 @@ export const DefaultMetaTags = () => {
       <meta name="twitter:image:alt" content="Allergy-Free Travel Logo" data-react-helmet="true" />
       
       {/* WhatsApp specific meta tags */}
-      <link itemProp="thumbnailUrl" href={defaultImage} />
-      <span itemProp="thumbnail" itemScope itemType="http://schema.org/ImageObject">
-        <link itemProp="url" href={defaultImage} />
-      </span>
+      <meta itemProp="thumbnailUrl" content={defaultImage} />
     </Helmet>
   );
 };

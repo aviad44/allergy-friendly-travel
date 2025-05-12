@@ -8,6 +8,18 @@ declare global {
       XFBML: {
         parse: () => void;
       };
+      api: (path: string, method: string, callback: (response: any) => void) => void;
+      AppEvents?: {
+        logPageView: () => void;
+      };
+      init: (params: {
+        appId?: string;
+        version: string;
+        xfbml?: boolean;
+        status?: boolean;
+        cookie?: boolean;
+      }) => void;
+      getLoginStatus: (callback: (response: any) => void) => void;
       [key: string]: any;
     }
   }

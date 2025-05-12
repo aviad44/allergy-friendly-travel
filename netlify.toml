@@ -9,14 +9,13 @@
   to = "https://service.prerender.io/https://www.allergy-free-travel.com/:splat"
   status = 200
   force = true
-  conditions = { User-Agent = ["(?i)facebook", "(?i)facebookexternalhit", "(?i)whatsapp", "(?i)twitter", "(?i)linkedin", "(?i)pinterest", "(?i)slack", "(?i)telegram", "(?i)bot", "(?i)preview", "(?i)embedly", "(?i)quora"] }
+  conditions = { User-Agent = ["facebookexternalhit", "Facebookexternalhit", "FacebookBot", "Facebook", "Whatsapp", "WhatsApp", "twitter", "Twitter", "Twitterbot", "linkedinbot", "LinkedInBot", "pinterest", "Pinterest", "slack", "telegram", "bot", "preview", "embedly", "quora", "googlebot", "bingbot", "yandex", "duckduckbot"] }
 
 # Handle 404 errors for regular users - This must come AFTER the bot redirects
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = { User-Agent = ["^((?!facebookexternalhit|whatsapp|twitterbot|linkedinbot|pinterest|slackbot|telegram|googlebot|bingbot|baiduspider|seznambot|bytespider|yandex|discord).)*$"] }
 
 # Add security headers
 [[headers]]

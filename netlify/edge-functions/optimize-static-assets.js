@@ -1,17 +1,32 @@
 
 export default async function handler(request, context) {
-  // List of known bot user agents to route to Prerender.io
+  // Expanded list of known bot user agents to route to Prerender.io
   const botUserAgents = [
     'facebookexternalhit',
+    'Facebookexternalhit',
+    'FacebookBot',
+    'facebook',
+    'Facebook',
     'whatsapp',
+    'WhatsApp',
+    'twitter',
+    'Twitter',
     'twitterbot',
+    'Twitterbot',
     'linkedinbot',
+    'LinkedInBot',
     'pinterest',
-    'slackbot',
+    'Pinterest',
+    'slack',
+    'Slackbot',
     'telegram',
+    'Telegram',
     'googlebot',
+    'Googlebot',
     'bingbot',
+    'Bingbot',
     'baiduspider',
+    'Baiduspider',
     'seznambot',
     'bytespider',
     'ia_archiver',
@@ -19,7 +34,10 @@ export default async function handler(request, context) {
     'embedly',
     'quora',
     'discordbot',
-    'preview'
+    'preview',
+    'yandex',
+    'duckduckbot',
+    'skype'
   ];
 
   // Get the user agent from the request
@@ -33,6 +51,9 @@ export default async function handler(request, context) {
   const isBot = botUserAgents.some(botAgent => 
     lowerUserAgent.includes(botAgent.toLowerCase())
   ) || /bot|crawler|spider|facebook|whatsapp/i.test(lowerUserAgent);
+
+  // Enhanced logging for debugging - log ALL requests for troubleshooting
+  context.log(`Request from: ${userAgent} for URL: ${url} | isBot: ${isBot}`);
 
   // Enhanced logging for social media platforms
   if (lowerUserAgent.includes('whatsapp') || 
@@ -59,7 +80,7 @@ export default async function handler(request, context) {
     // Generate unique request ID for debugging
     const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     
-    // Add Prerender headers and explicitly route to Prerender.io
+    // CRITICAL FIX: Add Prerender headers and explicitly route to Prerender.io with 302 redirect
     return new Response(null, {
       status: 302,
       headers: {
@@ -68,7 +89,9 @@ export default async function handler(request, context) {
         'X-Prerender-Token': prerenderToken,
         'x-prerender-requestid': requestId,
         'X-Original-User-Agent': userAgent,
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-cache',
+        'X-Debug-BotDetection': 'true',
+        'X-Bot-UserAgent': userAgent.substring(0, 200) // Truncate if too long
       }
     });
   }
