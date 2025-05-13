@@ -1,5 +1,5 @@
 
-import { useImageLoader } from "@/hooks/useImageLoader";
+import React, { useState, useEffect } from "react";
 import { HeroImageFallback } from "./HeroImageFallback";
 import { HeroImageOverlay } from "./HeroImageOverlay";
 
@@ -10,52 +10,62 @@ interface HeroImageProps {
 }
 
 export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg" }: HeroImageProps) => {
-  // Use the extracted hook for image loading logic
-  const { imageLoaded, imageFailed, currentImageUrl, setImageLoaded, setImageFailed } = 
-    useImageLoader({ imageUrl, altText, fallbackImage });
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  // Critical destinations with specific image requirements
+  const criticalDestinations: Record<string, string> = {
+    'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
+    'koh-samui': "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+    'swiss-alps': "https://images.unsplash.com/photo-1531816458010-fb7685eecbcb?auto=format&fit=crop&w=2000&h=1000&q=80"
+  };
+
+  // For critical destinations check if the URL contains the destination ID
+  const destinationMatch = Object.keys(criticalDestinations).find(destId => 
+    imageUrl.includes(destId) || altText.toLowerCase().includes(destId)
+  );
+
+  // Use specific critical image if needed
+  const actualImageUrl = destinationMatch ? criticalDestinations[destinationMatch] : imageUrl;
+  
+  useEffect(() => {
+    // Preload image
+    const img = new Image();
+    img.src = actualImageUrl;
     
-  // Add more debug logging
-  console.log(`HeroImage: Rendering with URL: ${imageUrl}, current: ${currentImageUrl}, loaded: ${imageLoaded}, failed: ${imageFailed}`);
+    img.onload = () => {
+      setImageLoaded(true);
+      setImageFailed(false);
+    };
+    
+    img.onerror = () => {
+      console.error(`Failed to load image: ${actualImageUrl}`);
+      setImageFailed(true);
+    };
+    
+    // Cleanup
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [actualImageUrl]);
 
   return (
-    <div className="absolute inset-0">
-      {/* Loading placeholder */}
-      {!imageLoaded && (
-        <HeroImageFallback altText={altText} isLoading={true} />
-      )}
+    <div className="relative w-full h-full">
+      {!imageLoaded || imageFailed ? (
+        <HeroImageFallback fallbackImage={fallbackImage} />
+      ) : null}
       
-      {/* Main image */}
-      {currentImageUrl && (
-        <img 
-          src={currentImageUrl}
-          alt={altText}
-          className={`w-full h-full object-cover transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          loading="eager" // Important for hero images
-          width="1200"
-          height="600"
-          onLoad={() => {
-            console.log(`HeroImage: Successfully loaded image: ${currentImageUrl}`);
-            setImageLoaded(true);
-            setImageFailed(false);
-          }}
-          onError={(e) => {
-            console.error(`HeroImage: Failed to load image: ${currentImageUrl}`);
-            setImageFailed(true);
-            
-            // Try using a placeholder directly
-            const placeholderUrl = `https://placehold.co/1200x600/1e3a8a/ffffff?text=${altText.split(' - ')[0]}`;
-            console.log(`HeroImage: Attempting emergency fallback: ${placeholderUrl}`);
-            (e.target as HTMLImageElement).src = placeholderUrl;
-          }}
-        />
-      )}
+      <img
+        src={actualImageUrl}
+        alt={altText}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+          imageLoaded && !imageFailed ? 'opacity-100' : 'opacity-0'
+        }`}
+        onLoad={() => setImageLoaded(true)}
+        onError={() => setImageFailed(true)}
+      />
       
-      {/* Fallback when all images fail */}
-      {imageFailed && (
-        <HeroImageFallback altText={altText} isLoading={false} />
-      )}
-      
-      {/* Overlay gradient for text visibility */}
       <HeroImageOverlay />
     </div>
   );

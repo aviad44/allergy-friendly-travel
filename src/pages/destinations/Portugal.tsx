@@ -10,6 +10,16 @@ const Portugal = () => {
   const pageKeywords = "Portugal allergy friendly hotels, gluten free hotel Portugal, celiac Portugal travel, nut free hotel Lisbon, dairy free hotels Algarve";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/portugal";
   const currentDate = new Date().toISOString().split('T')[0];
+  
+  // Use a consistent image that matches our teaser
+  const imageUrl = "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1200&q=80";
+  const imageAlt = "Colorful buildings in Porto, Portugal - Allergy-friendly travel destination";
+  
+  // Preload the image
+  React.useEffect(() => {
+    const img = new Image();
+    img.src = imageUrl;
+  }, []);
 
   return (
     <>
@@ -23,7 +33,7 @@ const Portugal = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
+        <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         
@@ -31,7 +41,7 @@ const Portugal = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" />
+        <meta name="twitter:image" content={imageUrl} />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
@@ -40,7 +50,7 @@ const Portugal = () => {
             "@type": "TravelArticle",
             "headline": "Allergy-Friendly Hotels in Portugal (2025 Guide)",
             "description": pageDescription,
-            "image": "https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png",
+            "image": imageUrl,
             "author": {
               "@type": "Organization",
               "name": "Allergy-Free Travel"
@@ -50,7 +60,7 @@ const Portugal = () => {
               "name": "Allergy-Free Travel",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png"
+                "url": "https://www.allergy-free-travel.com/og-image.png"
               }
             },
             "datePublished": currentDate,

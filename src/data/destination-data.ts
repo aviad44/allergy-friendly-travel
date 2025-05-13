@@ -11,14 +11,14 @@ import { barcelonaContent } from './destination-barcelona';
 import { cyprusContent } from './destination-cyprus';
 import { londonContent } from './destination-london';
 import { romeContent } from './destination-rome';
+import { portugalContent } from './destination-portugal';
+import { creteContent } from './destination-crete';
 
-// Create empty arrays with the right types
+// Create empty arrays with the right types for destinations without full data
 const abudhabiHotels: Hotel[] = [];
-const creteHotels: Hotel[] = [];
 const thailandHotels: Hotel[] = [];
 const hotelChainsInfo: Hotel[] = [];
 const newYorkHotels: Hotel[] = [];
-const portugalHotels: Hotel[] = [];
 const turkeyHotels: Hotel[] = [];
 const cruiseLinesInfo: Hotel[] = [];
 const cruiseLinesFaqs: FAQ[] = [];
@@ -36,11 +36,7 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
     faqs: genericFaqs,
     intro: genericIntro
   },
-  crete: {
-    hotels: creteHotels,
-    faqs: genericFaqs,
-    intro: genericIntro
-  },
+  crete: creteContent,
   tokyo: tokyoContent,
   thailand: {
     hotels: thailandHotels,
@@ -57,11 +53,7 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
     faqs: genericFaqs,
     intro: genericIntro
   },
-  portugal: {
-    hotels: portugalHotels,
-    faqs: genericFaqs,
-    intro: genericIntro
-  },
+  portugal: portugalContent,
   'swiss-alps': swissAlpsContent,
   'koh-samui': kohSamuiContent,
   turkey: {

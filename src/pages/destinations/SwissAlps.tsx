@@ -11,10 +11,9 @@ const SwissAlps = () => {
   const pageKeywords = "Swiss Alps allergy-friendly hotels, gluten-free hotel Switzerland, allergy-safe chalets, dairy-free Zermatt, celiac travel St. Moritz";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/swiss-alps";
 
-  // Get image from our constants and ensure proper formatting
-  const imageId = DESTINATION_IMAGES['swiss-alps'];
-  const heroImageUrl = `https://images.unsplash.com/${imageId}?auto=format&fit=crop&w=2000&h=1000&q=80`;
-  const heroAltText = "Luxury Swiss Alps resort infinity pool with stunning Matterhorn mountain view";
+  // Ensure we're using a consistent image that matches the teaser
+  const heroImageUrl = "https://images.unsplash.com/photo-1531816458010-fb7685eecbcb?auto=format&fit=crop&w=2000&h=1000&q=80";
+  const heroAltText = "Stunning Swiss Alps mountain landscape with snow-capped peaks and green valleys";
 
   return (
     <>
@@ -52,7 +51,8 @@ const SwissAlps = () => {
               "name": "Swiss Alps",
               "description": "Mountain range in Switzerland"
             },
-            "audience": "Travelers with food allergies or dietary restrictions"
+            "audience": "Travelers with food allergies or dietary restrictions",
+            "image": heroImageUrl
           })}
         </script>
       </Helmet>
