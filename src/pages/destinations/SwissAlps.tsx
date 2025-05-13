@@ -2,7 +2,6 @@
 import React from 'react';
 import { DestinationReviews } from '@/components/reviews/DestinationReviews';
 import { Helmet } from 'react-helmet';
-import { DESTINATION_IMAGES } from '@/constants/destinations';
 
 const SwissAlps = () => {
   // SEO metadata
@@ -11,9 +10,9 @@ const SwissAlps = () => {
   const pageKeywords = "Swiss Alps allergy-friendly hotels, gluten-free hotel Switzerland, allergy-safe chalets, dairy-free Zermatt, celiac travel St. Moritz";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/swiss-alps";
 
-  // Ensure we're using a consistent image that matches the teaser
-  const heroImageUrl = "https://images.unsplash.com/photo-1531816458010-fb7685eecbcb?auto=format&fit=crop&w=2000&h=1000&q=80";
-  const heroAltText = "Stunning Swiss Alps mountain landscape with snow-capped peaks and green valleys";
+  // Using the newly uploaded Swiss Alps image
+  const heroImageUrl = "/lovable-uploads/a53b2ba4-d551-4fcd-bd11-36c4643be95b.png";
+  const heroAltText = "Stunning Swiss Alps mountain landscape with snow-capped peaks, green valleys, pine forests and small chalets";
 
   return (
     <>
