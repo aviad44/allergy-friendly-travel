@@ -38,6 +38,13 @@ export const destinations: Destination[] = [
     subtitle: 'Safe Accommodations and Restaurants in Tuscany'
   },
   {
+    id: 'rome',
+    name: 'Rome',
+    country: 'Italy',
+    description: 'Top 5 Allergy-Friendly Hotels in Rome',
+    subtitle: 'Safe & Comfortable Stays for Travelers with Food Sensitivities'
+  },
+  {
     id: 'abu-dhabi',
     name: 'Abu Dhabi',
     country: 'UAE',

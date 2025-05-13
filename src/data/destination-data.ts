@@ -1,4 +1,3 @@
-
 import { DestinationContent, Hotel, FAQ, DestinationId } from '@/types/definitions';
 import { tuscanyContent } from './destination-tuscany';
 import { genericFaqs, genericIntro } from './generic-content';
@@ -10,6 +9,7 @@ import { parisContent } from './destination-paris';
 import { barcelonaContent } from './destination-barcelona';
 import { cyprusContent } from './destination-cyprus';
 import { londonContent } from './destination-london';
+import { romeContent } from './destination-rome';
 
 // Create empty arrays with the right types
 const abudhabiHotels: Hotel[] = [];
@@ -29,6 +29,7 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
   paris: parisContent,
   barcelona: barcelonaContent,
   cyprus: cyprusContent,
+  rome: romeContent,
   'abu-dhabi': {
     hotels: abudhabiHotels,
     faqs: genericFaqs,

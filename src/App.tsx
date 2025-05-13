@@ -16,6 +16,7 @@ import London from '@/pages/destinations/London';
 import Paris from '@/pages/destinations/Paris';
 import Barcelona from '@/pages/destinations/Barcelona';
 import Cyprus from '@/pages/destinations/Cyprus';
+import Rome from '@/pages/destinations/Rome';
 import AbuDhabi from '@/pages/destinations/AbuDhabi';
 import Crete from '@/pages/destinations/Crete';
 import Tokyo from '@/pages/destinations/Tokyo';
@@ -81,6 +82,7 @@ const AppContent = () => {
           <Route path="/destinations/paris" element={<Paris />} />
           <Route path="/destinations/barcelona" element={<Barcelona />} />
           <Route path="/destinations/cyprus" element={<Cyprus />} />
+          <Route path="/destinations/rome" element={<Rome />} />
           <Route path="/destinations/abu-dhabi" element={<AbuDhabi />} />
           <Route path="/destinations/abudhabi" element={<AbuDhabi />} />
           <Route path="/destinations/crete" element={<Crete />} />
