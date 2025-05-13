@@ -4,9 +4,10 @@ import React from 'react';
 interface HeroImageFallbackProps {
   altText: string;
   isLoading: boolean;
+  fallbackImage?: string;
 }
 
-export const HeroImageFallback: React.FC<HeroImageFallbackProps> = ({ altText, isLoading }) => {
+export const HeroImageFallback: React.FC<HeroImageFallbackProps> = ({ altText, isLoading, fallbackImage }) => {
   const titleText = altText.split(' - ')[0];
 
   // Only show loading state when actually loading
@@ -23,10 +24,17 @@ export const HeroImageFallback: React.FC<HeroImageFallbackProps> = ({ altText, i
     );
   }
 
-  // Error fallback state
+  // Error fallback state - can use a fallback image if provided
   return (
     <div className="absolute inset-0 bg-gradient-to-b from-blue-500 to-blue-900 flex items-center justify-center">
-      <div className="text-white text-xl font-bold text-center px-6">
+      {fallbackImage ? (
+        <img 
+          src={fallbackImage} 
+          alt={titleText} 
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
+        />
+      ) : null}
+      <div className="text-white text-xl font-bold text-center px-6 z-10 relative">
         {titleText}
       </div>
     </div>

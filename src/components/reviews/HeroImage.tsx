@@ -53,7 +53,11 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
   return (
     <div className="relative w-full h-full">
       {!imageLoaded || imageFailed ? (
-        <HeroImageFallback fallbackImage={fallbackImage} />
+        <HeroImageFallback 
+          altText={altText} 
+          isLoading={!imageFailed && !imageLoaded} 
+          fallbackImage={fallbackImage} 
+        />
       ) : null}
       
       <img
