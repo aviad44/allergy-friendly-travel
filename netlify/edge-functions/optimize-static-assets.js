@@ -19,64 +19,102 @@ export default async function handler(request, context) {
   const url = request.url;
   const lowerUserAgent = userAgent.toLowerCase();
   
-  // Simple bot detection check
+  // Bot detection check with detailed logging
   const isBot = botUserAgents.some(bot => 
     lowerUserAgent.includes(bot.toLowerCase())
   );
 
-  // Enhanced logging for debugging
-  context.log(`Request from: ${userAgent} for URL: ${url} | isBot: ${isBot}`);
+  // Log all requests for debugging
+  context.log(`Request from: ${userAgent}`);
+  context.log(`URL requested: ${url}`);
+  context.log(`Is bot detected: ${isBot}`);
 
-  // For social media bots, specially log them
+  // For social media bots, provide more detailed logging
   if (lowerUserAgent.includes('facebook') || lowerUserAgent.includes('whatsapp')) {
-    context.log(`SOCIAL MEDIA BOT: ${userAgent} for ${url}`);
+    context.log(`SOCIAL MEDIA BOT DETECTED: ${userAgent}`);
+    context.log(`SOCIAL MEDIA URL: ${url}`);
+    context.log(`Headers: ${JSON.stringify([...request.headers.entries()])}`);
   }
 
   // Add the Prerender handling for bots
   if (isBot) {
-    context.log(`BOT DETECTED: ${userAgent} for ${url}`);
+    context.log(`BOT HANDLING: ${userAgent}`);
     
     // Get the Prerender token
-    const prerenderToken = Deno.env.get("PRERENDER_TOKEN") || '';
+    const prerenderToken = Deno.env.get("PRERENDER_TOKEN");
     
-    // Full URL with protocol for Prerender.io
-    const fullUrl = `https://www.allergy-free-travel.com${new URL(url).pathname}`;
+    if (!prerenderToken) {
+      context.log("ERROR: PRERENDER_TOKEN not found in environment variables");
+      return new Response("Error: Prerender token not configured", {
+        status: 500,
+        headers: { 'Content-Type': 'text/plain' }
+      });
+    }
     
-    // We'll use a proxy approach instead of redirects to ensure headers are passed
+    // Full URL for Prerender.io
+    const path = new URL(url).pathname;
+    const fullUrl = `https://www.allergy-free-travel.com${path}`;
+    
+    context.log(`PRERENDER URL: https://service.prerender.io/${fullUrl}`);
+    context.log(`PRERENDER TOKEN LENGTH: ${prerenderToken.length}`);
+    
     try {
-      // Make a fetch request to Prerender directly
-      const prerenderUrl = `https://service.prerender.io/${fullUrl}`;
-      
-      context.log(`FETCHING FROM PRERENDER: ${prerenderUrl}`);
-      
-      // Pass the request to Prerender with the token
-      const prerenderResponse = await fetch(prerenderUrl, {
+      // Make the request to Prerender.io with proper headers
+      const prerenderResponse = await fetch(`https://service.prerender.io/${fullUrl}`, {
         headers: {
           'X-Prerender-Token': prerenderToken,
-          'User-Agent': userAgent
+          'User-Agent': userAgent,
+          'Accept': '*/*',
+          'Host': 'service.prerender.io'
         }
       });
       
-      // Get the response content
-      const responseBody = await prerenderResponse.text();
+      const status = prerenderResponse.status;
+      context.log(`PRERENDER RESPONSE STATUS: ${status}`);
       
-      // Create a new response with the prerendered content
+      if (!prerenderResponse.ok) {
+        context.log(`ERROR FROM PRERENDER: ${status}`);
+        
+        // Return error for debugging but with 200 status to avoid confusing bots
+        return new Response(`Prerender service returned ${status} status.`, {
+          status: 200,
+          headers: {
+            'Content-Type': 'text/html',
+            'X-Debug-Info': `Prerender service returned ${status}`
+          }
+        });
+      }
+      
+      // Get the prerendered content
+      const responseBody = await prerenderResponse.text();
+      const contentLength = responseBody.length;
+      
+      context.log(`PRERENDER RESPONSE LENGTH: ${contentLength}`);
+      context.log(`PRERENDER RESPONSE SAMPLE: ${responseBody.substring(0, 100)}...`);
+      
+      // Check if we got a valid HTML response
+      if (!responseBody.includes('<html') && !responseBody.includes('<!DOCTYPE html')) {
+        context.log('ERROR: Prerender response does not contain HTML');
+        
+        // Fall back to direct rendering in emergency
+        return context.next();
+      }
+      
+      // Return the prerendered content with proper headers
       return new Response(responseBody, {
-        status: prerenderResponse.status,
+        status: 200,
         headers: {
           'Content-Type': 'text/html',
-          'Cache-Control': 'no-cache',
+          'Cache-Control': 'public, max-age=60',
           'X-Prerendered': 'true'
         }
       });
     } catch (error) {
-      context.log(`ERROR FETCHING FROM PRERENDER: ${error.message}`);
+      context.log(`CRITICAL ERROR WITH PRERENDER: ${error.message}`);
+      context.log(`STACK: ${error.stack}`);
       
-      // Return an error response
-      return new Response(`Error fetching prerendered content: ${error.message}`, {
-        status: 500,
-        headers: { 'Content-Type': 'text/plain' }
-      });
+      // In case of failure, fall back to standard rendering
+      return context.next();
     }
   }
 

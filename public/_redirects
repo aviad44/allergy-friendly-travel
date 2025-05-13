@@ -1,28 +1,4 @@
 
-# HIGHEST PRIORITY - Social Media Bot Detection
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=facebookexternalhit
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=Facebookexternalhit
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=FacebookBot
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=facebook
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=Facebook
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=whatsapp
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=WhatsApp
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=twitterbot
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=linkedinbot
-/destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=pinterestbot
-
-# General bot patterns for ALL routes - after specific cases
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=facebookexternalhit
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=Facebookexternalhit
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=FacebookBot
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=facebook
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=Facebook
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=whatsapp
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=WhatsApp
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=twitterbot
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=linkedinbot
-/* https://service.prerender.io/https://www.allergy-free-travel.com/:splat 200! User-Agent=pinterestbot
-
 # Redirect domain aliases to primary domain
 https://allergyfreetravel.com/* https://www.allergy-free-travel.com/:splat 301!
 https://allergy-free-travel.com/* https://www.allergy-free-travel.com/:splat 301!
@@ -30,9 +6,12 @@ https://allergy-free-travel.com/* https://www.allergy-free-travel.com/:splat 301
 # Optional: Redirect default Netlify subdomain to primary domain
 https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:splat 301!
 
-# Handle 404 errors - This must come AFTER the bot redirects
-/*    /index.html   200
-
 # Redirect URL normalization - ensure canonical paths
 /destinations/abudhabi /destinations/abu-dhabi 301
 /destinations/newyork /destinations/new-york 301
+
+# NOTE: All bot handling is now in edge-functions/optimize-static-assets.js
+# This file contains only non-bot related redirects
+
+# Handle 404 errors - This must come after the bot redirects
+/*    /index.html   200

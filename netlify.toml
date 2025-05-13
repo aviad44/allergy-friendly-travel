@@ -3,18 +3,16 @@
   command = "npm run build"
   publish = "dist"
 
-# Edge functions with improved bot detection
+# Edge functions with improved bot detection - this has highest priority
 [[edge_functions]]
   path = "/*"
   function = "optimize-static-assets"
 
-# Handle 404 errors for regular users
+# Default handling for regular users
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  [redirects.conditions]
-    User-Agent = ["!facebookexternalhit", "!Facebookexternalhit", "!FacebookBot", "!Facebook", "!facebook", "!Whatsapp", "!WhatsApp", "!twitter", "!Twitter", "!Twitterbot", "!linkedinbot", "!LinkedInBot", "!pinterest", "!Pinterest"]
 
 # Add security headers
 [[headers]]
@@ -29,7 +27,7 @@
     # CRITICAL: Prerender token header for all requests
     X-Prerender-Token = "${PRERENDER_TOKEN}"
 
-# Add improved cache control for static assets (7+ days)
+# Add improved cache control for static assets
 [[headers]]
   for = "*.js"
   [headers.values]

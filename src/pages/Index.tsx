@@ -7,7 +7,7 @@ import { HeroSection } from "@/components/hero/HeroSection";
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
   const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
-  const mainImage = '/lovable-uploads/e8b4dc3d-60a2-4fb7-bc33-77580f4d249c.png';
+  const mainImage = '/lovable-uploads/toronto-skyline.png';
   
   return (
     <>
@@ -17,16 +17,16 @@ export default function Index() {
         <meta name="keywords" content="allergy-friendly travel, food allergy hotels, gluten-free accommodation, dairy-free travel, nut-free hotels, allergen-free vacation, safe travel with allergies" />
         <link rel="canonical" href={`${baseUrl}/`} />
         
-        {/* Open Graph Meta Tags */}
+        {/* Open Graph Meta Tags - CRITICAL FOR FACEBOOK/WHATSAPP SHARING */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
         <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
         <meta property="og:url" content={`${baseUrl}/`} />
         <meta property="og:image" content={`${baseUrl}${mainImage}`} />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="600" />
-        <meta property="og:image:height" content="600" />
-        <meta property="og:image:alt" content="Allergy-Free Travel Logo" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="800" />
+        <meta property="og:image:alt" content="Toronto Skyline - Allergy-Free Travel" />
         <meta property="og:site_name" content="Allergy-Free Travel" />
         <meta property="og:locale" content="en_US" />
         
@@ -35,7 +35,7 @@ export default function Index() {
         <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
         <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
         <meta name="twitter:image" content={`${baseUrl}${mainImage}`} />
-        <meta name="twitter:image:alt" content="Allergy-Free Travel Logo" />
+        <meta name="twitter:image:alt" content="Toronto Skyline - Allergy-Free Travel" />
         
         {/* WhatsApp specific meta - additional tags to ensure compatibility */}
         <meta property="og:image:secure_url" content={`${baseUrl}${mainImage}`} />
@@ -61,8 +61,8 @@ export default function Index() {
             "image": {
               "@type": "ImageObject",
               "url": `${baseUrl}${mainImage}`,
-              "width": "600",
-              "height": "600"
+              "width": "1200",
+              "height": "800"
             }
           })}
         </script>

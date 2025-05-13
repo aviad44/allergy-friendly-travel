@@ -18,19 +18,25 @@ Allow: /destinations/thailand
 Allow: /destinations/ayia-napa
 Allow: /hotels/le-petit-palace
 
-# Explicitly ALLOW prerender and social media bots
+# Explicitly ALLOW Prerender and social media bots - CRITICAL
 User-agent: facebookexternalhit
 Allow: /
+
 User-agent: FacebookBot
 Allow: /
+
 User-agent: WhatsApp
 Allow: /
+
 User-agent: Twitterbot
 Allow: /
+
 User-agent: LinkedInBot
 Allow: /
+
 User-agent: PinterestBot  
 Allow: /
+
 User-agent: prerender
 Allow: /
 
