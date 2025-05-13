@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Globe } from "lucide-react";
-import { LanguageCode, languages } from "@/types/reviews";
+import { LanguageCode, languages } from "@/types/definitions";
 
 interface LanguageSelectorProps {
   currentLanguage: LanguageCode;

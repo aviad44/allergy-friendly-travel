@@ -1,5 +1,5 @@
 
-import { DestinationContent, Hotel, FAQ } from '@/types/definitions';
+import { DestinationContent, Hotel, FAQ } from '@/types/reviews';
 
 const romeHotels: Hotel[] = [
   {
@@ -16,7 +16,11 @@ const romeHotels: Hotel[] = [
     ],
     url: 'https://www.hotelartemide.it/',
     reviews: [
-      'The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.'
+      {
+        text: 'The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.',
+        author: 'Maria S.',
+        rating: 5
+      }
     ],
     description: 'Located in the heart of Rome, this luxury hotel ensures a comfortable and safe experience for guests with dietary restrictions.'
   },
@@ -34,7 +38,11 @@ const romeHotels: Hotel[] = [
     ],
     url: 'https://www.singerpalacehotel.com/',
     reviews: [
-      'The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.'
+      {
+        text: 'The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.',
+        author: 'David L.',
+        rating: 5
+      }
     ],
     description: 'Highly rated for its attention to guest needs, this boutique hotel is a great option for those with food allergies.'
   },
@@ -52,7 +60,11 @@ const romeHotels: Hotel[] = [
     ],
     url: 'https://www.hoteldamaso.com/',
     reviews: [
-      'The chef personally explained every meal option to me, and I felt completely at ease dining here.'
+      {
+        text: 'The chef personally explained every meal option to me, and I felt completely at ease dining here.',
+        author: 'Sophie R.',
+        rating: 5
+      }
     ],
     description: 'Centrally located near Piazza Navona, this hotel is a great pick for travelers wanting both convenience and allergy-conscious service.'
   },
@@ -70,7 +82,11 @@ const romeHotels: Hotel[] = [
     ],
     url: 'https://www.hotelarchimederoma.com/',
     reviews: [
-      'As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!'
+      {
+        text: 'As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!',
+        author: 'Thomas B.',
+        rating: 4
+      }
     ],
     description: 'Located near the Termini train station, this hotel is praised for its accessibility and allergy-aware staff.'
   },
@@ -88,7 +104,11 @@ const romeHotels: Hotel[] = [
     ],
     url: 'https://www.relaisborgogentile.com/',
     reviews: [
-      'From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.'
+      {
+        text: 'From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.',
+        author: 'Anna M.',
+        rating: 5
+      }
     ],
     description: 'Set in the scenic Lazio countryside, this retreat is ideal for guests who want a peaceful and allergy-friendly experience.'
   }

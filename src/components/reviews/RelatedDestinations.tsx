@@ -1,8 +1,8 @@
-
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
-import { destinations, DestinationId } from "@/types/reviews";
+import { DestinationId } from "@/types/definitions";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
+import { destinations } from "@/data/destinations-list";
 
 export interface RelatedDestinationsProps {
   currentDestination: DestinationId;

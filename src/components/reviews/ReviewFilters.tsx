@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Select, 
@@ -7,7 +6,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
-import { sortOptions } from '@/types/reviews';
+import { sortOptions } from '@/types/definitions';
 
 interface ReviewFiltersProps {
   selectedDestination: string;

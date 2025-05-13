@@ -1,3 +1,4 @@
+
 import { DestinationContent, Hotel, FAQ, DestinationId } from '@/types/definitions';
 import { tuscanyContent } from './destination-tuscany';
 import { genericFaqs, genericIntro } from './generic-content';

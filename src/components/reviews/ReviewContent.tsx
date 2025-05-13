@@ -1,12 +1,12 @@
-
 import React, { useState } from "react";
 import { ReviewsHeader } from "./ReviewsHeader";
 import { ReviewForm } from "./ReviewForm";
 import { ReviewFilters } from "./ReviewFilters";
 import { ReviewsList } from "./ReviewsList";
-import { Review, sortOptions } from "@/types/reviews";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Review } from "@/types/definitions";
+import { sortOptions } from "@/types/definitions";
 
 interface ReviewContentProps {
   reviews: Review[];

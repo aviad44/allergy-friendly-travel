@@ -1,12 +1,11 @@
-
 import React, { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Helmet } from "react-helmet";
 import { ReviewContent } from "@/components/reviews/ReviewContent";
-import { Review, sortOptions } from "@/types/reviews";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { Review, sortOptions } from "@/types/definitions";
 
 const Reviews = () => {
   const [reviews, setReviews] = useState<Review[]>([]);

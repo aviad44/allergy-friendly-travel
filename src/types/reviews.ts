@@ -1,3 +1,4 @@
+
 export interface Destination {
   id: DestinationId;
   name: string;
@@ -22,7 +23,7 @@ export interface Hotel {
   address: string;
   allergyFeatures: string[];
   url: string;
-  reviews: string[];
+  reviews: Review[] | string[];
   description: string;
   imageUrl?: string;
 }
@@ -59,3 +60,51 @@ export type DestinationId =
   | 'ayia-napa'
   | 'tuscany'
   | 'rome';
+
+// Add the missing exports that are referenced in components
+export interface Review {
+  id: string;
+  rating: number;
+  text: string;
+  author_name: string;
+  created_at: string;
+  destination?: string;
+  traveler_type?: string;
+  language: string;
+}
+
+export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
+
+export const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'he', name: 'Hebrew' }
+];
+
+// Mock destinations data used by components
+export const destinations: Destination[] = [
+  {
+    id: 'london',
+    name: 'London',
+    country: 'United Kingdom',
+    description: 'Best Allergy-Friendly Hotels in London',
+    subtitle: 'Safe Accommodations for Food Allergies'
+  },
+  {
+    id: 'paris',
+    name: 'Paris',
+    country: 'France',
+    description: 'Best Allergy-Friendly Hotels in Paris',
+    subtitle: 'Safe Accommodations for Food Allergies'
+  },
+  {
+    id: 'rome',
+    name: 'Rome',
+    country: 'Italy',
+    description: 'Top 5 Allergy-Friendly Hotels in Rome',
+    subtitle: 'Safe & Comfortable Stays for Travelers with Food Sensitivities'
+  },
+  // Add other destinations as needed
+];
+
+// Mock destination data mapping
+export const destinationData: Record<DestinationId, DestinationContent> = {} as Record<DestinationId, DestinationContent>;

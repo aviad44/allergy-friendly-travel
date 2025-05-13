@@ -1,6 +1,5 @@
-
 import { Star, Trash2 } from "lucide-react";
-import { Review } from "@/types/reviews";
+import { Review } from "@/types/definitions";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";

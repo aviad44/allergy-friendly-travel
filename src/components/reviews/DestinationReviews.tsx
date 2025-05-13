@@ -3,7 +3,7 @@ import { DestinationHero } from "./DestinationHero";
 import { LanguageTable } from "./LanguageTable";
 import { TravelTips } from "@/components/hotels/TravelTips";
 import { RelatedDestinations } from "./RelatedDestinations";
-import { LanguageCode, destinations, DestinationId, destinationData } from "@/types/reviews";
+import { LanguageCode, Destination, DestinationId } from "@/types/definitions";
 import { Separator } from "@/components/ui/separator";
 import { DestinationHeader } from "./DestinationHeader";
 import { IntroSection } from "./IntroSection";
@@ -13,6 +13,7 @@ import { ShareExperienceSection } from "./ShareExperienceSection";
 import { Globe } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { destinations, destinationData } from "@/data/destinations-list";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
