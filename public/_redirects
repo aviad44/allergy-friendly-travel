@@ -1,17 +1,5 @@
 
-# HIGHEST PRIORITY - Social Media Bot Detection for Homepage
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=facebookexternalhit
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=Facebookexternalhit
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=FacebookBot
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=facebook
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=Facebook
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=whatsapp
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=WhatsApp
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=twitterbot
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=linkedinbot
-/ https://service.prerender.io/https://www.allergy-free-travel.com/ 200! User-Agent=pinterestbot
-
-# HIGHEST PRIORITY - Social Media Bot Detection for destinations
+# HIGHEST PRIORITY - Social Media Bot Detection
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=facebookexternalhit
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=Facebookexternalhit
 /destinations/crete https://service.prerender.io/https://www.allergy-free-travel.com/destinations/crete 200! User-Agent=FacebookBot

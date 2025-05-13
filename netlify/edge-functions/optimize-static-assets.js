@@ -17,7 +17,6 @@ export default async function handler(request, context) {
   // Get the user agent and URL
   const userAgent = request.headers.get('user-agent') || '';
   const url = request.url;
-  const path = new URL(url).pathname;
   const lowerUserAgent = userAgent.toLowerCase();
   
   // Simple bot detection check
@@ -26,12 +25,7 @@ export default async function handler(request, context) {
   );
 
   // Enhanced logging for debugging
-  context.log(`Request from: ${userAgent} for URL: ${url} | Path: ${path} | isBot: ${isBot}`);
-
-  // Special handling for home page (root path)
-  if (path === '/' && isBot) {
-    context.log(`HOME PAGE BOT DETECTED: ${userAgent} for ${url}`);
-  }
+  context.log(`Request from: ${userAgent} for URL: ${url} | isBot: ${isBot}`);
 
   // For social media bots, specially log them
   if (lowerUserAgent.includes('facebook') || lowerUserAgent.includes('whatsapp')) {
@@ -46,7 +40,7 @@ export default async function handler(request, context) {
     const prerenderToken = Deno.env.get("PRERENDER_TOKEN") || '';
     
     // Full URL with protocol for Prerender.io
-    const fullUrl = `https://www.allergy-free-travel.com${path}`;
+    const fullUrl = `https://www.allergy-free-travel.com${new URL(url).pathname}`;
     
     // We'll use a proxy approach instead of redirects to ensure headers are passed
     try {

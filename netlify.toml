@@ -56,15 +56,6 @@
   [headers.values]
     Cache-Control = "public, max-age=604800, immutable"
 
-# Special headers for the homepage OG image
-[[headers]]
-  for = "/lovable-uploads/toronto-skyline.png"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET"
-    Cache-Control = "public, max-age=604800"
-    Content-Type = "image/png"
-
 # WhatsApp specific headers for all PNG images
 [[headers]]
   for = "/*.png"
