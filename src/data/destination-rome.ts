@@ -1,116 +1,121 @@
 
-import { DestinationContent, Hotel, FAQ } from '@/types/reviews';
+import { DestinationContent, Hotel, FAQ } from '@/types/definitions';
 
 const romeHotels: Hotel[] = [
   {
     name: 'Hotel Artemide',
-    location: 'Rome, Italy',
-    starRating: '⭐⭐⭐⭐',
-    rating: 4,
-    address: 'Via Nazionale, 22, 00184 Roma RM, Italy',
-    allergyFeatures: [
+    features: [
       'Staff highly trained for dietary restrictions',
       'Special meal options for gluten intolerance',
       'Customized dining options available',
       'Allergy information collected at check-in'
     ],
-    url: 'https://www.hotelartemide.it/',
+    rating: 4,
+    location: 'Rome, Italy',
+    image: undefined,
+    address: 'Via Nazionale, 22, 00184 Roma RM, Italy',
+    description: 'Located in the heart of Rome, this luxury hotel ensures a comfortable and safe experience for guests with dietary restrictions.',
+    quote: 'The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.',
+    bookingUrl: 'https://www.hotelartemide.it/',
     reviews: [
       {
         text: 'The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.',
         author: 'Maria S.',
         rating: 5
       }
-    ],
-    description: 'Located in the heart of Rome, this luxury hotel ensures a comfortable and safe experience for guests with dietary restrictions.'
+    ]
   },
   {
     name: 'Singer Palace Hotel Roma',
-    location: 'Rome, Italy',
-    starRating: '⭐⭐⭐⭐⭐',
-    rating: 5,
-    address: 'Via Alessandro Specchi, 10, 00186 Roma RM, Italy',
-    allergyFeatures: [
+    features: [
       'Proactive allergy management',
       'Allergy screening during check-in',
       'Boutique hotel with personalized service',
       'Staff trained for food allergy awareness'
     ],
-    url: 'https://www.singerpalacehotel.com/',
+    rating: 5,
+    location: 'Rome, Italy',
+    image: undefined,
+    address: 'Via Alessandro Specchi, 10, 00186 Roma RM, Italy',
+    description: 'Highly rated for its attention to guest needs, this boutique hotel is a great option for those with food allergies.',
+    quote: 'The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.',
+    bookingUrl: 'https://www.singerpalacehotel.com/',
     reviews: [
       {
         text: 'The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.',
         author: 'David L.',
         rating: 5
       }
-    ],
-    description: 'Highly rated for its attention to guest needs, this boutique hotel is a great option for those with food allergies.'
+    ]
   },
   {
     name: 'Hotel Damaso',
-    location: 'Rome, Italy',
-    starRating: '⭐⭐⭐⭐',
-    rating: 4,
-    address: 'Piazza della Cancelleria, 62, 00186 Roma RM, Italy',
-    allergyFeatures: [
+    features: [
       'Chef consultations for allergies',
       'Centrally located near Piazza Navona',
       'Detailed menu ingredients available',
       'Safe dining options for allergies'
     ],
-    url: 'https://www.hoteldamaso.com/',
+    rating: 4,
+    location: 'Rome, Italy',
+    image: undefined,
+    address: 'Piazza della Cancelleria, 62, 00186 Roma RM, Italy',
+    description: 'Centrally located near Piazza Navona, this hotel is a great pick for travelers wanting both convenience and allergy-conscious service.',
+    quote: 'The chef personally explained every meal option to me, and I felt completely at ease dining here.',
+    bookingUrl: 'https://www.hoteldamaso.com/',
     reviews: [
       {
         text: 'The chef personally explained every meal option to me, and I felt completely at ease dining here.',
         author: 'Sophie R.',
         rating: 5
       }
-    ],
-    description: 'Centrally located near Piazza Navona, this hotel is a great pick for travelers wanting both convenience and allergy-conscious service.'
+    ]
   },
   {
     name: 'Hotel Archimede',
-    location: 'Rome, Italy',
-    starRating: '⭐⭐⭐',
-    rating: 3,
-    address: 'Via dei Mille, 19, 00185 Roma RM, Italy',
-    allergyFeatures: [
+    features: [
       'Specialized in nut allergy safety',
       'Located near Termini train station',
       'Accessible and convenient location',
       'Clear allergen labeling'
     ],
-    url: 'https://www.hotelarchimederoma.com/',
+    rating: 3,
+    location: 'Rome, Italy',
+    image: undefined,
+    address: 'Via dei Mille, 19, 00185 Roma RM, Italy',
+    description: 'Located near the Termini train station, this hotel is praised for its accessibility and allergy-aware staff.',
+    quote: 'As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!',
+    bookingUrl: 'https://www.hotelarchimederoma.com/',
     reviews: [
       {
         text: 'As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!',
         author: 'Thomas B.',
         rating: 4
       }
-    ],
-    description: 'Located near the Termini train station, this hotel is praised for its accessibility and allergy-aware staff.'
+    ]
   },
   {
     name: 'Relais Borgo Gentile',
-    location: 'Lazio countryside, near Rome, Italy',
-    starRating: '⭐⭐⭐⭐',
-    rating: 4,
-    address: 'Via Quattro Camini, 00060 Sacrofano RM, Italy',
-    allergyFeatures: [
+    features: [
       'Gluten-free breakfast options',
       'Allergen-free meal preparation',
       'Peaceful countryside retreat',
       'Detailed ingredient information'
     ],
-    url: 'https://www.relaisborgogentile.com/',
+    rating: 4,
+    location: 'Lazio countryside, near Rome, Italy',
+    image: undefined,
+    address: 'Via Quattro Camini, 00060 Sacrofano RM, Italy',
+    description: 'Set in the scenic Lazio countryside, this retreat is ideal for guests who want a peaceful and allergy-friendly experience.',
+    quote: 'From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.',
+    bookingUrl: 'https://www.relaisborgogentile.com/',
     reviews: [
       {
         text: 'From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.',
         author: 'Anna M.',
         rating: 5
       }
-    ],
-    description: 'Set in the scenic Lazio countryside, this retreat is ideal for guests who want a peaceful and allergy-friendly experience.'
+    ]
   }
 ];
 

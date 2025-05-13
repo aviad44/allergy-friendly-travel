@@ -5,8 +5,7 @@ import { ReviewFilters } from "./ReviewFilters";
 import { ReviewsList } from "./ReviewsList";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Review } from "@/types/definitions";
-import { sortOptions } from "@/types/definitions";
+import { Review, sortOptions } from "@/types/definitions";
 
 interface ReviewContentProps {
   reviews: Review[];

@@ -1,77 +1,7 @@
-
-export interface Destination {
-  id: DestinationId;
-  name: string;
-  country: string;
-  description: string;
-  subtitle: string;
-  image?: string;
-}
-
-export interface DestinationContent {
-  hotels: Hotel[];
-  faqs: FAQ[];
-  intro: string | string[];
-  languageTable?: LanguageTable;
-}
-
-export interface Hotel {
-  name: string;
-  location: string;
-  starRating: string;
-  rating: number;
-  address: string;
-  allergyFeatures: string[];
-  url: string;
-  reviews: Review[] | string[];
-  description: string;
-  imageUrl?: string;
-}
-
-export interface FAQ {
-  question: string;
-  answer: string;
-}
-
-export interface LanguageTable {
-  headers: string[];
-  rows: string[][];
-}
-
-export type LanguageCode = 'en' | 'he';
-
-export type DestinationId = 
-  | 'london'
-  | 'paris'
-  | 'barcelona' 
-  | 'cyprus'
-  | 'abu-dhabi' 
-  | 'crete'
-  | 'tokyo'
-  | 'thailand'
-  | 'hotel-chains'
-  | 'new-york'
-  | 'portugal'
-  | 'swiss-alps'
-  | 'koh-samui'
-  | 'turkey'
-  | 'cruise-lines'
-  | 'toronto'
-  | 'ayia-napa'
-  | 'tuscany'
-  | 'rome';
+import { DestinationId, Destination, DestinationContent, Hotel, FAQ, LanguageTable, Review, LanguageCode } from './definitions';
 
 // Add the missing exports that are referenced in components
-export interface Review {
-  id: string;
-  rating: number;
-  text: string;
-  author_name: string;
-  created_at: string;
-  destination?: string;
-  traveler_type?: string;
-  language: string;
-}
+export type { Destination, DestinationContent, Hotel, FAQ, LanguageTable, Review, DestinationId, LanguageCode };
 
 export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
 
@@ -106,5 +36,6 @@ export const destinations: Destination[] = [
   // Add other destinations as needed
 ];
 
-// Mock destination data mapping
-export const destinationData: Record<DestinationId, DestinationContent> = {} as Record<DestinationId, DestinationContent>;
+// Mock destination data mapping - export it here for backwards compatibility but
+// we're using the real destination-data.ts file
+export { destinationData } from '@/data/destination-data';

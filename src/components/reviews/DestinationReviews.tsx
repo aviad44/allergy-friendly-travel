@@ -13,7 +13,8 @@ import { ShareExperienceSection } from "./ShareExperienceSection";
 import { Globe } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { destinations, destinationData } from "@/data/destinations-list";
+import { destinations } from "@/data/destinations-list";
+import { destinationData } from "@/data/destination-data";
 
 interface DestinationPageProps {
   destinationId: DestinationId;

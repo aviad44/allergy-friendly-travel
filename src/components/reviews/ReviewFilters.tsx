@@ -6,7 +6,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
-import { sortOptions } from '@/types/definitions';
+import { sortOptions } from "@/types/definitions";
 
 interface ReviewFiltersProps {
   selectedDestination: string;
