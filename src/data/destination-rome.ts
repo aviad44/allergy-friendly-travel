@@ -3,7 +3,7 @@ import { DestinationContent, Hotel, FAQ } from '@/types/definitions';
 
 const romeHotels: Hotel[] = [
   {
-    name: 'Hotel Artemide',
+    name: "1. Hotel Artemide",
     features: [
       'Staff highly trained for dietary restrictions',
       'Special meal options for gluten intolerance',
@@ -20,13 +20,13 @@ const romeHotels: Hotel[] = [
     reviews: [
       {
         text: 'The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.',
-        author: 'Maria S.',
+        author_name: 'Maria S.',
         rating: 5
       }
     ]
   },
   {
-    name: 'Singer Palace Hotel Roma',
+    name: "2. Singer Palace Hotel Roma",
     features: [
       'Proactive allergy management',
       'Allergy screening during check-in',
@@ -37,19 +37,19 @@ const romeHotels: Hotel[] = [
     location: 'Rome, Italy',
     image: undefined,
     address: 'Via Alessandro Specchi, 10, 00186 Roma RM, Italy',
-    description: 'Highly rated for its attention to guest needs, this boutique hotel is a great option for those with food allergies.',
+    description: 'This boutique hotel is highly rated for its attention to guest needs.',
     quote: 'The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.',
     bookingUrl: 'https://www.singerpalacehotel.com/',
     reviews: [
       {
         text: 'The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.',
-        author: 'David L.',
+        author_name: 'David L.',
         rating: 5
       }
     ]
   },
   {
-    name: 'Hotel Damaso',
+    name: "3. Hotel Damaso",
     features: [
       'Chef consultations for allergies',
       'Centrally located near Piazza Navona',
@@ -60,19 +60,19 @@ const romeHotels: Hotel[] = [
     location: 'Rome, Italy',
     image: undefined,
     address: 'Piazza della Cancelleria, 62, 00186 Roma RM, Italy',
-    description: 'Centrally located near Piazza Navona, this hotel is a great pick for travelers wanting both convenience and allergy-conscious service.',
+    description: 'Near Piazza Navona, a convenient and allergy-conscious choice.',
     quote: 'The chef personally explained every meal option to me, and I felt completely at ease dining here.',
     bookingUrl: 'https://www.hoteldamaso.com/',
     reviews: [
       {
         text: 'The chef personally explained every meal option to me, and I felt completely at ease dining here.',
-        author: 'Sophie R.',
+        author_name: 'Sophie R.',
         rating: 5
       }
     ]
   },
   {
-    name: 'Hotel Archimede',
+    name: "4. Hotel Archimede",
     features: [
       'Specialized in nut allergy safety',
       'Located near Termini train station',
@@ -83,19 +83,19 @@ const romeHotels: Hotel[] = [
     location: 'Rome, Italy',
     image: undefined,
     address: 'Via dei Mille, 19, 00185 Roma RM, Italy',
-    description: 'Located near the Termini train station, this hotel is praised for its accessibility and allergy-aware staff.',
+    description: 'Close to Termini station with allergy-aware staff.',
     quote: 'As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!',
     bookingUrl: 'https://www.hotelarchimederoma.com/',
     reviews: [
       {
         text: 'As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!',
-        author: 'Thomas B.',
+        author_name: 'Thomas B.',
         rating: 4
       }
     ]
   },
   {
-    name: 'Relais Borgo Gentile',
+    name: "5. Relais Borgo Gentile",
     features: [
       'Gluten-free breakfast options',
       'Allergen-free meal preparation',
@@ -106,13 +106,13 @@ const romeHotels: Hotel[] = [
     location: 'Lazio countryside, near Rome, Italy',
     image: undefined,
     address: 'Via Quattro Camini, 00060 Sacrofano RM, Italy',
-    description: 'Set in the scenic Lazio countryside, this retreat is ideal for guests who want a peaceful and allergy-friendly experience.',
+    description: 'A peaceful countryside retreat with excellent allergy-friendly service.',
     quote: 'From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.',
     bookingUrl: 'https://www.relaisborgogentile.com/',
     reviews: [
       {
         text: 'From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.',
-        author: 'Anna M.',
+        author_name: 'Anna M.',
         rating: 5
       }
     ]
@@ -135,13 +135,21 @@ const romeFaqs: FAQ[] = [
   {
     question: "Should I bring emergency medication to Rome?",
     answer: "Yes, always carry antihistamines and an EpiPen if prescribed. While pharmacies are common in Rome, having your familiar medication on hand is important for emergencies."
+  },
+  {
+    question: "What are some tips for allergy-safe travel in Rome?",
+    answer: "Contact hotels in advance, use allergy translation cards, check ingredients carefully, bring medication, and research restaurants that cater to dietary restrictions."
   }
 ];
 
 export const romeContent: DestinationContent = {
   hotels: romeHotels,
   faqs: romeFaqs,
-  intro: "Rome, the Eternal City, is a dream destination for many travelers - but those with food allergies may worry about navigating Italian cuisine safely. Fortunately, many hotels in Rome now offer excellent accommodations for guests with dietary restrictions. From luxury establishments in the heart of the city to peaceful retreats in the countryside, Rome has options for every allergy-conscious traveler. Here are our top recommendations for allergy-friendly hotels in Rome, where you can enjoy your stay without compromising on safety or comfort.",
+  intro: [
+    "Rome, the Eternal City, is a dream destination for many travelers - but those with food allergies may worry about navigating Italian cuisine safely. Fortunately, many hotels in Rome now offer excellent accommodations for guests with dietary restrictions.",
+    "From luxury establishments in the heart of the city to peaceful retreats in the countryside, Rome has options for every allergy-conscious traveler. Here are our top recommendations for allergy-friendly hotels in Rome, where you can enjoy your stay without compromising on safety or comfort.",
+    "By choosing one of these allergy-friendly hotels, you can enjoy a worry-free and delicious stay in Rome!"
+  ],
   languageTable: {
     headers: ["English", "Italian"],
     rows: [
