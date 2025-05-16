@@ -134,5 +134,12 @@ export const destinations: Destination[] = [
     country: 'Cyprus',
     description: 'Best Allergy-Friendly Hotels in Ayia Napa',
     subtitle: 'Safe Beach Accommodations for Food Allergies'
+  },
+  {
+    id: 'gluten-free-europe',
+    name: 'Gluten-Free Europe',
+    country: 'Europe',
+    description: 'Top 5 Gluten-Free Travel Destinations in Europe (2025)',
+    subtitle: 'Where to Travel in Europe If You're Gluten-Free or Have Celiac Disease'
   }
 ];

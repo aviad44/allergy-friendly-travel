@@ -44,6 +44,7 @@ import Turkey from '@/pages/destinations/Turkey';
 import CruiseLines from '@/pages/destinations/CruiseLines';
 import Toronto from '@/pages/destinations/Toronto';
 import Tuscany from '@/pages/destinations/Tuscany';
+import GlutenFreeEurope from '@/pages/destinations/GlutenFreeEurope';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -95,6 +96,7 @@ const AppContent = () => {
           <Route path="/destinations/portugal" element={<Portugal />} />
           <Route path="/destinations/swiss-alps" element={<SwissAlps />} />
           <Route path="/destinations/tuscany" element={<Tuscany />} />
+          <Route path="/destinations/gluten-free-europe" element={<GlutenFreeEurope />} />
           <Route path="/search-results" element={<SearchResults />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<AboutUs />} />

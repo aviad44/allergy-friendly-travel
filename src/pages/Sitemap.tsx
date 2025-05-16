@@ -36,6 +36,7 @@ const sitemapStructure = [
       { title: 'Portugal', path: '/destinations/portugal' },
       { title: 'Swiss Alps', path: '/destinations/swiss-alps' },
       { title: 'Hotel Chains', path: '/destinations/hotel-chains' },
+      { title: 'Gluten-Free Europe', path: '/destinations/gluten-free-europe' },
     ],
   },
 ];

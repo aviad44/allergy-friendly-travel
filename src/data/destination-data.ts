@@ -13,6 +13,7 @@ import { londonContent } from './destination-london';
 import { romeContent } from './destination-rome';
 import { portugalContent } from './destination-portugal';
 import { creteContent } from './destination-crete';
+import { glutenFreeEuropeContent } from './destination-gluten-free-europe';
 
 // Create empty arrays with the right types for destinations without full data
 const abudhabiHotels: Hotel[] = [];
@@ -72,5 +73,6 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
     faqs: genericFaqs,
     intro: genericIntro
   },
-  'tuscany': tuscanyContent
+  'tuscany': tuscanyContent,
+  'gluten-free-europe': glutenFreeEuropeContent
 };
