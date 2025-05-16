@@ -1,3 +1,4 @@
+
 export const DESTINATION_IMAGES: Record<string, string> = {
   london: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1000&q=80",
   paris: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1000&q=80",
@@ -16,6 +17,6 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   turkey: "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
   'cruise-lines': "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=1000&q=80",
   toronto: "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-  'ayia-napa': "https://images.unsplash.com/photo-1565109698955-47a3acedd48e?auto=format&fit=crop&w=1000&q=80",
-  'tuscany': "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?auto=format&fit=crop&w=1000&q=80"
+  'ayia-napa': "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png", // Updated to use the image from the Ayia Napa article
+  'tuscany': "/lovable-uploads/ea1edce9-b144-449c-a4c7-0e3f02c54be9.png" // Updated to use the Ponte Vecchio image from the Tuscany article
 };
