@@ -20,5 +20,5 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   'ayia-napa': "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png", // Updated to use the image from the Ayia Napa article
   'tuscany': "/lovable-uploads/ea1edce9-b144-449c-a4c7-0e3f02c54be9.png", // Updated to use the Ponte Vecchio image from the Tuscany article
   'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png", // EU flag with gluten-free symbol
-  'athens': "/lovable-uploads/f983026e-1050-4308-9955-23234fc3451d.png" // Updated to new chef image
+  'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" // Updated to new luxury Athens hotel lobby image
 };

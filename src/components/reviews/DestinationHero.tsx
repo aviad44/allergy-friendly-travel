@@ -20,7 +20,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
     'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80", // Barcelona image
     'ayia-napa': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Cyprus image for Ayia Napa
-    'athens': "/lovable-uploads/f983026e-1050-4308-9955-23234fc3451d.png" // New Athens image with chef preparing food
+    'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" // New Athens image with luxury hotel lobby
   };
   
   // Always prioritize critical destinations - use DIRECT paths for these specific cases
@@ -63,7 +63,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     altText = `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`;
   }
   if (destination.id === 'athens') {
-    altText = `Chef preparing gourmet gluten-free dishes in Athens restaurant - Allergy-friendly Greek cuisine`;
+    altText = `Luxurious hotel lobby in Athens with elegant furnishings - Allergy-friendly Greek accommodation`;
   }
   
   // Preload the image to ensure it's cached for sharing

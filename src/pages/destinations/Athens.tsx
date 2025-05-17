@@ -12,7 +12,7 @@ const AthensGlutenFree = () => {
         <meta name="keywords" content="gluten-free Athens, celiac restaurants Athens, safe gluten-free dining, gluten-free Greek food, allergy-friendly restaurants Athens 2025" />
         <meta property="og:title" content="Top 10 Gluten-Free Restaurants in Athens for Celiacs (2025)" />
         <meta property="og:description" content="Discover the top 10 gluten-free restaurants in Athens, Greece — safe for celiacs. Includes fully GF spots, menus, reviews & allergy-safe tips." />
-        <meta property="og:image" content="/lovable-uploads/f983026e-1050-4308-9955-23234fc3451d.png" />
+        <meta property="og:image" content="/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://www.allergy-free-travel.com/destinations/athens" />
       </Helmet>

@@ -38,7 +38,7 @@ export const DestinationCard = ({
         'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
         'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
         'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
-        'athens': "/lovable-uploads/f983026e-1050-4308-9955-23234fc3451d.png" // Update Athens to use the new chef preparing food image
+        'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" // Update Athens to use the new luxury hotel lobby image
       };
       
       // ALWAYS check if the ID directly matches our critical destinations first
@@ -91,7 +91,7 @@ export const DestinationCard = ({
             alt={id === 'cyprus' 
               ? `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`
               : id === 'athens' 
-                ? `Chef preparing gourmet gluten-free dishes in Athens - Allergy-friendly Greek cuisine`
+                ? `Luxurious hotel lobby in Athens with elegant furnishings - Allergy-friendly Greek accommodation`
                 : `${name}, ${country} - Allergy-friendly destination`}
             className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => {
@@ -111,7 +111,7 @@ export const DestinationCard = ({
                 'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
                 'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
                 'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
-                'athens': "/lovable-uploads/f983026e-1050-4308-9955-23234fc3451d.png" // Updated Athens fallback 
+                'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" // Updated Athens fallback 
               };
               
               let fallbackSrc;
@@ -135,8 +135,8 @@ export const DestinationCard = ({
             height="225"
           />
           
-          {/* Gradient overlay for text readability - updated to be more visually appealing */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
+          {/* Gradient overlay for text readability - enhanced for better visual appeal */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/70"></div>
           
           {/* Destination title overlay */}
           <div className="absolute bottom-3 left-3 right-3">
