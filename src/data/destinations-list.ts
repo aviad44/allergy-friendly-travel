@@ -148,5 +148,12 @@ export const destinations: Destination[] = [
     country: 'Germany',
     description: 'Best Allergy-Friendly Hotels in Munich',
     subtitle: 'Safe Accommodations for Food Allergies in Bavaria'
+  },
+  {
+    id: 'athens',
+    name: 'Athens',
+    country: 'Greece',
+    description: 'Top 10 Gluten-Free Restaurants in Athens for Celiacs (2025)',
+    subtitle: 'Safe & Delicious Dining Options for Celiacs in the Greek Capital'
   }
 ];

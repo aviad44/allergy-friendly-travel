@@ -1,9 +1,10 @@
 export type DestinationId = 
   | 'london'
   | 'paris'
-  | 'barcelona' 
-  | 'cyprus'
-  | 'abu-dhabi' 
+  | 'barcelona'
+  | 'cyprus' 
+  | 'rome'
+  | 'abu-dhabi'
   | 'crete'
   | 'tokyo'
   | 'thailand'
@@ -17,9 +18,9 @@ export type DestinationId =
   | 'toronto'
   | 'ayia-napa'
   | 'tuscany'
-  | 'rome'
   | 'gluten-free-europe'
-  | 'munich';
+  | 'munich'
+  | 'athens';
 
 export interface Destination {
   id: DestinationId;
@@ -47,6 +48,27 @@ export interface Hotel {
   }[];
 }
 
+export interface Restaurant {
+  id: string;
+  name: string;
+  description: string;
+  isPurelyAllergyFriendly: boolean;
+  features: string[];
+  location: string;
+  website?: string;
+  contactInfo?: {
+    phone?: string;
+    email?: string;
+  };
+  guestReview?: string;
+}
+
+export interface BonusTool {
+  name: string;
+  description: string;
+  link: string;
+}
+
 export interface FAQ {
   question: string;
   answer: string;
@@ -71,9 +93,11 @@ export interface Review {
 export interface DestinationContent {
   intro: string | string[];
   hotels: Hotel[];
+  restaurants?: Restaurant[];
   faqs: FAQ[];
-  highlights?: string[];
   languageTable?: LanguageTable;
+  tips?: string[];
+  bonusTools?: BonusTool[];
 }
 
 export type LanguageCode = 'en' | 'fr' | 'de' | 'es' | 'it' | 'he';

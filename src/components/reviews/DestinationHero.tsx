@@ -20,7 +20,8 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
     'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80", // Barcelona image
     'ayia-napa': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Cyprus image for Ayia Napa
-    'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png" // Add Munich to critical destinations
+    'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png", // Add Munich to critical destinations
+    'athens': "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&w=1200&q=80" // Athens Acropolis image
   };
   
   // Always prioritize critical destinations - use DIRECT paths for these specific cases

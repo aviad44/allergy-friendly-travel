@@ -1,3 +1,4 @@
+
 import { DestinationContent, Hotel, FAQ, DestinationId } from '@/types/definitions';
 import { tuscanyContent } from './destination-tuscany';
 import { genericFaqs, genericIntro } from './generic-content';
@@ -13,6 +14,7 @@ import { romeContent } from './destination-rome';
 import { portugalContent } from './destination-portugal';
 import { creteContent } from './destination-crete';
 import { glutenFreeEuropeContent } from './destination-gluten-free-europe';
+import { athensContent } from './destination-athens';
 
 // Create empty arrays with the right types for destinations without full data
 const abudhabiHotels: Hotel[] = [];
@@ -79,5 +81,6 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
     hotels: munichHotels,
     faqs: genericFaqs,
     intro: genericIntro
-  }
+  },
+  'athens': athensContent
 };
