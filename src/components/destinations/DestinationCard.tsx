@@ -37,7 +37,8 @@ export const DestinationCard = ({
         'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
         'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
         'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-        'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80"
+        'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
+        'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png" // Add Munich to critical destinations
       };
       
       // ALWAYS check if the ID directly matches our critical destinations first
@@ -89,7 +90,9 @@ export const DestinationCard = ({
             src={imgSrc}
             alt={id === 'cyprus' 
               ? `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`
-              : `${name}, ${country} - Allergy-friendly destination`}
+              : id === 'munich' 
+                ? `Luxurious hotel lobby in Munich, Germany - Allergy-friendly accommodation for travelers`
+                : `${name}, ${country} - Allergy-friendly destination`}
             className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => {
               console.log(`DestinationCard: Successfully loaded image for ${name}: ${imgSrc}`);
@@ -107,7 +110,8 @@ export const DestinationCard = ({
                 'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
                 'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
                 'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-                'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80"
+                'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
+                'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png" // Add Munich to fallbacks
               };
               
               let fallbackSrc;

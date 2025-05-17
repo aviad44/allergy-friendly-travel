@@ -19,7 +19,8 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
     'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80", // Barcelona image
-    'ayia-napa': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png" // Cyprus image for Ayia Napa
+    'ayia-napa': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Cyprus image for Ayia Napa
+    'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png" // Add Munich to critical destinations
   };
   
   // Always prioritize critical destinations - use DIRECT paths for these specific cases
@@ -60,6 +61,9 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
   }
   if (destination.id === 'cyprus') {
     altText = `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`;
+  }
+  if (destination.id === 'munich') {
+    altText = `Luxurious hotel lobby in Munich, Germany - Allergy-friendly accommodation for travelers`;
   }
   
   // Preload the image to ensure it's cached for sharing

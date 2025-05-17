@@ -9,7 +9,7 @@ export const DestinationsList = () => {
   useEffect(() => {
     const preloadImages = () => {
       // Define all critical destinations that need special attention
-      const criticalDestinations = ['cyprus', 'crete', 'hotel-chains', 'turkey', 'toronto', 'barcelona'];
+      const criticalDestinations = ['cyprus', 'crete', 'hotel-chains', 'turkey', 'toronto', 'barcelona', 'munich'];
       
       // Special handling for critical destinations with direct hardcoded paths
       const criticalImageMap: Record<string, string> = {
@@ -18,7 +18,8 @@ export const DestinationsList = () => {
         'crete': DESTINATION_IMAGES['crete'], 
         'turkey': DESTINATION_IMAGES['turkey'],
         'toronto': DESTINATION_IMAGES['toronto'], 
-        'barcelona': DESTINATION_IMAGES['barcelona']
+        'barcelona': DESTINATION_IMAGES['barcelona'],
+        'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png" // Add Munich to critical images
       };
       
       // First preload critical destinations with direct hardcoded paths
@@ -73,7 +74,8 @@ export const DestinationsList = () => {
             'crete': DESTINATION_IMAGES['crete'], 
             'turkey': DESTINATION_IMAGES['turkey'],
             'toronto': DESTINATION_IMAGES['toronto'], 
-            'barcelona': DESTINATION_IMAGES['barcelona']
+            'barcelona': DESTINATION_IMAGES['barcelona'],
+            'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png" // Add Munich to critical images
           };
           
           // Get image value with fallbacks
