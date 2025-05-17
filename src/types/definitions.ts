@@ -1,3 +1,4 @@
+
 export type DestinationId = 
   | 'london'
   | 'paris'
@@ -98,6 +99,7 @@ export interface DestinationContent {
   languageTable?: LanguageTable;
   tips?: string[];
   bonusTools?: BonusTool[];
+  highlights?: string[]; // Add the missing highlights property
 }
 
 export type LanguageCode = 'en' | 'fr' | 'de' | 'es' | 'it' | 'he';
