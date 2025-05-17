@@ -1,4 +1,3 @@
-
 export type DestinationId = 
   | 'london'
   | 'paris'
@@ -19,7 +18,8 @@ export type DestinationId =
   | 'ayia-napa'
   | 'tuscany'
   | 'rome'
-  | 'gluten-free-europe';
+  | 'gluten-free-europe'
+  | 'munich';
 
 export interface Destination {
   id: DestinationId;
