@@ -26,7 +26,6 @@ const cruiseLinesInfo: Hotel[] = [];
 const cruiseLinesFaqs: FAQ[] = [];
 const cruiseLinesIntro: string = "";
 const ayiaNapaHotels: Hotel[] = [];
-const munichHotels: Hotel[] = [];
 
 export const destinationData: Record<DestinationId, Partial<DestinationContent>> = {
   london: londonContent,
@@ -77,10 +76,5 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
   },
   'tuscany': tuscanyContent,
   'gluten-free-europe': glutenFreeEuropeContent,
-  'munich': {
-    hotels: munichHotels,
-    faqs: genericFaqs,
-    intro: genericIntro
-  },
   'athens': athensContent
 };

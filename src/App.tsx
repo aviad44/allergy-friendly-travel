@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -45,7 +46,6 @@ import Toronto from '@/pages/destinations/Toronto';
 import Tuscany from '@/pages/destinations/Tuscany';
 import GlutenFreeEurope from '@/pages/destinations/GlutenFreeEurope';
 import AthensGlutenFree from "./pages/destinations/Athens";
-import Munich from '@/pages/destinations/Munich';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -113,7 +113,6 @@ const AppContent = () => {
           <Route path="/destinations/turkey" element={<Turkey />} />
           <Route path="/destinations/cruise-lines" element={<CruiseLines />} />
           <Route path="/destinations/toronto" element={<Toronto />} />
-          <Route path="/destinations/munich" element={<Munich />} />
           <Route path="/destinations/athens" element={<AthensGlutenFree />} />
           <Route path="/destinations/:destinationId" element={<NotFound />} />
         </Route>

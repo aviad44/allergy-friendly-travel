@@ -143,13 +143,6 @@ export const destinations: Destination[] = [
     subtitle: 'Where to Travel in Europe If You\'re Gluten-Free or Have Celiac Disease'
   },
   {
-    id: 'munich',
-    name: 'Munich',
-    country: 'Germany',
-    description: 'Best Allergy-Friendly Hotels in Munich',
-    subtitle: 'Safe Accommodations for Food Allergies in Bavaria'
-  },
-  {
     id: 'athens',
     name: 'Athens',
     country: 'Greece',
