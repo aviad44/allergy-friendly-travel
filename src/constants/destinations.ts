@@ -19,5 +19,6 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   toronto: "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
   'ayia-napa': "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png", // Updated to use the image from the Ayia Napa article
   'tuscany': "/lovable-uploads/ea1edce9-b144-449c-a4c7-0e3f02c54be9.png", // Updated to use the Ponte Vecchio image from the Tuscany article
-  'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png" // EU flag with gluten-free symbol
+  'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png", // EU flag with gluten-free symbol
+  'munich': "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1000&q=80" // Beautiful bird's eye view of Munich's green mountains
 };
