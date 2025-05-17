@@ -18,7 +18,6 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
     'koh-samui': "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
     'swiss-alps': "https://images.unsplash.com/photo-1531816458010-fb7685eecbcb?auto=format&fit=crop&w=2000&h=1000&q=80",
-    'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png", // Add Munich to critical destinations
     'athens': "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&w=1200&q=80" // Athens Acropolis image
   };
 
