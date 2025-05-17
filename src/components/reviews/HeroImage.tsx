@@ -18,7 +18,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
     'koh-samui': "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
     'swiss-alps': "https://images.unsplash.com/photo-1531816458010-fb7685eecbcb?auto=format&fit=crop&w=2000&h=1000&q=80",
-    'athens': "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&w=1200&q=80" // Athens Acropolis image
+    'athens': "/lovable-uploads/93d77143-5339-4fd4-a873-df1141b70120.png" // Athens chef cooking image
   };
 
   // For critical destinations check if the URL contains the destination ID
