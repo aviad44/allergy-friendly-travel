@@ -3,6 +3,8 @@
  * Tracks and reports web vitals metrics
  */
 
+import React from 'react';
+
 // Basic Web Vitals tracking
 export const trackWebVitals = () => {
   if ('performance' in window && 'getEntriesByType' in performance) {
@@ -45,14 +47,20 @@ export const trackLCP = () => {
   try {
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
-        console.log(`📊 LCP: ${entry.startTime.toFixed(1)}ms`, entry);
+        // Type assertion to access LCP-specific properties
+        const lcpEntry = entry as PerformanceEntry & {
+          element?: Element;
+          startTime: number;
+        };
+        
+        console.log(`📊 LCP: ${lcpEntry.startTime.toFixed(1)}ms`, lcpEntry);
         
         // LCP should be under 2.5s for good UX
-        if (entry.startTime > 2500) {
+        if (lcpEntry.startTime > 2500) {
           logPerformanceIssue({
             metric: 'poor-lcp',
-            value: entry.startTime.toFixed(1),
-            element: entry.element?.tagName || 'unknown',
+            value: lcpEntry.startTime.toFixed(1),
+            element: lcpEntry.element?.tagName || 'unknown',
             url: window.location.pathname
           });
         }
@@ -70,13 +78,23 @@ export const trackInteractions = () => {
   try {
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
+        // Type assertion for FirstInput entry
+        const interactionEntry = entry as PerformanceEntry & {
+          processingStart?: number;
+          startTime: number;
+          duration: number;
+          entryType: string;
+        };
+        
         // This entry is FID if it's the first interaction
-        const isFirstInteraction = entry.entryType === 'first-input';
-        const delay = isFirstInteraction ? entry.processingStart - entry.startTime : entry.duration;
+        const isFirstInteraction = interactionEntry.entryType === 'first-input';
+        const delay = isFirstInteraction && interactionEntry.processingStart 
+          ? interactionEntry.processingStart - interactionEntry.startTime 
+          : interactionEntry.duration;
         
         console.log(
           `👆 ${isFirstInteraction ? 'FID' : 'Interaction'}: ${delay.toFixed(1)}ms`,
-          entry
+          interactionEntry
         );
         
         // Log if over thresholds
@@ -94,17 +112,18 @@ export const trackInteractions = () => {
     });
     
     // Also observe all interactions for INP
-    new PerformanceObserver((entryList) => {
-      for (const entry of entryList.getEntries()) {
-        if (entry.duration > 200) {
-          console.log(`⚠️ Slow interaction: ${entry.duration.toFixed(1)}ms`, entry);
+    if ('event' in PerformanceObserver.supportedEntryTypes) {
+      new PerformanceObserver((entryList) => {
+        for (const entry of entryList.getEntries()) {
+          if (entry.duration > 200) {
+            console.log(`⚠️ Slow interaction: ${entry.duration.toFixed(1)}ms`, entry);
+          }
         }
-      }
-    }).observe({ 
-      type: 'event', 
-      buffered: true,
-      durationThreshold: 16 // Only observe interactions taking >16ms
-    });
+      }).observe({ 
+        type: 'event', 
+        buffered: true
+      });
+    }
   } catch (e) {
     console.error('Interaction tracking not supported', e);
   }
@@ -117,18 +136,24 @@ export const trackCLS = () => {
   try {
     // Keep track of the current CLS value
     let clsValue = 0;
-    let clsEntries = [];
+    let clsEntries: any[] = [];
     
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
+        // Type assertion for LayoutShift entry
+        const layoutShiftEntry = entry as PerformanceEntry & {
+          hadRecentInput?: boolean;
+          value: number;
+        };
+        
         // Only count if not caused by user input
-        if (!entry.hadRecentInput) {
-          const impact = entry.value;
+        if (!layoutShiftEntry.hadRecentInput) {
+          const impact = layoutShiftEntry.value;
           clsValue += impact;
-          clsEntries.push(entry);
+          clsEntries.push(layoutShiftEntry);
           
           if (impact > 0.1) {
-            console.log(`📏 Layout shift: ${impact.toFixed(3)}, accumulated CLS: ${clsValue.toFixed(3)}`, entry);
+            console.log(`📏 Layout shift: ${impact.toFixed(3)}, accumulated CLS: ${clsValue.toFixed(3)}`, layoutShiftEntry);
           }
         }
       }
@@ -177,15 +202,18 @@ export const trackResourceLoading = () => {
   try {
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
+        // Type assertion for Resource entry
+        const resourceEntry = entry as PerformanceResourceTiming;
+        
         if (entry.duration > 1000) {
           console.log(`🐌 Slow resource: ${entry.name} (${entry.duration.toFixed(1)}ms)`);
           
           // Check for large resources
-          if (entry.transferSize && entry.transferSize > 500000) { // 500KB
+          if (resourceEntry.transferSize && resourceEntry.transferSize > 500000) { // 500KB
             logPerformanceIssue({
               metric: 'large-resource',
               resource: entry.name,
-              size: Math.round(entry.transferSize / 1024) + 'KB',
+              size: Math.round(resourceEntry.transferSize / 1024) + 'KB',
               url: window.location.pathname
             });
           }
