@@ -18,6 +18,21 @@ Allow: /destinations/thailand
 Allow: /destinations/ayia-napa
 Allow: /hotels/le-petit-palace
 
+# Disallow development-related directories
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /components/
+Disallow: /data/
+Disallow: /*.js$
+Disallow: /*.ts$
+Disallow: /*.tsx$
+Disallow: /*.json$
+Disallow: /*.md$
+Disallow: /*.lock$
+Disallow: /*.toml$
+Disallow: /.git/
+Disallow: /.github/
+
 # Explicitly ALLOW Prerender and social media bots - CRITICAL
 User-agent: facebookexternalhit
 Allow: /
