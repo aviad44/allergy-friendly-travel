@@ -24,7 +24,7 @@ serve(async (req) => {
     const { destination, allergies } = await req.json();
     console.log('✅ Processing search request for:', { destination, allergies });
 
-    // Send request to OpenAI API with your custom GPT
+    // Optimized request to OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -32,50 +32,35 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o', // Using the more powerful model for better results
+        model: 'gpt-4o', // Keep using the powerful model but with optimized parameters
         messages: [
           {
             role: 'system',
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels.
-            Format your response in this EXACT numbered format for each hotel (number each section exactly as shown):
+            Format your response in this EXACT numbered format for each hotel:
             
             ## 1. [Hotel Name] ⭐⭐⭐⭐⭐
             
-            📍 [Exact Address including neighborhood, City, Country]
+            📍 [City, Country]
             
             🌟 Why it's great for [allergy type] allergy travelers:
-            - [Feature 1 - specific to allergy accommodation]
-            - [Feature 2 - specific to food handling procedures]
-            - [Feature 3 - another relevant feature]
+            - [Feature 1]
+            - [Feature 2]
             
             💬 Allergy Guest Review:
-            "[Insert a real, authentic review from someone with this specific allergy]"
+            "[Brief review]"
             
             🔗 [Official Hotel Website URL]
             
-            ---
-            
-            ## 2. [Next Hotel Name]
-            
-            [Continue with same format]
-            
-            IMPORTANT:
-            1. Make sure EVERY hotel includes the hotel name, address, allergy features, guest review, and website URL
-            2. Format needs to be EXACTLY as shown with markdown headers and emoji
-            3. Include up to 10 hotels for the given destination that truly accommodate the specific allergies
-            4. Only include hotels with strong evidence of genuine allergy accommodation
-            5. Only include accurate information and working URLs
-            6. Be concise but thorough in your descriptions
-            7. Use authentic, realistic guest reviews that reflect real experiences with the specific allergies
-            8. Always use the ## header format for hotel names and --- separators between hotels`
+            ---`
           },
           {
             role: 'user',
-            content: `Find the best allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Provide up to 10 hotels with their full details, focusing only on hotels with strong evidence of properly accommodating ${allergies} allergies.`
+            content: `Find the best 3-5 allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies.`
           },
         ],
-        temperature: 0.3,
-        max_tokens: 3000, // Increased token limit to handle more hotels
+        temperature: 0.2, // Lower temperature for more deterministic responses
+        max_tokens: 1000, // Reduced token limit for faster responses
       }),
     });
 
@@ -88,13 +73,11 @@ serve(async (req) => {
     const data = await response.json();
     console.log('✅ Received response from OpenAI');
     
-    // Process the response to remove any potential prompt indicators
+    // Process the response
     let processedResponse = data.choices[0].message.content;
     processedResponse = processedResponse
       .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
       .replace(/Format your response[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/IMPORTANT RULES:[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/Format exactly as shown[\s\S]*?(?=\n\n|$)/g, '')
       .trim();
     
     return new Response(

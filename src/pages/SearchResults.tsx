@@ -13,11 +13,13 @@ import { LoadingState } from "@/components/search/LoadingState";
 import { HotelList } from "@/components/search/hotel-list";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useRef } from "react";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const requestTimeoutRef = useRef<number | null>(null);
   
   const destination = searchParams.get("destination") || "";
   const allergies = searchParams.get("allergies") || "";
@@ -26,10 +28,9 @@ const SearchResults = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [hotels, setHotels] = useState<HotelInfo[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [searchStartTime, setSearchStartTime] = useState<number | null>(null);
   
   useEffect(() => {
-    console.log('Search Parameters:', { destination, allergies }); // Debug log
-    
     if (!destination || !allergies) {
       toast({
         title: "Missing search parameters",
@@ -43,9 +44,18 @@ const SearchResults = () => {
     const performSearch = async () => {
       setIsSearching(true);
       setError(null);
+      setSearchStartTime(Date.now());
+      
+      // Set a timeout to show partial results if taking too long
+      requestTimeoutRef.current = window.setTimeout(() => {
+        toast({
+          title: "Search is taking longer than expected",
+          description: "We're still looking for the best allergy-friendly hotels for you. Results will appear soon.",
+          variant: "default"
+        });
+      }, 5000);
       
       try {
-        console.log('Sending search request to Supabase search-with-gpt function');
         const {
           data,
           error
@@ -61,11 +71,15 @@ const SearchResults = () => {
           throw error;
         }
         
-        console.log('Received response data:', data);
-        
         if (!data?.recommendation) {
           console.error('No recommendation data:', data);
           throw new Error('No recommendation received from the AI');
+        }
+        
+        // Calculate and log the request time
+        if (searchStartTime) {
+          const searchTime = (Date.now() - searchStartTime) / 1000;
+          console.log(`Search completed in ${searchTime.toFixed(2)} seconds`);
         }
         
         // Clean the response before displaying it
@@ -75,7 +89,6 @@ const SearchResults = () => {
         // Extract hotels from the recommendation
         try {
           const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
-          console.log('Extracted hotels:', extractedHotels);
           
           if (!extractedHotels || extractedHotels.length === 0) {
             console.warn('No hotels could be extracted from the response');
@@ -105,10 +118,20 @@ const SearchResults = () => {
         });
       } finally {
         setIsSearching(false);
+        if (requestTimeoutRef.current) {
+          clearTimeout(requestTimeoutRef.current);
+        }
       }
     };
     
     performSearch();
+    
+    // Cleanup function to clear timeout if component unmounts
+    return () => {
+      if (requestTimeoutRef.current) {
+        clearTimeout(requestTimeoutRef.current);
+      }
+    };
   }, [destination, allergies, toast, navigate]);
 
   // SEO metadata
@@ -123,15 +146,11 @@ const SearchResults = () => {
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <link rel="canonical" href={canonicalUrl} />
-        
-        {/* Open Graph Meta Tags */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:image" content={imageUrl} />
-        
-        {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
@@ -141,21 +160,15 @@ const SearchResults = () => {
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
           <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-            {/* Back Button */}
             <BackButton />
-            
-            {/* Safety Notice */}
             <SafetyNotice />
 
-            {/* Error display if needed */}
             {error && (
               <Alert variant="destructive" className="my-4">
                 <AlertCircle className="h-4 w-4 mr-2" />
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-
-            {/* No title here - we'll only use the title in the HotelList component */}
 
             {isSearching ? (
               <LoadingState />
