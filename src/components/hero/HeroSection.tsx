@@ -7,34 +7,44 @@ export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const isMobile = useIsMobile();
   
-  // Preload hero image with higher quality settings
+  // Generate optimized hero image URL with variable size based on viewport
+  const getOptimizedHeroUrl = () => {
+    const baseUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
+    
+    // Since this is an uploaded image and not an Unsplash URL,
+    // we can't optimize it at runtime. Return the original URL.
+    return baseUrl;
+  };
+  
+  // Preload hero image
   useEffect(() => {
     const img = new Image();
-    img.src = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
+    img.src = getOptimizedHeroUrl();
     img.onload = () => setImageLoaded(true);
   }, []);
 
   return (
     <section 
       className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
-      style={{
-        backgroundImage: `url("/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        height: isMobile ? '100vh' : '110vh',
-        opacity: imageLoaded ? 1 : 0,
-        transition: 'opacity 0.5s ease-in',
-        imageRendering: 'crisp-edges',
-      }}
     >
-      {/* Lightweight placeholder while image loads */}
-      {!imageLoaded && (
-        <div 
-          className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600"
-          aria-hidden="true"
-        ></div>
-      )}
+      {/* Low quality placeholder while image loads */}
+      <div 
+        className={`absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600 transition-opacity duration-500 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}
+        aria-hidden="true"
+      ></div>
+      
+      {/* Main hero image - optimized */}
+      <div 
+        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+        style={{
+          backgroundImage: `url("${getOptimizedHeroUrl()}")`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          height: isMobile ? '100vh' : '110vh',
+        }}
+        role="img"
+        aria-label="Allergy-friendly travel destination with scenic view"
+      ></div>
       
       <div className="absolute inset-0 bg-black/5 backdrop-blur-[0px]"></div>
       

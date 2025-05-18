@@ -5,15 +5,21 @@ export const DestinationsHero = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
   
-  // Determine image URL based on device type
+  // Determine optimized image URL based on device type
   const getResponsiveImageUrl = () => {
-    const isMobile = window.innerWidth < 768;
+    const width = window.innerWidth < 768 ? 800 : 1600;
     const baseUrl = "https://images.unsplash.com/photo-1488085061387-422e29b40080";
-    const params = isMobile 
-      ? "?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-      : "?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
-    return baseUrl + params;
+    return `${baseUrl}?fm=webp&w=${width}&q=${window.innerWidth < 768 ? 75 : 80}`;
   };
+  
+  // Create responsive srcSet for different viewport sizes
+  const srcSet = `
+    https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=640&q=75 640w,
+    https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=960&q=75 960w,
+    https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=1200&q=80 1200w,
+    https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=1600&q=80 1600w,
+    https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=2000&q=80 2000w
+  `;
   
   useEffect(() => {
     // Preload image with timeout for mobile
@@ -24,7 +30,7 @@ export const DestinationsHero = () => {
     const timeout = setTimeout(() => {
       console.log('Destinations hero image load timeout - using fallback');
       setImageFailed(true);
-    }, 8000);
+    }, 5000);
     
     img.onload = () => {
       clearTimeout(timeout);
@@ -56,8 +62,10 @@ export const DestinationsHero = () => {
             alt="Travel destinations" 
             className={`w-full h-full object-cover object-center transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             loading="eager" // This is a hero image so eager loading is appropriate
-            width={window.innerWidth < 768 ? 800 : 1200}
+            width={window.innerWidth < 768 ? 800 : 1600}
             height={window.innerWidth < 768 ? 400 : 600}
+            srcSet={srcSet}
+            sizes="(max-width: 640px) 640px, (max-width: 960px) 960px, (max-width: 1200px) 1200px, (max-width: 1600px) 1600px, 2000px"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600"></div>
