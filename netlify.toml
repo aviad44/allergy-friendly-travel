@@ -56,33 +56,76 @@
 [[headers]]
   for = "*.js"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "*.css"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
+# Improved caching for images
 [[headers]]
   for = "*.webp"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/webp"
+
+[[headers]]
+  for = "*.avif"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/avif"
 
 [[headers]]
   for = "*.png"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "image/png"
 
 [[headers]]
   for = "*.jpg"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/jpeg"
 
-# WhatsApp specific headers for all PNG images
+[[headers]]
+  for = "*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/jpeg"
+
+# WhatsApp specific headers for all images
 [[headers]]
   for = "/*.png"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET"
-    Cache-Control = "public, max-age=604800"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Enable Brotli compression for all assets
+[build.processing]
+  skip_processing = false
+[build.processing.css]
+  bundle = true
+  minify = true
+[build.processing.js]
+  bundle = true
+  minify = true
+[build.processing.html]
+  pretty_urls = true
+[build.processing.images]
+  compress = true

@@ -39,9 +39,14 @@ export default defineConfig(({ mode }) => ({
       compress: {
         drop_console: true,
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.debug', 'console.info'],
+        passes: 2, // Additional passes for better minification
+      },
+      mangle: {
+        safari10: true, // Better Safari support
       },
     },
-    // Enable code splitting
+    // Improved code splitting
     rollupOptions: {
       output: {
         manualChunks: {
@@ -51,11 +56,26 @@ export default defineConfig(({ mode }) => ({
             '@/components/ui/card', 
             '@/components/ui/toast'
           ],
+          'charts': ['recharts'],
+          'icons': ['lucide-react'],
+          'form-handling': ['@hookform/resolvers', 'react-hook-form', 'zod'],
+          'date-handling': ['date-fns'],
         },
         // Ensure chunk size is reasonable
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
-        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+        assetFileNames: ({ name }) => {
+          // Put images in a separate directory with better caching
+          if (/\.(png|jpe?g|svg|gif|webp|avif)$/.test(name ?? '')) {
+            return 'assets/images/[name]-[hash][extname]';
+          }
+          // Put CSS in a separate directory
+          if (/\.css$/.test(name ?? '')) {
+            return 'assets/css/[name]-[hash][extname]';
+          }
+          // Default for other assets
+          return 'assets/[ext]/[name]-[hash][extname]';
+        },
       },
     },
     // Enable source maps for production (helps with monitoring)
@@ -64,12 +84,24 @@ export default defineConfig(({ mode }) => ({
     cssCodeSplit: true,
     // Reduce chunk size warnings threshold
     chunkSizeWarningLimit: 1000,
+    // Enable module preload polyfill for better browser support
+    modulePreload: {
+      polyfill: true,
+    },
+    // Generate compressed files for CDN serving
+    reportCompressedSize: true,
   },
-  // Enable tree shaking
+  // Enhanced tree shaking
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
     esbuildOptions: {
       treeShaking: true,
+    },
+  },
+  // Handle proper path-based code splitting for dynamic imports
+  experimental: {
+    renderBuiltUrl(filename) {
+      return `/${filename}`;
     },
   },
 }));

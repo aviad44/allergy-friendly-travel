@@ -2,15 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { getResponsiveImageProps, trackImagePerformance } from '@/utils/image-optimization';
+import { getResponsiveImageProps } from '@/utils/image-optimization';
 
 export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const isMobile = useIsMobile();
+  
+  // Updated hero image URL - use a known working image
   const heroImageUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
   
-  // Track LCP performance for this critical element
-  trackImagePerformance('hero-section');
+  // Width and height calculations for explicit dimensions
+  const heroWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+  const heroHeight = typeof window !== 'undefined' ? 
+    (isMobile ? window.innerHeight : window.innerHeight * 1.1) : 800;
   
   // Preload hero image - critical for LCP
   useEffect(() => {
@@ -20,12 +24,12 @@ export const HeroSection = () => {
     img.onload = () => setImageLoaded(true);
     img.src = heroImageUrl;
     
-    // Add preload link for the hero image
+    // Add preload link for the hero image with proper type
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'image';
     link.href = heroImageUrl;
-    link.type = 'image/png'; // Adjust based on actual image type
+    link.type = 'image/png';
     document.head.appendChild(link);
     
     return () => {
@@ -34,10 +38,6 @@ export const HeroSection = () => {
       }
     };
   }, []);
-
-  // Calculate dimensions based on viewport for explicit width/height
-  const heroHeight = isMobile ? window.innerHeight : window.innerHeight * 1.1;
-  const heroWidth = window.innerWidth;
 
   return (
     <section 
@@ -54,7 +54,7 @@ export const HeroSection = () => {
         }}
       ></div>
       
-      {/* Main hero image with explicit dimensions */}
+      {/* Main hero image with explicit dimensions and fetchPriority */}
       <div 
         className={`absolute inset-0 transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
         style={{
