@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { getResponsiveImageProps } from '@/utils/image-optimization';
 
 interface HotelImageProps {
   name: string;
@@ -12,7 +13,6 @@ interface HotelImageProps {
 export const HotelImage: React.FC<HotelImageProps> = ({ name, rating, imageUrl }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
   
   // Process image URL for optimal loading
   const getOptimizedUrl = (url: string) => {
@@ -20,12 +20,21 @@ export const HotelImage: React.FC<HotelImageProps> = ({ name, rating, imageUrl }
     
     // For Unsplash photo IDs
     if (url.startsWith('photo-')) {
-      return `https://images.unsplash.com/${url}?auto=format&fit=crop&w=1200&h=675&q=80`;
+      return `https://images.unsplash.com/${url}?fm=webp&fit=crop&w=1200&h=675&q=80`;
     }
     
     // For direct URLs
+    if (url.includes('unsplash.com') && !url.includes('fm=webp')) {
+      const baseUrl = url.split('?')[0];
+      return `${baseUrl}?fm=webp&fit=crop&w=1200&h=675&q=80`;
+    }
+    
     return url;
   };
+  
+  // Get explicit dimensions for the image
+  const width = 1200;
+  const height = 675;
   
   // Preload image if URL is provided
   useEffect(() => {
@@ -35,6 +44,8 @@ export const HotelImage: React.FC<HotelImageProps> = ({ name, rating, imageUrl }
     
     const img = new Image();
     img.src = processedUrl;
+    img.width = width;
+    img.height = height;
     img.onload = () => {
       setImageLoaded(true);
       setImageError(false);
@@ -42,13 +53,13 @@ export const HotelImage: React.FC<HotelImageProps> = ({ name, rating, imageUrl }
     img.onerror = () => {
       console.error(`Failed to load image for ${name}: ${processedUrl}`);
       setImageError(true);
-      
-      // Try one more time with a different query parameter for cache busting
-      if (retryCount < 1) {
-        setRetryCount(prev => prev + 1);
-      }
     };
-  }, [imageUrl, name, retryCount]);
+    
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [imageUrl, name]);
 
   // Generate fallback gradient colors based on hotel name
   const getFallbackColor = () => {
@@ -76,14 +87,17 @@ export const HotelImage: React.FC<HotelImageProps> = ({ name, rating, imageUrl }
             </div>
           )}
           
-          {/* Actual image */}
+          {/* Actual image with proper attributes */}
           <img 
             src={getOptimizedUrl(imageUrl)} 
             alt={`${name} - Hotel view`}
             className={`h-full w-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImageLoaded(true)}
             onError={() => setImageError(true)}
-            loading="eager"
+            loading="lazy"
+            width={width}
+            height={height}
+            decoding="async"
           />
         </>
       ) : (

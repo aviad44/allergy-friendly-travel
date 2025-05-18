@@ -2,45 +2,67 @@
 import React, { useState, useEffect } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { getResponsiveImageProps, trackImagePerformance } from '@/utils/image-optimization';
 
 export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const isMobile = useIsMobile();
+  const heroImageUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
   
-  // Generate optimized hero image URL with variable size based on viewport
-  const getOptimizedHeroUrl = () => {
-    const baseUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
-    
-    // Since this is an uploaded image and not an Unsplash URL,
-    // we can't optimize it at runtime. Return the original URL.
-    return baseUrl;
-  };
+  // Track LCP performance for this critical element
+  trackImagePerformance('hero-section');
   
-  // Preload hero image
+  // Preload hero image - critical for LCP
   useEffect(() => {
     const img = new Image();
-    img.src = getOptimizedHeroUrl();
+    img.fetchPriority = 'high';
+    img.loading = 'eager';
     img.onload = () => setImageLoaded(true);
+    img.src = heroImageUrl;
+    
+    // Add preload link for the hero image
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = heroImageUrl;
+    link.type = 'image/png'; // Adjust based on actual image type
+    document.head.appendChild(link);
+    
+    return () => {
+      if (document.head.contains(link)) {
+        document.head.removeChild(link);
+      }
+    };
   }, []);
+
+  // Calculate dimensions based on viewport for explicit width/height
+  const heroHeight = isMobile ? window.innerHeight : window.innerHeight * 1.1;
+  const heroWidth = window.innerWidth;
 
   return (
     <section 
+      id="hero-section"
       className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
     >
       {/* Low quality placeholder while image loads */}
       <div 
         className={`absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600 transition-opacity duration-500 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}
         aria-hidden="true"
+        style={{
+          width: heroWidth,
+          height: heroHeight,
+        }}
       ></div>
       
-      {/* Main hero image - optimized */}
+      {/* Main hero image with explicit dimensions */}
       <div 
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
         style={{
-          backgroundImage: `url("${getOptimizedHeroUrl()}")`,
+          backgroundImage: `url("${heroImageUrl}")`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          height: isMobile ? '100vh' : '110vh',
+          width: heroWidth,
+          height: heroHeight,
         }}
         role="img"
         aria-label="Allergy-friendly travel destination with scenic view"

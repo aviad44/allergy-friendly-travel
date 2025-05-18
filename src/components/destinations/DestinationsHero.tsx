@@ -1,16 +1,20 @@
 
 import React, { useState, useEffect } from 'react';
+import { preloadCriticalImages, trackImagePerformance } from '@/utils/image-optimization';
 
 export const DestinationsHero = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
   
-  // Determine optimized image URL based on device type
-  const getResponsiveImageUrl = () => {
-    const width = window.innerWidth < 768 ? 800 : 1600;
-    const baseUrl = "https://images.unsplash.com/photo-1488085061387-422e29b40080";
-    return `${baseUrl}?fm=webp&w=${width}&q=${window.innerWidth < 768 ? 75 : 80}`;
-  };
+  // Track LCP performance for this critical element
+  trackImagePerformance('destinations-hero');
+  
+  // Define image dimensions based on viewport
+  const width = window.innerWidth;
+  const height = Math.round(width < 768 ? width * 0.5 : width * 0.35); // Maintain aspect ratio
+  
+  // Define the optimized image URL with proper format
+  const imageUrl = "https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=1600&q=80";
   
   // Create responsive srcSet for different viewport sizes
   const srcSet = `
@@ -21,16 +25,21 @@ export const DestinationsHero = () => {
     https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=2000&q=80 2000w
   `;
   
+  // Preload the hero image for better LCP
+  preloadCriticalImages([imageUrl]);
+  
   useEffect(() => {
-    // Preload image with timeout for mobile
+    // Preload image with priority
     const img = new Image();
-    img.src = getResponsiveImageUrl();
+    img.src = imageUrl;
+    img.fetchPriority = 'high';
+    img.loading = 'eager';
     
     // Set timeout for slow connections
     const timeout = setTimeout(() => {
       console.log('Destinations hero image load timeout - using fallback');
       setImageFailed(true);
-    }, 5000);
+    }, 3000); // Reduced timeout for better UX
     
     img.onload = () => {
       clearTimeout(timeout);
@@ -47,28 +56,34 @@ export const DestinationsHero = () => {
   }, []);
 
   return (
-    <section className="relative py-10 md:py-16 mt-0">
+    <section className="relative py-10 md:py-16 mt-0" id="destinations-hero">
       <div className="absolute inset-0 overflow-hidden">
         {/* Show low quality placeholder while image loads */}
         <div 
           className={`absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600 transition-opacity duration-500 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}
           aria-hidden="true"
+          style={{ width, height }}
         ></div>
         
-        {/* Main image with optimized loading */}
+        {/* Main image with optimized loading and explicit dimensions */}
         {!imageFailed ? (
           <img 
-            src={getResponsiveImageUrl()} 
+            src={imageUrl} 
             alt="Travel destinations" 
             className={`w-full h-full object-cover object-center transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-            loading="eager" // This is a hero image so eager loading is appropriate
-            width={window.innerWidth < 768 ? 800 : 1600}
-            height={window.innerWidth < 768 ? 400 : 600}
+            loading="eager" 
+            fetchPriority="high"
+            width={width}
+            height={height}
             srcSet={srcSet}
-            sizes="(max-width: 640px) 640px, (max-width: 960px) 960px, (max-width: 1200px) 1200px, (max-width: 1600px) 1600px, 2000px"
+            sizes="100vw"
+            decoding="async"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600"></div>
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600"
+            style={{ width, height }}
+          ></div>
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
       </div>

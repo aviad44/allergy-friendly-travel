@@ -3,11 +3,26 @@ import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { HOME_CONTENT } from "@/constants/home";
 import { Helmet } from "react-helmet";
 import { HeroSection } from "@/components/hero/HeroSection";
+import { useEffect } from "react";
+import { preloadCriticalImages } from "@/utils/image-optimization";
+import { initPerformanceMonitoring } from "@/utils/performanceMonitoring";
 
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
   const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
-  const mainImage = '/lovable-uploads/toronto-skyline.png';
+  const mainImage = '/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png';
+  
+  // Initialize performance monitoring
+  useEffect(() => {
+    initPerformanceMonitoring();
+  }, []);
+  
+  // Preload critical images for index page
+  preloadCriticalImages([
+    mainImage,
+    '/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png',
+    '/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png'
+  ]);
   
   return (
     <>
@@ -16,6 +31,9 @@ export default function Index() {
         <meta name="description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
         <meta name="keywords" content="allergy-friendly travel, food allergy hotels, gluten-free accommodation, dairy-free travel, nut-free hotels, allergen-free vacation, safe travel with allergies" />
         <link rel="canonical" href={`${baseUrl}/`} />
+        
+        {/* Preloads for critical resources */}
+        <link rel="preload" href={mainImage} as="image" />
         
         {/* Open Graph Meta Tags - CRITICAL FOR FACEBOOK/WHATSAPP SHARING */}
         <meta property="og:type" content="website" />

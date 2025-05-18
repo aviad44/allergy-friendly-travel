@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { HeroImageFallback } from "./HeroImageFallback";
 import { HeroImageOverlay } from "./HeroImageOverlay";
+import { getResponsiveImageProps, preloadCriticalImages } from "@/utils/image-optimization";
 
 interface HeroImageProps {
   imageUrl: string;
@@ -28,6 +29,10 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
 
   // Use specific critical image if needed
   const actualImageUrl = destinationMatch ? criticalDestinations[destinationMatch] : imageUrl;
+  
+  // Calculate explicit dimensions based on viewport
+  const width = window.innerWidth;
+  const height = Math.round(window.innerWidth < 768 ? width * 0.5 : width * 0.4);
   
   // Create responsive image attributes for different screen sizes
   const getResponsiveSrcSet = (url: string) => {
@@ -59,17 +64,24 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     }
     
     const baseUrl = url.split('?')[0];
-    const width = window.innerWidth < 768 ? 960 : 1600;
-    return `${baseUrl}?fm=webp&w=${width}&q=80`;
+    const imgWidth = window.innerWidth < 768 ? 960 : 1600;
+    return `${baseUrl}?fm=webp&w=${imgWidth}&q=80`;
   };
   
   // Get the optimized version of the image URL
   const optimizedImageUrl = getOptimalImageUrl(actualImageUrl);
   
+  // Preload this critical image
+  preloadCriticalImages([optimizedImageUrl]);
+  
   useEffect(() => {
-    // Preload image
+    // Preload image with high priority
     const img = new Image();
     img.src = optimizedImageUrl;
+    img.fetchPriority = 'high';
+    img.loading = 'eager';
+    img.width = width;
+    img.height = height;
     
     img.onload = () => {
       setImageLoaded(true);
@@ -86,7 +98,7 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
       img.onload = null;
       img.onerror = null;
     };
-  }, [optimizedImageUrl]);
+  }, [optimizedImageUrl, width, height]);
 
   return (
     <div className="relative w-full h-full">
@@ -108,9 +120,11 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
         sizes={sizes}
         onLoad={() => setImageLoaded(true)}
         onError={() => setImageFailed(true)}
-        loading="eager" // Use eager for hero/above-fold images
-        width="1600"
-        height="900"
+        loading="eager"
+        fetchPriority="high"
+        width={width}
+        height={height}
+        decoding="async"
       />
       
       <HeroImageOverlay />
