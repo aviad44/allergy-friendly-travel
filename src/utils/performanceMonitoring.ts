@@ -1,256 +1,217 @@
+
 /**
- * Performance monitoring utility
- * Tracks and reports web vitals metrics
+ * Web Performance Monitoring Utilities
+ * Tracks critical web vitals and other performance metrics
  */
 
-import React from 'react';
+// Helper function to safely check if Performance API is available
+const isPerformanceSupported = () => {
+  return typeof window !== 'undefined' && 
+         typeof window.performance !== 'undefined' && 
+         typeof PerformanceObserver !== 'undefined';
+};
 
-// Basic Web Vitals tracking
-export const trackWebVitals = () => {
-  if ('performance' in window && 'getEntriesByType' in performance) {
-    // Track navigation timing
-    performance.getEntriesByType('navigation').forEach(entry => {
-      if (entry instanceof PerformanceNavigationTiming) {
-        const navigationStart = entry.startTime;
-        const responseStart = entry.responseStart;
-        const responseEnd = entry.responseEnd;
-        const domComplete = entry.domComplete;
-        const loadEventEnd = entry.loadEventEnd;
+// Initialize performance monitoring
+export const initPerformanceMonitoring = () => {
+  if (!isPerformanceSupported()) {
+    console.log('Performance API not supported in this environment');
+    return;
+  }
+
+  try {
+    // Monitor LCP (Largest Contentful Paint)
+    observeLCP();
+    
+    // Monitor FID (First Input Delay)
+    observeFID();
+    
+    // Monitor CLS (Cumulative Layout Shift)
+    observeCLS();
+    
+    // Monitor long tasks (for responsiveness)
+    observeLongTasks();
+    
+    // Monitor resource loading
+    observeResourceLoading();
+    
+    // Monitor navigation timing
+    captureNavigationTiming();
+    
+    console.log('Performance monitoring initialized');
+  } catch (error) {
+    console.error('Error initializing performance monitoring:', error);
+  }
+};
+
+// Monitor Largest Contentful Paint
+const observeLCP = () => {
+  try {
+    const lcpObserver = new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
+      const lastEntry = entries[entries.length - 1];
+      
+      if (lastEntry) {
+        // Need to type cast since TS doesn't know about LCP properties
+        const lcpEntry = lastEntry as PerformanceEntry & { element?: Element };
         
-        // Calculate TTFB (Time to First Byte)
-        const ttfb = responseStart - navigationStart;
-        // Calculate load time
-        const loadTime = domComplete - navigationStart;
-        // Calculate total time
-        const totalTime = loadEventEnd - navigationStart;
+        const lcpValue = lcpEntry.startTime;
+        const lcpElement = lcpEntry.element;
         
-        console.log(`🚀 Performance: TTFB ${ttfb.toFixed(1)}ms, Load ${loadTime.toFixed(1)}ms, Total ${totalTime.toFixed(1)}ms`);
+        console.log(`LCP: ${lcpValue.toFixed(2)}ms`, lcpElement ? 
+          `Element: ${lcpElement.tagName.toLowerCase()}` : 'Unknown element');
         
-        // Send to analytics if above threshold
-        if (ttfb > 600 || loadTime > 3000) {
-          logPerformanceIssue({
-            metric: 'slow-load',
-            ttfb: ttfb.toFixed(1),
-            load: loadTime.toFixed(1),
-            url: window.location.pathname
-          });
+        // Report to analytics if needed
+        if (lcpValue > 2500) {
+          console.warn('LCP is above the "good" threshold (2.5s)');
         }
       }
     });
+    
+    lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+  } catch (error) {
+    console.error('Error observing LCP:', error);
   }
 };
 
-// Track Largest Contentful Paint (LCP)
-export const trackLCP = () => {
-  if (!('PerformanceObserver' in window)) return;
-  
+// Monitor First Input Delay
+const observeFID = () => {
   try {
-    new PerformanceObserver((entryList) => {
-      for (const entry of entryList.getEntries()) {
-        // Type assertion to access LCP-specific properties
-        const lcpEntry = entry as PerformanceEntry & {
-          element?: Element;
-          startTime: number;
-        };
-        
-        console.log(`📊 LCP: ${lcpEntry.startTime.toFixed(1)}ms`, lcpEntry);
-        
-        // LCP should be under 2.5s for good UX
-        if (lcpEntry.startTime > 2500) {
-          logPerformanceIssue({
-            metric: 'poor-lcp',
-            value: lcpEntry.startTime.toFixed(1),
-            element: lcpEntry.element?.tagName || 'unknown',
-            url: window.location.pathname
-          });
-        }
-      }
-    }).observe({ type: 'largest-contentful-paint', buffered: true });
-  } catch (e) {
-    console.error('LCP tracking not supported', e);
-  }
-};
-
-// Track First Input Delay (FID) and Interaction to Next Paint (INP)
-export const trackInteractions = () => {
-  if (!('PerformanceObserver' in window)) return;
-  
-  try {
-    new PerformanceObserver((entryList) => {
-      for (const entry of entryList.getEntries()) {
-        // Type assertion for FirstInput entry
-        const interactionEntry = entry as PerformanceEntry & {
+    const fidObserver = new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
+      entries.forEach(entry => {
+        // Need to type cast for FID properties
+        const fidEntry = entry as PerformanceEntry & { 
           processingStart?: number;
           startTime: number;
-          duration: number;
-          entryType: string;
         };
         
-        // This entry is FID if it's the first interaction
-        const isFirstInteraction = interactionEntry.entryType === 'first-input';
-        const delay = isFirstInteraction && interactionEntry.processingStart 
-          ? interactionEntry.processingStart - interactionEntry.startTime 
-          : interactionEntry.duration;
+        const fidValue = fidEntry.processingStart ? 
+          fidEntry.processingStart - fidEntry.startTime : 0;
         
-        console.log(
-          `👆 ${isFirstInteraction ? 'FID' : 'Interaction'}: ${delay.toFixed(1)}ms`,
-          interactionEntry
-        );
+        console.log(`FID: ${fidValue.toFixed(2)}ms`);
         
-        // Log if over thresholds
-        if ((isFirstInteraction && delay > 100) || (!isFirstInteraction && delay > 200)) {
-          logPerformanceIssue({
-            metric: isFirstInteraction ? 'poor-fid' : 'poor-interaction',
-            value: delay.toFixed(1),
-            url: window.location.pathname
-          });
+        // Report to analytics if needed
+        if (fidValue > 100) {
+          console.warn('FID is above the "good" threshold (100ms)');
         }
-      }
-    }).observe({ 
-      type: 'first-input', 
-      buffered: true 
+      });
     });
     
-    // Also observe all interactions for INP
-    if ('event' in PerformanceObserver.supportedEntryTypes) {
-      new PerformanceObserver((entryList) => {
-        for (const entry of entryList.getEntries()) {
-          if (entry.duration > 200) {
-            console.log(`⚠️ Slow interaction: ${entry.duration.toFixed(1)}ms`, entry);
-          }
-        }
-      }).observe({ 
-        type: 'event', 
-        buffered: true
-      });
-    }
-  } catch (e) {
-    console.error('Interaction tracking not supported', e);
+    fidObserver.observe({ type: 'first-input', buffered: true });
+  } catch (error) {
+    console.error('Error observing FID:', error);
   }
 };
 
-// Track Cumulative Layout Shift (CLS)
-export const trackCLS = () => {
-  if (!('PerformanceObserver' in window)) return;
-  
+// Monitor Cumulative Layout Shift
+const observeCLS = () => {
   try {
-    // Keep track of the current CLS value
     let clsValue = 0;
-    let clsEntries: any[] = [];
+    let clsEntries = [];
     
-    new PerformanceObserver((entryList) => {
-      for (const entry of entryList.getEntries()) {
-        // Type assertion for LayoutShift entry
-        const layoutShiftEntry = entry as PerformanceEntry & {
-          hadRecentInput?: boolean;
+    const clsObserver = new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
+      
+      entries.forEach(entry => {
+        // Type cast for CLS properties
+        const clsEntry = entry as PerformanceEntry & { 
           value: number;
+          hadRecentInput?: boolean;
         };
         
-        // Only count if not caused by user input
-        if (!layoutShiftEntry.hadRecentInput) {
-          const impact = layoutShiftEntry.value;
-          clsValue += impact;
-          clsEntries.push(layoutShiftEntry);
+        // Ignore if had recent input
+        if (!clsEntry.hadRecentInput) {
+          clsValue += clsEntry.value;
+          clsEntries.push(clsEntry);
           
-          if (impact > 0.1) {
-            console.log(`📏 Layout shift: ${impact.toFixed(3)}, accumulated CLS: ${clsValue.toFixed(3)}`, layoutShiftEntry);
+          console.log(`CLS update: ${clsValue.toFixed(3)}`);
+          
+          // Report to analytics if needed
+          if (clsValue > 0.1) {
+            console.warn('CLS is above the "good" threshold (0.1)');
           }
         }
-      }
+      });
+    });
+    
+    clsObserver.observe({ type: 'layout-shift', buffered: true });
+  } catch (error) {
+    console.error('Error observing CLS:', error);
+  }
+};
+
+// Monitor long tasks for responsiveness
+const observeLongTasks = () => {
+  try {
+    const longTaskObserver = new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
       
-      // CLS should be under 0.1 for good UX
-      if (clsValue > 0.1) {
-        logPerformanceIssue({
-          metric: 'poor-cls',
-          value: clsValue.toFixed(3),
-          url: window.location.pathname
-        });
-      }
-    }).observe({ type: 'layout-shift', buffered: true });
-  } catch (e) {
-    console.error('CLS tracking not supported', e);
+      entries.forEach(entry => {
+        console.log(`Long task detected: ${entry.duration.toFixed(2)}ms`);
+      });
+    });
+    
+    // For long tasks, we don't need any custom properties
+    longTaskObserver.observe({ type: 'longtask', buffered: true });
+  } catch (error) {
+    console.error('Error observing long tasks:', error);
   }
 };
 
-// Track Long Tasks
-export const trackLongTasks = () => {
-  if (!('PerformanceObserver' in window)) return;
-  
+// Monitor resource loading
+const observeResourceLoading = () => {
   try {
-    new PerformanceObserver((entryList) => {
-      for (const entry of entryList.getEntries()) {
-        console.log(`⏱️ Long task: ${entry.duration.toFixed(1)}ms`, entry);
-        
-        if (entry.duration > 50) {
-          logPerformanceIssue({
-            metric: 'long-task',
-            duration: entry.duration.toFixed(1),
-            url: window.location.pathname
-          });
-        }
-      }
-    }).observe({ type: 'longtask', buffered: true });
-  } catch (e) {
-    console.error('Long task tracking not supported', e);
-  }
-};
-
-// Track resource loading
-export const trackResourceLoading = () => {
-  if (!('PerformanceObserver' in window)) return;
-  
-  try {
-    new PerformanceObserver((entryList) => {
-      for (const entry of entryList.getEntries()) {
-        // Type assertion for Resource entry
+    const resourceObserver = new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
+      
+      entries.forEach(entry => {
+        // Type cast for resource timing properties
         const resourceEntry = entry as PerformanceResourceTiming;
         
-        if (entry.duration > 1000) {
-          console.log(`🐌 Slow resource: ${entry.name} (${entry.duration.toFixed(1)}ms)`);
-          
-          // Check for large resources
-          if (resourceEntry.transferSize && resourceEntry.transferSize > 500000) { // 500KB
-            logPerformanceIssue({
-              metric: 'large-resource',
-              resource: entry.name,
-              size: Math.round(resourceEntry.transferSize / 1024) + 'KB',
-              url: window.location.pathname
-            });
-          }
+        // Only log large resources or slow resources
+        if (
+          (resourceEntry.transferSize && resourceEntry.transferSize > 100000) || 
+          entry.duration > 1000
+        ) {
+          console.log(
+            `Resource: ${resourceEntry.name.split('/').pop()}, ` +
+            `Size: ${resourceEntry.transferSize ? 
+              (resourceEntry.transferSize / 1024).toFixed(1) + 'KB' : 'unknown'}, ` +
+            `Duration: ${entry.duration.toFixed(0)}ms`
+          );
         }
-      }
-    }).observe({ type: 'resource', buffered: true });
-  } catch (e) {
-    console.error('Resource tracking not supported', e);
+      });
+    });
+    
+    resourceObserver.observe({ type: 'resource', buffered: true });
+  } catch (error) {
+    console.error('Error observing resource loading:', error);
   }
 };
 
-// Helper to log performance issues
-const logPerformanceIssue = (data: Record<string, any>) => {
-  // In production, this would send to an analytics service
-  console.warn('Performance issue detected:', data);
-};
-
-// Initialize all performance monitoring
-export const initPerformanceMonitoring = () => {
-  // Only run in production to avoid dev tool impact
-  if (import.meta.env.MODE === 'production') {
-    // Run after page load to not interfere with initial rendering
-    if (document.readyState === 'complete') {
-      setTimeout(initTracking, 100);
-    } else {
-      window.addEventListener('load', () => setTimeout(initTracking, 100));
-    }
+// Capture navigation timing
+const captureNavigationTiming = () => {
+  if (typeof window === 'undefined' || !window.performance || !window.performance.timing) {
+    return;
   }
-};
-
-function initTracking() {
-  trackWebVitals();
-  trackLCP();
-  trackInteractions();
-  trackCLS();
-  trackLongTasks();
-  trackResourceLoading();
   
-  console.log('🔍 Performance monitoring initialized');
-}
+  // Use setTimeout to ensure timing data is available
+  setTimeout(() => {
+    try {
+      const navTiming = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      
+      if (navTiming) {
+        console.log('Navigation Timing:');
+        console.log(`- DNS: ${(navTiming.domainLookupEnd - navTiming.domainLookupStart).toFixed(0)}ms`);
+        console.log(`- TCP: ${(navTiming.connectEnd - navTiming.connectStart).toFixed(0)}ms`);
+        console.log(`- Request: ${(navTiming.responseStart - navTiming.requestStart).toFixed(0)}ms`);
+        console.log(`- Response: ${(navTiming.responseEnd - navTiming.responseStart).toFixed(0)}ms`);
+        console.log(`- DOM Processing: ${(navTiming.domComplete - navTiming.domInteractive).toFixed(0)}ms`);
+        console.log(`- Load Event: ${(navTiming.loadEventEnd - navTiming.loadEventStart).toFixed(0)}ms`);
+        console.log(`- Total Page Load: ${(navTiming.loadEventEnd - navTiming.startTime).toFixed(0)}ms`);
+      }
+    } catch (error) {
+      console.error('Error capturing navigation timing:', error);
+    }
+  }, 0);
+};

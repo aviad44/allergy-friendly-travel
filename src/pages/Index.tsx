@@ -14,16 +14,17 @@ export default function Index() {
   
   // Initialize performance monitoring
   useEffect(() => {
+    // Initialize performance monitoring
     initPerformanceMonitoring();
     
-    // Preload critical images and verify they exist
+    // Preload critical images (moved inside a useEffect to avoid React hook errors)
     const imagesToPreload = [
       mainImage,
       '/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png',
       '/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png'
     ];
     
-    // Verify images exist before preloading
+    // Directly preload images without using hooks outside components
     imagesToPreload.forEach(img => {
       const testImg = new Image();
       testImg.onload = () => console.log(`Image verified: ${img}`);
@@ -31,6 +32,7 @@ export default function Index() {
       testImg.src = img;
     });
     
+    // Use the non-hook version of preloadCriticalImages
     preloadCriticalImages(imagesToPreload);
   }, []);
   
