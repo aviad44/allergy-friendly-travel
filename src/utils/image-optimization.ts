@@ -1,6 +1,8 @@
+
 /**
  * Image optimization utilities to improve performance and LCP metrics
  */
+import React from 'react';
 
 type ImageFormat = 'webp' | 'avif' | 'jpg' | 'png';
 type ImageSize = 'small' | 'medium' | 'large' | 'original';
