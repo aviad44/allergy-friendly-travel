@@ -25,7 +25,6 @@ export const DestinationCard = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [imgSrc, setImgSrc] = useState('');
-  const [srcSet, setSrcSet] = useState('');
   
   // Process image URL based on the type of image reference
   useEffect(() => {
@@ -34,87 +33,35 @@ export const DestinationCard = ({
       // This is our highest priority source of truth for these specific destinations
       const criticalDestinations: Record<string, string> = {
         'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
-        'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", 
-        'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?fm=webp&fit=crop&w=800&q=80",
+        'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
+        'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
         'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
         'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-        'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?fm=webp&fit=crop&w=800&q=80",
-        'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png"
+        'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
+        'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" // Update Athens to use the new luxury hotel lobby image
       };
       
       // ALWAYS check if the ID directly matches our critical destinations first
       if (id in criticalDestinations) {
-        // For Unsplash images, ensure WebP format
-        if (criticalDestinations[id].includes('unsplash.com') && !criticalDestinations[id].includes('fm=webp')) {
-          const baseUrl = criticalDestinations[id].split('?')[0];
-          const imageUrl = `${baseUrl}?fm=webp&fit=crop&w=800&q=80`;
-          
-          // Create a proper srcSet for responsive images
-          setSrcSet(`
-            ${baseUrl}?fm=webp&fit=crop&w=400&q=80 400w,
-            ${baseUrl}?fm=webp&fit=crop&w=800&q=80 800w,
-            ${baseUrl}?fm=webp&fit=crop&w=1200&q=80 1200w
-          `);
-          
-          return imageUrl;
-        }
-        
+        console.log(`DestinationCard: Using critical hardcoded image for ${id}: ${criticalDestinations[id]}`);
         return criticalDestinations[id];
       }
       
       // If we have a direct URL from props, use it (second priority)
       if (image && (image.startsWith('/') || image.startsWith('http'))) {
-        // For Unsplash images, ensure WebP format
-        if (image.includes('unsplash.com') && !image.includes('fm=webp')) {
-          const baseUrl = image.split('?')[0];
-          const imageUrl = `${baseUrl}?fm=webp&fit=crop&w=800&q=80`;
-          
-          // Create a proper srcSet for responsive images
-          setSrcSet(`
-            ${baseUrl}?fm=webp&fit=crop&w=400&q=80 400w,
-            ${baseUrl}?fm=webp&fit=crop&w=800&q=80 800w,
-            ${baseUrl}?fm=webp&fit=crop&w=1200&q=80 1200w
-          `);
-          
-          return imageUrl;
-        }
-        
         return image;
       }
       
       // For Unsplash photo IDs (third priority)
       if (image && image.startsWith('photo-')) {
-        const baseUrl = `https://images.unsplash.com/${image}`;
-        const imageUrl = `${baseUrl}?fm=webp&fit=crop&w=800&q=80`;
-        
-        // Create a proper srcSet for responsive images
-        setSrcSet(`
-          ${baseUrl}?fm=webp&fit=crop&w=400&q=80 400w,
-          ${baseUrl}?fm=webp&fit=crop&w=800&q=80 800w,
-          ${baseUrl}?fm=webp&fit=crop&w=1200&q=80 1200w
-        `);
-        
-        return imageUrl;
+        const isMobile = window.innerWidth < 768;
+        const width = isMobile ? 400 : 800;
+        return `https://images.unsplash.com/${image}?auto=format&fit=crop&w=${width}&q=80`;
       }
       
       // Look up in our destination constants (fourth priority)
       const destKey = id as keyof typeof DESTINATION_IMAGES;
       if (DESTINATION_IMAGES[destKey]) {
-        // Check if it's an Unsplash URL that needs WebP conversion
-        if (DESTINATION_IMAGES[destKey].includes('unsplash.com') && !DESTINATION_IMAGES[destKey].includes('fm=webp')) {
-          const baseUrl = DESTINATION_IMAGES[destKey].split('?')[0];
-          const imageUrl = `${baseUrl}?fm=webp&fit=crop&w=800&q=80`;
-          
-          // Create a proper srcSet for responsive images
-          setSrcSet(`
-            ${baseUrl}?fm=webp&fit=crop&w=400&q=80 400w,
-            ${baseUrl}?fm=webp&fit=crop&w=800&q=80 800w,
-            ${baseUrl}?fm=webp&fit=crop&w=1200&q=80 1200w
-          `);
-          
-          return imageUrl;
-        }
-        
         return DESTINATION_IMAGES[destKey];
       }
       
@@ -138,61 +85,57 @@ export const DestinationCard = ({
             </div>
           )}
           
-          {/* Main image with WebP support and explicit dimensions */}
-          <picture>
-            {srcSet && <source type="image/webp" srcSet={srcSet} sizes="(max-width: 400px) 400px, 800px" />}
-            <img
-              src={imgSrc}
-              alt={id === 'cyprus' 
-                ? `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`
-                : id === 'athens' 
-                  ? `Luxurious hotel lobby in Athens with elegant furnishings - Allergy-friendly Greek accommodation`
-                  : `${name}, ${country} - Allergy-friendly destination`}
-              className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-              onLoad={() => {
-                console.log(`DestinationCard: Successfully loaded image for ${name}: ${imgSrc}`);
+          {/* Main image */}
+          <img
+            src={imgSrc}
+            alt={id === 'cyprus' 
+              ? `Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination`
+              : id === 'athens' 
+                ? `Luxurious hotel lobby in Athens with elegant furnishings - Allergy-friendly Greek accommodation`
+                : `${name}, ${country} - Allergy-friendly destination`}
+            className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => {
+              console.log(`DestinationCard: Successfully loaded image for ${name}: ${imgSrc}`);
+              setImageLoaded(true);
+              setImageError(false);
+            }}
+            onError={(e) => {
+              console.error(`DestinationCard: Failed to load image for ${name}: ${imgSrc}`);
+              setImageError(true);
+              
+              // Critical fallbacks using hardcoded values for known problematic destinations
+              const errorFallbacks: Record<string, string> = {
+                'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
+                'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", 
+                'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
+                'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
+                'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
+                'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
+                'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" // Updated Athens fallback 
+              };
+              
+              let fallbackSrc;
+              if (id in errorFallbacks) {
+                console.log(`DestinationCard: Using fallback for ${id}: ${errorFallbacks[id]}`);
+                fallbackSrc = errorFallbacks[id];
+              } else {
+                fallbackSrc = `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
+              }
+              
+              // Apply the fallback directly
+              (e.target as HTMLImageElement).src = fallbackSrc;
+              
+              // Give the new image a chance to load
+              setTimeout(() => {
                 setImageLoaded(true);
-                setImageError(false);
-              }}
-              onError={(e) => {
-                console.error(`DestinationCard: Failed to load image for ${name}: ${imgSrc}`);
-                setImageError(true);
-                
-                // Critical fallbacks using hardcoded values for known problematic destinations
-                const errorFallbacks: Record<string, string> = {
-                  'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
-                  'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", 
-                  'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?fm=webp&fit=crop&w=800&q=80",
-                  'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
-                  'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-                  'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?fm=webp&fit=crop&w=800&q=80",
-                  'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png"
-                };
-                
-                let fallbackSrc;
-                if (id in errorFallbacks) {
-                  console.log(`DestinationCard: Using fallback for ${id}: ${errorFallbacks[id]}`);
-                  fallbackSrc = errorFallbacks[id];
-                } else {
-                  fallbackSrc = `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
-                }
-                
-                // Apply the fallback directly
-                (e.target as HTMLImageElement).src = fallbackSrc;
-                
-                // Give the new image a chance to load
-                setTimeout(() => {
-                  setImageLoaded(true);
-                }, 100);
-              }}
-              loading="eager" // Use eager for important above-the-fold images
-              width="400"
-              height="225"
-              decoding="async"
-            />
-          </picture>
+              }, 100);
+            }}
+            loading="eager" // Use eager for important above-the-fold images
+            width="400"
+            height="225"
+          />
           
-          {/* Gradient overlay for text readability */}
+          {/* Gradient overlay for text readability - enhanced for better visual appeal */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/70"></div>
           
           {/* Destination title overlay */}

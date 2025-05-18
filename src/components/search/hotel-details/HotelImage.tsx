@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { getResponsiveImageProps } from '@/utils/image-optimization';
 
 interface HotelImageProps {
   name: string;
@@ -13,7 +14,7 @@ export const HotelImage: React.FC<HotelImageProps> = ({ name, rating, imageUrl }
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   
-  // Process image URL for optimal loading with WebP
+  // Process image URL for optimal loading
   const getOptimizedUrl = (url: string) => {
     if (!url) return '';
     
@@ -22,15 +23,10 @@ export const HotelImage: React.FC<HotelImageProps> = ({ name, rating, imageUrl }
       return `https://images.unsplash.com/${url}?fm=webp&fit=crop&w=1200&h=675&q=80`;
     }
     
-    // For direct URLs, ensure WebP format
+    // For direct URLs
     if (url.includes('unsplash.com') && !url.includes('fm=webp')) {
       const baseUrl = url.split('?')[0];
       return `${baseUrl}?fm=webp&fit=crop&w=1200&h=675&q=80`;
-    }
-    
-    // For uploaded images, use as-is
-    if (url.startsWith('/lovable-uploads/')) {
-      return url;
     }
     
     return url;
@@ -91,26 +87,18 @@ export const HotelImage: React.FC<HotelImageProps> = ({ name, rating, imageUrl }
             </div>
           )}
           
-          {/* Actual image with WebP support using picture element */}
-          <picture>
-            <source 
-              type="image/webp" 
-              srcSet={imageUrl.includes('unsplash.com') ? 
-                `${imageUrl.split('?')[0]}?fm=webp&w=1200&q=80 1x, ${imageUrl.split('?')[0]}?fm=webp&w=2400&q=80 2x` : 
-                undefined}
-            />
-            <img 
-              src={getOptimizedUrl(imageUrl)} 
-              alt={`${name} - Hotel view`}
-              className={`h-full w-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
-              loading="lazy"
-              width={width}
-              height={height}
-              decoding="async"
-            />
-          </picture>
+          {/* Actual image with proper attributes */}
+          <img 
+            src={getOptimizedUrl(imageUrl)} 
+            alt={`${name} - Hotel view`}
+            className={`h-full w-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageError(true)}
+            loading="lazy"
+            width={width}
+            height={height}
+            decoding="async"
+          />
         </>
       ) : (
         // Fallback gradient background

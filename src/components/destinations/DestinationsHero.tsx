@@ -1,20 +1,22 @@
 
 import React, { useState, useEffect } from 'react';
-import { preloadCriticalImages } from '@/utils/image-optimization';
+import { preloadCriticalImages, trackImagePerformance } from '@/utils/image-optimization';
 
 export const DestinationsHero = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
   
-  // Define image dimensions based on viewport
-  const width = typeof window !== 'undefined' ? window.innerWidth : 1200;
-  const height = typeof window !== 'undefined' ? 
-    Math.round(width < 768 ? width * 0.5 : width * 0.35) : 600; // Maintain aspect ratio
+  // Track LCP performance for this critical element
+  trackImagePerformance('destinations-hero');
   
-  // Define WebP format image URL - switching to WebP for better performance
+  // Define image dimensions based on viewport
+  const width = window.innerWidth;
+  const height = Math.round(width < 768 ? width * 0.5 : width * 0.35); // Maintain aspect ratio
+  
+  // Define the optimized image URL with proper format
   const imageUrl = "https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=1600&q=80";
   
-  // Create responsive srcSet for different viewport sizes with WebP
+  // Create responsive srcSet for different viewport sizes
   const srcSet = `
     https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=640&q=75 640w,
     https://images.unsplash.com/photo-1488085061387-422e29b40080?fm=webp&w=960&q=75 960w,
@@ -24,10 +26,10 @@ export const DestinationsHero = () => {
   `;
   
   // Preload the hero image for better LCP
+  preloadCriticalImages([imageUrl]);
+  
   useEffect(() => {
-    preloadCriticalImages([imageUrl]);
-    
-    // Preload image with high priority
+    // Preload image with priority
     const img = new Image();
     img.src = imageUrl;
     img.fetchPriority = 'high';
@@ -35,8 +37,9 @@ export const DestinationsHero = () => {
     
     // Set timeout for slow connections
     const timeout = setTimeout(() => {
+      console.log('Destinations hero image load timeout - using fallback');
       setImageFailed(true);
-    }, 3000); 
+    }, 3000); // Reduced timeout for better UX
     
     img.onload = () => {
       clearTimeout(timeout);
@@ -62,27 +65,20 @@ export const DestinationsHero = () => {
           style={{ width, height }}
         ></div>
         
-        {/* Main image with WebP format, optimized loading and explicit dimensions */}
+        {/* Main image with optimized loading and explicit dimensions */}
         {!imageFailed ? (
-          <picture>
-            {/* WebP source */}
-            <source 
-              type="image/webp" 
-              srcSet={srcSet}
-              sizes="100vw"
-            />
-            {/* Fallback source */}
-            <img 
-              src={imageUrl} 
-              alt="Travel destinations" 
-              className={`w-full h-full object-cover object-center transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-              loading="eager" 
-              fetchPriority="high"
-              width={width}
-              height={height}
-              decoding="async"
-            />
-          </picture>
+          <img 
+            src={imageUrl} 
+            alt="Travel destinations" 
+            className={`w-full h-full object-cover object-center transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            loading="eager" 
+            fetchPriority="high"
+            width={width}
+            height={height}
+            srcSet={srcSet}
+            sizes="100vw"
+            decoding="async"
+          />
         ) : (
           <div 
             className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600"
