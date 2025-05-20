@@ -1,11 +1,11 @@
 
 import { FeaturedDestinations } from "@/components/FeaturedDestinations";
 import { HOME_CONTENT } from "@/constants/home";
-import { Helmet } from "react-helmet";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { useEffect } from "react";
 import { preloadCriticalImages } from "@/utils/image-optimization";
 import { initPerformanceMonitoring } from "@/utils/performanceMonitoring";
+import { SocialTags } from "@/components/SocialTags";
 
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
@@ -26,65 +26,13 @@ export default function Index() {
   
   return (
     <>
-      <Helmet>
-        <title>Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions</title>
-        <meta name="description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
-        <meta name="keywords" content="allergy-friendly travel, food allergy hotels, gluten-free accommodation, dairy-free travel, nut-free hotels, allergen-free vacation, safe travel with allergies" />
-        <link rel="canonical" href={`${baseUrl}/`} />
-        
-        {/* Preloads for critical resources */}
-        <link rel="preload" href={mainImage} as="image" />
-        
-        {/* Open Graph Meta Tags - CRITICAL FOR FACEBOOK/WHATSAPP SHARING */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
-        <meta property="og:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
-        <meta property="og:url" content={`${baseUrl}/`} />
-        <meta property="og:image" content={`${baseUrl}${mainImage}`} />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="800" />
-        <meta property="og:image:alt" content="Toronto Skyline - Allergy-Free Travel" />
-        <meta property="og:site_name" content="Allergy-Free Travel" />
-        <meta property="og:locale" content="en_US" />
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Allergy-Free Travel – Hotels for Food Allergies" />
-        <meta name="twitter:description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." />
-        <meta name="twitter:image" content={`${baseUrl}${mainImage}`} />
-        <meta name="twitter:image:alt" content="Toronto Skyline - Allergy-Free Travel" />
-        
-        {/* WhatsApp specific meta - additional tags to ensure compatibility */}
-        <meta property="og:image:secure_url" content={`${baseUrl}${mainImage}`} />
-        <link itemProp="thumbnailUrl" href={`${baseUrl}${mainImage}`} />
-        <span itemProp="thumbnail" itemScope itemType="http://schema.org/ImageObject">
-          <link itemProp="url" href={`${baseUrl}${mainImage}`} />
-        </span>
-        
-        {/* Schema.org JSON-LD */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "TravelAgency",
-            "name": "Allergy Free Travel",
-            "description": "Helping travelers with food allergies and dietary restrictions find safe accommodations worldwide.",
-            "url": baseUrl,
-            "logo": `${baseUrl}${mainImage}`,
-            "telephone": "+1-123-456-7890",
-            "email": "info@allergy-free-travel.com",
-            "areaServed": "Worldwide",
-            "serviceType": "Allergy-Friendly Travel Planning",
-            "dateModified": currentDate,
-            "image": {
-              "@type": "ImageObject",
-              "url": `${baseUrl}${mainImage}`,
-              "width": "1200",
-              "height": "800"
-            }
-          })}
-        </script>
-      </Helmet>
+      <SocialTags
+        title="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions"
+        description="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more."
+        imageUrl={mainImage}
+        url={`${baseUrl}/`}
+        type="website"
+      />
       
       <HeroSection />
       
