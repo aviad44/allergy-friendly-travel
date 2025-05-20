@@ -8,7 +8,7 @@ const Cyprus = () => {
   const pageDescription = "Discover the best allergy-friendly hotels in Cyprus. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/cyprus";
   
-  // CRITICAL: Using the Cyprus beach resort image (now with absolute URL)
+  // CRITICAL: Using the Cyprus beach resort image with absolute URL for consistent social sharing
   const imageUrl = "https://www.allergy-free-travel.com/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png";
   
   return (

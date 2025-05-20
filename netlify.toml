@@ -51,6 +51,8 @@
     Content-Security-Policy = "upgrade-insecure-requests"
     # CRITICAL: Prerender token header for all requests
     X-Prerender-Token = "${PRERENDER_TOKEN}"
+    # Critical for Facebook crawlers
+    Access-Control-Allow-Origin = "*"
 
 # Add improved cache control for static assets
 [[headers]]
@@ -73,16 +75,19 @@
   [headers.values]
     Cache-Control = "public, max-age=604800, immutable"
     Content-Type = "image/png"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET"
 
 [[headers]]
   for = "*.jpg"
   [headers.values]
     Cache-Control = "public, max-age=604800, immutable"
-
-# WhatsApp specific headers for all PNG images
-[[headers]]
-  for = "/*.png"
-  [headers.values]
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET"
-    Cache-Control = "public, max-age=604800"
+
+# Special handling for social media crawlers
+[[headers]]
+  for = "/"
+  [headers.values]
+    X-Social-Media-Ready = "true"
+    Access-Control-Allow-Origin = "*"

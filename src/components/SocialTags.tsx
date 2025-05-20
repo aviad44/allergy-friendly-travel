@@ -32,7 +32,18 @@ export const SocialTags = ({
     // Verify OG tags were injected properly after render
     setTimeout(() => {
       const ogImage = document.querySelector('meta[property="og:image"]');
+      const ogTitle = document.querySelector('meta[property="og:title"]');
       console.log(`OG Image verification: ${ogImage?.getAttribute('content')}`);
+      console.log(`OG Title verification: ${ogTitle?.getAttribute('content')}`);
+      
+      // Add direct link element for Facebook crawler
+      if (!document.querySelector('link[rel="image_src"]')) {
+        const linkElement = document.createElement('link');
+        linkElement.rel = 'image_src';
+        linkElement.href = absoluteImageUrl;
+        document.head.appendChild(linkElement);
+        console.log(`Added image_src link: ${absoluteImageUrl}`);
+      }
     }, 100);
   }, [absoluteImageUrl, currentUrl, title]);
   
@@ -42,6 +53,9 @@ export const SocialTags = ({
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={currentUrl} />
+      
+      {/* Direct image link for Facebook */}
+      <link rel="image_src" href={absoluteImageUrl} />
       
       {/* Facebook/WhatsApp OpenGraph tags */}
       <meta property="og:type" content={type} data-react-helmet="true" />
@@ -66,6 +80,9 @@ export const SocialTags = ({
       {/* WhatsApp specific tags */}
       <link itemProp="thumbnailUrl" href={absoluteImageUrl} data-react-helmet="true" />
       <meta itemProp="image" content={absoluteImageUrl} data-react-helmet="true" />
+      
+      {/* Facebook specific - adding these seems to help in some cases */}
+      <meta property="fb:app_id" content="allergy.free.travel" data-react-helmet="true" />
     </Helmet>
   );
 };
