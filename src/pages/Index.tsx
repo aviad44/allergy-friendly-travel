@@ -10,6 +10,7 @@ import { SocialTags } from "@/components/SocialTags";
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
   const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
+  // Using the absolute URL here is critical for social sharing
   const mainImage = 'https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png';
   
   // Initialize performance monitoring
@@ -20,8 +21,8 @@ export default function Index() {
   // Preload critical images for index page
   preloadCriticalImages([
     mainImage,
-    '/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png',
-    '/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png'
+    'https://www.allergy-free-travel.com/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png',
+    'https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png'
   ]);
   
   return (

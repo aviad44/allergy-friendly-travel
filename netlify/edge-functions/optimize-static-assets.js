@@ -11,7 +11,8 @@ export default async function handler(request, context) {
     'twitter',
     'twitterbot',
     'linkedinbot',
-    'pinterest'
+    'pinterest',
+    'instagrambot'
   ];
 
   // Get the user agent and URL
@@ -56,7 +57,14 @@ export default async function handler(request, context) {
             'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
             'athens': "https://www.allergy-free-travel.com/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png",
             'hotel-chains': "https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
-            'ayia-napa': "https://www.allergy-free-travel.com/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png"
+            'ayia-napa': "https://www.allergy-free-travel.com/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png",
+            'rome': "https://www.allergy-free-travel.com/lovable-uploads/decde333-fd7d-4147-8bad-637fbf08028c.png",
+            'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
+            'paris': "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            'switzerland': "https://www.allergy-free-travel.com/lovable-uploads/a53b2ba4-d551-4fcd-bd11-36c4643be95b.png",
+            'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            'tuscany': "https://www.allergy-free-travel.com/lovable-uploads/ea1edce9-b144-449c-a4c7-0e3f02c54be9.png",
+            'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80"
           };
           
           if (criticalDestinations[destId]) {
@@ -69,11 +77,13 @@ export default async function handler(request, context) {
         // For homepage, use default image
         if (path === '/' || path === '') {
           ogImage = "https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
+          ogTitle = "Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions";
+          ogDesc = "Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more.";
         }
         
         // Create simple HTML response with essential OG tags that Facebook needs
         const html = `<!DOCTYPE html>
-        <html>
+        <html prefix="og: https://ogp.me/ns#">
         <head>
           <title>${ogTitle}</title>
           <meta property="og:title" content="${ogTitle}" />
@@ -84,9 +94,11 @@ export default async function handler(request, context) {
           <meta property="og:image:height" content="630" />
           <meta property="og:url" content="${url}" />
           <meta property="og:type" content="website" />
+          <meta property="og:site_name" content="Allergy-Free Travel" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:image" content="${ogImage}" />
           <link rel="canonical" href="${url}" />
+          <link rel="image_src" href="${ogImage}" />
           <meta http-equiv="refresh" content="0;URL='${url}'" />
         </head>
         <body>
@@ -102,6 +114,7 @@ export default async function handler(request, context) {
           headers: {
             'Content-Type': 'text/html',
             'Cache-Control': 'no-store, max-age=0',
+            'Access-Control-Allow-Origin': '*', 
             'X-Robots-Tag': 'noindex'
           }
         });

@@ -32,6 +32,12 @@ export const NetlifySocialHeaders = () => {
       fbMetaTag.setAttribute("content", "allergy.free.travel");
       document.head.appendChild(fbMetaTag);
       
+      // Add Open Graph prefix to HTML tag
+      const htmlTag = document.querySelector('html');
+      if (htmlTag && !htmlTag.hasAttribute('prefix')) {
+        htmlTag.setAttribute('prefix', 'og: https://ogp.me/ns#');
+      }
+      
       console.log("Added social crawler detection markers to page");
     }
     
@@ -68,6 +74,17 @@ export const NetlifySocialHeaders = () => {
           linkElement.rel = 'image_src';
           linkElement.href = imageUrl;
           document.head.appendChild(linkElement);
+          
+          // Add width and height
+          const widthMeta = document.createElement("meta");
+          widthMeta.setAttribute("property", "og:image:width");
+          widthMeta.setAttribute("content", "1200");
+          document.head.appendChild(widthMeta);
+          
+          const heightMeta = document.createElement("meta");
+          heightMeta.setAttribute("property", "og:image:height");
+          heightMeta.setAttribute("content", "630");
+          document.head.appendChild(heightMeta);
         }
         
         if (!ogTitle) {

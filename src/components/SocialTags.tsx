@@ -57,6 +57,9 @@ export const SocialTags = ({
       {/* Direct image link for Facebook */}
       <link rel="image_src" href={absoluteImageUrl} />
       
+      {/* Open Graph Prefix */}
+      <html prefix="og: https://ogp.me/ns#" />
+      
       {/* Facebook/WhatsApp OpenGraph tags */}
       <meta property="og:type" content={type} data-react-helmet="true" />
       <meta property="og:url" content={currentUrl} data-react-helmet="true" />

@@ -4,42 +4,43 @@ import { Destination } from "@/types/reviews";
 import { HeroImage } from "./HeroImage";
 import { DestinationInfo } from "./DestinationInfo";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
+import { DESTINATION_OG_IMAGES } from "@/utils/socialSharing";
 
 interface DestinationHeroProps {
   destination: Destination;
 }
 
 export const DestinationHero = ({ destination }: DestinationHeroProps) => {
-  // Define critical destinations with direct paths for reliable image display
-  // IMPORTANT: These MUST match the image URLs used in the OG tags for each destination
-  const criticalDestinations: Record<string, string> = {
-    'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80", // Crete image - MUST match OG tag
-    'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png", // Resort image
-    'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Cyprus beachfront resort
-    'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
-    'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
-    'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80", // Barcelona image
-    'ayia-napa': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Cyprus image for Ayia Napa
-    'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" // New Athens image with luxury hotel lobby
-  };
-  
-  // Always prioritize critical destinations - use DIRECT paths for these specific cases
+  // First, check if we have a dedicated OG image for this destination
+  // This ensures we use the same image in both social sharing and on the page
   let imageUrl = '';
   
-  // Direct image assignment for critical destinations - highest priority
-  if (destination.id in criticalDestinations) {
-    imageUrl = criticalDestinations[destination.id];
-    console.log(`DestinationHero: Using critical destination path for ${destination.id}: ${imageUrl}`);
+  // Use the OG image mapping as the highest priority source
+  if (destination.id in DESTINATION_OG_IMAGES) {
+    imageUrl = DESTINATION_OG_IMAGES[destination.id];
+    console.log(`DestinationHero: Using OG image for ${destination.id}: ${imageUrl}`);
   } 
   // Check our central image constants - second priority
   else if (destination.id in DESTINATION_IMAGES) {
     const key = destination.id as keyof typeof DESTINATION_IMAGES;
     imageUrl = DESTINATION_IMAGES[key];
+    // Make sure URLs are absolute for consistency
+    if (!imageUrl.startsWith('http')) {
+      imageUrl = imageUrl.startsWith('/') 
+        ? `https://www.allergy-free-travel.com${imageUrl}` 
+        : `https://www.allergy-free-travel.com/${imageUrl}`;
+    }
     console.log(`DestinationHero: Using DESTINATION_IMAGES for ${destination.id}: ${imageUrl}`);
   } 
   // Use destination's image if available - third priority
   else if (destination.image && (destination.image.startsWith('http') || destination.image.startsWith('/'))) {
     imageUrl = destination.image;
+    // Make absolute if needed
+    if (!imageUrl.startsWith('http')) {
+      imageUrl = imageUrl.startsWith('/') 
+        ? `https://www.allergy-free-travel.com${imageUrl}` 
+        : `https://www.allergy-free-travel.com/${imageUrl}`;
+    }
     console.log(`DestinationHero: Using destination.image for ${destination.id}: ${imageUrl}`);
   } 
   // Final fallback - placeholder
@@ -47,9 +48,6 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     imageUrl = `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destination.name}`;
     console.log(`DestinationHero: Using fallback for ${destination.id}: ${imageUrl}`);
   }
-  
-  // Add more debug logging
-  console.log(`DestinationHero: Final image URL for ${destination.id}: ${imageUrl}`);
   
   // Define a descriptive alt text
   let altText = `Scenic view of ${destination.name} - Allergy-friendly travel destination`;
@@ -73,40 +71,39 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     img.src = imageUrl;
     console.log(`DestinationHero: Preloading main image: ${imageUrl}`);
     
-    // Also preload a fallback
-    const fallbackUrl = criticalDestinations[destination.id] || 
-                        (destination.id in DESTINATION_IMAGES ? 
-                          DESTINATION_IMAGES[destination.id as keyof typeof DESTINATION_IMAGES] : 
-                          `https://placehold.co/1200x600/1e3a8a/ffffff?text=${destination.name}`);
-    
-    if (fallbackUrl !== imageUrl) {
-      const fallbackImg = new Image();
-      fallbackImg.src = fallbackUrl;
-      console.log(`DestinationHero: Preloading fallback image: ${fallbackUrl}`);
-    }
-    
+    // Ensure image URL is absolute
+    const absoluteImageUrl = imageUrl.startsWith('http') 
+      ? imageUrl 
+      : `https://www.allergy-free-travel.com${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+      
     // Update document head with page-specific meta tags if needed
-    const ensureOgImage = () => {
+    setTimeout(() => {
+      // Check if OG image is present
       const ogImageTag = document.querySelector('meta[property="og:image"]');
       if (ogImageTag) {
         const currentOgImage = ogImageTag.getAttribute('content');
         
-        // If OG image is not matching the hero image, update it
-        if (currentOgImage && !currentOgImage.includes(imageUrl) && !imageUrl.includes(currentOgImage)) {
-          console.log(`DestinationHero: OG Image mismatch. Current: ${currentOgImage}, Hero: ${imageUrl}`);
-          // Ensure image URL is absolute
-          const absoluteImageUrl = imageUrl.startsWith('http') ? 
-            imageUrl : 
-            `${window.location.origin}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
-          
+        // If current OG image doesn't match our hero image or isn't absolute, update it
+        if (currentOgImage && 
+            (!currentOgImage.startsWith('http') || 
+             (currentOgImage !== absoluteImageUrl && !absoluteImageUrl.includes(currentOgImage) && !currentOgImage.includes(absoluteImageUrl)))) {
+          console.log(`DestinationHero: OG Image mismatch or not absolute. Current: ${currentOgImage}, Hero: ${absoluteImageUrl}`);
           ogImageTag.setAttribute('content', absoluteImageUrl);
-          console.log(`DestinationHero: Updated OG Image to match hero: ${absoluteImageUrl}`);
+          console.log(`DestinationHero: Updated OG Image to: ${absoluteImageUrl}`);
+          
+          // Also update image_src
+          const imageSrc = document.querySelector('link[rel="image_src"]');
+          if (imageSrc) {
+            imageSrc.setAttribute('href', absoluteImageUrl);
+          } else {
+            const linkElement = document.createElement('link');
+            linkElement.rel = 'image_src';
+            linkElement.href = absoluteImageUrl;
+            document.head.appendChild(linkElement);
+          }
         }
       }
-    };
-    
-    // Run this check after a short delay to ensure Helmet has updated the head
-    setTimeout(ensureOgImage, 500);
+    }, 300);
   }, [destination.id, imageUrl, destination.name]);
 
   return (
