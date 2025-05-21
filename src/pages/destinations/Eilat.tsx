@@ -21,7 +21,7 @@ const Eilat = () => {
   return (
     <>
       <SocialTags
-        title="A Stress-Free Vacation: U Coral Beach Hotel in Eilat Offers a Unique Allergy-Friendly Experience"
+        title="A Stress-Free Vacation: Fattal's U Coral Beach Hotel in Eilat Offers a Unique Allergy-Friendly Experience"
         description="Discover how U Coral Beach Hotel in Eilat by Fattal offers a unique allergy-friendly experience for families traveling with food allergies."
         imageUrl={ogImageUrl}
         url={`${baseUrl}${pagePath}`}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { DestinationHero } from "./DestinationHero";
 import { LanguageTable } from "./LanguageTable";
@@ -29,6 +28,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const content = destinationData[destinationId];
   const isLondon = destinationId === 'london' as DestinationId;
   const isAthens = destinationId === 'athens' as DestinationId;
+  const isEilat = destinationId === 'eilat' as DestinationId;
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   
   // Enhanced debug logging to ensure data is loaded
@@ -40,6 +40,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     faqs: content?.faqs?.length || 0,
     languageTable: !!content?.languageTable,
     intro: !!content?.intro,
+    longDescription: !!content?.longDescription,
     destinationData: Object.keys(destinationData)
   });
 
@@ -167,7 +168,23 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     );
   };
 
-  // Render bonus tools for Athens
+  // Render long description for Eilat
+  const renderLongDescription = () => {
+    if (!isEilat || !content?.longDescription) {
+      return null;
+    }
+    
+    return (
+      <section className="mt-8 space-y-4">
+        <div 
+          className="prose prose-sm sm:prose max-w-none"
+          dangerouslySetInnerHTML={{ __html: content.longDescription }}
+        />
+      </section>
+    );
+  };
+
+  // Render bonus tools for destinations
   const renderBonusTools = () => {
     if (!content?.bonusTools || content.bonusTools.length === 0) {
       return null;
@@ -197,7 +214,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     );
   };
 
-  // Render travel tips for Athens
+  // Render travel tips for destinations
   const renderTravelTips = () => {
     if (!content?.tips || content.tips.length === 0) {
       return <TravelTips />;
@@ -245,9 +262,11 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
             <Separator className="bg-primary/10 h-0.5" />
 
-            {/* Display restaurants for Athens, hotels for other destinations */}
+            {/* Display restaurants for Athens, long description for Eilat, hotels for other destinations */}
             {isAthens ? (
               renderRestaurantsSection()
+            ) : isEilat ? (
+              renderLongDescription()
             ) : (
               <TopHotelsSection 
                 hotels={content?.hotels || []}
@@ -263,9 +282,9 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
               destinationName={destination.name}
             />
 
-            {isAthens ? renderTravelTips() : <TravelTips />}
+            {renderTravelTips()}
 
-            {isAthens && renderBonusTools()}
+            {renderBonusTools()}
 
             {content?.languageTable && content.languageTable.headers && content.languageTable.headers.length > 0 && (
               <div className="overflow-x-auto -mx-3 sm:mx-0 bg-primary/5 p-4 rounded-xl">

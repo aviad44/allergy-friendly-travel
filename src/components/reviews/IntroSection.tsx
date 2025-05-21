@@ -5,7 +5,7 @@ import { CalendarPlus } from "lucide-react";
 interface IntroSectionProps {
   intro: string | string[];
   destinationName: string;
-  isLondon?: boolean; 
+  isLondon?: boolean;
 }
 
 export const IntroSection = ({ intro, destinationName, isLondon }: IntroSectionProps) => {
@@ -18,6 +18,12 @@ export const IntroSection = ({ intro, destinationName, isLondon }: IntroSectionP
         </p>
       ));
     }
+    
+    // Check if intro is HTML content
+    if (typeof intro === 'string' && (intro.trim().startsWith('<p>') || intro.trim().startsWith('<blockquote>'))) {
+      return <div dangerouslySetInnerHTML={{ __html: intro }} />;
+    }
+    
     return <p className="mb-4 text-muted-foreground">{intro}</p>;
   };
 
