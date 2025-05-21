@@ -13,7 +13,7 @@ export const IntroSection = ({ intro, destinationName, isLondon }: IntroSectionP
   const renderIntro = () => {
     if (Array.isArray(intro)) {
       return intro.map((paragraph, index) => (
-        <p key={index} className="mb-4 text-muted-foreground">
+        <p key={index} className="mb-5 text-muted-foreground">
           {paragraph}
         </p>
       ));
@@ -21,14 +21,14 @@ export const IntroSection = ({ intro, destinationName, isLondon }: IntroSectionP
     
     // Check if intro is HTML content
     if (typeof intro === 'string' && (intro.trim().startsWith('<p>') || intro.trim().startsWith('<blockquote>'))) {
-      return <div dangerouslySetInnerHTML={{ __html: intro }} />;
+      return <div className="space-y-4" dangerouslySetInnerHTML={{ __html: intro }} />;
     }
     
     return <p className="mb-4 text-muted-foreground">{intro}</p>;
   };
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-6">
       <h2 className="text-xl font-display font-semibold flex items-center">
         <CalendarPlus className="mr-2 h-5 w-5 text-primary/80" aria-hidden="true" />
         {isLondon 

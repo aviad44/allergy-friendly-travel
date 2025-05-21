@@ -1,4 +1,17 @@
+
 import { DestinationId } from "@/types/definitions";
+
+// Add default image for social sharing
+export const DEFAULT_SOCIAL_IMAGE = 'https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png';
+
+// Helper function to ensure image URLs are absolute
+export const getAbsoluteImageUrl = (imageUrl: string): string => {
+  if (imageUrl.startsWith('http')) {
+    return imageUrl;
+  }
+  const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
+  return `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+};
 
 export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'london': 'https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png',

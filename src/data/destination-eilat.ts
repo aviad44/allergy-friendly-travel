@@ -59,17 +59,19 @@ export const eilatContent: DestinationContent = {
   intro: eilatIntro,
   longDescription: `
     <h2>When Hospitality Meets Responsibility</h2>
+    
     <p>Penina Belhassan, the Allergy Liaison at Fattal's U Coral Beach Hotel in Eilat, isn't a doctor or a nutritionist. But for guests with food allergies, she's a trusted and beloved figure. Her initiative, born from real empathy and on-the-ground experience, has turned the hotel into a safe haven for families dealing with food allergies.</p>
-
+    
     <blockquote>
       "I saw parents feeling helpless – and decided to improvise less and listen more."
     </blockquote>
-
+    
     <p>When Penina began her role as Chef Coordinator at U Coral Beach, she didn't expect to become a central figure for allergy care. "At first, we just did our best—replacing chefs, making quick changes—but there was no dedicated person managing allergies," she recalls. "I realized that wasn't enough. So, I stepped up."</p>
-
+    
     <p>Instead of relying solely on corporate guidelines, Penina joined allergy parenting groups, consulted with dietitians, and collaborated with allergy advocacy organizations. Most importantly, she listened to guests. "There's nothing like hearing directly from a mother what truly scares her—then working together on solutions."</p>
-
+    
     <h2>Allergy-Friendly Process: From Check-In to Custom Meals</h2>
+    
     <ul>
       <li>
         <strong>Pre-Arrival Communication:</strong> Guests with food allergies can inform the booking center in advance or speak with Penina directly. Her number is shared courteously at reception and in the welcome packet upon check-in.
@@ -84,25 +86,29 @@ export const eilatContent: DestinationContent = {
         <strong>Customized Room Cleaning:</strong> Upon request, rooms are thoroughly cleaned with special instructions to housekeeping to avoid any contact with allergen residues or reactive cleaning agents.
       </li>
     </ul>
-
+    
     <h2>Real Stories, Real Relief: Guest Testimonials</h2>
+    
     <ul>
       <li>"My child ate in a hotel restaurant without fear. I've never seen him so calm."</li>
       <li>"Thank you for that one short call—it changed our entire vacation."</li>
       <li>"For the first time in years, I slept well at a hotel. Someone was thinking about us."</li>
     </ul>
-
+    
     <p><em>One guest summed it up perfectly:</em></p>
+    
     <blockquote>
       "Penina didn't make a fuss or try to impress. She simply asked, planned, and delivered. It sounds basic—but in the allergy world, it's rare."
     </blockquote>
-
+    
     <h2>Beyond the Kitchen: Emergency Preparedness</h2>
+    
     <p>The hotel is fully equipped for allergy emergencies. "Our security staff is trained in first aid, including how to respond to allergic reactions. If an incident occurs, there's a clear protocol—and I'm involved immediately."</p>
-
+    
     <h2>Conclusion: No Slogans, Just Sincerity</h2>
+    
     <p>Penina doesn't see herself as a hero—just someone who cares deeply. "I can't promise we'll have everything, but I can promise we'll do our best—proactively, not reactively."</p>
-
+    
     <p>The allergy-care model she pioneered in Eilat isn't perfect, but it provides something invaluable: a genuine sense of safety for families who usually avoid traveling.</p>
   `,
   tips: [
