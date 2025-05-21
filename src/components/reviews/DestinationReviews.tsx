@@ -223,36 +223,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     );
   };
 
-  // Render bonus tools for destinations
-  const renderBonusTools = () => {
-    if (!content?.bonusTools || content.bonusTools.length === 0) {
-      return null;
-    }
-    
-    return (
-      <div className="mt-8 bg-blue-50 p-6 rounded-xl">
-        <h3 className="text-xl font-semibold mb-4">Helpful Resources</h3>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {content.bonusTools.map((tool, index) => (
-            <a 
-              key={index}
-              href={tool.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center p-4 bg-white rounded-lg border border-blue-100 hover:bg-blue-50 transition-colors"
-            >
-              <div>
-                <h4 className="font-medium text-blue-600">{tool.name}</h4>
-                <p className="text-sm text-gray-600">{tool.description}</p>
-              </div>
-              <ExternalLink className="h-5 w-5 ml-auto text-blue-400" />
-            </a>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   // Render travel tips for destinations - updated to use correct destination name
   const renderTravelTips = () => {
     if (!content?.tips || content.tips.length === 0) {
@@ -322,8 +292,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             />
 
             {renderTravelTips()}
-
-            {renderBonusTools()}
 
             {content?.languageTable && content.languageTable.headers && content.languageTable.headers.length > 0 && (
               <div className="overflow-x-auto -mx-3 sm:mx-0 bg-primary/5 p-4 rounded-xl">
