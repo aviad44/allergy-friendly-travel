@@ -46,6 +46,7 @@ import Toronto from '@/pages/destinations/Toronto';
 import Tuscany from '@/pages/destinations/Tuscany';
 import GlutenFreeEurope from '@/pages/destinations/GlutenFreeEurope';
 import AthensGlutenFree from "./pages/destinations/Athens";
+import Eilat from "./pages/destinations/Eilat";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -114,6 +115,7 @@ const AppContent = () => {
           <Route path="/destinations/cruise-lines" element={<CruiseLines />} />
           <Route path="/destinations/toronto" element={<Toronto />} />
           <Route path="/destinations/athens" element={<AthensGlutenFree />} />
+          <Route path="/destinations/eilat" element={<Eilat />} />
           <Route path="/destinations/:destinationId" element={<NotFound />} />
         </Route>
       </Routes>

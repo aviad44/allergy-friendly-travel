@@ -92,5 +92,6 @@ export const DESTINATION_OG_IMAGES: Record<string, string> = {
   'tuscany': "https://www.allergy-free-travel.com/lovable-uploads/ea1edce9-b144-449c-a4c7-0e3f02c54be9.png",
   'swiss-alps': "https://www.allergy-free-travel.com/lovable-uploads/a53b2ba4-d551-4fcd-bd11-36c4643be95b.png",
   'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80",
-  'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80"
+  'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
+  'eilat': "https://www.allergy-free-travel.com/lovable-uploads/48a5bd4e-8c30-41ef-835e-981d6731b3b8.png"
 };

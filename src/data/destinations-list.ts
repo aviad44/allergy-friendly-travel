@@ -148,5 +148,12 @@ export const destinations: Destination[] = [
     country: 'Greece',
     description: 'Top 10 Gluten-Free Restaurants in Athens for Celiacs (2025)',
     subtitle: 'Safe & Delicious Dining Options for Celiacs in the Greek Capital'
+  },
+  {
+    id: 'eilat',
+    name: 'Eilat',
+    country: 'Israel',
+    description: 'A Stress-Free Vacation: U Coral Beach Hotel in Eilat',
+    subtitle: 'Allergy-Friendly Experience at Fattal\'s Resort'
   }
 ];
