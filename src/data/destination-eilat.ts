@@ -16,7 +16,7 @@ const eilatHotels: Hotel[] = [
     imageUrl: '/lovable-uploads/48a5bd4e-8c30-41ef-835e-981d6731b3b8.png',
     websiteUrl: 'https://www.fattal-hotels.com/hotels-in-israel/eilat/u-coral-beach-club-eilat/',
     bookingUrl: 'https://www.fattal-hotels.com/hotels-in-israel/eilat/u-coral-beach-club-eilat/',
-    guestReview: 'My child ate in a hotel restaurant without fear. I've never seen him so calm. For the first time in years, I slept well at a hotel. Someone was thinking about us.',
+    guestReview: "My child ate in a hotel restaurant without fear. I've never seen him so calm. For the first time in years, I slept well at a hotel. Someone was thinking about us.",
     isPurelyAllergyFriendly: true
   }
 ];
