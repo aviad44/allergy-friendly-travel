@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { destinations } from "@/data/destinations-list";
 import { destinationData } from "@/data/destination-data";
+import { Button } from "@/components/ui/button";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -90,7 +91,44 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     console.error(`Missing content data for: ${destinationId}`);
   }
 
-  // Render restaurants section for Athens
+  // Render booking button for Eilat hotel
+  const renderBookingButton = () => {
+    if (!isEilat || !content?.hotels || content.hotels.length === 0) {
+      return null;
+    }
+    
+    const hotel = content.hotels[0]; // Get the first hotel
+    
+    return (
+      <section className="my-6">
+        <div className="bg-blue-50 p-6 rounded-xl">
+          <h3 className="text-xl font-semibold mb-3">Book Your Stay</h3>
+          <p className="mb-4">Ready to experience a worry-free vacation with expert allergy care at {hotel.name}?</p>
+          
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button 
+              className="bg-teal-600 hover:bg-teal-700 text-white flex-1 gap-2"
+              onClick={() => window.open(hotel.bookingUrl, "_blank")}
+            >
+              Book Now
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+            
+            <Button 
+              variant="outline"
+              className="border-teal-600 text-teal-700 hover:bg-teal-50 flex-1 gap-2"
+              onClick={() => window.open(`https://maps.google.com/?q=${hotel.name} ${hotel.location}`, "_blank")}
+            >
+              View on Map
+              <MapPin className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  };
+
+  // Render restaurants section for Athens only
   const renderRestaurantsSection = () => {
     if (!isAthens || !content?.restaurants || content.restaurants.length === 0) {
       return null;
@@ -180,6 +218,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           className="prose prose-sm sm:prose max-w-none"
           dangerouslySetInnerHTML={{ __html: content.longDescription }}
         />
+        {renderBookingButton()}
       </section>
     );
   };
@@ -214,7 +253,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     );
   };
 
-  // Render travel tips for destinations
+  // Render travel tips for destinations - updated to use correct destination name
   const renderTravelTips = () => {
     if (!content?.tips || content.tips.length === 0) {
       return <TravelTips />;
@@ -224,7 +263,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
       <div className="bg-amber-50 p-6 rounded-xl my-8">
         <h3 className="text-xl font-semibold mb-4 flex items-center">
           <Star className="h-5 w-5 mr-2 text-amber-500" /> 
-          Gluten-Free Travel Tips for Athens
+          {isAthens ? "Gluten-Free Travel Tips for Athens" : `Travel Tips for ${destination.name}`}
         </h3>
         <ul className="space-y-3">
           {content.tips.map((tip, index) => (
