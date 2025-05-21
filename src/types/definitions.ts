@@ -32,6 +32,7 @@ export interface Destination {
 }
 
 export interface Hotel {
+  id?: string;
   name: string;
   features: string[];
   rating?: number;
@@ -46,6 +47,14 @@ export interface Hotel {
     author: string;
     rating: number;
   }[];
+  stars?: number;
+  allergenFriendly?: string[];
+  amenities?: string[];
+  priceRange?: string;
+  imageUrl?: string;
+  websiteUrl?: string;
+  guestReview?: string;
+  isPurelyAllergyFriendly?: boolean;
 }
 
 export interface Restaurant {
