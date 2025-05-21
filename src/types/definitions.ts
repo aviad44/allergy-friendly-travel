@@ -19,7 +19,8 @@ export type DestinationId =
   | 'ayia-napa'
   | 'tuscany'
   | 'gluten-free-europe'
-  | 'athens';
+  | 'athens'
+  | 'eilat';
 
 export interface Destination {
   id: DestinationId;
@@ -97,7 +98,8 @@ export interface DestinationContent {
   languageTable?: LanguageTable;
   tips?: string[];
   bonusTools?: BonusTool[];
-  highlights?: string[]; // Add the missing highlights property
+  highlights?: string[]; 
+  longDescription?: string;
 }
 
 export type LanguageCode = 'en' | 'fr' | 'de' | 'es' | 'it' | 'he';

@@ -7,6 +7,7 @@ const eilatHotels: Hotel[] = [
     name: 'U Coral Beach Hotel by Fattal',
     location: 'Eilat, Israel',
     stars: 4,
+    address: 'Coral Beach, Eilat, Israel',
     description: 'A family-friendly resort offering a unique allergy-friendly experience with dedicated staff who provide personalized care for guests with food allergies.',
     allergenFriendly: ['gluten', 'dairy', 'eggs', 'sesame', 'nuts'],
     amenities: ['pool', 'restaurant', 'bar', 'fitness center', 'spa', 'kids club', 'free wifi'],
