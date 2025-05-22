@@ -24,49 +24,7 @@ import { hotelChainsContent } from './destination-hotel-chains';
 import { cruiseLinesContent } from './destination-cruise-lines';
 import { turkeyContent } from './destination-turkey';
 
-// Fix Hotel data types for destination-gluten-free-europe.ts
-if (glutenFreeEuropeContent.hotels) {
-  glutenFreeEuropeContent.hotels = glutenFreeEuropeContent.hotels.map(hotel => {
-    // @ts-ignore - Remove reviews field which is not in the Hotel interface
-    if (hotel.reviews) {
-      const { reviews, ...hotelWithoutReviews } = hotel;
-      return hotelWithoutReviews;
-    }
-    return hotel;
-  });
-}
-
-// Fix Hotel data types for destination-rome.ts
-if (romeContent.hotels) {
-  romeContent.hotels = romeContent.hotels.map(hotel => {
-    // @ts-ignore - Remove reviews field which is not in the Hotel interface
-    if (hotel.reviews) {
-      const { reviews, ...hotelWithoutReviews } = hotel;
-      return hotelWithoutReviews;
-    }
-    return hotel;
-  });
-}
-
-// Fix Hotel data types for destination-tuscany.ts
-if (tuscanyContent.hotels) {
-  tuscanyContent.hotels = tuscanyContent.hotels.map(hotel => {
-    // @ts-ignore - Remove reviews field which is not in the Hotel interface
-    if (hotel.reviews) {
-      const { reviews, ...hotelWithoutReviews } = hotel;
-      return hotelWithoutReviews;
-    }
-    return hotel;
-  });
-}
-
-// Remove highlights from tuscanyContent if it exists
-// @ts-ignore - Remove highlights field which is not in the DestinationContent interface
-if (tuscanyContent.highlights) {
-  // @ts-ignore
-  const { highlights, ...tuscanyWithoutHighlights } = tuscanyContent;
-  Object.assign(tuscanyContent, tuscanyWithoutHighlights);
-}
+// We don't need to modify the hotel objects anymore as we've added the reviews field to the Hotel interface
 
 export const destinationData: Record<DestinationId, Partial<DestinationContent>> = {
   london: londonContent,

@@ -13,7 +13,28 @@ export const getAbsoluteImageUrl = (imageUrl: string): string => {
   return `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
 };
 
+// Create a record with all destination IDs using the default image for those without a specific image
+const defaultDestinations: Record<DestinationId, string> = {} as Record<DestinationId, string>;
+
+// Set all destinations to use the default image
+const allDestinationIds: DestinationId[] = [
+  'london', 'paris', 'barcelona', 'cyprus', 'rome', 'abu-dhabi', 'crete', 
+  'tokyo', 'thailand', 'hotel-chains', 'new-york', 'portugal', 'swiss-alps', 
+  'koh-samui', 'turkey', 'cruise-lines', 'toronto', 'ayia-napa', 'tuscany', 
+  'gluten-free-europe', 'athens', 'eilat', 'dubai', 'amsterdam', 'santorini', 
+  'bali', 'cancun', 'venice', 'florence', 'prague', 'budapest', 'vienna', 
+  'munich', 'singapore', 'sydney', 'cape-town', 'rio-de-janeiro', 'seoul', 
+  'hong-kong', 'bangkok', 'istanbul', 'kyoto', 'auckland', 'seville', 
+  'marrakech', 'cairo', 'dublin', 'nice', 'porto', 'lisbon', 'tel-aviv'
+];
+
+allDestinationIds.forEach(id => {
+  defaultDestinations[id] = DEFAULT_SOCIAL_IMAGE;
+});
+
+// Override with specific images for destinations that have them
 export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
+  ...defaultDestinations,
   'london': 'https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png',
   'paris': 'https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png',
   'barcelona': 'https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png',

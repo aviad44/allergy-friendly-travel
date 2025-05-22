@@ -64,24 +64,25 @@ export type DestinationId =
   | 'cruise-lines';
 
 export interface Hotel {
-  id?: string; // Made optional to match existing data
+  id?: string;
   name: string;
-  location?: string; // Made optional to match existing data
-  stars?: number; // Made optional to match existing data
+  location?: string;
+  stars?: number;
   address: string;
   description: string;
-  allergenFriendly?: string[]; // Made optional to match existing data
-  amenities?: string[]; // Made optional to match existing data
+  allergenFriendly?: string[];
+  amenities?: string[];
   features: string[];
-  rating?: number; // Made optional to match existing data
-  priceRange?: string; // Made optional to match existing data
-  imageUrl?: string; // Made optional to match existing data
-  websiteUrl?: string; // Made optional to match existing data
+  rating?: number;
+  priceRange?: string;
+  imageUrl?: string;
+  websiteUrl?: string;
   bookingUrl: string;
   guestReview?: string;
-  isPurelyAllergyFriendly?: boolean; // Made optional to match existing data
+  isPurelyAllergyFriendly?: boolean;
   quote?: string;
   image?: string;
+  reviews?: Array<{ text: string; author?: string; rating?: number }>;
 }
 
 export interface FAQ {
@@ -113,6 +114,7 @@ export interface DestinationContent {
     rows: string[][];
   };
   bonusTools?: BonusTool[];
+  highlights?: string[];
 }
 
 // Add BonusTool interface for bonusTools property
