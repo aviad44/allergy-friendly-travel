@@ -1,28 +1,22 @@
 
-import React from 'react';
-import { InfoIcon } from 'lucide-react';
+import { BookingButtonSection } from "./BookingButtonSection";
+import { Hotel } from "@/types/definitions";
 
 interface LongDescriptionSectionProps {
-  content?: string;
-  title?: string;
+  longDescription?: string;
+  hotel?: Hotel;
 }
 
-export const LongDescriptionSection = ({ content, title = "About This Destination" }: LongDescriptionSectionProps) => {
-  if (!content) {
-    return null;
-  }
+export const LongDescriptionSection = ({ longDescription, hotel }: LongDescriptionSectionProps) => {
+  if (!longDescription) return null;
   
   return (
-    <section className="my-8">
-      <div className="flex items-center mb-4">
-        <InfoIcon className="h-5 w-5 mr-2 text-blue-500" />
-        <h2 className="text-2xl font-bold">{title}</h2>
-      </div>
-      <div className="prose prose-blue max-w-none">
-        {content.split('\n\n').map((paragraph, i) => (
-          <p key={i} className="mb-4">{paragraph}</p>
-        ))}
-      </div>
+    <section className="mt-8 space-y-6">
+      <div 
+        className="prose prose-sm sm:prose max-w-none text-content"
+        dangerouslySetInnerHTML={{ __html: longDescription }}
+      />
+      <BookingButtonSection hotel={hotel} />
     </section>
   );
 };

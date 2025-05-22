@@ -85,7 +85,6 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
             name={destination.name}
             currentLanguage={currentLanguage}
             onLanguageChange={setCurrentLanguage}
-            isLondon={isLondon}
           />
           
           <Separator className="my-8" />
@@ -102,10 +101,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           {content?.hotels && content.hotels.length > 0 && (
             <>
               <Separator className="my-8" />
-              <TopHotelsSection 
-                hotels={content.hotels} 
-                destinationName={destination.name}
-              />
+              <TopHotelsSection hotels={content.hotels} />
             </>
           )}
           
@@ -129,11 +125,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           {content?.tips && content.tips.length > 0 && (
             <>
               <Separator className="my-8" />
-              <TravelTipsSection 
-                tips={content.tips}
-                destinationName={destination.name}
-                isAthens={isAthens}
-              />
+              <TravelTipsSection tips={content.tips} />
             </>
           )}
           
@@ -152,10 +144,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
           {content?.faqs && content.faqs.length > 0 && (
             <>
               <Separator className="my-8" />
-              <FAQSection 
-                faqs={content.faqs}
-                destinationName={destination.name}
-              />
+              <FAQSection faqs={content.faqs} />
             </>
           )}
           
