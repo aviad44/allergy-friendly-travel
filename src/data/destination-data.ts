@@ -16,17 +16,57 @@ import { creteContent } from './destination-crete';
 import { glutenFreeEuropeContent } from './destination-gluten-free-europe';
 import { athensContent } from './destination-athens';
 import { eilatContent } from './destination-eilat';
+import { thailandContent } from './destination-thailand';
+import { newYorkContent } from './destination-new-york';
+import { ayiaNapaContent } from './destination-ayia-napa';
+import { abuDhabiContent } from './destination-abu-dhabi';
+import { hotelChainsContent } from './destination-hotel-chains';
+import { cruiseLinesContent } from './destination-cruise-lines';
+import { turkeyContent } from './destination-turkey';
 
-// Create empty arrays with the right types for destinations without full data
-const abudhabiHotels: Hotel[] = [];
-const thailandHotels: Hotel[] = [];
-const hotelChainsInfo: Hotel[] = [];
-const newYorkHotels: Hotel[] = [];
-const turkeyHotels: Hotel[] = [];
-const cruiseLinesInfo: Hotel[] = [];
-const cruiseLinesFaqs: FAQ[] = [];
-const cruiseLinesIntro: string = "";
-const ayiaNapaHotels: Hotel[] = [];
+// Fix Hotel data types for destination-gluten-free-europe.ts
+if (glutenFreeEuropeContent.hotels) {
+  glutenFreeEuropeContent.hotels = glutenFreeEuropeContent.hotels.map(hotel => {
+    // @ts-ignore - Remove reviews field which is not in the Hotel interface
+    if (hotel.reviews) {
+      const { reviews, ...hotelWithoutReviews } = hotel;
+      return hotelWithoutReviews;
+    }
+    return hotel;
+  });
+}
+
+// Fix Hotel data types for destination-rome.ts
+if (romeContent.hotels) {
+  romeContent.hotels = romeContent.hotels.map(hotel => {
+    // @ts-ignore - Remove reviews field which is not in the Hotel interface
+    if (hotel.reviews) {
+      const { reviews, ...hotelWithoutReviews } = hotel;
+      return hotelWithoutReviews;
+    }
+    return hotel;
+  });
+}
+
+// Fix Hotel data types for destination-tuscany.ts
+if (tuscanyContent.hotels) {
+  tuscanyContent.hotels = tuscanyContent.hotels.map(hotel => {
+    // @ts-ignore - Remove reviews field which is not in the Hotel interface
+    if (hotel.reviews) {
+      const { reviews, ...hotelWithoutReviews } = hotel;
+      return hotelWithoutReviews;
+    }
+    return hotel;
+  });
+}
+
+// Remove highlights from tuscanyContent if it exists
+// @ts-ignore - Remove highlights field which is not in the DestinationContent interface
+if (tuscanyContent.highlights) {
+  // @ts-ignore
+  const { highlights, ...tuscanyWithoutHighlights } = tuscanyContent;
+  Object.assign(tuscanyContent, tuscanyWithoutHighlights);
+}
 
 export const destinationData: Record<DestinationId, Partial<DestinationContent>> = {
   london: londonContent,
@@ -34,47 +74,19 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
   barcelona: barcelonaContent,
   cyprus: cyprusContent,
   rome: romeContent,
-  'abu-dhabi': {
-    hotels: abudhabiHotels,
-    faqs: genericFaqs,
-    intro: genericIntro
-  },
+  'abu-dhabi': abuDhabiContent,
   crete: creteContent,
   tokyo: tokyoContent,
-  thailand: {
-    hotels: thailandHotels,
-    faqs: genericFaqs,
-    intro: genericIntro
-  },
-  'hotel-chains': {
-    hotels: hotelChainsInfo,
-    faqs: genericFaqs,
-    intro: genericIntro
-  },
-  'new-york': {
-    hotels: newYorkHotels,
-    faqs: genericFaqs,
-    intro: genericIntro
-  },
+  thailand: thailandContent,
+  'hotel-chains': hotelChainsContent,
+  'new-york': newYorkContent,
   portugal: portugalContent,
   'swiss-alps': swissAlpsContent,
   'koh-samui': kohSamuiContent,
-  turkey: {
-    hotels: turkeyHotels,
-    faqs: genericFaqs,
-    intro: genericIntro
-  },
-  'cruise-lines': {
-    hotels: cruiseLinesInfo,
-    faqs: cruiseLinesFaqs,
-    intro: cruiseLinesIntro
-  },
+  turkey: turkeyContent,
+  'cruise-lines': cruiseLinesContent,
   toronto: torontoContent,
-  'ayia-napa': {
-    hotels: ayiaNapaHotels,
-    faqs: genericFaqs,
-    intro: genericIntro
-  },
+  'ayia-napa': ayiaNapaContent,
   'tuscany': tuscanyContent,
   'gluten-free-europe': glutenFreeEuropeContent,
   'athens': athensContent,

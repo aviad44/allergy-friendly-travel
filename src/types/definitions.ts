@@ -54,14 +54,14 @@ export type DestinationId =
   | 'turkey'
   | 'toronto'
   | 'abu-dhabi'
-  | 'thailand'  // Added 'thailand' to fix the destination-data.ts error
-  | 'portugal'  // Added 'portugal' to fix the destination-data.ts error
-  | 'swiss-alps' // Added to fix destination-data.ts error
-  | 'koh-samui' // Added to support Thailand destinations
+  | 'thailand'
+  | 'portugal'
+  | 'swiss-alps'
+  | 'koh-samui'
   | 'ayia-napa'
   | 'tuscany'
   | 'gluten-free-europe'
-  | 'cruise-lines'; // Added to fix destination-data.ts error
+  | 'cruise-lines';
 
 export interface Hotel {
   id?: string; // Made optional to match existing data
@@ -98,7 +98,7 @@ export interface Restaurant {
   guestReview?: string;
   isPurelyAllergyFriendly: boolean;
   website?: string;
-  contactInfo?: string | { phone: string; email: string }; // Updated to support both string and object formats
+  contactInfo?: string | { phone: string; email: string };
 }
 
 export interface DestinationContent {
@@ -112,7 +112,7 @@ export interface DestinationContent {
     headers: string[];
     rows: string[][];
   };
-  bonusTools?: BonusTool[]; // Updated to use proper type for bonusTools
+  bonusTools?: BonusTool[];
 }
 
 // Add BonusTool interface for bonusTools property
