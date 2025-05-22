@@ -1,8 +1,6 @@
+
 import { useState, useEffect } from "react";
 import { DestinationHero } from "./DestinationHero";
-import { LanguageTable } from "./LanguageTable";
-import { TravelTips } from "@/components/hotels/TravelTips";
-import { RelatedDestinations } from "./RelatedDestinations";
 import { LanguageCode, Destination, DestinationId } from "@/types/definitions";
 import { Separator } from "@/components/ui/separator";
 import { DestinationHeader } from "./DestinationHeader";
@@ -10,12 +8,15 @@ import { IntroSection } from "./IntroSection";
 import { TopHotelsSection } from "./TopHotelsSection";
 import { FAQSection } from "./FAQSection";
 import { ShareExperienceSection } from "./ShareExperienceSection";
-import { Globe, MapPin, Utensils, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { destinations } from "@/data/destinations-list";
 import { destinationData } from "@/data/destination-data";
-import { Button } from "@/components/ui/button";
+import { RestaurantsSection } from "./RestaurantsSection";
+import { LongDescriptionSection } from "./LongDescriptionSection";
+import { TravelTipsSection } from "./TravelTipsSection";
+import { LanguageTableSection } from "./LanguageTableSection";
+import { RelatedDestinations } from "./RelatedDestinations";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -63,12 +64,12 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     }
   }, [destination, destinationId, navigate]);
 
+  // Debug logging
   if (content?.hotels) {
-    console.log(`Hotel data for ${destinationId}:`, content.hotels.slice(0, 1)); // Log first hotel as sample
+    console.log(`Hotel data for ${destinationId}:`, content.hotels.slice(0, 1));
   }
-
   if (content?.restaurants) {
-    console.log(`Restaurant data for ${destinationId}:`, content.restaurants.slice(0, 1)); // Log first restaurant as sample
+    console.log(`Restaurant data for ${destinationId}:`, content.restaurants.slice(0, 1));
   }
 
   // Safely prepare intro content
@@ -86,168 +87,10 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     );
   }
 
-  // Ensure we have at least minimal content for missing destinations
+  // Show warning for missing content
   if (!content) {
     console.error(`Missing content data for: ${destinationId}`);
   }
-
-  // Render booking button for Eilat hotel
-  const renderBookingButton = () => {
-    if (!isEilat || !content?.hotels || content.hotels.length === 0) {
-      return null;
-    }
-    
-    const hotel = content.hotels[0]; // Get the first hotel
-    
-    return (
-      <section className="my-6">
-        <div className="bg-blue-50 p-6 rounded-xl">
-          <h3 className="text-xl font-semibold mb-3">Book Your Stay</h3>
-          <p className="mb-4">Ready to experience a worry-free vacation with expert allergy care at {hotel.name}?</p>
-          
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button 
-              className="bg-teal-600 hover:bg-teal-700 text-white flex-1 gap-2"
-              onClick={() => window.open(hotel.bookingUrl, "_blank")}
-            >
-              Book Now
-              <ExternalLink className="h-4 w-4" />
-            </Button>
-            
-            <Button 
-              variant="outline"
-              className="border-teal-600 text-teal-700 hover:bg-teal-50 flex-1 gap-2"
-              onClick={() => window.open(`https://maps.google.com/?q=${hotel.name} ${hotel.location}`, "_blank")}
-            >
-              View on Map
-              <MapPin className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </section>
-    );
-  };
-
-  // Render restaurants section for Athens only
-  const renderRestaurantsSection = () => {
-    if (!isAthens || !content?.restaurants || content.restaurants.length === 0) {
-      return null;
-    }
-    
-    return (
-      <section className="mt-8 space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-semibold flex items-center gap-2">
-          <Utensils className="h-6 w-6 text-primary/80" aria-hidden="true" />
-          Top 10 Gluten-Free Restaurants in Athens
-        </h2>
-        
-        <div className="grid gap-6 md:grid-cols-2">
-          {content.restaurants.map((restaurant) => (
-            <div 
-              key={restaurant.id}
-              className={`border rounded-lg p-5 shadow-sm transition-all hover:shadow-md ${
-                restaurant.isPurelyAllergyFriendly 
-                  ? "border-l-4 border-l-green-500 bg-green-50" 
-                  : "border-l-4 border-l-blue-400"
-              }`}
-            >
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-semibold">{restaurant.name}</h3>
-                {restaurant.isPurelyAllergyFriendly && (
-                  <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                    100% Gluten-Free
-                  </span>
-                )}
-              </div>
-              
-              <p className="text-gray-600 mb-4">{restaurant.description}</p>
-              
-              <div className="flex items-center text-gray-600 mb-3">
-                <MapPin className="h-4 w-4 mr-2" />
-                <span>{restaurant.location}</span>
-              </div>
-              
-              <div className="mb-3">
-                {restaurant.features.map((feature, idx) => (
-                  <span 
-                    key={idx}
-                    className="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded mr-2 mb-2"
-                  >
-                    {feature}
-                  </span>
-                ))}
-              </div>
-              
-              {restaurant.guestReview && (
-                <div className="bg-blue-50 p-3 rounded-md mb-3">
-                  <div className="flex items-center mb-1">
-                    <Star className="h-4 w-4 text-yellow-500 mr-1" />
-                    <span className="text-sm font-medium">Guest Review:</span>
-                  </div>
-                  <p className="text-sm italic">"{restaurant.guestReview}"</p>
-                </div>
-              )}
-              
-              {restaurant.website && (
-                <a 
-                  href={restaurant.website}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center text-blue-600 hover:text-blue-800"
-                >
-                  Visit website
-                  <ExternalLink className="h-4 w-4 ml-1" />
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-    );
-  };
-
-  // Render long description for Eilat
-  const renderLongDescription = () => {
-    if (!isEilat || !content?.longDescription) {
-      return null;
-    }
-    
-    return (
-      <section className="mt-8 space-y-4">
-        <div 
-          className="prose prose-sm sm:prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: content.longDescription }}
-        />
-        {renderBookingButton()}
-      </section>
-    );
-  };
-
-  // Render travel tips for destinations - updated to use correct destination name
-  const renderTravelTips = () => {
-    if (!content?.tips || content.tips.length === 0) {
-      return <TravelTips />;
-    }
-    
-    return (
-      <div className="bg-amber-50 p-6 rounded-xl my-8">
-        <h3 className="text-xl font-semibold mb-4 flex items-center">
-          <Star className="h-5 w-5 mr-2 text-amber-500" /> 
-          {isAthens ? "Gluten-Free Travel Tips for Athens" : `Travel Tips for ${destination.name}`}
-        </h3>
-        <ul className="space-y-3">
-          {content.tips.map((tip, index) => (
-            <li key={index} className="flex items-start">
-              <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-amber-100 text-amber-800 text-sm font-medium mr-3">
-                {index + 1}
-              </span>
-              <span>{tip}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -273,9 +116,12 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
             {/* Display restaurants for Athens, long description for Eilat, hotels for other destinations */}
             {isAthens ? (
-              renderRestaurantsSection()
+              <RestaurantsSection restaurants={content?.restaurants} />
             ) : isEilat ? (
-              renderLongDescription()
+              <LongDescriptionSection 
+                longDescription={content?.longDescription} 
+                hotel={content?.hotels && content.hotels.length > 0 ? content.hotels[0] : undefined}
+              />
             ) : (
               <TopHotelsSection 
                 hotels={content?.hotels || []}
@@ -291,22 +137,16 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
               destinationName={destination.name}
             />
 
-            {renderTravelTips()}
+            <TravelTipsSection 
+              tips={content?.tips} 
+              destinationName={destination.name} 
+              isAthens={isAthens}
+            />
 
-            {content?.languageTable && content.languageTable.headers && content.languageTable.headers.length > 0 && (
-              <div className="overflow-x-auto -mx-3 sm:mx-0 bg-primary/5 p-4 rounded-xl">
-                <div className="min-w-full p-3 sm:p-0">
-                  <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center">
-                    <Globe className="mr-2 h-6 w-6 text-primary/80" aria-hidden="true" />
-                    Essential Phrases for Allergy Travelers
-                  </h2>
-                  <LanguageTable 
-                    data={content?.languageTable || { headers: [], rows: [] }}
-                    textAlignment={textAlignment}
-                  />
-                </div>
-              </div>
-            )}
+            <LanguageTableSection 
+              languageTable={content?.languageTable}
+              textAlignment={textAlignment}
+            />
 
             <RelatedDestinations 
               currentDestination={destinationId} 

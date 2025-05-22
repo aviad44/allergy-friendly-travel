@@ -1,81 +1,78 @@
-export type DestinationId = 
-  | 'london'
-  | 'paris'
-  | 'barcelona'
-  | 'cyprus' 
-  | 'rome'
-  | 'abu-dhabi'
-  | 'crete'
-  | 'tokyo'
-  | 'thailand'
-  | 'hotel-chains'
-  | 'new-york'
-  | 'portugal'
-  | 'swiss-alps'
-  | 'koh-samui'
-  | 'turkey'
-  | 'cruise-lines'
-  | 'toronto'
-  | 'ayia-napa'
-  | 'tuscany'
-  | 'gluten-free-europe'
-  | 'athens'
-  | 'eilat';
+export type LanguageCode = 'en' | 'he';
 
 export interface Destination {
-  id: DestinationId;
+  id: string;
   name: string;
   country: string;
   description: string;
-  subtitle: string;
   image?: string;
+  subtitle?: string;
 }
+
+export type DestinationId =
+  | 'london'
+  | 'paris'
+  | 'new-york'
+  | 'tokyo'
+  | 'dubai'
+  | 'barcelona'
+  | 'rome'
+  | 'amsterdam'
+  | 'santorini'
+  | 'bali'
+  | 'cancun'
+  | 'venice'
+  | 'florence'
+  | 'prague'
+  | 'budapest'
+  | 'vienna'
+  | 'munich'
+  | 'singapore'
+  | 'sydney'
+  | 'cape-town'
+  | 'rio-de-janeiro'
+  | 'seoul'
+  | 'hong-kong'
+  | 'bangkok'
+  | 'istanbul'
+  | 'kyoto'
+  | 'auckland'
+  | 'seville'
+  | 'marrakech'
+  | 'cairo'
+  | 'dublin'
+  | 'nice'
+  | 'porto'
+  | 'lisbon'
+  | 'crete'
+  | 'cyprus'
+  | 'athens'
+  | 'eilat'
+  | 'tel-aviv'
+  | 'hotel-chains'
+  | 'turkey'
+  | 'toronto'
+  | 'abu-dhabi';
 
 export interface Hotel {
-  id?: string;
-  name: string;
-  features: string[];
-  rating?: number;
-  location?: string;
-  image?: string;
-  address: string;
-  description?: string;
-  quote?: string;
-  bookingUrl: string;
-  reviews?: {
-    text: string;
-    author: string;
-    rating: number;
-  }[];
-  stars?: number;
-  allergenFriendly?: string[];
-  amenities?: string[];
-  priceRange?: string;
-  imageUrl?: string;
-  websiteUrl?: string;
-  guestReview?: string;
-  isPurelyAllergyFriendly?: boolean;
-}
-
-export interface Restaurant {
   id: string;
   name: string;
-  description: string;
-  isPurelyAllergyFriendly: boolean;
-  features: string[];
   location: string;
-  website?: string;
-  contactInfo?: {
-    phone?: string;
-    email?: string;
-  };
-  guestReview?: string;
-}
-
-export interface BonusTool {
-  name: string;
+  stars: number;
+  address: string;
   description: string;
-  link: string;
+  allergenFriendly: string[];
+  amenities: string[];
+  features: string[];
+  rating: number;
+  priceRange: string;
+  imageUrl: string;
+  websiteUrl: string;
+  bookingUrl: string;
+  guestReview?: string;
+  isPurelyAllergyFriendly: boolean;
+  quote?: string;
+  image?: string;
 }
 
 export interface FAQ {
@@ -83,43 +80,30 @@ export interface FAQ {
   answer: string;
 }
 
-export interface LanguageTable {
-  headers: string[];
-  rows: string[][];
-}
-
-export interface Review {
+// Add Restaurant type if it doesn't exist
+export interface Restaurant {
   id: string;
-  rating: number;
-  text: string;
-  author_name: string;
-  created_at: string;
-  destination?: string;
-  traveler_type?: string;
-  language: string;
+  name: string;
+  description: string;
+  location: string;
+  features: string[];
+  guestReview?: string;
+  isPurelyAllergyFriendly: boolean;
+  website?: string;
 }
 
+// Update DestinationContent to include restaurants if needed
 export interface DestinationContent {
-  intro: string | string[];
-  hotels: Hotel[];
-  restaurants?: Restaurant[];
-  faqs: FAQ[];
-  languageTable?: LanguageTable;
+  hotels?: Hotel[];
+  faqs?: FAQ[];
+  intro?: string | string[];
   tips?: string[];
-  bonusTools?: BonusTool[];
-  highlights?: string[]; 
+  // Add restaurants if not already defined
+  restaurants?: Restaurant[];
+  // Add longDescription if not already defined
   longDescription?: string;
+  languageTable?: {
+    headers: string[];
+    rows: string[][];
+  };
 }
-
-export type LanguageCode = 'en' | 'fr' | 'de' | 'es' | 'it' | 'he';
-
-export const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'fr', name: 'French' },
-  { code: 'de', name: 'German' },
-  { code: 'es', name: 'Spanish' },
-  { code: 'it', name: 'Italian' },
-  { code: 'he', name: 'Hebrew' }
-];
-
-export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
