@@ -1,4 +1,3 @@
-
 import { DestinationContent, Hotel, FAQ } from '@/types/definitions';
 
 const eilatHotels: Hotel[] = [
@@ -88,6 +87,8 @@ export const eilatContent: DestinationContent = {
     </ul>
     
     <h2>Real Stories, Real Relief: Guest Testimonials</h2>
+    
+    <p>Families who have stayed at the U Coral Beach Hotel in Eilat share moving stories about their experiences:</p>
     
     <ul>
       <li>"My child ate in a hotel restaurant without fear. I've never seen him so calm."</li>
