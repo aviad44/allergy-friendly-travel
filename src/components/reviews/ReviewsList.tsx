@@ -8,7 +8,7 @@ interface ReviewsListProps {
   onReviewDeleted?: () => void;
 }
 
-export const ReviewsList: React.FC<ReviewsListProps> = ({ reviews, isLoading, onReviewDeleted }) => {
+export const ReviewsList = ({ reviews, isLoading, onReviewDeleted }: ReviewsListProps) => {
   if (isLoading) {
     return (
       <div className="text-center py-12">

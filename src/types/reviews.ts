@@ -1,14 +1,9 @@
-import { DestinationId, Destination, DestinationContent, Hotel, FAQ, LanguageTable, Review, LanguageCode } from './definitions';
+
+import { DestinationId, Destination, DestinationContent, Hotel, FAQ, LanguageCode, Review, sortOptions, languages } from './definitions';
 
 // Add the missing exports that are referenced in components
-export type { Destination, DestinationContent, Hotel, FAQ, LanguageTable, Review, DestinationId, LanguageCode };
-
-export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
-
-export const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'he', name: 'Hebrew' }
-];
+export type { Destination, DestinationContent, Hotel, FAQ, LanguageCode, Review, DestinationId };
+export { sortOptions, languages };
 
 // Mock destinations data used by components
 export const destinations: Destination[] = [

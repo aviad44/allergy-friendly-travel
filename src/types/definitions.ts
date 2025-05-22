@@ -1,3 +1,4 @@
+
 export type LanguageCode = 'en' | 'he';
 
 export interface Destination {
@@ -52,7 +53,8 @@ export type DestinationId =
   | 'hotel-chains'
   | 'turkey'
   | 'toronto'
-  | 'abu-dhabi';
+  | 'abu-dhabi'
+  | 'thailand';  // Added 'thailand' to fix the destination-data.ts error
 
 export interface Hotel {
   id: string;
@@ -80,7 +82,6 @@ export interface FAQ {
   answer: string;
 }
 
-// Add Restaurant type if it doesn't exist
 export interface Restaurant {
   id: string;
   name: string;
@@ -90,20 +91,39 @@ export interface Restaurant {
   guestReview?: string;
   isPurelyAllergyFriendly: boolean;
   website?: string;
+  contactInfo?: string; // Added to fix destination-athens errors
 }
 
-// Update DestinationContent to include restaurants if needed
 export interface DestinationContent {
   hotels?: Hotel[];
   faqs?: FAQ[];
   intro?: string | string[];
   tips?: string[];
-  // Add restaurants if not already defined
   restaurants?: Restaurant[];
-  // Add longDescription if not already defined
   longDescription?: string;
   languageTable?: {
     headers: string[];
     rows: string[][];
   };
+  bonusTools?: string[]; // Added to fix destination-eilat.ts error
 }
+
+// Add Review and sortOptions types for the review components
+export interface Review {
+  id: string;
+  author_name: string;
+  created_at: string;
+  destination?: string;
+  traveler_type?: string;
+  text: string;
+  rating: number;
+  language?: string;
+}
+
+export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
+
+// Add languages array for DestinationNavigation.tsx
+export const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'he', name: 'Hebrew' }
+];
