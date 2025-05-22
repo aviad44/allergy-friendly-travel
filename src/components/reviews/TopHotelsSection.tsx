@@ -31,15 +31,15 @@ export const TopHotelsSection = ({ hotels, destinationName = "" }: TopHotelsSect
               </div>
               <p className="text-gray-700 mb-4">{hotel.description}</p>
               <div className="space-y-2">
-                <div className="flex items-center">
+                <div className="flex items-start">
                   <span className="font-medium text-gray-800 mr-2">Special Diets:</span>
                   <span>{hotel.specialDiets?.join(", ") || "Information not available"}</span>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-start">
                   <span className="font-medium text-gray-800 mr-2">Location:</span>
                   <span>{hotel.location || "Location information not available"}</span>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-start">
                   <span className="font-medium text-gray-800 mr-2">Price Range:</span>
                   <span>{hotel.priceRange || "$$$"}</span>
                 </div>

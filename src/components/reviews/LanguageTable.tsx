@@ -1,61 +1,43 @@
 
-import { Destination } from "@/types/reviews";
+import React from 'react';
 
 export interface LanguageTableProps {
-  data?: {
-    headers: string[];
-    rows: string[][];
-  };
-  destinationName?: string;
-  textAlignment?: string;
+  headers: string[];
+  rows: string[][];
 }
 
-export const LanguageTable = ({ data, destinationName, textAlignment = "text-left" }: LanguageTableProps) => {
-  // Check if data is undefined or empty
-  if (!data || !data.headers || data.headers.length === 0) {
-    return null; // Don't render anything if there's no data
-  }
-
+export const LanguageTable = ({ headers, rows }: LanguageTableProps) => {
   return (
-    <div className="rounded-md border overflow-hidden shadow-sm">
-      <div className="overflow-x-auto">
-        <table className={`w-full ${textAlignment}`}>
-          <thead className="bg-muted/50">
-            <tr>
-              {data.headers.map((header, index) => (
-                <th 
-                  key={index} 
-                  className={`px-4 py-3 text-sm font-medium ${textAlignment}`}
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            {headers.map((header, index) => (
+              <th
+                key={index}
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {rows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {row.map((cell, cellIndex) => (
+                <td
+                  key={cellIndex}
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                 >
-                  {header}
-                </th>
+                  {cell}
+                </td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {data.rows.map((row, rowIndex) => (
-              <tr 
-                key={rowIndex} 
-                className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-muted/20'}
-              >
-                {row.map((cell, cellIndex) => (
-                  <td 
-                    key={cellIndex} 
-                    className={`px-4 py-3 text-sm ${textAlignment}`}
-                  >
-                    {cell}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {destinationName && (
-        <div className="p-3 bg-muted/10 text-xs text-center text-muted-foreground">
-          Essential phrases for travelers with allergies in {destinationName}
-        </div>
-      )}
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
