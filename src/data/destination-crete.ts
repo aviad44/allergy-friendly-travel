@@ -5,8 +5,11 @@ export const creteContent: DestinationContent = {
   intro: "Experience the beauty of Crete without worrying about allergies with these allergy-conscious accommodations.",
   hotels: [
     {
+      id: "blue-palace",
       name: "Blue Palace, a Luxury Collection Resort ★★★★★",
       address: "Plaka, Elounda, Crete 72053, Greece",
+      location: "Elounda",
+      stars: 5,
       features: [
         "⭐ 5-star luxury resort",
         "🍽️ Detailed allergen menus",
@@ -17,11 +20,17 @@ export const creteContent: DestinationContent = {
       bookingUrl: "https://www.marriott.com/hotels/travel/herak-blue-palace-a-luxury-collection-resort-and-spa-crete/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/76493476.jpg?k=3f69730363c8c2b7275039fc1448191c37098267330232e0faa8379f80ee2d78&o=&hp=1",
       rating: 4.8,
-      location: "Elounda"
+      allergenFriendly: ["Gluten-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
     },
     {
+      id: "domes-noruz",
       name: "Domes Noruz Chania ★★★★★",
       address: "Strati Pantelaki 5, Agioi Apostoloi, Chania 73100, Greece",
+      location: "Chania",
+      stars: 5,
       features: [
         "⭐ 5-star adults-only resort",
         "🍽️ Personalized diet plans",
@@ -32,11 +41,17 @@ export const creteContent: DestinationContent = {
       bookingUrl: "https://www.domesnoruz.com/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/188380634.jpg?k=f16ebd17cf7d8a7b72224665d9b6836767f23ca680ec89d0474b320ded649e7c&o=&hp=1",
       rating: 4.7,
-      location: "Chania"
+      allergenFriendly: ["Dairy-Free", "Gluten-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Beach Access"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
     },
     {
+      id: "stella-island",
       name: "Stella Island Luxury Resort & Spa ★★★★★",
       address: "Analipsi, Hersonissos, Crete 70014, Greece",
+      location: "Hersonissos",
+      stars: 5,
       features: [
         "⭐ 5-star adults-only resort",
         "🍽️ Clear allergen labeling",
@@ -47,11 +62,17 @@ export const creteContent: DestinationContent = {
       bookingUrl: "https://www.stellaisland.gr/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/243816179.jpg?k=d93c84a4478bd47f950b615ea485b502f93d3a7904652445c01c9d314b9a91a7&o=&hp=1",
       rating: 4.9,
-      location: "Hersonissos"
+      allergenFriendly: ["Gluten-Free", "Vegan", "Celiac-Safe"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
     },
     {
+      id: "grecotel-amirandes",
       name: "Grecotel Amirandes ★★★★★",
       address: "Gouves, Heraklion, Crete 70014, Greece",
+      location: "Gouves",
+      stars: 5,
       features: [
         "⭐ 5-star family-friendly resort",
         "🍽️ Dedicated allergen-free kitchens",
@@ -62,7 +83,10 @@ export const creteContent: DestinationContent = {
       bookingUrl: "https://www.grecotel.com/crete/amirandes/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/266065269.jpg?k=bb69ddecf661a306203374885a36c3cc7eacc04c86c5f87d0349ae475fca0306&o=&hp=1",
       rating: 4.6,
-      location: "Gouves"
+      allergenFriendly: ["Multiple Allergen Options", "Kid-Friendly"],
+      amenities: ["WiFi", "Swimming Pool", "Kids Club", "Multiple Restaurants"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
     }
   ],
   faqs: [

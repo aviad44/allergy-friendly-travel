@@ -5,7 +5,9 @@ export const barcelonaContent: DestinationContent = {
   intro: "Barcelona offers many allergy-friendly accommodations for travelers with dietary restrictions. From luxury hotels in the city center to beautiful properties along the coastline, you'll find establishments that take food allergies seriously and provide safe dining options during your stay.",
   hotels: [
     {
+      id: "grand-hotel-central",
       name: "Grand Hotel Central",
+      location: "Barcelona, Spain",
       address: "Via Laietana, 30, 08003 Barcelona, Spain",
       features: [
         "Personalized allergy menus",
@@ -16,10 +18,16 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Located in the heart of Barcelona, this luxury hotel prioritizes guest well-being with exceptional allergy-aware dining options.",
       quote: "Absolutely loved this hotel. From the moment I arrived, they ensured all my dietary needs were met.",
-      bookingUrl: "https://www.grandhotelcentral.com/"
+      bookingUrl: "https://www.grandhotelcentral.com/",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Room Service"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
     },
     {
+      id: "mercer-hotel",
       name: "Mercer Hotel Barcelona",
+      location: "Barcelona, Spain",
       address: "Carrer dels Lledó, 7, 08002 Barcelona, Spain",
       features: [
         "Tailored meals for food allergies",
@@ -30,10 +38,16 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Renowned for its exceptional service, Mercer Hotel provides tailored meals for guests with allergies in a stunning historic setting.",
       quote: "The staff was incredibly attentive to my son's peanut allergy, making our stay stress-free.",
-      bookingUrl: "https://www.mercerbarcelona.com/"
+      bookingUrl: "https://www.mercerbarcelona.com/",
+      allergenFriendly: ["Peanut-Free", "Gluten-Free"],
+      amenities: ["WiFi", "Room Service", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
     },
     {
+      id: "hotel-arts",
       name: "Hotel Arts Barcelona",
+      location: "Barcelona, Spain",
       address: "Carrer de la Marina, 19-21, 08005 Barcelona, Spain",
       features: [
         "Multiple allergy-conscious restaurants",
@@ -44,10 +58,16 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Overlooking the marina, Hotel Arts offers allergy-conscious dining options with stunning Mediterranean views.",
       quote: "The staff took my allergies seriously and ensured every meal was prepared safely.",
-      bookingUrl: "https://www.hotelartsbarcelona.com/"
+      bookingUrl: "https://www.hotelartsbarcelona.com/",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Egg-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Multiple Restaurants"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
     },
     {
+      id: "nobu-hotel",
       name: "Nobu Hotel Barcelona",
+      location: "Barcelona, Spain",
       address: "Av. de Roma, 2-4, 08014 Barcelona, Spain",
       features: [
         "Japanese-fusion allergy-safe dining",
@@ -58,10 +78,16 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Combining Japanese-inspired luxury with dietary sensitivity, Nobu Hotel is a top pick for allergy-conscious travelers.",
       quote: "The chef personally ensured that my meals were allergy-safe, and the service was impeccable.",
-      bookingUrl: "https://barcelona.nobuhotels.com/"
+      bookingUrl: "https://barcelona.nobuhotels.com/",
+      allergenFriendly: ["Gluten-Free", "Seafood-Free Options"],
+      amenities: ["WiFi", "Room Service", "Restaurant", "Gym"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
     },
     {
+      id: "hotel-calipolis",
       name: "Hotel Calipolis Sitges",
+      location: "Sitges, Barcelona, Spain",
       address: "Avinguda Sofia, 2, 08870 Sitges, Barcelona, Spain",
       features: [
         "Allergy-friendly menus",
@@ -72,7 +98,11 @@ export const barcelonaContent: DestinationContent = {
       ],
       description: "Situated in Sitges, a short drive from Barcelona, this hotel offers allergy-friendly menus and customized meal plans in a beautiful coastal setting.",
       quote: "I felt completely safe dining here, thanks to their detailed approach to food allergies.",
-      bookingUrl: "https://www.hotelcalipolis.com/en/"
+      bookingUrl: "https://www.hotelcalipolis.com/en/",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Beach Access"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
     }
   ],
   faqs: [
