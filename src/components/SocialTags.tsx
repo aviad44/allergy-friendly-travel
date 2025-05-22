@@ -23,46 +23,29 @@ export const SocialTags = ({
     (typeof window !== 'undefined' ? window.location.href : 'https://www.allergy-free-travel.com');
   const imageAlt = `${title} - Allergy-Free Travel`;
   
-  // Direct DOM manipulation to ensure Facebook crawler can see the OG tags
+  // Debug logging to help troubleshoot social sharing issues
   useEffect(() => {
-    console.log(`SocialTags mounted for: ${title}`);
-    console.log(`Image URL for sharing: ${absoluteImageUrl}`);
+    console.log(`SocialTags component mounted for: ${currentUrl}`);
+    console.log(`- Image URL: ${absoluteImageUrl}`);
+    console.log(`- Title: ${title}`);
     
-    // Handle direct image link which helps Facebook crawler
-    const linkElement = document.querySelector('link[rel="image_src"]') as HTMLLinkElement;
-    if (linkElement) {
-      linkElement.href = absoluteImageUrl;
-    } else {
-      const newLinkElement = document.createElement('link');
-      newLinkElement.rel = 'image_src';
-      newLinkElement.href = absoluteImageUrl;
-      document.head.appendChild(newLinkElement);
-    }
-    
-    // Make sure we have the right og:image:width and height
-    const ensureMetaTag = (property: string, content: string) => {
-      let meta = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
-      if (!meta) {
-        meta = document.createElement('meta');
-        meta.setAttribute('property', property);
-        document.head.appendChild(meta);
+    // Verify OG tags were injected properly after render
+    setTimeout(() => {
+      const ogImage = document.querySelector('meta[property="og:image"]');
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      console.log(`OG Image verification: ${ogImage?.getAttribute('content')}`);
+      console.log(`OG Title verification: ${ogTitle?.getAttribute('content')}`);
+      
+      // Add direct link element for Facebook crawler
+      if (!document.querySelector('link[rel="image_src"]')) {
+        const linkElement = document.createElement('link');
+        linkElement.rel = 'image_src';
+        linkElement.href = absoluteImageUrl;
+        document.head.appendChild(linkElement);
+        console.log(`Added image_src link: ${absoluteImageUrl}`);
       }
-      meta.content = content;
-    };
-    
-    // Ensure critical meta tags are present
-    ensureMetaTag('og:image:width', '1200');
-    ensureMetaTag('og:image:height', '630');
-    ensureMetaTag('og:image:alt', imageAlt);
-    ensureMetaTag('og:image:type', 'image/png');
-    ensureMetaTag('og:locale', 'he_IL'); // Set to Hebrew since this appears to be for Hebrew users
-    
-    // Add prefix to html tag for Open Graph
-    const htmlTag = document.documentElement;
-    if (htmlTag && !htmlTag.getAttribute('prefix')) {
-      htmlTag.setAttribute('prefix', 'og: https://ogp.me/ns#');
-    }
-  }, [absoluteImageUrl, title, imageAlt]);
+    }, 100);
+  }, [absoluteImageUrl, currentUrl, title]);
   
   return (
     <Helmet>
@@ -71,38 +54,38 @@ export const SocialTags = ({
       <meta name="description" content={description} />
       <link rel="canonical" href={currentUrl} />
       
-      {/* Direct image link for Facebook/WhatsApp */}
+      {/* Direct image link for Facebook */}
       <link rel="image_src" href={absoluteImageUrl} />
       
-      {/* Open Graph Prefix for HTML tag */}
+      {/* Open Graph Prefix */}
       <html prefix="og: https://ogp.me/ns#" />
       
       {/* Facebook/WhatsApp OpenGraph tags */}
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={currentUrl} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={absoluteImageUrl} />
-      <meta property="og:image:secure_url" content={absoluteImageUrl} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta property="og:image:alt" content={imageAlt} />
-      <meta property="og:site_name" content="Allergy-Free Travel" />
-      <meta property="og:locale" content="he_IL" />
+      <meta property="og:type" content={type} data-react-helmet="true" />
+      <meta property="og:url" content={currentUrl} data-react-helmet="true" />
+      <meta property="og:title" content={title} data-react-helmet="true" />
+      <meta property="og:description" content={description} data-react-helmet="true" />
+      <meta property="og:image" content={absoluteImageUrl} data-react-helmet="true" />
+      <meta property="og:image:secure_url" content={absoluteImageUrl} data-react-helmet="true" />
+      <meta property="og:image:width" content="1200" data-react-helmet="true" />
+      <meta property="og:image:height" content="630" data-react-helmet="true" />
+      <meta property="og:image:alt" content={imageAlt} data-react-helmet="true" />
+      <meta property="og:site_name" content="Allergy-Free Travel" data-react-helmet="true" />
+      <meta property="og:locale" content="en_US" data-react-helmet="true" />
       
       {/* Twitter card tags */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={absoluteImageUrl} />
-      <meta name="twitter:image:alt" content={imageAlt} />
+      <meta name="twitter:card" content="summary_large_image" data-react-helmet="true" />
+      <meta name="twitter:title" content={title} data-react-helmet="true" />
+      <meta name="twitter:description" content={description} data-react-helmet="true" />
+      <meta name="twitter:image" content={absoluteImageUrl} data-react-helmet="true" />
+      <meta name="twitter:image:alt" content={imageAlt} data-react-helmet="true" />
       
       {/* WhatsApp specific tags */}
-      <link itemProp="thumbnailUrl" href={absoluteImageUrl} />
-      <meta itemProp="image" content={absoluteImageUrl} />
+      <link itemProp="thumbnailUrl" href={absoluteImageUrl} data-react-helmet="true" />
+      <meta itemProp="image" content={absoluteImageUrl} data-react-helmet="true" />
       
-      {/* LinkedIn specific */}
-      <meta property="linkedin:image" content={absoluteImageUrl} />
+      {/* Facebook specific - adding these seems to help in some cases */}
+      <meta property="fb:app_id" content="allergy.free.travel" data-react-helmet="true" />
     </Helmet>
   );
 };

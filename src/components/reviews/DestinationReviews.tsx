@@ -17,8 +17,6 @@ import { LongDescriptionSection } from "./LongDescriptionSection";
 import { TravelTipsSection } from "./TravelTipsSection";
 import { LanguageTableSection } from "./LanguageTableSection";
 import { RelatedDestinations } from "./RelatedDestinations";
-import { SocialTags } from "@/components/SocialTags";
-import { DESTINATION_OG_IMAGES } from "@/utils/socialSharing";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -35,18 +33,19 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const isEilat = destinationId === 'eilat' as DestinationId;
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   
-  // Get proper social sharing information
-  const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
-  const canonicalUrl = `${baseUrl}/destinations/${destinationId}`;
-  const imageUrl = DESTINATION_OG_IMAGES[destinationId];
-  const destName = destination?.name || destinationId.split('-').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  
-  // Enhanced debug logging for social sharing
-  console.log(`DestinationReviews for ${destinationId}`);
-  console.log(`Social Image: ${imageUrl}`);
-  console.log(`Canonical URL: ${canonicalUrl}`);
-  
+  // Enhanced debug logging to ensure data is loaded
+  console.log(`Destination ID: ${destinationId}`);
+  console.log(`Loading destination: ${destinationId}`, { 
+    contentExists: !!content,
+    hotels: content?.hotels?.length || 0,
+    restaurants: content?.restaurants?.length || 0,
+    faqs: content?.faqs?.length || 0,
+    languageTable: !!content?.languageTable,
+    intro: !!content?.intro,
+    longDescription: !!content?.longDescription,
+    destinationData: Object.keys(destinationData)
+  });
+
   useEffect(() => {
     // Check if content is missing and log warning
     if (!content || (!content.hotels || content.hotels.length === 0) && (!content.restaurants || content.restaurants.length === 0)) {
@@ -65,99 +64,102 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     }
   }, [destination, destinationId, navigate]);
 
-  if (!destination) return null;
+  // Debug logging
+  if (content?.hotels) {
+    console.log(`Hotel data for ${destinationId}:`, content.hotels.slice(0, 1));
+  }
+  if (content?.restaurants) {
+    console.log(`Restaurant data for ${destinationId}:`, content.restaurants.slice(0, 1));
+  }
+
+  // Safely prepare intro content
+  let introContent: string | string[] = "Find safe and comfortable accommodations for travelers with dietary restrictions.";
+  if (content?.intro) {
+    introContent = content.intro;
+  }
+
+  if (!destination) {
+    console.error(`Missing destination data for: ${destinationId}`);
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading destination information...</p>
+      </div>
+    );
+  }
+
+  // Show warning for missing content
+  if (!content) {
+    console.error(`Missing content data for: ${destinationId}`);
+  }
 
   return (
-    <>
-      <SocialTags 
-        title={`Allergy-Friendly Hotels in ${destName} | Safe Dining Guide`}
-        description={`Discover the best allergy-friendly hotels in ${destName}. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.`}
-        imageUrl={imageUrl}
-        url={canonicalUrl}
-        type="article"
-      />
-      
-      <div className={`min-h-screen bg-background ${textAlignment}`} dir={isRTL ? 'rtl' : 'ltr'}>
-        <DestinationHero destination={destination} />
-        
-        <div className="container mx-auto px-4 py-8 max-w-5xl">
-          <DestinationHeader 
-            name={destination.name}
-            currentLanguage={currentLanguage}
-            onLanguageChange={setCurrentLanguage}
-          />
-          
-          <Separator className="my-8" />
-          
-          {/* Display intro content if available */}
-          {content?.intro && (
+    <div className="min-h-screen bg-background flex flex-col">
+      <DestinationHero destination={destination} />
+
+      <main className="container mx-auto px-3 sm:px-5 lg:px-6 py-4 sm:py-6 -mt-14 sm:-mt-16 relative z-10 flex-grow">
+        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-5 sm:p-6">
+          <article className="space-y-6 sm:space-y-8 text-left">
+            <DestinationHeader 
+              destinationName={destination.name}
+              isLondon={isLondon}
+              description={destination.description}
+              subtitle={destination.subtitle}
+            />
+            
             <IntroSection 
-              intro={content.intro} 
+              intro={introContent}
+              destinationName={destination.name}
+              isLondon={isLondon}
+            />
+
+            <Separator className="bg-primary/10 h-0.5" />
+
+            {/* Display restaurants for Athens, long description for Eilat, hotels for other destinations */}
+            {isAthens ? (
+              <RestaurantsSection restaurants={content?.restaurants} />
+            ) : isEilat ? (
+              <LongDescriptionSection 
+                longDescription={content?.longDescription} 
+                hotel={content?.hotels && content.hotels.length > 0 ? content.hotels[0] : undefined}
+              />
+            ) : (
+              <TopHotelsSection 
+                hotels={content?.hotels || []}
+                destinationName={destination.name}
+                isLondon={isLondon}
+              />
+            )}
+
+            <Separator className="bg-primary/10 h-0.5" />
+
+            <FAQSection 
+              faqs={content?.faqs || []}
               destinationName={destination.name}
             />
-          )}
-          
-          {/* Display hotels if available */}
-          {content?.hotels && content.hotels.length > 0 && (
-            <>
-              <Separator className="my-8" />
-              <TopHotelsSection hotels={content.hotels} />
-            </>
-          )}
-          
-          {/* Display restaurants if available */}
-          {content?.restaurants && content.restaurants.length > 0 && (
-            <>
-              <Separator className="my-8" />
-              <RestaurantsSection restaurants={content.restaurants} />
-            </>
-          )}
-          
-          {/* Display long description if available */}
-          {content?.longDescription && (
-            <>
-              <Separator className="my-8" />
-              <LongDescriptionSection content={content.longDescription} />
-            </>
-          )}
-          
-          {/* Display travel tips if available */}
-          {content?.tips && content.tips.length > 0 && (
-            <>
-              <Separator className="my-8" />
-              <TravelTipsSection tips={content.tips} />
-            </>
-          )}
-          
-          {/* Display language table if available */}
-          {content?.languageTable && (
-            <>
-              <Separator className="my-8" />
-              <LanguageTableSection 
-                headers={content.languageTable.headers}
-                rows={content.languageTable.rows}
-              />
-            </>
-          )}
-          
-          {/* Display FAQs if available */}
-          {content?.faqs && content.faqs.length > 0 && (
-            <>
-              <Separator className="my-8" />
-              <FAQSection faqs={content.faqs} />
-            </>
-          )}
-          
-          <Separator className="my-8" />
-          
-          {/* Related destinations */}
-          <RelatedDestinations currentDestination={destinationId} />
-          
-          {/* Share experience */}
-          <Separator className="my-8" />
-          <ShareExperienceSection destinationName={destination.name} />
+
+            <TravelTipsSection 
+              tips={content?.tips} 
+              destinationName={destination.name} 
+              isAthens={isAthens}
+            />
+
+            <LanguageTableSection 
+              languageTable={content?.languageTable}
+              textAlignment={textAlignment}
+            />
+
+            <RelatedDestinations 
+              currentDestination={destinationId} 
+              textAlignment={textAlignment}
+            />
+            
+            <ShareExperienceSection 
+              destinationName={destination.name}
+              isLondon={isLondon}
+            />
+          </article>
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 };
