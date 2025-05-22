@@ -54,7 +54,9 @@ export type DestinationId =
   | 'turkey'
   | 'toronto'
   | 'abu-dhabi'
-  | 'thailand';  // Added 'thailand' to fix the destination-data.ts error
+  | 'thailand'  // Added 'thailand' to fix the destination-data.ts error
+  | 'portugal'  // Added 'portugal' to fix the destination-data.ts error
+  | 'koh-samui'; // Added to support Thailand destinations
 
 export interface Hotel {
   id: string;
@@ -105,7 +107,14 @@ export interface DestinationContent {
     headers: string[];
     rows: string[][];
   };
-  bonusTools?: string[]; // Added to fix destination-eilat.ts error
+  bonusTools?: BonusTool[]; // Updated to use proper type for bonusTools
+}
+
+// Add BonusTool interface for bonusTools property
+export interface BonusTool {
+  name: string;
+  description: string;
+  link: string;
 }
 
 // Add Review and sortOptions types for the review components

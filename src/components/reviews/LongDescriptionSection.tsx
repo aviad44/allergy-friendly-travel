@@ -11,9 +11,9 @@ export const LongDescriptionSection = ({ longDescription, hotel }: LongDescripti
   if (!longDescription) return null;
   
   return (
-    <section className="mt-8 space-y-4">
+    <section className="mt-8 space-y-6">
       <div 
-        className="prose prose-sm sm:prose max-w-none"
+        className="prose prose-sm sm:prose max-w-none text-content"
         dangerouslySetInnerHTML={{ __html: longDescription }}
       />
       <BookingButtonSection hotel={hotel} />

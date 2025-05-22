@@ -1,3 +1,4 @@
+
 import React from "react";
 import { ReviewCard } from "./ReviewCard";
 import { Review } from "@/types/definitions";
@@ -28,7 +29,7 @@ export const ReviewsList = ({ reviews, isLoading, onReviewDeleted }: ReviewsList
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-8">
       {reviews.map((review) => (
         <div key={review.id} className="reviews-animation-fade">
           <ReviewCard 
