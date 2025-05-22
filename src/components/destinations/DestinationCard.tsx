@@ -135,8 +135,8 @@ export const DestinationCard = ({
             height="225"
           />
           
-          {/* Gradient overlay for text readability - enhanced for better visual appeal */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/70"></div>
+          {/* Gradient overlay for text readability - enhanced for better contrast with main article images */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70"></div>
           
           {/* Destination title overlay */}
           <div className="absolute bottom-3 left-3 right-3">

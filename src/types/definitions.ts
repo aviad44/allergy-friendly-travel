@@ -56,6 +56,7 @@ export type DestinationId =
   | 'abu-dhabi'
   | 'thailand'  // Added 'thailand' to fix the destination-data.ts error
   | 'portugal'  // Added 'portugal' to fix the destination-data.ts error
+  | 'swiss-alps' // Added to fix destination-data.ts error
   | 'koh-samui'; // Added to support Thailand destinations
 
 export interface Hotel {
@@ -93,7 +94,7 @@ export interface Restaurant {
   guestReview?: string;
   isPurelyAllergyFriendly: boolean;
   website?: string;
-  contactInfo?: string; // Added to fix destination-athens errors
+  contactInfo?: string | { phone: string; email: string }; // Updated to support both string and object formats
 }
 
 export interface DestinationContent {
