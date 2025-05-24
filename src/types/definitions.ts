@@ -1,88 +1,42 @@
 
-export type LanguageCode = 'en' | 'he';
+export type DestinationId = 
+  | 'london' | 'paris' | 'barcelona' | 'cyprus' | 'rome' | 'abu-dhabi' | 'crete' 
+  | 'tokyo' | 'thailand' | 'hotel-chains' | 'new-york' | 'portugal' | 'swiss-alps' 
+  | 'koh-samui' | 'turkey' | 'cruise-lines' | 'toronto' | 'ayia-napa' | 'tuscany' 
+  | 'gluten-free-europe' | 'athens' | 'eilat';
+
+export type LanguageCode = 'en' | 'he' | 'ar' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'tr' | 'el';
 
 export interface Destination {
-  id: string;
+  id: DestinationId;
   name: string;
   country: string;
   description: string;
-  image?: string;
   subtitle?: string;
+  image?: string;
 }
-
-export type DestinationId =
-  | 'london'
-  | 'paris'
-  | 'new-york'
-  | 'tokyo'
-  | 'dubai'
-  | 'barcelona'
-  | 'rome'
-  | 'amsterdam'
-  | 'santorini'
-  | 'bali'
-  | 'cancun'
-  | 'venice'
-  | 'florence'
-  | 'prague'
-  | 'budapest'
-  | 'vienna'
-  | 'munich'
-  | 'singapore'
-  | 'sydney'
-  | 'cape-town'
-  | 'rio-de-janeiro'
-  | 'seoul'
-  | 'hong-kong'
-  | 'bangkok'
-  | 'istanbul'
-  | 'kyoto'
-  | 'auckland'
-  | 'seville'
-  | 'marrakech'
-  | 'cairo'
-  | 'dublin'
-  | 'nice'
-  | 'porto'
-  | 'lisbon'
-  | 'crete'
-  | 'cyprus'
-  | 'athens'
-  | 'eilat'
-  | 'tel-aviv'
-  | 'hotel-chains'
-  | 'turkey'
-  | 'toronto'
-  | 'abu-dhabi'
-  | 'thailand'
-  | 'portugal'
-  | 'swiss-alps'
-  | 'koh-samui'
-  | 'ayia-napa'
-  | 'tuscany'
-  | 'gluten-free-europe'
-  | 'cruise-lines';
 
 export interface Hotel {
   id?: string;
   name: string;
-  location?: string;
-  stars?: number;
-  address: string;
   description: string;
-  allergenFriendly?: string[];
-  amenities?: string[];
-  features: string[];
   rating?: number;
-  priceRange?: string;
-  imageUrl?: string;
-  websiteUrl?: string;
-  bookingUrl: string;
+  specialDiets?: string[];
+  features?: string[];
+  bookingUrl?: string;
   guestReview?: string;
+  website?: string;
+}
+
+export interface Restaurant {
+  id?: string;
+  name: string;
+  description: string;
+  rating?: number;
+  features?: string[];
   isPurelyAllergyFriendly?: boolean;
-  quote?: string;
-  image?: string;
-  reviews?: Array<{ text: string; author?: string; rating?: number }>;
+  guestReview?: string;
+  website?: string;
 }
 
 export interface FAQ {
@@ -90,56 +44,43 @@ export interface FAQ {
   answer: string;
 }
 
-export interface Restaurant {
-  id: string;
-  name: string;
-  description: string;
-  location: string;
-  features: string[];
-  guestReview?: string;
-  isPurelyAllergyFriendly: boolean;
-  website?: string;
-  contactInfo?: string | { phone: string; email: string };
+export interface LanguageTable {
+  headers: string[];
+  rows: string[][];
 }
 
 export interface DestinationContent {
-  hotels?: Hotel[];
-  faqs?: FAQ[];
   intro?: string | string[];
-  tips?: string[];
+  hotels?: Hotel[];
   restaurants?: Restaurant[];
+  faqs?: FAQ[];
+  languageTable?: LanguageTable;
+  tips?: string[];
   longDescription?: string;
-  languageTable?: {
-    headers: string[];
-    rows: string[][];
-  };
-  bonusTools?: BonusTool[];
-  highlights?: string[];
+  bonusTools?: any;
 }
 
-// Add BonusTool interface for bonusTools property
-export interface BonusTool {
-  name: string;
-  description: string;
-  link: string;
-}
-
-// Add Review and sortOptions types for the review components
 export interface Review {
   id: string;
-  author_name: string;
-  created_at: string;
-  destination?: string;
-  traveler_type?: string;
   text: string;
   rating: number;
-  language?: string;
+  created_at: string;
+  author_name?: string;
+  destination?: string;
+  traveler_type?: string;
 }
 
-export const sortOptions = ['newest', 'oldest', 'highestRated', 'lowestRated'] as const;
+export const sortOptions = ['newest', 'rating', 'oldest', 'highestRated', 'lowestRated'] as const;
 
-// Add languages array for DestinationNavigation.tsx
-export const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'he', name: 'Hebrew' }
-];
+export const languages = {
+  en: 'English',
+  he: 'עברית',
+  ar: 'العربية',
+  es: 'Español',
+  fr: 'Français',
+  de: 'Deutsch',
+  it: 'Italiano',
+  pt: 'Português',
+  tr: 'Türkçe',
+  el: 'Ελληνικά'
+};
