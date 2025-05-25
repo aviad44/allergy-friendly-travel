@@ -1,4 +1,5 @@
 
+
 export type DestinationId = 
   | 'london' | 'paris' | 'barcelona' | 'cyprus' | 'rome' | 'abu-dhabi' | 'crete' 
   | 'tokyo' | 'thailand' | 'hotel-chains' | 'new-york' | 'portugal' | 'swiss-alps' 
@@ -26,6 +27,14 @@ export interface Hotel {
   bookingUrl?: string;
   guestReview?: string;
   website?: string;
+  location?: string;
+  address?: string;
+  quote?: string;
+  image?: string;
+  allergenFriendly?: string[];
+  amenities?: string[];
+  isPurelyAllergyFriendly?: boolean;
+  stars?: number;
 }
 
 export interface Restaurant {
@@ -37,6 +46,7 @@ export interface Restaurant {
   isPurelyAllergyFriendly?: boolean;
   guestReview?: string;
   website?: string;
+  location?: string;
 }
 
 export interface FAQ {
@@ -72,15 +82,16 @@ export interface Review {
 
 export const sortOptions = ['newest', 'rating', 'oldest', 'highestRated', 'lowestRated'] as const;
 
-export const languages = {
-  en: 'English',
-  he: 'עברית',
-  ar: 'العربية',
-  es: 'Español',
-  fr: 'Français',
-  de: 'Deutsch',
-  it: 'Italiano',
-  pt: 'Português',
-  tr: 'Türkçe',
-  el: 'Ελληνικά'
-};
+export const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'he', name: 'עברית' },
+  { code: 'ar', name: 'العربية' },
+  { code: 'es', name: 'Español' },
+  { code: 'fr', name: 'Français' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'it', name: 'Italiano' },
+  { code: 'pt', name: 'Português' },
+  { code: 'tr', name: 'Türkçe' },
+  { code: 'el', name: 'Ελληνικά' }
+];
+
