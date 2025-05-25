@@ -16,16 +16,12 @@ export const getAbsoluteImageUrl = (imageUrl: string): string => {
 // Create a record with all destination IDs using the default image for those without a specific image
 const defaultDestinations: Record<DestinationId, string> = {} as Record<DestinationId, string>;
 
-// Set all destinations to use the default image
+// Set all destinations to use the default image - only using valid DestinationIds
 const allDestinationIds: DestinationId[] = [
   'london', 'paris', 'barcelona', 'cyprus', 'rome', 'abu-dhabi', 'crete', 
   'tokyo', 'thailand', 'hotel-chains', 'new-york', 'portugal', 'swiss-alps', 
   'koh-samui', 'turkey', 'cruise-lines', 'toronto', 'ayia-napa', 'tuscany', 
-  'gluten-free-europe', 'athens', 'eilat', 'dubai', 'amsterdam', 'santorini', 
-  'bali', 'cancun', 'venice', 'florence', 'prague', 'budapest', 'vienna', 
-  'munich', 'singapore', 'sydney', 'cape-town', 'rio-de-janeiro', 'seoul', 
-  'hong-kong', 'bangkok', 'istanbul', 'kyoto', 'auckland', 'seville', 
-  'marrakech', 'cairo', 'dublin', 'nice', 'porto', 'lisbon', 'tel-aviv'
+  'gluten-free-europe', 'athens', 'eilat'
 ];
 
 allDestinationIds.forEach(id => {

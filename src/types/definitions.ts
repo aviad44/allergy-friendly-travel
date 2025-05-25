@@ -35,6 +35,12 @@ export interface Hotel {
   amenities?: string[];
   isPurelyAllergyFriendly?: boolean;
   stars?: number;
+  priceRange?: string;
+  reviews?: Array<{
+    text: string;
+    author: string;
+    rating: number;
+  }>;
 }
 
 export interface Restaurant {
@@ -47,6 +53,10 @@ export interface Restaurant {
   guestReview?: string;
   website?: string;
   location?: string;
+  contactInfo?: {
+    phone?: string;
+    email?: string;
+  };
 }
 
 export interface FAQ {
@@ -68,6 +78,7 @@ export interface DestinationContent {
   tips?: string[];
   longDescription?: string;
   bonusTools?: any;
+  highlights?: string[];
 }
 
 export interface Review {
