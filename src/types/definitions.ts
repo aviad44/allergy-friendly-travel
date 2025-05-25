@@ -1,5 +1,4 @@
 
-
 export type DestinationId = 
   | 'london' | 'paris' | 'barcelona' | 'cyprus' | 'rome' | 'abu-dhabi' | 'crete' 
   | 'tokyo' | 'thailand' | 'hotel-chains' | 'new-york' | 'portugal' | 'swiss-alps' 
@@ -31,6 +30,7 @@ export interface Hotel {
   address?: string;
   quote?: string;
   image?: string;
+  imageUrl?: string;
   allergenFriendly?: string[];
   amenities?: string[];
   isPurelyAllergyFriendly?: boolean;
@@ -105,4 +105,3 @@ export const languages = [
   { code: 'tr', name: 'Türkçe' },
   { code: 'el', name: 'Ελληνικά' }
 ];
-
