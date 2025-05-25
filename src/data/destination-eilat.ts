@@ -1,3 +1,4 @@
+
 import { DestinationContent, Hotel, FAQ } from '@/types/definitions';
 
 const eilatHotels: Hotel[] = [
@@ -14,7 +15,7 @@ const eilatHotels: Hotel[] = [
     rating: 4.7,
     priceRange: '$$',
     imageUrl: '/lovable-uploads/48a5bd4e-8c30-41ef-835e-981d6731b3b8.png',
-    websiteUrl: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive',
+    website: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive',
     bookingUrl: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive',
     guestReview: "My child ate in a hotel restaurant without fear. I've never seen him so calm. For the first time in years, I slept well at a hotel. Someone was thinking about us.",
     isPurelyAllergyFriendly: true
