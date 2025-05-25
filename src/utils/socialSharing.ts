@@ -1,8 +1,8 @@
 
 import { DestinationId } from "@/types/definitions";
 
-// Add default image for social sharing
-export const DEFAULT_SOCIAL_IMAGE = 'https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png';
+// Main hero image from the homepage - this will be the default for the site
+export const DEFAULT_SOCIAL_IMAGE = 'https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png';
 
 // Helper function to ensure image URLs are absolute
 export const getAbsoluteImageUrl = (imageUrl: string): string => {

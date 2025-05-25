@@ -10,7 +10,7 @@ import { SocialTags } from "@/components/SocialTags";
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
   const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
-  // Using the absolute URL here is critical for social sharing
+  // Using the hero image as the main social sharing image for the homepage
   const mainImage = 'https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png';
   
   // Initialize performance monitoring
