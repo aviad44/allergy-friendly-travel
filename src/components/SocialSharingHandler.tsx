@@ -13,6 +13,7 @@ export const SocialSharingHandler = () => {
   useEffect(() => {
     // Debug information to verify the component is functioning
     console.log('SocialSharingHandler initialized for:', location.pathname);
+    console.log('Default social image being used:', DEFAULT_SOCIAL_IMAGE);
     
     // Detect if running in a Facebook user agent
     const isSocialCrawler = /facebookexternalhit|Facebot|XING-contained\/|LinkedInBot|Twitterbot|WhatsApp|Slackbot/i.test(
@@ -41,6 +42,12 @@ export const SocialSharingHandler = () => {
         pageTitle = `Allergy-Friendly Hotels in ${destName} | Safe Dining Guide`;
         pageDescription = `Discover the best allergy-friendly hotels in ${destName}. Reviews of accommodations catering to gluten-free, dairy-free, and other dietary restrictions.`;
       }
+    }
+    
+    // Force override to ensure correct image on homepage
+    if (location.pathname === '/' || location.pathname === '') {
+      imageUrl = 'https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png';
+      console.log('Homepage detected, forcing correct image:', imageUrl);
     }
     
     // Function to create or update meta tags
