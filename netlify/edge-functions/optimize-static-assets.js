@@ -1,4 +1,3 @@
-
 export default async function handler(request, context) {
   // Define critical bot user agents that need prerendering
   const botUserAgents = [
@@ -45,13 +44,13 @@ export default async function handler(request, context) {
         let ogTitle = "Allergy-Free Travel – Hotels for Food Allergies";
         let ogDesc = "Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind.";
         
-        // Default to a working generic image
-        let ogImage = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+        // Use a professional tropical resort image similar to the uploaded one
+        let ogImage = "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
         
-        // For homepage, use a beautiful travel/vacation image that's guaranteed to work
+        // For homepage, use the tropical resort image that matches the site's vacation theme
         if (path === '/' || path === '') {
-          // Use a beautiful resort/vacation image that matches our site's theme
-          ogImage = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+          // This Unsplash image shows a beautiful tropical resort with infinity pool and ocean view - similar to the uploaded image
+          ogImage = "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
           ogTitle = "Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions";
           ogDesc = "Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more.";
         }
