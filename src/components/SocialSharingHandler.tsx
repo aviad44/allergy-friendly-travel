@@ -1,7 +1,7 @@
 
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { DEFAULT_SOCIAL_IMAGE, DESTINATION_OG_IMAGES } from '@/utils/socialSharing';
+import { DEFAULT_SOCIAL_IMAGE, DESTINATION_OG_IMAGES, updateMetaTags } from '@/utils/socialSharing';
 
 /**
  * This component dynamically handles social sharing metadata across all pages
@@ -12,14 +12,14 @@ export const SocialSharingHandler = () => {
   
   useEffect(() => {
     // Debug information to verify the component is functioning
-    console.log('SocialSharingHandler initialized');
+    console.log('SocialSharingHandler initialized for:', location.pathname);
     
     // Detect if running in a Facebook user agent
-    const isFacebookBot = /facebookexternalhit|Facebot|XING-contained\/|LinkedInBot|Twitterbot|WhatsApp/i.test(
+    const isSocialCrawler = /facebookexternalhit|Facebot|XING-contained\/|LinkedInBot|Twitterbot|WhatsApp|Slackbot/i.test(
       navigator.userAgent || ''
     );
     
-    if (isFacebookBot) {
+    if (isSocialCrawler) {
       console.log('Social media crawler detected!');
     }
     
@@ -43,54 +43,90 @@ export const SocialSharingHandler = () => {
       }
     }
     
-    // Function to update or create meta tags
-    const updateMetaTag = (selector: string, attribute: string, value: string) => {
-      let element = document.querySelector(selector) as HTMLMetaElement;
+    // Function to create or update meta tags
+    const updateOrCreateMetaTag = (property: string, content: string, tagType: 'meta' | 'link' = 'meta', attr = 'property') => {
+      let element = document.querySelector(`${tagType}[${attr}="${property}"]`);
       if (!element) {
-        element = document.createElement('meta');
-        element.setAttribute(attribute, selector.replace(/[[\]"]/g, ''));
+        element = document.createElement(tagType);
+        element.setAttribute(attr, property);
         document.head.appendChild(element);
       }
-      element.content = value;
+      
+      if (tagType === 'meta') {
+        (element as HTMLMetaElement).content = content;
+      } else if (tagType === 'link') {
+        (element as HTMLLinkElement).href = content;
+      }
     };
     
-    // Update essential OpenGraph tags
-    updateMetaTag('meta[property="og:image"]', 'property', imageUrl);
-    updateMetaTag('meta[property="og:image:secure_url"]', 'property', imageUrl);
-    updateMetaTag('meta[property="og:title"]', 'property', pageTitle);
-    updateMetaTag('meta[property="og:description"]', 'property', pageDescription);
-    updateMetaTag('meta[property="og:url"]', 'property', window.location.href);
+    // Update Open Graph meta tags
+    updateOrCreateMetaTag('og:title', pageTitle);
+    updateOrCreateMetaTag('og:description', pageDescription);
+    updateOrCreateMetaTag('og:image', imageUrl);
+    updateOrCreateMetaTag('og:image:secure_url', imageUrl);
+    updateOrCreateMetaTag('og:url', window.location.href);
+    updateOrCreateMetaTag('og:type', 'website');
+    updateOrCreateMetaTag('og:site_name', 'Allergy-Free Travel');
     
-    // Update Twitter tags
-    updateMetaTag('meta[name="twitter:image"]', 'name', imageUrl);
-    updateMetaTag('meta[name="twitter:title"]', 'name', pageTitle);
-    updateMetaTag('meta[name="twitter:description"]', 'name', pageDescription);
+    // Update Twitter Card tags
+    updateOrCreateMetaTag('twitter:card', 'summary_large_image', 'meta', 'name');
+    updateOrCreateMetaTag('twitter:title', pageTitle, 'meta', 'name');
+    updateOrCreateMetaTag('twitter:description', pageDescription, 'meta', 'name');
+    updateOrCreateMetaTag('twitter:image', imageUrl, 'meta', 'name');
+    updateOrCreateMetaTag('twitter:image:alt', `${pageTitle} - Allergy-Free Travel`, 'meta', 'name');
     
-    // Update WhatsApp specific tags
-    const thumbnailUrls = document.querySelectorAll('link[itemprop="thumbnailUrl"]');
-    thumbnailUrls.forEach(el => el.setAttribute('href', imageUrl));
+    // Add image_src link for Facebook
+    updateOrCreateMetaTag('image_src', imageUrl, 'link', 'rel');
     
-    const thumbnailLinks = document.querySelectorAll('link[itemprop="url"]');
-    thumbnailLinks.forEach(el => el.setAttribute('href', imageUrl));
+    // Add thumbnailUrl for WhatsApp
+    updateOrCreateMetaTag('thumbnailUrl', imageUrl, 'link', 'itemprop');
     
-    // Update link[rel="image_src"] for Facebook
-    const imageSrcLinks = document.querySelectorAll('link[rel="image_src"]');
-    imageSrcLinks.forEach(el => el.setAttribute('href', imageUrl));
+    // Ensure we have an thumbnail item with url attribute for WhatsApp and other platforms
+    let thumbnailSpan = document.querySelector('span[itemprop="thumbnail"]');
+    if (!thumbnailSpan) {
+      thumbnailSpan = document.createElement('span');
+      thumbnailSpan.setAttribute('itemprop', 'thumbnail');
+      thumbnailSpan.setAttribute('itemscope', '');
+      thumbnailSpan.setAttribute('itemtype', 'http://schema.org/ImageObject');
+      document.head.appendChild(thumbnailSpan);
+      
+      const urlLink = document.createElement('link');
+      urlLink.setAttribute('itemprop', 'url');
+      urlLink.setAttribute('href', imageUrl);
+      thumbnailSpan.appendChild(urlLink);
+    } else {
+      const urlLink = thumbnailSpan.querySelector('link[itemprop="url"]');
+      if (urlLink) {
+        urlLink.setAttribute('href', imageUrl);
+      } else {
+        const newUrlLink = document.createElement('link');
+        newUrlLink.setAttribute('itemprop', 'url');
+        newUrlLink.setAttribute('href', imageUrl);
+        thumbnailSpan.appendChild(newUrlLink);
+      }
+    }
     
-    console.log('Updated social sharing metadata', {
-      image: imageUrl,
-      title: pageTitle
-    });
+    // Add Open Graph prefix to html tag if not already there
+    const htmlTag = document.querySelector('html');
+    if (htmlTag && !htmlTag.getAttribute('prefix')?.includes('og:')) {
+      const currentPrefix = htmlTag.getAttribute('prefix') || '';
+      htmlTag.setAttribute('prefix', `${currentPrefix} og: https://ogp.me/ns#`.trim());
+    }
+    
+    console.log('Social sharing tags updated for:', location.pathname);
+    console.log('Using image:', imageUrl);
     
     // Force a second update after a slight delay to handle race conditions
     setTimeout(() => {
-      updateMetaTag('meta[property="og:image"]', 'property', imageUrl);
-      updateMetaTag('meta[property="og:image:secure_url"]', 'property', imageUrl);
+      updateOrCreateMetaTag('og:image', imageUrl);
+      updateOrCreateMetaTag('og:image:secure_url', imageUrl);
+      updateOrCreateMetaTag('image_src', imageUrl, 'link', 'rel');
       
       // Double-check that critical tags were updated correctly
       const ogImage = document.querySelector('meta[property="og:image"]');
       console.log('Verified OG Image tag:', ogImage ? (ogImage as HTMLMetaElement).content : 'MISSING!');
     }, 500);
+    
   }, [location.pathname]);
   
   return null; // This component doesn't render anything

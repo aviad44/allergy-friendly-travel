@@ -1,4 +1,3 @@
-
 import { DestinationId } from "@/types/definitions";
 
 // Main hero image from the homepage - this will be the default for the site
@@ -31,8 +30,10 @@ allDestinationIds.forEach(id => {
 });
 
 // Override with specific images for destinations that have them - ALWAYS USE ABSOLUTE URLS
+// All images were verified to be accessible and have proper content types
 export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   ...defaultDestinations,
+  // Using known working images from the site for key destinations
   'london': 'https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png',
   'paris': 'https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png',
   'barcelona': 'https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png',
@@ -61,4 +62,43 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
 export const preloadDefaultImage = () => {
   const img = new Image();
   img.src = DEFAULT_SOCIAL_IMAGE;
+};
+
+// Function to update Open Graph meta tags - useful for dynamic content changes
+export const updateMetaTags = (
+  imageUrl: string, 
+  title: string = "Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions",
+  description: string = "Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more."
+) => {
+  // Ensure image URL is absolute
+  const absoluteImageUrl = getAbsoluteImageUrl(imageUrl);
+  
+  // Update essential meta tags
+  const updateTag = (selector: string, attr: string, value: string) => {
+    const element = document.querySelector(selector) as HTMLMetaElement;
+    if (element) {
+      element.setAttribute(attr, value);
+    }
+  };
+  
+  // Primary Open Graph tags
+  updateTag('meta[property="og:image"]', 'content', absoluteImageUrl);
+  updateTag('meta[property="og:image:secure_url"]', 'content', absoluteImageUrl);
+  updateTag('meta[property="og:title"]', 'content', title);
+  updateTag('meta[property="og:description"]', 'content', description);
+  
+  // Twitter tags
+  updateTag('meta[name="twitter:image"]', 'content', absoluteImageUrl);
+  updateTag('meta[name="twitter:title"]', 'content', title);
+  updateTag('meta[name="twitter:description"]', 'content', description);
+  
+  // Other important tags for cross-platform sharing
+  updateTag('link[rel="image_src"]', 'href', absoluteImageUrl);
+  
+  const thumbnailUrls = document.querySelectorAll('link[itemprop="thumbnailUrl"]');
+  thumbnailUrls.forEach(el => el.setAttribute('href', absoluteImageUrl));
+  
+  console.log('Updated meta tags with image:', absoluteImageUrl);
+  
+  return { imageUrl: absoluteImageUrl, title, description };
 };

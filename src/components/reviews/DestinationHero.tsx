@@ -4,7 +4,7 @@ import { Destination } from "@/types/reviews";
 import { HeroImage } from "./HeroImage";
 import { DestinationInfo } from "./DestinationInfo";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
-import { DESTINATION_OG_IMAGES } from "@/utils/socialSharing";
+import { DESTINATION_OG_IMAGES, updateMetaTags } from "@/utils/socialSharing";
 
 interface DestinationHeroProps {
   destination: Destination;
@@ -64,46 +64,41 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     altText = `Luxurious hotel lobby in Athens with elegant furnishings - Allergy-friendly Greek accommodation`;
   }
   
-  // Preload the image to ensure it's cached for sharing
+  // Preload the image and update meta tags when component mounts
   useEffect(() => {
     // Preload main image
     const img = new Image();
     img.src = imageUrl;
     console.log(`DestinationHero: Preloading main image: ${imageUrl}`);
     
-    // Ensure image URL is absolute
-    const absoluteImageUrl = imageUrl.startsWith('http') 
-      ? imageUrl 
-      : `https://www.allergy-free-travel.com${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
-      
-    // Update document head with page-specific meta tags if needed
+    // Format the destination name for better title
+    const destName = destination.name.trim();
+    
+    // Use our shared utility to update all meta tags at once
+    updateMetaTags(
+      imageUrl,
+      `Allergy-Friendly Hotels in ${destName} | Safe Travel Guide 2025`,
+      `Discover the best allergy-friendly hotels in ${destName}. Comprehensive guide to accommodations catering to food allergies, gluten-free, and special dietary needs.`
+    );
+    
+    // Explicitly create image_src link which helps various social media platforms
+    let imageSrcLink = document.querySelector('link[rel="image_src"]');
+    if (!imageSrcLink) {
+      imageSrcLink = document.createElement('link');
+      imageSrcLink.setAttribute('rel', 'image_src');
+      document.head.appendChild(imageSrcLink);
+    }
+    imageSrcLink.setAttribute('href', imageUrl);
+    
+    // Force a second update after a slight delay
     setTimeout(() => {
-      // Check if OG image is present
-      const ogImageTag = document.querySelector('meta[property="og:image"]');
-      if (ogImageTag) {
-        const currentOgImage = ogImageTag.getAttribute('content');
-        
-        // If current OG image doesn't match our hero image or isn't absolute, update it
-        if (currentOgImage && 
-            (!currentOgImage.startsWith('http') || 
-             (currentOgImage !== absoluteImageUrl && !absoluteImageUrl.includes(currentOgImage) && !currentOgImage.includes(absoluteImageUrl)))) {
-          console.log(`DestinationHero: OG Image mismatch or not absolute. Current: ${currentOgImage}, Hero: ${absoluteImageUrl}`);
-          ogImageTag.setAttribute('content', absoluteImageUrl);
-          console.log(`DestinationHero: Updated OG Image to: ${absoluteImageUrl}`);
-          
-          // Also update image_src
-          const imageSrc = document.querySelector('link[rel="image_src"]');
-          if (imageSrc) {
-            imageSrc.setAttribute('href', absoluteImageUrl);
-          } else {
-            const linkElement = document.createElement('link');
-            linkElement.rel = 'image_src';
-            linkElement.href = absoluteImageUrl;
-            document.head.appendChild(linkElement);
-          }
-        }
+      // Double check meta tags
+      const ogImage = document.querySelector('meta[property="og:image"]');
+      if (ogImage && (ogImage as HTMLMetaElement).content !== imageUrl) {
+        (ogImage as HTMLMetaElement).content = imageUrl;
+        console.log('DestinationHero: Fixed OG image in delayed update');
       }
-    }, 300);
+    }, 500);
   }, [destination.id, imageUrl, destination.name]);
 
   return (

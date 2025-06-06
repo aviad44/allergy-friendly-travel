@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DestinationReviews } from '@/components/reviews/DestinationReviews';
 import { Helmet } from 'react-helmet';
+import { DESTINATION_OG_IMAGES } from '@/utils/socialSharing';
 
 const Portugal = () => {
   // SEO metadata
@@ -11,12 +12,12 @@ const Portugal = () => {
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/portugal";
   const currentDate = new Date().toISOString().split('T')[0];
   
-  // Use a consistent image that matches our teaser
-  const imageUrl = "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1200&q=80";
-  const imageAlt = "Colorful buildings in Porto, Portugal - Allergy-friendly travel destination";
+  // Always use our verified working images from the centralized repository
+  const imageUrl = DESTINATION_OG_IMAGES['portugal'];
+  const imageAlt = "Beautiful view of Portugal's coastline - Allergy-friendly travel destination";
   
   // Preload the image
-  React.useEffect(() => {
+  useEffect(() => {
     const img = new Image();
     img.src = imageUrl;
   }, []);
@@ -30,18 +31,25 @@ const Portugal = () => {
         <link rel="canonical" href={canonicalUrl} />
         <meta name="author" content="Allergy-Free Travel" />
         
-        {/* Open Graph Meta Tags */}
+        {/* Open Graph Meta Tags - Essential for social sharing */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content={imageUrl} />
+        <meta property="og:image:secure_url" content={imageUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Allergy-Free Travel" />
+        
+        {/* Facebook and WhatsApp specific */}
+        <link rel="image_src" href={imageUrl} />
+        <link itemProp="thumbnailUrl" href={imageUrl} />
         
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={imageUrl} />
+        <meta name="twitter:image:alt" content={imageAlt} />
         
         {/* Schema.org markup */}
         <script type="application/ld+json">
@@ -50,7 +58,13 @@ const Portugal = () => {
             "@type": "TravelArticle",
             "headline": "Allergy-Friendly Hotels in Portugal (2025 Guide)",
             "description": pageDescription,
-            "image": imageUrl,
+            "image": {
+              "@type": "ImageObject",
+              "url": imageUrl,
+              "width": "1200",
+              "height": "630",
+              "caption": imageAlt
+            },
             "author": {
               "@type": "Organization",
               "name": "Allergy-Free Travel"
@@ -60,7 +74,7 @@ const Portugal = () => {
               "name": "Allergy-Free Travel",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://www.allergy-free-travel.com/og-image.png"
+                "url": "https://www.allergy-free-travel.com/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png"
               }
             },
             "datePublished": currentDate,
