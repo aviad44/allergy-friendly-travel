@@ -1,6 +1,7 @@
 
 import { toast } from "sonner";
 import { copyToClipboard, downloadAsPDF, downloadAsPNG, shareToWhatsApp } from '../utils/cardGeneration';
+import { DEFAULT_SOCIAL_IMAGE } from "@/utils/socialSharing";
 
 export function useAllergyCardSharing() {
   const handleCopyToClipboard = (generatedCard: string | null, translatedCard: string | null) => {
@@ -29,7 +30,7 @@ export function useAllergyCardSharing() {
     // Add meta tags temporarily to enhance sharing
     const ensureMetaTags = () => {
       const baseUrl = 'https://www.allergy-free-travel.com';
-      const imagePath = `${baseUrl}/lovable-uploads/c0d4e111-501f-46b3-94ad-23c5b56f9736.png`;
+      const imagePath = DEFAULT_SOCIAL_IMAGE; // Use our consistent main image
       const title = "My Allergy Translation Card";
       const description = "Custom allergy translation card from Allergy-Free Travel";
       
@@ -56,6 +57,7 @@ export function useAllergyCardSharing() {
       updateOrCreateTag('og:locale', 'en_US');
       
       // WhatsApp specific meta tags with itemprop
+      // These tags are crucial for WhatsApp sharing
       const addItemPropTags = () => {
         // Remove any existing itemprop tags
         const existingTags = document.querySelectorAll('[itemprop="thumbnailUrl"], [itemprop="thumbnail"]');
@@ -79,6 +81,12 @@ export function useAllergyCardSharing() {
         
         thumbSpan.appendChild(urlLink);
         document.head.appendChild(thumbSpan);
+        
+        // Add explicit image_src link for Facebook
+        const imageSrc = document.createElement('link');
+        imageSrc.setAttribute('rel', 'image_src');
+        imageSrc.setAttribute('href', imagePath);
+        document.head.appendChild(imageSrc);
       };
       
       addItemPropTags();
@@ -98,6 +106,14 @@ export function useAllergyCardSharing() {
       updateOrCreateTwitterTag('twitter:image', imagePath);
       updateOrCreateTwitterTag('twitter:title', title);
       updateOrCreateTwitterTag('twitter:description', description);
+      
+      // Add HTML prefix for OG tags
+      const htmlTag = document.querySelector('html');
+      if (htmlTag) {
+        htmlTag.setAttribute('prefix', 'og: https://ogp.me/ns#');
+      }
+      
+      console.log('Social sharing metadata updated for WhatsApp sharing');
     };
     
     ensureMetaTags();

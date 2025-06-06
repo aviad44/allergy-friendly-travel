@@ -9,6 +9,7 @@ export const getAbsoluteImageUrl = (imageUrl: string): string => {
   if (imageUrl.startsWith('http')) {
     return imageUrl;
   }
+  // Make sure we're using the full domain name even in development
   const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
   return `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
 };
@@ -25,10 +26,11 @@ const allDestinationIds: DestinationId[] = [
 ];
 
 allDestinationIds.forEach(id => {
+  // Always use absolute URLs for social sharing
   defaultDestinations[id] = DEFAULT_SOCIAL_IMAGE;
 });
 
-// Override with specific images for destinations that have them
+// Override with specific images for destinations that have them - ALWAYS USE ABSOLUTE URLS
 export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   ...defaultDestinations,
   'london': 'https://www.allergy-free-travel.com/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png',
@@ -53,4 +55,10 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'gluten-free-europe': 'https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png',
   'athens': 'https://www.allergy-free-travel.com/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png',
   'eilat': 'https://www.allergy-free-travel.com/lovable-uploads/48a5bd4e-8c30-41ef-835e-981d6731b3b8.png'
+};
+
+// Pre-load the default image for better performance
+export const preloadDefaultImage = () => {
+  const img = new Image();
+  img.src = DEFAULT_SOCIAL_IMAGE;
 };

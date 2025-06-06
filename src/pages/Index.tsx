@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { preloadCriticalImages } from "@/utils/image-optimization";
 import { initPerformanceMonitoring } from "@/utils/performanceMonitoring";
 import { SocialTags } from "@/components/SocialTags";
+import { preloadDefaultImage } from "@/utils/socialSharing";
+import { Helmet } from "react-helmet";
 
 export default function Index() {
   const currentDate = new Date().toISOString().split('T')[0];
@@ -16,6 +18,7 @@ export default function Index() {
   // Initialize performance monitoring
   useEffect(() => {
     initPerformanceMonitoring();
+    preloadDefaultImage(); // Preload the default sharing image
   }, []);
   
   // Preload critical images for index page
@@ -27,6 +30,16 @@ export default function Index() {
   
   return (
     <>
+      {/* Add direct Helmet tags for the homepage for maximum compatibility */}
+      <Helmet>
+        <meta property="og:image" content={mainImage} />
+        <meta property="og:image:secure_url" content={mainImage} />
+        <meta property="og:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions" />
+        <meta property="og:description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
+        <meta property="og:url" content="https://www.allergy-free-travel.com/" />
+        <link rel="image_src" href={mainImage} />
+      </Helmet>
+    
       <SocialTags
         title="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions"
         description="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more."
