@@ -44,27 +44,30 @@ export default async function handler(request, context) {
         const destMatch = path.match(/\/destinations\/([a-zA-Z0-9-_]+)/);
         let ogTitle = "Allergy-Free Travel – Hotels for Food Allergies";
         let ogDesc = "Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind.";
-        let ogImage = "https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
         
-        // Custom image handling for specific destinations
+        // Use a working image from Unsplash that we know is accessible
+        let ogImage = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+        
+        // Custom image handling for specific destinations using working Unsplash images
         if (destMatch) {
           const destId = destMatch[1].toLowerCase();
           
-          // Map of critical destinations to their images (MUST match what's in our components)
+          // Map of critical destinations to their working images
           const criticalDestinations = {
             'crete': "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80",
-            'cyprus': "https://www.allergy-free-travel.com/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png",
+            'cyprus': "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
             'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-            'athens': "https://www.allergy-free-travel.com/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png",
-            'hotel-chains': "https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
-            'ayia-napa': "https://www.allergy-free-travel.com/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png",
-            'rome': "https://www.allergy-free-travel.com/lovable-uploads/decde333-fd7d-4147-8bad-637fbf08028c.png",
+            'athens': "https://images.unsplash.com/photo-1555993539-1732b0258235?auto=format&fit=crop&w=1200&q=80",
+            'hotel-chains': "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+            'ayia-napa': "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
+            'rome': "https://images.unsplash.com/photo-1552832230-c0197047daf6?auto=format&fit=crop&w=1200&q=80",
             'tokyo': "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
             'paris': "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            'switzerland': "https://www.allergy-free-travel.com/lovable-uploads/a53b2ba4-d551-4fcd-bd11-36c4643be95b.png",
+            'switzerland': "https://images.unsplash.com/photo-1531816458010-fb7685eecbcb?auto=format&fit=crop&w=1200&q=80",
             'london': "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            'tuscany': "https://www.allergy-free-travel.com/lovable-uploads/ea1edce9-b144-449c-a4c7-0e3f02c54be9.png",
-            'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80"
+            'tuscany': "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=1200&q=80",
+            'new-york': "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80",
+            'portugal': "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1200&q=80"
           };
           
           if (criticalDestinations[destId]) {
@@ -74,9 +77,9 @@ export default async function handler(request, context) {
           }
         }
         
-        // For homepage, use default image
+        // For homepage, use a specific hotel/travel image from Unsplash
         if (path === '/' || path === '') {
-          ogImage = "https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
+          ogImage = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
           ogTitle = "Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions";
           ogDesc = "Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more.";
         }
@@ -85,6 +88,7 @@ export default async function handler(request, context) {
         const html = `<!DOCTYPE html>
         <html prefix="og: https://ogp.me/ns#">
         <head>
+          <meta charset="UTF-8">
           <title>${ogTitle}</title>
           <meta property="og:title" content="${ogTitle}" />
           <meta property="og:description" content="${ogDesc}" />
@@ -92,18 +96,23 @@ export default async function handler(request, context) {
           <meta property="og:image:secure_url" content="${ogImage}" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
+          <meta property="og:image:type" content="image/jpeg" />
           <meta property="og:url" content="${url}" />
           <meta property="og:type" content="website" />
           <meta property="og:site_name" content="Allergy-Free Travel" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:image" content="${ogImage}" />
+          <meta name="twitter:title" content="${ogTitle}" />
+          <meta name="twitter:description" content="${ogDesc}" />
           <link rel="canonical" href="${url}" />
           <link rel="image_src" href="${ogImage}" />
-          <meta http-equiv="refresh" content="0;URL='${url}'" />
+          <meta http-equiv="refresh" content="2;URL='${url}'" />
         </head>
         <body>
-          <p>Redirecting to Allergy Free Travel...</p>
-          <img src="${ogImage}" alt="Allergy Free Travel" style="width:100%; max-width:600px;" />
+          <h1>${ogTitle}</h1>
+          <p>${ogDesc}</p>
+          <img src="${ogImage}" alt="Allergy Free Travel" style="width:100%; max-width:600px; height:auto;" />
+          <p><a href="${url}">Continue to Allergy Free Travel</a></p>
         </body>
         </html>`;
         
@@ -112,10 +121,10 @@ export default async function handler(request, context) {
         return new Response(html, {
           status: 200,
           headers: {
-            'Content-Type': 'text/html',
-            'Cache-Control': 'no-store, max-age=0',
+            'Content-Type': 'text/html; charset=utf-8',
+            'Cache-Control': 'public, max-age=300',
             'Access-Control-Allow-Origin': '*', 
-            'X-Robots-Tag': 'noindex'
+            'X-Robots-Tag': 'noindex, nofollow'
           }
         });
       } catch (error) {
