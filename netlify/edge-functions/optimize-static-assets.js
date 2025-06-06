@@ -1,3 +1,4 @@
+
 export default async function handler(request, context) {
   // Define critical bot user agents that need prerendering
   const botUserAgents = [
@@ -47,10 +48,10 @@ export default async function handler(request, context) {
         // Default to a working generic image
         let ogImage = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
         
-        // For homepage, use the ACTUAL homepage hero image
+        // For homepage, use a beautiful travel/vacation image that's guaranteed to work
         if (path === '/' || path === '') {
-          // Try the actual homepage image first, with fallback to Unsplash
-          ogImage = "https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
+          // Use a beautiful resort/vacation image that matches our site's theme
+          ogImage = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
           ogTitle = "Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions";
           ogDesc = "Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more.";
         }
@@ -95,7 +96,7 @@ export default async function handler(request, context) {
           <meta property="og:image:secure_url" content="${ogImage}" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
-          <meta property="og:image:type" content="image/png" />
+          <meta property="og:image:type" content="image/jpeg" />
           <meta property="og:url" content="${url}" />
           <meta property="og:type" content="website" />
           <meta property="og:site_name" content="Allergy-Free Travel" />
