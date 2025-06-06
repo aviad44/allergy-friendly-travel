@@ -1,4 +1,3 @@
-
 export default async function handler(request, context) {
   // Define critical bot user agents that need prerendering
   const botUserAgents = [
@@ -45,12 +44,13 @@ export default async function handler(request, context) {
         let ogTitle = "Allergy-Free Travel – Hotels for Food Allergies";
         let ogDesc = "Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind.";
         
-        // Use a beautiful resort/hotel image that works well for travel sites
+        // Default to a working generic image
         let ogImage = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
         
-        // For homepage, use appropriate title and description with a nice travel image
+        // For homepage, use the ACTUAL homepage hero image
         if (path === '/' || path === '') {
-          ogImage = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+          // Try the actual homepage image first, with fallback to Unsplash
+          ogImage = "https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
           ogTitle = "Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions";
           ogDesc = "Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more.";
         }
@@ -95,7 +95,7 @@ export default async function handler(request, context) {
           <meta property="og:image:secure_url" content="${ogImage}" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
-          <meta property="og:image:type" content="image/jpeg" />
+          <meta property="og:image:type" content="image/png" />
           <meta property="og:url" content="${url}" />
           <meta property="og:type" content="website" />
           <meta property="og:site_name" content="Allergy-Free Travel" />
