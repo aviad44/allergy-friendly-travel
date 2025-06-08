@@ -57,22 +57,24 @@ const SearchResults = () => {
       }, 5000);
       
       try {
-        // Use the working openai-proxy function instead of the problematic search-with-gpt
-        const systemPrompt = "You are a hotel recommendation assistant for people with food allergies. Provide detailed hotel recommendations with specific information about allergy accommodations, kitchen protocols, and safety measures. Always respond in English only.";
+        // Enhanced system prompt for better consistency
+        const systemPrompt = `You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. 
+
+IMPORTANT: Format your response EXACTLY like this example:
+
+### Hotel Ritz Madrid ★★★★★
+**Address:** Plaza de la Lealtad 5, Madrid, Spain
+- ⭐ 5-star luxury hotel
+- 🍽️ Dedicated gluten-free kitchen area
+- 👨‍🍳 Trained staff for allergy protocols
+- 📞 +34 91 701 6767
+
+**Description:** This luxury hotel offers excellent gluten-free accommodations with trained staff.
+**Guest Quote:** "Amazing gluten-free breakfast options and very helpful staff" - Maria S.
+
+Always respond in English only. Provide 3-5 real hotels with complete information.`;
         
-        const userInput = `Find allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Please provide 3-5 specific hotels with the following format for each hotel:
-
-### Hotel Name ★★★★★
-**Address:** Full street address
-- ⭐ Star rating
-- 🍽️ Allergy accommodation details
-- 👨‍🍳 Kitchen/chef information
-- 📞 Phone number
-
-**Description:** Brief description of allergy services
-**Guest Quote:** "Sample guest review about allergy accommodation"
-
-Please provide real hotels with accurate information in English only.`;
+        const userInput = `Find allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Please provide specific hotels with detailed allergy accommodation information.`;
 
         console.log('📡 Calling openai-proxy function...');
         
@@ -80,7 +82,7 @@ Please provide real hotels with accurate information in English only.`;
           body: {
             userInput: userInput,
             systemPrompt: systemPrompt,
-            model: "gpt-4.1-2025-04-14",
+            model: "gpt-4o-mini",
             temperature: 0.7,
             max_tokens: 2000
           }
@@ -107,7 +109,7 @@ Please provide real hotels with accurate information in English only.`;
         setRecommendation(cleanedRecommendation);
         console.log('✅ Recommendation received, length:', cleanedRecommendation.length);
         
-        // Extract hotels from the recommendation
+        // Extract hotels from the recommendation using the improved parser
         try {
           const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
           

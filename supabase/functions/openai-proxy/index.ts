@@ -23,7 +23,7 @@ serve(async (req) => {
     console.log('⏱️ OpenAI Proxy function started at:', new Date().toISOString());
 
     // Parse request body
-    const { userInput, systemPrompt, model = "gpt-4.1-2025-04-14", temperature = 0.7, max_tokens = 2000 } = await req.json();
+    const { userInput, systemPrompt, model = "gpt-4o-mini", temperature = 0.7, max_tokens = 2000 } = await req.json();
     
     console.log('✅ Processing request:', { 
       inputLength: userInput.length,
@@ -33,8 +33,32 @@ serve(async (req) => {
       max_tokens
     });
 
-    // Default system prompt for hotel recommendations
-    const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed, structured, and always in English.";
+    // Improved system prompt that ensures consistent formatting
+    const enhancedSystemPrompt = `You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. 
+
+IMPORTANT: Format your response EXACTLY like this example:
+
+### Hotel Ritz Madrid ★★★★★
+**Address:** Plaza de la Lealtad 5, Madrid, Spain
+- ⭐ 5-star luxury hotel
+- 🍽️ Dedicated gluten-free kitchen area
+- 👨‍🍳 Trained staff for allergy protocols
+- 📞 +34 91 701 6767
+
+**Description:** This luxury hotel offers excellent gluten-free accommodations with trained staff.
+**Guest Quote:** "Amazing gluten-free breakfast options and very helpful staff" - Maria S.
+
+### Villa Magna Madrid ★★★★★
+**Address:** Paseo de la Castellana 22, Madrid, Spain
+- ⭐ 5-star hotel with spa
+- 🍽️ Gluten-free menu available
+- 👨‍🍳 Chef trained in allergy management
+- 📞 +34 91 587 1234
+
+**Description:** Modern hotel with excellent allergy-friendly dining options.
+**Guest Quote:** "Perfect for my celiac needs, great restaurant" - John D.
+
+Always respond in English only. Provide 3-5 real hotels with complete information.`;
 
     console.log('🔄 Sending request to OpenAI API...');
     const startTime = Date.now();
@@ -50,7 +74,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: systemPrompt || defaultSystemPrompt
+            content: systemPrompt || enhancedSystemPrompt
           },
           { role: 'user', content: userInput }
         ],
