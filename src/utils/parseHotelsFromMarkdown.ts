@@ -1,6 +1,6 @@
 
 /**
- * Enhanced parser for hotel information from markdown text returned by GPT
+ * Simplified and more robust parser for hotel information from markdown text
  */
 export const parseHotelsFromMarkdown = (markdownText: string): any[] => {
   if (!markdownText) {
@@ -9,74 +9,70 @@ export const parseHotelsFromMarkdown = (markdownText: string): any[] => {
   }
   
   try {
-    console.log('🔍 Parsing markdown text:', markdownText.substring(0, 500) + '...');
-    console.log('📝 Full response length:', markdownText.length);
+    console.log('🔍 Starting to parse markdown text...');
+    console.log('📄 Full response:', markdownText);
     
-    // Split by hotel headers - try multiple patterns
+    // Clean the text first
+    const cleanedText = markdownText
+      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/Format your response[\s\S]*?(?=\n\n|$)/g, '')
+      .trim();
+    
+    console.log('🧹 Cleaned text:', cleanedText.substring(0, 500) + '...');
+    
+    // Try to split by different hotel section patterns
     let hotelSections: string[] = [];
     
-    // Pattern 1: ### Hotel Name format
-    if (markdownText.includes('### ')) {
-      hotelSections = markdownText.split(/\n(?=###\s+)/);
-      console.log('📋 Using ### pattern, found sections:', hotelSections.length);
+    // Pattern 1: ### Hotel Name
+    if (cleanedText.includes('###')) {
+      hotelSections = cleanedText.split(/\n(?=###\s+)/);
+      console.log('📋 Found sections using ### pattern:', hotelSections.length);
     }
-    // Pattern 2: ## Hotel Name format  
-    else if (markdownText.includes('## ')) {
-      hotelSections = markdownText.split(/\n(?=##\s+)/);
-      console.log('📋 Using ## pattern, found sections:', hotelSections.length);
+    // Pattern 2: ## Hotel Name  
+    else if (cleanedText.includes('##')) {
+      hotelSections = cleanedText.split(/\n(?=##\s+)/);
+      console.log('📋 Found sections using ## pattern:', hotelSections.length);
     }
-    // Pattern 3: **Hotel Name** format
-    else if (markdownText.includes('**') && markdownText.includes('Hotel')) {
-      hotelSections = markdownText.split(/\n(?=\*\*[^*]*Hotel[^*]*\*\*)/i);
-      console.log('📋 Using **Hotel** pattern, found sections:', hotelSections.length);
+    // Pattern 3: Numbered list (1., 2., etc.)
+    else if (/^\d+\.\s/.test(cleanedText)) {
+      hotelSections = cleanedText.split(/\n(?=\d+\.\s)/);
+      console.log('📋 Found sections using numbered pattern:', hotelSections.length);
     }
-    // Pattern 4: Numbered list format
-    else if (/\d+\.\s/.test(markdownText)) {
-      hotelSections = markdownText.split(/\n(?=\d+\.\s)/);
-      console.log('📋 Using numbered list pattern, found sections:', hotelSections.length);
-    }
-    // Fallback: treat entire text as one section
+    // Fallback: treat as single section
     else {
-      hotelSections = [markdownText];
-      console.log('📋 Using fallback pattern, treating as single section');
+      hotelSections = [cleanedText];
+      console.log('📋 Using fallback - treating as single section');
     }
     
     const hotels = hotelSections
-      .filter(section => section.trim().length > 10) // Filter out very short sections
+      .filter(section => section.trim().length > 20) // Filter out very short sections
       .map((section, index) => {
         try {
-          console.log(`🏨 Processing hotel section ${index + 1}:`, section.substring(0, 200) + '...');
+          console.log(`🏨 Processing section ${index + 1}:`, section.substring(0, 200));
           
-          // Extract hotel name - try multiple patterns
-          let name = `Hotel ${index + 1}`; // Default fallback
+          // Extract hotel name with multiple fallback patterns
+          let name = `Hotel ${index + 1}`;
           const namePatterns = [
-            /###\s+([^★\n]+)/,           // ### Hotel Name
-            /##\s+([^★\n]+)/,            // ## Hotel Name  
-            /\*\*([^*]+Hotel[^*]*)\*\*/i, // **Hotel Name**
-            /\d+\.\s*\*\*([^*]+)\*\*/,   // 1. **Hotel Name**
-            /\d+\.\s*([^\n]+)/,          // 1. Hotel Name
-            /^([^\n]+)/                  // First line
+            /###\s+(.+?)(?:\s*★|$)/,           // ### Hotel Name ★★★
+            /##\s+(.+?)(?:\s*★|$)/,            // ## Hotel Name ★★★  
+            /\d+\.\s*(.+?)(?:\s*★|$)/,         // 1. Hotel Name ★★★
+            /\*\*(.+?)\*\*/,                   // **Hotel Name**
+            /^([^\n]+)/                        // First line
           ];
           
           for (const pattern of namePatterns) {
             const match = section.match(pattern);
-            if (match && match[1]) {
-              name = match[1].trim().replace(/★+/g, '').trim();
+            if (match && match[1] && match[1].trim().length > 2) {
+              name = match[1].trim();
               console.log(`✅ Found name: "${name}"`);
               break;
             }
           }
           
-          // Extract star rating
-          const starsMatch = section.match(/★+/);
-          const starCount = starsMatch ? starsMatch[0].length : 4;
-          const starRating = '★'.repeat(starCount);
-          
-          // Extract address/location - try multiple patterns
-          let address = '';
+          // Extract address/location
+          let address = 'Address not available';
           const addressPatterns = [
             /\*\*Address:\*\*\s*([^\n]+)/i,
-            /\*\*Location:\*\*\s*([^\n]+)/i,
             /📍\s*([^\n]+)/,
             /Address:\s*([^\n]+)/i,
             /Location:\s*([^\n]+)/i
@@ -91,29 +87,61 @@ export const parseHotelsFromMarkdown = (markdownText: string): any[] => {
             }
           }
           
-          // Extract description
-          let description = `${name} offers excellent allergy-friendly accommodations.`;
-          const descPatterns = [
-            /\*\*Description:\*\*\s*([^\n]+)/i,
-            /\*\*Why suitable:\*\*\s*([^\n]+)/i,
-            /Description:\s*([^\n]+)/i
-          ];
+          // Extract star rating
+          const starsMatch = section.match(/★+/);
+          const starCount = starsMatch ? starsMatch[0].length : 4;
+          const starRating = '★'.repeat(starCount);
           
-          for (const pattern of descPatterns) {
-            const match = section.match(pattern);
-            if (match && match[1]) {
-              description = match[1].trim();
+          // Extract description - look for descriptive text
+          let description = `${name} offers excellent allergy-friendly accommodations with trained staff and special dietary options.`;
+          const lines = section.split('\n');
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (trimmed.length > 50 && 
+                !trimmed.includes('**') && 
+                !trimmed.includes('###') && 
+                !trimmed.includes('##') &&
+                !trimmed.includes('📍') &&
+                !trimmed.includes('⭐') &&
+                !trimmed.startsWith('-') &&
+                !trimmed.startsWith('•')) {
+              description = trimmed;
               console.log(`📝 Found description: "${description.substring(0, 50)}..."`);
               break;
             }
           }
           
-          // Extract guest quote
+          // Extract allergy features - look for bullet points
+          const allergyFeatures: string[] = [];
+          const featureLines = section.split('\n');
+          for (const line of featureLines) {
+            const trimmed = line.trim();
+            if ((trimmed.startsWith('-') || trimmed.startsWith('•') || trimmed.startsWith('*')) && trimmed.length > 10) {
+              const feature = trimmed.replace(/^[-•*]\s*/, '').trim();
+              if (feature.length > 5) {
+                allergyFeatures.push(feature);
+              }
+            }
+          }
+          
+          // Add default features if none found
+          if (allergyFeatures.length === 0) {
+            allergyFeatures.push(
+              'Allergy-aware staff training',
+              'Special dietary menu options',
+              'Cross-contamination prevention protocols',
+              'Consultation with kitchen staff available'
+            );
+          }
+          
+          console.log(`🔧 Found ${allergyFeatures.length} features for ${name}`);
+          
+          // Extract guest review/quote
           let guestQuote = '';
           const quotePatterns = [
-            /\*\*Guest Quote:\*\*\s*"([^"]+)"/i,
-            /\*\*Review:\*\*\s*"([^"]+)"/i,
-            /"([^"]{20,})"/  // Any quoted text that's reasonably long
+            /"([^"]{10,})"/,                    // Any quoted text
+            /Guest Quote:\s*"([^"]+)"/i,
+            /Review:\s*"([^"]+)"/i
           ];
           
           for (const pattern of quotePatterns) {
@@ -125,60 +153,41 @@ export const parseHotelsFromMarkdown = (markdownText: string): any[] => {
             }
           }
           
-          // Extract features (lines starting with - or bullet points)
-          const featureLines = section.split('\n').filter(line => {
-            const trimmed = line.trim();
-            return trimmed.startsWith('-') || trimmed.startsWith('•') || trimmed.startsWith('*') || 
-                   trimmed.includes('⭐') || trimmed.includes('🍽️') || trimmed.includes('👨‍🍳') || 
-                   trimmed.includes('📞') || trimmed.includes('✅');
-          });
-          
-          const allergyFeatures = featureLines.map(line => 
-            line.replace(/^[-•*]\s*/, '').replace(/[⭐🍽️👨‍🍳📞✅]\s*/, '').trim()
-          ).filter(feature => feature.length > 5); // Filter out very short features
-          
-          console.log(`🔧 Found ${allergyFeatures.length} features:`, allergyFeatures.slice(0, 3));
-          
-          // Extract phone number
-          const phoneMatch = section.match(/📞\s*([^\n]+)|Phone:\s*([^\n]+)|Tel:\s*([^\n]+)/i);
-          const phone = phoneMatch ? (phoneMatch[1] || phoneMatch[2] || phoneMatch[3] || '').trim() : '';
-          
           // Generate booking URL
-          const searchQuery = name + (address ? ' ' + address : '');
+          const searchQuery = name + (address !== 'Address not available' ? ' ' + address : '');
           const url = `https://www.booking.com/search?ss=${encodeURIComponent(searchQuery)}`;
           
           const hotel = {
             name,
-            location: address || 'Location not specified',
+            location: address,
             starRating,
             rating: starCount,
-            address: address || '',
-            allergyFeatures: allergyFeatures.length > 0 ? allergyFeatures : [
-              'Allergy-aware staff training',
-              'Special dietary menu options',
-              'Cross-contamination prevention protocols'
-            ],
+            address,
+            allergyFeatures,
             url,
             reviews: guestQuote ? [guestQuote] : [],
             description,
-            phone: phone || '',
-            imageUrl: '' // Will be populated by HotelCard if needed
+            phone: '',
+            imageUrl: ''
           };
           
-          console.log(`✅ Successfully parsed hotel: "${name}" with ${allergyFeatures.length} features`);
+          console.log(`✅ Successfully parsed hotel: "${name}"`);
+          console.log(`   - Location: ${address}`);
+          console.log(`   - Features: ${allergyFeatures.length}`);
+          console.log(`   - Description: ${description.substring(0, 50)}...`);
+          
           return hotel;
           
         } catch (error) {
-          console.error(`❌ Error parsing hotel section ${index + 1}:`, error);
-          console.error('Section content:', section.substring(0, 300));
+          console.error(`❌ Error parsing section ${index + 1}:`, error);
           
-          // Return a basic hotel object even if parsing fails
+          // Return a basic fallback hotel
           return {
             name: `Hotel ${index + 1}`,
             location: 'Location not available',
             starRating: '★★★★',
             rating: 4,
-            address: '',
+            address: 'Address not available',
             allergyFeatures: ['Allergy-friendly options available'],
             url: 'https://www.booking.com',
             reviews: [],
@@ -189,12 +198,15 @@ export const parseHotelsFromMarkdown = (markdownText: string): any[] => {
         }
       });
     
-    console.log(`🎯 Successfully parsed ${hotels.length} hotels from ${hotelSections.length} sections`);
+    console.log(`🎯 Final result: Successfully parsed ${hotels.length} hotels`);
+    hotels.forEach((hotel, i) => {
+      console.log(`Hotel ${i + 1}: ${hotel.name} - ${hotel.allergyFeatures.length} features`);
+    });
+    
     return hotels;
     
   } catch (error) {
     console.error('❌ Critical error in parseHotelsFromMarkdown:', error);
-    console.error('Markdown text sample:', markdownText.substring(0, 500));
     return [];
   }
 };

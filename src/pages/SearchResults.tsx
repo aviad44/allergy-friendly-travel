@@ -58,7 +58,7 @@ const SearchResults = () => {
       try {
         const userInput = `Find allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Please provide specific hotels with detailed allergy accommodation information.`;
 
-        console.log('📡 Calling openai-proxy function with input:', userInput.substring(0, 100) + '...');
+        console.log('📡 Calling openai-proxy function...');
         
         const { data, error } = await supabase.functions.invoke('openai-proxy', {
           body: {
@@ -85,53 +85,45 @@ const SearchResults = () => {
           console.log(`✅ Search completed in ${searchTime.toFixed(2)} seconds`);
         }
         
-        console.log('📄 Raw OpenAI response:', data.result.substring(0, 300) + '...');
+        console.log('📄 Raw OpenAI response received');
         console.log('📊 Response length:', data.result.length);
+        console.log('📋 First 500 chars:', data.result.substring(0, 500));
+        console.log('📋 Last 500 chars:', data.result.substring(data.result.length - 500));
         
-        // Clean the response before displaying it
+        // Clean the response
         const cleanedRecommendation = cleanResponseText(data.result);
         setRecommendation(cleanedRecommendation);
-        console.log('✅ Cleaned recommendation length:', cleanedRecommendation.length);
         
-        // Extract hotels from the recommendation using the improved parser
-        try {
-          console.log('🔧 Starting hotel extraction...');
-          const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
+        // Parse hotels with improved logging
+        console.log('🔧 Starting hotel extraction with improved parser...');
+        const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
+        
+        console.log('🎯 Parser results:', {
+          hotelsFound: extractedHotels.length,
+          hotels: extractedHotels.map(h => ({ name: h.name, features: h.allergyFeatures?.length || 0 }))
+        });
+        
+        if (!extractedHotels || extractedHotels.length === 0) {
+          console.warn('⚠️ No hotels extracted, but response was received');
+          setError('Could not extract hotel information from the response. The search worked, but we had trouble formatting the results. Please try again.');
+          setHotels([]);
+        } else {
+          // Remove duplicates and validate
+          const validHotels = extractedHotels.filter(hotel => 
+            hotel && hotel.name && hotel.name.length > 3
+          );
           
-          if (!extractedHotels || extractedHotels.length === 0) {
-            console.warn('⚠️ No hotels could be extracted from the response');
-            console.warn('⚠️ Raw response sample:', cleanedRecommendation.substring(0, 500));
-            setError('Could not extract hotel information from the response. Please try again.');
-            setHotels([]);
-          } else {
-            // Remove any duplicates and validate hotels
-            const validHotels = extractedHotels.filter(hotel => 
-              hotel && hotel.name && hotel.name.length > 3
-            );
-            
-            const uniqueHotels = validHotels.filter((hotel, index, self) =>
-              index === self.findIndex((h) => h.name === hotel.name)
-            );
-            
-            console.log(`✅ Successfully extracted ${uniqueHotels.length} valid hotels`);
-            uniqueHotels.forEach((hotel, i) => {
-              console.log(`🏨 Hotel ${i + 1}: ${hotel.name} (${hotel.allergyFeatures.length} features)`);
-            });
-            
-            setHotels(uniqueHotels);
-          }
-        } catch (parseError) {
-          console.error('❌ Error parsing hotels from markdown:', parseError);
-          console.error('❌ Response that failed to parse:', cleanedRecommendation.substring(0, 1000));
-          setError('There was an error processing the hotel information. The search worked, but we had trouble formatting the results.');
-          // Still set the recommendation so users can see raw data
-          setRecommendation(cleanedRecommendation);
+          const uniqueHotels = validHotels.filter((hotel, index, self) =>
+            index === self.findIndex((h) => h.name === hotel.name)
+          );
+          
+          console.log(`✅ Final result: ${uniqueHotels.length} valid unique hotels`);
+          setHotels(uniqueHotels);
         }
         
       } catch (error) {
         console.error('❌ Error during search:', error);
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-        console.error('❌ Error details:', errorMessage);
         
         if (errorMessage.includes('insufficient_quota') || errorMessage.includes('429')) {
           setError('API quota exceeded. Please check your OpenAI account billing and try again later.');
@@ -156,7 +148,7 @@ const SearchResults = () => {
     
     performSearch();
     
-    // Cleanup function to clear timeout if component unmounts
+    // Cleanup function
     return () => {
       if (requestTimeoutRef.current) {
         clearTimeout(requestTimeoutRef.current);
