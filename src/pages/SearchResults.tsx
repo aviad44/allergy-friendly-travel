@@ -45,6 +45,7 @@ const SearchResults = () => {
       setIsSearching(true);
       setError(null);
       setSearchStartTime(Date.now());
+      console.log('🔍 Starting search for:', { destination, allergies });
       
       // Set a timeout to show partial results if taking too long
       requestTimeoutRef.current = window.setTimeout(() => {
@@ -56,42 +57,62 @@ const SearchResults = () => {
       }, 5000);
       
       try {
-        const {
-          data,
-          error
-        } = await supabase.functions.invoke('search-with-gpt', {
+        // Use the working openai-proxy function instead of the problematic search-with-gpt
+        const systemPrompt = "You are a hotel recommendation assistant for people with food allergies. Provide detailed hotel recommendations with specific information about allergy accommodations, kitchen protocols, and safety measures. Always respond in English only.";
+        
+        const userInput = `Find allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Please provide 3-5 specific hotels with the following format for each hotel:
+
+### Hotel Name ★★★★★
+**Address:** Full street address
+- ⭐ Star rating
+- 🍽️ Allergy accommodation details
+- 👨‍🍳 Kitchen/chef information
+- 📞 Phone number
+
+**Description:** Brief description of allergy services
+**Guest Quote:** "Sample guest review about allergy accommodation"
+
+Please provide real hotels with accurate information in English only.`;
+
+        console.log('📡 Calling openai-proxy function...');
+        
+        const { data, error } = await supabase.functions.invoke('openai-proxy', {
           body: {
-            destination,
-            allergies
+            userInput: userInput,
+            systemPrompt: systemPrompt,
+            model: "gpt-4.1-2025-04-14",
+            temperature: 0.7,
+            max_tokens: 2000
           }
         });
         
         if (error) {
-          console.error('Supabase Function Error:', error);
+          console.error('❌ Supabase Function Error:', error);
           throw error;
         }
         
-        if (!data?.recommendation) {
-          console.error('No recommendation data:', data);
+        if (!data?.result) {
+          console.error('❌ No result data:', data);
           throw new Error('No recommendation received from the AI');
         }
         
         // Calculate and log the request time
         if (searchStartTime) {
           const searchTime = (Date.now() - searchStartTime) / 1000;
-          console.log(`Search completed in ${searchTime.toFixed(2)} seconds`);
+          console.log(`✅ Search completed in ${searchTime.toFixed(2)} seconds`);
         }
         
         // Clean the response before displaying it
-        const cleanedRecommendation = cleanResponseText(data.recommendation);
+        const cleanedRecommendation = cleanResponseText(data.result);
         setRecommendation(cleanedRecommendation);
+        console.log('✅ Recommendation received, length:', cleanedRecommendation.length);
         
         // Extract hotels from the recommendation
         try {
           const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
           
           if (!extractedHotels || extractedHotels.length === 0) {
-            console.warn('No hotels could be extracted from the response');
+            console.warn('⚠️ No hotels could be extracted from the response');
             setHotels([]);
           } else {
             // Remove any duplicates
@@ -100,16 +121,17 @@ const SearchResults = () => {
             );
             
             setHotels(uniqueHotels);
+            console.log('✅ Extracted hotels:', uniqueHotels.length);
           }
         } catch (parseError) {
-          console.error('Error parsing hotels from markdown:', parseError);
+          console.error('❌ Error parsing hotels from markdown:', parseError);
           setError('There was an error processing the hotel information. Please try again.');
           // Still set the recommendation so users can see raw data
           setRecommendation(cleanedRecommendation);
         }
         
       } catch (error) {
-        console.error('Error during search:', error);
+        console.error('❌ Error during search:', error);
         setError('Sorry, we couldn\'t complete the search. Please try again later.');
         toast({
           title: "Search Error",

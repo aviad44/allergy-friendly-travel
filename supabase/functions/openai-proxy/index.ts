@@ -20,21 +20,21 @@ serve(async (req) => {
       throw new Error('OpenAI API key is not configured');
     }
 
-    console.log('⏱️ Function invocation started at:', new Date().toISOString());
+    console.log('⏱️ OpenAI Proxy function started at:', new Date().toISOString());
 
     // Parse request body
-    const { userInput, systemPrompt, model = "gpt-4o", temperature = 0.7, max_tokens = 2000 } = await req.json();
+    const { userInput, systemPrompt, model = "gpt-4.1-2025-04-14", temperature = 0.7, max_tokens = 2000 } = await req.json();
     
-    console.log('✅ Processing request with input:', { 
-      inputPreview: userInput.substring(0, 100) + (userInput.length > 100 ? '...' : ''),
-      systemPromptPreview: systemPrompt?.substring(0, 100) + (systemPrompt?.length > 100 ? '...' : ''),
+    console.log('✅ Processing request:', { 
+      inputLength: userInput.length,
+      systemPromptLength: systemPrompt?.length || 0,
       model,
       temperature,
       max_tokens
     });
 
-    // Default system prompt if none provided
-    const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured.";
+    // Default system prompt for hotel recommendations
+    const defaultSystemPrompt = "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed, structured, and always in English.";
 
     console.log('🔄 Sending request to OpenAI API...');
     const startTime = Date.now();
@@ -67,33 +67,36 @@ serve(async (req) => {
     console.log(`⏱️ OpenAI API request completed in: ${requestDuration.toFixed(2)}s`);
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('❌ OpenAI API Error:', errorData);
-      throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
+      const errorText = await response.text();
+      console.error('❌ OpenAI API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText
+      });
+      throw new Error(`OpenAI API error: ${response.status} - ${response.statusText}`);
     }
 
     const data = await response.json();
     console.log('✅ Received response from OpenAI');
-    console.log('✅ Response length:', data.choices[0].message.content.length);
+    console.log('✅ Response content length:', data.choices[0].message.content.length);
     console.log('✅ Token usage:', {
       prompt_tokens: data.usage?.prompt_tokens || 'unknown',
       completion_tokens: data.usage?.completion_tokens || 'unknown',
       total_tokens: data.usage?.total_tokens || 'unknown'
     });
     
-    // Clean the response before returning it
+    // Extract and clean the response content
     let content = data.choices[0].message.content;
     
-    // Process response to remove prompt instructions that might have leaked into the response
+    // Basic cleanup - remove any system instructions that might have leaked
     content = content
       .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
       .replace(/Format your response as[\s\S]*?(?=\n\n|$)/g, '')
       .replace(/EXTREMELY IMPORTANT SAFETY REQUIREMENTS:[\s\S]*?(?=\n\n|$)/g, '')
       .trim();
     
-    console.log('✅ Response first 100 chars:', content.substring(0, 100));
-    console.log('✅ Response last 100 chars:', content.substring(content.length - 100));
-    console.log('⏱️ Function invocation completed at:', new Date().toISOString());
+    console.log('✅ Cleaned content first 200 chars:', content.substring(0, 200));
+    console.log('⏱️ Function completed at:', new Date().toISOString());
 
     return new Response(
       JSON.stringify({ result: content }),
