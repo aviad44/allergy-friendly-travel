@@ -14,75 +14,75 @@ serve(async (req) => {
   }
 
   try {
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openAIApiKey) {
-      console.error('❌ OpenAI API key is missing');
-      throw new Error('OpenAI API key is not configured');
+    const chatbaseApiKey = Deno.env.get('CHATBASE_API_KEY');
+    if (!chatbaseApiKey) {
+      console.error('❌ Chatbase API key is missing');
+      throw new Error('Chatbase API key is not configured');
     }
 
     // Parse request body
     const { destination, allergies } = await req.json();
     console.log('✅ Processing search request for:', { destination, allergies });
 
-    // Optimized request to OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Create the query for Chatbase
+    const query = `Find the best allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Please provide 3-5 specific hotel recommendations with detailed information about their allergy accommodations.`;
+    
+    console.log('🤖 Sending query to Chatbase:', query);
+
+    // Call Chatbase API
+    const response = await fetch('https://www.chatbase.co/api/v1/chat', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${chatbaseApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o', // Keep using the powerful model but with optimized parameters
         messages: [
           {
-            role: 'system',
-            content: `You are a specialized travel assistant focusing on allergy-friendly hotels.
-            Format your response in this EXACT numbered format for each hotel:
-            
-            ## 1. [Hotel Name] ⭐⭐⭐⭐⭐
-            
-            📍 [City, Country]
-            
-            🌟 Why it's great for [allergy type] allergy travelers:
-            - [Feature 1]
-            - [Feature 2]
-            
-            💬 Allergy Guest Review:
-            "[Brief review]"
-            
-            🔗 [Official Hotel Website URL]
-            
-            ---`
-          },
-          {
-            role: 'user',
-            content: `Find the best 3-5 allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies.`
-          },
+            content: query,
+            role: "user"
+          }
         ],
-        temperature: 0.2, // Lower temperature for more deterministic responses
-        max_tokens: 1000, // Reduced token limit for faster responses
+        chatbotId: "yWArdEZJM7gTntiEMM2Tr",
+        stream: false,
+        temperature: 0.2
       }),
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('❌ OpenAI API Error:', errorData);
-      throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
+      const errorData = await response.text();
+      console.error('❌ Chatbase API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData
+      });
+      throw new Error(`Chatbase API error: ${response.status} - ${errorData}`);
     }
 
     const data = await response.json();
-    console.log('✅ Received response from OpenAI');
+    console.log('✅ Received response from Chatbase');
     
-    // Process the response
-    let processedResponse = data.choices[0].message.content;
-    processedResponse = processedResponse
-      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/Format your response[\s\S]*?(?=\n\n|$)/g, '')
-      .trim();
+    // Extract the response content
+    let recommendation = '';
+    if (data.text) {
+      recommendation = data.text;
+    } else if (data.content) {
+      recommendation = data.content;
+    } else if (data.message) {
+      recommendation = data.message;
+    } else {
+      console.error('❌ Unexpected Chatbase response format:', data);
+      throw new Error('Invalid response format from Chatbase');
+    }
+    
+    // Clean up the response
+    recommendation = recommendation.trim();
+    
+    console.log('✅ Processed recommendation length:', recommendation.length);
     
     return new Response(
       JSON.stringify({ 
-        recommendation: processedResponse,
+        recommendation: recommendation,
         status: "success" 
       }),
       {
