@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,34 +56,16 @@ const SearchResults = () => {
       }, 5000);
       
       try {
-        // Enhanced system prompt for better consistency
-        const systemPrompt = `You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. 
-
-IMPORTANT: Format your response EXACTLY like this example:
-
-### Hotel Ritz Madrid ★★★★★
-**Address:** Plaza de la Lealtad 5, Madrid, Spain
-- ⭐ 5-star luxury hotel
-- 🍽️ Dedicated gluten-free kitchen area
-- 👨‍🍳 Trained staff for allergy protocols
-- 📞 +34 91 701 6767
-
-**Description:** This luxury hotel offers excellent gluten-free accommodations with trained staff.
-**Guest Quote:** "Amazing gluten-free breakfast options and very helpful staff" - Maria S.
-
-Always respond in English only. Provide 3-5 real hotels with complete information.`;
-        
         const userInput = `Find allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Please provide specific hotels with detailed allergy accommodation information.`;
 
-        console.log('📡 Calling openai-proxy function...');
+        console.log('📡 Calling openai-proxy function with input:', userInput.substring(0, 100) + '...');
         
         const { data, error } = await supabase.functions.invoke('openai-proxy', {
           body: {
             userInput: userInput,
-            systemPrompt: systemPrompt,
             model: "gpt-4o-mini",
             temperature: 0.7,
-            max_tokens: 2000
+            max_tokens: 2500
           }
         });
         
@@ -104,37 +85,62 @@ Always respond in English only. Provide 3-5 real hotels with complete informatio
           console.log(`✅ Search completed in ${searchTime.toFixed(2)} seconds`);
         }
         
+        console.log('📄 Raw OpenAI response:', data.result.substring(0, 300) + '...');
+        console.log('📊 Response length:', data.result.length);
+        
         // Clean the response before displaying it
         const cleanedRecommendation = cleanResponseText(data.result);
         setRecommendation(cleanedRecommendation);
-        console.log('✅ Recommendation received, length:', cleanedRecommendation.length);
+        console.log('✅ Cleaned recommendation length:', cleanedRecommendation.length);
         
         // Extract hotels from the recommendation using the improved parser
         try {
+          console.log('🔧 Starting hotel extraction...');
           const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
           
           if (!extractedHotels || extractedHotels.length === 0) {
             console.warn('⚠️ No hotels could be extracted from the response');
+            console.warn('⚠️ Raw response sample:', cleanedRecommendation.substring(0, 500));
+            setError('Could not extract hotel information from the response. Please try again.');
             setHotels([]);
           } else {
-            // Remove any duplicates
-            const uniqueHotels = extractedHotels.filter((hotel, index, self) =>
+            // Remove any duplicates and validate hotels
+            const validHotels = extractedHotels.filter(hotel => 
+              hotel && hotel.name && hotel.name.length > 3
+            );
+            
+            const uniqueHotels = validHotels.filter((hotel, index, self) =>
               index === self.findIndex((h) => h.name === hotel.name)
             );
             
+            console.log(`✅ Successfully extracted ${uniqueHotels.length} valid hotels`);
+            uniqueHotels.forEach((hotel, i) => {
+              console.log(`🏨 Hotel ${i + 1}: ${hotel.name} (${hotel.allergyFeatures.length} features)`);
+            });
+            
             setHotels(uniqueHotels);
-            console.log('✅ Extracted hotels:', uniqueHotels.length);
           }
         } catch (parseError) {
           console.error('❌ Error parsing hotels from markdown:', parseError);
-          setError('There was an error processing the hotel information. Please try again.');
+          console.error('❌ Response that failed to parse:', cleanedRecommendation.substring(0, 1000));
+          setError('There was an error processing the hotel information. The search worked, but we had trouble formatting the results.');
           // Still set the recommendation so users can see raw data
           setRecommendation(cleanedRecommendation);
         }
         
       } catch (error) {
         console.error('❌ Error during search:', error);
-        setError('Sorry, we couldn\'t complete the search. Please try again later.');
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.error('❌ Error details:', errorMessage);
+        
+        if (errorMessage.includes('insufficient_quota') || errorMessage.includes('429')) {
+          setError('API quota exceeded. Please check your OpenAI account billing and try again later.');
+        } else if (errorMessage.includes('401')) {
+          setError('API authentication failed. Please check your OpenAI API key configuration.');
+        } else {
+          setError('Sorry, we couldn\'t complete the search. Please try again later.');
+        }
+        
         toast({
           title: "Search Error",
           description: "We couldn't complete your search. Please try again later.",
