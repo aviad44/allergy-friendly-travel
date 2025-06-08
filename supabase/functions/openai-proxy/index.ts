@@ -28,7 +28,7 @@ serve(async (req) => {
     console.log('⏱️ OpenAI Proxy function started at:', new Date().toISOString());
 
     // Parse request body
-    const { userInput, systemPrompt, model = "gpt-4o-mini", temperature = 0.7, max_tokens = 2000 } = await req.json();
+    const { userInput, systemPrompt, model = "gpt-4o-mini", temperature = 0.7, max_tokens = 3000 } = await req.json();
     
     console.log('✅ Processing request:', { 
       inputLength: userInput.length,
@@ -38,32 +38,35 @@ serve(async (req) => {
       max_tokens
     });
 
-    // Improved system prompt that ensures consistent formatting
-    const enhancedSystemPrompt = `You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. 
+    // Enhanced system prompt for structured JSON output
+    const enhancedSystemPrompt = `You are a hotel recommendation assistant for people with food allergies.
 
-IMPORTANT: Format your response EXACTLY like this example:
+Your task is to return structured hotel recommendations based on a user's question or location. The output **must always be in clean, valid JSON** — no explanation, no markdown, no headings, and no free text outside the JSON.
 
-### Hotel Ritz Madrid ★★★★★
-**Address:** Plaza de la Lealtad 5, Madrid, Spain
-- ⭐ 5-star luxury hotel
-- 🍽️ Dedicated gluten-free kitchen area
-- 👨‍🍳 Trained staff for allergy protocols
-- 📞 +34 91 701 6767
+Each response should return **at least 5 hotels** (if available) that meet allergy-friendly criteria. Include a mix of both luxury and affordable options.
 
-**Description:** This luxury hotel offers excellent gluten-free accommodations with trained staff.
-**Guest Quote:** "Amazing gluten-free breakfast options and very helpful staff" - Maria S.
+Use the following format for the JSON array:
 
-### Villa Magna Madrid ★★★★★
-**Address:** Paseo de la Castellana 22, Madrid, Spain
-- ⭐ 5-star hotel with spa
-- 🍽️ Gluten-free menu available
-- 👨‍🍳 Chef trained in allergy management
-- 📞 +34 91 587 1234
+[
+  {
+    "hotel_name": "Hotel Name",
+    "city": "City",
+    "country": "Country", 
+    "star_rating": "4★",
+    "allergy_friendly_features": "Gluten-free kitchen, trained staff, no peanuts on menu",
+    "guest_review_summary": "Guests consistently praise the hotel for accommodating dietary needs.",
+    "price_range": "$120–$180 per night",
+    "booking_link": "https://booking.example.com/hotel-link"
+  }
+]
 
-**Description:** Modern hotel with excellent allergy-friendly dining options.
-**Guest Quote:** "Perfect for my celiac needs, great restaurant" - John D.
+Important formatting rules:
+- Return only valid JSON — no text before or after it.
+- Do not use markdown, bolding, bullets, or formatting characters.
+- Always use double quotes for keys and values (to match JSON syntax).
+- If information is unknown, leave the value as an empty string (""), but keep the key.
 
-Always respond in English only. Provide 3-5 real hotels with complete information.`;
+This structured format is critical for the front-end system (LOVABLE) to parse and display each result correctly.`;
 
     console.log('🔄 Sending request to OpenAI API...');
     const startTime = Date.now();
@@ -79,7 +82,7 @@ Always respond in English only. Provide 3-5 real hotels with complete informatio
         messages: [
           {
             role: 'system',
-            content: systemPrompt || enhancedSystemPrompt
+            content: enhancedSystemPrompt
           },
           { role: 'user', content: userInput }
         ],
@@ -117,14 +120,15 @@ Always respond in English only. Provide 3-5 real hotels with complete informatio
     // Extract and clean the response content
     let content = data.choices[0].message.content;
     
-    // Basic cleanup - remove any system instructions that might have leaked
+    // Clean up any potential markdown or formatting
     content = content
-      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/Format your response as[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/EXTREMELY IMPORTANT SAFETY REQUIREMENTS:[\s\S]*?(?=\n\n|$)/g, '')
+      .replace(/```json/g, '')
+      .replace(/```/g, '')
+      .replace(/^\s*#.*$/gm, '') // Remove markdown headers
+      .replace(/^\s*\*.*$/gm, '') // Remove markdown bullets
       .trim();
     
-    console.log('✅ Cleaned content first 200 chars:', content.substring(0, 200));
+    console.log('✅ Cleaned content first 500 chars:', content.substring(0, 500));
     console.log('⏱️ Function completed at:', new Date().toISOString());
 
     return new Response(
