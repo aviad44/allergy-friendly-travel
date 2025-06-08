@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -44,7 +45,6 @@ const SearchResults = () => {
       setIsSearching(true);
       setError(null);
       setSearchStartTime(Date.now());
-      console.log('🔍 Starting search for:', { destination, allergies });
       
       // Set a timeout to show partial results if taking too long
       requestTimeoutRef.current = window.setTimeout(() => {
@@ -56,83 +56,61 @@ const SearchResults = () => {
       }, 5000);
       
       try {
-        const userInput = `Find allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Please provide specific hotels with detailed allergy accommodation information.`;
-
-        console.log('📡 Calling openai-proxy function...');
-        
-        const { data, error } = await supabase.functions.invoke('openai-proxy', {
+        const {
+          data,
+          error
+        } = await supabase.functions.invoke('search-with-gpt', {
           body: {
-            userInput: userInput,
-            model: "gpt-4o-mini",
-            temperature: 0.7,
-            max_tokens: 2500
+            destination,
+            allergies
           }
         });
         
         if (error) {
-          console.error('❌ Supabase Function Error:', error);
+          console.error('Supabase Function Error:', error);
           throw error;
         }
         
-        if (!data?.result) {
-          console.error('❌ No result data:', data);
+        if (!data?.recommendation) {
+          console.error('No recommendation data:', data);
           throw new Error('No recommendation received from the AI');
         }
         
         // Calculate and log the request time
         if (searchStartTime) {
           const searchTime = (Date.now() - searchStartTime) / 1000;
-          console.log(`✅ Search completed in ${searchTime.toFixed(2)} seconds`);
+          console.log(`Search completed in ${searchTime.toFixed(2)} seconds`);
         }
         
-        console.log('📄 Raw OpenAI response received');
-        console.log('📊 Response length:', data.result.length);
-        console.log('📋 First 500 chars:', data.result.substring(0, 500));
-        console.log('📋 Last 500 chars:', data.result.substring(data.result.length - 500));
-        
-        // Clean the response
-        const cleanedRecommendation = cleanResponseText(data.result);
+        // Clean the response before displaying it
+        const cleanedRecommendation = cleanResponseText(data.recommendation);
         setRecommendation(cleanedRecommendation);
         
-        // Parse hotels with improved logging
-        console.log('🔧 Starting hotel extraction with improved parser...');
-        const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
-        
-        console.log('🎯 Parser results:', {
-          hotelsFound: extractedHotels.length,
-          hotels: extractedHotels.map(h => ({ name: h.name, features: h.allergyFeatures?.length || 0 }))
-        });
-        
-        if (!extractedHotels || extractedHotels.length === 0) {
-          console.warn('⚠️ No hotels extracted, but response was received');
-          setError('Could not extract hotel information from the response. The search worked, but we had trouble formatting the results. Please try again.');
-          setHotels([]);
-        } else {
-          // Remove duplicates and validate
-          const validHotels = extractedHotels.filter(hotel => 
-            hotel && hotel.name && hotel.name.length > 3
-          );
+        // Extract hotels from the recommendation
+        try {
+          const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
           
-          const uniqueHotels = validHotels.filter((hotel, index, self) =>
-            index === self.findIndex((h) => h.name === hotel.name)
-          );
-          
-          console.log(`✅ Final result: ${uniqueHotels.length} valid unique hotels`);
-          setHotels(uniqueHotels);
+          if (!extractedHotels || extractedHotels.length === 0) {
+            console.warn('No hotels could be extracted from the response');
+            setHotels([]);
+          } else {
+            // Remove any duplicates
+            const uniqueHotels = extractedHotels.filter((hotel, index, self) =>
+              index === self.findIndex((h) => h.name === hotel.name)
+            );
+            
+            setHotels(uniqueHotels);
+          }
+        } catch (parseError) {
+          console.error('Error parsing hotels from markdown:', parseError);
+          setError('There was an error processing the hotel information. Please try again.');
+          // Still set the recommendation so users can see raw data
+          setRecommendation(cleanedRecommendation);
         }
         
       } catch (error) {
-        console.error('❌ Error during search:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-        
-        if (errorMessage.includes('insufficient_quota') || errorMessage.includes('429')) {
-          setError('API quota exceeded. Please check your OpenAI account billing and try again later.');
-        } else if (errorMessage.includes('401')) {
-          setError('API authentication failed. Please check your OpenAI API key configuration.');
-        } else {
-          setError('Sorry, we couldn\'t complete the search. Please try again later.');
-        }
-        
+        console.error('Error during search:', error);
+        setError('Sorry, we couldn\'t complete the search. Please try again later.');
         toast({
           title: "Search Error",
           description: "We couldn't complete your search. Please try again later.",
@@ -148,7 +126,7 @@ const SearchResults = () => {
     
     performSearch();
     
-    // Cleanup function
+    // Cleanup function to clear timeout if component unmounts
     return () => {
       if (requestTimeoutRef.current) {
         clearTimeout(requestTimeoutRef.current);

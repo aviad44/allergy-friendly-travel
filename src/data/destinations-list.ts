@@ -1,176 +1,159 @@
 
-import { DestinationId } from '@/types/definitions';
+import { Destination } from '@/types/definitions';
 
-export interface DestinationListItem {
-  id: DestinationId;
-  name: string;
-  country: string;
-  description: string;
-  subtitle?: string;
-  image?: string;
-}
-
-export const destinations: DestinationListItem[] = [
-  // Europe destinations
+export const destinations: Destination[] = [
   {
-    id: 'london' as DestinationId,
+    id: 'london',
     name: 'London',
     country: 'United Kingdom',
-    description: 'A comprehensive guide to allergy-friendly restaurants and hotels in London, featuring dedicated allergen menus and trained staff.',
-    subtitle: 'Your Complete Allergy-Friendly Guide to London'
+    description: 'Best Allergy-Friendly Hotels in London',
+    subtitle: 'Safe Accommodations for Food Allergies'
   },
   {
-    id: 'paris' as DestinationId,
+    id: 'paris',
     name: 'Paris',
     country: 'France',
-    description: 'Discover safe dining and accommodation options in the City of Light for travelers with food allergies.',
-    subtitle: 'Navigate Paris Safely with Food Allergies'
+    description: 'Best Allergy-Friendly Hotels in Paris',
+    subtitle: 'Safe Accommodations for Food Allergies'
   },
   {
-    id: 'barcelona' as DestinationId,
+    id: 'barcelona',
     name: 'Barcelona',
     country: 'Spain',
-    description: 'Explore Barcelona\'s allergy-friendly restaurants and hotels, with detailed reviews and safety information.',
-    subtitle: 'Allergy-Safe Travel in Catalonia\'s Capital'
+    description: 'Best Allergy-Friendly Hotels in Barcelona',
+    subtitle: 'Safe Accommodations for Food Allergies'
   },
   {
-    id: 'rome' as DestinationId,
+    id: 'cyprus',
+    name: 'Cyprus',
+    country: 'Cyprus', 
+    description: 'Best Allergy-Friendly Hotels in Cyprus',
+    subtitle: 'Safe Accommodations for Food Allergies'
+  },
+  {
+    id: 'tuscany',
+    name: 'Tuscany',
+    country: 'Italy', 
+    description: 'Allergy-Friendly 6-Day Tuscany Itinerary',
+    subtitle: 'Safe Accommodations and Restaurants in Tuscany'
+  },
+  {
+    id: 'rome',
     name: 'Rome',
     country: 'Italy',
-    description: 'Navigate the Eternal City safely with our guide to allergy-friendly dining and accommodations.',
-    subtitle: 'Safe Travel Guide for Food Allergies in Rome'
+    description: 'Top 5 Allergy-Friendly Hotels in Rome',
+    subtitle: 'Safe & Comfortable Stays for Travelers with Food Sensitivities'
   },
   {
-    id: 'cyprus' as DestinationId,
-    name: 'Cyprus',
-    country: 'Cyprus',
-    description: 'Mediterranean paradise with allergy-conscious resorts and restaurants catering to dietary restrictions.',
-    subtitle: 'Island Paradise for Allergy-Safe Vacations'
-  },
-  {
-    id: 'crete' as DestinationId,
-    name: 'Crete',
-    country: 'Greece',
-    description: 'Greece\'s largest island offers excellent allergy-friendly accommodations and traditional cuisine adaptations.',
-    subtitle: 'Greek Island Getaway with Allergy Awareness'
-  },
-  {
-    id: 'portugal' as DestinationId,
-    name: 'Portugal',
-    country: 'Portugal',
-    description: 'From Lisbon to Porto, discover Portugal\'s growing allergy-awareness in hotels and restaurants.',
-    subtitle: 'Coastal Charm with Allergy Accommodations'
-  },
-  {
-    id: 'swiss-alps' as DestinationId,
-    name: 'Swiss Alps',
-    country: 'Switzerland',
-    description: 'Mountain resorts and chalets with excellent allergy protocols and pristine dining standards.',
-    subtitle: 'Alpine Adventures with Allergy Safety'
-  },
-  {
-    id: 'tuscany' as DestinationId,
-    name: 'Tuscany',
-    country: 'Italy',
-    description: 'Wine country escapes with allergy-friendly agriturismos and restaurants understanding dietary needs.',
-    subtitle: 'Italian Countryside with Culinary Safety'
-  },
-  {
-    id: 'gluten-free-europe' as DestinationId,
-    name: 'Gluten-Free Europe',
-    country: 'Multiple Countries',
-    description: 'A comprehensive guide to celiac-safe travel across European destinations with certified restaurants.',
-    subtitle: 'Celiac-Safe European Adventure Guide'
-  },
-  {
-    id: 'athens' as DestinationId,
-    name: 'Athens',
-    country: 'Greece',
-    description: 'Ancient history meets modern allergy awareness in Greece\'s capital city.',
-    subtitle: 'Historic Athens with Contemporary Food Safety'
-  },
-  {
-    id: 'ayia-napa' as DestinationId,
-    name: 'Ayia Napa',
-    country: 'Cyprus',
-    description: 'Beach resort destination with allergy-conscious hotels and seaside dining options.',
-    subtitle: 'Beach Paradise with Dietary Accommodations'
-  },
-
-  // Asia & Middle East destinations  
-  {
-    id: 'tokyo' as DestinationId,
-    name: 'Tokyo',
-    country: 'Japan',
-    description: 'Navigate Japan\'s capital with confidence using our allergy-friendly restaurant and hotel guide.',
-    subtitle: 'Safe Dining in the Land of the Rising Sun'
-  },
-  {
-    id: 'thailand' as DestinationId,
-    name: 'Thailand',
-    country: 'Thailand',
-    description: 'Tropical paradise with increasing allergy awareness in resorts and local cuisine establishments.',
-    subtitle: 'Southeast Asian Adventure with Food Safety'
-  },
-  {
-    id: 'koh-samui' as DestinationId,
-    name: 'Koh Samui',
-    country: 'Thailand',
-    description: 'Island getaway with luxury resorts offering comprehensive allergy management and safe dining.',
-    subtitle: 'Tropical Island Retreat with Allergy Care'
-  },
-  {
-    id: 'abu-dhabi' as DestinationId,
+    id: 'abu-dhabi',
     name: 'Abu Dhabi',
     country: 'UAE',
-    description: 'Luxury destination with world-class hotels providing exceptional allergy accommodation services.',
-    subtitle: 'Desert Luxury with Premium Allergy Services'
+    description: 'Best Allergy-Friendly Hotels in Abu Dhabi',
+    subtitle: 'Safe Accommodations for Food Allergies'
   },
   {
-    id: 'turkey' as DestinationId,
-    name: 'Turkey',
-    country: 'Turkey',
-    description: 'Bridge between Europe and Asia offering diverse allergy-friendly accommodations and cuisine.',
-    subtitle: 'Cultural Crossroads with Culinary Safety'
+    id: 'crete',
+    name: 'Crete',
+    country: 'Greece',
+    description: 'Best Allergy-Friendly Hotels in Crete',
+    subtitle: 'Safe Accommodations for Food Allergies'
   },
   {
-    id: 'eilat' as DestinationId,
-    name: 'Eilat',
-    country: 'Israel',
-    description: 'Red Sea resort destination featuring the pioneering allergy-friendly program at U Coral Beach Hotel.',
-    subtitle: 'Desert Oasis with Revolutionary Allergy Care',
-    image: 'https://images.unsplash.com/photo-1544918796-60e440755919?auto=format&fit=crop&w=1200&q=80'
+    id: 'tokyo',
+    name: 'Tokyo',
+    country: 'Japan',
+    description: 'Best Allergy-Friendly Hotels in Tokyo',
+    subtitle: 'Safe Accommodations for Food Allergies'
   },
-
-  // North America destinations
   {
-    id: 'new-york' as DestinationId,
+    id: 'thailand',
+    name: 'Thailand',
+    country: 'Thailand',
+    description: 'Best Allergy-Friendly Hotels in Thailand',
+    subtitle: 'Safe Accommodations for Food Allergies'
+  },
+  {
+    id: 'hotel-chains',
+    name: 'Hotel Chains',
+    country: 'Worldwide',
+    description: 'Best Allergy-Friendly Hotel Chains',
+    subtitle: 'Safe Hotel Chains for Food Allergies'
+  },
+  {
+    id: 'new-york',
     name: 'New York',
     country: 'United States',
-    description: 'The Big Apple\'s extensive allergy-friendly dining scene and accommodating hotel options.',
-    subtitle: 'Urban Adventure with Comprehensive Allergy Resources'
+    description: 'Best Allergy-Friendly Hotels in New York',
+    subtitle: 'Safe Accommodations for Food Allergies'
   },
   {
-    id: 'toronto' as DestinationId,
+    id: 'portugal',
+    name: 'Portugal',
+    country: 'Portugal',
+    description: 'Best Allergy-Friendly Hotels in Portugal',
+    subtitle: 'Safe Accommodations for Food Allergies'
+  },
+  {
+    id: 'swiss-alps',
+    name: 'Swiss Alps',
+    country: 'Switzerland',
+    description: 'Best Allergy-Friendly Hotels in the Swiss Alps',
+    subtitle: 'Safe Mountain Accommodations for Food Allergies'
+  },
+  {
+    id: 'koh-samui',
+    name: 'Koh Samui',
+    country: 'Thailand',
+    description: 'Four Seasons Koh Samui – The "White Lotus" Resort',
+    subtitle: 'Allergy-Friendly White Lotus Filming Location'
+  },
+  {
+    id: 'turkey',
+    name: 'Turkey',
+    country: 'Turkey',
+    description: 'Best Allergy-Friendly Hotels in Turkey',
+    subtitle: 'Safe All-Inclusive Resorts for Food Allergies'
+  },
+  {
+    id: 'cruise-lines',
+    name: 'Cruise Lines',
+    country: 'Worldwide',
+    description: 'Best Allergy-Friendly Cruise Lines',
+    subtitle: 'Safe Cruising for Food Allergies'
+  },
+  {
+    id: 'toronto',
     name: 'Toronto',
     country: 'Canada',
-    description: 'Canada\'s largest city offers excellent allergy protocols in hotels and diverse safe dining options.',
-    subtitle: 'Canadian Hospitality Meets Allergy Awareness'
-  },
-
-  // Special categories
-  {
-    id: 'hotel-chains' as DestinationId,
-    name: 'Hotel Chains',
-    country: 'Global',
-    description: 'Comprehensive reviews of international hotel chains and their allergy accommodation policies.',
-    subtitle: 'Global Hospitality Standards for Food Allergies'
+    description: 'Best Allergy-Friendly Hotels in Toronto',
+    subtitle: 'Safe Accommodations for Food Allergies'
   },
   {
-    id: 'cruise-lines' as DestinationId,
-    name: 'Cruise Lines',
-    country: 'Global',
-    description: 'Ocean adventures with detailed allergy management protocols across major cruise operators.',
-    subtitle: 'Safe Sailing with Comprehensive Allergy Support'
+    id: 'ayia-napa',
+    name: 'Ayia Napa',
+    country: 'Cyprus',
+    description: 'Best Allergy-Friendly Hotels in Ayia Napa',
+    subtitle: 'Safe Beach Accommodations for Food Allergies'
+  },
+  {
+    id: 'gluten-free-europe',
+    name: 'Gluten-Free Europe',
+    country: 'Europe',
+    description: 'Top 5 Gluten-Free Travel Destinations in Europe (2025)',
+    subtitle: 'Where to Travel in Europe If You\'re Gluten-Free or Have Celiac Disease'
+  },
+  {
+    id: 'athens',
+    name: 'Athens',
+    country: 'Greece',
+    description: 'Top 10 Gluten-Free Restaurants in Athens for Celiacs (2025)',
+    subtitle: 'Safe & Delicious Dining Options for Celiacs in the Greek Capital'
+  },
+  {
+    id: 'eilat',
+    name: 'Eilat',
+    country: 'Israel',
+    description: 'A Stress-Free Vacation: U Coral Beach Hotel in Eilat',
+    subtitle: 'Allergy-Friendly Experience at Fattal\'s Resort'
   }
 ];
