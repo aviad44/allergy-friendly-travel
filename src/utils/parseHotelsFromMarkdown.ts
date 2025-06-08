@@ -1,6 +1,6 @@
 
 /**
- * Enhanced parser for hotel information from JSON/markdown text
+ * Enhanced JSON parser for hotel information from OpenAI
  */
 export const parseHotelsFromMarkdown = (responseText: string): any[] => {
   if (!responseText) {
@@ -9,109 +9,78 @@ export const parseHotelsFromMarkdown = (responseText: string): any[] => {
   }
   
   try {
-    console.log('🔍 Starting to parse response text...');
-    console.log('📄 Full response length:', responseText.length);
-    console.log('📄 First 500 chars:', responseText.substring(0, 500));
+    console.log('🔍 Starting JSON parsing...');
+    console.log('📄 Response length:', responseText.length);
+    console.log('📄 First 300 chars:', responseText.substring(0, 300));
+    console.log('📄 Last 300 chars:', responseText.substring(responseText.length - 300));
     
-    // Clean the text first - remove system instructions and markdown
-    let cleanedText = responseText
-      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/Format your response[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/You are a hotel recommendation[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/Your task is to return[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/```json/g, '')
-      .replace(/```/g, '')
-      .replace(/^\s*#.*$/gm, '') // Remove markdown headers
-      .replace(/^\s*\*.*$/gm, '') // Remove markdown bullets
-      .trim();
+    // Clean the response text
+    let cleanedText = responseText.trim();
     
-    console.log('🧹 Cleaned text length:', cleanedText.length);
-    console.log('🧹 Cleaned first 500 chars:', cleanedText.substring(0, 500));
-    
-    // Try to parse as JSON first
-    if (cleanedText.startsWith('[') || cleanedText.startsWith('{')) {
+    // Remove any wrapper objects if present
+    if (cleanedText.startsWith('{"result":')) {
       try {
-        console.log('🔍 Attempting JSON parse...');
-        const jsonData = JSON.parse(cleanedText);
-        const hotelsArray = Array.isArray(jsonData) ? jsonData : [jsonData];
-        
-        const hotels = hotelsArray.map((hotel, index) => ({
-          name: hotel.hotel_name || hotel.name || `Hotel ${index + 1}`,
-          location: `${hotel.city || 'Unknown City'}, ${hotel.country || 'Unknown Country'}`,
-          starRating: hotel.star_rating || '★★★★',
-          rating: hotel.star_rating ? hotel.star_rating.split('★').length - 1 : 4,
-          address: `${hotel.city || 'Unknown City'}, ${hotel.country || 'Unknown Country'}`,
-          allergyFeatures: hotel.allergy_friendly_features ? 
-            hotel.allergy_friendly_features.split(',').map((f: string) => f.trim()) : 
-            ['Allergy-friendly options available'],
-          url: hotel.booking_link || `https://www.booking.com/search?ss=${encodeURIComponent(hotel.hotel_name || hotel.name || '')}`,
-          reviews: hotel.guest_review_summary ? [hotel.guest_review_summary] : [],
-          description: hotel.guest_review_summary || 'Allergy-friendly accommodation with trained staff.',
-          phone: '',
-          imageUrl: '',
-          priceRange: hotel.price_range || ''
-        }));
-        
-        console.log(`✅ JSON parse successful: ${hotels.length} hotels`);
-        return hotels;
-      } catch (jsonError) {
-        console.log('❌ JSON parse failed:', jsonError);
-        console.log('Falling back to text parsing...');
+        const wrapper = JSON.parse(cleanedText);
+        cleanedText = wrapper.result || cleanedText;
+      } catch (e) {
+        console.log('⚠️ Could not unwrap result object, using original text');
       }
     }
     
-    // Fallback: Create sample hotels if parsing fails
-    console.log('⚠️ Creating fallback hotels since parsing failed');
-    const fallbackHotels = [
-      {
-        name: 'Allergy-Friendly Hotel Amsterdam',
-        location: 'Amsterdam, Netherlands',
-        starRating: '★★★★',
-        rating: 4,
-        address: 'Amsterdam, Netherlands',
-        allergyFeatures: ['Gluten-free menu available', 'Trained allergy-aware staff', 'Dedicated preparation areas'],
-        url: 'https://www.booking.com/search?ss=Amsterdam%20allergy%20friendly',
-        reviews: ['Great accommodations for dietary restrictions'],
-        description: 'This hotel offers excellent allergy-friendly accommodations with trained staff.',
-        phone: '',
-        imageUrl: '',
-        priceRange: '$150-200 per night'
-      },
-      {
-        name: 'Safe Stay Hotel',
-        location: 'Amsterdam, Netherlands',
-        starRating: '★★★★★',
-        rating: 5,
-        address: 'Amsterdam, Netherlands',
-        allergyFeatures: ['Dairy-free options', 'Cross-contamination prevention', 'Detailed ingredient lists'],
-        url: 'https://www.booking.com/search?ss=Amsterdam%20safe%20hotel',
-        reviews: ['Excellent for allergy sufferers'],
-        description: 'Luxury hotel with comprehensive allergy management protocols.',
-        phone: '',
-        imageUrl: '',
-        priceRange: '$200-300 per night'
-      },
-      {
-        name: 'Comfort Inn Allergy Care',
-        location: 'Amsterdam, Netherlands', 
-        starRating: '★★★',
-        rating: 3,
-        address: 'Amsterdam, Netherlands',
-        allergyFeatures: ['Allergy-friendly breakfast', 'Staff allergy training', 'Safe dining options'],
-        url: 'https://www.booking.com/search?ss=Amsterdam%20comfort%20inn',
-        reviews: ['Good value with allergy considerations'],
-        description: 'Affordable accommodation with basic allergy accommodations.',
-        phone: '',
-        imageUrl: '',
-        priceRange: '$80-120 per night'
-      }
-    ];
+    // Additional cleaning
+    cleanedText = cleanedText
+      .replace(/```json/gi, '')
+      .replace(/```/g, '')
+      .trim();
     
-    console.log(`🎯 Returning ${fallbackHotels.length} fallback hotels`);
-    return fallbackHotels;
+    console.log('🧹 Cleaned text length:', cleanedText.length);
+    console.log('🧹 Cleaned first 300 chars:', cleanedText.substring(0, 300));
+    
+    // Parse the JSON
+    console.log('🔍 Attempting JSON parse...');
+    const jsonData = JSON.parse(cleanedText);
+    
+    // Ensure we have an array
+    const hotelsArray = Array.isArray(jsonData) ? jsonData : [jsonData];
+    
+    console.log(`✅ JSON parsed successfully: ${hotelsArray.length} hotels found`);
+    
+    // Transform to our internal format
+    const hotels = hotelsArray.map((hotel, index) => {
+      const transformedHotel = {
+        name: hotel.hotel_name || hotel.name || `Hotel ${index + 1}`,
+        location: `${hotel.city || 'Unknown City'}, ${hotel.country || 'Unknown Country'}`,
+        starRating: hotel.star_rating || '★★★★',
+        rating: hotel.star_rating ? (hotel.star_rating.match(/★/g) || []).length : 4,
+        address: `${hotel.city || 'Unknown City'}, ${hotel.country || 'Unknown Country'}`,
+        allergyFeatures: hotel.allergy_friendly_features ? 
+          hotel.allergy_friendly_features.split(',').map((f: string) => f.trim()).filter((f: string) => f.length > 0) : 
+          ['Allergy-friendly options available'],
+        url: hotel.booking_link || `https://www.booking.com/search?ss=${encodeURIComponent(hotel.hotel_name || hotel.name || '')}`,
+        reviews: hotel.guest_review_summary ? [hotel.guest_review_summary] : [],
+        description: hotel.guest_review_summary || 'Allergy-friendly accommodation with trained staff.',
+        phone: '',
+        imageUrl: '',
+        priceRange: hotel.price_range || '$100-200 per night'
+      };
+      
+      console.log(`✅ Transformed hotel ${index + 1}:`, {
+        name: transformedHotel.name,
+        location: transformedHotel.location,
+        features: transformedHotel.allergyFeatures.length
+      });
+      
+      return transformedHotel;
+    });
+    
+    console.log(`🎯 Final result: ${hotels.length} hotels successfully parsed`);
+    return hotels;
     
   } catch (error) {
-    console.error('❌ Critical error in parseHotelsFromMarkdown:', error);
+    console.error('❌ JSON parsing failed:', error);
+    console.error('❌ Failed text:', responseText.substring(0, 500));
+    
+    // Return empty array instead of fallback hotels to force proper debugging
     return [];
   }
 };

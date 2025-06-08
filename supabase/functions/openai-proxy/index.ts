@@ -28,45 +28,39 @@ serve(async (req) => {
     console.log('⏱️ OpenAI Proxy function started at:', new Date().toISOString());
 
     // Parse request body
-    const { userInput, systemPrompt, model = "gpt-4o-mini", temperature = 0.7, max_tokens = 3000 } = await req.json();
+    const { userInput, systemPrompt, model = "gpt-4o-mini", temperature = 0.3, max_tokens = 4000 } = await req.json();
     
     console.log('✅ Processing request:', { 
       inputLength: userInput.length,
-      systemPromptLength: systemPrompt?.length || 0,
       model,
       temperature,
       max_tokens
     });
 
-    // Enhanced system prompt for structured JSON output
-    const enhancedSystemPrompt = `You are a hotel recommendation assistant for people with food allergies.
+    // System prompt that FORCES JSON output
+    const jsonSystemPrompt = `You are a hotel recommendation system that MUST return ONLY valid JSON.
 
-Your task is to return structured hotel recommendations based on a user's question or location. The output **must always be in clean, valid JSON** — no explanation, no markdown, no headings, and no free text outside the JSON.
-
-Each response should return **at least 5 hotels** (if available) that meet allergy-friendly criteria. Include a mix of both luxury and affordable options.
-
-Use the following format for the JSON array:
+CRITICAL RULES:
+1. Return ONLY a JSON array - no text before or after
+2. No markdown, no explanations, no additional text
+3. Each hotel must have ALL required fields
+4. Return exactly 5-7 hotels minimum
+5. Use this EXACT structure:
 
 [
   {
-    "hotel_name": "Hotel Name",
-    "city": "City",
-    "country": "Country", 
+    "hotel_name": "Hotel Name Here",
+    "city": "City Name",
+    "country": "Country Name", 
     "star_rating": "4★",
-    "allergy_friendly_features": "Gluten-free kitchen, trained staff, no peanuts on menu",
-    "guest_review_summary": "Guests consistently praise the hotel for accommodating dietary needs.",
-    "price_range": "$120–$180 per night",
-    "booking_link": "https://booking.example.com/hotel-link"
+    "allergy_friendly_features": "Feature 1, Feature 2, Feature 3",
+    "guest_review_summary": "Review summary here",
+    "price_range": "$100-200 per night",
+    "booking_link": "https://www.booking.com/hotel/link"
   }
 ]
 
-Important formatting rules:
-- Return only valid JSON — no text before or after it.
-- Do not use markdown, bolding, bullets, or formatting characters.
-- Always use double quotes for keys and values (to match JSON syntax).
-- If information is unknown, leave the value as an empty string (""), but keep the key.
-
-This structured format is critical for the front-end system (LOVABLE) to parse and display each result correctly.`;
+IMPORTANT: Start your response with [ and end with ] - nothing else.`;
 
     console.log('🔄 Sending request to OpenAI API...');
     const startTime = Date.now();
@@ -82,13 +76,16 @@ This structured format is critical for the front-end system (LOVABLE) to parse a
         messages: [
           {
             role: 'system',
-            content: enhancedSystemPrompt
+            content: jsonSystemPrompt
           },
-          { role: 'user', content: userInput }
+          { 
+            role: 'user', 
+            content: `Find allergy-friendly hotels for: ${userInput}. Return ONLY the JSON array as specified.`
+          }
         ],
         temperature: temperature,
         max_tokens: max_tokens,
-        top_p: 1.0,
+        top_p: 0.9,
         frequency_penalty: 0,
         presence_penalty: 0
       }),
@@ -117,18 +114,37 @@ This structured format is critical for the front-end system (LOVABLE) to parse a
       total_tokens: data.usage?.total_tokens || 'unknown'
     });
     
-    // Extract and clean the response content
-    let content = data.choices[0].message.content;
+    // Extract and aggressively clean the response content
+    let content = data.choices[0].message.content.trim();
     
-    // Clean up any potential markdown or formatting
+    console.log('🔍 Raw content first 200 chars:', content.substring(0, 200));
+    console.log('🔍 Raw content last 200 chars:', content.substring(content.length - 200));
+    
+    // Remove any non-JSON content
     content = content
-      .replace(/```json/g, '')
+      .replace(/```json/gi, '')
       .replace(/```/g, '')
-      .replace(/^\s*#.*$/gm, '') // Remove markdown headers
-      .replace(/^\s*\*.*$/gm, '') // Remove markdown bullets
+      .replace(/^[^[\{]*/, '') // Remove everything before first [ or {
+      .replace(/[^\]\}]*$/, '') // Remove everything after last ] or }
       .trim();
     
-    console.log('✅ Cleaned content first 500 chars:', content.substring(0, 500));
+    // Ensure it starts with [ or {
+    if (!content.startsWith('[') && !content.startsWith('{')) {
+      console.error('❌ Content does not start with [ or {:', content.substring(0, 100));
+      throw new Error('Invalid JSON format received from OpenAI');
+    }
+    
+    // Validate JSON by parsing it
+    try {
+      const parsedContent = JSON.parse(content);
+      console.log('✅ JSON validation successful, hotels count:', Array.isArray(parsedContent) ? parsedContent.length : 1);
+    } catch (parseError) {
+      console.error('❌ JSON parsing failed:', parseError);
+      console.error('❌ Content that failed to parse:', content);
+      throw new Error('Invalid JSON received from OpenAI');
+    }
+    
+    console.log('✅ Cleaned content first 300 chars:', content.substring(0, 300));
     console.log('⏱️ Function completed at:', new Date().toISOString());
 
     return new Response(
