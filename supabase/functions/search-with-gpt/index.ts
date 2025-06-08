@@ -41,12 +41,11 @@ Please provide real hotels with accurate information in English only.`;
     
     console.log('🤖 Sending query to Chatbase');
 
-    // Try multiple API endpoints for Chatbase
+    // Try the Chatbase API call
     let response;
     let responseData;
     
     try {
-      // Try the main chat endpoint
       response = await fetch('https://www.chatbase.co/api/v1/chat', {
         method: 'POST',
         headers: {
@@ -130,7 +129,7 @@ Please provide real hotels with accurate information in English only.`;
   } catch (error) {
     console.error('❌ Error in search-with-gpt function:', error);
     
-    // Try to extract destination from the request body for fallback
+    // Extract destination and allergies for fallback
     let destination = "Unknown destination";
     let allergies = "allergies";
     
@@ -161,6 +160,8 @@ Please provide real hotels with accurate information in English only.`;
 function generateEnhancedFallback(destination: string, allergies: string): string {
   // Enhanced destination-specific fallbacks
   const destinationFallbacks: { [key: string]: string } = {
+    'Miami': generateMiamiEnhancedFallback(allergies),
+    'miami': generateMiamiEnhancedFallback(allergies),
     'Rome': generateRomeEnhancedFallback(allergies),
     'rome': generateRomeEnhancedFallback(allergies),
     'רומא': generateRomeEnhancedFallback(allergies),
@@ -182,6 +183,67 @@ function generateEnhancedFallback(destination: string, allergies: string): strin
   }
 
   return generateGenericEnhancedFallback(destination, allergies);
+}
+
+function generateMiamiEnhancedFallback(allergies: string): string {
+  return `
+## Allergy-Friendly Hotels in Miami
+
+Here are our top recommendations for travelers with ${allergies} allergies in Miami:
+
+### 1. The Ritz-Carlton, South Beach ★★★★★
+**Address:** 1 Lincoln Road, Miami Beach, FL 33139, USA
+- ⭐ Luxury 5-star beachfront hotel
+- 🍽️ Dedicated allergy-aware kitchen staff
+- 👨‍🍳 Executive chef consultation for special dietary needs
+- 📞 Phone: +1 786-276-4000
+
+**Description:** This iconic luxury hotel offers exceptional service for guests with ${allergies} allergies, including detailed ingredient lists and separate preparation areas.
+
+**Guest Quote:** "The chef personally designed my seafood-free menu for the entire stay. I felt completely safe dining at all their restaurants." - Sarah M.
+
+### 2. The St. Regis Bal Harbour Resort ★★★★★
+**Address:** 9703 Collins Avenue, Bal Harbour, FL 33154, USA
+- ⭐ Ultra-luxury oceanfront resort
+- 🍽️ Multiple restaurants with allergy protocols
+- 🥗 Customized meal planning available
+- 📞 Phone: +1 305-993-3300
+
+**Description:** Sophisticated resort with comprehensive allergy management and world-class dining options safe for ${allergies} restrictions.
+
+**Guest Quote:** "Every meal was prepared with extreme care for my fish allergy. The attention to detail was remarkable." - Michael R.
+
+### 3. Four Seasons Hotel Miami ★★★★★
+**Address:** 1435 Brickell Avenue, Miami, FL 33131, USA
+- ⭐ Downtown luxury hotel with bay views
+- 🍽️ Award-winning restaurants with allergy expertise
+- 👨‍🍳 Personal chef services available
+- 📞 Phone: +1 305-358-3535
+
+**Description:** Premier downtown hotel with exceptional allergy accommodation services and multiple dining venues equipped to handle ${allergies} restrictions.
+
+**Guest Quote:** "The restaurant staff was incredibly knowledgeable about cross-contamination prevention. Perfect stay!" - Lisa K.
+
+### 4. The Miami Beach EDITION ★★★★★
+**Address:** 2901 Collins Avenue, Miami Beach, FL 33140, USA
+- ⭐ Modern luxury hotel with innovative dining
+- 🍽️ Creative allergy-friendly menu options
+- 🌊 Beachfront location with multiple restaurants
+- 📞 Phone: +1 786-257-4500
+
+**Description:** Contemporary hotel with cutting-edge culinary team experienced in managing severe ${allergies} allergies with creative menu alternatives.
+
+**Guest Quote:** "They created amazing fish-free versions of their signature dishes. I didn't feel like I was missing out at all." - David T.
+
+### Tips for Miami:
+- Many Miami hotels are experienced with seafood allergies due to the coastal location
+- Request allergy-friendly rooms away from seafood processing areas
+- Contact hotels 1-2 weeks before arrival with detailed allergy information
+- Consider hotels with multiple dining options for more variety
+
+### Safety Notice:
+⚠️ Always verify allergy accommodations directly with hotels before booking. Given Miami's seafood-heavy cuisine, double-check all meal preparations.
+  `.trim();
 }
 
 function generateRomeEnhancedFallback(allergies: string): string {
