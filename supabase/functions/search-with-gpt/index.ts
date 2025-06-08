@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -14,18 +13,21 @@ serve(async (req) => {
   }
 
   try {
-    const chatbaseApiKey = Deno.env.get('CHATBASE_API_KEY');
-    if (!chatbaseApiKey) {
-      console.error('❌ Chatbase API key is missing');
-      throw new Error('Chatbase API key is not configured');
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openAIApiKey) {
+      console.error('❌ OpenAI API key is missing');
+      throw new Error('OpenAI API key is not configured');
     }
 
     // Parse request body
     const { destination, allergies } = await req.json();
     console.log('✅ Processing search request for:', { destination, allergies });
 
-    // Create English query for consistent English responses
-    const query = `Find allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Please provide 3-5 specific hotels with the following format for each hotel:
+    // Create system prompt for hotel recommendations
+    const systemPrompt = "You are a hotel recommendation assistant for people with food allergies. Provide detailed hotel recommendations with specific information about allergy accommodations, kitchen protocols, and safety measures. Always respond in English.";
+
+    // Create user query for hotel search
+    const userQuery = `Find allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Please provide 3-5 specific hotels with the following format for each hotel:
 
 ### Hotel Name ★★★★★
 **Address:** Full street address
@@ -39,78 +41,62 @@ serve(async (req) => {
 
 Please provide real hotels with accurate information in English only.`;
     
-    console.log('🤖 Sending query to Chatbase');
+    console.log('🤖 Sending query to OpenAI');
 
-    // Try the Chatbase API call
-    let response;
-    let responseData;
+    // Call OpenAI API directly
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: systemPrompt
+          },
+          {
+            role: 'user',
+            content: userQuery
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000
+      }),
+    });
+
+    console.log('📡 OpenAI Response status:', response.status);
     
-    try {
-      response = await fetch('https://www.chatbase.co/api/v1/chat', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${chatbaseApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: [
-            {
-              content: query,
-              role: "user"
-            }
-          ],
-          chatbotId: "yWArdEZJM7gTntiEMM2Tr",
-          stream: false,
-          temperature: 0.3,
-          model: "gpt-4"
-        }),
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ OpenAI API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText
       });
-
-      console.log('📡 Chatbase Response status:', response.status);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ Chatbase API error:', {
-          status: response.status,
-          statusText: response.statusText,
-          error: errorText
-        });
-        throw new Error(`Chatbase API failed: ${response.status}`);
-      }
-
-      responseData = await response.json();
-      console.log('✅ Chatbase response received');
-      
-    } catch (apiError) {
-      console.error('❌ Chatbase API call failed:', apiError);
-      throw apiError;
+      throw new Error(`OpenAI API failed: ${response.status}`);
     }
+
+    const responseData = await response.json();
+    console.log('✅ OpenAI response received');
     
-    // Extract the response content with better parsing
+    // Extract the response content
     let recommendation = '';
-    if (responseData.text) {
-      recommendation = responseData.text;
-    } else if (responseData.content) {
-      recommendation = responseData.content;
-    } else if (responseData.message) {
-      recommendation = responseData.message;
-    } else if (responseData.response) {
-      recommendation = responseData.response;
-    } else if (responseData.choices && responseData.choices[0] && responseData.choices[0].message) {
+    if (responseData.choices && responseData.choices[0] && responseData.choices[0].message) {
       recommendation = responseData.choices[0].message.content;
-    } else if (responseData.data && responseData.data.content) {
-      recommendation = responseData.data.content;
     } else {
-      console.error('❌ Unexpected Chatbase response format:', JSON.stringify(responseData, null, 2));
-      throw new Error('Unexpected response format from Chatbase');
+      console.error('❌ Unexpected OpenAI response format:', JSON.stringify(responseData, null, 2));
+      throw new Error('Unexpected response format from OpenAI');
     }
     
     // Clean up the response
     recommendation = recommendation.trim();
     
     if (!recommendation || recommendation.length < 100) {
-      console.warn('⚠️ Received very short recommendation, using enhanced fallback');
-      throw new Error('Short or empty response from API');
+      console.warn('⚠️ Received very short recommendation, using fallback');
+      throw new Error('Short or empty response from OpenAI');
     }
     
     console.log('✅ Processed recommendation length:', recommendation.length);
@@ -119,7 +105,7 @@ Please provide real hotels with accurate information in English only.`;
       JSON.stringify({ 
         recommendation: recommendation,
         status: "success",
-        source: "chatbase_api" 
+        source: "openai_api" 
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -338,7 +324,7 @@ Here are our top recommendations for travelers with ${allergies} allergies in Pa
 ### 3. Hotel des Grands Boulevards ★★★★☆
 **Address:** 17 Boulevard Poissonnière, 75002 Paris, France
 - ⭐ Boutique 4-star hotel
-- 🥐 Extensive allergy-friendly breakfast options
+- 🐐 Extensive allergy-friendly breakfast options
 - 🍽️ Restaurant with detailed ingredient information
 - 📞 Phone: +33 1 85 73 33 33
 
@@ -349,7 +335,7 @@ Here are our top recommendations for travelers with ${allergies} allergies in Pa
 ### 4. Hôtel Plaza Athénée ★★★★★
 **Address:** 25 Avenue Montaigne, 75008 Paris, France
 - ⭐ 5-star luxury accommodation
-- 🥐 Gluten-free pastries and bread
+- 🐐 Gluten-free pastries and bread
 - 🍲 Allergen-free room service
 - 📞 Phone: +33 1 53 67 66 65
 
