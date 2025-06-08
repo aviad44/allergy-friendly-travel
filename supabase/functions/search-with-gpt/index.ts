@@ -30,8 +30,8 @@ serve(async (req) => {
     console.log('🤖 Sending query to Chatbase:', query);
     console.log('🔑 Using API key (first 10 chars):', chatbaseApiKey.substring(0, 10) + '...');
 
-    // Call Chatbase API with updated endpoint and format
-    const response = await fetch('https://www.chatbase.co/api/v1/chat', {
+    // Try the new Chatbase API format first
+    let response = await fetch('https://www.chatbase.co/api/v1/chat', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${chatbaseApiKey}`,
@@ -53,71 +53,87 @@ serve(async (req) => {
     console.log('📡 Response status:', response.status);
     console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
 
+    // If first API call fails, try alternative endpoint
+    if (!response.ok) {
+      console.log('🔄 Trying alternative Chatbase API endpoint...');
+      
+      response = await fetch('https://www.chatbase.co/api/v1/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${chatbaseApiKey}`,
+        },
+        body: JSON.stringify({
+          chatbotId: "yWArdEZJM7gTntiEMM2Tr",
+          messages: [
+            {
+              role: "user",
+              content: query
+            }
+          ]
+        }),
+      });
+    }
+
+    // If still not working, try the public API endpoint
+    if (!response.ok) {
+      console.log('🔄 Trying public Chatbase API endpoint...');
+      
+      response = await fetch(`https://www.chatbase.co/api/v1/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': chatbaseApiKey,
+        },
+        body: JSON.stringify({
+          chatbotId: "yWArdEZJM7gTntiEMM2Tr",
+          message: query
+        }),
+      });
+    }
+
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('❌ Chatbase API Error:', {
+      console.error('❌ All Chatbase API attempts failed:', {
         status: response.status,
         statusText: response.statusText,
         error: errorData
       });
       
-      // Fallback to static London data for now
+      // Dynamic fallback based on destination
       const fallbackRecommendation = `
-## 1. The Langham London ⭐⭐⭐⭐⭐
+## Allergy-Friendly Hotels in ${destination}
 
-📍 London, United Kingdom
+I apologize, but our AI service is temporarily unavailable. Here are some general recommendations for allergy-friendly accommodations in ${destination}:
 
-🌟 Why it's great for ${allergies} allergy travelers:
-- Dedicated allergy-trained kitchen staff
-- Custom menu preparation for dietary restrictions
-- Excellent cross-contamination protocols
-- 24/7 room service with allergy-safe options
+### 1. International Chain Hotels
+- **Hilton Hotels** - Most locations have allergy protocols
+- **Marriott Hotels** - Trained staff for dietary restrictions  
+- **InterContinental** - Dedicated allergy menus available
 
-💬 Allergy Guest Review:
-"The staff took my ${allergies} allergy very seriously and prepared safe meals throughout my stay."
+### 2. Luxury Hotels
+- Look for 4-5 star hotels with multiple restaurants
+- Hotels with executive floors often provide better allergy support
+- Properties with dedicated concierge services
 
-🔗 https://www.langhamhotels.com/en/the-langham/london/
+### 3. Tips for ${destination}:
+- Contact hotels directly about your ${allergies} allergy before booking
+- Request rooms with kitchenette if available
+- Research local emergency services and allergy-friendly restaurants
+- Carry allergy medication and translation cards
 
----
+### Safety Notice:
+⚠️ Always verify allergy accommodations directly with hotels before booking. Staff training and protocols can vary by location.
 
-## 2. Hilton London Bankside ⭐⭐⭐⭐
-
-📍 London, United Kingdom
-
-🌟 Why it's great for ${allergies} allergy travelers:
-- Comprehensive allergen protocols
-- Staff trained in allergy awareness
-- Safe food preparation areas
-- Detailed ingredient information available
-
-💬 Allergy Guest Review:
-"Felt completely safe dining here with my ${allergies} allergy. Staff were knowledgeable and helpful."
-
-🔗 https://www.hilton.com/en/hotels/lonsbhi-hilton-london-bankside/
-
----
-
-## 3. Claridge's ⭐⭐⭐⭐⭐
-
-📍 London, United Kingdom
-
-🌟 Why it's great for ${allergies} allergy travelers:
-- World-class allergy accommodation services
-- Personalized meal planning
-- Expert kitchen staff trained in allergen handling
-- Luxury service with safety focus
-
-💬 Allergy Guest Review:
-"Outstanding service for my ${allergies} allergy. They went above and beyond to ensure my safety."
-
-🔗 https://www.claridges.co.uk/
+For the most up-to-date recommendations, please try searching again later or contact our support team.
       `;
       
       return new Response(
         JSON.stringify({ 
           recommendation: fallbackRecommendation.trim(),
           status: "success",
-          source: "fallback" 
+          source: "fallback",
+          destination: destination
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -136,8 +152,12 @@ serve(async (req) => {
       recommendation = data.content;
     } else if (data.message) {
       recommendation = data.message;
+    } else if (data.response) {
+      recommendation = data.response;
     } else if (data.choices && data.choices[0] && data.choices[0].message) {
       recommendation = data.choices[0].message.content;
+    } else if (data.data && data.data.message) {
+      recommendation = data.data.message;
     } else {
       console.error('❌ Unexpected Chatbase response format:', data);
       throw new Error('Invalid response format from Chatbase');
