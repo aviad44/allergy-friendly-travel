@@ -28,7 +28,12 @@ serve(async (req) => {
     const { destination, allergies } = await req.json();
     console.log('✅ Processing search request for:', { destination, allergies });
 
-    // Optimized request to OpenAI API
+    // Validate input
+    if (!destination || !allergies) {
+      throw new Error('Missing required parameters: destination and allergies');
+    }
+
+    // Make request to OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -36,7 +41,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o', // Keep using the powerful model but with optimized parameters
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
@@ -63,8 +68,8 @@ serve(async (req) => {
             content: `Find the best 3-5 allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies.`
           },
         ],
-        temperature: 0.2, // Lower temperature for more deterministic responses
-        max_tokens: 1000, // Reduced token limit for faster responses
+        temperature: 0.2,
+        max_tokens: 1000,
       }),
     });
 
@@ -90,6 +95,7 @@ serve(async (req) => {
         status: "success" 
       }),
       {
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
