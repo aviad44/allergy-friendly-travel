@@ -25,7 +25,7 @@ export const HeroSection = () => {
     link.rel = 'preload';
     link.as = 'image';
     link.href = heroImageUrl;
-    link.type = 'image/png'; // Adjust based on actual image type
+    link.type = 'image/png';
     document.head.appendChild(link);
     
     return () => {
@@ -35,23 +35,15 @@ export const HeroSection = () => {
     };
   }, []);
 
-  // Calculate dimensions based on viewport for explicit width/height
-  const heroHeight = isMobile ? window.innerHeight : window.innerHeight * 1.1;
-  const heroWidth = window.innerWidth;
-
   return (
     <section 
       id="hero-section"
-      className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
+      className="relative min-h-[100vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
     >
       {/* Low quality placeholder while image loads */}
       <div 
         className={`absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-600 transition-opacity duration-500 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}
         aria-hidden="true"
-        style={{
-          width: heroWidth,
-          height: heroHeight,
-        }}
       ></div>
       
       {/* Main hero image with explicit dimensions */}
@@ -61,8 +53,6 @@ export const HeroSection = () => {
           backgroundImage: `url("${heroImageUrl}")`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          width: heroWidth,
-          height: heroHeight,
         }}
         role="img"
         aria-label="Allergy-friendly travel destination with scenic view"
@@ -70,24 +60,24 @@ export const HeroSection = () => {
       
       <div className="absolute inset-0 bg-black/5 backdrop-blur-[0px]"></div>
       
-      <div className="relative z-10 container mx-auto px-4 -mt-0 sm:-mt-16">
-        <div className="mx-auto max-w-[90%] sm:max-w-[700px]">
+      <div className="relative z-10 w-full px-3 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="w-full max-w-[95%] sm:max-w-[85%] md:max-w-[700px] mx-auto">
           <div 
-            className="text-center p-6 sm:p-10 rounded-2xl backdrop-blur-sm transition-all duration-300 ease-in-out"
+            className="text-center p-4 sm:p-6 md:p-8 lg:p-10 rounded-xl sm:rounded-2xl backdrop-blur-sm transition-all duration-300 ease-in-out"
             style={{ backgroundColor: 'rgba(0, 85, 102, 0.4)' }}
           >
-            <h1 className="text-[1.75rem] sm:text-[2.2rem] font-bold leading-tight sm:leading-relaxed mb-4 text-white drop-shadow-md">
+            <h1 className="text-[1.5rem] sm:text-[1.75rem] md:text-[2.2rem] font-bold leading-tight mb-3 sm:mb-4 text-white drop-shadow-md">
               <span className="block">Find Your Perfect</span>
               <span className="block">
                 Food Allergy Friendly Hotel
               </span>
             </h1>
             
-            <p className="text-lg sm:text-xl mb-8 text-white font-medium drop-shadow-md max-w-xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-6 sm:mb-8 text-white font-medium drop-shadow-md mx-auto max-w-full sm:max-w-xl">
               Find hotels that understand your allergy needs for a safe and enjoyable stay
             </p>
             
-            <div className="transform transition-all duration-300 hover:scale-[1.02]">
+            <div className="transform transition-all duration-300 hover:scale-[1.02] w-full">
               <SearchBar />
             </div>
           </div>

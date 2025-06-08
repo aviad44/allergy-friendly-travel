@@ -87,41 +87,45 @@ export const SearchBar = () => {
   }, [destination, allergies, navigate, toast]);
 
   return (
-    <div className="flex flex-col gap-3 w-full">
-      <div className="flex flex-col sm:flex-row gap-3">
+    <div className="flex flex-col gap-2 sm:gap-3 w-full max-w-full">
+      <div className="flex flex-col gap-2 sm:gap-3 w-full">
         {/* Destination input with autocomplete */}
-        <MemoizedAutocomplete
-          placeholder="Enter destination"
-          value={destination}
-          onChange={handleDestinationChange}
-          suggestions={destinationSuggestions}
-          className="bg-white/90 backdrop-blur-sm"
-        />
+        <div className="w-full">
+          <MemoizedAutocomplete
+            placeholder="Enter destination"
+            value={destination}
+            onChange={handleDestinationChange}
+            suggestions={destinationSuggestions}
+            className="bg-white/90 backdrop-blur-sm w-full text-sm sm:text-base"
+          />
+        </div>
         
         {/* Allergy input with autocomplete */}
-        <MemoizedAutocomplete
-          placeholder="Type of allergies"
-          value={allergies}
-          onChange={handleAllergiesChange}
-          suggestions={allergySuggestions}
-          className="bg-white/90 backdrop-blur-sm"
-        />
+        <div className="w-full">
+          <MemoizedAutocomplete
+            placeholder="Type of allergies"
+            value={allergies}
+            onChange={handleAllergiesChange}
+            suggestions={allergySuggestions}
+            className="bg-white/90 backdrop-blur-sm w-full text-sm sm:text-base"
+          />
+        </div>
       </div>
       
       {/* Recent search suggestion */}
       {lastSearch && !destination && !allergies && (
-        <div className="text-xs text-blue-600 cursor-pointer hover:underline" onClick={handleUseLastSearch}>
+        <div className="text-xs text-blue-200 cursor-pointer hover:underline text-center px-2" onClick={handleUseLastSearch}>
           Use last search: {lastSearch.destination} with {lastSearch.allergies} allergies
         </div>
       )}
       
       {/* Search button */}
       <Button 
-        className="w-full p-3 md:p-4 bg-[#00b397] hover:bg-[#009f84] text-white text-[1.1em] transition-colors duration-300 flex items-center justify-center gap-2"
+        className="w-full p-3 sm:p-4 bg-[#00b397] hover:bg-[#009f84] text-white text-sm sm:text-base md:text-[1.1em] transition-colors duration-300 flex items-center justify-center gap-2 rounded-lg"
         onClick={handleSearch} 
         disabled={isSearching}
       >
-        <Search className="h-5 w-5" />
+        <Search className="h-4 w-4 sm:h-5 sm:w-5" />
         <span>{isSearching ? "Searching..." : "Search Now"}</span>
       </Button>
     </div>
