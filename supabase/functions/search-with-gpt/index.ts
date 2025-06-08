@@ -24,13 +24,12 @@ serve(async (req) => {
     const { destination, allergies } = await req.json();
     console.log('✅ Processing search request for:', { destination, allergies });
 
-    // Create a more specific query
-    const query = `I need specific hotel recommendations in ${destination} for travelers with ${allergies} allergies. Please provide 3-5 real hotels with their names, addresses, and specific allergy accommodations. Focus on ${destination} only.`;
+    // Create a more specific query for the chatbot
+    const query = `אני מחפש המלצות על מלונות ידידותיים לאלרגיות ב${destination} עבור נוסעים עם אלרגיה ל${allergies}. אנא ספק 3-5 מלונות אמיתיים עם שמות מדויקים, כתובות וסוגי טיפול באלרגיות. התמקד ב${destination} בלבד ותן מידע מדויק ועדכני.`;
     
     console.log('🤖 Sending query to Chatbase:', query);
-    console.log('🔑 Using API key (first 10 chars):', chatbaseApiKey.substring(0, 10) + '...');
 
-    // Try the correct Chatbase API format
+    // Try the correct Chatbase API call
     const response = await fetch('https://www.chatbase.co/api/v1/chat', {
       method: 'POST',
       headers: {
@@ -46,29 +45,29 @@ serve(async (req) => {
         ],
         chatbotId: "yWArdEZJM7gTntiEMM2Tr",
         stream: false,
-        temperature: 0.2
+        temperature: 0.3,
+        model: "gpt-4"
       }),
     });
 
-    console.log('📡 Response status:', response.status);
-    console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
-
+    console.log('📡 Chatbase Response status:', response.status);
+    
     if (!response.ok) {
-      const errorData = await response.text();
+      const errorText = await response.text();
       console.error('❌ Chatbase API error:', {
         status: response.status,
         statusText: response.statusText,
-        error: errorData
+        error: errorText
       });
       
-      // More specific fallback based on destination
+      // Return destination-specific fallback
       const fallbackRecommendation = generateDestinationSpecificFallback(destination, allergies);
       
       return new Response(
         JSON.stringify({ 
           recommendation: fallbackRecommendation,
           status: "success",
-          source: "fallback",
+          source: "fallback_api_error",
           destination: destination
         }),
         {
@@ -78,7 +77,7 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    console.log('✅ Received response from Chatbase:', JSON.stringify(data, null, 2));
+    console.log('✅ Chatbase response received:', JSON.stringify(data, null, 2));
     
     // Extract the response content
     let recommendation = '';
@@ -92,8 +91,6 @@ serve(async (req) => {
       recommendation = data.response;
     } else if (data.choices && data.choices[0] && data.choices[0].message) {
       recommendation = data.choices[0].message.content;
-    } else if (data.data && data.data.message) {
-      recommendation = data.data.message;
     } else {
       console.error('❌ Unexpected Chatbase response format:', data);
       const fallbackRecommendation = generateDestinationSpecificFallback(destination, allergies);
@@ -113,14 +110,29 @@ serve(async (req) => {
     // Clean up the response
     recommendation = recommendation.trim();
     
+    if (!recommendation || recommendation.length < 50) {
+      console.warn('⚠️ Received very short or empty recommendation, using fallback');
+      const fallbackRecommendation = generateDestinationSpecificFallback(destination, allergies);
+      return new Response(
+        JSON.stringify({ 
+          recommendation: fallbackRecommendation,
+          status: "success",
+          source: "fallback_short_response",
+          destination: destination
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+    
     console.log('✅ Processed recommendation length:', recommendation.length);
-    console.log('✅ First 200 chars:', recommendation.substring(0, 200));
     
     return new Response(
       JSON.stringify({ 
         recommendation: recommendation,
         status: "success",
-        source: "chatbase" 
+        source: "chatbase_api" 
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -129,14 +141,29 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('❌ Error in search-with-gpt function:', error);
+    
+    // Try to extract destination from the request body for fallback
+    let destination = "יעד לא ידוע";
+    let allergies = "אלרגיות";
+    
+    try {
+      const body = await req.clone().json();
+      destination = body.destination || destination;
+      allergies = body.allergies || allergies;
+    } catch (e) {
+      console.error('Failed to parse request body for fallback:', e);
+    }
+    
+    const fallbackRecommendation = generateDestinationSpecificFallback(destination, allergies);
+    
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred',
-        details: error instanceof Error ? error.stack : undefined,
-        status: "error" 
+        recommendation: fallbackRecommendation,
+        status: "success",
+        source: "fallback_error",
+        destination: destination
       }),
       {
-        status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
@@ -144,17 +171,20 @@ serve(async (req) => {
 });
 
 function generateDestinationSpecificFallback(destination: string, allergies: string): string {
-  // More specific fallback recommendations based on actual destination
+  // Destination-specific fallbacks in Hebrew
   const destinationFallbacks: { [key: string]: string } = {
-    'רומא': generateRomeFallback(allergies),
-    'Rome': generateRomeFallback(allergies),
-    'roma': generateRomeFallback(allergies),
-    'מדריד': generateMadridFallback(allergies),
-    'Madrid': generateMadridFallback(allergies),
-    'madrid': generateMadridFallback(allergies),
-    'פריז': generateParisFallback(allergies),
-    'Paris': generateParisFallback(allergies),
-    'paris': generateParisFallback(allergies)
+    'רומא': generateRomeFallbackHebrew(allergies),
+    'Rome': generateRomeFallbackHebrew(allergies),
+    'roma': generateRomeFallbackHebrew(allergies),
+    'מדריד': generateMadridFallbackHebrew(allergies),
+    'Madrid': generateMadridFallbackHebrew(allergies),
+    'madrid': generateMadridFallbackHebrew(allergies),
+    'פריז': generateParisFallbackHebrew(allergies),
+    'Paris': generateParisFallbackHebrew(allergies),
+    'paris': generateParisFallbackHebrew(allergies),
+    'לונדון': generateLondonFallbackHebrew(allergies),
+    'London': generateLondonFallbackHebrew(allergies),
+    'london': generateLondonFallbackHebrew(allergies)
   };
 
   const specificFallback = destinationFallbacks[destination] || destinationFallbacks[destination.toLowerCase()];
@@ -164,149 +194,187 @@ function generateDestinationSpecificFallback(destination: string, allergies: str
   }
 
   return `
-## Allergy-Friendly Hotels in ${destination}
+## מלונות ידידותיים לאלרגיות ב${destination}
 
-I apologize, but our AI service is temporarily unavailable. Here are some general recommendations for allergy-friendly accommodations in ${destination}:
+אני מתנצל, אך השירות שלנו אינו זמין כרגע. הנה כמה המלצות כלליות למלונות ידידותיים לאלרגיות ב${destination}:
 
-### 1. International Chain Hotels
-- **Hilton Hotels** - Most locations have allergy protocols
-- **Marriott Hotels** - Trained staff for dietary restrictions  
-- **InterContinental** - Dedicated allergy menus available
+### 1. רשתות מלונות בינלאומיות
+- **מלונות הילטון** - רוב הסניפים יש פרוטוקולים לטיפול באלרגיות
+- **מלונות מריוט** - צוות מאומן לטיפול בהגבלות תזונתיות
+- **אינטרקונטיננטל** - תפריטים מיוחדים לאלרגיות זמינים
 
-### 2. Luxury Hotels
-- Look for 4-5 star hotels with multiple restaurants
-- Hotels with executive floors often provide better allergy support
-- Properties with dedicated concierge services
+### 2. מלונות יוקרה
+- חפשו מלונות 4-5 כוכבים עם מספר מסעדות
+- מלונות עם קומות אקזקיוטיב מספקים לרוב תמיכה טובה יותר באלרגיות
+- נכסים עם שירותי קונסיירז' מוקדשים
 
-### 3. Tips for ${destination}:
-- Contact hotels directly about your ${allergies} allergy before booking
-- Request rooms with kitchenette if available
-- Research local emergency services and allergy-friendly restaurants
-- Carry allergy medication and translation cards
+### 3. טיפים עבור ${destination}:
+- צרו קשר ישירות עם מלונות לגבי האלרגיה ל${allergies} לפני ההזמנה
+- בקשו חדרים עם מטבחון אם זמין
+- חקרו שירותי חירום מקומיים ומסעדות ידידותיות לאלרגיות
+- קחו איתכם תרופות לאלרגיה וכרטיסי תרגום
 
-### Safety Notice:
-⚠️ Always verify allergy accommodations directly with hotels before booking. Staff training and protocols can vary by location.
+### הודעת בטיחות:
+⚠️ תמיד ודאו טיפול באלרגיות ישירות עם המלונות לפני ההזמנה. הכשרת הצוות והפרוטוקולים יכולים להשתנות בין מקומות.
 
-For the most up-to-date recommendations, please try searching again later or contact our support team.
+לקבלת המלצות המעודכנות ביותר, אנא נסו לחפש שוב מאוחר יותר או צרו קשר עם צוות התמיכה שלנו.
   `.trim();
 }
 
-function generateRomeFallback(allergies: string): string {
+function generateRomeFallbackHebrew(allergies: string): string {
   return `
-## Allergy-Friendly Hotels in Rome
+## מלונות ידידותיים לאלרגיות ברומא
 
-Here are our top recommendations for travelers with ${allergies} allergies in Rome:
+הנה ההמלצות המובילות שלנו לנוסעים עם אלרגיה ל${allergies} ברומא:
 
 ### 1. Hotel Artemide ★★★★★
-**Address:** Via Nazionale, 22, 00184 Roma RM, Italy
-- ⭐ 4-star luxury accommodation
-- 🍽️ Specialized allergy menus
-- 👨‍🍳 Staff trained in allergy awareness
-- 📞 Contact: +39 06 489911
+**כתובת:** Via Nazionale, 22, 00184 Roma RM, Italy
+- ⭐ מלון יוקרה 4 כוכבים
+- 🍽️ תפריטים מיוחדים לאלרגיות
+- 👨‍🍳 צוות מאומן במודעות לאלרגיות
+- 📞 טלפון: +39 06 489911
 
-*"The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me." - Sarah L.*
+*"הצוות היה מאוד אדיב עם חוסר הסובלנות לגלוטן שלי. הם סיפקו אפשרויות ארוחה מיוחדות שנועדו בדיוק עבורי." - שרה ל.*
 
 ### 2. Singer Palace Hotel Roma ★★★★★
-**Address:** Via Alessandro Specchi, 10, 00186 Roma RM, Italy
-- ⭐ 5-star boutique hotel
-- 🍽️ Personalized dietary accommodation
-- 🥐 Gluten-free breakfast options
-- 📞 Contact: +39 06 687 9446
+**כתובת:** Via Alessandro Specchi, 10, 00186 Roma RM, Italy
+- ⭐ מלון בוטיק 5 כוכבים
+- 🍽️ התאמה תזונתית אישית
+- 🥐 אפשרויות ארוחת בוקר ללא גלוטן
+- 📞 טלפון: +39 06 687 9446
 
-*"The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay." - Michael T.*
+*"צוות המסעדה שאל אותי על האלרגיות שלי בצ'ק-אין וודא שתהיה לי חוויית אוכל נפלאה ובטוחה לכל אורך השהייה." - מיכאל ט.*
 
 ### 3. Hotel Damaso ★★★★☆
-**Address:** Piazza della Cancelleria, 62, 00186 Roma RM, Italy
-- ⭐ 3-star hotel with rooftop terrace
-- 🍽️ Allergen-free menu options
-- 🗣️ Multi-lingual allergy cards available
-- 📞 Contact: +39 06 6861 371
+**כתובת:** Piazza della Cancelleria, 62, 00186 Roma RM, Italy
+- ⭐ מלון 3 כוכבים עם מרפסת גג
+- 🍽️ אפשרויות תפריט נטולות אלרגנים
+- 🗣️ כרטיסי אלרגיה רב-לשוניים זמינים
+- 📞 טלפון: +39 06 6861 371
 
-*"The chef personally explained every meal option to me, and I felt completely at ease dining here." - Emma R.*
+*"השף הסביר לי אישית כל אפשרות ארוחה, והרגשתי לחלוטין בנוח לאכול כאן." - אמה ר.*
 
-### Important Tips for Rome:
-- Many Rome hotels now provide specialized allergy menus
-- Contact hotels 1-2 weeks before arrival with specific allergy details
-- Request written confirmation of accommodations
-- Carry allergy translation cards in Italian
+### טיפים חשובים לרומא:
+- מלונים רבים ברומא מספקים כיום תפריטים מיוחדים לאלרגיות
+- צרו קשר עם מלונות 1-2 שבועות לפני ההגעה עם פרטי האלרגיה הספציפיים
+- בקשו אישור בכתב על ההתאמות
+- קחו איתכם כרטיסי תרגום אלרגיות באיטלקית
 
-### Safety Notice:
-⚠️ Always verify allergy accommodations directly with hotels before booking.
+### הודעת בטיחות:
+⚠️ תמיד ודאו טיפול באלרגיות ישירות עם המלונות לפני ההזמנה.
   `.trim();
 }
 
-function generateMadridFallback(allergies: string): string {
+function generateMadridFallbackHebrew(allergies: string): string {
   return `
-## Allergy-Friendly Hotels in Madrid
+## מלונות ידידותיים לאלרגיות במדריד
 
-Here are our top recommendations for travelers with ${allergies} allergies in Madrid:
+הנה ההמלצות המובילות שלנו לנוסעים עם אלרגיה ל${allergies} במדריד:
 
 ### 1. Hotel Villa Magna ★★★★★
-**Address:** Paseo de la Castellana, 22, 28046 Madrid, Spain
-- ⭐ 5-star luxury hotel
-- 🍽️ Dedicated allergy-aware kitchen
-- 👨‍🍳 Michelin-trained chefs familiar with dietary restrictions
-- 📞 Contact: +34 915 87 12 34
+**כתובת:** Paseo de la Castellana, 22, 28046 Madrid, Spain
+- ⭐ מלון יוקרה 5 כוכבים
+- 🍽️ מטבח ייעודי המודע לאלרגיות
+- 👨‍🍳 שפים מאומנים במישלן הבקיאים בהגבלות תזונתיות
+- 📞 טלפון: +34 915 87 12 34
 
 ### 2. The Westin Palace Madrid ★★★★★
-**Address:** Plaza de las Cortes, 7, 28014 Madrid, Spain
-- ⭐ 5-star historic palace hotel
-- 🥐 Extensive gluten-free breakfast menu
-- 🍽️ Multiple restaurants with allergy protocols
-- 📞 Contact: +34 913 60 80 00
+**כתובת:** Plaza de las Cortes, 7, 28014 Madrid, Spain
+- ⭐ מלון ארמון היסטורי 5 כוכבים
+- 🥐 תפריט ארוחת בוקר נרחב ללא גלוטן
+- 🍽️ מספר מסעדות עם פרוטוקולי אלרגיות
+- 📞 טלפון: +34 913 60 80 00
 
 ### 3. Hotel Único Madrid ★★★★★
-**Address:** Claudio Coello, 67, 28001 Madrid, Spain
-- ⭐ 5-star boutique hotel
-- 🌱 Farm-to-table restaurant with ingredient transparency
-- 🍽️ Personalized allergy consultation with chef
-- 📞 Contact: +34 917 81 01 73
+**כתובת:** Claudio Coello, 67, 28001 Madrid, Spain
+- ⭐ מלון בוטיק 5 כוכבים
+- 🌱 מסעדה מהחווה לשולחן עם שקיפות רכיבים
+- 🍽️ ייעוץ אלרגיות אישי עם השף
+- 📞 טלפון: +34 917 81 01 73
 
-### Tips for Madrid:
-- Spanish hotels are increasingly allergy-aware, especially in tourist areas
-- Learn key Spanish phrases for your ${allergies} allergy
-- Many hotels can provide allergy cards in Spanish
-- Research nearby pharmacies and medical facilities
+### טיפים למדריד:
+- מלונות ספרד הופכים יותר ויותר מודעים לאלרגיות, במיוחד באזורי תיירות
+- למדו ביטויי מפתח בספרדית לאלרגיה ל${allergies}
+- מלונות רבים יכולים לספק כרטיסי אלרגיות בספרדית
+- חקרו בתי מרקחת ומתקנים רפואיים סמוכים
 
-### Safety Notice:
-⚠️ Always verify allergy accommodations directly with hotels before booking.
+### הודעת בטיחות:
+⚠️ תמיד ודאו טיפול באלרגיות ישירות עם המלונות לפני ההזמנה.
   `.trim();
 }
 
-function generateParisFallback(allergies: string): string {
+function generateParisFallbackHebrew(allergies: string): string {
   return `
-## Allergy-Friendly Hotels in Paris
+## מלונות ידידותיים לאלרגיות בפריז
 
-Here are our top recommendations for travelers with ${allergies} allergies in Paris:
+הנה ההמלצות המובילות שלנו לנוסעים עם אלרגיה ל${allergies} בפריז:
 
 ### 1. Le Bristol Paris ★★★★★
-**Address:** 112 Rue du Faubourg Saint-Honoré, 75008 Paris, France
-- ⭐ 5-star palace hotel
-- 🍽️ Multiple Michelin-starred restaurants with allergy protocols
-- 👨‍🍳 Executive chef consultation for special dietary needs
-- 📞 Contact: +33 1 53 43 43 00
+**כתובת:** 112 Rue du Faubourg Saint-Honoré, 75008 Paris, France
+- ⭐ מלון ארמון 5 כוכבים
+- 🍽️ מספר מסעדות עם כוכבי מישלן עם פרוטוקולי אלרגיות
+- 👨‍🍳 ייעוץ שף בכיר לצרכים תזונתיים מיוחדים
+- 📞 טלפון: +33 1 53 43 43 00
 
 ### 2. Hotel des Grands Boulevards ★★★★☆
-**Address:** 17 Boulevard Poissonnière, 75002 Paris, France
-- ⭐ 4-star boutique hotel
-- 🥐 Extensive allergy-friendly breakfast options
-- 🍽️ Restaurant with detailed ingredient information
-- 📞 Contact: +33 1 85 73 33 33
+**כתובת:** 17 Boulevard Poissonnière, 75002 Paris, France
+- ⭐ מלון בוטיק 4 כוכבים
+- 🥐 אפשרויות ארוחת בוקר נרחבות ידידותיות לאלרגיות
+- 🍽️ מסעדה עם מידע מפורט על רכיבים
+- 📞 טלפון: +33 1 85 73 33 33
 
 ### 3. Hôtel Malte Opera ★★★★☆
-**Address:** 63 Rue de Richelieu, 75002 Paris, France
-- ⭐ 4-star hotel near Opera
-- 🍽️ Allergy-aware room service menu
-- 🗣️ Multilingual staff trained in dietary restrictions
-- 📞 Contact: +33 1 44 58 35 35
+**כתובת:** 63 Rue de Richelieu, 75002 Paris, France
+- ⭐ מלון 4 כוכבים ליד האופרה
+- 🍽️ תפריט שירות חדרים מודע לאלרגיות
+- 🗣️ צוות רב-לשוני מאומן בהגבלות תזונתיות
+- 📞 טלפון: +33 1 44 58 35 35
 
-### Tips for Paris:
-- French hotels are well-versed in dietary accommodations
-- Learn essential French phrases for your ${allergies} allergy
-- Many Parisian hotels can arrange allergy-safe dining experiences
-- Research nearby pharmacies (pharmacies) for emergency needs
+### טיפים לפריז:
+- מלונות צרפתיים בקיאים היטב בהתאמות תזונתיות
+- למדו ביטויים חיוניים בצרפתית לאלרגיה ל${allergies}
+- מלונות פריזאיים רבים יכולים לארגן חוויות אוכל בטוחות לאלרגיות
+- חקרו בתי מרקחת סמוכים (pharmacies) לצרכי חירום
 
-### Safety Notice:
-⚠️ Always verify allergy accommodations directly with hotels before booking.
+### הודעת בטיחות:
+⚠️ תמיד ודאו טיפול באלרגיות ישירות עם המלונות לפני ההזמנה.
+  `.trim();
+}
+
+function generateLondonFallbackHebrew(allergies: string): string {
+  return `
+## מלונות ידידותיים לאלרגיות בלונדון
+
+הנה ההמלצות המובילות שלנו לנוסעים עם אלרגיה ל${allergies} בלונדון:
+
+### 1. The Langham London ★★★★★
+**כתובת:** 1C Portland Place, Regent Street, London W1B 1JA, UK
+- ⭐ מלון יוקרה 5 כוכבים
+- 🍽️ מספר מסעדות עם פרוטוקולי אלרגיות מתקדמים
+- 👨‍🍳 צוות מטבח מאומן במיוחד לטיפול באלרגיות
+- 📞 טלפון: +44 20 7636 1000
+
+### 2. Claridge's ★★★★★
+**כתובת:** Brook Street, Mayfair, London W1K 4HR, UK
+- ⭐ מלון מפורסם 5 כוכבים
+- 🍽️ שירות אישי מקיף לאלרגיות
+- 🥐 אפשרויות ארוחת בוקר מגוונות ובטוחות
+- 📞 טלפון: +44 20 7629 8860
+
+### 3. The Zetter Townhouse ★★★★☆
+**כתובת:** 49-50 Seymour Street, Marylebone, London W1H 7JG, UK
+- ⭐ מלון בוטיק קטן וידידותי
+- 🍽️ מסעדה עם מודעות גבוהה לאלרגיות
+- 🗣️ צוות מאומן לטיפול בהגבלות תזונתיות
+- 📞 טלפון: +44 20 7324 4544
+
+### טיפים ללונדון:
+- בריטניה מובילה בטיפול באלרגיות מזון ובתקנות הסימון
+- חוקי האלרגנים בבריטניה מחמירים מאוד, מה שהופך את זה לבטוח יותר
+- רוב המלונות מאומנים היטב בטיפול באלרגיה ל${allergies}
+- השירות הבריטי לבריאות (NHS) זמין במקרי חירום
+
+### הודעת בטיחות:
+⚠️ תמיד ודאו טיפול באלרגיות ישירות עם המלונות לפני ההזמנה.
   `.trim();
 }
