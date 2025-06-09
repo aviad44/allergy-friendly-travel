@@ -1,7 +1,8 @@
+
 import { DestinationId } from "@/types/definitions";
 
-// Main hero image - using a working Unsplash image for better compatibility
-export const DEFAULT_SOCIAL_IMAGE = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
+// Main hero image - using your beautiful homepage pool image with palm trees
+export const DEFAULT_SOCIAL_IMAGE = 'https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png';
 
 // Helper function to ensure image URLs are absolute
 export const getAbsoluteImageUrl = (imageUrl: string): string => {
@@ -13,10 +14,10 @@ export const getAbsoluteImageUrl = (imageUrl: string): string => {
   return `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
 };
 
-// Create a record with all destination IDs using working Unsplash images
+// Create a record with all destination IDs using your homepage image as default
 const defaultDestinations: Record<DestinationId, string> = {} as Record<DestinationId, string>;
 
-// Set all destinations to use the default image - only using valid DestinationIds
+// Set all destinations to use your beautiful homepage image
 const allDestinationIds: DestinationId[] = [
   'london', 'paris', 'barcelona', 'cyprus', 'rome', 'abu-dhabi', 'crete', 
   'tokyo', 'thailand', 'hotel-chains', 'new-york', 'portugal', 'swiss-alps', 
@@ -25,36 +26,36 @@ const allDestinationIds: DestinationId[] = [
 ];
 
 allDestinationIds.forEach(id => {
-  // Always use absolute URLs for social sharing - using working Unsplash images
+  // Always use absolute URLs for social sharing - using your homepage image
   defaultDestinations[id] = DEFAULT_SOCIAL_IMAGE;
 });
 
-// Override with specific working images for destinations - ALWAYS USE WORKING UNSPLASH URLS
+// Override with specific working images for destinations - using your homepage image as primary
 export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   ...defaultDestinations,
-  // Using verified working Unsplash images for consistent social sharing
-  'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'paris': 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-  'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-  'cyprus': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80',
-  'rome': 'https://images.unsplash.com/photo-1552832230-c0197047daf6?auto=format&fit=crop&w=1200&q=80',
-  'abu-dhabi': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80',
-  'crete': 'https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80',
-  'tokyo': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80',
-  'thailand': 'https://images.unsplash.com/photo-1539650116574-75c0c6d73fb4?auto=format&fit=crop&w=1200&q=80',
-  'hotel-chains': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-  'new-york': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80',
-  'portugal': 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1200&q=80',
-  'swiss-alps': 'https://images.unsplash.com/photo-1531816458010-fb7685eecbcb?auto=format&fit=crop&w=1200&q=80',
-  'koh-samui': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
-  'turkey': 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1200&q=80',
-  'cruise-lines': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80',
-  'toronto': 'https://images.unsplash.com/photo-1517935706615-2717063c2225?auto=format&fit=crop&w=1200&q=80',
-  'ayia-napa': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80',
-  'tuscany': 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=1200&q=80',
-  'gluten-free-europe': 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1200&q=80',
-  'athens': 'https://images.unsplash.com/photo-1555993539-1732b0258235?auto=format&fit=crop&w=1200&q=80',
-  'eilat': 'https://images.unsplash.com/photo-1544918796-60e440755919?auto=format&fit=crop&w=1200&q=80'
+  // Using your beautiful homepage pool image for key destinations
+  'london': DEFAULT_SOCIAL_IMAGE,
+  'paris': DEFAULT_SOCIAL_IMAGE,
+  'barcelona': DEFAULT_SOCIAL_IMAGE,
+  'cyprus': DEFAULT_SOCIAL_IMAGE,
+  'rome': DEFAULT_SOCIAL_IMAGE,
+  'abu-dhabi': DEFAULT_SOCIAL_IMAGE,
+  'crete': DEFAULT_SOCIAL_IMAGE,
+  'tokyo': DEFAULT_SOCIAL_IMAGE,
+  'thailand': DEFAULT_SOCIAL_IMAGE,
+  'hotel-chains': DEFAULT_SOCIAL_IMAGE,
+  'new-york': DEFAULT_SOCIAL_IMAGE,
+  'portugal': DEFAULT_SOCIAL_IMAGE,
+  'swiss-alps': DEFAULT_SOCIAL_IMAGE,
+  'koh-samui': DEFAULT_SOCIAL_IMAGE,
+  'turkey': DEFAULT_SOCIAL_IMAGE,
+  'cruise-lines': DEFAULT_SOCIAL_IMAGE,
+  'toronto': DEFAULT_SOCIAL_IMAGE,
+  'ayia-napa': DEFAULT_SOCIAL_IMAGE,
+  'tuscany': DEFAULT_SOCIAL_IMAGE,
+  'gluten-free-europe': DEFAULT_SOCIAL_IMAGE,
+  'athens': DEFAULT_SOCIAL_IMAGE,
+  'eilat': DEFAULT_SOCIAL_IMAGE
 };
 
 // Pre-load the default image for better performance
