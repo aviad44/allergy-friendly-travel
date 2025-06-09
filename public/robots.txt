@@ -2,12 +2,17 @@
 User-agent: *
 Allow: /
 
-# Explicitly allow important pages
+# Allow important content pages
 Allow: /about
 Allow: /contact
 Allow: /destinations
 Allow: /categories
 Allow: /reviews
+Allow: /faq
+Allow: /terms
+Allow: /allergy-translation-card
+
+# Allow specific destination pages
 Allow: /destinations/paris
 Allow: /destinations/london
 Allow: /destinations/barcelona
@@ -16,24 +21,80 @@ Allow: /destinations/crete
 Allow: /destinations/abu-dhabi
 Allow: /destinations/thailand
 Allow: /destinations/ayia-napa
+Allow: /destinations/rome
+Allow: /destinations/tokyo
+Allow: /destinations/new-york
+Allow: /destinations/portugal
+Allow: /destinations/swiss-alps
+Allow: /destinations/koh-samui
+Allow: /destinations/turkey
+Allow: /destinations/cruise-lines
+Allow: /destinations/toronto
+Allow: /destinations/tuscany
+Allow: /destinations/gluten-free-europe
+Allow: /destinations/athens
+Allow: /destinations/eilat
+Allow: /destinations/hotel-chains
+
+# Allow hotel pages
 Allow: /hotels/le-petit-palace
 
-# Disallow development-related directories
+# BLOCK ALL CODE FILES AND INTERNAL FOLDERS
 Disallow: /src/
 Disallow: /node_modules/
 Disallow: /components/
 Disallow: /data/
+Disallow: /hooks/
+Disallow: /lib/
+Disallow: /types/
+Disallow: /utils/
+Disallow: /constants/
+Disallow: /integrations/
+Disallow: /supabase/
+Disallow: /netlify/
+Disallow: /.git/
+Disallow: /.github/
+Disallow: /dist/
+Disallow: /build/
+
+# Block all code file extensions
 Disallow: /*.js$
 Disallow: /*.ts$
 Disallow: /*.tsx$
+Disallow: /*.jsx$
 Disallow: /*.json$
 Disallow: /*.md$
 Disallow: /*.lock$
 Disallow: /*.toml$
-Disallow: /.git/
-Disallow: /.github/
+Disallow: /*.config.js$
+Disallow: /*.config.ts$
+Disallow: /*.css$
+Disallow: /*.scss$
+Disallow: /*.sass$
 
-# Explicitly ALLOW Prerender and social media bots - CRITICAL
+# Block development and build files
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /yarn.lock
+Disallow: /bun.lockb
+Disallow: /tsconfig.json
+Disallow: /vite.config.ts
+Disallow: /tailwind.config.ts
+Disallow: /postcss.config.js
+Disallow: /components.json
+Disallow: /.gitignore
+Disallow: /README.md
+
+# Block any file with these patterns
+Disallow: /*/*.ts
+Disallow: /*/*.tsx
+Disallow: /*/*.js
+Disallow: /*/*.jsx
+Disallow: /*/components/
+Disallow: /*/src/
+Disallow: /*/node_modules/
+
+# ALLOW social media and prerender bots - CRITICAL for social sharing
 User-agent: facebookexternalhit
 Allow: /
 
@@ -54,6 +115,19 @@ Allow: /
 
 User-agent: prerender
 Allow: /
+
+User-agent: GoogleBot
+Allow: /
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /components/
+Disallow: /*.ts$
+Disallow: /*.tsx$
+Disallow: /*.js$
+Disallow: /*.jsx$
+
+# Crawl delay to reduce server load
+Crawl-delay: 1
 
 # Sitemap location
 Sitemap: https://www.allergy-free-travel.com/sitemap.xml

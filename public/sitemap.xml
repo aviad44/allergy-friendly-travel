@@ -7,127 +7,199 @@
   <!-- Homepage -->
   <url>
     <loc>https://www.allergy-free-travel.com/</loc>
-    <lastmod>2024-06-10</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Main Categories -->
+  <!-- Main Content Pages -->
   <url>
-    <loc>https://www.allergy-free-travel.com/categories</loc>
-    <lastmod>2024-06-10</lastmod>
+    <loc>https://www.allergy-free-travel.com/about</loc>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.allergy-free-travel.com/contact</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/faq</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/terms</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/categories</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.allergy-free-travel.com/reviews</loc>
-    <lastmod>2024-06-10</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.allergy-free-travel.com/destinations</loc>
-    <lastmod>2024-06-10</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.allergy-free-travel.com/about</loc>
-    <lastmod>2024-06-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.allergy-free-travel.com/contact</loc>
-    <lastmod>2024-06-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.allergy-free-travel.com/faq</loc>
-    <lastmod>2024-06-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.allergy-free-travel.com/terms</loc>
-    <lastmod>2024-06-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://www.allergy-free-travel.com/allergy-translation-card</loc>
-    <lastmod>2024-07-08</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Destination Pages -->
   <url>
-    <loc>https://www.allergy-free-travel.com/destinations/paris</loc>
-    <lastmod>2024-06-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.allergy-free-travel.com/destinations/london</loc>
-    <lastmod>2024-06-10</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.allergy-free-travel.com/destinations/crete</loc>
-    <lastmod>2024-06-10</lastmod>
+    <loc>https://www.allergy-free-travel.com/destinations/paris</loc>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.allergy-free-travel.com/destinations/barcelona</loc>
-    <lastmod>2024-06-10</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.allergy-free-travel.com/destinations/ayia-napa</loc>
-    <lastmod>2024-06-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.allergy-free-travel.com/destinations/cyprus</loc>
-    <lastmod>2024-06-10</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/crete</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.allergy-free-travel.com/destinations/abu-dhabi</loc>
-    <lastmod>2024-06-10</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.allergy-free-travel.com/destinations/thailand</loc>
-    <lastmod>2024-06-10</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.allergy-free-travel.com/destinations/newyork</loc>
-    <lastmod>2024-06-10</lastmod>
+    <loc>https://www.allergy-free-travel.com/destinations/ayia-napa</loc>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/rome</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/tokyo</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/new-york</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.allergy-free-travel.com/destinations/portugal</loc>
-    <lastmod>2024-06-15</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/swiss-alps</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/koh-samui</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/turkey</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/cruise-lines</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/toronto</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/tuscany</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/gluten-free-europe</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/athens</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/eilat</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.allergy-free-travel.com/destinations/hotel-chains</loc>
+    <lastmod>2024-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   
   <!-- Hotel Pages -->
   <url>
     <loc>https://www.allergy-free-travel.com/hotels/le-petit-palace</loc>
-    <lastmod>2024-06-10</lastmod>
+    <lastmod>2024-12-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

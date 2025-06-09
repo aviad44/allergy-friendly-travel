@@ -8,13 +8,7 @@
   path = "/*"
   function = "optimize-static-assets"
 
-# Default handling for regular users
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-# Block access to development directories
+# Redirect code files and internal folders to 404
 [[redirects]]
   from = "/src/*"
   to = "/404.html"
@@ -39,6 +33,138 @@
   status = 404
   force = true
 
+[[redirects]]
+  from = "/hooks/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/lib/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/types/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/utils/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/constants/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/integrations/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/supabase/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# Block individual code files
+[[redirects]]
+  from = "/*.ts"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.tsx"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.js"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.jsx"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package-lock.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/bun.lockb"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/tsconfig*.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.config.*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/components.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.gitignore"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# URL normalization redirects
+[[redirects]]
+  from = "/destinations/abudhabi"
+  to = "/destinations/abu-dhabi"
+  status = 301
+
+[[redirects]]
+  from = "/destinations/newyork"
+  to = "/destinations/new-york"
+  status = 301
+
+# Default handling for regular users - MUST come after all specific redirects
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
 # Add security headers
 [[headers]]
   for = "/*"
@@ -49,12 +175,10 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Content-Security-Policy = "upgrade-insecure-requests"
-    # CRITICAL: Prerender token header for all requests
     X-Prerender-Token = "${PRERENDER_TOKEN}"
-    # Critical for Facebook crawlers
     Access-Control-Allow-Origin = "*"
 
-# Add improved cache control for static assets
+# Cache control for static assets
 [[headers]]
   for = "*.js"
   [headers.values]
