@@ -6,16 +6,18 @@ import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
 import { Autocomplete } from "./search/Autocomplete";
+import { MultiSelectAutocomplete } from "./search/MultiSelectAutocomplete";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// Memoized Autocomplete to prevent unnecessary re-renders
+// Memoized components to prevent unnecessary re-renders
 const MemoizedAutocomplete = memo(Autocomplete);
+const MemoizedMultiSelectAutocomplete = memo(MultiSelectAutocomplete);
 
 export const SearchBar = () => {
   const [destination, setDestination] = useState("");
-  const [allergies, setAllergies] = useState("");
+  const [allergies, setAllergies] = useState<string[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [lastSearch, setLastSearch] = useState<{destination: string, allergies: string} | null>(null);
+  const [lastSearch, setLastSearch] = useState<{destination: string, allergies: string[]} | null>(null);
   const isMobile = useIsMobile();
   
   const { toast } = useToast();
@@ -39,29 +41,29 @@ export const SearchBar = () => {
     setDestination(value);
   }, []);
   
-  const handleAllergiesChange = useCallback((value: string) => {
-    setAllergies(value);
+  const handleAllergiesChange = useCallback((values: string[]) => {
+    setAllergies(values);
   }, []);
   
   // Clear the form
   const handleClearForm = useCallback(() => {
     setDestination("");
-    setAllergies("");
+    setAllergies([]);
   }, []);
   
   // Use last search
   const handleUseLastSearch = useCallback(() => {
     if (lastSearch) {
       setDestination(lastSearch.destination);
-      setAllergies(lastSearch.allergies);
+      setAllergies(lastSearch.allergies || []);
     }
   }, [lastSearch]);
   
   const handleSearch = useCallback(async () => {
-    if (!destination || !allergies) {
+    if (!destination || allergies.length === 0) {
       toast({
         title: "Please fill in all fields",
-        description: "Both destination and allergy type are required to help find suitable hotels",
+        description: "Both destination and at least one allergy type are required to help find suitable hotels",
         variant: "destructive"
       });
       return;
@@ -81,7 +83,8 @@ export const SearchBar = () => {
     });
     
     // Navigate to search results page with query parameters
-    navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergies)}`);
+    const allergiesParam = allergies.join(',');
+    navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}`);
     
     setIsSearching(false);
   }, [destination, allergies, navigate, toast]);
@@ -100,12 +103,12 @@ export const SearchBar = () => {
           />
         </div>
         
-        {/* Allergy input with autocomplete */}
+        {/* Multi-select allergy input with autocomplete */}
         <div className="w-full">
-          <MemoizedAutocomplete
-            placeholder="Type of allergies"
-            value={allergies}
-            onChange={handleAllergiesChange}
+          <MemoizedMultiSelectAutocomplete
+            placeholder="Select allergies (choose multiple)"
+            selectedValues={allergies}
+            onSelectedValuesChange={handleAllergiesChange}
             suggestions={allergySuggestions}
             className="bg-white/90 backdrop-blur-sm w-full text-sm sm:text-base"
           />
@@ -113,9 +116,9 @@ export const SearchBar = () => {
       </div>
       
       {/* Recent search suggestion */}
-      {lastSearch && !destination && !allergies && (
+      {lastSearch && !destination && allergies.length === 0 && (
         <div className="text-xs text-blue-200 cursor-pointer hover:underline text-center px-2" onClick={handleUseLastSearch}>
-          Use last search: {lastSearch.destination} with {lastSearch.allergies} allergies
+          Use last search: {lastSearch.destination} with {Array.isArray(lastSearch.allergies) ? lastSearch.allergies.join(', ') : lastSearch.allergies} allergies
         </div>
       )}
       

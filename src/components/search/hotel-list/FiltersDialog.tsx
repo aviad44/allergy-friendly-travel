@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
+import { MultiSelectAutocomplete } from '../MultiSelectAutocomplete';
+import { allergySuggestions } from '@/utils/searchSuggestions';
 
 export interface FiltersDialogProps {
   isOpen: boolean;
@@ -21,13 +23,15 @@ export const FiltersDialog: React.FC<FiltersDialogProps> = ({
 }) => {
   const navigate = useNavigate();
   const [destinationInput, setDestinationInput] = React.useState(destination);
-  const [allergiesInput, setAllergiesInput] = React.useState(allergies);
+  const [allergiesInput, setAllergiesInput] = React.useState<string[]>(
+    allergies ? allergies.split(',').map(a => a.trim()) : []
+  );
 
   // Reset inputs when dialog opens
   React.useEffect(() => {
     if (isOpen) {
       setDestinationInput(destination);
-      setAllergiesInput(allergies);
+      setAllergiesInput(allergies ? allergies.split(',').map(a => a.trim()) : []);
     }
   }, [isOpen, destination, allergies]);
 
@@ -37,7 +41,7 @@ export const FiltersDialog: React.FC<FiltersDialogProps> = ({
     // Create search params
     const searchParams = new URLSearchParams();
     searchParams.set('destination', destinationInput);
-    searchParams.set('allergies', allergiesInput);
+    searchParams.set('allergies', allergiesInput.join(','));
     
     // Close dialog
     onOpenChange(false);
@@ -66,11 +70,12 @@ export const FiltersDialog: React.FC<FiltersDialogProps> = ({
           
           <div className="space-y-2">
             <Label htmlFor="allergies">Allergies</Label>
-            <Input 
-              id="allergies" 
-              value={allergiesInput} 
-              onChange={(e) => setAllergiesInput(e.target.value)}
-              placeholder="e.g., Peanut, Gluten, Dairy"
+            <MultiSelectAutocomplete
+              placeholder="Select allergies (choose multiple)"
+              selectedValues={allergiesInput}
+              onSelectedValuesChange={setAllergiesInput}
+              suggestions={allergySuggestions}
+              className="w-full"
             />
           </div>
           

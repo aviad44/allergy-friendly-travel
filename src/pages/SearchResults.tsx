@@ -22,7 +22,9 @@ const SearchResults = () => {
   const requestTimeoutRef = useRef<number | null>(null);
   
   const destination = searchParams.get("destination") || "";
-  const allergies = searchParams.get("allergies") || "";
+  const allergiesParam = searchParams.get("allergies") || "";
+  // Handle both comma-separated and single allergy formats for backward compatibility
+  const allergies = allergiesParam.includes(',') ? allergiesParam : allergiesParam;
   
   const [recommendation, setRecommendation] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -134,10 +136,11 @@ const SearchResults = () => {
     };
   }, [destination, allergies, toast, navigate]);
 
-  // SEO metadata
-  const pageTitle = `Allergy-Friendly Hotels in ${destination} | Safe Dining for ${allergies} Allergies`;
-  const pageDescription = `Discover the best allergy-friendly hotels in ${destination} for travelers with ${allergies} allergies. Expert recommendations for safe accommodations.`;
-  const canonicalUrl = `https://www.allergy-free-travel.com/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergies)}`;
+  // SEO metadata - handle multiple allergies in the description
+  const allergiesDisplay = allergiesParam.includes(',') ? allergiesParam.replace(/,/g, ', ') : allergiesParam;
+  const pageTitle = `Allergy-Friendly Hotels in ${destination} | Safe Dining for ${allergiesDisplay} Allergies`;
+  const pageDescription = `Discover the best allergy-friendly hotels in ${destination} for travelers with ${allergiesDisplay} allergies. Expert recommendations for safe accommodations.`;
+  const canonicalUrl = `https://www.allergy-free-travel.com/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}`;
   const imageUrl = "https://www.allergy-free-travel.com/lovable-uploads/e8b4dc3d-60a2-4fb7-bc33-77580f4d249c.png";
 
   return (
