@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useState, useCallback, memo, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { destinationSuggestions } from "@/utils/searchSuggestions";
+import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
 import { Autocomplete } from "./search/Autocomplete";
-import { AllergiesTable } from "./search/AllergiesTable";
+import { MultiSelectAutocomplete } from "./search/MultiSelectAutocomplete";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 // Memoized components to prevent unnecessary re-renders
 const MemoizedAutocomplete = memo(Autocomplete);
-const MemoizedAllergiesTable = memo(AllergiesTable);
+const MemoizedMultiSelectAutocomplete = memo(MultiSelectAutocomplete);
 
 export const SearchBar = () => {
   const [destination, setDestination] = useState("");
@@ -103,11 +103,14 @@ export const SearchBar = () => {
           />
         </div>
         
-        {/* Allergies selection table */}
+        {/* Multi-select allergy input with autocomplete */}
         <div className="w-full">
-          <MemoizedAllergiesTable
-            selectedAllergies={allergies}
-            onAllergiesChange={handleAllergiesChange}
+          <MemoizedMultiSelectAutocomplete
+            placeholder="Select allergies (choose multiple)"
+            selectedValues={allergies}
+            onSelectedValuesChange={handleAllergiesChange}
+            suggestions={allergySuggestions}
+            className="bg-white/90 backdrop-blur-sm w-full text-sm sm:text-base"
           />
         </div>
       </div>
