@@ -1,4 +1,3 @@
-
 import { DestinationId } from "@/types/definitions";
 
 // Main hero image - using your beautiful homepage pool image with palm trees
@@ -55,7 +54,7 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'tuscany': DEFAULT_SOCIAL_IMAGE,
   'gluten-free-europe': DEFAULT_SOCIAL_IMAGE,
   'athens': DEFAULT_SOCIAL_IMAGE,
-  'eilat': DEFAULT_SOCIAL_IMAGE
+  'eilat': '/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png' // Specific Eilat U Coral Beach hotel image
 };
 
 // Pre-load the default image for better performance

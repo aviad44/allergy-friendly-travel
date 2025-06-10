@@ -14,7 +14,7 @@ const eilatHotels: Hotel[] = [
     features: ['Dedicated Allergy Liaison', 'Pre-arrival communication', 'Separate utensils for allergen-free cooking', 'Custom meal preparation', 'Emergency preparedness'],
     rating: 4.7,
     priceRange: '$$',
-    imageUrl: '/lovable-uploads/48a5bd4e-8c30-41ef-835e-981d6731b3b8.png',
+    imageUrl: '/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png', // Updated to use the specific Eilat hotel image
     website: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive',
     bookingUrl: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive',
     guestReview: "My child ate in a hotel restaurant without fear. I've never seen him so calm. For the first time in years, I slept well at a hotel. Someone was thinking about us.",
