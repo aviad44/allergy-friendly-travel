@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    // Add history fallback for client-side routing
     historyApiFallback: true, 
   },
   plugins: [
@@ -29,47 +28,60 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Optimize for production
-    target: 'es2018',
+    target: 'es2020', // Modern target for better optimization
     outDir: 'dist',
     assetsDir: 'assets',
-    // Enable minification
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
+        drop_console: mode === 'production',
         drop_debugger: true,
+        pure_funcs: mode === 'production' ? ['console.log'] : [],
       },
     },
-    // Enable code splitting
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor': ['react', 'react-dom', 'react-router-dom'],
+          'react-vendor': ['react', 'react-dom'],
+          'router': ['react-router-dom'],
           'ui-components': [
             '@/components/ui/button', 
             '@/components/ui/card', 
             '@/components/ui/toast'
           ],
+          'utils': [
+            '@/utils/image-optimization',
+            '@/utils/performanceMonitoring'
+          ]
         },
-        // Ensure chunk size is reasonable
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
-        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name?.split('.');
+          const ext = info?.[info.length - 1];
+          if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(assetInfo.name || '')) {
+            return `assets/img/[name]-[hash].[ext]`;
+          }
+          if (/\.(woff2?|eot|ttf|otf)$/i.test(assetInfo.name || '')) {
+            return `assets/fonts/[name]-[hash].[ext]`;
+          }
+          return `assets/${ext}/[name]-[hash].[ext]`;
+        },
       },
     },
-    // Enable source maps for production (helps with monitoring)
-    sourcemap: true,
-    // Enable CSS code splitting
+    sourcemap: false, // Disable sourcemaps in production for smaller bundles
     cssCodeSplit: true,
-    // Reduce chunk size warnings threshold
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 800, // More aggressive chunk size limits
+    reportCompressedSize: false, // Skip gzip reporting for faster builds
   },
-  // Enable tree shaking
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
     esbuildOptions: {
-      treeShaking: true,
+      target: 'es2020',
     },
   },
+  esbuild: {
+    target: 'es2020',
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+  }
 }));

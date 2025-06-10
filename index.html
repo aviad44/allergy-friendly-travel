@@ -13,13 +13,20 @@
     <!-- Critical CSS Inlining (optimized above-the-fold styles) -->
     <style>
       /* Critical path CSS for fastest rendering */
-      body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fff}
+      body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fff;font-display:swap}
       .hero-section{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center}
+      /* Preload critical font */
+      @font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;src:local('Poppins Regular'),local('Poppins-Regular')}
     </style>
     
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" as="image" />
+    <!-- Preload critical resources with highest priority -->
+    <link rel="preload" href="/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" as="image" fetchpriority="high" />
     <link rel="preload" href="/src/index.css" as="style" />
+    <link rel="preload" href="/src/main.tsx" as="script" crossorigin />
+    
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     
     <!-- Primary Meta Tags -->
     <meta name="description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more dietary restrictions worldwide." />
@@ -58,16 +65,23 @@
     <!-- Facebook specific link tag - helps with certain Facebook scrapers -->
     <link rel="image_src" href="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
     
-    <!-- Deferred/Async Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5PWZX00PL4"></script>
+    <!-- Optimized Analytics - defer loading to improve initial page load -->
     <script>
+      // Defer analytics until after critical content loads
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-5PWZX00PL4', { 'send_page_view': false });
-      // Defer full pageview tracking until after critical content loads
+      
+      // Load analytics script only after page is interactive
       window.addEventListener('load', function() {
-        gtag('event', 'page_view');
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-5PWZX00PL4';
+        document.head.appendChild(script);
+        
+        // Send pageview after everything is loaded
+        setTimeout(() => gtag('event', 'page_view'), 100);
       });
     </script>
     
@@ -77,71 +91,22 @@
     <!-- Robots directive -->
     <meta name="robots" content="index, follow" />
     
-    <!-- Non-critical CSS loaded with low priority -->
-    <link rel="stylesheet" href="/src/index.css" media="print" onload="this.media='all'" />
+    <!-- Load CSS with optimal priority -->
+    <link rel="stylesheet" href="/src/index.css" media="all" />
     
-    <!-- Structured Data -->
+    <!-- Structured Data - minimize and optimize -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Allergy Free Travel",
-      "url": "https://www.allergy-free-travel.com",
-      "logo": "https://www.allergy-free-travel.com/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png",
-      "image": "https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png",
-      "description": "Helping travelers with food allergies and dietary restrictions find safe accommodations worldwide.",
-      "sameAs": [
-        "https://www.facebook.com/allergyfreetravel",
-        "https://www.instagram.com/allergyfreetravel",
-        "https://twitter.com/allergyfreetravel"
-      ]
-    }
-    </script>
-    
-    <!-- Website Schema Markup -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "url": "https://www.allergy-free-travel.com",
-      "name": "Allergy Free Travel",
-      "description": "Find allergy-friendly hotels and travel guides worldwide",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://www.allergy-free-travel.com/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
+    {"@context":"https://schema.org","@type":"Organization","name":"Allergy Free Travel","url":"https://www.allergy-free-travel.com","logo":"https://www.allergy-free-travel.com/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png","image":"https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png","description":"Helping travelers with food allergies and dietary restrictions find safe accommodations worldwide."}
     </script>
     
     <!-- Additional image metadata for Facebook/WhatsApp-->
     <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
     <meta property="og:image:url" content="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
     <meta property="og:image:secure_url" content="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
-    
-    <style>
-        #lovable-badge {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            width: 141px;
-            padding: 5px 13px;    
-            background-color: #000;
-            color: #fff;
-            font-size: 12px;
-            border-radius: 5px;
-            font-family: sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            z-index: 1000000;
-        }
-    </style>
 </head>
 <body>
     <div id="root"></div>
-    <!-- Non-critical scripts loaded at the end of body -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <!-- Move all non-critical scripts to end of body for better performance -->
     <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>
