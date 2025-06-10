@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useState, useCallback, memo, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
+import { destinationSuggestions } from "@/utils/searchSuggestions";
 import { Autocomplete } from "./search/Autocomplete";
-import { MultiSelectAutocomplete } from "./search/MultiSelectAutocomplete";
+import { AllergiesTable } from "./search/AllergiesTable";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 // Memoized components to prevent unnecessary re-renders
 const MemoizedAutocomplete = memo(Autocomplete);
-const MemoizedMultiSelectAutocomplete = memo(MultiSelectAutocomplete);
+const MemoizedAllergiesTable = memo(AllergiesTable);
 
 export const SearchBar = () => {
   const [destination, setDestination] = useState("");
@@ -90,8 +90,8 @@ export const SearchBar = () => {
   }, [destination, allergies, navigate, toast]);
 
   return (
-    <div className="flex flex-col gap-2 sm:gap-3 w-full max-w-full">
-      <div className="flex flex-col gap-2 sm:gap-3 w-full">
+    <div className="flex flex-col gap-4 w-full max-w-full">
+      <div className="flex flex-col gap-4 w-full">
         {/* Destination input with autocomplete */}
         <div className="w-full">
           <MemoizedAutocomplete
@@ -103,14 +103,11 @@ export const SearchBar = () => {
           />
         </div>
         
-        {/* Multi-select allergy input with autocomplete */}
+        {/* Allergies selection table */}
         <div className="w-full">
-          <MemoizedMultiSelectAutocomplete
-            placeholder="Select allergies (choose multiple)"
-            selectedValues={allergies}
-            onSelectedValuesChange={handleAllergiesChange}
-            suggestions={allergySuggestions}
-            className="bg-white/90 backdrop-blur-sm w-full text-sm sm:text-base"
+          <MemoizedAllergiesTable
+            selectedAllergies={allergies}
+            onAllergiesChange={handleAllergiesChange}
           />
         </div>
       </div>
