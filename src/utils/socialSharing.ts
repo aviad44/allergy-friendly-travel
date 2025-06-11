@@ -13,48 +13,30 @@ export const getAbsoluteImageUrl = (imageUrl: string): string => {
   return `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
 };
 
-// Create a record with all destination IDs using your homepage image as default
-const defaultDestinations: Record<DestinationId, string> = {} as Record<DestinationId, string>;
-
-// Set all destinations to use your beautiful homepage image
-const allDestinationIds: DestinationId[] = [
-  'london', 'paris', 'barcelona', 'cyprus', 'rome', 'abu-dhabi', 'crete', 
-  'tokyo', 'thailand', 'hotel-chains', 'new-york', 'portugal', 'swiss-alps', 
-  'koh-samui', 'turkey', 'cruise-lines', 'toronto', 'ayia-napa', 'tuscany', 
-  'gluten-free-europe', 'athens', 'eilat'
-];
-
-allDestinationIds.forEach(id => {
-  // Always use absolute URLs for social sharing - using your homepage image
-  defaultDestinations[id] = DEFAULT_SOCIAL_IMAGE;
-});
-
-// Override with specific working images for destinations - using your homepage image as primary
+// Destination-specific images - each destination gets its unique image
 export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
-  ...defaultDestinations,
-  // Using your beautiful homepage pool image for key destinations
-  'london': DEFAULT_SOCIAL_IMAGE,
-  'paris': DEFAULT_SOCIAL_IMAGE,
-  'barcelona': DEFAULT_SOCIAL_IMAGE,
-  'cyprus': DEFAULT_SOCIAL_IMAGE,
-  'rome': DEFAULT_SOCIAL_IMAGE,
-  'abu-dhabi': DEFAULT_SOCIAL_IMAGE,
-  'crete': DEFAULT_SOCIAL_IMAGE,
-  'tokyo': DEFAULT_SOCIAL_IMAGE,
-  'thailand': DEFAULT_SOCIAL_IMAGE,
-  'hotel-chains': DEFAULT_SOCIAL_IMAGE,
-  'new-york': DEFAULT_SOCIAL_IMAGE,
-  'portugal': DEFAULT_SOCIAL_IMAGE,
-  'swiss-alps': DEFAULT_SOCIAL_IMAGE,
-  'koh-samui': DEFAULT_SOCIAL_IMAGE,
-  'turkey': DEFAULT_SOCIAL_IMAGE,
-  'cruise-lines': DEFAULT_SOCIAL_IMAGE,
-  'toronto': DEFAULT_SOCIAL_IMAGE,
-  'ayia-napa': DEFAULT_SOCIAL_IMAGE,
-  'tuscany': DEFAULT_SOCIAL_IMAGE,
-  'gluten-free-europe': DEFAULT_SOCIAL_IMAGE,
-  'athens': DEFAULT_SOCIAL_IMAGE,
-  'eilat': '/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png' // Specific Eilat U Coral Beach hotel image
+  'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'paris': 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+  'cyprus': 'https://www.allergy-free-travel.com/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png',
+  'rome': 'https://www.allergy-free-travel.com/lovable-uploads/decde333-fd7d-4147-8bad-637fbf08028c.png',
+  'abu-dhabi': 'https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=1200&q=80',
+  'crete': 'https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=1200&q=80',
+  'tokyo': 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80',
+  'thailand': 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80',
+  'hotel-chains': 'https://www.allergy-free-travel.com/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png',
+  'new-york': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80',
+  'portugal': 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1200&q=80',
+  'swiss-alps': 'https://www.allergy-free-travel.com/lovable-uploads/a53b2ba4-d551-4fcd-bd11-36c4643be95b.png',
+  'koh-samui': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+  'turkey': 'https://www.allergy-free-travel.com/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png',
+  'cruise-lines': 'https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=1200&q=80',
+  'toronto': 'https://www.allergy-free-travel.com/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png',
+  'ayia-napa': 'https://www.allergy-free-travel.com/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png',
+  'tuscany': 'https://www.allergy-free-travel.com/lovable-uploads/ea1edce9-b144-449c-a4c7-0e3f02c54be9.png',
+  'gluten-free-europe': 'https://www.allergy-free-travel.com/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png',
+  'athens': 'https://www.allergy-free-travel.com/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png',
+  'eilat': 'https://www.allergy-free-travel.com/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png'
 };
 
 // Pre-load the default image for better performance
