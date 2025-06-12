@@ -62,7 +62,7 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Destination Pages -->
+  <!-- Destination Pages - All with consistent URLs -->
   <url>
     <loc>https://www.allergy-free-travel.com/destinations/london</loc>
     <lastmod>2024-12-09</lastmod>

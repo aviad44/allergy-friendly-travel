@@ -1,5 +1,7 @@
+
 import React from 'react';
-import { Helmet } from "react-helmet";
+import { SocialTags } from "@/components/SocialTags";
+import { DESTINATION_OG_IMAGES } from '@/utils/socialSharing';
 import { CruiseHero } from '@/components/cruise/CruiseHero';
 import { CruiseIntro } from '@/components/cruise/CruiseIntro';
 import { ComparisonTable } from '@/components/cruise/ComparisonTable';
@@ -66,24 +68,22 @@ const cruiseLines: CruiseLine[] = [
 ];
 
 const CruiseLines = () => {
-  const baseUrl = import.meta.env.VITE_PUBLIC_URL || 'https://www.allergy-free-travel.com';
+  const pageTitle = "Top Cruise Lines for Food Allergies (2025) – Real Reviews & Rankings";
+  const pageDescription = "Explore the best cruise lines for travelers with food allergies. Real reviews, expert rankings, and top safety practices for celiac, nut, dairy, and gluten sensitivities.";
+  const canonicalUrl = "https://www.allergy-free-travel.com/destinations/cruise-lines";
+  const imageUrl = DESTINATION_OG_IMAGES['cruise-lines'];
 
   return (
     <div className="min-h-screen bg-background pb-12">
-      <Helmet>
-        <title>Top Cruise Lines for Food Allergies (2025) – Real Reviews & Rankings</title>
-        <meta 
-          name="description" 
-          content="Explore the best cruise lines for travelers with food allergies. Real reviews, expert rankings, and top safety practices for celiac, nut, dairy, and gluten sensitivities." 
-        />
-        <meta 
-          name="keywords" 
-          content="cruise lines food allergies, allergy-friendly cruises, gluten-free cruise, dairy-free cruise meals, cruises for dietary restrictions, celiac cruise, allergy-safe travel" 
-        />
-        <link rel="canonical" href={`${baseUrl}/destinations/cruise-lines`} />
-      </Helmet>
+      <SocialTags
+        title={pageTitle}
+        description={pageDescription}
+        imageUrl={imageUrl}
+        url={canonicalUrl}
+        type="article"
+      />
 
-      <CruiseHero baseUrl={baseUrl} />
+      <CruiseHero baseUrl={canonicalUrl} />
       
       <div className="container mx-auto px-4 py-8 max-w-4xl -mt-10 relative z-10">
         <CruiseIntro />

@@ -6,91 +6,35 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
+import { SocialTags } from "@/components/SocialTags";
+import { DESTINATION_OG_IMAGES } from '@/utils/socialSharing';
 
 export default function HotelChains() {
   // SEO metadata
   const pageTitle = "Top Allergy-Friendly Hotel Chains Worldwide (2025 Guide)";
   const pageDescription = "Discover the top global hotel chains with allergy-friendly and celiac-safe food policies. Learn which hotels accommodate food allergies and offer certified allergy-safe services.";
-  const pageKeywords = "Allergy Friendly Hotels, Gluten Free Hotels, Celiac Safe Travel, Food Allergies, Hotel Chains with Allergy Policies";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
-  
-  // CRITICAL: Using a reliable hotel chains image that's guaranteed to load
-  const imageUrl = "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png";
+  const imageUrl = DESTINATION_OG_IMAGES['hotel-chains'];
   
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   
-  // Current date for schema metadata
-  const currentDate = new Date().toISOString().split('T')[0];
-  
-  console.log("HotelChains page rendering with image:", imageUrl);
-
   // Preload hero image
   useEffect(() => {
     const img = new Image();
     img.src = imageUrl;
-    img.onload = () => {
-      console.log("Hotel chains hero image preloaded successfully");
-      setHeroImageLoaded(true);
-    };
-    img.onerror = (e) => {
-      console.error("Failed to load hotel chains hero image:", e);
-      // Fall back to another reliable image if needed
-      const fallbackUrl = "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png";
-      console.log("Trying fallback hotel image:", fallbackUrl);
-      const fallbackImg = new Image();
-      fallbackImg.src = fallbackUrl;
-      fallbackImg.onload = () => setHeroImageLoaded(true);
-    };
+    img.onload = () => setHeroImageLoaded(true);
   }, [imageUrl]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <meta name="keywords" content={pageKeywords} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta name="robots" content="index, follow" />
-        
-        {/* Open Graph Meta Tags */}
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:image" content={imageUrl} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:type" content="website" />
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content={imageUrl} />
-        
-        {/* Schema.org markup */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            "headline": pageTitle,
-            "description": pageDescription,
-            "image": imageUrl,
-            "author": {
-              "@type": "Organization",
-              "name": "Allergy-Free Travel"
-            },
-            "publisher": {
-              "@type": "Organization",
-              "name": "Allergy-Free Travel",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png"
-              }
-            },
-            "datePublished": "2023-07-15",
-            "dateModified": currentDate
-          })}
-        </script>
-      </Helmet>
-
+      <SocialTags
+        title={pageTitle}
+        description={pageDescription}
+        imageUrl={imageUrl}
+        url={canonicalUrl}
+        type="article"
+      />
+      
       {/* Hero Image */}
       <div className="relative h-60 sm:h-72 md:h-96 overflow-hidden">
         <img 
