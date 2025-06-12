@@ -77,7 +77,7 @@ export const optimizeFontLoading = () => {
   document.head.appendChild(styleSheet);
 };
 
-// Monitor and report performance metrics
+// Monitor and report performance metrics with proper typing
 export const trackPerformanceMetrics = () => {
   // Track Core Web Vitals
   if ('PerformanceObserver' in window) {
@@ -87,32 +87,37 @@ export const trackPerformanceMetrics = () => {
       const lastEntry = entries[entries.length - 1];
       console.log(`LCP: ${lastEntry.startTime.toFixed(1)}ms`);
       
-      // Report to analytics if needed
       if (lastEntry.startTime > 2500) {
         console.warn('Poor LCP detected:', lastEntry.startTime);
       }
     }).observe({ type: 'largest-contentful-paint', buffered: true });
 
-    // FID tracking
+    // FID tracking - properly typed
     new PerformanceObserver((entryList) => {
       const entries = entryList.getEntries();
       entries.forEach(entry => {
-        const fid = entry.processingStart - entry.startTime;
-        console.log(`FID: ${fid.toFixed(1)}ms`);
-        
-        if (fid > 100) {
-          console.warn('Poor FID detected:', fid);
+        // Type assertion for first-input entry
+        const fidEntry = entry as PerformanceEventTiming;
+        if (fidEntry.processingStart && fidEntry.startTime) {
+          const fid = fidEntry.processingStart - fidEntry.startTime;
+          console.log(`FID: ${fid.toFixed(1)}ms`);
+          
+          if (fid > 100) {
+            console.warn('Poor FID detected:', fid);
+          }
         }
       });
     }).observe({ type: 'first-input', buffered: true });
 
-    // CLS tracking
+    // CLS tracking - properly typed
     let clsValue = 0;
     new PerformanceObserver((entryList) => {
       const entries = entryList.getEntries();
       entries.forEach(entry => {
-        if (!entry.hadRecentInput) {
-          clsValue += entry.value;
+        // Type assertion for layout-shift entry
+        const clsEntry = entry as any; // Using 'any' for layout-shift specific properties
+        if (clsEntry.hadRecentInput === false || clsEntry.hadRecentInput === undefined) {
+          clsValue += clsEntry.value || 0;
         }
       });
       
