@@ -2,22 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { OptimizedImage } from '@/components/OptimizedImage';
 
 export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const isMobile = useIsMobile();
   const heroImageUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
   
-  // Aggressive preloading for LCP optimization
+  // Preload hero image with highest priority
   useEffect(() => {
-    // Create high-priority image preload
-    const img = new Image();
-    img.fetchPriority = 'high';
-    img.loading = 'eager';
-    img.onload = () => setImageLoaded(true);
-    img.src = heroImageUrl;
-    
-    // Prefetch critical resources
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'image';
@@ -35,16 +28,20 @@ export const HeroSection = () => {
   return (
     <section 
       className="relative min-h-[100vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
-      style={{
-        // Inline critical styles for faster rendering
-        backgroundImage: imageLoaded ? `url("${heroImageUrl}")` : 'linear-gradient(135deg, #00b397 0%, #0085a3 100%)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
     >
-      {/* Optimized overlay */}
-      <div className="absolute inset-0 bg-black/5"></div>
+      {/* Optimized background image with explicit dimensions */}
+      <div className="absolute inset-0">
+        <OptimizedImage
+          src={heroImageUrl}
+          alt="Beautiful poolside vacation scene with palm trees - Allergy-Free Travel"
+          className="w-full h-full object-cover"
+          width={1920}
+          height={1080}
+          priority={true}
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/5"></div>
+      </div>
       
       <div className="relative z-10 w-full px-3 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="w-full max-w-[95%] sm:max-w-[85%] md:max-w-[700px] mx-auto">

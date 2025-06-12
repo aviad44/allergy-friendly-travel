@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    target: 'es2020', // Modern target for better optimization
+    target: 'es2020',
     outDir: 'dist',
     assetsDir: 'assets',
     minify: 'terser',
@@ -42,16 +42,34 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
+          // Vendor chunks
           'react-vendor': ['react', 'react-dom'],
           'router': ['react-router-dom'],
+          
+          // UI components
           'ui-components': [
             '@/components/ui/button', 
             '@/components/ui/card', 
             '@/components/ui/toast'
           ],
-          'utils': [
+          
+          // Performance utilities
+          'performance': [
+            '@/utils/performanceOptimizer',
+            '@/hooks/usePerformanceOptimization'
+          ],
+          
+          // Image optimization
+          'image-optimization': [
             '@/utils/image-optimization',
-            '@/utils/performanceMonitoring'
+            '@/components/OptimizedImage'
+          ],
+          
+          // Destination pages (lazy loaded)
+          'destinations': [
+            '@/pages/destinations/Paris',
+            '@/pages/destinations/London',
+            '@/pages/destinations/Rome'
           ]
         },
         chunkFileNames: 'assets/js/[name]-[hash].js',
@@ -59,7 +77,7 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name?.split('.');
           const ext = info?.[info.length - 1];
-          if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(assetInfo.name || '')) {
+          if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico|webp)$/i.test(assetInfo.name || '')) {
             return `assets/img/[name]-[hash].[ext]`;
           }
           if (/\.(woff2?|eot|ttf|otf)$/i.test(assetInfo.name || '')) {
@@ -69,13 +87,18 @@ export default defineConfig(({ mode }) => ({
         },
       },
     },
-    sourcemap: false, // Disable sourcemaps in production for smaller bundles
+    sourcemap: false,
     cssCodeSplit: true,
-    chunkSizeWarningLimit: 800, // More aggressive chunk size limits
-    reportCompressedSize: false, // Skip gzip reporting for faster builds
+    chunkSizeWarningLimit: 500, // More aggressive size limits
+    reportCompressedSize: false,
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
+    include: [
+      'react', 
+      'react-dom', 
+      'react-router-dom',
+      '@/utils/performanceOptimizer'
+    ],
     esbuildOptions: {
       target: 'es2020',
     },
