@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { CanonicalTags } from '@/components/CanonicalTags';
 import { DestinationsHero } from '@/components/destinations/DestinationsHero';
 import { DestinationsList } from '@/components/destinations/DestinationsList';
 import { destinations } from '@/data/destinations-list';
@@ -16,11 +17,12 @@ const DestinationsIndex = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
+      <CanonicalTags canonicalUrl={canonicalUrl} />
+      
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <meta name="keywords" content={pageKeywords} />
-        <link rel="canonical" href={canonicalUrl} />
         <meta name="robots" content="index, follow" />
         
         {/* Open Graph Meta Tags */}

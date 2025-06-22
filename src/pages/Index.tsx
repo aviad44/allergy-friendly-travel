@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { HOME_CONTENT } from "@/constants/home";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { SocialTags } from "@/components/SocialTags";
+import { CanonicalTags } from "@/components/CanonicalTags";
 import { Helmet } from "react-helmet";
 
 // Lazy load non-critical components
@@ -25,6 +26,8 @@ export default function Index() {
   
   return (
     <>
+      <CanonicalTags canonicalUrl={`${baseUrl}/`} />
+      
       {/* Meta tags */}
       <Helmet>
         <meta property="og:image" content={mainImage} />
