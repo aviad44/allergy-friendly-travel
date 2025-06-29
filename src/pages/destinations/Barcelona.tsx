@@ -1,6 +1,7 @@
 
 import { DestinationReviews } from "@/components/reviews/DestinationReviews";
 import { SocialTags } from "@/components/SocialTags";
+import { CanonicalTags } from "@/components/CanonicalTags";
 
 const Barcelona = () => {
   // SEO metadata with absolute URLs for proper social sharing
@@ -13,6 +14,7 @@ const Barcelona = () => {
 
   return (
     <>
+      <CanonicalTags canonicalUrl={canonicalUrl} />
       <SocialTags
         title={pageTitle}
         description={pageDescription}

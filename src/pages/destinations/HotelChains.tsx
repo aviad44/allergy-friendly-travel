@@ -1,3 +1,4 @@
+
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Rocket, ExternalLink, Hotel, Star, Search } from "lucide-react";
@@ -7,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 import { SocialTags } from "@/components/SocialTags";
+import { CanonicalTags } from "@/components/CanonicalTags";
 import { DESTINATION_OG_IMAGES } from '@/utils/socialSharing';
 
 export default function HotelChains() {
@@ -27,6 +29,7 @@ export default function HotelChains() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      <CanonicalTags canonicalUrl={canonicalUrl} />
       <SocialTags
         title={pageTitle}
         description={pageDescription}

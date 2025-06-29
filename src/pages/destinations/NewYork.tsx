@@ -1,6 +1,7 @@
 
 import { DestinationReviews } from "@/components/reviews/DestinationReviews";
 import { Helmet } from "react-helmet";
+import { CanonicalTags } from "@/components/CanonicalTags";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
@@ -30,11 +31,11 @@ const NewYork = () => {
 
   return (
     <>
+      <CanonicalTags canonicalUrl={canonicalUrl} />
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <meta name="keywords" content={pageKeywords} />
-        <link rel="canonical" href={canonicalUrl} />
         <meta name="robots" content="index, follow" />
         
         {/* Open Graph Meta Tags */}

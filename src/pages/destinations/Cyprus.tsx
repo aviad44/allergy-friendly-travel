@@ -1,6 +1,7 @@
 
 import { DestinationReviews } from "@/components/reviews/DestinationReviews";
 import { SocialTags } from "@/components/SocialTags";
+import { CanonicalTags } from "@/components/CanonicalTags";
 
 const Cyprus = () => {
   // SEO metadata
@@ -13,6 +14,7 @@ const Cyprus = () => {
   
   return (
     <>
+      <CanonicalTags canonicalUrl={canonicalUrl} />
       <SocialTags 
         title={pageTitle}
         description={pageDescription}
