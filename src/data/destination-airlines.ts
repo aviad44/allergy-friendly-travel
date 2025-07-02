@@ -3,62 +3,61 @@ import { DestinationContent } from '@/types/definitions';
 
 export const airlinesContent: Partial<DestinationContent> = {
   intro: [
-    "Flying with food allergies doesn't have to be stressful. Discover which airlines around the world take allergies seriously and read what real travelers with food allergies are saying.",
-    "Our comprehensive guide ranks the best allergy-friendly airlines based on their policies, crew training, and real passenger experiences."
+    "Flying with food allergies doesn't have to be stressful. Discover which airlines around the world take allergies seriously and read what real travelers with food allergies are saying."
   ],
   
   longDescription: `
     <div class="space-y-6">
       <h2 class="text-2xl font-bold text-blue-800 mb-4">🌍 Top 5 Allergy-Friendly Airlines in the World</h2>
       
-      <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500 mb-6">
-        <h3 class="text-xl font-semibold text-blue-800 mb-2">🥇 <a href="https://www.jetblue.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline">JetBlue Airways</a></h3>
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">🥇 <a href="https://www.jetblue.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">JetBlue Airways</a></h3>
         <p class="mb-3"><strong>Why it ranks #1:</strong> Peanut-free policy, buffer zones, pre-boarding for cleaning, and EpiPens on board.</p>
         <blockquote class="italic border-l-2 border-blue-300 pl-4 text-gray-700">
-          "JetBlue is my go-to! They let me board early to clean the area, they don't serve nuts, and the staff is always informed." – @AllergyTravelr on <a href="https://www.spokin.com/top-rated-allergy-friendly-airlines?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline">Spokin</a>
+          "JetBlue is my go-to! They let me board early to clean the area, they don't serve nuts, and the staff is always informed." – @AllergyTravelr on <a href="https://www.spokin.com/top-rated-allergy-friendly-airlines?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Spokin</a>
         </blockquote>
       </div>
 
-      <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-gray-400 mb-6">
-        <h3 class="text-xl font-semibold text-blue-800 mb-2">🥈 <a href="https://www.southwest.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline">Southwest Airlines</a></h3>
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">🥈 <a href="https://www.southwest.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Southwest Airlines</a></h3>
         <p>Supports pre-boarding, onboard announcements, and offers nut-free snacks.</p>
       </div>
 
-      <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500 mb-6">
-        <h3 class="text-xl font-semibold text-blue-800 mb-2">🥉 <a href="https://www.delta.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline">Delta Air Lines</a></h3>
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">🥉 <a href="https://www.delta.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Delta Air Lines</a></h3>
         <p>Notify 48 hours ahead and Delta won't serve peanut products. Allows seat cleaning pre-board.</p>
       </div>
 
-      <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500 mb-6">
-        <h3 class="text-xl font-semibold text-blue-800 mb-2">⭐ <a href="https://www.alaskaair.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline">Alaska Airlines</a></h3>
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">⭐ <a href="https://www.alaskaair.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Alaska Airlines</a></h3>
         <p>Offers allergy-zone seating, pre-boarding for cleaning, and has epinephrine on board.</p>
       </div>
 
-      <div class="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500 mb-6">
-        <h3 class="text-xl font-semibold text-blue-800 mb-2">🌟 <a href="https://www.britishairways.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline">British Airways</a></h3>
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">🌟 <a href="https://www.britishairways.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">British Airways</a></h3>
         <p>Offers allergen-free meals with advance notice and makes allergy announcements.</p>
       </div>
 
       <h2 class="text-2xl font-bold text-blue-800 mb-4 mt-8">✈️ Other Notable Mentions</h2>
       <ul class="list-disc list-inside space-y-2 mb-6">
-        <li><a href="https://www.singaporeair.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline"><strong>Singapore Airlines</strong></a> – No peanut snacks, allergy-safe meals on request.</li>
-        <li><a href="https://www.qantas.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline"><strong>Qantas Airways</strong></a> – Nut-free snacks and trained crew support.</li>
-        <li><a href="https://www.virginatlantic.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline"><strong>Virgin Atlantic</strong></a> – Offers special meals and makes announcements.</li>
+        <li><a href="https://www.singaporeair.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Singapore Airlines</a> – No peanut snacks, allergy-safe meals on request.</li>
+        <li><a href="https://www.qantas.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Qantas Airways</a> – Nut-free snacks and trained crew support.</li>
+        <li><a href="https://www.virginatlantic.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Virgin Atlantic</a> – Offers special meals and makes announcements.</li>
       </ul>
 
       <h2 class="text-2xl font-bold text-red-600 mb-4">⚠️ Airlines to Be Cautious With</h2>
-      <p class="mb-4">According to <a href="https://www.foodallergy.org/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline">FARE</a> and frequent flyers, these airlines offer limited allergy support:</p>
-      <ul class="list-disc list-inside space-y-2 text-red-700">
+      <p class="mb-4">According to <a href="https://www.foodallergy.org/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">FARE</a> and frequent flyers, these airlines offer limited allergy support:</p>
+      <ul class="list-disc list-inside space-y-2 text-red-700 mb-6">
         <li>United Airlines</li>
         <li>American Airlines</li>
         <li>Spirit Airlines</li>
         <li>Frontier Airlines</li>
         <li>Allegiant Air</li>
         <li>Emirates</li>
-        <li>Qatar Airways – See <a href="https://nypost.com/2025/05/09/lifestyle/teacher-with-deadly-allergy-claims-13k-honeymoon-flight-could-kill-her-this-is-life-or-death-for-me/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 underline">this story</a>.</li>
+        <li>Qatar Airways – See <a href="https://nypost.com/2025/05/09/lifestyle/teacher-with-deadly-allergy-claims-13k-honeymoon-flight-could-kill-her-this-is-life-or-death-for-me/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">this story</a>.</li>
       </ul>
 
-      <h2 class="text-2xl font-bold text-blue-800 mb-4 mt-8">🧳 Tips for Safe Flying with Food Allergies</h2>
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">🧳 Tips for Safe Flying with Food Allergies</h2>
       <ul class="list-disc list-inside space-y-2 mb-6">
         <li>Contact the airline 48–72 hours in advance.</li>
         <li>Bring your own food and EpiPens.</li>
