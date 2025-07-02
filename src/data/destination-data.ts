@@ -23,6 +23,7 @@ import { abuDhabiContent } from './destination-abu-dhabi';
 import { hotelChainsContent } from './destination-hotel-chains';
 import { cruiseLinesContent } from './destination-cruise-lines';
 import { turkeyContent } from './destination-turkey';
+import { airlinesContent } from './destination-airlines';
 
 export const destinationData: Record<DestinationId, Partial<DestinationContent>> = {
   london: londonContent,
@@ -46,5 +47,6 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
   'tuscany': tuscanyContent,
   'gluten-free-europe': glutenFreeEuropeContent,
   'athens': athensContent,
-  'eilat': eilatContent
+  'eilat': eilatContent,
+  'airlines': airlinesContent
 };
