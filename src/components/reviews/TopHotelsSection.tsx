@@ -64,15 +64,15 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
           </>
         ) : hasHotels ? (
           hotels.map((hotel, index) => (
-            <div key={index}>
+            <div key={hotel.id || index}>
               <HotelCard
                 name={hotel.name}
                 address={hotel.address}
-                features={hotel.features}
+                features={hotel.features || hotel.amenities}
                 description={hotel.description}
                 quote={hotel.quote}
                 bookingUrl={hotel.bookingUrl}
-                imageUrl={hotel.image}
+                imageUrl={hotel.image || hotel.imageUrl}
               />
             </div>
           ))

@@ -17,9 +17,9 @@ export const RestaurantsSection = ({ restaurants }: RestaurantsSectionProps) => 
       </h2>
       
       <div className="grid gap-6 md:grid-cols-2">
-        {restaurants.map((restaurant) => (
+        {restaurants.map((restaurant, index) => (
           <div 
-            key={restaurant.id}
+            key={restaurant.id || index}
             className={`border rounded-lg p-5 shadow-sm transition-all hover:shadow-md ${
               restaurant.isPurelyAllergyFriendly 
                 ? "border-l-4 border-l-green-500 bg-green-50" 
@@ -37,21 +37,25 @@ export const RestaurantsSection = ({ restaurants }: RestaurantsSectionProps) => 
             
             <p className="text-gray-600 mb-4">{restaurant.description}</p>
             
-            <div className="flex items-center text-gray-600 mb-3">
-              <MapPin className="h-4 w-4 mr-2" />
-              <span>{restaurant.location}</span>
-            </div>
+            {restaurant.location && (
+              <div className="flex items-center text-gray-600 mb-3">
+                <MapPin className="h-4 w-4 mr-2" />
+                <span>{restaurant.location}</span>
+              </div>
+            )}
             
-            <div className="mb-3">
-              {restaurant.features.map((feature, idx) => (
-                <span 
-                  key={idx}
-                  className="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded mr-2 mb-2"
-                >
-                  {feature}
-                </span>
-              ))}
-            </div>
+            {restaurant.features && (
+              <div className="mb-3">
+                {restaurant.features.map((feature, idx) => (
+                  <span 
+                    key={idx}
+                    className="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded mr-2 mb-2"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            )}
             
             {restaurant.guestReview && (
               <div className="bg-blue-50 p-3 rounded-md mb-3">
@@ -63,9 +67,9 @@ export const RestaurantsSection = ({ restaurants }: RestaurantsSectionProps) => 
               </div>
             )}
             
-            {restaurant.website && (
+            {(restaurant.website || restaurant.websiteUrl) && (
               <a 
-                href={restaurant.website}
+                href={restaurant.website || restaurant.websiteUrl}
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center text-blue-600 hover:text-blue-800"
