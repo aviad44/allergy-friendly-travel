@@ -50,6 +50,7 @@ const Reviews = () => {
           .filter(review => !["love this hotel", "loved this hotel", "Great hotel"].includes(review.text || ""))
           .map(review => ({
             ...review,
+            author: review.author_name, // Map author_name to author
             id: review.id, // Keep ID as a string
             created_at: review.created_at || new Date().toISOString(),
             rating: typeof review.rating === 'number' ? review.rating : 5

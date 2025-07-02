@@ -1,5 +1,5 @@
 
-import { DestinationContent, Hotel, FAQ } from '@/types/definitions';
+import { DestinationContent, Hotel, FAQ, TravelTip } from '@/types/definitions';
 
 const eilatHotels: Hotel[] = [
   {
@@ -15,7 +15,7 @@ const eilatHotels: Hotel[] = [
     rating: 4.7,
     priceRange: '$$',
     imageUrl: '/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png', // Updated to use the specific Eilat hotel image
-    website: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive',
+    websiteUrl: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive',
     bookingUrl: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive',
     guestReview: "My child ate in a hotel restaurant without fear. I've never seen him so calm. For the first time in years, I slept well at a hotel. Someone was thinking about us.",
     isPurelyAllergyFriendly: true
@@ -53,10 +53,35 @@ const eilatIntro = `
 <blockquote>"I saw parents feeling helpless – and decided to improvise less and listen more," explains Penina.</blockquote>
 `;
 
+// Define travel tips as proper TravelTip objects
+const eilatTips: TravelTip[] = [
+  {
+    title: "Contact Allergy Liaison",
+    content: "Contact the hotel's Allergy Liaison before your visit to discuss your specific allergies and needs."
+  },
+  {
+    title: "Request Custom Room Cleaning",
+    content: "Request a customized room cleaning to avoid contact with allergen residues."
+  },
+  {
+    title: "Ask About Separate Utensils",
+    content: "Ask about the separate utensils and cooking areas for allergen-free meal preparation."
+  },
+  {
+    title: "Know Medical Facilities",
+    content: "Familiarize yourself with the nearest medical facilities in Eilat in case of an emergency."
+  },
+  {
+    title: "Pre-Arrival Communication",
+    content: "Take advantage of the pre-arrival communication to ensure specific ingredients are available during your stay."
+  }
+];
+
 export const eilatContent: DestinationContent = {
   hotels: eilatHotels,
   faqs: eilatFaqs,
   intro: eilatIntro,
+  tips: eilatTips,
   longDescription: `
     <h2>When Hospitality Meets Responsibility</h2>
     
@@ -113,13 +138,6 @@ export const eilatContent: DestinationContent = {
     
     <p>The allergy-care model she pioneered in Eilat isn't perfect, but it provides something invaluable: a genuine sense of safety for families who usually avoid traveling.</p>
   `,
-  tips: [
-    "Contact the hotel's Allergy Liaison before your visit to discuss your specific allergies and needs.",
-    "Request a customized room cleaning to avoid contact with allergen residues.",
-    "Ask about the separate utensils and cooking areas for allergen-free meal preparation.",
-    "Familiarize yourself with the nearest medical facilities in Eilat in case of an emergency.",
-    "Take advantage of the pre-arrival communication to ensure specific ingredients are available during your stay."
-  ],
   bonusTools: [
     {
       name: "Contact Allergy Liaison",

@@ -1,5 +1,5 @@
 
-import { DestinationContent, Restaurant, FAQ } from '@/types/definitions';
+import { DestinationContent, Restaurant, FAQ, TravelTip } from '@/types/definitions';
 
 // Define restaurants data
 const athensRestaurants: Restaurant[] = [
@@ -11,10 +11,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["100% Gluten-Free", "Celiac Safe", "Traditional Greek Cuisine"],
     location: "Kolonaki, Athens",
     website: "https://gfbistroathens.gr",
-    contactInfo: {
-      phone: "+30 21 0000 0000",
-      email: "info@gfbistroathens.gr"
-    },
+    phone: "+30 21 0000 0000",
+    email: "info@gfbistroathens.gr",
     guestReview: "I haven't eaten traditional Greek food like this since my diagnosis. No reactions, no worries."
   },
   {
@@ -25,10 +23,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["Labeled Gluten-Free Options", "Vegan Choices", "Health Food"],
     location: "Syntagma Square",
     website: "https://www.avocadoathens.com",
-    contactInfo: {
-      phone: "+30 21 0000 0001",
-      email: "info@avocadoathens.com"
-    },
+    phone: "+30 21 0000 0001",
+    email: "info@avocadoathens.com",
     guestReview: "The staff asked about celiac and confirmed all prep methods. Very trustworthy and delicious."
   },
   {
@@ -39,10 +35,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["Separate GF Menu", "Thai Cuisine", "Rice-Based Dishes"],
     location: "Exarchia",
     website: "https://www.tamarindathens.gr",
-    contactInfo: {
-      phone: "+30 21 0000 0002",
-      email: "info@tamarindathens.gr"
-    },
+    phone: "+30 21 0000 0002",
+    email: "info@tamarindathens.gr",
     guestReview: "Clearly marked menu and the chef personally explained how they avoid wheat-based sauces. Safe and flavorful."
   },
   {
@@ -53,10 +47,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["Organic", "Marked Allergens", "Gluten-Free Options"],
     location: "Kolonaki & Kifisia",
     website: "https://www.niceneasy.gr",
-    contactInfo: {
-      phone: "+30 21 0000 0003",
-      email: "info@niceneasy.gr"
-    },
+    phone: "+30 21 0000 0003",
+    email: "info@niceneasy.gr",
     guestReview: "I had a GF burger with gluten-free bun — the staff even double-checked with the kitchen. 10/10!"
   },
   {
@@ -67,10 +59,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["Gluten-Free Bakery", "Separate Baking Area", "Pastries"],
     location: "Vasilissis Sofias Ave",
     website: "https://www.korabakery.com",
-    contactInfo: {
-      phone: "+30 21 0000 0004",
-      email: "info@korabakery.com"
-    },
+    phone: "+30 21 0000 0004",
+    email: "info@korabakery.com",
     guestReview: "They're honest about risks but very cautious. I had zero reaction to their gluten-free loaf."
   },
   {
@@ -81,10 +71,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["Gluten-Free Pizza", "Italian Food", "Casual Dining"],
     location: "Exarchia",
     website: "https://www.mysticpizza.gr",
-    contactInfo: {
-      phone: "+30 21 0000 0005",
-      email: "info@mysticpizza.gr"
-    },
+    phone: "+30 21 0000 0005",
+    email: "info@mysticpizza.gr",
     guestReview: "They made it separately and wore gloves. I was impressed!"
   },
   {
@@ -95,10 +83,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["100% Gluten-Free", "Vegan", "Breakfast & Lunch"],
     location: "Petralona",
     website: "https://www.limebistro.gr",
-    contactInfo: {
-      phone: "+30 21 0000 0006",
-      email: "info@limebistro.gr"
-    },
+    phone: "+30 21 0000 0006",
+    email: "info@limebistro.gr",
     guestReview: "As a celiac vegan, I felt at home. The kitchen is tiny but spotlessly safe."
   },
   {
@@ -109,10 +95,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["Greek Fusion", "Marked GF Options", "Accommodating Staff"],
     location: "Psyrri",
     website: "https://www.tobazaki.gr",
-    contactInfo: {
-      phone: "+30 21 0000 0007",
-      email: "info@tobazaki.gr"
-    },
+    phone: "+30 21 0000 0007",
+    email: "info@tobazaki.gr",
     guestReview: "The chef showed me ingredients and used foil to grill my food separately. I felt totally safe."
   },
   {
@@ -123,10 +107,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["Vegan Street Food", "Gluten-Free Options", "Casual"],
     location: "Monastiraki",
     website: "https://veganbeat.gr",
-    contactInfo: {
-      phone: "+30 21 0000 0008",
-      email: "info@veganbeat.gr"
-    },
+    phone: "+30 21 0000 0008",
+    email: "info@veganbeat.gr",
     guestReview: "Falafel wrap was wrapped in GF pita and made separately. Staff knew about celiac and took it seriously."
   },
   {
@@ -137,10 +119,8 @@ const athensRestaurants: Restaurant[] = [
     features: ["Rolled Ice Cream", "Desserts", "Gluten-Free Options"],
     location: "Plaka",
     website: "https://www.iceroll.gr",
-    contactInfo: {
-      phone: "+30 21 0000 0009",
-      email: "info@iceroll.gr"
-    },
+    phone: "+30 21 0000 0009",
+    email: "info@iceroll.gr",
     guestReview: "They washed everything before prepping my order and changed gloves. Very reassuring!"
   }
 ];
@@ -169,6 +149,30 @@ const athensFaqs: FAQ[] = [
   }
 ];
 
+// Define travel tips as proper TravelTip objects
+const athensTips: TravelTip[] = [
+  {
+    title: "Carry Translation Cards",
+    content: "Always carry a Greek translation card explaining celiac disease"
+  },
+  {
+    title: "Look for Labels",
+    content: "Look for restaurants with 'gluten-free' (χωρίς γλουτένη) labels"
+  },
+  {
+    title: "Book Kitchen-Equipped Accommodations",
+    content: "Book accommodations with kitchens so you can prepare some meals"
+  },
+  {
+    title: "Research in Advance",
+    content: "Research restaurants before visiting Athens"
+  },
+  {
+    title: "Join Local Groups",
+    content: "Join local Facebook groups like 'Gluten-Free Athens' for up-to-date recommendations"
+  }
+];
+
 // Main destination content object
 export const athensContent: DestinationContent = {
   intro: `If you're planning a trip to Athens and following a strict gluten-free diet due to celiac disease, you're in luck. The Greek capital is becoming increasingly aware of food allergies and dietary needs — especially gluten intolerance. From traditional Greek tavernas to modern vegan cafes, here are the top 10 celiac-safe restaurants in Athens where you can enjoy delicious meals 100% worry-free.
@@ -177,13 +181,7 @@ All restaurants listed either offer certified gluten-free options, maintain stri
   hotels: [],  // We're focusing on restaurants instead of hotels for this article
   restaurants: athensRestaurants,
   faqs: athensFaqs,
-  tips: [
-    "Always carry a Greek translation card explaining celiac disease",
-    "Look for restaurants with 'gluten-free' (χωρίς γλουτένη) labels",
-    "Book accommodations with kitchens so you can prepare some meals",
-    "Research restaurants before visiting Athens",
-    "Join local Facebook groups like 'Gluten-Free Athens' for up-to-date recommendations"
-  ],
+  tips: athensTips,
   bonusTools: [
     {
       name: "Interactive Map",

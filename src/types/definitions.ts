@@ -14,6 +14,7 @@ export interface Hotel {
   description: string;
   imageUrl?: string;
   image?: string;
+  website?: string;
   websiteUrl?: string;
   bookingUrl?: string;
   address?: string;
@@ -30,6 +31,7 @@ export interface Hotel {
   stars?: number;
   rating?: number;
   priceRange?: string;
+  guestReview?: string;
 }
 
 export interface Review {
@@ -73,6 +75,12 @@ export interface DestinationContent {
   tips?: TravelTip[];
   languageTable?: LanguageTable;
   longDescription?: string;
+  highlights?: string[];
+  bonusTools?: Array<{
+    name: string;
+    description: string;
+    link: string;
+  }>;
 }
 
 export interface Restaurant {
@@ -80,8 +88,8 @@ export interface Restaurant {
   name: string;
   description: string;
   imageUrl?: string;
-  websiteUrl?: string;
   website?: string;
+  websiteUrl?: string;
   address?: string;
   location?: string;
   phone?: string;
@@ -92,6 +100,10 @@ export interface Restaurant {
   features?: string[];
   guestReview?: string;
   isPurelyAllergyFriendly?: boolean;
+  contactInfo?: {
+    phone?: string;
+    email?: string;
+  };
 }
 
 export type LanguageCode = 'en' | 'he';

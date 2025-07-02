@@ -116,12 +116,6 @@ export const tuscanyContent: DestinationContent = {
   ],
   hotels,
   faqs,
-  highlights: [
-    "Florence's AIC-certified gluten-free restaurants",
-    "Dairy-free and vegan gelato options with clear allergen labeling",
-    "Rural agriturismos with customizable meal options",
-    "Hotels with allergy-trained staff and specialized breakfast options"
-  ],
   languageTable: {
     headers: ["English", "Italian", "Pronunciation"],
     rows: [
