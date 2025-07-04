@@ -114,7 +114,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
             <Separator className="bg-primary/10 h-0.5" />
 
-            {/* Display restaurants for Athens, long description for Eilat, hotels for other destinations */}
+            {/* Display restaurants for Athens, long description for Eilat, skip hotels for airlines, hotels for other destinations */}
             {isAthens ? (
               <RestaurantsSection restaurants={content?.restaurants} />
             ) : isEilat ? (
@@ -122,7 +122,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                 longDescription={content?.longDescription} 
                 hotel={content?.hotels && content.hotels.length > 0 ? content.hotels[0] : undefined}
               />
-            ) : (
+            ) : destinationId === 'airlines' ? null : (
               <TopHotelsSection 
                 hotels={content?.hotels || []}
                 destinationName={destination.name}
