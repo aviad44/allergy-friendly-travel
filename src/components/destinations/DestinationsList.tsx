@@ -9,7 +9,7 @@ export const DestinationsList = () => {
   useEffect(() => {
     const preloadImages = () => {
       // Define all critical destinations that need special attention
-      const criticalDestinations = ['cyprus', 'crete', 'hotel-chains', 'turkey', 'toronto', 'barcelona', 'munich', 'athens'];
+      const criticalDestinations = ['cyprus', 'crete', 'hotel-chains', 'turkey', 'toronto', 'barcelona', 'munich', 'athens', 'eilat', 'airlines', 'gluten-free-europe'];
       
       // Special handling for critical destinations with direct hardcoded paths
       const criticalImageMap: Record<string, string> = {
@@ -20,7 +20,10 @@ export const DestinationsList = () => {
         'toronto': DESTINATION_IMAGES['toronto'], 
         'barcelona': DESTINATION_IMAGES['barcelona'],
         'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png", // Add Munich to critical images
-        'athens': "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&w=1200&q=80" // Athens Acropolis image
+        'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png", // Athens hotel lobby image
+        'eilat': "/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png", // Eilat beach resort image
+        'airlines': "/src/assets/commercial-airplane.jpg", // Airlines airplane image
+        'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png" // Gluten-free Europe image
       };
       
       // First preload critical destinations with direct hardcoded paths
@@ -77,7 +80,10 @@ export const DestinationsList = () => {
             'toronto': DESTINATION_IMAGES['toronto'], 
             'barcelona': DESTINATION_IMAGES['barcelona'],
             'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png", // Add Munich to critical images
-            'athens': "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&w=1200&q=80" // Athens Acropolis image
+            'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png", // Athens hotel lobby image
+            'eilat': "/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png", // Eilat beach resort image
+            'airlines': "/src/assets/commercial-airplane.jpg", // Airlines airplane image
+            'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png" // Gluten-free Europe image
           };
           
           // Get image value with fallbacks
