@@ -48,9 +48,9 @@ export default async function handler(request, context) {
         // Use a beautiful resort/hotel image that works well for travel sites
         let ogImage = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
         
-        // For homepage, use appropriate title and description with a nice travel image
+        // For homepage, use the actual homepage image that matches the site
         if (path === '/' || path === '') {
-          ogImage = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+          ogImage = "https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
           ogTitle = "Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions";
           ogDesc = "Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more.";
         }
