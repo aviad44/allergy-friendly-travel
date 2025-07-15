@@ -2,44 +2,7 @@
 User-agent: *
 Allow: /
 
-# Allow important content pages
-Allow: /about
-Allow: /contact
-Allow: /destinations
-Allow: /categories
-Allow: /reviews
-Allow: /faq
-Allow: /terms
-Allow: /allergy-translation-card
-
-# Allow specific destination pages
-Allow: /destinations/paris
-Allow: /destinations/london
-Allow: /destinations/barcelona
-Allow: /destinations/cyprus
-Allow: /destinations/crete
-Allow: /destinations/abu-dhabi
-Allow: /destinations/thailand
-Allow: /destinations/ayia-napa
-Allow: /destinations/rome
-Allow: /destinations/tokyo
-Allow: /destinations/new-york
-Allow: /destinations/portugal
-Allow: /destinations/swiss-alps
-Allow: /destinations/koh-samui
-Allow: /destinations/turkey
-Allow: /destinations/cruise-lines
-Allow: /destinations/toronto
-Allow: /destinations/tuscany
-Allow: /destinations/gluten-free-europe
-Allow: /destinations/athens
-Allow: /destinations/eilat
-Allow: /destinations/hotel-chains
-
-# Allow hotel pages
-Allow: /hotels/le-petit-palace
-
-# BLOCK ALL CODE FILES AND INTERNAL FOLDERS
+# Block development files and folders
 Disallow: /src/
 Disallow: /node_modules/
 Disallow: /components/
@@ -57,7 +20,7 @@ Disallow: /.github/
 Disallow: /dist/
 Disallow: /build/
 
-# Block all code file extensions
+# Block code file extensions
 Disallow: /*.js$
 Disallow: /*.ts$
 Disallow: /*.tsx$
@@ -85,7 +48,7 @@ Disallow: /components.json
 Disallow: /.gitignore
 Disallow: /README.md
 
-# Block any file with these patterns
+# Block file patterns in subdirectories
 Disallow: /*/*.ts
 Disallow: /*/*.tsx
 Disallow: /*/*.js
