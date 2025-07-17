@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Helmet } from "react-helmet";
+import { StructuredData } from "@/components/StructuredData";
 
 const AboutUs = () => {
   return (
@@ -8,7 +9,19 @@ const AboutUs = () => {
       <Helmet>
         <title>About Us | Allergy-Friendly Hotel Finder</title>
         <meta name="description" content="Learn about our mission to make travel accessible and safe for individuals with food allergies." />
+        <meta name="keywords" content="allergy-friendly travel, food allergy support, safe hotel booking, travel with allergies, allergy-conscious travel platform" />
+        <meta name="robots" content="index, follow" />
       </Helmet>
+      
+      <StructuredData
+        type="article"
+        title="About Allergy-Free Travel - Our Mission to Make Travel Safe for Everyone"
+        description="Learn about our mission to make travel accessible and safe for individuals with food allergies. Discover how we help travelers find allergy-friendly accommodations worldwide."
+        url="https://www.allergy-free-travel.com/about"
+        image="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80"
+        author="Allergy-Free Travel Team"
+        publishedDate="2024-01-01T00:00:00Z"
+      />
 
       {/* Hero Image */}
       <div className="w-full h-[400px] relative">

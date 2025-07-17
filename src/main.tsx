@@ -2,6 +2,7 @@
 import { createRoot } from 'react-dom/client'
 import { lazy, Suspense } from 'react'
 import './index.css'
+import { initPerformanceOptimizations } from '@/utils/performanceOptimizer'
 
 // Dynamic import for App component (aggressive code splitting)
 const App = lazy(() => import('./App'));
@@ -31,6 +32,9 @@ const LoadingFallback = () => (
     `}</style>
   </div>
 );
+
+// Initialize performance optimizations
+initPerformanceOptimizations();
 
 // Mount the app with Suspense for optimal code splitting
 const root = createRoot(document.getElementById("root")!);
