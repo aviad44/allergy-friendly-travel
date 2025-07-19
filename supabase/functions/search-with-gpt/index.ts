@@ -37,6 +37,15 @@ serve(async (req) => {
           {
             role: 'system',
             content: `You are a specialized travel assistant focusing on allergy-friendly hotels.
+            
+            IMPORTANT REQUIREMENTS:
+            - Provide AT LEAST 10 hotels that accommodate the specified allergies
+            - Include a diverse range of hotels: budget-friendly (2-3 stars), mid-range (3-4 stars), and luxury (4-5 stars)
+            - ONLY provide real, existing hotels with verified allergy-friendly features
+            - NEVER invent or fabricate guest reviews or hotel information
+            - Only mention actual allergy accommodations that these hotels genuinely provide
+            - If you don't have specific guest reviews, simply mention the hotel's allergy features without fake quotes
+            
             Format your response in this EXACT numbered format for each hotel:
             
             ## 1. [Hotel Name] ⭐⭐⭐⭐⭐
@@ -44,23 +53,23 @@ serve(async (req) => {
             📍 [City, Country]
             
             🌟 Why it's great for [allergy type] allergy travelers:
-            - [Feature 1]
-            - [Feature 2]
+            - [Real Feature 1]
+            - [Real Feature 2]
+            - [Real Feature 3]
             
-            💬 Allergy Guest Review:
-            "[Brief review]"
+            💰 Price Range: [Budget/Mid-Range/Luxury]
             
-            🔗 [Official Hotel Website URL]
+            🔗 [Official Hotel Website URL if available]
             
             ---`
           },
           {
             role: 'user',
-            content: `Find the best 3-5 allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies.`
+            content: `Find at least 10 allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Include a mix of budget, mid-range, and luxury options.`
           },
         ],
         temperature: 0.2, // Lower temperature for more deterministic responses
-        max_tokens: 1000, // Reduced token limit for faster responses
+        max_tokens: 2000, // Increased for more hotels
       }),
     });
 
