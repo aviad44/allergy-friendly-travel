@@ -28,9 +28,9 @@ export const HotelDetailsDialog: React.FC<HotelDetailsDialogProps> = ({
 
   return (
     <Dialog open={!!selectedHotel} onOpenChange={() => onOpenChange()}>
-      <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold flex items-center gap-2">
+      <DialogContent className="w-[95vw] max-w-lg sm:w-full h-[90vh] sm:h-auto max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="text-right space-y-2">
+          <DialogTitle className="text-lg sm:text-xl font-bold flex items-start gap-2 leading-tight">
             {cleanHotelName}
           </DialogTitle>
           
@@ -39,18 +39,18 @@ export const HotelDetailsDialog: React.FC<HotelDetailsDialogProps> = ({
               href={getGoogleMapsUrl(cleanHotelName, selectedHotel.location)}
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center text-sm text-muted-foreground hover:text-primary mt-1 gap-1"
+              className="flex items-center text-sm text-muted-foreground hover:text-primary gap-1 justify-start"
               aria-label={`View ${cleanHotelName} on Google Maps`}
             >
-              <MapPin className="h-3.5 w-3.5" />
-              <span>{selectedHotel.location}</span>
-              <ExternalLink className="h-3 w-3 ml-1" />
+              <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+              <span className="break-words">{selectedHotel.location}</span>
+              <ExternalLink className="h-3 w-3 flex-shrink-0" />
             </a>
           )}
         </DialogHeader>
         
         {selectedHotel && (
-          <div className="mt-2">
+          <div className="mt-4 space-y-4">
             <HotelDetails hotel={selectedHotel} showHeader={false} />
           </div>
         )}
