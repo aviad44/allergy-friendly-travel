@@ -1,7 +1,7 @@
 import { DestinationId } from "@/types/definitions";
 
-// Main hero image - using your beautiful homepage pool image with palm trees
-export const DEFAULT_SOCIAL_IMAGE = 'https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png';
+// Main hero image - using a reliable hotel/travel image from Unsplash
+export const DEFAULT_SOCIAL_IMAGE = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80';
 
 // Helper function to ensure image URLs are absolute
 export const getAbsoluteImageUrl = (imageUrl: string): string => {
