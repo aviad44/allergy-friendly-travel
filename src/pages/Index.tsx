@@ -22,7 +22,7 @@ const SectionLoader = () => (
 
 export default function Index() {
   const baseUrl = 'https://www.allergy-free-travel.com';
-  const mainImage = 'https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png';
+  const mainImage = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80';
   
   return (
     <>
