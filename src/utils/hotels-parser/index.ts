@@ -32,6 +32,9 @@ export const parseHotelsFromMarkdown = (markdownText: string): ParsedHotel[] => 
           const rating = (starRating.match(/⭐/g) || []).length || parseFloat(starRating) || 0;
           const allergyFeatures = extractAllergyFeatures(entry);
           const review = extractReview(entry);
+          console.log('=== REVIEW EXTRACTION ===');
+          console.log('Entry:', entry.substring(0, 500));
+          console.log('Extracted review:', review);
           
           // Try to extract multiple reviews
           const allReviews: ReviewInfo[] = [];

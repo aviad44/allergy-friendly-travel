@@ -123,60 +123,43 @@ export const extractUrl: UrlExtractor = (entry: string): string => {
 };
 
 export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null => {
-  console.log('Extracting review from entry:', entry.substring(0, 200));
+  console.log('🔍 EXTRACTING REVIEW FROM:', entry.substring(0, 300));
   
+  // First, let's test with the exact format from the response
+  const exactPattern = /💬 Guest Review: "([^"]*)" - ([^,]*), ([^(]*) \(Source: ([^)]*)\)/i;
+  const exactMatch = entry.match(exactPattern);
+  
+  if (exactMatch) {
+    console.log('✅ EXACT MATCH FOUND:', exactMatch);
+    return {
+      text: exactMatch[1].trim(),
+      author: exactMatch[2].trim(),
+      country: exactMatch[3].trim(),
+      source: exactMatch[4].trim(),
+      rating: 4
+    };
+  }
+  
+  // Fallback patterns
   const reviewPatterns = [
-    // New format with source: "text" - Name, Country (Source: TripAdvisor)
-    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^(]*?)\s*\(Source:\s*([^)]*)\)/i,
-    // Standard format: "text" - Name, Country
-    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^\n(]*)/i,
-    // Simple format: "text" - Name
-    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n(]*)/i,
-    // Just quoted review
     /💬\s*Guest Review:\s*"([^"]*)"/i,
-    /7️⃣\s*\*\*Guest Review\*\*:\s*"([^"]*)"/i,
-    /\*\*Guest Review\*\*:\s*"([^"]*)"/i,
-    /\*\*Authentic Guest Reviews\*\*:\s*"([^"]*)"/i,
-    /Guest says:\s*"([^"]*)"/i,
-    /Review:\s*"([^"]*)"/i,
-    /"([^"]*)"\s*—\s*⭐/i,
-    /"([^"]*)"\s*-\s*([A-Z][a-z]*),?\s*([A-Z][a-z]*)?/i, // "Review text" - Name, Country
-    /"([^"]{30,})"/  // Any quoted text that's reasonably long (30+ chars)
+    /"([^"]{30,})"/
   ];
   
   for (const pattern of reviewPatterns) {
     const reviewMatch = entry.match(pattern);
     if (reviewMatch?.[1]) {
-      console.log('Found review match:', reviewMatch);
       const reviewText = reviewMatch[1].trim();
-      // Filter out obvious non-reviews
-      if (!reviewText.toLowerCase().includes('hotel name') && 
-          !reviewText.toLowerCase().includes('booking') &&
-          !reviewText.toLowerCase().includes('website') &&
-          !reviewText.toLowerCase().includes('price range') &&
-          !reviewText.toLowerCase().includes('why it') &&
-          reviewText.length > 20) {
-        
-        // Extract country - remove "USA" from "(Source: TripAdvisor)" pattern
-        let country = reviewMatch[3]?.trim();
-        if (country && country.includes('(')) {
-          country = country.split('(')[0].trim();
-        }
-        
-        const result = {
+      if (reviewText.length > 20) {
+        console.log('📝 FALLBACK MATCH:', reviewText);
+        return {
           text: reviewText,
-          author: reviewMatch[2]?.trim() || undefined,
-          country: country || undefined,
-          source: reviewMatch[4]?.trim() || undefined,
-          rating: 4 // Default rating
+          rating: 4
         };
-        
-        console.log('Returning review:', result);
-        return result;
       }
     }
   }
   
-  console.log('No review found in entry');
+  console.log('❌ NO REVIEW FOUND');
   return null;
 };
