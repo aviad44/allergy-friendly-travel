@@ -144,10 +144,10 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                   </div>
                   <div className="flex-1">
                     <p className="text-xs text-gray-700 italic line-clamp-2">
-                      "{hotel.reviews[0]}"
+                      "{hotel.reviews[0].text}"
                     </p>
                     <div className="mt-1 text-xs text-teal-600 font-medium">
-                      - Verified Guest Review
+                      - {hotel.reviews[0].author ? `${hotel.reviews[0].author}${hotel.reviews[0].country ? `, ${hotel.reviews[0].country}` : ''}` : 'Verified Guest Review'}
                     </div>
                   </div>
                 </div>

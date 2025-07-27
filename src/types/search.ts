@@ -1,10 +1,17 @@
 
+export interface ReviewInfo {
+  text: string;
+  author?: string;
+  country?: string;
+  rating?: number;
+}
+
 export interface HotelInfo {
   name: string;
   url?: string;
   accommodations?: string;
   dietary?: string;
-  reviews?: string[];
+  reviews?: ReviewInfo[];
   safety?: string;
   imageUrl?: string;
   rating?: number;

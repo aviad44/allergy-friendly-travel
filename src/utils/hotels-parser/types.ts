@@ -7,8 +7,15 @@ export interface ParsedHotel {
   address: string;
   allergyFeatures: string[];
   url: string;
-  reviews: string[];
+  reviews: ReviewInfo[];
   description: string;
+}
+
+export interface ReviewInfo {
+  text: string;
+  author?: string;
+  country?: string;
+  rating?: number;
 }
 
 // Updated type definitions for our extractors with more specific return types
@@ -17,7 +24,7 @@ export type LocationExtractor = (entry: string) => string;
 export type StarRatingExtractor = (entry: string) => string;
 export type AllergyFeaturesExtractor = (entry: string) => string[];
 export type UrlExtractor = (entry: string) => string;
-export type ReviewExtractor = (entry: string) => string | null;
+export type ReviewExtractor = (entry: string) => ReviewInfo | null;
 
 // For backward compatibility
 export type HotelExtractor = (entry: string) => string | string[] | null;

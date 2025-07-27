@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Star } from 'lucide-react';
+import { ReviewInfo } from '@/types/search';
 
 interface GuestReviewsProps {
-  reviews?: Array<{ text: string; author?: string; rating?: number }> | string[];
+  reviews?: ReviewInfo[];
   rating?: number;
 }
 
@@ -15,12 +16,14 @@ export const GuestReviews: React.FC<GuestReviewsProps> = ({ reviews, rating }) =
       <h3 className="text-lg font-semibold text-gray-900 mb-3">🗣️ Guest Reviews</h3>
       <div className="space-y-4">
         {reviews.map((review, index) => {
-          // Handle both string reviews and object reviews
-          const reviewText = typeof review === 'string' ? review : review.text;
-          const reviewRating = typeof review === 'object' ? review.rating : rating || 4;
-          const authorInitial = typeof review === 'object' && review.author 
+          const reviewText = review.text;
+          const reviewRating = review.rating || rating || 4;
+          const authorInitial = review.author 
             ? review.author.charAt(0).toUpperCase()
             : String.fromCharCode(65 + (index % 26)); // Generate A, B, C... for guests
+          
+          const displayName = review.author || 'Verified Guest';
+          const displayLocation = review.country ? `, ${review.country}` : '';
           
           return (
             <div key={index} className="bg-gradient-to-r from-teal-50 to-green-50 p-4 rounded-lg border border-teal-100">
@@ -31,7 +34,7 @@ export const GuestReviews: React.FC<GuestReviewsProps> = ({ reviews, rating }) =
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-semibold text-gray-800">
-                      {typeof review === 'object' && review.author ? review.author.split(',')[0] : 'Verified Guest'}
+                      {displayName}{displayLocation}
                     </span>
                     <div className="flex">
                       {Array(5).fill(0).map((_, i) => (

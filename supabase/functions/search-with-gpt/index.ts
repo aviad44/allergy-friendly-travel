@@ -58,7 +58,7 @@ serve(async (req) => {
             - [Real Feature 2]
             - [Real Feature 3]
             
-            💬 Guest Review: "[Insert authentic guest review quote mentioning allergy-friendly experience]" - [Guest Name/Initial], [Review Source]
+            💬 Guest Review: "[Insert authentic guest review quote mentioning allergy-friendly experience]" - [Guest First Name], [Country of Origin]
             
             💰 Price Range: [Budget/Mid-Range/Luxury]
             

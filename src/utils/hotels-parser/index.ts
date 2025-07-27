@@ -1,5 +1,5 @@
 
-import { ParsedHotel } from './types';
+import { ParsedHotel, ReviewInfo } from './types';
 import {
   extractHotelName,
   extractLocation,
@@ -34,7 +34,7 @@ export const parseHotelsFromMarkdown = (markdownText: string): ParsedHotel[] => 
           const review = extractReview(entry);
           
           // Try to extract multiple reviews
-          const allReviews: string[] = [];
+          const allReviews: ReviewInfo[] = [];
           if (review) allReviews.push(review);
           
           // Look for additional reviews in the entry
@@ -48,11 +48,14 @@ export const parseHotelsFromMarkdown = (markdownText: string): ParsedHotel[] => 
             for (const match of matches) {
               const reviewText = match[1]?.trim();
               if (reviewText && 
-                  !allReviews.includes(reviewText) &&
+                  !allReviews.find(r => r.text === reviewText) &&
                   !reviewText.toLowerCase().includes('hotel name') &&
                   !reviewText.toLowerCase().includes('booking') &&
                   reviewText.length > 20) {
-                allReviews.push(reviewText);
+                allReviews.push({
+                  text: reviewText,
+                  rating: 4
+                });
               }
             }
           }

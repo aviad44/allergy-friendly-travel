@@ -5,7 +5,8 @@ import {
   StarRatingExtractor,
   AllergyFeaturesExtractor,
   UrlExtractor,
-  ReviewExtractor
+  ReviewExtractor,
+  ReviewInfo
 } from './types';
 
 export const extractHotelName: HotelNameExtractor = (entry: string): string => {
@@ -121,9 +122,10 @@ export const extractUrl: UrlExtractor = (entry: string): string => {
   return '';
 };
 
-export const extractReview: ReviewExtractor = (entry: string): string | null => {
+export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null => {
   const reviewPatterns = [
-    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),?\s*([^\n]*)/i,
+    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^\n]*)/i,
+    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*)/i,
     /💬\s*Guest Review:\s*"([^"]*)"/i,
     /7️⃣\s*\*\*Guest Review\*\*:\s*"([^"]*)"/i,
     /\*\*Guest Review\*\*:\s*"([^"]*)"/i,
@@ -131,22 +133,28 @@ export const extractReview: ReviewExtractor = (entry: string): string | null => 
     /Guest says:\s*"([^"]*)"/i,
     /Review:\s*"([^"]*)"/i,
     /"([^"]*)"\s*—\s*⭐/i,
-    /"([^"]*)"\s*-\s*[A-Z][a-z]*/i, // "Review text" - Author
+    /"([^"]*)"\s*-\s*([A-Z][a-z]*),?\s*([A-Z][a-z]*)?/i, // "Review text" - Name, Country
     /"([^"]{30,})"/  // Any quoted text that's reasonably long (30+ chars)
   ];
   
   for (const pattern of reviewPatterns) {
     const reviewMatch = entry.match(pattern);
     if (reviewMatch?.[1]) {
-      const review = reviewMatch[1].trim();
+      const reviewText = reviewMatch[1].trim();
       // Filter out obvious non-reviews
-      if (!review.toLowerCase().includes('hotel name') && 
-          !review.toLowerCase().includes('booking') &&
-          !review.toLowerCase().includes('website') &&
-          !review.toLowerCase().includes('price range') &&
-          !review.toLowerCase().includes('why it') &&
-          review.length > 20) {
-        return review;
+      if (!reviewText.toLowerCase().includes('hotel name') && 
+          !reviewText.toLowerCase().includes('booking') &&
+          !reviewText.toLowerCase().includes('website') &&
+          !reviewText.toLowerCase().includes('price range') &&
+          !reviewText.toLowerCase().includes('why it') &&
+          reviewText.length > 20) {
+        
+        return {
+          text: reviewText,
+          author: reviewMatch[2]?.trim() || undefined,
+          country: reviewMatch[3]?.trim() || undefined,
+          rating: 4 // Default rating
+        };
       }
     }
   }
