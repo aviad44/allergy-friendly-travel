@@ -123,15 +123,15 @@ export const extractUrl: UrlExtractor = (entry: string): string => {
 
 export const extractReview: ReviewExtractor = (entry: string): string | null => {
   const reviewPatterns = [
+    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),?\s*([^\n]*)/i,
+    /💬\s*Guest Review:\s*"([^"]*)"/i,
     /7️⃣\s*\*\*Guest Review\*\*:\s*"([^"]*)"/i,
     /\*\*Guest Review\*\*:\s*"([^"]*)"/i,
     /\*\*Authentic Guest Reviews\*\*:\s*"([^"]*)"/i,
-    /💬\s*Guest Review:\s*"([^"]*)"/i,
-    /💬\s*"([^"]*)"/i,
-    /"([^"]*)"\s*—\s*⭐/i,
-    /"([^"]*)"\s*-\s*[A-Z][a-z]*/i, // "Review text" - Author
     /Guest says:\s*"([^"]*)"/i,
     /Review:\s*"([^"]*)"/i,
+    /"([^"]*)"\s*—\s*⭐/i,
+    /"([^"]*)"\s*-\s*[A-Z][a-z]*/i, // "Review text" - Author
     /"([^"]{30,})"/  // Any quoted text that's reasonably long (30+ chars)
   ];
   
@@ -143,6 +143,8 @@ export const extractReview: ReviewExtractor = (entry: string): string | null => 
       if (!review.toLowerCase().includes('hotel name') && 
           !review.toLowerCase().includes('booking') &&
           !review.toLowerCase().includes('website') &&
+          !review.toLowerCase().includes('price range') &&
+          !review.toLowerCase().includes('why it') &&
           review.length > 20) {
         return review;
       }

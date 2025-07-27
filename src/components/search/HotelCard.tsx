@@ -134,6 +134,32 @@ export const HotelCard: React.FC<HotelCardProps> = ({
             </div>
           )}
           
+          {/* Guest Reviews Preview */}
+          {hotel.reviews && hotel.reviews.length > 0 && (
+            <div className="mb-3">
+              <div className="bg-teal-50 p-3 rounded-lg border border-teal-100">
+                <div className="flex items-start mb-2">
+                  <div className="h-6 w-6 rounded-full bg-teal-500 flex items-center justify-center text-white text-xs font-semibold mr-2">
+                    💬
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs text-gray-700 italic line-clamp-2">
+                      "{hotel.reviews[0]}"
+                    </p>
+                    <div className="mt-1 text-xs text-teal-600 font-medium">
+                      - Verified Guest Review
+                    </div>
+                  </div>
+                </div>
+                {hotel.reviews.length > 1 && (
+                  <div className="text-xs text-teal-600 text-center">
+                    +{hotel.reviews.length - 1} more reviews
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          
           {/* Allergy Features - SIMPLIFIED */}
           {hotel.allergyFeatures && hotel.allergyFeatures.length > 0 && (
             <div className="mb-3">
