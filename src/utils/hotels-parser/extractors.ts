@@ -123,28 +123,15 @@ export const extractUrl: UrlExtractor = (entry: string): string => {
 };
 
 export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null => {
-  // Simple patterns focusing just on guest name
-  const reviewPatterns = [
-    // "Review text" - Name, Country (Source: Source)
-    /💬 Guest Review: "([^"]*)" - ([^,]*), ([^(]*) \(Source: ([^)]*)\)/i,
-    // "Review text" - Name, Country  
-    /💬 Guest Review: "([^"]*)" - ([^,]*), ([^()\n]*)/i,
-    // "Review text" - Name
-    /💬 Guest Review: "([^"]*)" - ([^,()\n]*)/i,
-    // Just the review text
-    /💬 Guest Review: "([^"]*)"/i,
-  ];
+  // Look for the review pattern and extract with simple string parsing
+  const reviewMatch = entry.match(/💬 Guest Review: "([^"]+)" - ([^,\n]+)/i);
   
-  for (const pattern of reviewPatterns) {
-    const match = entry.match(pattern);
-    if (match && match[1] && match[1].length > 20) {
-      return {
-        text: match[1].trim(),
-        author: match[2]?.trim() || undefined,
-        source: match[4]?.trim() || undefined,
-        rating: 4
-      };
-    }
+  if (reviewMatch && reviewMatch[1] && reviewMatch[1].length > 20) {
+    return {
+      text: reviewMatch[1].trim(),
+      author: reviewMatch[2]?.trim() || undefined,
+      rating: 4
+    };
   }
   
   return null;
