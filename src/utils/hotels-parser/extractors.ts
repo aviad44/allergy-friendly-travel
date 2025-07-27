@@ -123,6 +123,8 @@ export const extractUrl: UrlExtractor = (entry: string): string => {
 };
 
 export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null => {
+  console.log('Extracting review from entry:', entry.substring(0, 200));
+  
   const reviewPatterns = [
     // New format with source: "text" - Name, Country (Source: TripAdvisor)
     /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^(]*?)\s*\(Source:\s*([^)]*)\)/i,
@@ -145,6 +147,7 @@ export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null
   for (const pattern of reviewPatterns) {
     const reviewMatch = entry.match(pattern);
     if (reviewMatch?.[1]) {
+      console.log('Found review match:', reviewMatch);
       const reviewText = reviewMatch[1].trim();
       // Filter out obvious non-reviews
       if (!reviewText.toLowerCase().includes('hotel name') && 
@@ -160,16 +163,20 @@ export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null
           country = country.split('(')[0].trim();
         }
         
-        return {
+        const result = {
           text: reviewText,
           author: reviewMatch[2]?.trim() || undefined,
           country: country || undefined,
           source: reviewMatch[4]?.trim() || undefined,
           rating: 4 // Default rating
         };
+        
+        console.log('Returning review:', result);
+        return result;
       }
     }
   }
   
+  console.log('No review found in entry');
   return null;
 };
