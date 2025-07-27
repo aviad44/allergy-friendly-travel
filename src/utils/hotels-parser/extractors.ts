@@ -124,9 +124,13 @@ export const extractUrl: UrlExtractor = (entry: string): string => {
 
 export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null => {
   const reviewPatterns = [
-    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^(]*)\s*\(Source:\s*([^)]*)\)/i,
-    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^\n]*)/i,
-    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*)/i,
+    // New format with source: "text" - Name, Country (Source: TripAdvisor)
+    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^(]*?)\s*\(Source:\s*([^)]*)\)/i,
+    // Standard format: "text" - Name, Country
+    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^\n(]*)/i,
+    // Simple format: "text" - Name
+    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n(]*)/i,
+    // Just quoted review
     /💬\s*Guest Review:\s*"([^"]*)"/i,
     /7️⃣\s*\*\*Guest Review\*\*:\s*"([^"]*)"/i,
     /\*\*Guest Review\*\*:\s*"([^"]*)"/i,
@@ -150,10 +154,16 @@ export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null
           !reviewText.toLowerCase().includes('why it') &&
           reviewText.length > 20) {
         
+        // Extract country - remove "USA" from "(Source: TripAdvisor)" pattern
+        let country = reviewMatch[3]?.trim();
+        if (country && country.includes('(')) {
+          country = country.split('(')[0].trim();
+        }
+        
         return {
           text: reviewText,
           author: reviewMatch[2]?.trim() || undefined,
-          country: reviewMatch[3]?.trim() || undefined,
+          country: country || undefined,
           source: reviewMatch[4]?.trim() || undefined,
           rating: 4 // Default rating
         };
