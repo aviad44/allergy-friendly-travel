@@ -123,43 +123,29 @@ export const extractUrl: UrlExtractor = (entry: string): string => {
 };
 
 export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null => {
-  console.log('🔍 EXTRACTING REVIEW FROM:', entry.substring(0, 300));
-  
-  // First, let's test with the exact format from the response
-  const exactPattern = /💬 Guest Review: "([^"]*)" - ([^,]*), ([^(]*) \(Source: ([^)]*)\)/i;
-  const exactMatch = entry.match(exactPattern);
-  
-  if (exactMatch) {
-    console.log('✅ EXACT MATCH FOUND:', exactMatch);
-    return {
-      text: exactMatch[1].trim(),
-      author: exactMatch[2].trim(),
-      country: exactMatch[3].trim(),
-      source: exactMatch[4].trim(),
-      rating: 4
-    };
-  }
-  
-  // Fallback patterns
+  // Simple patterns focusing just on guest name
   const reviewPatterns = [
-    /💬\s*Guest Review:\s*"([^"]*)"/i,
-    /"([^"]{30,})"/
+    // "Review text" - Name, Country (Source: Source)
+    /💬 Guest Review: "([^"]*)" - ([^,]*), ([^(]*) \(Source: ([^)]*)\)/i,
+    // "Review text" - Name, Country  
+    /💬 Guest Review: "([^"]*)" - ([^,]*), ([^()\n]*)/i,
+    // "Review text" - Name
+    /💬 Guest Review: "([^"]*)" - ([^,()\n]*)/i,
+    // Just the review text
+    /💬 Guest Review: "([^"]*)"/i,
   ];
   
   for (const pattern of reviewPatterns) {
-    const reviewMatch = entry.match(pattern);
-    if (reviewMatch?.[1]) {
-      const reviewText = reviewMatch[1].trim();
-      if (reviewText.length > 20) {
-        console.log('📝 FALLBACK MATCH:', reviewText);
-        return {
-          text: reviewText,
-          rating: 4
-        };
-      }
+    const match = entry.match(pattern);
+    if (match && match[1] && match[1].length > 20) {
+      return {
+        text: match[1].trim(),
+        author: match[2]?.trim() || undefined,
+        source: match[4]?.trim() || undefined,
+        rating: 4
+      };
     }
   }
   
-  console.log('❌ NO REVIEW FOUND');
   return null;
 };

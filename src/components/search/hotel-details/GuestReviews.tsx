@@ -27,7 +27,7 @@ export const GuestReviews: React.FC<GuestReviewsProps> = ({ reviews, rating }) =
             : String.fromCharCode(65 + (index % 26)); // Generate A, B, C... for guests
           
           const displayName = review.author || 'Verified Guest';
-          const displayLocation = review.country ? `, ${review.country}` : '';
+          const displayLocation = ''; // Removed country display for now
           
           return (
             <div key={index} className="bg-gradient-to-r from-teal-50 to-green-50 p-4 rounded-lg border border-teal-100">
