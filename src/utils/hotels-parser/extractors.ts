@@ -126,15 +126,26 @@ export const extractReview: ReviewExtractor = (entry: string): string | null => 
     /7️⃣\s*\*\*Guest Review\*\*:\s*"([^"]*)"/i,
     /\*\*Guest Review\*\*:\s*"([^"]*)"/i,
     /\*\*Authentic Guest Reviews\*\*:\s*"([^"]*)"/i,
+    /💬\s*Guest Review:\s*"([^"]*)"/i,
+    /💬\s*"([^"]*)"/i,
     /"([^"]*)"\s*—\s*⭐/i,
-    /💬\s*[^:]*:\s*"([^"]*)"/i,
-    /"([^"]{20,})"/  // Any quoted text that's reasonably long
+    /"([^"]*)"\s*-\s*[A-Z][a-z]*/i, // "Review text" - Author
+    /Guest says:\s*"([^"]*)"/i,
+    /Review:\s*"([^"]*)"/i,
+    /"([^"]{30,})"/  // Any quoted text that's reasonably long (30+ chars)
   ];
   
   for (const pattern of reviewPatterns) {
     const reviewMatch = entry.match(pattern);
     if (reviewMatch?.[1]) {
-      return reviewMatch[1].trim();
+      const review = reviewMatch[1].trim();
+      // Filter out obvious non-reviews
+      if (!review.toLowerCase().includes('hotel name') && 
+          !review.toLowerCase().includes('booking') &&
+          !review.toLowerCase().includes('website') &&
+          review.length > 20) {
+        return review;
+      }
     }
   }
   

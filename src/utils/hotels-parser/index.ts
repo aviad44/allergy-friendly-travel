@@ -32,6 +32,30 @@ export const parseHotelsFromMarkdown = (markdownText: string): ParsedHotel[] => 
           const rating = (starRating.match(/⭐/g) || []).length || parseFloat(starRating) || 0;
           const allergyFeatures = extractAllergyFeatures(entry);
           const review = extractReview(entry);
+          
+          // Try to extract multiple reviews
+          const allReviews: string[] = [];
+          if (review) allReviews.push(review);
+          
+          // Look for additional reviews in the entry
+          const additionalReviewPatterns = [
+            /"([^"]{30,})"/g,
+            /💬[^"]*"([^"]{20,})"/g
+          ];
+          
+          for (const pattern of additionalReviewPatterns) {
+            const matches = entry.matchAll(pattern);
+            for (const match of matches) {
+              const reviewText = match[1]?.trim();
+              if (reviewText && 
+                  !allReviews.includes(reviewText) &&
+                  !reviewText.toLowerCase().includes('hotel name') &&
+                  !reviewText.toLowerCase().includes('booking') &&
+                  reviewText.length > 20) {
+                allReviews.push(reviewText);
+              }
+            }
+          }
           const location = extractLocation(entry);
           
           const hotel: ParsedHotel = {
@@ -42,7 +66,7 @@ export const parseHotelsFromMarkdown = (markdownText: string): ParsedHotel[] => 
             address: '',  // Address is optional and defaults to location
             allergyFeatures,
             url: extractUrl(entry),
-            reviews: review ? [review] : [],
+            reviews: allReviews,
             description: generateHotelDescription(allergyFeatures, entry)
           };
 
