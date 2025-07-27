@@ -9,7 +9,11 @@ interface GuestReviewsProps {
 }
 
 export const GuestReviews: React.FC<GuestReviewsProps> = ({ reviews, rating }) => {
-  if (!reviews || reviews.length === 0) return null;
+  console.log('🎯 GuestReviews received:', { reviews, rating });
+  if (!reviews || reviews.length === 0) {
+    console.log('❌ No reviews to display');
+    return null;
+  }
   
   return (
     <div>
