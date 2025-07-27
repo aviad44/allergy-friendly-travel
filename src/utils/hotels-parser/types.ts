@@ -15,6 +15,7 @@ export interface ReviewInfo {
   text: string;
   author?: string;
   country?: string;
+  source?: string;
   rating?: number;
 }
 

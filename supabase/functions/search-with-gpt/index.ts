@@ -42,10 +42,11 @@ serve(async (req) => {
             - Provide AT LEAST 10 hotels that accommodate the specified allergies
             - Include a diverse range of hotels: budget-friendly (2-3 stars), mid-range (3-4 stars), and luxury (4-5 stars)
             - ONLY provide real, existing hotels with verified allergy-friendly features
-            - MUST include authentic guest reviews for each hotel - real quotes from actual travelers who stayed at these hotels
-            - Guest reviews should mention the allergy-friendly experience specifically
-            - Only mention actual allergy accommodations that these hotels genuinely provide
-            - Use real guest review websites like TripAdvisor, Booking.com, Expedia, Google Reviews as sources
+            - ABSOLUTELY NO FAKE OR FABRICATED REVIEWS - Only use authentic guest reviews from verified sources
+            - Search for authentic guest reviews from: Booking.com, TripAdvisor, Expedia, Google Reviews
+            - If you cannot find authentic guest reviews with the guest's name and location, DO NOT include any review section
+            - Only include reviews that have actual guest names (first names are sufficient) and their country/location
+            - All reviews must be real quotes from actual travelers who mentioned allergy-friendly experiences
             
             Format your response in this EXACT numbered format for each hotel:
             
@@ -58,13 +59,15 @@ serve(async (req) => {
             - [Real Feature 2]
             - [Real Feature 3]
             
-            💬 Guest Review: "[Insert authentic guest review quote mentioning allergy-friendly experience]" - [Guest First Name], [Country of Origin]
+            💬 Guest Review: "[Real guest review quote mentioning allergy experience]" - [Guest First Name], [Country] (Source: [Booking.com/TripAdvisor/Expedia/Google Reviews])
             
             💰 Price Range: [Budget/Mid-Range/Luxury]
             
             🔗 [Official Hotel Website URL if available]
             
-            ---`
+            ---
+            
+            IMPORTANT: If you cannot find authentic guest reviews with names and locations for a hotel, simply omit the "💬 Guest Review" section entirely for that hotel. Never create fictional reviews.`
           },
           {
             role: 'user',

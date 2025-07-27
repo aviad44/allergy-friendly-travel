@@ -124,6 +124,7 @@ export const extractUrl: UrlExtractor = (entry: string): string => {
 
 export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null => {
   const reviewPatterns = [
+    /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^(]*)\s*\(Source:\s*([^)]*)\)/i,
     /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*),\s*([^\n]*)/i,
     /💬\s*Guest Review:\s*"([^"]*)"\s*-\s*([^,\n]*)/i,
     /💬\s*Guest Review:\s*"([^"]*)"/i,
@@ -153,6 +154,7 @@ export const extractReview: ReviewExtractor = (entry: string): ReviewInfo | null
           text: reviewText,
           author: reviewMatch[2]?.trim() || undefined,
           country: reviewMatch[3]?.trim() || undefined,
+          source: reviewMatch[4]?.trim() || undefined,
           rating: 4 // Default rating
         };
       }

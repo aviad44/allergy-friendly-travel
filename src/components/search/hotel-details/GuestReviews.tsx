@@ -49,8 +49,15 @@ export const GuestReviews: React.FC<GuestReviewsProps> = ({ reviews, rating }) =
                   <p className="text-gray-700 text-sm leading-relaxed italic">
                     "{reviewText}"
                   </p>
-                  <div className="mt-2 text-xs text-teal-600 font-medium">
-                    ✓ Allergy-conscious traveler
+                  <div className="mt-2 flex items-center justify-between">
+                    <div className="text-xs text-teal-600 font-medium">
+                      ✓ Allergy-conscious traveler
+                    </div>
+                    {review.source && (
+                      <div className="text-xs text-gray-500">
+                        Source: {review.source}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
