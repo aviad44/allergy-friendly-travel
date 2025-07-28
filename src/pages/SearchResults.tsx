@@ -48,71 +48,28 @@ const SearchResults = () => {
       setError(null);
       setSearchStartTime(Date.now());
       
-      // Set a timeout to show partial results if taking too long
-      requestTimeoutRef.current = window.setTimeout(() => {
-        toast({
-          title: "Search is taking longer than expected",
-          description: "We're still looking for the best allergy-friendly hotels for you. Results will appear soon.",
-          variant: "default"
-        });
-      }, 5000);
-      
       try {
-        const {
-          data,
-          error
-        } = await supabase.functions.invoke('search-with-gpt', {
-          body: {
-            destination,
-            allergies
-          }
-        });
+        console.log('🚀 Starting hybrid search for:', { destination, allergies });
         
-        if (error) {
-          console.error('Supabase Function Error:', error);
-          throw error;
-        }
+        // שימוש במנוע החיפוש ההיברידי החדש
+        const { hybridSearch } = await import('@/utils/hybridSearch');
+        const results = await hybridSearch.search({ destination, allergies });
         
-        if (!data?.recommendation) {
-          console.error('No recommendation data:', data);
-          throw new Error('No recommendation received from the AI');
-        }
-        
-        // Calculate and log the request time
         if (searchStartTime) {
           const searchTime = (Date.now() - searchStartTime) / 1000;
-          console.log(`Search completed in ${searchTime.toFixed(2)} seconds`);
+          console.log(`Hybrid search completed in ${searchTime.toFixed(2)} seconds`);
         }
         
-        // Clean the response before displaying it
-        const cleanedRecommendation = cleanResponseText(data.recommendation);
-        setRecommendation(cleanedRecommendation);
+        console.log(`✅ Hybrid search found ${results.length} hotels`);
         
-        // Extract hotels from the recommendation
-        try {
-          const extractedHotels = parseHotelsFromMarkdown(cleanedRecommendation);
-          
-          if (!extractedHotels || extractedHotels.length === 0) {
-            console.warn('No hotels could be extracted from the response');
-            setHotels([]);
-          } else {
-            // Remove any duplicates
-            const uniqueHotels = extractedHotels.filter((hotel, index, self) =>
-              index === self.findIndex((h) => h.name === hotel.name)
-            );
-            
-            setHotels(uniqueHotels);
-          }
-        } catch (parseError) {
-          console.error('Error parsing hotels from markdown:', parseError);
-          setError('There was an error processing the hotel information. Please try again.');
-          // Still set the recommendation so users can see raw data
-          setRecommendation(cleanedRecommendation);
+        if (results && results.length > 0) {
+          setHotels(results);
+        } else {
+          setError('לא נמצאו מלונות מתאימים. אנא נסה חיפוש אחר.');
         }
-        
       } catch (error) {
-        console.error('Error during search:', error);
-        setError('Sorry, we couldn\'t complete the search. Please try again later.');
+        console.error('💥 Hybrid search error:', error);
+        setError('אירעה שגיאה בחיפוש. אנא נסה שוב מאוחר יותר.');
         toast({
           title: "Search Error",
           description: "We couldn't complete your search. Please try again later.",
