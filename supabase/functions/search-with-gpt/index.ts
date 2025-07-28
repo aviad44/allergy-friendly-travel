@@ -32,7 +32,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o', // Keep using the powerful model but with optimized parameters
+        model: 'gpt-4o-mini', // Fast model for quicker responses
         messages: [
           {
             role: 'system',
@@ -76,8 +76,8 @@ serve(async (req) => {
             content: `Find at least 10 allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Include a mix of budget, mid-range, and luxury options.`
           },
         ],
-        temperature: 0.2, // Lower temperature for more deterministic responses
-        max_tokens: 2000, // Increased for more hotels
+        temperature: 0.3, // Slightly higher for faster responses
+        max_tokens: 1500, // Reduced for faster responses
       }),
     });
 
