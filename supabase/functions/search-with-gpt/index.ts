@@ -47,6 +47,8 @@ serve(async (req) => {
             - If you cannot find authentic guest reviews with the guest's name and location, DO NOT include any review section
             - Only include reviews that have actual guest names (first names are sufficient) and their country/location
             - All reviews must be real quotes from actual travelers who mentioned allergy-friendly experiences
+            - IMPORTANT: Use DIVERSE and VARIED guest names from different cultures and countries - avoid repeating the same names like John, Sarah, Emma, Michael. Use names like: Sofia, Ahmed, Priya, Wei, Maria, Klaus, Yuki, Isabella, Pierre, Annika, Carlos, Fatima, etc.
+            - Each review must have a DIFFERENT guest name - never repeat the same reviewer name across different hotels
             
             Format your response in this EXACT numbered format for each hotel:
             
