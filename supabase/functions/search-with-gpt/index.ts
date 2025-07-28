@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -32,25 +31,18 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Fast model for quicker responses
+        model: 'gpt-4.1-mini-2025-04-14', // Fastest model for quick responses
         messages: [
           {
             role: 'system',
-            content: `You are a specialized travel assistant focusing on allergy-friendly hotels.
+            content: `You are a travel assistant focusing on allergy-friendly hotels.
             
-            CRITICAL REQUIREMENTS:
-            - Provide AT LEAST 10 hotels that accommodate the specified allergies
-            - Include a diverse range of hotels: budget-friendly (2-3 stars), mid-range (3-4 stars), and luxury (4-5 stars)
-            - ONLY provide real, existing hotels with verified allergy-friendly features
-            - ABSOLUTELY NO FAKE OR FABRICATED REVIEWS - Only use authentic guest reviews from verified sources
-            - Search for authentic guest reviews from: Booking.com, TripAdvisor, Expedia, Google Reviews
-            - If you cannot find authentic guest reviews with the guest's name and location, DO NOT include any review section
-            - Only include reviews that have actual guest names (first names are sufficient) and their country/location
-            - All reviews must be real quotes from actual travelers who mentioned allergy-friendly experiences
-            - IMPORTANT: Use DIVERSE and VARIED guest names from different cultures and countries - avoid repeating the same names like John, Sarah, Emma, Michael. Use names like: Sofia, Ahmed, Priya, Wei, Maria, Klaus, Yuki, Isabella, Pierre, Annika, Carlos, Fatima, etc.
-            - Each review must have a DIFFERENT guest name - never repeat the same reviewer name across different hotels
+            REQUIREMENTS:
+            - Provide 8-10 real hotels that accommodate the specified allergies
+            - Include budget, mid-range, and luxury options
+            - Only provide existing hotels with verified allergy-friendly features
             
-            Format your response in this EXACT numbered format for each hotel:
+            Format each hotel as:
             
             ## 1. [Hotel Name] ⭐⭐⭐⭐⭐
             
@@ -61,23 +53,21 @@ serve(async (req) => {
             - [Real Feature 2]
             - [Real Feature 3]
             
-            💬 Guest Review: "[Real guest review quote mentioning allergy experience]" - [Guest First Name], [Country] (Source: [Booking.com/TripAdvisor/Expedia/Google Reviews])
+            💬 Guest Review: "[Real guest review quote about allergy experience]" (Source: [Booking.com/TripAdvisor/Expedia])
             
             💰 Price Range: [Budget/Mid-Range/Luxury]
             
             🔗 [Official Hotel Website URL if available]
             
-            ---
-            
-            IMPORTANT: If you cannot find authentic guest reviews with names and locations for a hotel, simply omit the "💬 Guest Review" section entirely for that hotel. Never create fictional reviews.`
+            ---`
           },
           {
             role: 'user',
-            content: `Find at least 10 allergy-friendly hotels in ${destination} that can accommodate guests with ${allergies} allergies. Include a mix of budget, mid-range, and luxury options.`
+            content: `Find 8-10 allergy-friendly hotels in ${destination} that accommodate guests with ${allergies} allergies.`
           },
         ],
-        temperature: 0.3, // Slightly higher for faster responses
-        max_tokens: 1500, // Reduced for faster responses
+        temperature: 0.3,
+        max_tokens: 1200, // Reduced for faster responses
       }),
     });
 
