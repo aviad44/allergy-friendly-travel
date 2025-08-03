@@ -7,7 +7,8 @@ export const destinations: Destination[] = [
     name: 'Amsterdam',
     country: 'Netherlands',
     description: 'Top 10 Allergy-Friendly Hotels in Amsterdam',
-    subtitle: 'Safe Accommodations for Food Allergies'
+    subtitle: 'Safe Accommodations for Food Allergies',
+    image: '/src/assets/amsterdam-canal-classic.jpg'
   },
   {
     id: 'london',

@@ -38,7 +38,7 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'athens': 'https://www.allergy-free-travel.com/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png',
   'eilat': 'https://www.allergy-free-travel.com/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png',
   'airlines': '/src/assets/commercial-airplane.jpg',
-  'amsterdam': 'https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a?auto=format&fit=crop&w=1200&q=80'
+  'amsterdam': '/src/assets/amsterdam-canal-classic.jpg'
 };
 
 // Pre-load the default image for better performance
