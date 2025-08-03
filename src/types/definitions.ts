@@ -138,4 +138,5 @@ export type DestinationId =
   | 'gluten-free-europe'
   | 'athens'
   | 'eilat'
-  | 'airlines';
+  | 'airlines'
+  | 'amsterdam';

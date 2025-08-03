@@ -24,6 +24,7 @@ import { hotelChainsContent } from './destination-hotel-chains';
 import { cruiseLinesContent } from './destination-cruise-lines';
 import { turkeyContent } from './destination-turkey';
 import { airlinesContent } from './destination-airlines';
+import { amsterdamContent } from './destination-amsterdam';
 
 export const destinationData: Record<DestinationId, Partial<DestinationContent>> = {
   london: londonContent,
@@ -48,5 +49,6 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
   'gluten-free-europe': glutenFreeEuropeContent,
   'athens': athensContent,
   'eilat': eilatContent,
-  'airlines': airlinesContent
+  'airlines': airlinesContent,
+  'amsterdam': amsterdamContent
 };

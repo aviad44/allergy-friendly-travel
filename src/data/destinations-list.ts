@@ -3,6 +3,13 @@ import { Destination } from '@/types/definitions';
 
 export const destinations: Destination[] = [
   {
+    id: 'amsterdam',
+    name: 'Amsterdam',
+    country: 'Netherlands',
+    description: 'Top 10 Allergy-Friendly Hotels in Amsterdam',
+    subtitle: 'Safe Accommodations for Food Allergies'
+  },
+  {
     id: 'london',
     name: 'London',
     country: 'United Kingdom',
