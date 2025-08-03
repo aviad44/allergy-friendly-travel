@@ -67,11 +67,11 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
             <div key={hotel.id || index}>
               <HotelCard
                 name={hotel.name}
-                address={hotel.address}
+                address={hotel.address || hotel.location}
                 features={hotel.features || hotel.amenities}
                 description={hotel.description}
-                quote={hotel.quote}
-                bookingUrl={hotel.bookingUrl}
+                quote={hotel.guestReview || hotel.quote}
+                bookingUrl={hotel.bookingUrl || hotel.website}
                 imageUrl={hotel.image || hotel.imageUrl}
               />
             </div>
