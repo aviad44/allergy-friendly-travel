@@ -69,6 +69,7 @@ export interface LanguageTable {
 
 export interface DestinationContent {
   intro: string | string[];
+  imageUrl?: string;
   hotels?: Hotel[];
   restaurants?: Restaurant[];
   faqs?: FAQ[];

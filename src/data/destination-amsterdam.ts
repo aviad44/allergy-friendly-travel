@@ -254,6 +254,7 @@ const intro = [
 ];
 
 export const amsterdamContent: DestinationContent = {
+  imageUrl: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=1200&q=80",
   intro,
   hotels,
   restaurants,

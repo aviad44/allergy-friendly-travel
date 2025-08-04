@@ -2,6 +2,7 @@
 import { DestinationContent } from '@/types/definitions';
 
 export const glutenFreeEuropeContent: DestinationContent = {
+  imageUrl: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1200&q=80",
   intro: "Traveling through Europe with celiac disease or gluten sensitivity doesn't have to mean missing out on amazing food and hospitality. In fact, more cities are embracing gluten-free travelers than ever before—with certified restaurants, allergy-trained hotel staff, and gluten-free menus becoming increasingly available.",
   hotels: [
     {

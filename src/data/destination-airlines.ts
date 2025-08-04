@@ -2,6 +2,7 @@
 import { DestinationContent } from '@/types/definitions';
 
 export const airlinesContent: Partial<DestinationContent> = {
+  imageUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80",
   intro: [
     "Flying with food allergies doesn't have to be stressful. Discover which airlines around the world take allergies seriously and read what real travelers with food allergies are saying."
   ],
