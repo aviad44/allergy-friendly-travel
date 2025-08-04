@@ -153,8 +153,11 @@ export const translateText = async (
     console.log(`Using OpenAI translation for ${languageName}`);
     
     try {
+      console.log("Importing Supabase client...");
       const { supabase } = await import('@/integrations/supabase/client');
+      console.log("Supabase client imported successfully");
       
+      console.log("Calling OpenAI proxy function...");
       const { data: result, error } = await supabase.functions.invoke('openai-proxy', {
         body: {
           userInput: text,
@@ -169,19 +172,30 @@ export const translateText = async (
         }
       });
 
+      console.log("OpenAI proxy response:", { result, error });
+
       if (error) {
         console.error('OpenAI translation error:', error);
         throw new Error(error.message || 'Translation service failed');
       }
 
-      if (result?.content) {
-        console.log("OpenAI translation successful:", result.content);
-        return { translatedText: result.content.trim() };
+      if (result?.result) {
+        console.log("OpenAI translation successful:", result.result);
+        return { translatedText: result.result.trim() };
       } else {
+        console.log("No result in response:", result);
         throw new Error('No translation received from service');
       }
     } catch (apiError) {
       console.error('API translation failed:', apiError);
+      console.error('Error details:', apiError);
+      
+      // Show specific error to user
+      const errorMsg = apiError instanceof Error ? apiError.message : 'Unknown API error';
+      toast.error(`Translation failed: ${errorMsg}`, {
+        duration: 10000,
+        id: "translation-api-error"
+      });
       
       // Fallback to manual translation request
       const fallbackText = `[${languageName.toUpperCase()} TRANSLATION]
@@ -189,11 +203,6 @@ export const translateText = async (
 ${text}
 
 [Professional medical translation needed to ${languageName}]`;
-
-      toast.error(`Translation service unavailable. Please translate manually.`, {
-        duration: 5000,
-        id: "translation-fallback"
-      });
 
       return { translatedText: fallbackText };
     }
