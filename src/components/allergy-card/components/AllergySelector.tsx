@@ -8,24 +8,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-// Common allergy list with emojis
+// Common allergy list with emojis and severity levels
 export const ALL_ALLERGIES = [
-  { name: "Peanuts", emoji: "🥜" },
-  { name: "Tree nuts", emoji: "🌰" },
-  { name: "Milk", emoji: "🥛" },
-  { name: "Eggs", emoji: "🍳" },
-  { name: "Fish", emoji: "🐟" },
-  { name: "Shellfish", emoji: "🦐" },
-  { name: "Wheat", emoji: "🌾" },
-  { name: "Soy", emoji: "🫘" },
-  { name: "Sesame", emoji: "🌱" },
-  { name: "Gluten", emoji: "🍞" },
-  { name: "Celery", emoji: "🥬" },
-  { name: "Mustard", emoji: "🌭" },
-  { name: "Lupin", emoji: "🌿" },
-  { name: "Sulfites", emoji: "🍷" },
-  { name: "Crustaceans", emoji: "🦞" },
-  { name: "Molluscs", emoji: "🐚" }
+  { name: "Peanuts", emoji: "🥜", severity: "critical" },
+  { name: "Tree nuts", emoji: "🌰", severity: "critical" },
+  { name: "Shellfish", emoji: "🦐", severity: "critical" },
+  { name: "Fish", emoji: "🐟", severity: "high" },
+  { name: "Milk", emoji: "🥛", severity: "high" },
+  { name: "Eggs", emoji: "🍳", severity: "high" },
+  { name: "Wheat", emoji: "🌾", severity: "high" },
+  { name: "Gluten", emoji: "🍞", severity: "high" },
+  { name: "Soy", emoji: "🫘", severity: "medium" },
+  { name: "Sesame", emoji: "🌱", severity: "medium" },
+  { name: "Celery", emoji: "🥬", severity: "medium" },
+  { name: "Mustard", emoji: "🌭", severity: "medium" },
+  { name: "Lupin", emoji: "🌿", severity: "medium" },
+  { name: "Crustaceans", emoji: "🦞", severity: "high" },
+  { name: "Molluscs", emoji: "🐚", severity: "medium" },
+  { name: "Sulfites", emoji: "🍷", severity: "low" },
+  { name: "Corn", emoji: "🌽", severity: "medium" },
+  { name: "Avocado", emoji: "🥑", severity: "low" },
+  { name: "Kiwi", emoji: "🥝", severity: "low" },
+  { name: "Banana", emoji: "🍌", severity: "low" }
 ];
 
 interface AllergySelectorProps {
@@ -74,24 +78,51 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
           </Tooltip>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-          {filteredAllergies.map((allergy) => (
-            <Toggle
-              key={allergy.name}
-              pressed={selectedAllergies.includes(allergy.name)}
-              onPressedChange={() => {
-                console.log("Toggling allergy:", allergy.name);
-                handleToggleAllergy(allergy.name);
-              }}
-              className={cn(
-                "flex items-center justify-start gap-2 border border-gray-200 hover:bg-blue-50 h-auto py-2 px-3",
-                selectedAllergies.includes(allergy.name) ? "bg-blue-100 border-blue-300" : ""
-              )}
-            >
-              <span className="text-lg">{allergy.emoji}</span>
-              <span className="text-sm">{allergy.name}</span>
-            </Toggle>
-          ))}
+        {/* Group allergies by severity */}
+        <div className="space-y-4">
+          {[{ level: "critical", title: "Critical Allergies", color: "border-red-300 bg-red-50" },
+            { level: "high", title: "High Risk Allergies", color: "border-orange-300 bg-orange-50" },
+            { level: "medium", title: "Medium Risk Allergies", color: "border-yellow-300 bg-yellow-50" },
+            { level: "low", title: "Low Risk Allergies", color: "border-green-300 bg-green-50" }
+          ].map(severity => {
+            const allergiesInLevel = filteredAllergies.filter(a => a.severity === severity.level);
+            if (allergiesInLevel.length === 0) return null;
+            
+            return (
+              <div key={severity.level} className={`p-4 rounded-lg border ${severity.color}`}>
+                <h3 className="text-sm font-medium mb-3 text-gray-700">{severity.title}</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                  {allergiesInLevel.map((allergy) => (
+                    <Toggle
+                      key={allergy.name}
+                      pressed={selectedAllergies.includes(allergy.name)}
+                      onPressedChange={() => {
+                        console.log("Toggling allergy:", allergy.name);
+                        handleToggleAllergy(allergy.name);
+                      }}
+                      className={cn(
+                        "flex items-center justify-start gap-2 border border-gray-200 hover:bg-white/80 h-auto py-2 px-3 transition-all",
+                        selectedAllergies.includes(allergy.name) 
+                          ? "bg-red-100 border-red-400 shadow-sm" 
+                          : "bg-white"
+                      )}
+                    >
+                      <div className="relative">
+                        <span className="text-lg">{allergy.emoji}</span>
+                        {selectedAllergies.includes(allergy.name) && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-6 h-0.5 bg-red-600 rotate-45 absolute"></div>
+                            <div className="w-6 h-0.5 bg-red-600 -rotate-45 absolute"></div>
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-sm">{allergy.name}</span>
+                    </Toggle>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
         
         {filteredAllergies.length === 0 && (

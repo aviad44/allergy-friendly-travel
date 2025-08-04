@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SharingOptions } from '../components/SharingOptions';
 
 interface Step4Props {
   generatedCard: string | null;
@@ -187,45 +188,15 @@ export const Step4Download: React.FC<Step4Props> = ({
         </CardContent>
       </div>
 
-      {/* Action Buttons */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-        <Button 
-          onClick={onDownloadPDF} 
-          className="gap-2 bg-[#26c6da] hover:bg-[#00acc1] hover:scale-105 transform transition-all shadow hover:shadow-md"
-        >
-          <Download className="h-4 w-4" />
-          Download PDF
-        </Button>
-        <Button 
-          onClick={onDownloadPNG} 
-          className="gap-2 bg-[#26c6da] hover:bg-[#00acc1] hover:scale-105 transform transition-all shadow hover:shadow-md"
-        >
-          <Download className="h-4 w-4" />
-          Download PNG
-        </Button>
-        <Button 
-          onClick={onShareToWhatsApp} 
-          className="gap-2 bg-[#25d366] hover:bg-[#128c7e] hover:scale-105 transform transition-all shadow hover:shadow-md"
-        >
-          <Share2 className="h-4 w-4" />
-          Send to WhatsApp
-        </Button>
-        <Button 
-          onClick={onCopyToClipboard} 
-          className="gap-2 bg-[#26c6da] hover:bg-[#00acc1] hover:scale-105 transform transition-all shadow hover:shadow-md"
-        >
-          <Copy className="h-4 w-4" />
-          Copy Text
-        </Button>
-        
-        <Button 
-          onClick={() => window.print()} 
-          className="col-span-1 sm:col-span-2 gap-2 bg-[#26c6da] hover:bg-[#00acc1] hover:scale-105 transform transition-all shadow hover:shadow-md"
-        >
-          <span className="mr-2">🖨️</span>
-          Print Now
-        </Button>
-      </div>
+      {/* Enhanced Sharing Options */}
+      <SharingOptions
+        cardContent={displayedCard}
+        translatedContent={translatedCard}
+        onDownloadPDF={onDownloadPDF}
+        onDownloadPNG={onDownloadPNG}
+        onCopyToClipboard={onCopyToClipboard}
+        onShareToWhatsApp={onShareToWhatsApp}
+      />
       
       <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
         <h3 className="font-semibold text-blue-800 mb-3">Your card is ready!</h3>

@@ -5,6 +5,7 @@ import { AllergySelector } from '../components/AllergySelector';
 import { CustomAllergyInput } from '../components/CustomAllergyInput';
 import { SelectedAllergiesList } from '../components/SelectedAllergiesList';
 import { CardTypeSelector } from '../components/CardTypeSelector';
+import { VoiceInput } from '../components/VoiceInput';
 import { UserNameInput } from '../components/UserNameInput';
 
 interface Step1Props {
@@ -48,12 +49,30 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
           handleToggleAllergy={handleToggleAllergy}
         />
         
-        <div className="mt-6">
-          <CustomAllergyInput
-            customAllergy={customAllergy}
-            setCustomAllergy={setCustomAllergy}
-            handleAddCustomAllergy={handleAddCustomAllergy}
-          />
+        <div className="mt-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <CustomAllergyInput
+                customAllergy={customAllergy}
+                setCustomAllergy={setCustomAllergy}
+                handleAddCustomAllergy={handleAddCustomAllergy}
+              />
+            </div>
+            <div className="ml-4">
+              <VoiceInput 
+                onTranscript={(text) => {
+                  setCustomAllergy(text);
+                  setTimeout(handleAddCustomAllergy, 100);
+                }}
+                language="en"
+              />
+            </div>
+          </div>
+          
+          <div className="text-xs text-gray-500 flex items-center gap-2">
+            <span>💡</span>
+            <span>Try saying allergies like "peanuts", "dairy", or "gluten free" for quick voice input</span>
+          </div>
         </div>
 
         <div className="mt-6">
