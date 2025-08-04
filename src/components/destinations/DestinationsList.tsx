@@ -22,7 +22,7 @@ export const DestinationsList = () => {
         'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png", // Add Munich to critical images
         'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png", // Athens hotel lobby image
         'eilat': "/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png", // Eilat beach resort image
-        'airlines': "/src/assets/commercial-airplane.jpg", // Airlines airplane image
+        'airlines': "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80", // Airlines airplane image
         'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png" // Gluten-free Europe image
       };
       
@@ -82,7 +82,7 @@ export const DestinationsList = () => {
             'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png", // Add Munich to critical images
             'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png", // Athens hotel lobby image
             'eilat': "/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png", // Eilat beach resort image
-            'airlines': "/src/assets/commercial-airplane.jpg", // Airlines airplane image
+            'airlines': "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80", // Airlines airplane image
             'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png" // Gluten-free Europe image
           };
           

@@ -37,7 +37,7 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'gluten-free-europe': 'https://www.allergy-free-travel.com/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png',
   'athens': 'https://www.allergy-free-travel.com/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png',
   'eilat': 'https://www.allergy-free-travel.com/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png',
-  'airlines': '/src/assets/commercial-airplane.jpg',
+  'airlines': 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80',
   'amsterdam': 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=1200&q=80'
 };
 
