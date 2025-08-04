@@ -110,7 +110,7 @@ const simpleTranslations: Record<string, Record<string, string>> = {
 };
 
 /**
- * Translates text using built-in simple translations
+ * Translates text using built-in translations with OpenAI fallback
  */
 export const translateText = async (
   text: string,
@@ -128,18 +128,14 @@ export const translateText = async (
     console.log(`Starting translation to ${languageName} (code: ${targetLanguage})`);
     console.log("Text to translate:", text);
 
-    // Simulate loading delay
-    await new Promise(resolve => setTimeout(resolve, 300));
-
     // Check if we have built-in translations for this language
     if (simpleTranslations[languageName]) {
-      console.log(`Found translations for ${languageName}`);
+      console.log(`Using built-in translations for ${languageName}`);
       const translations = simpleTranslations[languageName];
       let translatedText = text;
       
       // Replace known phrases with more flexible matching
       Object.entries(translations).forEach(([english, translated]) => {
-        // More flexible regex to catch variations
         const escapedEnglish = english.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const regex = new RegExp(escapedEnglish, 'gi');
         
@@ -150,25 +146,57 @@ export const translateText = async (
       });
       
       console.log("Final translated text:", translatedText);
-      
-      // Only return translation if it's actually different from original
-      if (translatedText !== text) {
-        return { translatedText };
-      } else {
-        console.log("No translation changes made, text remained the same");
-        return { translatedText: text };
-      }
+      return { translatedText };
     }
 
-    // For languages without built-in translations
-    console.log(`No built-in translations for ${languageName}`);
-    const formattedText = `[${languageName.toUpperCase()} TRANSLATION NEEDED]
+    // For languages without built-in translations, use OpenAI
+    console.log(`Using OpenAI translation for ${languageName}`);
+    
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      const { data: result, error } = await supabase.functions.invoke('openai-proxy', {
+        body: {
+          userInput: text,
+          systemPrompt: `You are a professional medical translator. Translate the following allergy warning text to ${languageName}. 
+          This is critical medical information that must be accurate and clear. 
+          Return ONLY the translated text, nothing else.
+          Keep the formatting and structure exactly the same.
+          This text will be used to communicate life-threatening allergies.`,
+          model: 'gpt-4o-mini',
+          temperature: 0.1,
+          max_tokens: 500
+        }
+      });
+
+      if (error) {
+        console.error('OpenAI translation error:', error);
+        throw new Error(error.message || 'Translation service failed');
+      }
+
+      if (result?.content) {
+        console.log("OpenAI translation successful:", result.content);
+        return { translatedText: result.content.trim() };
+      } else {
+        throw new Error('No translation received from service');
+      }
+    } catch (apiError) {
+      console.error('API translation failed:', apiError);
+      
+      // Fallback to manual translation request
+      const fallbackText = `[${languageName.toUpperCase()} TRANSLATION]
 
 ${text}
 
-[Please translate the above text to ${languageName}]`;
+[Professional medical translation needed to ${languageName}]`;
 
-    return { translatedText: formattedText };
+      toast.error(`Translation service unavailable. Please translate manually.`, {
+        duration: 5000,
+        id: "translation-fallback"
+      });
+
+      return { translatedText: fallbackText };
+    }
     
   } catch (error) {
     console.error("Translation error:", error);
