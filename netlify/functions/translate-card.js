@@ -35,24 +35,23 @@ const handler = async (event) => {
     };
   };
   
-  // Check if this is a POST request
-  if (event.httpMethod !== 'POST') {
-    console.error(`Method Not Allowed: ${event.httpMethod}`);
-    return createResponse({ error: 'Method Not Allowed', translatedText: null }, 405);
-  }
-
   // Handle OPTIONS request for CORS preflight
   if (event.httpMethod === 'OPTIONS') {
     return {
-      statusCode: 204, // No content for OPTIONS
+      statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Content-Length': '0',
       },
-      body: '{}', // Empty but valid JSON
+      body: JSON.stringify({}),
     };
+  }
+
+  // Check if this is a POST request
+  if (event.httpMethod !== 'POST') {
+    console.error(`Method Not Allowed: ${event.httpMethod}`);
+    return createResponse({ error: 'Method Not Allowed', translatedText: null }, 405);
   }
 
   try {
