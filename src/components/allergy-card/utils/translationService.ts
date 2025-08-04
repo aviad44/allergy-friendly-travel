@@ -110,7 +110,7 @@ const simpleTranslations: Record<string, Record<string, string>> = {
 };
 
 /**
- * Translates text using built-in simple translations or mock for other languages
+ * Translates text using built-in simple translations
  */
 export const translateText = async (
   text: string,
@@ -118,50 +118,63 @@ export const translateText = async (
 ): Promise<TranslationResponse> => {
   try {
     if (!text || !targetLanguage) {
+      console.error("Missing text or target language");
       return { translatedText: null, error: "Missing text or target language" };
     }
 
     // Get language name from code for more accurate translations
     const languageName = getLanguageNameFromCode(targetLanguage);
     
-    console.log(`Translating to ${languageName} (${targetLanguage})`);
+    console.log(`Starting translation to ${languageName} (code: ${targetLanguage})`);
+    console.log("Text to translate:", text);
 
     // Simulate loading delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 300));
 
     // Check if we have built-in translations for this language
     if (simpleTranslations[languageName]) {
+      console.log(`Found translations for ${languageName}`);
       const translations = simpleTranslations[languageName];
       let translatedText = text;
       
-      // Replace known phrases more accurately
+      // Replace known phrases with more flexible matching
       Object.entries(translations).forEach(([english, translated]) => {
-        // Use word boundaries for more precise matching
-        const regex = new RegExp(`\\b${english.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
-        translatedText = translatedText.replace(regex, translated);
+        // More flexible regex to catch variations
+        const escapedEnglish = english.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(escapedEnglish, 'gi');
+        
+        if (regex.test(translatedText)) {
+          console.log(`Replacing "${english}" with "${translated}"`);
+          translatedText = translatedText.replace(regex, translated);
+        }
       });
       
-      console.log("Translation success using built-in dictionary");
-      console.log("Original text:", text);
-      console.log("Translated text:", translatedText);
-      return { translatedText };
+      console.log("Final translated text:", translatedText);
+      
+      // Only return translation if it's actually different from original
+      if (translatedText !== text) {
+        return { translatedText };
+      } else {
+        console.log("No translation changes made, text remained the same");
+        return { translatedText: text };
+      }
     }
 
-    // For other languages, provide a formatted response indicating translation is needed
+    // For languages without built-in translations
+    console.log(`No built-in translations for ${languageName}`);
     const formattedText = `[${languageName.toUpperCase()} TRANSLATION NEEDED]
 
 ${text}
 
 [Please translate the above text to ${languageName}]`;
 
-    console.log("Provided template for manual translation");
     return { translatedText: formattedText };
     
   } catch (error) {
     console.error("Translation error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     
-    toast.error(`Translation failed: ${errorMessage}. Please try again later.`, {
+    toast.error(`Translation failed: ${errorMessage}`, {
       duration: 5000,
       id: "translation-error"
     });
