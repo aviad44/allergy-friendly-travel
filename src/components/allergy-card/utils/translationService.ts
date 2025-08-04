@@ -152,47 +152,75 @@ export const translateText = async (
     // For languages without built-in translations, use OpenAI
     console.log(`Using OpenAI translation for ${languageName}`);
     
-    try {
-      console.log("Importing Supabase client...");
-      const { supabase } = await import('@/integrations/supabase/client');
-      console.log("Supabase client imported successfully");
+    // Check for API key from localStorage
+    const openaiApiKey = localStorage.getItem('openai_api_key');
+    
+    if (!openaiApiKey) {
+      // Return manual translation request
+      const fallbackText = `[${languageName.toUpperCase()} TRANSLATION NEEDED]
+
+${text}
+
+[Set OpenAI API key in settings for automatic translation]`;
       
-      console.log("Calling OpenAI proxy function...");
-      const { data: result, error } = await supabase.functions.invoke('openai-proxy', {
-        body: {
-          userInput: text,
-          systemPrompt: `You are a professional medical translator. Translate the following allergy warning text to ${languageName}. 
-          This is critical medical information that must be accurate and clear. 
-          Return ONLY the translated text, nothing else.
-          Keep the formatting and structure exactly the same.
-          This text will be used to communicate life-threatening allergies.`,
+      toast.error('OpenAI API key required for automatic translation. Click the settings button to add your key.', {
+        duration: 8000,
+        id: "api-key-missing"
+      });
+      
+      return { translatedText: fallbackText };
+    }
+    
+    try {
+      console.log("Making direct OpenAI API call...");
+      
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openaiApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a professional medical translator. Translate the following allergy warning text to ${languageName}. 
+              This is critical medical information that must be accurate and clear. 
+              Return ONLY the translated text, nothing else.
+              Keep the formatting and structure exactly the same.
+              This text will be used to communicate life-threatening allergies.`
+            },
+            {
+              role: 'user',
+              content: text
+            }
+          ],
           temperature: 0.1,
           max_tokens: 500
-        }
+        }),
       });
 
-      console.log("OpenAI proxy response:", { result, error });
-
-      if (error) {
-        console.error('OpenAI translation error:', error);
-        throw new Error(error.message || 'Translation service failed');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: { message: 'Unknown error' } }));
+        throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
       }
 
-      if (result?.result) {
-        console.log("OpenAI translation successful:", result.result);
-        return { translatedText: result.result.trim() };
+      const data = await response.json();
+      const translatedText = data.choices?.[0]?.message?.content?.trim();
+
+      if (translatedText) {
+        console.log("OpenAI translation successful:", translatedText);
+        return { translatedText };
       } else {
-        console.log("No result in response:", result);
-        throw new Error('No translation received from service');
+        throw new Error('No translation received from OpenAI');
       }
     } catch (apiError) {
-      console.error('API translation failed:', apiError);
-      console.error('Error details:', apiError);
+      console.error('OpenAI translation failed:', apiError);
       
       // Show specific error to user
       const errorMsg = apiError instanceof Error ? apiError.message : 'Unknown API error';
-      toast.error(`Translation failed: ${errorMsg}`, {
+      toast.error(`Translation failed: ${errorMsg}. Check your API key in settings.`, {
         duration: 10000,
         id: "translation-api-error"
       });
