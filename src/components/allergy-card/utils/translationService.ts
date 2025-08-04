@@ -66,39 +66,6 @@ export const getLanguageOptions = () => {
 };
 
 /**
- * Safely parse JSON from response text
- */
-const safelyParseJSON = async (response: Response): Promise<any> => {
-  let text = "";
-  
-  try {
-    text = await response.text();
-    console.log("Response text received, length:", text.length);
-    
-    if (!text || text.trim() === "") {
-      console.error("Empty response received from server");
-      // Return a standardized object for empty responses
-      return { 
-        error: "Empty response received from server", 
-        translatedText: null 
-      };
-    }
-    
-    return JSON.parse(text);
-  } catch (error) {
-    console.error("JSON parsing error:", error);
-    console.error("Response text received:", text ? text.substring(0, 100) : "No response text");
-    
-    // Return a standardized error object instead of throwing
-    return { 
-      error: `Failed to parse JSON response: ${error.message}`, 
-      responseText: text ? text.substring(0, 100) + "..." : "Could not retrieve response body",
-      translatedText: null 
-    };
-  }
-};
-
-/**
  * Simple built-in translations for common allergy terms
  */
 const simpleTranslations: Record<string, Record<string, string>> = {
@@ -107,15 +74,24 @@ const simpleTranslations: Record<string, Record<string, string>> = {
     "I CANNOT EAT": "אני לא יכול/ה לאכול",
     "Tree nuts": "אגוזי עץ", 
     "Eggs": "ביצים",
+    "Shellfish": "פירות ים",
+    "Milk": "חלב",
     "Even a tiny amount can make me very sick": "אפילו כמות קטנה יכולה לגרום לי להיות חולה מאוד",
     "Please make sure my food is prepared without these ingredients": "אנא וודאו שהאוכל שלי מוכן ללא המרכיבים הללו",
-    "and might require emergency medicine": "ועלול לדרוש תרופה חירום"
+    "and might require emergency medicine": "ועלול לדרוש תרופה חירום",
+    "Cross-contamination can cause a serious allergic reaction": "זיהום צולב יכול לגרום לתגובה אלרגית חמורה",
+    "Please ensure that my meal is prepared without these allergens": "אנא וודאו שהארוחה שלי מוכנה ללא האלרגנים הללו",
+    "and that all cooking utensils and surfaces are thoroughly cleaned": "וכי כל כלי הבישול והמשטחים נוקו ביסודיות",
+    "before preparing my food": "לפני הכנת האוכל שלי",
+    "Thank you for your assistance in this important health matter": "תודה על עזרתכם בעניין בריאותי חשוב זה"
   },
   Spanish: {
     "I have serious food allergies": "Tengo alergias alimentarias graves",
     "I CANNOT EAT": "NO PUEDO COMER",
     "Tree nuts": "Frutos secos",
-    "Eggs": "Huevos", 
+    "Eggs": "Huevos",
+    "Shellfish": "Mariscos", 
+    "Milk": "Leche",
     "Even a tiny amount can make me very sick": "Incluso una pequeña cantidad puede enfermarme gravemente",
     "Please make sure my food is prepared without these ingredients": "Por favor asegúrese de que mi comida se prepare sin estos ingredientes",
     "and might require emergency medicine": "y podría requerir medicina de emergencia"
@@ -125,6 +101,8 @@ const simpleTranslations: Record<string, Record<string, string>> = {
     "I CANNOT EAT": "JE NE PEUX PAS MANGER",
     "Tree nuts": "Noix",
     "Eggs": "Œufs",
+    "Shellfish": "Fruits de mer",
+    "Milk": "Lait",
     "Even a tiny amount can make me very sick": "Même une petite quantité peut me rendre très malade", 
     "Please make sure my food is prepared without these ingredients": "Veuillez vous assurer que ma nourriture est préparée sans ces ingrédients",
     "and might require emergency medicine": "et pourrait nécessiter un médicament d'urgence"
