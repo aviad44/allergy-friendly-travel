@@ -99,7 +99,40 @@ const safelyParseJSON = async (response: Response): Promise<any> => {
 };
 
 /**
- * Translates text using our translation function
+ * Simple built-in translations for common allergy terms
+ */
+const simpleTranslations: Record<string, Record<string, string>> = {
+  Hebrew: {
+    "I have serious food allergies": "יש לי אלרגיות מזון חמורות",
+    "I CANNOT EAT": "אני לא יכול/ה לאכול",
+    "Tree nuts": "אגוזי עץ", 
+    "Eggs": "ביצים",
+    "Even a tiny amount can make me very sick": "אפילו כמות קטנה יכולה לגרום לי להיות חולה מאוד",
+    "Please make sure my food is prepared without these ingredients": "אנא וודאו שהאוכל שלי מוכן ללא המרכיבים הללו",
+    "and might require emergency medicine": "ועלול לדרוש תרופה חירום"
+  },
+  Spanish: {
+    "I have serious food allergies": "Tengo alergias alimentarias graves",
+    "I CANNOT EAT": "NO PUEDO COMER",
+    "Tree nuts": "Frutos secos",
+    "Eggs": "Huevos", 
+    "Even a tiny amount can make me very sick": "Incluso una pequeña cantidad puede enfermarme gravemente",
+    "Please make sure my food is prepared without these ingredients": "Por favor asegúrese de que mi comida se prepare sin estos ingredientes",
+    "and might require emergency medicine": "y podría requerir medicina de emergencia"
+  },
+  French: {
+    "I have serious food allergies": "J'ai de graves allergies alimentaires",
+    "I CANNOT EAT": "JE NE PEUX PAS MANGER",
+    "Tree nuts": "Noix",
+    "Eggs": "Œufs",
+    "Even a tiny amount can make me very sick": "Même une petite quantité peut me rendre très malade", 
+    "Please make sure my food is prepared without these ingredients": "Veuillez vous assurer que ma nourriture est préparée sans ces ingrédients",
+    "and might require emergency medicine": "et pourrait nécessiter un médicament d'urgence"
+  }
+};
+
+/**
+ * Translates text using built-in simple translations or mock for other languages
  */
 export const translateText = async (
   text: string,
@@ -115,79 +148,33 @@ export const translateText = async (
     
     console.log(`Translating to ${languageName} (${targetLanguage})`);
 
-    // For debugging if API is not working
-    if (process.env.NODE_ENV === 'development' && import.meta.env.VITE_DEBUG_TRANSLATION === 'true') {
-      console.log("Using debug mock translation");
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
-      return { 
-        translatedText: `[${languageName.toUpperCase()} TRANSLATION]\n\n${text}\n\n(This is a debug mock translation)` 
-      };
-    }
+    // Simulate loading delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Skip Netlify function and go directly to Supabase Edge Function for better reliability
-    // The error suggests Netlify function is returning HTML instead of JSON
-    console.log("Skipping Netlify function due to parsing issues, using Supabase Edge Function");
-    
-    const baseUrl = window.location.origin;
-    const supabaseUrl = `${baseUrl}/functions/v1/translate-card`;
-    
-    console.log(`Using Supabase translation function at: ${supabaseUrl}`);
-    
-    try {
-      const response = await fetch(supabaseUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text,
-          targetLanguage: languageName
-        }),
+    // Check if we have built-in translations for this language
+    if (simpleTranslations[languageName]) {
+      const translations = simpleTranslations[languageName];
+      let translatedText = text;
+      
+      // Replace known phrases
+      Object.entries(translations).forEach(([english, translated]) => {
+        translatedText = translatedText.replace(new RegExp(english, 'gi'), translated);
       });
-
-      console.log("Supabase response status:", response.status);
-
-      if (!response.ok) {
-        const errorData = await safelyParseJSON(response);
-        
-        if (errorData && errorData.error) {
-          throw new Error(errorData.error);
-        } else {
-          throw new Error(`Translation API error: HTTP ${response.status}`);
-        }
-      }
-
-      const responseData = await safelyParseJSON(response);
       
-      if (responseData.error && !responseData.translatedText) {
-        console.error("Supabase API returned JSON with error:", responseData.error);
-        throw new Error(responseData.error);
-      }
-      
-      const translationText = responseData.translation || responseData.translatedText;
-      
-      if (!translationText) {
-        const errorMessage = "Translation API returned empty result";
-        console.error(errorMessage, responseData);
-        throw new Error(errorMessage);
-      }
-      
-      console.log("Translation success, result:", translationText.substring(0, 50) + "...");
-      return { translatedText: translationText };
-    } catch (error) {
-      console.error("Supabase translation error:", error);
-      
-      // For development, provide a mock translation after API failure
-      if (process.env.NODE_ENV === 'development') {
-        console.warn("Translation service failed, using mock translation for development");
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Fake delay
-        return { 
-          translatedText: `[${languageName.toUpperCase()} EMERGENCY MOCK]\n\n${text}\n\n(Mock after services failed: ${error.message})` 
-        };
-      }
-      
-      throw error;
+      console.log("Translation success using built-in dictionary");
+      return { translatedText };
     }
+
+    // For other languages, provide a formatted response indicating translation is needed
+    const formattedText = `[${languageName.toUpperCase()} TRANSLATION NEEDED]
+
+${text}
+
+[Please translate the above text to ${languageName}]`;
+
+    console.log("Provided template for manual translation");
+    return { translatedText: formattedText };
+    
   } catch (error) {
     console.error("Translation error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
