@@ -8,7 +8,7 @@ export const destinations: Destination[] = [
     country: 'Netherlands',
     description: 'Top 10 Allergy-Friendly Hotels in Amsterdam',
     subtitle: 'Safe Accommodations for Food Allergies',
-    image: '/src/assets/amsterdam-canal-classic.jpg'
+    image: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=1200&q=80'
   },
   {
     id: 'london',
