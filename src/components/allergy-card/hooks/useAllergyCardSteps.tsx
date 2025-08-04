@@ -13,10 +13,9 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
 
   const generateCardContent = async () => {
     const values = form.getValues();
-    const isChild = values.audienceType === "child";
     
     console.log("Generating card with allergies:", values.allergies);
-    const cardText = generateCardText(values.allergies, isChild, values.userName);
+    const cardText = generateCardText(values.allergies);
     setGeneratedCard(cardText);
     setTranslatedCard(null); // Reset translation when card is regenerated
     
@@ -101,10 +100,10 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
   // Reset translation when target language changes
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
-      if (name === 'targetLanguage' && step === Step.Preview && generatedCard) {
+      if (name === 'targetLanguage' && step === Step.Download && generatedCard) {
         setTranslatedCard(null); // Reset translation when language changes
         
-        // Auto-translate if we're already on the preview step
+        // Auto-translate if we're already on the download step
         const targetLang = value.targetLanguage as string;
         if (targetLang && generatedCard) {
           console.log("Language changed, auto-translating");
@@ -112,8 +111,8 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
         }
       }
       
-      // If source language changes and we're on the preview step, regenerate card
-      if (name === 'sourceLanguage' && step === Step.Preview) {
+      // If source language changes and we're on the download step, regenerate card
+      if (name === 'sourceLanguage' && step === Step.Download) {
         console.log("Source language changed, regenerating card");
         generateCardContent();
       }

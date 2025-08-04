@@ -12,9 +12,7 @@ import { jsPDF } from 'jspdf';
  * @returns Generated card text
  */
 export const generateCardText = (
-  allergies: string[], 
-  isChild: boolean = false,
-  userName: string | undefined = undefined
+  allergies: string[]
 ): string => {
   // Format allergies with emojis where available
   const formattedAllergies = allergies.map(allergy => {
@@ -22,13 +20,14 @@ export const generateCardText = (
     return icon ? `${icon} ${allergy}` : allergy;
   }).join(", ");
 
-  if (isChild) {
-    const nameSection = userName ? `My name is ${userName}.\n\n` : '';
-    
-    return `⚠️ FOOD ALLERGY ALERT ⚠️\n\n${nameSection}I have serious food allergies. Please help keep me safe.\n\nI CANNOT EAT:\n${formattedAllergies}\n\nEven a tiny amount can make me very sick and might require emergency medicine. Please make sure my food is prepared without these ingredients.`;
-  } else {
-    return `⚠️ FOOD ALLERGY NOTIFICATION ⚠️\n\nI have severe allergies to the following foods:\n${formattedAllergies}\n\nCross-contamination can cause a serious allergic reaction. Please ensure that my meal is prepared without these allergens and that all cooking utensils and surfaces are thoroughly cleaned before preparing my food.\n\nThank you for your assistance in this important health matter.`;
-  }
+  return `⚠️ FOOD ALLERGY NOTIFICATION ⚠️
+
+I have severe allergies to the following foods:
+${formattedAllergies}
+
+Cross-contamination can cause a serious allergic reaction. Please ensure that my meal is prepared without these allergens and that all cooking utensils and surfaces are thoroughly cleaned before preparing my food.
+
+Thank you for your assistance in this important health matter.`;
 };
 
 /**
@@ -45,7 +44,7 @@ export const generateCardHtml = (
     ? (userName ? `Child Allergy Card for ${userName}` : 'Child Allergy Card')
     : 'Food Allergy Alert Card';
   
-  const originalText = generateCardText(allergies, isChild, userName);
+  const originalText = generateCardText(allergies);
   const formattedOriginal = originalText.replace(/\n/g, '<br>');
   const formattedTranslated = translatedText ? translatedText.replace(/\n/g, '<br>') : '';
 

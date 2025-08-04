@@ -103,26 +103,6 @@ export const Step2ChooseLanguages: React.FC<Step2Props> = ({ form }) => {
             )}
           />
           
-          <FormField
-            control={form.control}
-            name="includeQrCode"
-            render={({ field }) => (
-              <FormItem className="flex items-start space-x-3 space-y-0 mt-4 pt-4 border-t">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel className="text-base">Include QR Code</FormLabel>
-                  <FormDescription>
-                    Add a QR code to your card that links to an online version.
-                  </FormDescription>
-                </div>
-              </FormItem>
-            )}
-          />
         </div>
       </div>
       

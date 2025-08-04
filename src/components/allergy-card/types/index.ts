@@ -6,9 +6,6 @@ export const formSchema = z.object({
   customAllergy: z.string().optional(),
   sourceLanguage: z.string().default("en"),
   targetLanguage: z.string().min(1, "Please select a target language"),
-  audienceType: z.enum(["adult", "child"]).default("adult"),
-  includeQrCode: z.boolean().default(false),
-  userName: z.string().optional(),
 });
 
 export type FormValues = z.infer<typeof formSchema>;
@@ -16,14 +13,11 @@ export type FormValues = z.infer<typeof formSchema>;
 export enum Step {
   SelectAllergies = 0,
   ChooseLanguages = 1,
-  Preview = 2,
-  Download = 3,
+  Download = 2,
 }
 
 export interface CardData {
   sourceText: string;
   translatedText: string | null;
   allergies: string[];
-  userName?: string;
-  audienceType: "adult" | "child";
 }

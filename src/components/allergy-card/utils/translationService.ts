@@ -127,19 +127,23 @@ export const translateText = async (
     console.log(`Translating to ${languageName} (${targetLanguage})`);
 
     // Simulate loading delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     // Check if we have built-in translations for this language
     if (simpleTranslations[languageName]) {
       const translations = simpleTranslations[languageName];
       let translatedText = text;
       
-      // Replace known phrases
+      // Replace known phrases more accurately
       Object.entries(translations).forEach(([english, translated]) => {
-        translatedText = translatedText.replace(new RegExp(english, 'gi'), translated);
+        // Use word boundaries for more precise matching
+        const regex = new RegExp(`\\b${english.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
+        translatedText = translatedText.replace(regex, translated);
       });
       
       console.log("Translation success using built-in dictionary");
+      console.log("Original text:", text);
+      console.log("Translated text:", translatedText);
       return { translatedText };
     }
 

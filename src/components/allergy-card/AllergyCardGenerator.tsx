@@ -47,7 +47,6 @@ export const AllergyCardGenerator = () => {
   const stepRefs = {
     [Step.SelectAllergies]: useRef<HTMLDivElement>(null),
     [Step.ChooseLanguages]: useRef<HTMLDivElement>(null),
-    [Step.Preview]: useRef<HTMLDivElement>(null),
     [Step.Download]: useRef<HTMLDivElement>(null),
   };
 
