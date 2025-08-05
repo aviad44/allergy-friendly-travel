@@ -216,7 +216,9 @@ export class HybridHotelSearch {
       const { supabase } = await import('@/integrations/supabase/client');
       
       console.log('🔧 About to call search-with-gpt function...');
-      console.log('📋 Supabase URL:', 'https://embuxlxugjkjgsusrmlx.supabase.co');
+      console.log('📋 Supabase client:', supabase);
+      console.log('📋 Function name: "search-with-gpt"');
+      console.log('📋 Body:', { destination: filters.destination, allergies: filters.allergies });
       
       const { data, error } = await supabase.functions.invoke('search-with-gpt', {
         body: { 
