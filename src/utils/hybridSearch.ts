@@ -167,7 +167,27 @@ export class HybridHotelSearch {
         return gptHotels.slice(0, 10);
       } else {
         console.log('⚠️ GPT returned empty results');
-        return [];
+        // אם GPT לא מחזיר תוצאות, נחפש במאגר הקיים
+        console.log('🔍 Trying existing data as fallback...');
+        const existingHotels = this.searchExistingData(filters);
+        console.log(`📚 Found ${existingHotels.length} hotels in existing data`);
+        
+        if (existingHotels.length > 0) {
+          return existingHotels.slice(0, 8);
+        }
+        
+        return [{
+          name: "לא נמצאו מלונות",
+          location: filters.destination,
+          description: `לא נמצאו מלונות מתאימים לאלרגיה ${filters.allergies} ב${filters.destination}. אנא נסה יעד אחר או צור איתנו קשר לעזרה אישית.`,
+          url: "",
+          rating: 0,
+          starRating: "",
+          allergyFeatures: [],
+          reviews: [],
+          allergyAmenities: [],
+          amenities: []
+        }];
       }
       
     } catch (error) {
@@ -176,7 +196,7 @@ export class HybridHotelSearch {
       return [{
         name: "שגיאה בחיפוש",
         location: "נסה שוב",
-        description: `חיפוש נכשל עבור ${filters.destination}. אנא נסה שוב או בחר יעד אחר.`,
+        description: `חיפוש נכשל עבור ${filters.destination}. שגיאה: ${error instanceof Error ? error.message : 'Unknown error'}. אנא נסה שוב או בחר יעד אחר.`,
         url: "",
         rating: 0,
         starRating: "",
