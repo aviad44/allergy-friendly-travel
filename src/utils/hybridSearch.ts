@@ -156,22 +156,26 @@ export class HybridHotelSearch {
   async search(filters: SearchFilters): Promise<HotelInfo[]> {
     console.log('🔍 Starting hybrid search for:', filters);
     
-    // שלב 1: חיפוש עם GPT למידע מדויק ועדכני
+    // שלב 1: חיפוש עם GPT למידע מדויק ועדכני (מקור עיקרי)
     try {
+      console.log('🚀 Searching with GPT for accurate, up-to-date results...');
       const gptHotels = await this.searchWithGPT(filters);
       console.log(`🤖 GPT found ${gptHotels.length} hotels`);
       
       if (gptHotels.length > 0) {
         // GPT מצא תוצאות - השתמש בהן כמקור עיקרי
+        console.log('✅ Using GPT results as primary source');
         return gptHotels.slice(0, 10);
       }
+      
+      console.log('⚠️ GPT returned no results, trying existing data...');
     } catch (error) {
-      console.warn('GPT search failed, falling back to existing data:', error);
+      console.warn('❌ GPT search failed, falling back to existing data:', error);
     }
     
-    // שלב 2: גיבוי - חיפוש במאגר הקיים אם GPT נכשל
+    // שלב 2: גיבוי - חיפוש במאגר הקיים
     const existingHotels = this.searchExistingData(filters);
-    console.log(`✅ Found ${existingHotels.length} hotels in existing data as fallback`);
+    console.log(`📚 Found ${existingHotels.length} hotels in existing data as fallback`);
     
     return existingHotels.slice(0, 8);
   }
