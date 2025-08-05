@@ -73,7 +73,7 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
         toast.error("Please select at least one allergy");
         return;
       }
-    } else if (step === Step.ChooseLanguages) {
+    } else if (step === Step.ChooseLanguage) {
       if (!form.getValues().targetLanguage) {
         toast.error("Please select a target language");
         return;
@@ -84,7 +84,7 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
       setStep(step + 1);
       
       // When moving from language step to preview, generate card
-      if (step === Step.ChooseLanguages) {
+      if (step === Step.ChooseLanguage) {
         toast.loading("Generating your allergy card...", { id: "generating" });
         console.log("Moving to preview step, generating card");
         await generateCardContent();
@@ -113,11 +113,6 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
         }
       }
       
-      // If source language changes and we're on the download step, regenerate card
-      if (name === 'sourceLanguage' && step === Step.Download) {
-        console.log("Source language changed, regenerating card");
-        generateCardContent();
-      }
     });
     
     return () => subscription.unsubscribe();

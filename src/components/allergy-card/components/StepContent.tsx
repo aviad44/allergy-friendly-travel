@@ -55,7 +55,7 @@ export const StepContent: React.FC<StepContentProps> = ({
     switch (step) {
       case Step.SelectAllergies:
         return "Step 1: Select Your Allergies";
-      case Step.ChooseLanguages:
+      case Step.ChooseLanguage:
         return "Step 2: Choose Your Target Language";
       case Step.Download:
         return "Step 3: Download & Share";
@@ -68,7 +68,7 @@ export const StepContent: React.FC<StepContentProps> = ({
     switch (step) {
       case Step.SelectAllergies:
         return "Choose all allergies or dietary restrictions that apply to you";
-      case Step.ChooseLanguages:
+      case Step.ChooseLanguage:
         return "Select the target language for your card";
       case Step.Download:
         return "Save or share your allergy translation card";
@@ -105,7 +105,7 @@ export const StepContent: React.FC<StepContentProps> = ({
         </Card>
       );
 
-    case Step.ChooseLanguages:
+    case Step.ChooseLanguage:
       return (
         <Card>
           <CardHeader>

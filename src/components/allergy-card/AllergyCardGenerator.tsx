@@ -47,7 +47,7 @@ export const AllergyCardGenerator = () => {
   // References for scrolling to the top of each step
   const stepRefs = {
     [Step.SelectAllergies]: useRef<HTMLDivElement>(null),
-    [Step.ChooseLanguages]: useRef<HTMLDivElement>(null),
+    [Step.ChooseLanguage]: useRef<HTMLDivElement>(null),
     [Step.Download]: useRef<HTMLDivElement>(null),
   };
 
@@ -133,7 +133,7 @@ export const AllergyCardGenerator = () => {
         <Button 
           onClick={handleNext}
           disabled={(step === Step.SelectAllergies && selectedAllergies.length === 0) || 
-                  (step === Step.ChooseLanguages && !form.getValues().targetLanguage)}
+                  (step === Step.ChooseLanguage && !form.getValues().targetLanguage)}
           className="gap-1 bg-teal-600 hover:bg-teal-700"
         >
           {step === Step.Download ? 'Finish' : 'Next'}

@@ -15,7 +15,6 @@ export function useAllergyCardForm() {
     defaultValues: {
       allergies: [],
       customAllergy: "",
-      sourceLanguage: "en",
       targetLanguage: "", // This will be selected by the user
     },
   });
