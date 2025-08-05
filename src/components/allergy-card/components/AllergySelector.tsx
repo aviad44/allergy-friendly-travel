@@ -20,6 +20,7 @@ export const ALL_ALLERGIES = [
   { name: "Wheat", emoji: "🌾", severity: "high" },
   { name: "Gluten", emoji: "🍞", severity: "high" },
   { name: "Soy", emoji: "🫘", severity: "medium" },
+  { name: "Legumes", emoji: "🫛", severity: "medium" },
   { name: "Sesame", emoji: "🌱", severity: "medium" },
   { name: "Celery", emoji: "🥬", severity: "medium" },
   { name: "Mustard", emoji: "🌭", severity: "medium" },
