@@ -232,6 +232,19 @@ export class HybridHotelSearch {
       console.log('📡 Data type:', typeof data);
       console.log('📡 Data keys:', data ? Object.keys(data) : 'no data');
       
+      // 🔍 DEEP DEBUGGING - Raw response inspection
+      console.log('🔍 FULL RAW RESPONSE ANALYSIS:');
+      console.log('- Raw data object:', JSON.stringify(data, null, 2));
+      console.log('- Data structure analysis:');
+      if (data) {
+        for (const [key, value] of Object.entries(data)) {
+          console.log(`  - ${key}: ${typeof value}, length: ${typeof value === 'string' ? value.length : 'N/A'}`);
+          if (typeof value === 'string' && value.length > 0) {
+            console.log(`    First 200 chars: "${value.substring(0, 200)}..."`);
+          }
+        }
+      }
+      
       if (error) {
         console.error('❌ Supabase function error:', error);
         throw new Error(`Function error: ${error.message}`);
@@ -272,36 +285,63 @@ export class HybridHotelSearch {
       console.log('📝 Raw markdown content length:', markdownContent.length);
       console.log('📝 First 500 chars of markdown:', markdownContent.substring(0, 500));
       
+      // 🔍 CRITICAL DEBUGGING - Markdown content analysis
+      console.log('🔍 MARKDOWN ANALYSIS BEFORE PARSING:');
+      console.log('- Content type:', typeof markdownContent);
+      console.log('- Content length:', markdownContent.length);
+      console.log('- Is empty?', markdownContent.trim().length === 0);
+      console.log('- Contains hotel patterns?', /hotel/i.test(markdownContent));
+      console.log('- Contains markdown headers?', /#{1,3}/.test(markdownContent));
+      console.log('- First 1000 chars:\n', markdownContent.substring(0, 1000));
+      
       // Parse the GPT response using the unified parser
       console.log('📝 Parsing GPT response...');
       const { parseHotelsFromMarkdown } = await import('@/utils/hotels-parser');
+      
+      console.log('🔍 STARTING PARSER...');
       const parsedHotels = parseHotelsFromMarkdown(markdownContent);
       
-      console.log(`✅ Successfully parsed ${parsedHotels.length} hotels from GPT response`);
-      console.log('📊 Parsed hotels sample:', parsedHotels.slice(0, 2));
+      console.log('🔍 PARSER RESULTS:');
+      console.log(`- Parsed hotels count: ${parsedHotels.length}`);
+      console.log('- Full parsed hotels array:', JSON.stringify(parsedHotels, null, 2));
+      console.log('- First hotel details:', parsedHotels[0] || 'NO HOTELS FOUND');
+      
+      if (parsedHotels.length === 0) {
+        console.log('⚠️ NO HOTELS PARSED - ANALYZING WHY:');
+        console.log('- Raw markdown might not match parser patterns');
+        console.log('- Check if markdown format is compatible with parser');
+      }
       
       // Convert to HotelInfo format if needed
-      const convertedHotels: HotelInfo[] = parsedHotels.map(hotel => ({
-        name: hotel.name || 'Unknown Hotel',
-        location: hotel.location || '',
-        description: hotel.description || '',
-        url: hotel.url || '',
-        rating: hotel.rating || 4,
-        starRating: hotel.starRating || '4 stars',
-        allergyFeatures: hotel.allergyFeatures || [],
-        reviews: hotel.reviews ? hotel.reviews.map(review => ({
-          text: typeof review === 'string' ? review : review.text,
-          author: typeof review === 'object' ? review.author : 'Guest',
-          rating: typeof review === 'object' ? review.rating : 4
-        })) : [],
-        allergyAmenities: (hotel.allergyFeatures || []).map((feature: string) => ({
-          icon: '✅',
-          text: feature
-        })),
-        amenities: hotel.allergyFeatures || []
-      }));
+      console.log('🔄 CONVERTING TO HotelInfo FORMAT...');
+      const convertedHotels: HotelInfo[] = parsedHotels.map((hotel, index) => {
+        console.log(`🏨 Converting hotel ${index + 1}:`, hotel);
+        return {
+          name: hotel.name || 'Unknown Hotel',
+          location: hotel.location || '',
+          description: hotel.description || '',
+          url: hotel.url || '',
+          rating: hotel.rating || 4,
+          starRating: hotel.starRating || '4 stars',
+          allergyFeatures: hotel.allergyFeatures || [],
+          reviews: hotel.reviews ? hotel.reviews.map(review => ({
+            text: typeof review === 'string' ? review : review.text,
+            author: typeof review === 'object' ? review.author : 'Guest',
+            rating: typeof review === 'object' ? review.rating : 4
+          })) : [],
+          allergyAmenities: (hotel.allergyFeatures || []).map((feature: string) => ({
+            icon: '✅',
+            text: feature
+          })),
+          amenities: hotel.allergyFeatures || []
+        };
+      });
       
-      console.log(`🔄 Converted ${convertedHotels.length} hotels to HotelInfo format`);
+      console.log('🔍 FINAL CONVERSION RESULTS:');
+      console.log(`- Converted hotels count: ${convertedHotels.length}`);
+      console.log('- Final hotels array:', JSON.stringify(convertedHotels, null, 2));
+      console.log('- First converted hotel:', convertedHotels[0] || 'NO CONVERTED HOTELS');
+      
       return convertedHotels;
       
     } catch (error) {
