@@ -212,42 +212,30 @@ export class HybridHotelSearch {
     console.log('🚀 Starting GPT search with filters:', filters);
     
     try {
-      // Use direct fetch to the edge function
-      const response = await fetch('https://embuxlxugjkjgsusrmlx.supabase.co/functions/v1/search-with-gpt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtYnV4bHh1Z2pramdzdXNybWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQwODAxMjgsImV4cCI6MjA0OTY1NjEyOH0.iVA1pxwT2_GUBMBCIovf45o23E84FsGu8HByFDQOscQ`
-        },
-        body: JSON.stringify({ 
+      // Use Supabase client to call the edge function
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      const { data, error } = await supabase.functions.invoke('search-with-gpt', {
+        body: { 
           destination: filters.destination, 
           allergies: filters.allergies 
-        })
+        }
       });
       
-      console.log('📡 Response status:', response.status);
+      console.log('📡 Supabase function response:', { data, error });
       
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ HTTP Error:', response.status, errorText);
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
-      }
-      
-      const data = await response.json();
-      console.log('📡 GPT function response received:', data);
-      
-      if (data.error) {
-        console.error('❌ Function returned error:', data.error);
-        throw new Error(data.error);
+      if (error) {
+        console.error('❌ Supabase function error:', error);
+        throw new Error(`Function error: ${error.message}`);
       }
       
       if (!data || !data.recommendation) {
-        console.warn('⚠️ No recommendation in GPT response');
+        console.warn('⚠️ No recommendation in response');
         return [];
       }
       
-      // פרסינג התוצאות מ-GPT
-      console.log('📝 Parsing GPT response:', data.recommendation.substring(0, 200) + '...');
+      // Parse the GPT response
+      console.log('📝 Parsing GPT response...');
       const { parseHotelsFromMarkdown } = await import('@/utils/hotels-parser');
       const parsedHotels = parseHotelsFromMarkdown(data.recommendation || '');
       
