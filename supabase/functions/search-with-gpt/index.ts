@@ -7,32 +7,43 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  console.log('🚀 Edge Function started!');
+  
   if (req.method === 'OPTIONS') {
+    console.log('✅ Handling CORS preflight');
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    console.log('🚀 Function started - testing logging');
+    console.log('📋 Request method:', req.method);
+    console.log('📋 Request URL:', req.url);
     
-    // קבל נתונים מהקליינט
-    const { destination, allergies } = await req.json();
-    console.log('📨 Received data:', { destination, allergies });
-
+    const requestData = await req.json();
+    console.log('📨 Received data:', requestData);
+    
+    const { destination, allergies } = requestData;
+    
     if (!destination || !allergies) {
-      console.log('❌ Missing data');
-      return new Response(JSON.stringify({ error: "Missing destination or allergies" }), {
+      console.log('❌ Missing required data');
+      return new Response(JSON.stringify({ 
+        error: "Missing destination or allergies",
+        received: { destination, allergies }
+      }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // קח את ה-API KEY מהסביבה (הגדר בסודית Supabase)
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     console.log('🔑 API Key exists:', !!OPENAI_API_KEY);
+    console.log('🔑 API Key length:', OPENAI_API_KEY?.length || 0);
     
     if (!OPENAI_API_KEY) {
-      console.log('❌ No API key found');
-      return new Response(JSON.stringify({ error: "Missing OpenAI API key" }), {
+      console.log('❌ No OpenAI API key found');
+      return new Response(JSON.stringify({ 
+        error: "OpenAI API key not configured",
+        hint: "Set OPENAI_API_KEY in Supabase secrets"
+      }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -40,27 +51,22 @@ serve(async (req) => {
 
     console.log('🚀 Making OpenAI request...');
     
-    // קריאה ל-OpenAI GPT-3.5-Turbo (הכי משתלם)
-    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo", // אפשר להחליף ל-gpt-4o אם רוצים יקר ומדויק יותר
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
-            content: `
-You are a travel assistant specializing in allergy-friendly hotels worldwide.
+            content: `You are a travel assistant specializing in allergy-friendly hotels worldwide.
 
-REQUIREMENTS:
-- Find 8-10 REAL hotels that accommodate the specified allergies in the requested destination
-- Include budget, mid-range, and luxury options when possible
-- Only provide EXISTING hotels with verified allergy-friendly features
-- If destination is not in English, search by both local and English names
-- For destinations like Israel/ישראל, search Tel Aviv, Jerusalem, and other major cities
+Find 8-10 REAL hotels that accommodate the specified allergies in the requested destination.
+Include budget, mid-range, and luxury options when possible.
+Only provide EXISTING hotels with verified allergy-friendly features.
 
 FORMAT (EXACT):
 
@@ -81,8 +87,7 @@ FORMAT (EXACT):
 
 ---
 
-IMPORTANT: Always find hotels even for less common destinations. Research thoroughly.
-`
+IMPORTANT: Always find hotels even for less common destinations. Research thoroughly.`
           },
           {
             role: "user",
@@ -90,35 +95,44 @@ IMPORTANT: Always find hotels even for less common destinations. Research thorou
           }
         ],
         temperature: 0.3,
-        max_tokens: 1200,
+        max_tokens: 1500,
       }),
     });
 
-    console.log('📡 OpenAI response status:', openaiRes.status);
+    console.log('📡 OpenAI response status:', openaiResponse.status);
 
-    if (!openaiRes.ok) {
-      const err = await openaiRes.json();
-      console.log('❌ OpenAI error:', err);
-      return new Response(JSON.stringify({ error: err.error?.message || "OpenAI API error" }), {
+    if (!openaiResponse.ok) {
+      const errorData = await openaiResponse.json();
+      console.log('❌ OpenAI API error:', errorData);
+      return new Response(JSON.stringify({ 
+        error: "OpenAI API error",
+        details: errorData.error?.message || "Unknown OpenAI error"
+      }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const openaiData = await openaiRes.json();
+    const openaiData = await openaiResponse.json();
     const content = openaiData.choices?.[0]?.message?.content || "";
     
-    console.log('✅ Success! Content length:', content.length);
+    console.log('✅ OpenAI success! Content length:', content.length);
 
-    // בינתיים נחזיר רק את התשובה של GPT כטקסט (אפשר להוסיף parsing בהמשך)
-    return new Response(JSON.stringify({ hotelsMarkdown: content }), {
+    return new Response(JSON.stringify({ 
+      hotelsMarkdown: content,
+      success: true 
+    }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
-    console.log('💥 Function error:', error.message);
-    return new Response(JSON.stringify({ error: error.message || "Unknown error" }), {
+    console.error('💥 Edge Function error:', error);
+    return new Response(JSON.stringify({ 
+      error: "Edge Function error",
+      message: error.message,
+      stack: error.stack
+    }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
