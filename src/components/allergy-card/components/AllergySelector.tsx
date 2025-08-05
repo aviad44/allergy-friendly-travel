@@ -7,6 +7,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import cinnamonIcon from "@/assets/cinnamon-stick-icon.png";
 
 // Common allergy list with emojis and severity levels
 export const ALL_ALLERGIES = [
@@ -99,7 +100,15 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
                 )}
               >
                 <div className="relative">
-                  <span className="text-lg">{allergy.emoji}</span>
+                  {allergy.name === "Cinnamon" ? (
+                    <img 
+                      src={cinnamonIcon} 
+                      alt="Cinnamon stick" 
+                      className="w-5 h-5 object-contain"
+                    />
+                  ) : (
+                    <span className="text-lg">{allergy.emoji}</span>
+                  )}
                   {selectedAllergies.includes(allergy.name) && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-6 h-0.5 bg-red-600 rotate-45 absolute"></div>
