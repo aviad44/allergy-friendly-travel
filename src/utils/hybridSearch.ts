@@ -212,79 +212,32 @@ export class HybridHotelSearch {
     console.log('🚀 Starting GPT search with filters:', filters);
     
     try {
-      // Direct OpenAI API call for better reliability
-      const openAIApiKey = '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';
+      // Use Supabase client to call the edge function with proper API key
+      const { supabase } = await import('@/integrations/supabase/client');
       
-      if (!openAIApiKey) {
-        throw new Error('OpenAI API key is missing');
-      }
-
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openAIApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: `You are a travel assistant specializing in allergy-friendly hotels worldwide.
-              
-              REQUIREMENTS:
-              - Find 8-10 REAL hotels that accommodate the specified allergies in the requested destination
-              - Include budget, mid-range, and luxury options when possible
-              - Only provide EXISTING hotels with verified allergy-friendly features
-              - If destination is not in English, search by both local and English names
-              - For destinations like Israel/ישראל, search Tel Aviv, Jerusalem, and other major cities
-              
-              FORMAT (EXACT):
-              
-              ## 1. [Hotel Name] ⭐⭐⭐⭐
-              
-              📍 [City, Country]
-              
-              🌟 Allergy-friendly features for [allergy type]:
-              - [Feature 1]
-              - [Feature 2] 
-              - [Feature 3]
-              
-              💬 Guest Review: "[Guest review about allergy experience]"
-              
-              💰 Price Range: [Budget/Mid-Range/Luxury]
-              
-              🔗 [Booking URL or hotel website]
-              
-              ---
-              
-              IMPORTANT: Always find hotels even for less common destinations. Research thoroughly.`
-            },
-            {
-              role: 'user',
-              content: `Find 8-10 allergy-friendly hotels in ${filters.destination} that accommodate guests with ${filters.allergies} allergies.`
-            },
-          ],
-          temperature: 0.3,
-          max_tokens: 1200,
-        }),
+      const { data, error } = await supabase.functions.invoke('search-with-gpt', {
+        body: { 
+          destination: filters.destination, 
+          allergies: filters.allergies 
+        }
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('❌ OpenAI API Error:', errorData);
-        throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
-      }
-
-      const data = await response.json();
-      console.log('✅ Received response from OpenAI');
       
-      const recommendation = data.choices[0].message.content;
+      console.log('📡 Supabase function response:', { data, error });
+      
+      if (error) {
+        console.error('❌ Supabase function error:', error);
+        throw new Error(`Function error: ${error.message}`);
+      }
+      
+      if (!data || !data.recommendation) {
+        console.warn('⚠️ No recommendation in response');
+        return [];
+      }
       
       // Parse the GPT response
       console.log('📝 Parsing GPT response...');
       const { parseHotelsFromMarkdown } = await import('@/utils/hotels-parser');
-      const parsedHotels = parseHotelsFromMarkdown(recommendation || '');
+      const parsedHotels = parseHotelsFromMarkdown(data.recommendation || '');
       
       console.log(`✅ Successfully parsed ${parsedHotels.length} hotels from GPT response`);
       return parsedHotels;
