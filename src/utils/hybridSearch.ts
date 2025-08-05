@@ -182,20 +182,41 @@ export class HybridHotelSearch {
   
   private async searchWithGPT(filters: SearchFilters): Promise<HotelInfo[]> {
     // קריאה ל-GPT רק אם צריך
+    console.log('🚀 Calling GPT function with filters:', filters);
     const { supabase } = await import('@/integrations/supabase/client');
     
-    const { data, error } = await supabase.functions.invoke('search-with-gpt', {
-      body: { 
-        destination: filters.destination, 
-        allergies: filters.allergies 
+    try {
+      const { data, error } = await supabase.functions.invoke('search-with-gpt', {
+        body: { 
+          destination: filters.destination, 
+          allergies: filters.allergies 
+        }
+      });
+      
+      console.log('📡 GPT function response:', { data, error });
+      
+      if (error) {
+        console.error('❌ Supabase function error:', error);
+        throw error;
       }
-    });
-    
-    if (error) throw error;
-    
-    // פרסינג התוצאות מ-GPT
-    const { parseHotelsFromMarkdown } = await import('@/utils/hotels-parser');
-    return parseHotelsFromMarkdown(data.recommendation || '');
+      
+      if (!data || !data.recommendation) {
+        console.warn('⚠️ No recommendation in GPT response');
+        return [];
+      }
+      
+      // פרסינג התוצאות מ-GPT
+      console.log('📝 Parsing GPT response:', data.recommendation.substring(0, 200) + '...');
+      const { parseHotelsFromMarkdown } = await import('@/utils/hotels-parser');
+      const parsedHotels = parseHotelsFromMarkdown(data.recommendation || '');
+      
+      console.log(`✅ Successfully parsed ${parsedHotels.length} hotels from GPT response`);
+      return parsedHotels;
+      
+    } catch (error) {
+      console.error('❌ Error in searchWithGPT:', error);
+      throw error;
+    }
   }
 }
 
