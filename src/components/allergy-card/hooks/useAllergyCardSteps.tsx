@@ -37,7 +37,9 @@ export function useAllergyCardSteps(form: ReturnType<typeof import('react-hook-f
     try {
       toast.loading("Translating your card...", { id: "translation" });
       
-      const result = await translateText(text, targetLanguage);
+      // Get allergies from form to pass to translation function
+      const values = form.getValues();
+      const result = await translateText(text, targetLanguage, values.allergies);
       
       if (result.translatedText) {
         setTranslatedCard(result.translatedText);

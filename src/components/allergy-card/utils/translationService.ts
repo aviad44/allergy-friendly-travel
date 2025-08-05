@@ -1,5 +1,7 @@
 
 import { toast } from "sonner";
+import { COMPLETE_TRANSLATIONS, allergyTranslations, TranslationData } from './translations';
+import { getAllergyIcon } from './allergyIcons';
 
 // Set up types for the translation request and response
 export interface TranslationRequest {
@@ -15,7 +17,7 @@ export interface TranslationResponse {
 // Define a more comprehensive language map
 const languageMap: Record<string, string> = {
   en: "English",
-  es: "Spanish",
+  es: "Spanish", 
   fr: "French",
   de: "German",
   it: "Italian",
@@ -66,55 +68,78 @@ export const getLanguageOptions = () => {
 };
 
 /**
- * Simple built-in translations for common allergy terms
+ * Generate the allergy card text
  */
-const simpleTranslations: Record<string, Record<string, string>> = {
-  Hebrew: {
-    "I have serious food allergies": "יש לי אלרגיות מזון חמורות",
-    "I CANNOT EAT": "אני לא יכול/ה לאכול",
-    "Tree nuts": "אגוזי עץ", 
-    "Eggs": "ביצים",
-    "Shellfish": "פירות ים",
-    "Milk": "חלב",
-    "Even a tiny amount can make me very sick": "אפילו כמות קטנה יכולה לגרום לי להיות חולה מאוד",
-    "Please make sure my food is prepared without these ingredients": "אנא וודאו שהאוכל שלי מוכן ללא המרכיבים הללו",
-    "and might require emergency medicine": "ועלול לדרוש תרופה חירום",
-    "Cross-contamination can cause a serious allergic reaction": "זיהום צולב יכול לגרום לתגובה אלרגית חמורה",
-    "Please ensure that my meal is prepared without these allergens": "אנא וודאו שהארוחה שלי מוכנה ללא האלרגנים הללו",
-    "and that all cooking utensils and surfaces are thoroughly cleaned": "וכי כל כלי הבישול והמשטחים נוקו ביסודיות",
-    "before preparing my food": "לפני הכנת האוכל שלי",
-    "Thank you for your assistance in this important health matter": "תודה על עזרתכם בעניין בריאותי חשוב זה"
-  },
-  Spanish: {
-    "I have serious food allergies": "Tengo alergias alimentarias graves",
-    "I CANNOT EAT": "NO PUEDO COMER",
-    "Tree nuts": "Frutos secos",
-    "Eggs": "Huevos",
-    "Shellfish": "Mariscos", 
-    "Milk": "Leche",
-    "Even a tiny amount can make me very sick": "Incluso una pequeña cantidad puede enfermarme gravemente",
-    "Please make sure my food is prepared without these ingredients": "Por favor asegúrese de que mi comida se prepare sin estos ingredientes",
-    "and might require emergency medicine": "y podría requerir medicina de emergencia"
-  },
-  French: {
-    "I have serious food allergies": "J'ai de graves allergies alimentaires",
-    "I CANNOT EAT": "JE NE PEUX PAS MANGER",
-    "Tree nuts": "Noix",
-    "Eggs": "Œufs",
-    "Shellfish": "Fruits de mer",
-    "Milk": "Lait",
-    "Even a tiny amount can make me very sick": "Même une petite quantité peut me rendre très malade", 
-    "Please make sure my food is prepared without these ingredients": "Veuillez vous assurer que ma nourriture est préparée sans ces ingrédients",
-    "and might require emergency medicine": "et pourrait nécessiter un médicament d'urgence"
-  }
+const generateCardText = (allergies: string[]): string => {
+  // Format allergies with emojis where available
+  const formattedAllergies = allergies.map(allergy => {
+    const icon = getAllergyIcon(allergy);
+    return icon ? `${icon} ${allergy}` : allergy;
+  }).join(", ");
+
+  return `⚠️ FOOD ALLERGY NOTIFICATION ⚠️
+
+I have severe allergies to the following foods:
+${formattedAllergies}
+
+Cross-contamination can cause a serious allergic reaction. Please ensure that my meal is prepared without these allergens and that all cooking utensils and surfaces are thoroughly cleaned before preparing my food.
+
+Thank you for your assistance in this important health matter.`;
 };
 
 /**
- * Translates text using built-in translations with OpenAI fallback
+ * Translate allergies to target language
+ */
+const translateAllergies = (allergies: string[], targetLanguageCode: string): string[] => {
+  const translations = allergyTranslations[targetLanguageCode];
+  if (!translations) {
+    return allergies; // Return original if no translations available
+  }
+
+  return allergies.map(allergy => {
+    return translations[allergy] || allergy;
+  });
+};
+
+/**
+ * Generate complete translated card text
+ */
+const generateTranslatedCardText = (allergies: string[], targetLanguageCode: string): string => {
+  const translationData = COMPLETE_TRANSLATIONS[targetLanguageCode];
+  if (!translationData) {
+    return `[Translation not available for ${getLanguageNameFromCode(targetLanguageCode)}]`;
+  }
+
+  // Translate the allergies
+  const translatedAllergies = translateAllergies(allergies, targetLanguageCode);
+  
+  // Format allergies with emojis
+  const formattedAllergies = translatedAllergies.map(allergy => {
+    const originalAllergy = allergies.find(orig => 
+      allergyTranslations[targetLanguageCode]?.[orig] === allergy
+    ) || allergy;
+    const icon = getAllergyIcon(originalAllergy);
+    return icon ? `${icon} ${allergy}` : allergy;
+  }).join(", ");
+
+  // Construct the full translated text
+  return `⚠️ ${translationData.title} ⚠️
+
+${translationData.mainText}
+${formattedAllergies}
+
+${translationData.crossContamination}
+
+${translationData.thankYou}`;
+};
+
+/**
+ * Translates text using built-in static translations
  */
 export const translateText = async (
   text: string,
-  targetLanguage: string
+  targetLanguage: string,
+  allergies?: string[]
 ): Promise<TranslationResponse> => {
   try {
     if (!text || !targetLanguage) {
@@ -122,118 +147,44 @@ export const translateText = async (
       return { translatedText: null, error: "Missing text or target language" };
     }
 
-    // Get language name from code for more accurate translations
-    const languageName = getLanguageNameFromCode(targetLanguage);
-    
-    console.log(`Starting translation to ${languageName} (code: ${targetLanguage})`);
+    console.log(`Starting translation to ${targetLanguage}`);
     console.log("Text to translate:", text);
 
-    // Check if we have built-in translations for this language
-    if (simpleTranslations[languageName]) {
-      console.log(`Using built-in translations for ${languageName}`);
-      const translations = simpleTranslations[languageName];
-      let translatedText = text;
+    // If we have allergies and this is a standard allergy card, use our complete translations
+    if (allergies && allergies.length > 0) {
+      const translatedText = generateTranslatedCardText(allergies, targetLanguage);
+      console.log("Generated complete translated text:", translatedText);
       
-      // Replace known phrases with more flexible matching
-      Object.entries(translations).forEach(([english, translated]) => {
-        const escapedEnglish = english.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(escapedEnglish, 'gi');
-        
-        if (regex.test(translatedText)) {
-          console.log(`Replacing "${english}" with "${translated}"`);
-          translatedText = translatedText.replace(regex, translated);
-        }
+      if (translatedText.includes('[Translation not available')) {
+        toast.warning(`Translation not available for ${getLanguageNameFromCode(targetLanguage)}. Please contact support to request this language.`, {
+          duration: 5000,
+          id: "language-not-available"
+        });
+        return { translatedText: null, error: `Translation not available for ${getLanguageNameFromCode(targetLanguage)}` };
+      }
+      
+      toast.success(`Text translated to ${getLanguageNameFromCode(targetLanguage)} successfully!`, {
+        duration: 3000,
+        id: "translation-success"
       });
       
-      console.log("Final translated text:", translatedText);
       return { translatedText };
     }
 
-    // For languages without built-in translations, use OpenAI
-    console.log(`Using OpenAI translation for ${languageName}`);
+    // Fallback for custom text - we don't have translations for custom text
+    toast.warning('Custom text translation requires OpenAI API. Only standard allergy cards can be translated automatically.', {
+      duration: 5000,
+      id: "custom-text-warning"
+    });
     
-    // Check for API key from localStorage
-    const openaiApiKey = localStorage.getItem('openai_api_key');
-    
-    if (!openaiApiKey) {
-      // Return manual translation request
-      const fallbackText = `[${languageName.toUpperCase()} TRANSLATION NEEDED]
+    return { 
+      translatedText: `[${getLanguageNameFromCode(targetLanguage).toUpperCase()} TRANSLATION NEEDED]
 
 ${text}
 
-[Set OpenAI API key in settings for automatic translation]`;
-      
-      toast.error('OpenAI API key required for automatic translation. Click the settings button to add your key.', {
-        duration: 8000,
-        id: "api-key-missing"
-      });
-      
-      return { translatedText: fallbackText };
-    }
-    
-    try {
-      console.log("Making direct OpenAI API call...");
-      
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openaiApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: `You are a professional medical translator. Translate the following allergy warning text to ${languageName}. 
-              This is critical medical information that must be accurate and clear. 
-              Return ONLY the translated text, nothing else.
-              Keep the formatting and structure exactly the same.
-              This text will be used to communicate life-threatening allergies.`
-            },
-            {
-              role: 'user',
-              content: text
-            }
-          ],
-          temperature: 0.1,
-          max_tokens: 500
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: { message: 'Unknown error' } }));
-        throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const translatedText = data.choices?.[0]?.message?.content?.trim();
-
-      if (translatedText) {
-        console.log("OpenAI translation successful:", translatedText);
-        return { translatedText };
-      } else {
-        throw new Error('No translation received from OpenAI');
-      }
-    } catch (apiError) {
-      console.error('OpenAI translation failed:', apiError);
-      
-      // Show specific error to user
-      const errorMsg = apiError instanceof Error ? apiError.message : 'Unknown API error';
-      toast.error(`Translation failed: ${errorMsg}. Check your API key in settings.`, {
-        duration: 10000,
-        id: "translation-api-error"
-      });
-      
-      // Fallback to manual translation request
-      const fallbackText = `[${languageName.toUpperCase()} TRANSLATION]
-
-${text}
-
-[Professional medical translation needed to ${languageName}]`;
-
-      return { translatedText: fallbackText };
-    }
+[Please contact support for custom text translation]`,
+      error: "Custom text translation not available"
+    };
     
   } catch (error) {
     console.error("Translation error:", error);
