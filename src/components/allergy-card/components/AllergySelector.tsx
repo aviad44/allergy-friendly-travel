@@ -27,6 +27,7 @@ export const ALL_ALLERGIES = [
   { name: "Molluscs", emoji: "🐚", severity: "medium" },
   { name: "Sulfites", emoji: "🍷", severity: "low" },
   { name: "Corn", emoji: "🌽", severity: "medium" },
+  { name: "Cinnamon", emoji: "🌿", severity: "medium" },
   { name: "Avocado", emoji: "🥑", severity: "low" },
   { name: "Kiwi", emoji: "🥝", severity: "low" },
   { name: "Banana", emoji: "🍌", severity: "low" }
