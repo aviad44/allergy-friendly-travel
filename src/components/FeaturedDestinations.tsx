@@ -86,6 +86,16 @@ const FEATURED_DESTINATIONS = [
     commonAllergies: ["Gluten", "Dairy"],
     href: "/destinations/abu-dhabi",
     destId: "abu-dhabi"
+  },
+  {
+    id: 9,
+    name: "Italy",
+    country: "Italy",
+    image: "https://www.allergy-free-travel.com/lovable-uploads/italy-restaurant-hero.jpg",
+    description: "Top destination for celiacs & gluten-sensitive travelers",
+    commonAllergies: ["Gluten", "Dairy"],
+    href: "/destinations/italy",
+    destId: "italy"
   }
 ];
 
