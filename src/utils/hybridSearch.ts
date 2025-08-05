@@ -229,15 +229,15 @@ export class HybridHotelSearch {
         throw new Error(`Function error: ${error.message}`);
       }
       
-      if (!data || !data.recommendation) {
-        console.warn('⚠️ No recommendation in response');
+      if (!data || !data.hotelsMarkdown) {
+        console.warn('⚠️ No hotels data in response');
         return [];
       }
       
       // Parse the GPT response
       console.log('📝 Parsing GPT response...');
       const { parseHotelsFromMarkdown } = await import('@/utils/hotels-parser');
-      const parsedHotels = parseHotelsFromMarkdown(data.recommendation || '');
+      const parsedHotels = parseHotelsFromMarkdown(data.hotelsMarkdown || '');
       
       console.log(`✅ Successfully parsed ${parsedHotels.length} hotels from GPT response`);
       return parsedHotels;

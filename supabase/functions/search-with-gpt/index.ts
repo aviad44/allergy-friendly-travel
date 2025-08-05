@@ -7,112 +7,105 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openAIApiKey) {
-      console.error('❌ OpenAI API key is missing');
-      throw new Error('OpenAI API key is not configured');
+    // קבל נתונים מהקליינט
+    const { destination, allergies } = await req.json();
+
+    if (!destination || !allergies) {
+      return new Response(JSON.stringify({ error: "Missing destination or allergies" }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    // Parse request body
-    const { destination, allergies } = await req.json();
-    console.log('✅ Processing search request for:', { destination, allergies });
+    // קח את ה-API KEY מהסביבה (הגדר בסודית Supabase)
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    if (!OPENAI_API_KEY) {
+      return new Response(JSON.stringify({ error: "Missing OpenAI API key" }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
-    // Optimized request to OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    // קריאה ל-OpenAI GPT-3.5-Turbo (הכי משתלם)
+    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14', // Latest flagship model
+        model: "gpt-3.5-turbo", // אפשר להחליף ל-gpt-4o אם רוצים יקר ומדויק יותר
         messages: [
           {
-            role: 'system',
-            content: `You are a travel assistant specializing in allergy-friendly hotels worldwide.
-            
-            REQUIREMENTS:
-            - Find 8-10 REAL hotels that accommodate the specified allergies in the requested destination
-            - Include budget, mid-range, and luxury options when possible
-            - Only provide EXISTING hotels with verified allergy-friendly features
-            - If destination is not in English, search by both local and English names
-            - For destinations like Israel/ישראל, search Tel Aviv, Jerusalem, and other major cities
-            
-            FORMAT (EXACT):
-            
-            ## 1. [Hotel Name] ⭐⭐⭐⭐
-            
-            📍 [City, Country]
-            
-            🌟 Allergy-friendly features for [allergy type]:
-            - [Feature 1]
-            - [Feature 2] 
-            - [Feature 3]
-            
-            💬 Guest Review: "[Guest review about allergy experience]"
-            
-            💰 Price Range: [Budget/Mid-Range/Luxury]
-            
-            🔗 [Booking URL or hotel website]
-            
-            ---
-            
-            IMPORTANT: Always find hotels even for less common destinations. Research thoroughly.`
+            role: "system",
+            content: `
+You are a travel assistant specializing in allergy-friendly hotels worldwide.
+
+REQUIREMENTS:
+- Find 8-10 REAL hotels that accommodate the specified allergies in the requested destination
+- Include budget, mid-range, and luxury options when possible
+- Only provide EXISTING hotels with verified allergy-friendly features
+- If destination is not in English, search by both local and English names
+- For destinations like Israel/ישראל, search Tel Aviv, Jerusalem, and other major cities
+
+FORMAT (EXACT):
+
+## 1. [Hotel Name] ⭐⭐⭐⭐
+
+📍 [City, Country]
+
+🌟 Allergy-friendly features for [allergy type]:
+- [Feature 1]
+- [Feature 2] 
+- [Feature 3]
+
+💬 Guest Review: "[Guest review about allergy experience]"
+
+💰 Price Range: [Budget/Mid-Range/Luxury]
+
+🔗 [Booking URL or hotel website]
+
+---
+
+IMPORTANT: Always find hotels even for less common destinations. Research thoroughly.
+`
           },
           {
-            role: 'user',
+            role: "user",
             content: `Find 8-10 allergy-friendly hotels in ${destination} that accommodate guests with ${allergies} allergies.`
-          },
+          }
         ],
         temperature: 0.3,
-        max_tokens: 2000, // Enough for detailed hotel list
+        max_tokens: 1200,
       }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('❌ OpenAI API Error:', errorData);
-      throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
-    }
-
-    const data = await response.json();
-    console.log('✅ Received response from OpenAI');
-    
-    // Process the response
-    let processedResponse = data.choices[0].message.content;
-    processedResponse = processedResponse
-      .replace(/IMPORTANT:[\s\S]*?(?=\n\n|$)/g, '')
-      .replace(/Format your response[\s\S]*?(?=\n\n|$)/g, '')
-      .trim();
-    
-    return new Response(
-      JSON.stringify({ 
-        recommendation: processedResponse,
-        status: "success" 
-      }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
-
-  } catch (error) {
-    console.error('❌ Error in search-with-gpt function:', error);
-    return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred',
-        details: error instanceof Error ? error.stack : undefined,
-        status: "error" 
-      }),
-      {
+    if (!openaiRes.ok) {
+      const err = await openaiRes.json();
+      return new Response(JSON.stringify({ error: err.error?.message || "OpenAI API error" }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
+      });
+    }
+
+    const openaiData = await openaiRes.json();
+    const content = openaiData.choices?.[0]?.message?.content || "";
+
+    // בינתיים נחזיר רק את התשובה של GPT כטקסט (אפשר להוסיף parsing בהמשך)
+    return new Response(JSON.stringify({ hotelsMarkdown: content }), {
+      status: 200,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message || "Unknown error" }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });
