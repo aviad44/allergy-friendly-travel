@@ -12,10 +12,14 @@ serve(async (req) => {
   }
 
   try {
+    console.log('🚀 Function started - testing logging');
+    
     // קבל נתונים מהקליינט
     const { destination, allergies } = await req.json();
+    console.log('📨 Received data:', { destination, allergies });
 
     if (!destination || !allergies) {
+      console.log('❌ Missing data');
       return new Response(JSON.stringify({ error: "Missing destination or allergies" }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -24,13 +28,18 @@ serve(async (req) => {
 
     // קח את ה-API KEY מהסביבה (הגדר בסודית Supabase)
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    console.log('🔑 API Key exists:', !!OPENAI_API_KEY);
+    
     if (!OPENAI_API_KEY) {
+      console.log('❌ No API key found');
       return new Response(JSON.stringify({ error: "Missing OpenAI API key" }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
+    console.log('🚀 Making OpenAI request...');
+    
     // קריאה ל-OpenAI GPT-3.5-Turbo (הכי משתלם)
     const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -85,8 +94,11 @@ IMPORTANT: Always find hotels even for less common destinations. Research thorou
       }),
     });
 
+    console.log('📡 OpenAI response status:', openaiRes.status);
+
     if (!openaiRes.ok) {
       const err = await openaiRes.json();
+      console.log('❌ OpenAI error:', err);
       return new Response(JSON.stringify({ error: err.error?.message || "OpenAI API error" }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -95,6 +107,8 @@ IMPORTANT: Always find hotels even for less common destinations. Research thorou
 
     const openaiData = await openaiRes.json();
     const content = openaiData.choices?.[0]?.message?.content || "";
+    
+    console.log('✅ Success! Content length:', content.length);
 
     // בינתיים נחזיר רק את התשובה של GPT כטקסט (אפשר להוסיף parsing בהמשך)
     return new Response(JSON.stringify({ hotelsMarkdown: content }), {
@@ -103,6 +117,7 @@ IMPORTANT: Always find hotels even for less common destinations. Research thorou
     });
 
   } catch (error) {
+    console.log('💥 Function error:', error.message);
     return new Response(JSON.stringify({ error: error.message || "Unknown error" }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
