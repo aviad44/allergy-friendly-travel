@@ -216,7 +216,7 @@ export class HybridHotelSearch {
       const { supabase } = await import('@/integrations/supabase/client');
       
       console.log('🔧 About to call search-with-gpt function...');
-      console.log('📋 Supabase client:', supabase);
+      console.log('📋 Supabase client:', !!supabase);
       console.log('📋 Function name: "search-with-gpt"');
       console.log('📋 Body:', { destination: filters.destination, allergies: filters.allergies });
       
@@ -227,28 +227,89 @@ export class HybridHotelSearch {
         }
       });
       
-      console.log('📡 Supabase function response:', { data, error });
+      console.log('📡 Raw Supabase function response data:', data);
+      console.log('📡 Raw Supabase function response error:', error);
+      console.log('📡 Data type:', typeof data);
+      console.log('📡 Data keys:', data ? Object.keys(data) : 'no data');
       
       if (error) {
         console.error('❌ Supabase function error:', error);
         throw new Error(`Function error: ${error.message}`);
       }
       
-      if (!data || !data.hotelsMarkdown) {
-        console.warn('⚠️ No hotels data in response');
+      if (!data) {
+        console.warn('⚠️ No data received from function');
         return [];
       }
       
-      // Parse the GPT response
+      // Check what fields are available in the response
+      console.log('🔍 Checking response structure...');
+      console.log('- hotelsMarkdown:', !!data.hotelsMarkdown);
+      console.log('- response:', !!data.response);
+      console.log('- choices:', !!data.choices);
+      console.log('- content:', !!data.content);
+      
+      // Try to extract the markdown content from different possible response formats
+      let markdownContent = '';
+      if (data.hotelsMarkdown) {
+        markdownContent = data.hotelsMarkdown;
+        console.log('✅ Found hotelsMarkdown field');
+      } else if (data.response) {
+        markdownContent = data.response;
+        console.log('✅ Found response field');
+      } else if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+        markdownContent = data.choices[0].message.content;
+        console.log('✅ Found OpenAI-style choices structure');
+      } else if (data.content) {
+        markdownContent = data.content;
+        console.log('✅ Found content field');
+      } else {
+        console.warn('⚠️ Could not find markdown content in response structure');
+        console.log('Full response data:', JSON.stringify(data, null, 2));
+        return [];
+      }
+      
+      console.log('📝 Raw markdown content length:', markdownContent.length);
+      console.log('📝 First 500 chars of markdown:', markdownContent.substring(0, 500));
+      
+      // Parse the GPT response using the unified parser
       console.log('📝 Parsing GPT response...');
       const { parseHotelsFromMarkdown } = await import('@/utils/hotels-parser');
-      const parsedHotels = parseHotelsFromMarkdown(data.hotelsMarkdown || '');
+      const parsedHotels = parseHotelsFromMarkdown(markdownContent);
       
       console.log(`✅ Successfully parsed ${parsedHotels.length} hotels from GPT response`);
-      return parsedHotels;
+      console.log('📊 Parsed hotels sample:', parsedHotels.slice(0, 2));
+      
+      // Convert to HotelInfo format if needed
+      const convertedHotels: HotelInfo[] = parsedHotels.map(hotel => ({
+        name: hotel.name || 'Unknown Hotel',
+        location: hotel.location || '',
+        description: hotel.description || '',
+        url: hotel.url || '',
+        rating: hotel.rating || 4,
+        starRating: hotel.starRating || '4 stars',
+        allergyFeatures: hotel.allergyFeatures || [],
+        reviews: hotel.reviews ? hotel.reviews.map(review => ({
+          text: typeof review === 'string' ? review : review.text,
+          author: typeof review === 'object' ? review.author : 'Guest',
+          rating: typeof review === 'object' ? review.rating : 4
+        })) : [],
+        allergyAmenities: (hotel.allergyFeatures || []).map((feature: string) => ({
+          icon: '✅',
+          text: feature
+        })),
+        amenities: hotel.allergyFeatures || []
+      }));
+      
+      console.log(`🔄 Converted ${convertedHotels.length} hotels to HotelInfo format`);
+      return convertedHotels;
       
     } catch (error) {
       console.error('❌ Error in searchWithGPT:', error);
+      console.error('❌ Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       throw error;
     }
   }

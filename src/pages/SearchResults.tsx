@@ -6,7 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { cleanResponseText } from "@/components/search/utils";
 import { Helmet } from "react-helmet";
 import { HotelInfo } from "@/types/search";
-import { parseHotelsFromMarkdown } from "@/utils/parseHotelsFromMarkdown";
+// Removed conflicting import - using unified parser through hybridSearch
 import { BackButton } from "@/components/search/BackButton";
 import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
