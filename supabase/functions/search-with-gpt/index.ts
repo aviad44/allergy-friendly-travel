@@ -31,7 +31,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14', // Updated to latest model
+        model: 'gpt-4o-mini', // Fast and reliable model
         messages: [
           {
             role: 'system',

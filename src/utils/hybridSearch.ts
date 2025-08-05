@@ -152,32 +152,40 @@ export class HybridHotelSearch {
     };
   }
   
-  // חיפוש מהיר עם GPT כמקור עיקרי + נתונים קיימים כגיבוי
+  // חיפוש פשוט עם GPT בלבד - מדויק ומהיר
   async search(filters: SearchFilters): Promise<HotelInfo[]> {
-    console.log('🔍 Starting hybrid search for:', filters);
+    console.log('🔍 Starting search for:', filters);
     
-    // שלב 1: חיפוש עם GPT למידע מדויק ועדכני (מקור עיקרי)
+    // חיפוש ישיר עם GPT למידע מדויק ועדכני
     try {
-      console.log('🚀 Searching with GPT for accurate, up-to-date results...');
+      console.log('🚀 Searching with GPT for accurate results...');
       const gptHotels = await this.searchWithGPT(filters);
       console.log(`🤖 GPT found ${gptHotels.length} hotels`);
       
       if (gptHotels.length > 0) {
-        // GPT מצא תוצאות - השתמש בהן כמקור עיקרי
-        console.log('✅ Using GPT results as primary source');
+        console.log('✅ Returning GPT results');
         return gptHotels.slice(0, 10);
+      } else {
+        console.log('⚠️ GPT returned empty results');
+        return [];
       }
       
-      console.log('⚠️ GPT returned no results, trying existing data...');
     } catch (error) {
-      console.warn('❌ GPT search failed, falling back to existing data:', error);
+      console.error('❌ GPT search failed:', error);
+      // במקרה של שגיאה, נחזיר הודעה ברורה
+      return [{
+        name: "שגיאה בחיפוש",
+        location: "נסה שוב",
+        description: `חיפוש נכשל עבור ${filters.destination}. אנא נסה שוב או בחר יעד אחר.`,
+        url: "",
+        rating: 0,
+        starRating: "",
+        allergyFeatures: [],
+        reviews: [],
+        allergyAmenities: [],
+        amenities: []
+      }];
     }
-    
-    // שלב 2: גיבוי - חיפוש במאגר הקיים
-    const existingHotels = this.searchExistingData(filters);
-    console.log(`📚 Found ${existingHotels.length} hotels in existing data as fallback`);
-    
-    return existingHotels.slice(0, 8);
   }
   
   private async searchWithGPT(filters: SearchFilters): Promise<HotelInfo[]> {
