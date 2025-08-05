@@ -215,6 +215,9 @@ export class HybridHotelSearch {
       // Use Supabase client to call the edge function with proper API key
       const { supabase } = await import('@/integrations/supabase/client');
       
+      console.log('🔧 About to call search-with-gpt function...');
+      console.log('📋 Supabase URL:', 'https://embuxlxugjkjgsusrmlx.supabase.co');
+      
       const { data, error } = await supabase.functions.invoke('search-with-gpt', {
         body: { 
           destination: filters.destination, 
