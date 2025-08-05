@@ -32,3 +32,6 @@ enabled = true
 
 [functions.translate-card]
 verify_jwt = false
+
+[functions.search-with-gpt]
+verify_jwt = false

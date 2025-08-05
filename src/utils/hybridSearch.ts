@@ -189,23 +189,36 @@ export class HybridHotelSearch {
   }
   
   private async searchWithGPT(filters: SearchFilters): Promise<HotelInfo[]> {
-    // קריאה ל-GPT רק אם צריך
-    console.log('🚀 Calling GPT function with filters:', filters);
-    const { supabase } = await import('@/integrations/supabase/client');
+    console.log('🚀 Starting GPT search with filters:', filters);
     
     try {
-      const { data, error } = await supabase.functions.invoke('search-with-gpt', {
-        body: { 
+      // Use direct fetch to the edge function
+      const response = await fetch('https://embuxlxugjkjgsusrmlx.supabase.co/functions/v1/search-with-gpt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtYnV4bHh1Z2pramdzdXNybWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQwODAxMjgsImV4cCI6MjA0OTY1NjEyOH0.iVA1pxwT2_GUBMBCIovf45o23E84FsGu8HByFDQOscQ`
+        },
+        body: JSON.stringify({ 
           destination: filters.destination, 
           allergies: filters.allergies 
-        }
+        })
       });
       
-      console.log('📡 GPT function response:', { data, error });
+      console.log('📡 Response status:', response.status);
       
-      if (error) {
-        console.error('❌ Supabase function error:', error);
-        throw error;
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ HTTP Error:', response.status, errorText);
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+      
+      const data = await response.json();
+      console.log('📡 GPT function response received:', data);
+      
+      if (data.error) {
+        console.error('❌ Function returned error:', data.error);
+        throw new Error(data.error);
       }
       
       if (!data || !data.recommendation) {
