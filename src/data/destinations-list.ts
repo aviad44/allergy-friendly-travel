@@ -170,5 +170,12 @@ export const destinations: Destination[] = [
     country: 'Worldwide',
     description: 'Best Airlines for Food Allergy Sufferers (2025 Guide)',
     subtitle: 'Safe Flying Tips & Allergy-Friendly Airline Rankings'
+  },
+  {
+    id: 'italy',
+    name: 'Italy',
+    country: 'Italy',
+    description: 'Discover Italy: Top Destination for Celiacs & Gluten‑Sensitive Travelers',
+    subtitle: 'Exceptional Gluten-Free Dining Across Rome, Florence, Milan & Naples'
   }
 ];

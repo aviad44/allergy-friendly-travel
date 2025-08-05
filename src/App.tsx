@@ -51,6 +51,7 @@ import AthensGlutenFree from "./pages/destinations/Athens";
 import Eilat from "./pages/destinations/Eilat";
 import Airlines from "./pages/destinations/Airlines";
 import Amsterdam from "./pages/destinations/Amsterdam";
+import Italy from "./pages/destinations/Italy";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -125,6 +126,7 @@ const AppContent = () => {
           <Route path="/destinations/eilat" element={<Eilat />} />
           <Route path="/destinations/airlines" element={<Airlines />} />
           <Route path="/destinations/amsterdam" element={<Amsterdam />} />
+          <Route path="/destinations/italy" element={<Italy />} />
           <Route path="/destinations/:destinationId" element={<NotFound />} />
         </Route>
       </Routes>
