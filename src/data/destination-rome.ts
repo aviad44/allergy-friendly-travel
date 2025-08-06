@@ -16,7 +16,7 @@ export const romeContent: DestinationContent = {
       description: "Located in the heart of Rome, this luxury hotel ensures a safe experience for guests with dietary restrictions.",
       quote: "The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.",
       rating: 4.8,
-      bookingUrl: "https://www.hotelartemide.it/",
+      bookingUrl: "https://www.hotelartemide.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/153715169.jpg?k=b5e897619e4c21c3e34c692731ae0e1e06b5a7790760c9db69f71d61444dc9c6&o=&hp=1",
       location: "City Center",
       reviews: [{ 
@@ -36,7 +36,7 @@ export const romeContent: DestinationContent = {
       description: "This boutique hotel is highly rated for its attention to guest needs.",
       quote: "The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.",
       rating: 4.9,
-      bookingUrl: "https://www.singerpalacehotel.com/",
+      bookingUrl: "https://www.singerpalacehotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/287246400.jpg?k=cf56e30c9523ced9876d2c8348bd3b2e68329545781f9133d968b923e1f30075&o=&hp=1",
       location: "Historic Center",
       reviews: [{ 
@@ -56,7 +56,7 @@ export const romeContent: DestinationContent = {
       description: "Near Piazza Navona, a convenient and allergy-conscious choice.",
       quote: "The chef personally explained every meal option to me, and I felt completely at ease dining here.",
       rating: 4.6,
-      bookingUrl: "https://www.hoteldamaso.com/",
+      bookingUrl: "https://www.hoteldamaso.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/149068523.jpg?k=c98b7b744991e91a3f24e235c072ddbb3ab2d027742aecbd0b44d11bcbbcc0d7&o=&hp=1",
       location: "Near Piazza Navona",
       reviews: [{ 
@@ -76,7 +76,7 @@ export const romeContent: DestinationContent = {
       description: "Close to Termini station with allergy-aware staff.",
       quote: "As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!",
       rating: 4.3,
-      bookingUrl: "https://www.hotelarchimederoma.com/",
+      bookingUrl: "https://www.hotelarchimederoma.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/16472585.jpg?k=e7c8e89f92c15fce001ee66757042e1c4143a569347e219320af769bf5406f35&o=&hp=1",
       location: "Near Termini Station",
       reviews: [{ 
@@ -96,7 +96,7 @@ export const romeContent: DestinationContent = {
       description: "A peaceful countryside retreat with excellent allergy-friendly service.",
       quote: "From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.",
       rating: 4.7,
-      bookingUrl: "https://www.relaisborgogentile.com/",
+      bookingUrl: "https://www.relaisborgogentile.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/117472948.jpg?k=fa0a7a330d951df245bea9ce270b8cab8e0cf347df4c21d5848d5f38ce39a138&o=&hp=1",
       location: "Countryside",
       reviews: [{ 

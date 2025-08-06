@@ -35,7 +35,7 @@ export const cyprusContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Dedicated allergy menus", "👨‍🍳 Staff trained in food allergies"],
       description: "This luxury resort offers dedicated allergy-friendly menus across all their restaurants. Kitchen staff undergo specialized training for handling food allergies and preventing cross-contamination.",
       quote: "The chef personally prepared special gluten-free meals for me throughout my stay! - Michael T.",
-      bookingUrl: "https://www.almyra.com/"
+      bookingUrl: "https://www.almyra.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "2. Four Seasons Hotel ★★★★★",
@@ -43,7 +43,7 @@ export const cyprusContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🌿 Allergen-free kitchen areas", "📋 Personalized meal plans"],
       description: "Four Seasons Limassol features dedicated kitchen areas for allergen-free food preparation and offers personalized meal plans for guests with dietary restrictions.",
       quote: "As someone with celiac disease, I felt completely safe dining at their restaurants! - Sarah K.",
-      bookingUrl: "https://www.fourseasons.com/cyprus/"
+      bookingUrl: "https://www.fourseasons.com/cyprus/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "3. Amara Hotel ★★★★★",
@@ -51,7 +51,7 @@ export const cyprusContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Allergy-conscious dining", "🍰 Gluten-free pastries"],
       description: "Amara offers extensive allergy-conscious dining options with specially trained staff who understand the importance of preventing cross-contamination.",
       quote: "Their gluten-free pastries were amazing! I've never felt so well-catered for as a coeliac traveler. - Emma R.",
-      bookingUrl: "https://www.amarahotel.com/"
+      bookingUrl: "https://www.amarahotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "4. Elysium Hotel ★★★★★",
@@ -59,7 +59,7 @@ export const cyprusContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Allergen-free zones", "📱 Digital allergen information"],
       description: "Elysium provides comprehensive digital allergen information for all menu items and maintains dedicated allergen-free preparation zones in their kitchens.",
       quote: "The staff was incredibly knowledgeable about my nut allergy and made me feel completely safe. - David L.",
-      bookingUrl: "https://www.elysium-hotel.com/"
+      bookingUrl: "https://www.elysium-hotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     }
   ],
   faqs: [],
@@ -84,7 +84,7 @@ export const creteContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Dedicated allergen-free kitchen areas", "👨‍🍳 Specialized chefs"],
       description: "Blue Palace features dedicated allergen-free kitchen spaces and specialized chefs who can prepare custom meals for guests with food allergies or dietary restrictions.",
       quote: "The chef prepared gluten-free versions of traditional Greek dishes that were absolutely incredible! - James M.",
-      bookingUrl: "https://www.bluepalace.gr/"
+      bookingUrl: "https://www.bluepalace.gr/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "2. Domes of Elounda ★★★★★",
@@ -92,7 +92,7 @@ export const creteContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🥗 Allergen menus", "📱 Digital allergen tracking"],
       description: "Domes of Elounda provides detailed allergen menus at all their restaurants and uses digital systems to track guest dietary requirements throughout their stay.",
       quote: "As someone with multiple food allergies, their attention to detail made my vacation worry-free! - Caroline D.",
-      bookingUrl: "https://domesresorts.com/domesofelounda/"
+      bookingUrl: "https://domesresorts.com/domesofelounda/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "3. Abaton Island Resort & Spa ★★★★★",
@@ -100,7 +100,7 @@ export const creteContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Allergy-friendly menus", "🍰 Gluten-free pastries"],
       description: "Abaton Island Resort offers comprehensive allergy-friendly dining options at all five of their restaurants, including a selection of gluten-free pastries and desserts.",
       quote: "Their gluten-free baklava was the highlight of my trip! Never thought I could enjoy traditional Greek desserts. - Sophie T.",
-      bookingUrl: "https://www.abaton.gr/"
+      bookingUrl: "https://www.abaton.gr/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "4. Daios Cove Luxury Resort ★★★★★",
@@ -108,7 +108,7 @@ export const creteContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Allergen-free zones", "📋 Personalized meal plans"],
       description: "Daios Cove maintains allergen-free preparation zones in their kitchens and offers personalized meal plans for guests with dietary restrictions throughout their stay.",
       quote: "The resort accommodated my dairy allergy at every meal without me having to ask twice. Amazing service! - Robert K.",
-      bookingUrl: "https://www.daioscove.com/"
+      bookingUrl: "https://www.daioscove.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     }
   ],
   faqs: [],
@@ -125,7 +125,7 @@ export const thailandContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Allergen-trained chefs", "📋 Personalized allergy cards"],
       description: "This luxury hotel offers guests personalized allergy cards in Thai to communicate dietary needs and employs chefs specifically trained in allergen management.",
       quote: "The hotel provided me with allergy cards in Thai which made dining out much easier during my entire stay! - Michael R.",
-      bookingUrl: "https://www.anantara.com/en/siam-bangkok"
+      bookingUrl: "https://www.anantara.com/en/siam-bangkok?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "2. Four Seasons Resort Koh Samui ★★★★★",
@@ -133,7 +133,7 @@ export const thailandContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🥗 Dedicated allergen kitchens", "🍽️ Cross-contamination protocols"],
       description: "The resort features dedicated allergen kitchens and implements strict cross-contamination protocols across all dining venues to ensure safe meals for guests with allergies.",
       quote: "As someone with severe celiac disease, I felt completely safe dining at all their restaurants. - Sarah T.",
-      bookingUrl: "https://www.fourseasons.com/kohsamui/"
+      bookingUrl: "https://www.fourseasons.com/kohsamui/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "3. Banyan Tree Phuket ★★★★★",
@@ -141,7 +141,7 @@ export const thailandContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "👨‍🍳 Chef consultation program", "🍦 Allergen-free desserts"],
       description: "Banyan Tree offers a chef consultation program for guests with allergies and specializes in creating allergen-free versions of traditional Thai desserts.",
       quote: "The chefs created special nut-free versions of Thai desserts that were incredible! - Thomas L.",
-      bookingUrl: "https://www.banyantree.com/thailand/phuket"
+      bookingUrl: "https://www.banyantree.com/thailand/phuket?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "4. The Slate Phuket ★★★★☆",
@@ -149,7 +149,7 @@ export const thailandContent: DestinationContent = {
       features: ["⭐ 4-star boutique resort", "🌱 Farm-to-table program", "🍽️ Allergen-aware dining"],
       description: "This design-focused resort maintains a farm-to-table program allowing for maximum transparency in ingredients and preparation for guests with dietary restrictions.",
       quote: "Their farm-to-table approach meant they could tell me exactly what was in every dish. Perfect for my multiple food allergies! - Emma K.",
-      bookingUrl: "https://www.theslatephuket.com/"
+      bookingUrl: "https://www.theslatephuket.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     }
   ],
   faqs: [
@@ -196,7 +196,7 @@ export const newYorkContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Dedicated allergen protocols", "👨‍🍳 Chef consultation program"],
       description: "The Langham offers a chef consultation program for guests with allergies and maintains strict allergen protocols throughout their kitchen operations.",
       quote: "The chef personally met with me to discuss my gluten allergy and created custom meals every day! - Jessica T.",
-      bookingUrl: "https://www.langhamhotels.com/en/the-langham/new-york/"
+      bookingUrl: "https://www.langhamhotels.com/en/the-langham/new-york/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "2. The Mark Hotel ★★★★★",
@@ -204,7 +204,7 @@ export const newYorkContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Allergen-free room service", "📋 Comprehensive allergen menus"],
       description: "The Mark provides comprehensive allergen menus for all dining options and offers specialized allergen-free room service for guests with dietary restrictions.",
       quote: "Their allergen menus were so detailed! I could enjoy my meals without any worry. - Robert C.",
-      bookingUrl: "https://www.themarkhotel.com/"
+      bookingUrl: "https://www.themarkhotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "3. 1 Hotel Central Park ★★★★★",
@@ -212,7 +212,7 @@ export const newYorkContent: DestinationContent = {
       features: ["⭐ 5-star eco-luxury", "🌱 Farm-to-table with allergy focus", "🥗 Vegan and gluten-free options"],
       description: "This eco-conscious hotel features farm-to-table dining with a strong focus on accommodating allergies. Their farm-fresh approach allows for maximum customization.",
       quote: "As someone with multiple food allergies, I was amazed at how easily they accommodated all my dietary needs. - Amanda W.",
-      bookingUrl: "https://www.1hotels.com/central-park"
+      bookingUrl: "https://www.1hotels.com/central-park?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "4. The Beekman ★★★★★",
@@ -220,7 +220,7 @@ export const newYorkContent: DestinationContent = {
       features: ["⭐ 5-star historic luxury", "🍽️ Allergy-trained culinary team", "📱 Digital allergy tracking"],
       description: "The Beekman's culinary team is specially trained in allergen management, and they use digital systems to track guest allergies across all dining experiences.",
       quote: "They remembered my dairy allergy throughout my entire stay without me having to remind them. Incredible service! - Michael P.",
-      bookingUrl: "https://www.thebeekman.com/"
+      bookingUrl: "https://www.thebeekman.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     }
   ],
   faqs: [],
@@ -245,7 +245,7 @@ export const portugalContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Dedicated allergen-free kitchen", "👨‍🍳 Allergen-trained chefs"],
       description: "Four Seasons Lisbon features a dedicated allergen-free kitchen area and specially trained chefs who can accommodate virtually any dietary restriction with advance notice.",
       quote: "The pastry chef created gluten-free versions of Portuguese pastries that were even better than the originals! - Emma L.",
-      bookingUrl: "https://www.fourseasons.com/lisbon/"
+      bookingUrl: "https://www.fourseasons.com/lisbon/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "2. Pine Cliffs Resort ★★★★★",
@@ -253,7 +253,7 @@ export const portugalContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Comprehensive allergen menus", "🥗 Allergen-free buffet sections"],
       description: "Pine Cliffs offers comprehensive allergen information for all their restaurants and maintains dedicated allergen-free sections at their buffets to prevent cross-contamination.",
       quote: "Their allergy-friendly kids' menu was a lifesaver for our son with multiple food allergies. First vacation without stress! - Thomas B.",
-      bookingUrl: "https://www.pinecliffs.com/"
+      bookingUrl: "https://www.pinecliffs.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "3. Six Senses Douro Valley ★★★★★",
@@ -261,7 +261,7 @@ export const portugalContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🌱 Farm-to-table with allergy focus", "🍽️ Personalized dietary programs"],
       description: "Six Senses' farm-to-table approach allows for complete transparency in ingredients and preparation. They offer personalized dietary programs for guests with allergies or restrictions.",
       quote: "The resort created a completely personalized menu plan for my challenging combination of allergies. Phenomenal service! - Sarah M.",
-      bookingUrl: "https://www.sixsenses.com/en/resorts/douro-valley/"
+      bookingUrl: "https://www.sixsenses.com/en/resorts/douro-valley/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     },
     {
       name: "4. Tivoli Avenida Liberdade Lisboa ★★★★★",
@@ -269,7 +269,7 @@ export const portugalContent: DestinationContent = {
       features: ["⭐ 5-star luxury", "🍽️ Allergen information system", "👨‍🍳 Chef consultation available"],
       description: "Tivoli Avenida Liberdade implements a comprehensive allergen information system across all their dining venues and offers chef consultations for guests with complex dietary needs.",
       quote: "The staff's knowledge about cross-contamination was impressive. I could enjoy traditional Portuguese cuisine safely as a celiac! - David K.",
-      bookingUrl: "https://www.tivolihotels.com/en/tivoli-avenida-liberdade-lisboa"
+      bookingUrl: "https://www.tivolihotels.com/en/tivoli-avenida-liberdade-lisboa?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=generic"
     }
   ],
   faqs: [],

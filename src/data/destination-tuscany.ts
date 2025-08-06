@@ -19,7 +19,7 @@ const hotels: Hotel[] = [
     ],
     location: "Florence",
     address: "Piazza Santa Elisabetta, 3, 50122 Firenze FI, Italy",
-    bookingUrl: "https://www.hotelbrunelleschi.it/",
+    bookingUrl: "https://www.hotelbrunelleschi.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
     description: "A historic hotel in the center of Florence with exceptional allergy protocols and trained staff."
   },
   {
@@ -39,7 +39,7 @@ const hotels: Hotel[] = [
     ],
     location: "Chianti Wine Country",
     address: "Str. delle Cetinelle, 53017 Radda in Chianti SI, Italy",
-    bookingUrl: "https://www.lecetinelle.it/",
+    bookingUrl: "https://www.lecetinelle.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
     description: "A beautiful agriturismo in the heart of Chianti offering personalized allergy accommodations."
   },
   {
@@ -60,7 +60,7 @@ const hotels: Hotel[] = [
     ],
     location: "Siena",
     address: "Via Custoza, 2, 53100 Siena SI, Italy",
-    bookingUrl: "https://www.gardenhotel.it/",
+    bookingUrl: "https://www.gardenhotel.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
     description: "A charming hotel in Siena with beautiful gardens and dedicated allergen-free dining options."
   },
   {
@@ -81,7 +81,7 @@ const hotels: Hotel[] = [
     ],
     location: "Lucca",
     address: "Via del Fosso, 26, 55100 Lucca LU, Italy",
-    bookingUrl: "https://www.hotelilaria.com/",
+    bookingUrl: "https://www.hotelilaria.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
     description: "A boutique hotel in the heart of Lucca with modern amenities and allergy-conscious dining."
   }
 ];
