@@ -34,22 +34,28 @@ serve(async (req) => {
 Your task is to analyze menu text and identify potential allergens with high accuracy.
 
 Common allergens to look for:
-- Dairy (milk, cheese, cream, butter, yogurt)
-- Eggs 
-- Fish (salmon, tuna, cod, etc.)
-- Shellfish (shrimp, crab, lobster, mussels)
-- Tree nuts (almonds, walnuts, cashews, pistachios)
-- Peanuts
-- Wheat (bread, pasta, flour)
-- Gluten (wheat, barley, rye)
-- Soy (soy sauce, tofu, soybean oil)
-- Sesame (tahini, sesame oil, seeds)
-- Celery
-- Mustard
-- Sulfites
-- Peas
-- Lentils
-- Beans
+- Fish (דג, fish, salmon, tuna, cod, sea bass, etc.) - Hebrew: דג, דגים, סלמון, טונה
+- Shellfish (שרימפס, crab, lobster, mussels) - Hebrew: שרימפס, סרטנים, לובסטר
+- Dairy (חלב, milk, cheese, cream, butter, yogurt) - Hebrew: חלב, גבינה, חמאה, יוגורט, קרם
+- Eggs (ביצה, ביצים) - Hebrew: ביצה, ביצים, אומלט
+- Tree nuts (אגוזים, almonds, walnuts, cashews, pistachios) - Hebrew: אגוזים, שקדים, אגוזי מלך
+- Peanuts (בוטנים, אגוזי אדמה) - Hebrew: בוטנים, אגוזי אדמה
+- Wheat/Gluten (חיטה, לחם, פסטה, קמח) - Hebrew: חיטה, לחם, פסטה, קמח, גלוטן
+- Soy (סויה, soy sauce, tofu) - Hebrew: סויה, רוטב סויה, טופו
+- Sesame (שומשום, tahini, sesame oil) - Hebrew: שומשום, טחינה, שמן שומשום
+- Celery (סלרי)
+- Mustard (חרדל)
+- Sulfites (סולפיטים)
+
+CRITICAL: Pay special attention to Hebrew food terms:
+- דג = fish (MAJOR ALLERGEN)
+- לברק = sea bass (type of fish - MAJOR ALLERGEN)
+- סלמון = salmon (fish - MAJOR ALLERGEN)
+- טונה = tuna (fish - MAJOR ALLERGEN)
+- שרימפס = shrimp (shellfish - MAJOR ALLERGEN)
+- חלב = milk (dairy - MAJOR ALLERGEN)
+- גבינה = cheese (dairy - MAJOR ALLERGEN)
+- ביצה/ביצים = eggs (MAJOR ALLERGEN)
 
 For each allergen found:
 1. Identify the specific allergen
@@ -60,16 +66,16 @@ Return ONLY a valid JSON object in this exact format:
 {
   "allergens": [
     {
-      "allergen": "Dairy",
+      "allergen": "Fish",
       "severity": "high",
-      "items": ["Cheese pizza", "Cream pasta", "Ice cream"]
+      "items": ["דג לברק", "סלמון גריל"]
     }
   ]
 }
 
 If no allergens are found, return: {"allergens": []}
 
-Analyze text in ANY language (English, Hebrew, Arabic, French, Spanish, Italian, German, Russian, Chinese, Japanese, etc.). Be thorough but only include allergens you are confident about.`;
+Analyze text in ANY language. Be VERY thorough and check every word against the allergen list above.`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',

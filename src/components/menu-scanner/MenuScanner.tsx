@@ -96,7 +96,7 @@ export const MenuScanner = () => {
         description: "Extracting text from menu..."
       });
 
-      const result = await Tesseract.recognize(file, 'eng+heb+ara+fra+spa+ita+deu+rus+chi_sim+jpn', {
+      const result = await Tesseract.recognize(file, 'heb+eng+ara+fra+spa+ita+deu+rus+chi_sim+jpn', {
         logger: (m) => {
           if (m.status === 'recognizing text') {
             setOcrProgress(Math.round(m.progress * 100));
@@ -104,13 +104,14 @@ export const MenuScanner = () => {
         }
       });
 
-      const text = result.data.text;
+      const text = result.data.text.trim();
+      console.log('OCR extracted text:', text);
       setExtractedText(text);
 
-      if (!text.trim()) {
+      if (!text || text.length < 3) {
         toast({
-          title: "No text found",
-          description: "Could not extract text from the image. Please try a clearer image.",
+          title: "No meaningful text found",
+          description: "Could not extract meaningful text from the image. Please try a clearer image with better lighting.",
           variant: "destructive"
         });
         return;
