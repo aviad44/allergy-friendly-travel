@@ -21,6 +21,7 @@ export const MenuScanner = () => {
   const [extractedText, setExtractedText] = useState('');
   const [detectedAllergens, setDetectedAllergens] = useState<AllergenMatch[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -141,7 +142,10 @@ export const MenuScanner = () => {
       });
 
       const { data, error } = await supabase.functions.invoke('analyze-menu-allergens', {
-        body: { menuText: text }
+        body: { 
+          menuText: text,
+          targetAllergens: selectedAllergens 
+        }
       });
 
       if (error) throw error;
@@ -179,13 +183,13 @@ export const MenuScanner = () => {
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-6 h-6 text-orange-600 mt-0.5" />
             <div>
-              <h3 className="font-semibold text-orange-800 mb-2">אזהרת בטיחות חשובה</h3>
+              <h3 className="font-semibold text-orange-800 mb-2">Important Safety Warning</h3>
               <p className="text-sm text-orange-700 mb-2">
-                המערכת מנתחת תפריטים בעברית, אנגלית, ערבית, ספרדית, צרפתית, איטלקית וגרמנית. 
-                <strong> תמיד בדקו עם הצוות לפני הזמנה!</strong>
+                This system analyzes menus in Hebrew, English, Arabic, Spanish, French, Italian, and German. 
+                <strong> Always verify with restaurant staff before ordering!</strong>
               </p>
               <p className="text-xs text-orange-600">
-                המערכת משמשת כעזר בלבד ואינה מחליפה ייעוץ רפואי או בדיקה ישירה עם המסעדה.
+                This system is for assistance only and does not replace medical advice or direct verification with the restaurant.
               </p>
             </div>
           </div>
@@ -203,12 +207,42 @@ export const MenuScanner = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Allergen Selection */}
+          <div className="space-y-3">
+            <h3 className="font-semibold">Select Allergens to Check For:</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              {[
+                'Gluten', 'Dairy', 'Eggs', 'Fish', 'Shellfish', 'Tree Nuts', 
+                'Peanuts', 'Soy', 'Sesame', 'Sulfites', 'Celery', 'Mustard'
+              ].map((allergen) => (
+                <label key={allergen} className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedAllergens.includes(allergen)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedAllergens([...selectedAllergens, allergen]);
+                      } else {
+                        setSelectedAllergens(selectedAllergens.filter(a => a !== allergen));
+                      }
+                    }}
+                    className="rounded border-gray-300"
+                  />
+                  <span className="text-sm">{allergen}</span>
+                </label>
+              ))}
+            </div>
+            {selectedAllergens.length === 0 && (
+              <p className="text-sm text-muted-foreground">Please select at least one allergen to scan for</p>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Button
               onClick={() => fileInputRef.current?.click()}
               variant="outline"
               className="h-32 border-dashed"
-              disabled={isProcessing}
+              disabled={isProcessing || selectedAllergens.length === 0}
             >
               <div className="text-center">
                 <Upload className="w-8 h-8 mx-auto mb-2" />
@@ -223,7 +257,7 @@ export const MenuScanner = () => {
               onClick={handleCameraCapture}
               variant="outline"
               className="h-32 border-dashed"
-              disabled={isProcessing}
+              disabled={isProcessing || selectedAllergens.length === 0}
             >
               <div className="text-center">
                 <Camera className="w-8 h-8 mx-auto mb-2" />

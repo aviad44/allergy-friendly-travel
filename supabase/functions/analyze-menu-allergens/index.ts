@@ -20,7 +20,7 @@ serve(async (req) => {
   }
 
   try {
-    const { menuText } = await req.json();
+    const { menuText, targetAllergens = [] } = await req.json();
 
     if (!menuText || typeof menuText !== 'string') {
       return new Response(
