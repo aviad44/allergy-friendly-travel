@@ -43,6 +43,46 @@ export const MenuScanner = () => {
     await processImage(file);
   };
 
+  const handleCameraCapture = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } // Use back camera on mobile
+      });
+      
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.play();
+
+      video.addEventListener('loadedmetadata', () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(video, 0, 0);
+        
+        canvas.toBlob(async (blob) => {
+          if (blob) {
+            const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+            const imageUrl = URL.createObjectURL(file);
+            setSelectedImage(imageUrl);
+            await processImage(file);
+          }
+        }, 'image/jpeg', 0.8);
+        
+        // Stop camera stream
+        stream.getTracks().forEach(track => track.stop());
+      });
+    } catch (error) {
+      console.error('Camera access error:', error);
+      toast({
+        title: "Camera access denied",
+        description: "Please allow camera access or upload an image instead",
+        variant: "destructive"
+      });
+    }
+  };
+
   const processImage = async (file: File) => {
     setIsProcessing(true);
     setOcrProgress(0);
@@ -56,7 +96,7 @@ export const MenuScanner = () => {
         description: "Extracting text from menu..."
       });
 
-      const result = await Tesseract.recognize(file, 'eng+heb', {
+      const result = await Tesseract.recognize(file, 'eng+heb+ara+fra+spa+ita+deu+rus+chi_sim+jpn', {
         logger: (m) => {
           if (m.status === 'recognizing text') {
             setOcrProgress(Math.round(m.progress * 100));
@@ -159,15 +199,16 @@ export const MenuScanner = () => {
             </Button>
 
             <Button
+              onClick={handleCameraCapture}
               variant="outline"
               className="h-32 border-dashed"
-              disabled={true}
+              disabled={isProcessing}
             >
               <div className="text-center">
                 <Camera className="w-8 h-8 mx-auto mb-2" />
                 <div>Take Photo</div>
                 <div className="text-sm text-muted-foreground">
-                  Coming soon
+                  Direct camera capture
                 </div>
               </div>
             </Button>

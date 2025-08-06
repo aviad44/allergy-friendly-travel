@@ -69,7 +69,7 @@ Return ONLY a valid JSON object in this exact format:
 
 If no allergens are found, return: {"allergens": []}
 
-Analyze both English and Hebrew text. Be thorough but only include allergens you are confident about.`;
+Analyze text in ANY language (English, Hebrew, Arabic, French, Spanish, Italian, German, Russian, Chinese, Japanese, etc.). Be thorough but only include allergens you are confident about.`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
