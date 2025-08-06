@@ -90,13 +90,13 @@ Arabic: فول سوداني، زبدة الفول السوداني، زيت ال
 Hebrew: בוטנים, חמאת בוטנים, שמן בוטנים
 
 WHEAT/GLUTEN (חיטה/גלוטן) - SEVERITY: HIGH
-English: wheat, gluten, bread, pasta, flour, barley, rye, oats, bulgur, couscous, semolina, seitan
-Spanish: trigo, gluten, pan, pasta, harina, cebada, centeno, avena, bulgur, cuscús, sémola
-German: Weizen, Gluten, Brot, Nudeln, Mehl, Gerste, Roggen, Hafer, Bulgur, Couscous, Grieß
-French: blé, gluten, pain, pâtes, farine, orge, seigle, avoine, boulgour, couscous, semoule
-Italian: grano, glutine, pane, pasta, farina, orzo, segale, avena, bulgur, couscous, semolino
-Arabic: قمح، غلوتين، خبز، معكرونة، دقيق، شعير، جاودار، شوفان، برغل، كسكس، سميد
-Hebrew: חיטה, גלוטן, לחם, פסטה, קמח, שעורה, שיפון, שיבולת שועל, בורגול, קוסקוס
+English: wheat, gluten, bread, pasta, spaghetti, penne, linguine, rigatoni, lasagna, pizza, flour, barley, rye, oats, bulgur, couscous, semolina, seitan, gnocchi, tortellini, ravioli, pappardelle, bucatini, trofie, focaccia, bruschetta, calzone
+Spanish: trigo, gluten, pan, pasta, espaguetis, macarrones, lasaña, pizza, harina, cebada, centeno, avena, bulgur, cuscús, sémola, ñoquis, tortellini, ravioli, focaccia, bruschetta, calzone
+German: Weizen, Gluten, Brot, Nudeln, Spaghetti, Penne, Lasagne, Pizza, Mehl, Gerste, Roggen, Hafer, Bulgur, Couscous, Grieß, Gnocchi, Tortellini, Ravioli, Focaccia
+French: blé, gluten, pain, pâtes, spaghetti, penne, lasagne, pizza, farine, orge, seigle, avoine, boulgour, couscous, semoule, gnocchi, tortellini, ravioli, focaccia
+Italian: grano, glutine, pane, pasta, spaghetti, penne, linguine, rigatoni, lasagne, pizza, farina, orzo, segale, avena, bulgur, couscous, semolino, gnocchi, tortellini, ravioli, pappardelle, bucatini, trofie, focaccia, bruschetta, calzone
+Arabic: قمح، غلوتين، خبز، معكرونة، سباغيتي، بيني، لازانيا، بيتزا، دقيق، شعير، جاودار، شوفان، برغل، كسكس، سميد، نيوكي، تورتيليني، رافيولي، فوكاشيا
+Hebrew: חיטה, גלוטן, לחם, פסטה, ספגטי, פני, לזניה, פיצה, קמח, שעורה, שיפון, שיבולת שועל, בורגול, קוסקוס, ניוקי, טורטליני, רביולי, פוקצ'ה
 
 SOY (סויה) - SEVERITY: HIGH
 English: soy, soya, soybeans, tofu, tempeh, miso, soy sauce, tamari, edamame, soy milk
@@ -120,9 +120,17 @@ CRITICAL ANALYSIS INSTRUCTIONS:
 1. Scan EVERY single word in the menu text
 2. Check against ALL language variants above
 3. Be EXTREMELY conservative - flag anything suspicious
-4. If any word matches or partially matches allergen terms, include it
-5. Look for hidden allergens in sauces, marinades, and preparations
-6. Consider cross-contamination risks
+4. MANDATORY: Any mention of pasta, pizza, bread, noodles, gnocchi MUST be flagged as gluten
+5. If any word matches or partially matches allergen terms, include it
+6. Look for hidden allergens in sauces, marinades, and preparations
+7. Consider cross-contamination risks
+8. Focus ONLY on these selected allergens: ${targetAllergens.length > 0 ? targetAllergens.join(', ') : 'ALL ALLERGENS'}
+
+SPECIFIC GLUTEN DETECTION RULES:
+- ANY pasta dish (spaghetti, penne, rigatoni, linguine, etc.) = GLUTEN
+- ANY pizza = GLUTEN  
+- ANY bread product (focaccia, bruschetta, etc.) = GLUTEN
+- ANY flour-based item = GLUTEN
 
 For each allergen found:
 1. Identify the specific allergen category
