@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 interface AllergenMatch {
   allergen: string;
   severity: 'high' | 'medium' | 'low';
+  confidence?: 'high' | 'medium' | 'low';
   items: string[];
 }
 
@@ -172,6 +173,25 @@ export const MenuScanner = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
+      {/* Safety Warning */}
+      <Card className="border-orange-200 bg-orange-50">
+        <CardContent className="pt-6">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-6 h-6 text-orange-600 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-orange-800 mb-2">אזהרת בטיחות חשובה</h3>
+              <p className="text-sm text-orange-700 mb-2">
+                המערכת מנתחת תפריטים בעברית, אנגלית, ערבית, ספרדית, צרפתית, איטלקית וגרמנית. 
+                <strong> תמיד בדקו עם הצוות לפני הזמנה!</strong>
+              </p>
+              <p className="text-xs text-orange-600">
+                המערכת משמשת כעזר בלבד ואינה מחליפה ייעוץ רפואי או בדיקה ישירה עם המסעדה.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -271,7 +291,14 @@ export const MenuScanner = () => {
                 {detectedAllergens.map((allergen, index) => (
                   <Card key={index} className="p-4">
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-medium">{allergen.allergen}</h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-medium">{allergen.allergen}</h4>
+                        {allergen.confidence && (
+                          <Badge variant="outline" className="text-xs">
+                            {allergen.confidence} confidence
+                          </Badge>
+                        )}
+                      </div>
                       <Badge variant={getSeverityColor(allergen.severity)}>
                         {allergen.severity} risk
                       </Badge>
