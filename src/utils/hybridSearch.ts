@@ -30,7 +30,7 @@ export class HybridHotelSearch {
             const intro = Array.isArray(destinationContent.intro) ? 
               destinationContent.intro.join(' ') : 
               destinationContent.intro || '';
-            matchingHotels.push(this.convertToHotelInfo(hotel, intro));
+            matchingHotels.push(this.convertToHotelInfo(hotel, intro, filters.destination));
           }
         });
       } else if (destinationContent.hotels) {
@@ -108,7 +108,24 @@ export class HybridHotelSearch {
     return false;
   }
   
-  private convertToHotelInfo(hotel: Hotel, destinationInfo: string): HotelInfo {
+  // Add UTM parameters to hotel URL for search results tracking
+  private addUtmToUrl(originalUrl: string, destination: string): string {
+    if (!originalUrl || originalUrl === '') return '';
+    
+    try {
+      const url = new URL(originalUrl);
+      url.searchParams.set('utm_source', 'allergy-free-travel.com');
+      url.searchParams.set('utm_medium', 'search_results');
+      url.searchParams.set('utm_campaign', destination.toLowerCase().replace(/\s+/g, '_'));
+      return url.toString();
+    } catch (error) {
+      // If URL is invalid, return original
+      console.warn('Invalid URL for UTM processing:', originalUrl);
+      return originalUrl;
+    }
+  }
+
+  private convertToHotelInfo(hotel: Hotel, destinationInfo: string, destination: string = ''): HotelInfo {
     // Create reviews array including the authentic guest review
     const reviews = [];
     
@@ -134,11 +151,14 @@ export class HybridHotelSearch {
     
     console.log(`🔄 Converting hotel ${hotel.name} with ${reviews.length} reviews`);
     
+    const originalUrl = hotel.website || hotel.websiteUrl || hotel.bookingUrl;
+    const urlWithUtm = this.addUtmToUrl(originalUrl, destination);
+    
     return {
       name: hotel.name,
       location: hotel.location || hotel.address || '',
       description: hotel.description || hotel.allergyInfo || destinationInfo,
-      url: hotel.website || hotel.websiteUrl || hotel.bookingUrl,
+      url: urlWithUtm,
       rating: hotel.rating || hotel.stars || 4,
       starRating: hotel.stars ? `${hotel.stars} stars` : '4 stars',
       allergyFeatures: hotel.allergenFriendly || hotel.amenities || hotel.features || [],
@@ -316,11 +336,12 @@ export class HybridHotelSearch {
       console.log('🔄 CONVERTING TO HotelInfo FORMAT...');
       const convertedHotels: HotelInfo[] = parsedHotels.map((hotel, index) => {
         console.log(`🏨 Converting hotel ${index + 1}:`, hotel);
+        const urlWithUtm = this.addUtmToUrl(hotel.url || '', filters.destination);
         return {
           name: hotel.name || 'Unknown Hotel',
           location: hotel.location || '',
           description: hotel.description || '',
-          url: hotel.url || '',
+          url: urlWithUtm,
           rating: hotel.rating || 4,
           starRating: hotel.starRating || '4 stars',
           allergyFeatures: hotel.allergyFeatures || [],

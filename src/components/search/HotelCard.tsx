@@ -27,11 +27,12 @@ export const HotelCard: React.FC<HotelCardProps> = ({
     return location;
   };
 
-  // Generate Google Maps URL with just city/location
+  // Generate Google Maps URL with just city/location and UTM tracking
   const getGoogleMapsUrl = (hotelName: string, location: string) => {
     if (!hotelName || !location) return '#';
     const query = encodeURIComponent(`${hotelName}, ${location}`);
-    return `https://www.google.com/maps/search/?api=1&query=${query}`;
+    const baseUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+    return `${baseUrl}&utm_source=allergy-free-travel.com&utm_medium=maps_link&utm_campaign=hotel_location`;
   };
 
   // Clean hotel name by removing any numbering, stars and formatting

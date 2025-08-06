@@ -15,7 +15,7 @@ export const londonContent: DestinationContent = {
       ],
       description: "This luxury hotel in Marylebone offers exceptional allergy-awareness programs and custom menus for guests with dietary restrictions.",
       quote: "The kitchen prepared a full gluten-free afternoon tea that was indistinguishable from the regular version.",
-      bookingUrl: "https://www.langhamhotels.com/en/the-langham/london/"
+      bookingUrl: "https://www.langhamhotels.com/en/the-langham/london/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=london"
     },
     {
       name: "Hilton London Bankside ★★★★",
@@ -28,7 +28,7 @@ export const londonContent: DestinationContent = {
       ],
       description: "Known for its vegan suite and strong allergen protocols, this hotel takes dietary restrictions seriously.",
       quote: "Staff were knowledgeable about my nut allergy and ensured all my meals were prepared safely.",
-      bookingUrl: "https://www.hilton.com/en/hotels/lonsbhi-hilton-london-bankside/"
+      bookingUrl: "https://www.hilton.com/en/hotels/lonsbhi-hilton-london-bankside/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=london"
     },
     {
       name: "Claridge's ★★★★★",
@@ -41,7 +41,7 @@ export const londonContent: DestinationContent = {
       ],
       description: "This iconic luxury hotel offers exceptional service for guests with dietary restrictions, with detailed allergen information available.",
       quote: "They took my celiac disease seriously and provided safe, delicious gluten-free alternatives.",
-      bookingUrl: "https://www.claridges.co.uk/"
+      bookingUrl: "https://www.claridges.co.uk/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=london"
     }
   ],
   faqs: [
