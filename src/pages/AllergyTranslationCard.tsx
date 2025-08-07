@@ -3,6 +3,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { HOME_CONTENT } from "@/constants/home";
 import { AllergyCardGenerator } from '@/components/allergy-card/AllergyCardGenerator';
+import { SocialShareButton } from '@/components/allergy-card/SocialShareButton';
 
 const AllergyTranslationCard = () => {
   return (
@@ -14,7 +15,10 @@ const AllergyTranslationCard = () => {
       </Helmet>
       
       <div className="container mx-auto px-4 py-12 max-w-5xl">
-        <h1 className="font-display text-3xl sm:text-4xl font-bold mb-4 text-blue-800">Allergy Translation Card Generator</h1>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-blue-800">Allergy Translation Card Generator</h1>
+          <SocialShareButton />
+        </div>
         
         <div className="mb-10">
           <p className="text-lg text-blue-700 mb-4">
