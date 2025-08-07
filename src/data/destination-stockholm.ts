@@ -1,135 +1,47 @@
 import { Hotel, FAQ, TravelTip, LanguageTable, Restaurant, DestinationContent } from "@/types/definitions";
 
-const hotels: Hotel[] = [
+const hotels = [
   {
-    id: "hotel-rival",
-    name: "1. Hotel Rival ★★★★★",
-    description: "Stylish hotel with allergy-free rooms and gluten-friendly breakfast options in trendy Södermalm.",
-    imageUrl: "src/assets/stockholm-hero.jpg",
-    website: "https://rival.se/",
-    bookingUrl: "https://rival.se/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=stockholm",
-    location: "Södermalm, Stockholm",
-    amenities: ["Allergy-free rooms", "Gluten-friendly breakfast", "Trendy location", "Modern amenities"],
-    guestReview: "Excellent allergy awareness. The staff understood my gluten sensitivity and provided safe breakfast options. The room was cleaned with hypoallergenic products. - Maria S., Finland",
-    allergyInfo: "Staff trained in allergy protocols, gluten-free breakfast available, allergy-aware cleaning",
-    stars: 5,
-    priceRange: "Luxury",
-    isPurelyAllergyFriendly: true
+    name: "Hotel Rival ★★★★★",
+    address: "Södermalm, Stockholm",
+    features: [
+      "Allergy-free rooms available",
+      "Gluten-friendly breakfast options",
+      "Hypoallergenic room cleaning",
+      "Staff trained in allergy protocols"
+    ],
+    description: "Stylish hotel with excellent allergy awareness and gluten-friendly breakfast options in trendy Södermalm.",
+    quote: "Excellent allergy awareness. The staff understood my gluten sensitivity and provided safe breakfast options. The room was cleaned with hypoallergenic products.",
+    bookingUrl: "https://rival.se/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=stockholm"
   },
   {
-    id: "downtown-camper-scandic",
-    name: "2. Downtown Camper by Scandic ★★★★",
-    description: "Modern eco-friendly hotel with dedicated gluten-free menu and trained allergy-aware staff.",
-    imageUrl: "src/assets/stockholm-hero.jpg",
-    website: "https://www.scandichotels.com/hotels/sweden/stockholm/scandic-stockholm",
-    bookingUrl: "https://www.scandichotels.com/hotels/sweden/stockholm/scandic-stockholm?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=stockholm",
-    location: "Stockholm City Center",
-    amenities: ["Dedicated gluten-free menu", "Trained staff", "Eco-friendly", "Central location"],
-    guestReview: "Reliable gluten-free options at breakfast and dinner. The kitchen staff knew exactly how to handle cross-contamination prevention. - Anders L., Sweden",
-    allergyInfo: "Comprehensive gluten-free menu, cross-contamination protocols, allergy-trained kitchen staff",
-    stars: 4,
-    priceRange: "Mid-Range",
-    isPurelyAllergyFriendly: true
+    name: "Downtown Camper by Scandic ★★★★",
+    address: "Stockholm City Center",
+    features: [
+      "Dedicated gluten-free menu",
+      "Allergy-trained kitchen staff",
+      "Cross-contamination protocols",
+      "Eco-friendly practices"
+    ],
+    description: "Modern eco-friendly hotel with comprehensive gluten-free options and trained allergy-aware staff.",
+    quote: "Reliable gluten-free options at breakfast and dinner. The kitchen staff knew exactly how to handle cross-contamination prevention.",
+    bookingUrl: "https://www.scandichotels.com/hotels/sweden/stockholm/scandic-stockholm?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=stockholm"
   },
   {
-    id: "radisson-blu-waterfront",
-    name: "3. Radisson Blu Waterfront ★★★★",
+    name: "Radisson Blu Waterfront ★★★★",
+    address: "Stockholm Waterfront",
+    features: [
+      "Waterfront views",
+      "Gluten-free buffet sections",
+      "Clear allergen labeling",
+      "Staff training on dietary restrictions"
+    ],
     description: "Waterfront hotel with safe gluten-free buffet items and well-informed allergy-aware staff.",
-    imageUrl: "src/assets/stockholm-hero.jpg",
-    website: "https://www.radissonhotels.com/en-us/hotels/radisson-blu-waterfront-stockholm",
-    bookingUrl: "https://www.radissonhotels.com/en-us/hotels/radisson-blu-waterfront-stockholm?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=stockholm",
-    location: "Stockholm Waterfront",
-    amenities: ["Waterfront views", "Gluten-free buffet", "Informed staff", "Modern facilities"],
-    guestReview: "Friendly and informed staff who took my dietary restrictions seriously. The buffet had clearly marked gluten-free sections. - Emma K., Norway",
-    allergyInfo: "Gluten-free buffet sections, clear allergen labeling, staff training on dietary restrictions",
-    stars: 4,
-    priceRange: "Mid-Range",
-    isPurelyAllergyFriendly: true
+    quote: "Friendly and informed staff who took my dietary restrictions seriously. The buffet had clearly marked gluten-free sections.",
+    bookingUrl: "https://www.radissonhotels.com/en-us/hotels/radisson-blu-waterfront-stockholm?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=stockholm"
   }
 ];
 
-const restaurants: Restaurant[] = [
-  {
-    id: "dirty-coco",
-    name: "Dirty Coco",
-    description: "100% gluten-free dessert café offering safe sweet treats for celiacs.",
-    cuisine: "Gluten-Free Desserts",
-    location: "Drottninggatan 65, Stockholm",
-    allergyInfo: "Completely gluten-free facility, no cross-contamination risk",
-    features: ["100% gluten-free", "Celiac-safe", "Dedicated facility"],
-    isPurelyAllergyFriendly: true
-  },
-  {
-    id: "mahalo",
-    name: "Mahalo",
-    description: "Vegan café with gluten, dairy, and nut-free options in trendy Södermalm.",
-    cuisine: "Vegan Café",
-    location: "Södermalm, Stockholm",
-    allergyInfo: "Multiple allergy accommodations, vegan menu with clear labeling",
-    features: ["Vegan", "Gluten-free options", "Nut-free choices", "Dairy-free"],
-    isPurelyAllergyFriendly: true
-  },
-  {
-    id: "fern-fika",
-    name: "Fern & Fika",
-    description: "Plant-based café with naturally gluten-free and additive-free options.",
-    cuisine: "Plant-Based Café",
-    location: "Hornstull, Stockholm",
-    allergyInfo: "Plant-based menu, naturally gluten-free options, additive-free",
-    features: ["Plant-based", "Naturally gluten-free", "Additive-free", "Health-focused"],
-    isPurelyAllergyFriendly: true
-  },
-  {
-    id: "happy-atelier",
-    name: "Happy Atelier",
-    description: "100% gluten-free bakery specializing in cinnamon buns and sandwiches.",
-    cuisine: "Gluten-Free Bakery",
-    location: "Kungsholmen, Stockholm",
-    allergyInfo: "Dedicated gluten-free bakery, safe for celiacs",
-    features: ["100% gluten-free", "Celiac-safe", "Fresh baked goods", "Cinnamon buns"],
-    isPurelyAllergyFriendly: true
-  },
-  {
-    id: "a-la-crepe",
-    name: "A la Crêpe",
-    description: "French-style crêperie offering almost entirely gluten-free options.",
-    cuisine: "French Crêperie",
-    location: "Katarina Bangata 42, Stockholm",
-    allergyInfo: "Gluten-free crêpe options, French-style preparation",
-    features: ["Gluten-free crêpes", "French cuisine", "Safe preparation"],
-    isPurelyAllergyFriendly: true
-  },
-  {
-    id: "pazzi",
-    name: "Pazzi",
-    description: "Italian restaurant with separate oven to avoid cross-contamination for gluten-free dishes.",
-    cuisine: "Italian",
-    location: "Östgötagatan 65, Stockholm",
-    allergyInfo: "Separate gluten-free oven, cross-contamination prevention protocols",
-    features: ["Italian cuisine", "Separate GF oven", "Cross-contamination prevention"],
-    isPurelyAllergyFriendly: true
-  },
-  {
-    id: "barrels-burger-beer",
-    name: "Barrels Burger & Beer",
-    description: "Burger restaurant offering gluten-free buns with allergy-trained staff.",
-    cuisine: "Burgers & Beer",
-    location: "Stockholm City",
-    allergyInfo: "Gluten-free burger buns available, staff trained in allergy protocols",
-    features: ["Gluten-free buns", "Allergy-trained staff", "Casual dining"],
-    isPurelyAllergyFriendly: true
-  },
-  {
-    id: "meatballs-for-people",
-    name: "Meatballs for the People",
-    description: "Traditional Swedish restaurant serving gluten-free Swedish meatballs.",
-    cuisine: "Traditional Swedish",
-    location: "Nytorgsgatan 30, Stockholm",
-    allergyInfo: "Gluten-free traditional Swedish meatballs available",
-    features: ["Swedish cuisine", "Gluten-free meatballs", "Traditional recipes"],
-    isPurelyAllergyFriendly: true
-  }
-];
 
 const faqs: FAQ[] = [
   {
@@ -150,21 +62,6 @@ const faqs: FAQ[] = [
   }
 ];
 
-const tips: TravelTip[] = [
-  {
-    title: "Verify Your Allergy Concerns",
-    content: "Always verify your allergy concerns directly with hotel and restaurant staff."
-  },
-  {
-    title: "Use Dedicated Gluten-Free Establishments",
-    content: "Use dedicated gluten-free establishments for maximum safety."
-  },
-  {
-    title: "Carry a Swedish Allergy Translation Card",
-    content: "Carry a Swedish allergy translation card for better communication."
-  }
-];
-
 const languageTable: LanguageTable = {
   headers: ["English", "Swedish"],
   rows: [
@@ -181,15 +78,9 @@ const languageTable: LanguageTable = {
 
 const intro = "Stockholm offers remarkable allergy-friendly options for travelers sensitive to gluten and other food allergens.";
 
-const longDescription = "Enjoy a safe and flavorful gluten-free experience in Stockholm!";
-
 export const stockholmContent: DestinationContent = {
-  imageUrl: "src/assets/stockholm-hero.jpg",
   intro,
-  longDescription,
   hotels,
-  restaurants,
   faqs,
-  tips,
   languageTable
 };
