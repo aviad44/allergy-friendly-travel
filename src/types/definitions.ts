@@ -141,4 +141,5 @@ export type DestinationId =
   | 'eilat'
   | 'airlines'
   | 'amsterdam'
-  | 'italy';
+  | 'italy'
+  | 'stockholm';

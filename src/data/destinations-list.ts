@@ -177,5 +177,12 @@ export const destinations: Destination[] = [
     country: 'Italy',
     description: 'Discover Italy: Top Destination for Celiacs & Gluten‑Sensitive Travelers',
     subtitle: 'Exceptional Gluten-Free Dining Across Rome, Florence, Milan & Naples'
+  },
+  {
+    id: 'stockholm',
+    name: 'Stockholm',
+    country: 'Sweden',
+    description: 'Allergy-Friendly Hotels & Gluten-Free Restaurants in Stockholm',
+    subtitle: 'Safe Accommodations and Dining for Food Allergies in Sweden\'s Capital'
   }
 ];

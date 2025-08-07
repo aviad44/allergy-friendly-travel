@@ -52,6 +52,7 @@ import Eilat from "./pages/destinations/Eilat";
 import Airlines from "./pages/destinations/Airlines";
 import Amsterdam from "./pages/destinations/Amsterdam";
 import Italy from "./pages/destinations/Italy";
+import Stockholm from "./pages/destinations/Stockholm";
 // import MenuScanner from "./pages/MenuScanner"; // Temporarily disabled
 
 const ScrollToTop = () => {
@@ -128,6 +129,7 @@ const AppContent = () => {
           <Route path="/destinations/airlines" element={<Airlines />} />
           <Route path="/destinations/amsterdam" element={<Amsterdam />} />
           <Route path="/destinations/italy" element={<Italy />} />
+          <Route path="/destinations/stockholm" element={<Stockholm />} />
           {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}
           <Route path="/destinations/:destinationId" element={<NotFound />} />
         </Route>
