@@ -4,16 +4,17 @@ import { Restaurant } from "@/types/definitions";
 
 interface RestaurantsSectionProps {
   restaurants?: Restaurant[];
+  destinationName?: string;
 }
 
-export const RestaurantsSection = ({ restaurants }: RestaurantsSectionProps) => {
+export const RestaurantsSection = ({ restaurants, destinationName }: RestaurantsSectionProps) => {
   if (!restaurants || restaurants.length === 0) return null;
   
   return (
     <section className="mt-8 space-y-6">
       <h2 className="text-2xl sm:text-3xl font-semibold flex items-center gap-2">
         <UtensilsCrossed className="h-6 w-6 text-primary/80" aria-hidden="true" />
-        Top 10 Gluten-Free Restaurants in Athens
+        {destinationName ? `Gluten-Free & Allergy-Friendly Restaurants in ${destinationName}` : 'Gluten-Free & Allergy-Friendly Restaurants'}
       </h2>
       
       <div className="grid gap-6 md:grid-cols-2">

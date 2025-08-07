@@ -31,6 +31,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const isLondon = destinationId === 'london' as DestinationId;
   const isAthens = destinationId === 'athens' as DestinationId;
   const isEilat = destinationId === 'eilat' as DestinationId;
+  const isStockholm = destinationId === 'stockholm' as DestinationId;
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   
   // Enhanced debug logging to ensure data is loaded
@@ -114,9 +115,12 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
 
             <Separator className="bg-primary/10 h-0.5" />
 
-            {/* Display restaurants for Athens, long description for Eilat, skip hotels for airlines, hotels for other destinations */}
-            {isAthens ? (
-              <RestaurantsSection restaurants={content?.restaurants} />
+            {/* Display restaurants for Athens and Stockholm, long description for Eilat, skip hotels for airlines, hotels for other destinations */}
+            {(isAthens || isStockholm) ? (
+              <RestaurantsSection 
+                restaurants={content?.restaurants} 
+                destinationName={destination.name}
+              />
             ) : isEilat ? (
               <LongDescriptionSection 
                 longDescription={content?.longDescription} 
