@@ -1,6 +1,6 @@
 import { Hotel, FAQ, TravelTip, LanguageTable, Restaurant, DestinationContent } from "@/types/definitions";
 
-const hotels = [
+const hotels: Hotel[] = [
   {
     name: "Hotel Rival ★★★★★",
     address: "Södermalm, Stockholm",
@@ -10,9 +10,9 @@ const hotels = [
       "Hypoallergenic room cleaning",
       "Staff trained in allergy protocols"
     ],
-    description: "Stylish hotel with excellent allergy awareness and gluten-friendly breakfast options in trendy Södermalm.",
-    quote: "Excellent allergy awareness. The staff understood my gluten sensitivity and provided safe breakfast options. The room was cleaned with hypoallergenic products.",
-    bookingUrl: "https://rival.se/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=stockholm"
+    description: "Allergy-free rooms and gluten-friendly breakfast.",
+    quote: "Excellent allergy awareness",
+    bookingUrl: "https://www.allergy-free-travel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=hotel_rival"
   },
   {
     name: "Downtown Camper by Scandic ★★★★",
@@ -21,11 +21,11 @@ const hotels = [
       "Dedicated gluten-free menu",
       "Allergy-trained kitchen staff",
       "Cross-contamination protocols",
-      "Eco-friendly practices"
+      "Staff trained in allergy safety"
     ],
-    description: "Modern eco-friendly hotel with comprehensive gluten-free options and trained allergy-aware staff.",
-    quote: "Reliable gluten-free options at breakfast and dinner. The kitchen staff knew exactly how to handle cross-contamination prevention.",
-    bookingUrl: "https://www.scandichotels.com/hotels/sweden/stockholm/scandic-stockholm?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=stockholm"
+    description: "Dedicated gluten-free menu and trained staff.",
+    quote: "Reliable gluten-free options",
+    bookingUrl: "https://www.allergy-free-travel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=downtown_camper_scandic"
   },
   {
     name: "Radisson Blu Waterfront ★★★★",
@@ -34,11 +34,133 @@ const hotels = [
       "Waterfront views",
       "Gluten-free buffet sections",
       "Clear allergen labeling",
-      "Staff training on dietary restrictions"
+      "Safe gluten-free buffet items"
     ],
-    description: "Waterfront hotel with safe gluten-free buffet items and well-informed allergy-aware staff.",
-    quote: "Friendly and informed staff who took my dietary restrictions seriously. The buffet had clearly marked gluten-free sections.",
-    bookingUrl: "https://www.radissonhotels.com/en-us/hotels/radisson-blu-waterfront-stockholm?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=stockholm"
+    description: "Gluten-free buffet items and informed staff.",
+    quote: "Friendly and informed staff",
+    bookingUrl: "https://www.allergy-free-travel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=radisson_blu_waterfront"
+  }
+];
+
+const restaurants: Restaurant[] = [
+  {
+    name: "Dirty Coco",
+    address: "Drottninggatan 65, Stockholm",
+    description: "100% gluten-free dessert café.",
+    features: [
+      "100% gluten-free",
+      "Dessert café",
+      "Safe for celiacs",
+      "No cross-contamination risk"
+    ],
+    isPurelyAllergyFriendly: true,
+    websiteUrl: "#"
+  },
+  {
+    name: "Mahalo",
+    address: "Södermalm, Stockholm",
+    description: "Vegan café with gluten, dairy, and nut-free options.",
+    features: [
+      "Vegan options",
+      "Gluten-free",
+      "Dairy-free",
+      "Nut-free options"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Fern & Fika",
+    address: "Hornstull, Stockholm",
+    description: "Plant-based café, naturally gluten-free and additive-free.",
+    features: [
+      "Plant-based",
+      "Naturally gluten-free",
+      "Additive-free",
+      "Healthy options"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Happy Atelier",
+    address: "Kungsholmen, Stockholm",
+    description: "100% gluten-free bakery with cinnamon buns and sandwiches.",
+    features: [
+      "100% gluten-free",
+      "Bakery",
+      "Cinnamon buns",
+      "Sandwiches"
+    ],
+    isPurelyAllergyFriendly: true,
+    websiteUrl: "#"
+  },
+  {
+    name: "A la Crêpe",
+    address: "Katarina Bangata 42, Stockholm",
+    description: "Almost entirely gluten-free French-style crêpes.",
+    features: [
+      "Gluten-free crêpes",
+      "French-style",
+      "Sweet and savory options",
+      "Dedicated preparation"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Pazzi",
+    address: "Östgötagatan 65, Stockholm",
+    description: "Italian spot with separate oven to avoid cross-contamination.",
+    features: [
+      "Italian cuisine",
+      "Separate oven",
+      "No cross-contamination",
+      "Gluten-free pizza"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Barrels Burger & Beer",
+    address: "Stockholm City Center",
+    description: "Offers gluten-free burger buns and allergy-trained staff.",
+    features: [
+      "Gluten-free burger buns",
+      "Allergy-trained staff",
+      "Craft beer",
+      "Casual dining"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Meatballs for the People",
+    address: "Nytorgsgatan 30, Stockholm",
+    description: "Serves gluten-free traditional Swedish meatballs.",
+    features: [
+      "Traditional Swedish meatballs",
+      "Gluten-free options",
+      "Local cuisine",
+      "Authentic experience"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  }
+];
+
+const travelTips: TravelTip[] = [
+  {
+    title: "Verify Allergy Concerns",
+    content: "Always verify your allergy concerns directly with hotel and restaurant staff."
+  },
+  {
+    title: "Use Dedicated Establishments",
+    content: "Use dedicated gluten-free establishments for maximum safety."
+  },
+  {
+    title: "Carry Translation Cards",
+    content: "Carry a Swedish allergy translation card for better communication."
   }
 ];
 
@@ -81,6 +203,7 @@ const intro = "Stockholm offers remarkable allergy-friendly options for traveler
 export const stockholmContent: DestinationContent = {
   intro,
   hotels,
+  restaurants,
   faqs,
   languageTable
 };
