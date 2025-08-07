@@ -152,20 +152,16 @@ const faqs: FAQ[] = [
 
 const tips: TravelTip[] = [
   {
-    title: "Book Allergy-Aware Hotels",
-    content: "Choose hotels like Hotel Rival or Downtown Camper by Scandic that have specific experience with allergy accommodations and gluten-free dining."
+    title: "Verify Your Allergy Concerns",
+    content: "Always verify your allergy concerns directly with hotel and restaurant staff."
   },
   {
-    title: "Visit Dedicated Gluten-Free Establishments",
-    content: "For maximum safety, prioritize 100% gluten-free places like Dirty Coco and Happy Atelier where cross-contamination isn't a concern."
+    title: "Use Dedicated Gluten-Free Establishments",
+    content: "Use dedicated gluten-free establishments for maximum safety."
   },
   {
-    title: "Carry Swedish Allergy Cards",
-    content: "Even though English is widely spoken, having allergy information in Swedish ensures clear communication with restaurant staff."
-  },
-  {
-    title: "Verify Allergy Protocols",
-    content: "Always confirm your specific allergy requirements directly with hotel and restaurant staff, even at allergy-friendly establishments."
+    title: "Carry a Swedish Allergy Translation Card",
+    content: "Carry a Swedish allergy translation card for better communication."
   }
 ];
 
@@ -183,14 +179,14 @@ const languageTable: LanguageTable = {
   ]
 };
 
-const intro = [
-  "Stockholm, Sweden's beautiful capital, offers exceptional opportunities for travelers with food allergies and celiac disease. The city's progressive approach to dietary accommodations makes it an ideal destination for allergy-conscious travelers seeking both safety and culinary excellence.",
-  "From dedicated 100% gluten-free bakeries to allergy-aware luxury hotels, Stockholm's hospitality industry has embraced inclusive dining. Whether you're managing celiac disease, gluten sensitivity, nut allergies, or dairy intolerance, you'll find numerous safe and delicious options throughout this stunning Scandinavian city."
-];
+const intro = "Stockholm offers remarkable allergy-friendly options for travelers sensitive to gluten and other food allergens.";
+
+const longDescription = "Enjoy a safe and flavorful gluten-free experience in Stockholm!";
 
 export const stockholmContent: DestinationContent = {
   imageUrl: "src/assets/stockholm-hero.jpg",
   intro,
+  longDescription,
   hotels,
   restaurants,
   faqs,
