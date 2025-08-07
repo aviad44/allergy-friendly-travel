@@ -1,26 +1,26 @@
 
 // Common destinations
 export const destinationSuggestions = [
-  "London",
-  "Paris",
-  "Barcelona",
-  "Cyprus",
   "Abu Dhabi",
-  "Crete",
-  "Tokyo",
-  "Thailand",
-  "New York",
-  "Rome",
-  "Venice",
-  "Madrid",
-  "Athens",
-  "Berlin",
   "Amsterdam",
-  "Vienna",
-  "Prague",
+  "Athens",
+  "Barcelona",
+  "Berlin",
   "Budapest",
+  "Crete",
+  "Cyprus",
   "Dubai",
-  "Singapore"
+  "London",
+  "Madrid",
+  "New York",
+  "Paris",
+  "Prague",
+  "Rome",
+  "Singapore",
+  "Thailand",
+  "Tokyo",
+  "Venice",
+  "Vienna"
 ];
 
 // Common allergy types
