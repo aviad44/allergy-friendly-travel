@@ -6,7 +6,7 @@ import { Form } from "@/components/ui/form";
 import { ProgressBar } from './components/ProgressBar';
 import { SafetyTips } from './components/SafetyTips';
 import { StepContent } from './components/StepContent';
-import { OpenAISettings } from './components/OpenAISettings';
+
 import { Step } from './types';
 import { useAllergyCardForm } from './hooks/useAllergyCardForm';
 import { useAllergyCardSteps } from './hooks/useAllergyCardSteps';
@@ -87,10 +87,7 @@ export const AllergyCardGenerator = () => {
       <Toaster position="top-center" richColors />
       
       <div className="mb-8 space-y-4">
-        <div className="flex justify-between items-center">
-          <ProgressBar currentStep={step} />
-          <OpenAISettings />
-        </div>
+        <ProgressBar currentStep={step} />
       </div>
       
       <div className="space-y-6">

@@ -74,7 +74,7 @@ export const SocialShareButton = () => {
           className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300"
         >
           <Share2 className="w-5 h-5 mr-2" />
-          שתף את הכלי
+          Share
         </Button>
       </PopoverTrigger>
       
