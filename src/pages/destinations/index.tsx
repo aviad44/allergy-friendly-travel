@@ -3,8 +3,6 @@ import React from 'react';
 import { DestinationsHero } from '@/components/destinations/DestinationsHero';
 import { DestinationsList } from '@/components/destinations/DestinationsList';
 import { destinations } from '@/data/destinations-list';
-import { DestinationsList } from '@/components/destinations/DestinationsList';
-import { destinations } from '@/data/destinations-list';
 
 const DestinationsIndex = () => {
   // SEO metadata
