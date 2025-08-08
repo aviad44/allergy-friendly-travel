@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+
 import { 
   Accordion,
   AccordionContent,
@@ -121,11 +121,6 @@ export default function FAQ() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Helmet>
-        <title>Frequently Asked Questions | Allergy Free Travel</title>
-        <meta name="description" content="Find answers to common questions about allergy-friendly travel, hotel accommodations, and our platform." />
-        <meta name="keywords" content="FAQ, allergy-friendly travel, food allergies, hotel accommodations, dietary restrictions, travel questions" />
-      </Helmet>
 
       <main className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="max-w-4xl mx-auto space-y-10">

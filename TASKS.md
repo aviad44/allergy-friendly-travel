@@ -24,6 +24,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Implement src/components/MetaManager.tsx with route-based config, canonical builder, and JSON-LD helpers; replace page-level Helmet usage.
   - DoD: One set of meta tags per route; canonical normalized; JSON-LD valid for destinations; old components re-export MetaManager.
 
+- [x] Finish migration — replace remaining Helmet usage in pages (AboutUs, DirectChat, FAQ, Sitemap, SearchResults, Destinations Index, Paris, New York, Hotel Chains)
+  - RATIONALE: Single authoritative SEO source; easier audits.
+  - HOW-TO: Use MetaManager route registry + dynamic handling for /search-results; remove CanonicalTags/SocialTags usage where redundant.
+  - DoD: Grep shows no <Helmet> in src/pages/** (except inside MetaManager); each route renders one set of tags; canonical normalized via buildCanonical.
+
 - [ ] Ensure single H1 per page and descriptive meta titles/descriptions
   - RATIONALE: Improves CTR and relevancy; avoids SEO penalties.
   - HOW-TO: Audit src/pages/** and src/components/** headers; enforce one <h1/> per page; use MetaManager to set title/description.

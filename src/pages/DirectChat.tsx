@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
+
 import { DirectGptChat } from "@/components/DirectGptChat";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -116,13 +116,6 @@ const DirectChat = () => {
   if (!isAuthorized) {
     return (
       <>
-        <Helmet>
-          <title>Secure Access | Allergy-Friendly Hotel Finder</title>
-          <meta 
-            name="description" 
-            content="Secure access page for Allergy-Friendly Hotel Finder chat system." 
-          />
-        </Helmet>
   
         <div className="container max-w-md mx-auto py-16 px-4">
           <Card className="p-6">
@@ -180,13 +173,6 @@ const DirectChat = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Secure OpenAI Chat | Allergy-Friendly Hotel Finder</title>
-        <meta 
-          name="description" 
-          content="Chat securely with our AI assistant to find allergy-friendly hotels using our OpenAI GPT proxy." 
-        />
-      </Helmet>
 
       <div className="container max-w-6xl mx-auto py-8 px-4">
         <h1 className="text-3xl font-bold mb-2">Secure OpenAI GPT Integration</h1>

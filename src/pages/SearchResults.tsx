@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { cleanResponseText } from "@/components/search/utils";
-import { Helmet } from "react-helmet";
+
 import { HotelInfo } from "@/types/search";
 // Removed conflicting import - using unified parser through hybridSearch
 import { BackButton } from "@/components/search/BackButton";
@@ -26,7 +26,7 @@ const SearchResults = () => {
   // Handle both comma-separated and single allergy formats for backward compatibility
   const allergies = allergiesParam.includes(',') ? allergiesParam : allergiesParam;
   
-  const [recommendation, setRecommendation] = useState("");
+  const [recommendation, setRecommendation] = useState(""); // reserved for future use
   const [isSearching, setIsSearching] = useState(false);
   const [hotels, setHotels] = useState<HotelInfo[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -93,29 +93,9 @@ const SearchResults = () => {
     };
   }, [destination, allergies, toast, navigate]);
 
-  // SEO metadata - handle multiple allergies in the description
-  const allergiesDisplay = allergiesParam.includes(',') ? allergiesParam.replace(/,/g, ', ') : allergiesParam;
-  const pageTitle = `Allergy-Friendly Hotels in ${destination} | Safe Dining for ${allergiesDisplay} Allergies`;
-  const pageDescription = `Discover the best allergy-friendly hotels in ${destination} for travelers with ${allergiesDisplay} allergies. Expert recommendations for safe accommodations.`;
-  const canonicalUrl = `https://www.allergy-free-travel.com/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}`;
-  const imageUrl = "https://www.allergy-free-travel.com/lovable-uploads/e8b4dc3d-60a2-4fb7-bc33-77580f4d249c.png";
 
   return (
     <>
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:type" content="article" />
-        <meta property="og:image" content={imageUrl} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content={imageUrl} />
-      </Helmet>
 
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-6 max-w-3xl">

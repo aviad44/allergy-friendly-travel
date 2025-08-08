@@ -90,6 +90,11 @@ const routeMeta: Record<string, RouteMeta> = {
       "Chat with our AI assistant for personalized allergy-friendly hotel recommendations.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
+  "/about": {
+    title: "About Us | Allergy-Free Travel",
+    description: "Learn about our mission to make travel safe and accessible for travelers with food allergies.",
+    image: DEFAULT_SOCIAL_IMAGE,
+  },
   "/sitemap": {
     title: "Sitemap | Allergy-Free Travel",
     description: "Explore all pages on Allergy-Free Travel.",
@@ -112,6 +117,17 @@ const routeMeta: Record<string, RouteMeta> = {
     description: "Discover destinations with allergy-friendly hotels and restaurants.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
+  "/destinations/hotel-chains": {
+    title: "Top Allergy-Friendly Hotel Chains Worldwide (2025 Guide)",
+    description:
+      "Discover the top global hotel chains with allergy-friendly and celiac-safe food policies. Learn which hotels accommodate food allergies and offer certified allergy-safe services.",
+    image: DEFAULT_SOCIAL_IMAGE,
+  },
+  "/search-results": {
+    title: "Search Results | Allergy-Free Travel",
+    description: "Personalized results for your allergy-friendly hotel search.",
+    image: DEFAULT_SOCIAL_IMAGE,
+  },
 };
 
 export const MetaManager: React.FC<MetaManagerProps> = ({ routeKey = "auto", dynamicData }) => {
@@ -121,31 +137,46 @@ export const MetaManager: React.FC<MetaManagerProps> = ({ routeKey = "auto", dyn
   const isDestination = path.startsWith("/destinations/");
   const destId = isDestination ? path.split("/")[2] : undefined;
 
-  const computed: RouteMeta = useMemo(() => {
-    const key = routeKey === "auto" || !routeKey ? path : routeKey;
-    // Prefer exact match, then fallback to base path (e.g., /destinations)
-    const base = routeMeta[key] || routeMeta[key.split("/").slice(0, 2).join("/")] || routeMeta["/"];
+const computed: RouteMeta = useMemo(() => {
+  const key = routeKey === "auto" || !routeKey ? path : routeKey;
+  // Prefer exact match, then fallback to base path (e.g., /destinations)
+  const base = routeMeta[key] || routeMeta[key.split("/").slice(0, 2).join("/")] || routeMeta["/"];
 
-    // Destination-specific overrides
-    if (isDestination && destId) {
-      const prettyName = destId
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (m) => m.toUpperCase());
-      const destImage = DESTINATION_OG_IMAGES[destId as keyof typeof DESTINATION_OG_IMAGES] || DEFAULT_SOCIAL_IMAGE;
-      return {
-        title: `Allergy-Friendly Hotels in ${prettyName} | Safe Dining Guide`,
-        description: `Discover the best allergy-friendly hotels in ${prettyName}. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.`,
-        image: destImage,
-        type: "website",
-        canonical: `${BASE_URL}${path}`,
-      };
-    }
-
+  // Destination-specific overrides
+  if (isDestination && destId) {
+    const prettyName = destId
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (m) => m.toUpperCase());
+    const destImage = DESTINATION_OG_IMAGES[destId as keyof typeof DESTINATION_OG_IMAGES] || DEFAULT_SOCIAL_IMAGE;
     return {
-      ...base,
-      ...(dynamicData || {}),
-    } as RouteMeta;
-  }, [routeKey, dynamicData, path, isDestination, destId]);
+      title: `Allergy-Friendly Hotels in ${prettyName} | Safe Dining Guide`,
+      description: `Discover the best allergy-friendly hotels in ${prettyName}. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.`,
+      image: destImage,
+      type: "website",
+      canonical: `${BASE_URL}${path}`,
+    };
+  }
+
+  // Dynamic search results page
+  if (key.startsWith("/search-results")) {
+    const params = new URLSearchParams(location.search);
+    const dest = params.get("destination") || "your destination";
+    const allergiesParam = params.get("allergies") || "allergies";
+    const allergiesDisplay = allergiesParam.includes(',') ? allergiesParam.replace(/,/g, ', ') : allergiesParam;
+    return {
+      title: `Allergy-Friendly Hotels in ${dest} | Safe Dining for ${allergiesDisplay} Allergies`,
+      description: `Discover the best allergy-friendly hotels in ${dest} for travelers with ${allergiesDisplay} allergies. Expert recommendations for safe accommodations.`,
+      image: DEFAULT_SOCIAL_IMAGE,
+      type: "article",
+      canonical: `${BASE_URL}/search-results?destination=${encodeURIComponent(dest)}&allergies=${encodeURIComponent(allergiesParam)}`,
+    };
+  }
+
+  return {
+    ...base,
+    ...(dynamicData || {}),
+  } as RouteMeta;
+}, [routeKey, dynamicData, path, isDestination, destId, location.search]);
 
   const absoluteImage = getAbsoluteImageUrl(computed.image || DEFAULT_SOCIAL_IMAGE);
   const canonicalUrl = buildCanonical(

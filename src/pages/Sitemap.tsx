@@ -1,8 +1,7 @@
 
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { HOME_CONTENT } from "@/constants/home";
-import { Helmet } from 'react-helmet';
+
 
 // Sitemap structure
 const sitemapStructure = [
@@ -44,10 +43,6 @@ const sitemapStructure = [
 const Sitemap = () => {
   return (
     <>
-      <Helmet>
-        <title>Site Map | {HOME_CONTENT.navigation.brand}</title>
-        <meta name="description" content="Navigate through our site with this comprehensive site map, showing all pages and destinations on Allergy Free Travel." />
-      </Helmet>
       
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <h1 className="font-display text-3xl sm:text-4xl font-bold mb-8 text-blue-800">Site Map</h1>

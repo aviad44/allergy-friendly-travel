@@ -1,17 +1,11 @@
 
 import React from "react";
-import { Helmet } from "react-helmet";
+
 import { StructuredData } from "@/components/StructuredData";
 
 const AboutUs = () => {
   return (
     <div className="min-h-screen bg-gray-50 w-full">
-      <Helmet>
-        <title>About Us | Allergy-Friendly Hotel Finder</title>
-        <meta name="description" content="Learn about our mission to make travel accessible and safe for individuals with food allergies." />
-        <meta name="keywords" content="allergy-friendly travel, food allergy support, safe hotel booking, travel with allergies, allergy-conscious travel platform" />
-        <meta name="robots" content="index, follow" />
-      </Helmet>
       
       <StructuredData
         type="article"
