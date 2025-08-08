@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Home, ArrowLeft } from "lucide-react";
-import { Helmet } from "react-helmet";
+import { MetaManager } from "@/components/MetaManager";
 
 const NotFound = () => {
   // Set proper 404 status code
@@ -21,11 +21,14 @@ const NotFound = () => {
   
   return (
     <div className="min-h-screen flex flex-col">
-      <Helmet>
-        <title>404 - Page Not Found | Allergy Free Travel</title>
-        <meta name="robots" content="noindex, follow" />
-        <meta httpEquiv="status" content="404" />
-      </Helmet>
+      <MetaManager 
+        routeKey="/404"
+        dynamicData={{
+          title: "404 - Page Not Found | Allergy Free Travel",
+          description: "The page you're looking for doesn't exist or has been moved.",
+          robots: "noindex, follow",
+        }}
+      />
       
       {/* Error content */}
       <div className="flex-grow flex items-center justify-center p-4 mt-20">

@@ -10,9 +10,6 @@ import { useTheme } from 'next-themes';
 import { Toaster } from '@/components/ui/toaster';
 import { MainLayout } from '@/components/MainLayout';
 import { HelmetProvider } from 'react-helmet-async';
-import { GlobalSocialTags } from '@/components/GlobalSocialTags';
-import { NetlifySocialHeaders } from '@/components/NetlifySocialHeaders';
-import { SocialSharingHandler } from '@/components/SocialSharingHandler';
 import DestinationsIndex from '@/pages/destinations';
 import London from '@/pages/destinations/London';
 import Paris from '@/pages/destinations/Paris';
@@ -82,9 +79,6 @@ const AppContent = () => {
 
   return (
     <>
-      <GlobalSocialTags />
-      <NetlifySocialHeaders />
-      <SocialSharingHandler />
       <ScrollToTop />
       <Toaster />
       <Routes>

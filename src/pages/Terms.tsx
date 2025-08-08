@@ -1,15 +1,18 @@
 
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import { MetaManager } from '@/components/MetaManager';
 import { HOME_CONTENT } from '@/constants/home';
 
 const Terms = () => {
   return (
     <>
-      <Helmet>
-        <title>Terms of Use | {HOME_CONTENT.navigation.brand}</title>
-        <meta name="description" content="Terms of Use for Allergy Free Travel - read our website's terms and conditions." />
-      </Helmet>
+      <MetaManager 
+        routeKey="/terms"
+        dynamicData={{
+          title: `Terms of Use | ${HOME_CONTENT.navigation.brand}`,
+          description: "Terms of Use for Allergy Free Travel - read our website's terms and conditions.",
+        }}
+      />
       
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <section className="bg-white p-8 rounded-lg shadow-sm">

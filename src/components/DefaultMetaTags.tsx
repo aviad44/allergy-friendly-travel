@@ -16,10 +16,8 @@ export const DefaultMetaTags = () => {
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="robots" content="index, follow" />
       
-      {/* These tags will only be used if individual pages don't specify their own */}
-      <meta name="description" content="Discover safe and welcoming hotels for people with food allergies. Travel with peace of mind." data-react-helmet="true" />
-      
-      {/* We're removing default OG tags from here since they'll be set by SocialTags on each page */}
+      {/* Keep only minimal static defaults; dynamic tags handled by MetaManager */}
+
     </Helmet>
   );
 };

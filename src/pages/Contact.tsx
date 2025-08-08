@@ -1,5 +1,5 @@
 
-import { Helmet } from "react-helmet";
+import { MetaManager } from "@/components/MetaManager";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ServicesSection } from "@/components/contact/ServicesSection";
 import { Toaster } from "@/components/ui/toaster";
@@ -13,26 +13,13 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <meta name="keywords" content={pageKeywords} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta name="robots" content="index, follow" />
-        
-        {/* Open Graph Meta Tags */}
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" />
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={pageDescription} />
-        <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/bdab176d-ca57-4ea9-b793-ea953f369bb9.png" />
-      </Helmet>
+      <MetaManager 
+        routeKey="/contact"
+        dynamicData={{
+          title: pageTitle,
+          description: pageDescription,
+        }}
+      />
 
       {/* Hero Section - Styled like homepage */}
       <section className="relative py-12 md:py-16 bg-white">

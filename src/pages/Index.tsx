@@ -2,9 +2,7 @@
 import { lazy, Suspense } from "react";
 import { HOME_CONTENT } from "@/constants/home";
 import { HeroSection } from "@/components/hero/HeroSection";
-import { SocialTags } from "@/components/SocialTags";
-import { CanonicalTags } from "@/components/CanonicalTags";
-import { Helmet } from "react-helmet";
+import { MetaManager } from "@/components/MetaManager";
 
 // Lazy load non-critical components
 const FeaturedDestinations = lazy(() => 
@@ -26,56 +24,13 @@ export default function Index() {
   
   return (
     <>
-      <CanonicalTags canonicalUrl={`${baseUrl}/`} />
-      
-      {/* Meta tags */}
-      <Helmet>
-        <title>Allergy-Friendly Travel Guide | Safe Hotels & Tips for Food Allergies</title>
-        <meta name="description" content="Find safe hotels and restaurants for food allergies. Expert travel guides for gluten-free, dairy-free, nut-free travelers. Book with confidence worldwide." />
-        <meta name="keywords" content="allergy-friendly hotels, gluten-free travel, food allergy travel, safe restaurants, dairy-free hotels, nut-free travel" />
-        <meta property="og:image" content={mainImage} />
-        <meta property="og:image:secure_url" content={mainImage} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Allergy-friendly travel guide showing safe hotels and restaurants" />
-        <meta property="og:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Food Allergies" />
-        <meta property="og:description" content="Find safe hotels and restaurants for food allergies. Expert travel guides for gluten-free, dairy-free, nut-free travelers. Book with confidence worldwide." />
-        <meta property="og:url" content="https://www.allergy-free-travel.com/" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Food Allergies" />
-        <meta name="twitter:description" content="Find safe hotels and restaurants for food allergies. Expert travel guides for gluten-free, dairy-free, nut-free travelers." />
-        <meta name="twitter:image" content={mainImage} />
-        <link rel="image_src" href={mainImage} />
-        
-        {/* Schema.org JSON-LD */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "Allergy-Free Travel",
-            "description": "Find safe hotels and restaurants for food allergies. Expert travel guides for gluten-free, dairy-free, nut-free travelers.",
-            "url": "https://www.allergy-free-travel.com",
-            "potentialAction": {
-              "@type": "SearchAction",
-              "target": "https://www.allergy-free-travel.com/search?q={search_term_string}",
-              "query-input": "required name=search_term_string"
-            },
-            "publisher": {
-              "@type": "Organization",
-              "name": "Allergy-Free Travel",
-              "url": "https://www.allergy-free-travel.com"
-            }
-          })}
-        </script>
-      </Helmet>
-    
-      <SocialTags
-        title="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Food Allergies"
-        description="Find safe hotels and restaurants for food allergies. Expert travel guides for gluten-free, dairy-free, nut-free travelers. Book with confidence worldwide."
-        imageUrl={mainImage}
-        url={`${baseUrl}/`}
-        type="website"
+      <MetaManager
+        routeKey="/"
+        dynamicData={{
+          image: mainImage,
+        }}
       />
+    
       
       {/* Hero loads immediately */}
       <HeroSection />

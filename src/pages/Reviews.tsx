@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Helmet } from "react-helmet";
+import { MetaManager } from "@/components/MetaManager";
 import { ReviewContent } from "@/components/reviews/ReviewContent";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -16,8 +16,6 @@ const Reviews = () => {
   const [sortBy, setSortBy] = useState<typeof sortOptions[number]>('newest');
   const { toast } = useToast();
 
-  const baseUrl = window.location.origin;
-  const canonicalUrl = `${baseUrl}/reviews`;
 
   useEffect(() => {
     fetchReviews();
@@ -74,13 +72,7 @@ const Reviews = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Helmet>
-        <title>Traveler Reviews | Allergy-Friendly Travel Guide</title>
-        <meta name="description" content="Read authentic traveler reviews about allergy-friendly hotels worldwide. Share your own experience to help others find safe accommodations." />
-        <meta name="keywords" content="allergy-friendly hotels, traveler reviews, food allergies, gluten-free hotels, dairy-free accommodations" />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta name="robots" content="index, follow" />
-      </Helmet>
+      <MetaManager routeKey="/reviews" />
 
       <div className="hero-gradient absolute inset-0 z-0" />
       <div className="relative z-10">

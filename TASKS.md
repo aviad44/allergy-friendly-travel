@@ -19,9 +19,14 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## SEO
 
+- [x] Consolidate SEO into central MetaManager component
+  - RATIONALE: Prevents duplicated tags and inconsistent SEO across routes; simplifies maintenance.
+  - HOW-TO: Implement src/components/MetaManager.tsx with route-based config, canonical builder, and JSON-LD helpers; replace page-level Helmet usage.
+  - DoD: One set of meta tags per route; canonical normalized; JSON-LD valid for destinations; old components re-export MetaManager.
+
 - [ ] Ensure single H1 per page and descriptive meta titles/descriptions
   - RATIONALE: Improves CTR and relevancy; avoids SEO penalties.
-  - HOW-TO: Audit src/pages/** and src/components/** headers; enforce one <h1/> per page; use react-helmet(-async) to set title/description.
+  - HOW-TO: Audit src/pages/** and src/components/** headers; enforce one <h1/> per page; use MetaManager to set title/description.
   - DoD: Every route has a single H1 and title (< 60 chars) + meta description (< 160 chars) including “allergy-friendly hotels”.
 
 - [ ] Canonical tags + JSON-LD where relevant

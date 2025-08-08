@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import { MetaManager } from '@/components/MetaManager';
 import { HOME_CONTENT } from '@/constants/home';
 const Privacy = () => {
   const currentDate = new Date().toLocaleDateString('en-US', {
@@ -8,10 +8,13 @@ const Privacy = () => {
     day: 'numeric'
   });
   return <>
-      <Helmet>
-        <title>Privacy Policy | {HOME_CONTENT.navigation.brand}</title>
-        <meta name="description" content="Our privacy policy outlines how we collect, use, and protect your personal information when using our allergy-friendly hotel finding service." />
-      </Helmet>
+      <MetaManager 
+        routeKey="/privacy"
+        dynamicData={{
+          title: `Privacy Policy | ${HOME_CONTENT.navigation.brand}`,
+          description: "Our privacy policy outlines how we collect, use, and protect your personal information when using our allergy-friendly hotel finding service.",
+        }}
+      />
       
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <section className="bg-white p-8 rounded-lg shadow-sm">
