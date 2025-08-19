@@ -2,6 +2,7 @@
 import { toast } from "sonner";
 import { COMPLETE_TRANSLATIONS, allergyTranslations, TranslationData } from './translations';
 import { getAllergyIcon } from './allergyIcons';
+import { trackLanguageUsage } from '@/utils/languageTracker';
 
 // Set up types for the translation request and response
 export interface TranslationRequest {
@@ -162,6 +163,9 @@ export const translateText = async (
         });
         return { translatedText: null, error: `Translation not available for ${getLanguageNameFromCode(targetLanguage)}` };
       }
+      
+      // Track language usage
+      trackLanguageUsage(targetLanguage, getLanguageNameFromCode(targetLanguage));
       
       toast.success(`Text translated to ${getLanguageNameFromCode(targetLanguage)} successfully!`, {
         duration: 3000,

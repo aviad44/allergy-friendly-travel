@@ -128,6 +128,11 @@ const routeMeta: Record<string, RouteMeta> = {
     description: "Personalized results for your allergy-friendly hotel search.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
+  "/language-stats": {
+    title: "Language Usage Statistics - Allergy Card Translations",
+    description: "View statistics on which languages are most requested for allergy card translations to help improve our service.",
+    image: DEFAULT_SOCIAL_IMAGE,
+  },
 };
 
 export const MetaManager: React.FC<MetaManagerProps> = ({ routeKey = "auto", dynamicData }) => {
