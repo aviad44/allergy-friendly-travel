@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { BarChart, Download, RefreshCw, Globe } from 'lucide-react';
 import { getLanguageUsageStats, exportLanguageUsage, clearLanguageUsage } from '@/utils/languageTracker';
+import { toast } from 'sonner';
 
 interface LanguageStats {
   languageCode: string;
@@ -50,6 +51,32 @@ export const LanguageUsageStats: React.FC = () => {
     return totalTranslations > 0 ? Math.round((count / totalTranslations) * 100) : 0;
   };
 
+  const addSampleData = () => {
+    // Add some sample data for testing
+    const sampleLanguages = [
+      { code: 'es', name: 'Spanish' },
+      { code: 'fr', name: 'French' },
+      { code: 'de', name: 'German' },
+      { code: 'it', name: 'Italian' },
+      { code: 'pt', name: 'Portuguese' }
+    ];
+    
+    sampleLanguages.forEach((lang, index) => {
+      for (let i = 0; i < (5 - index); i++) {
+        const currentUsage = JSON.parse(localStorage.getItem('allergy-card-language-usage') || '{}');
+        currentUsage[lang.code] = {
+          count: (currentUsage[lang.code]?.count || 0) + 1,
+          lastUsed: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
+          languageName: lang.name
+        };
+        localStorage.setItem('allergy-card-language-usage', JSON.stringify(currentUsage));
+      }
+    });
+    
+    loadStats();
+    toast.success('Sample data added successfully!', { duration: 3000 });
+  };
+
   if (stats.length === 0) {
     return (
       <Card>
@@ -60,8 +87,14 @@ export const LanguageUsageStats: React.FC = () => {
           </CardTitle>
           <CardDescription>No translation data available yet</CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">Start translating allergy cards to see usage statistics here.</p>
+        <CardContent className="space-y-4">
+          <p className="text-muted-foreground">
+            Translation statistics will appear here once users start translating allergy cards. 
+            Go to the <a href="/allergy-translation-card" className="text-primary hover:underline">Allergy Translation Card page</a> and try translating some allergies to different languages.
+          </p>
+          <Button onClick={addSampleData} variant="outline">
+            Add Sample Data (For Testing)
+          </Button>
         </CardContent>
       </Card>
     );
