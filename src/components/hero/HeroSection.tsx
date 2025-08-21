@@ -36,7 +36,7 @@ export const HeroSection = () => {
     <section 
       className="relative min-h-[100vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
     >
-      {/* Optimized background image for LCP */}
+      {/* Optimized background image for LCP discovery */}
       <div className="absolute inset-0">
         <img
           src={heroImageUrl}

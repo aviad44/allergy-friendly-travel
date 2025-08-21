@@ -33,15 +33,6 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Early preload of critical hero image for optimal LCP
-const heroImageUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
-const heroPreloadLink = document.createElement('link');
-heroPreloadLink.rel = 'preload';
-heroPreloadLink.as = 'image';
-heroPreloadLink.href = heroImageUrl;
-heroPreloadLink.fetchPriority = 'high';
-document.head.appendChild(heroPreloadLink);
-
 // Initialize performance optimizations
 initPerformanceOptimizations();
 
