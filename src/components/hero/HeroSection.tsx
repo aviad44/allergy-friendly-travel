@@ -8,18 +8,26 @@ export const HeroSection = () => {
   const isMobile = useIsMobile();
   const heroImageUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
   
-  // Preload hero image with highest priority
+  // Critical: Preload hero image immediately when component mounts
   useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = heroImageUrl;
-    link.fetchPriority = 'high';
-    document.head.appendChild(link);
+    // Create high-priority preload link
+    const preloadLink = document.createElement('link');
+    preloadLink.rel = 'preload';
+    preloadLink.as = 'image';
+    preloadLink.href = heroImageUrl;
+    preloadLink.fetchPriority = 'high';
+    
+    // Insert at the beginning of head for maximum priority
+    const firstChild = document.head.firstChild;
+    if (firstChild) {
+      document.head.insertBefore(preloadLink, firstChild);
+    } else {
+      document.head.appendChild(preloadLink);
+    }
     
     return () => {
-      if (document.head.contains(link)) {
-        document.head.removeChild(link);
+      if (document.head.contains(preloadLink)) {
+        document.head.removeChild(preloadLink);
       }
     };
   }, []);
@@ -28,7 +36,7 @@ export const HeroSection = () => {
     <section 
       className="relative min-h-[100vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
     >
-      {/* Background image */}
+      {/* Optimized background image for LCP */}
       <div className="absolute inset-0">
         <img
           src={heroImageUrl}
@@ -37,6 +45,9 @@ export const HeroSection = () => {
           onLoad={() => setImageLoaded(true)}
           loading="eager"
           fetchPriority="high"
+          decoding="sync"
+          width="1335"
+          height="1034"
         />
         <div className="absolute inset-0 bg-black/5"></div>
       </div>
