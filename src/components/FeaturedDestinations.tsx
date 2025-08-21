@@ -183,6 +183,11 @@ export const FeaturedDestinations = () => {
                   
                   <img
                     src={imageToUse}
+                    srcSet={imageToUse.includes('unsplash.com') ? 
+                      `${imageToUse.split('?')[0]}?fm=webp&w=400&q=75&fit=crop 400w,
+                       ${imageToUse.split('?')[0]}?fm=webp&w=800&q=80&fit=crop 800w` : ''
+                    }
+                    sizes="(max-width: 768px) 400px, 390px"
                     alt={destination.name === "Cyprus" 
                       ? "Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination"
                       : destination.name === "Hotel Chains"
@@ -192,9 +197,11 @@ export const FeaturedDestinations = () => {
                     className={`object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105 ${loadedImages[destination.id] ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => handleImageLoaded(destination.id)}
                     onError={(e) => handleImageError(destination.id, e)}
-                    loading="eager" // Use eager loading for featured destinations
-                    width="600" 
-                    height="375"
+                    loading="eager"
+                    fetchPriority="high"
+                    width="390" 
+                    height="244"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute bottom-0 left-0 p-4 text-white">

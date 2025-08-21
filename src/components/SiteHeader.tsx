@@ -25,7 +25,11 @@ export const SiteHeader = () => {
             <img 
               src="/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" 
               alt="Allergy Free Travel Logo" 
-              className="h-10" 
+              className="h-10 w-10 object-contain" 
+              width="40"
+              height="40"
+              loading="eager"
+              fetchPriority="high"
             />
             <span>{HOME_CONTENT.navigation.brand}</span>
           </Link>

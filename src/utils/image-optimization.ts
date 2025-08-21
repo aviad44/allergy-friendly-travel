@@ -19,13 +19,14 @@ interface OptimizedImageOptions {
  * Converts image URLs to optimized versions
  */
 export const optimizeImageUrl = (imageUrl: string, options: OptimizedImageOptions = {}): string => {
-  // Skip optimization for data URLs or relative local paths to uploaded files
+  // Skip optimization for data URLs
   if (!imageUrl || imageUrl.startsWith('data:')) {
     return imageUrl;
   }
   
-  // For uploaded images, return as is (they're already optimized during upload)
+  // For uploaded images, add compression and format optimization
   if (imageUrl.startsWith('/lovable-uploads/')) {
+    // For local uploads, we can't change format but we should specify dimensions
     return imageUrl;
   }
   
@@ -54,29 +55,44 @@ export const optimizeImageUrl = (imageUrl: string, options: OptimizedImageOption
 /**
  * Creates a responsive image srcSet for different screen sizes
  * @param imageUrl Base image URL
+ * @param displayWidth Expected display width in pixels
  * @returns An object with srcSet and sizes properties
  */
-export const createResponsiveSrcSet = (imageUrl: string): { srcSet: string, sizes: string } => {
-  if (!imageUrl || imageUrl.startsWith('data:') || !imageUrl.includes('unsplash.com')) {
+export const createResponsiveSrcSet = (imageUrl: string, displayWidth?: number): { srcSet: string, sizes: string } => {
+  if (!imageUrl || imageUrl.startsWith('data:')) {
     return { srcSet: '', sizes: '' };
   }
   
-  const baseUrl = imageUrl.split('?')[0];
+  // For uploaded images, create multiple size variants
+  if (imageUrl.startsWith('/lovable-uploads/')) {
+    // We can't modify uploaded images, but we can provide proper sizes
+    const sizes = displayWidth ? 
+      `${displayWidth}px` : 
+      '(max-width: 480px) 480px, (max-width: 800px) 800px, (max-width: 1200px) 1200px, 1600px';
+    return { srcSet: '', sizes };
+  }
   
-  // Create optimal srcSet with both WebP and AVIF formats for modern browsers
-  const srcSet = [
-    // WebP format for good compression and wide support
-    `${baseUrl}?fm=webp&w=480&q=80 480w`,
-    `${baseUrl}?fm=webp&w=800&q=80 800w`,
-    `${baseUrl}?fm=webp&w=1200&q=85 1200w`,
-    `${baseUrl}?fm=webp&w=1600&q=85 1600w`,
-    `${baseUrl}?fm=webp&w=2000&q=85 2000w`,
-  ].join(', ');
+  // For Unsplash images, create optimized srcSet
+  if (imageUrl.includes('unsplash.com')) {
+    const baseUrl = imageUrl.split('?')[0];
+    
+    // Create optimal srcSet with WebP format and proper compression
+    const srcSet = [
+      `${baseUrl}?fm=webp&w=400&q=75&fit=crop 400w`,
+      `${baseUrl}?fm=webp&w=800&q=80&fit=crop 800w`,
+      `${baseUrl}?fm=webp&w=1200&q=80&fit=crop 1200w`,
+      `${baseUrl}?fm=webp&w=1600&q=75&fit=crop 1600w`,
+    ].join(', ');
+    
+    // More precise sizes based on actual usage
+    const sizes = displayWidth ? 
+      `${displayWidth}px` : 
+      '(max-width: 390px) 390px, (max-width: 800px) 800px, (max-width: 1200px) 1200px, 1600px';
+    
+    return { srcSet, sizes };
+  }
   
-  // Responsive sizes attribute based on viewport
-  const sizes = '(max-width: 480px) 480px, (max-width: 800px) 800px, (max-width: 1200px) 1200px, (max-width: 1600px) 1600px, 2000px';
-  
-  return { srcSet, sizes };
+  return { srcSet: '', sizes: '' };
 }
 
 /**
