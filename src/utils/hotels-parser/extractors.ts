@@ -24,10 +24,23 @@ export const extractHotelName: HotelNameExtractor = (entry: string): string => {
     const nameMatch = entry.match(pattern);
     if (nameMatch?.[1]) {
       let name = nameMatch[1].replace(/\*\*/g, '').trim();
+      
       // Remove brackets that might wrap the hotel name
       name = name.replace(/^\[([^\]]+)\].*$/, '$1');
+      name = name.replace(/^\[([^\]]+)$/, '$1'); // Handle incomplete brackets
+      
       // Remove any trailing content after dots or other separators
       name = name.replace(/\.{3,}.*$/, '').trim();
+      
+      // Skip generic descriptions that aren't hotel names
+      if (name.toLowerCase().includes('these hotels') || 
+          name.toLowerCase().includes('this hotel') ||
+          name.toLowerCase().includes('provide various') ||
+          name.toLowerCase().includes('offer') ||
+          name.length < 3) {
+        continue;
+      }
+      
       return name;
     }
   }
@@ -36,13 +49,26 @@ export const extractHotelName: HotelNameExtractor = (entry: string): string => {
   const firstLine = entry.split('\n').find(line => line.trim() !== '');
   if (firstLine) {
     let name = firstLine.replace(/^\d+\.\s*/, '').trim();
+    
     // Remove brackets that might wrap the hotel name
     name = name.replace(/^\[([^\]]+)\].*$/, '$1');
+    name = name.replace(/^\[([^\]]+)$/, '$1');
+    
     // Remove any trailing content after dots
     name = name.replace(/\.{3,}.*$/, '').trim();
+    
+    // Skip generic descriptions
+    if (name.toLowerCase().includes('these hotels') || 
+        name.toLowerCase().includes('this hotel') ||
+        name.toLowerCase().includes('provide various') ||
+        name.toLowerCase().includes('offer') ||
+        name.length < 3) {
+      return 'Hotel Name Not Found';
+    }
+    
     return name;
   }
-  return 'Unknown Hotel';
+  return 'Hotel Name Not Found';
 };
 
 export const extractLocation: LocationExtractor = (entry: string): string => {

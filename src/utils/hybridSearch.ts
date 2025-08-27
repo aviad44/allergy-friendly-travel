@@ -54,8 +54,12 @@ export class HybridHotelSearch {
            (searchLower.includes('greece') && (keyLower.includes('athens') || keyLower.includes('crete') || keyLower.includes('rhodes'))) ||
            // Match Cyprus destinations
            (searchLower.includes('cyprus') && keyLower.includes('cyprus')) ||
-           // Handle Rhodes specifically
-           (searchLower.includes('rhodes') && keyLower.includes('crete')); // Rhodes is close to Crete geographically
+           // Handle Rhodes specifically - it should match both crete and rhodes destinations
+           (searchLower.includes('rhodes') && (keyLower.includes('crete') || keyLower.includes('rhodes'))) ||
+           // Handle Greek islands search
+           (searchLower.includes('greek') && (keyLower.includes('athens') || keyLower.includes('crete') || keyLower.includes('rhodes'))) ||
+           // Handle Europe searches
+           (searchLower.includes('europe') && (keyLower.includes('athens') || keyLower.includes('crete') || keyLower.includes('rhodes') || keyLower.includes('cyprus')));
   }
   
   private isAllergyFriendly(hotel: Hotel, allergies: string): boolean {
@@ -64,6 +68,13 @@ export class HybridHotelSearch {
     console.log(`📝 Allergy info: ${hotel.allergyInfo}`);
     console.log(`🍽️ Guest review: ${hotel.guestReview}`);
     console.log(`⭐ Is purely allergy friendly: ${hotel.isPurelyAllergyFriendly}`);
+    
+    // Check if hotel belongs to Atlantica chain (special consideration for allergen labeling)
+    const isAtlantica = hotel.name?.toLowerCase().includes('atlantica');
+    if (isAtlantica) {
+      console.log(`✅ Atlantica hotel found: ${hotel.name} - automatically allergy-friendly`);
+      return true; // Atlantica hotels are always allergy-friendly due to their labeling system
+    }
     
     // Check if hotel is marked as purely allergy-friendly
     if (hotel.isPurelyAllergyFriendly) {
