@@ -142,7 +142,11 @@ const createDownloadCard = (allergies: string[], translatedText: string | null):
   allergiesDiv.appendChild(allergiesTitle);
 
   const allergiesText = document.createElement('p');
-  allergiesText.textContent = `I have severe allergies to: ${allergies.join(', ')}`;
+  const formattedAllergies = allergies.map(allergy => {
+    const icon = getAllergyIcon(allergy);
+    return icon ? `${icon} ${allergy}` : `⚠️ ${allergy}`;
+  }).join(', ');
+  allergiesText.textContent = `I have severe allergies to: ${formattedAllergies}`;
   allergiesText.style.cssText = `
     color: #92400e;
     font-size: 16px;
@@ -173,7 +177,7 @@ const createDownloadCard = (allergies: string[], translatedText: string | null):
   cardDiv.appendChild(allergiesDiv);
 
   // Translation section
-  if (translatedText) {
+  if (translatedText && translatedText.trim()) {
     const translationDiv = document.createElement('div');
     translationDiv.style.cssText = `
       background-color: #eff6ff;
@@ -193,16 +197,17 @@ const createDownloadCard = (allergies: string[], translatedText: string | null):
     `;
     translationDiv.appendChild(translationTitle);
 
-    const translationText = document.createElement('p');
-    translationText.textContent = translatedText;
-    translationText.style.cssText = `
+    const translationTextEl = document.createElement('div');
+    translationTextEl.innerHTML = translatedText.replace(/\n/g, '<br>');
+    translationTextEl.style.cssText = `
       color: #1e40af;
       font-size: 16px;
       margin: 0;
       white-space: pre-wrap;
       word-wrap: break-word;
+      line-height: 1.6;
     `;
-    translationDiv.appendChild(translationText);
+    translationDiv.appendChild(translationTextEl);
 
     cardDiv.appendChild(translationDiv);
   }
@@ -214,6 +219,8 @@ const createDownloadCard = (allergies: string[], translatedText: string | null):
  * Downloads the allergy card as a PDF file
  */
 export const downloadAsPDF = async (allergies: string[], translatedText: string | null) => {
+  console.log('downloadAsPDF called with:', { allergies, translatedText });
+  
   if (!allergies || allergies.length === 0) {
     toast.error("No allergies selected");
     return;
@@ -259,6 +266,8 @@ export const downloadAsPDF = async (allergies: string[], translatedText: string 
  * Downloads the allergy card as a PNG image
  */
 export const downloadAsPNG = async (allergies: string[], translatedText: string | null) => {
+  console.log('downloadAsPNG called with:', { allergies, translatedText });
+  
   if (!allergies || allergies.length === 0) {
     toast.error("No allergies selected");
     return;
