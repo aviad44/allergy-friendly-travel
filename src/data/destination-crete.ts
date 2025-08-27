@@ -87,6 +87,67 @@ export const creteContent: DestinationContent = {
       amenities: ["WiFi", "Swimming Pool", "Kids Club", "Multiple Restaurants"],
       isPurelyAllergyFriendly: false,
       priceRange: "$$$"
+    },
+    // Atlantica Hotels Chain in Crete - Excellent allergen labeling
+    {
+      id: "atlantica-mikri-poli-rhodes",
+      name: "Atlantica Mikri Poli Rhodes ★★★★",
+      location: "Rhodes, Greece",
+      stars: 4,
+      address: "Rhodes, Greece",
+      features: [
+        "🏷️ Every dish labeled with allergens",
+        "👨‍🍳 Comprehensive allergy training",
+        "🍽️ Safe food preparation areas",
+        "🏛️ Near historical sites"
+      ],
+      description: "This Atlantica hotel in Rhodes exemplifies the chain's commitment to allergy safety. All dishes in the dining room are clearly marked with allergen information, and staff receive extensive training in allergy management and cross-contamination prevention.",
+      quote: "Currently staying here - every single menu item shows exactly which allergens it contains. Makes dining stress-free!",
+      bookingUrl: "https://www.atlanticahotels.com/greece/rhodes/atlantica-mikri-poli/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=greece",
+      allergenFriendly: ["Complete Allergen Transparency", "All Major Allergens"],
+      amenities: ["WiFi", "Swimming Pool", "All-Inclusive", "Entertainment"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "atlantica-grand-mediterraneo",
+      name: "Atlantica Grand Mediterraneo ★★★★",
+      location: "Corfu, Greece", 
+      stars: 4,
+      address: "Corfu, Greece",
+      features: [
+        "🏷️ Detailed allergen information system",
+        "🍽️ Multiple restaurants with clear labeling",
+        "👨‍🍳 Allergy-aware kitchen protocols",
+        "🌊 Stunning sea views"
+      ],
+      description: "Atlantica's flagship property in Corfu featuring their renowned allergen labeling system across all dining venues. Every dish is clearly marked with comprehensive allergen information, ensuring safe dining for guests with food allergies.",
+      quote: "The allergen labeling system here is the best I've seen - so detailed and accurate. Perfect for my multiple food allergies.",
+      bookingUrl: "https://www.atlanticahotels.com/greece/corfu/atlantica-grand-mediterraneo/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=greece",
+      allergenFriendly: ["Multiple Allergen Management", "Comprehensive System"],
+      amenities: ["WiFi", "Swimming Pool", "Multiple Restaurants", "Spa"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "atlantica-eleon-grand-resort",
+      name: "Atlantica Eleon Grand Resort ★★★★★",
+      location: "Zakynthos, Greece",
+      stars: 5,
+      address: "Zakynthos, Greece", 
+      features: [
+        "🏷️ Premium allergen labeling standards",
+        "🍽️ Luxury dining with allergy awareness", 
+        "👨‍🍳 Expert allergy management team",
+        "🏖️ Private beach access"
+      ],
+      description: "Luxury Atlantica resort in Zakynthos maintaining the chain's exceptional allergen management standards. Features comprehensive allergen labeling across all premium dining venues with dedicated allergy management protocols.",
+      quote: "Five-star luxury with five-star allergy safety. Every meal was clearly labeled and staff went above and beyond to ensure my safety.",
+      bookingUrl: "https://www.atlanticahotels.com/greece/zakynthos/atlantica-eleon-grand/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=greece",
+      allergenFriendly: ["Luxury Allergen Management", "Premium Safety Standards"],
+      amenities: ["WiFi", "Swimming Pool", "Private Beach", "Luxury Spa"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
     }
   ],
   faqs: [

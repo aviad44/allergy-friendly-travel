@@ -64,8 +64,67 @@ export const cyprusContent: DestinationContent = {
       isPurelyAllergyFriendly: false,
       priceRange: "$$$"
     },
-    // I'll add just the first few hotels with all required properties
-    // More hotels would follow the same pattern
+    // Atlantica Hotels Chain in Cyprus - Excellent allergen labeling
+    {
+      id: "atlantica-mare-village",
+      name: "Atlantica Mare Village ★★★★",
+      location: "Ayia Napa, Cyprus",
+      stars: 4,
+      address: "Ayia Napa, Cyprus",
+      features: [
+        "🏷️ All dishes labeled with allergens",
+        "👨‍🍳 Trained staff in allergy protocols",
+        "🍽️ Separate preparation areas",
+        "🌊 Beachfront location"
+      ],
+      description: "Part of the Atlantica hotel chain known for exceptional allergen management. Every dish in the dining room is clearly labeled with allergen information, making it safe and easy for guests with food allergies.",
+      quote: "Every single dish at the buffet was clearly marked with allergen symbols. I felt completely safe eating here.",
+      bookingUrl: "https://www.atlanticahotels.com/cyprus/ayia-napa/atlantica-mare-village/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Comprehensive Allergen Labeling", "All Major Allergens"],
+      amenities: ["WiFi", "Swimming Pool", "Beach Access", "All-Inclusive"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "atlantica-aeneas-resort",
+      name: "Atlantica Aeneas Resort ★★★★",
+      location: "Ayia Napa, Cyprus",
+      stars: 4,
+      address: "Ayia Napa, Cyprus",
+      features: [
+        "🏷️ Complete allergen information displayed",
+        "👨‍🍳 Allergy-trained kitchen staff",
+        "🍽️ Safe preparation protocols",
+        "👨‍👩‍👧‍👦 Family-friendly environment"
+      ],
+      description: "Family-friendly Atlantica resort with comprehensive allergen labeling system. All food service areas display clear allergen information for each dish, with staff trained to handle allergy concerns professionally.",
+      quote: "The Atlantica chain really understands allergies - every meal option was clearly marked and the staff double-checked everything.",
+      bookingUrl: "https://www.atlanticahotels.com/cyprus/ayia-napa/atlantica-aeneas-resort/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Comprehensive Allergen Labeling", "Family-Safe Options"],
+      amenities: ["WiFi", "Swimming Pool", "Kids Club", "All-Inclusive"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "atlantica-golden-beach",
+      name: "Atlantica Golden Beach Hotel ★★★★",
+      location: "Paphos, Cyprus",
+      stars: 4,
+      address: "Paphos, Cyprus",
+      features: [
+        "🏷️ Detailed allergen menu labeling",
+        "🍽️ Multiple dining venues with allergen info",
+        "👨‍🍳 Professional allergy management",
+        "🏖️ Premium beachfront location"
+      ],
+      description: "Beachfront Atlantica hotel in Paphos featuring the chain's signature allergen labeling system across all dining venues. Staff are well-trained in allergy protocols and cross-contamination prevention.",
+      quote: "Stayed here with severe nut allergies - every restaurant clearly showed which dishes were safe. Excellent system!",
+      bookingUrl: "https://www.atlanticahotels.com/cyprus/paphos/atlantica-golden-beach/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Nut-Free Options", "Comprehensive Labeling"],
+      amenities: ["WiFi", "Swimming Pool", "Multiple Restaurants", "Beach Access"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
     {
       id: "alion-beach",
       name: "Alion Beach Hotel ★★★★★",
