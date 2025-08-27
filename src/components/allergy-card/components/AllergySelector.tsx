@@ -17,6 +17,7 @@ export const ALL_ALLERGIES = [
   { name: "Fish", emoji: "🐟", severity: "high" },
   { name: "Milk", emoji: "🥛", severity: "high" },
   { name: "Eggs", emoji: "🍳", severity: "high" },
+  { name: "Unbaked eggs", emoji: "🥚", severity: "high" },
   { name: "Wheat", emoji: "🌾", severity: "high" },
   { name: "Gluten", emoji: "🍞", severity: "high" },
   { name: "Soy", emoji: "🫘", severity: "medium" },
