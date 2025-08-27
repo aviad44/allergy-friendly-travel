@@ -13,12 +13,12 @@ export function useAllergyCardSharing() {
     copyToClipboard(generatedCard, translatedCard);
   };
 
-  const handleDownloadPDF = () => {
-    downloadAsPDF();
+  const handleDownloadPDF = (allergies: string[], translatedCard: string | null) => {
+    downloadAsPDF(allergies, translatedCard);
   };
 
-  const handleDownloadPNG = () => {
-    downloadAsPNG();
+  const handleDownloadPNG = (allergies: string[], translatedCard: string | null) => {
+    downloadAsPNG(allergies, translatedCard);
   };
 
   const handleShareToWhatsApp = (generatedCard: string | null, translatedCard: string | null) => {

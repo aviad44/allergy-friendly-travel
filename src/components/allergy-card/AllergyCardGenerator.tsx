@@ -110,8 +110,8 @@ export const AllergyCardGenerator = () => {
               isTranslating={isTranslating}
               onRequestTranslation={handleTranslationRequest}
               onCopyToClipboard={() => handleCopyToClipboard(generatedCard, translatedCard)}
-              onDownloadPDF={handleDownloadPDF}
-              onDownloadPNG={handleDownloadPNG}
+              onDownloadPDF={() => handleDownloadPDF(selectedAllergies, translatedCard)}
+              onDownloadPNG={() => handleDownloadPNG(selectedAllergies, translatedCard)}
               onShareToWhatsApp={() => handleShareToWhatsApp(generatedCard, translatedCard)}
             />
           </div>

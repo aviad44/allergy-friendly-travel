@@ -213,24 +213,11 @@ const createDownloadCard = (allergies: string[], translatedText: string | null):
 /**
  * Downloads the allergy card as a PDF file
  */
-export const downloadAsPDF = async () => {
-  const originalCard = document.getElementById('allergy-card');
-  if (!originalCard) {
-    toast.error("Card element not found");
+export const downloadAsPDF = async (allergies: string[], translatedText: string | null) => {
+  if (!allergies || allergies.length === 0) {
+    toast.error("No allergies selected");
     return;
   }
-
-  // Get the allergy data from the original card
-  const allergiesElements = originalCard.querySelectorAll('[style*="background-color: #dbeafe"]');
-  const allergies: string[] = [];
-  allergiesElements.forEach(el => {
-    const text = el.textContent?.trim();
-    if (text) allergies.push(text);
-  });
-
-  // Get translation text
-  const translationElement = originalCard.querySelector('[style*="whiteSpace: pre-wrap"]:last-child');
-  const translatedText = translationElement?.textContent?.trim() || null;
 
   try {
     toast.loading("Generating PDF...");
@@ -271,24 +258,11 @@ export const downloadAsPDF = async () => {
 /**
  * Downloads the allergy card as a PNG image
  */
-export const downloadAsPNG = async () => {
-  const originalCard = document.getElementById('allergy-card');
-  if (!originalCard) {
-    toast.error("Card element not found");
+export const downloadAsPNG = async (allergies: string[], translatedText: string | null) => {
+  if (!allergies || allergies.length === 0) {
+    toast.error("No allergies selected");
     return;
   }
-
-  // Get the allergy data from the original card
-  const allergiesElements = originalCard.querySelectorAll('[style*="background-color: #dbeafe"]');
-  const allergies: string[] = [];
-  allergiesElements.forEach(el => {
-    const text = el.textContent?.trim();
-    if (text) allergies.push(text);
-  });
-
-  // Get translation text
-  const translationElement = originalCard.querySelector('[style*="whiteSpace: pre-wrap"]:last-child');
-  const translatedText = translationElement?.textContent?.trim() || null;
 
   try {
     toast.loading("Generating PNG image...");
