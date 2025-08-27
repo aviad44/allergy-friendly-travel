@@ -102,17 +102,24 @@ export const downloadAsPDF = async () => {
 
   try {
     toast.loading("Generating PDF...");
-    const canvas = await html2canvas(cardElement, {
-      scale: 3, // Higher scale for better quality
+    
+    // Create a clean clone of the card for download
+    const cleanCard = createCleanCardForDownload(cardElement);
+    document.body.appendChild(cleanCard);
+    
+    const canvas = await html2canvas(cleanCard, {
+      scale: 3,
       useCORS: true,
       allowTaint: true,
       backgroundColor: "#ffffff",
       removeContainer: true,
       logging: false,
-      width: cardElement.scrollWidth,
-      height: cardElement.scrollHeight,
-      foreignObjectRendering: true
+      width: cleanCard.scrollWidth,
+      height: cleanCard.scrollHeight
     });
+    
+    // Remove the temporary element
+    document.body.removeChild(cleanCard);
     
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({
@@ -145,17 +152,24 @@ export const downloadAsPNG = async () => {
 
   try {
     toast.loading("Generating PNG image...");
-    const canvas = await html2canvas(cardElement, {
-      scale: 3, // Higher scale for better quality
+    
+    // Create a clean clone of the card for download
+    const cleanCard = createCleanCardForDownload(cardElement);
+    document.body.appendChild(cleanCard);
+    
+    const canvas = await html2canvas(cleanCard, {
+      scale: 3,
       useCORS: true,
       allowTaint: true,
       backgroundColor: "#ffffff",
       removeContainer: true,
       logging: false,
-      width: cardElement.scrollWidth,
-      height: cardElement.scrollHeight,
-      foreignObjectRendering: true
+      width: cleanCard.scrollWidth,
+      height: cleanCard.scrollHeight
     });
+    
+    // Remove the temporary element
+    document.body.removeChild(cleanCard);
     
     const link = document.createElement('a');
     link.download = 'allergy-card.png';
@@ -167,6 +181,72 @@ export const downloadAsPNG = async () => {
     console.error("Error generating PNG: ", err);
     toast.error("Failed to generate PNG. Please try again.");
   }
+};
+
+/**
+ * Creates a clean version of the card element for download without any transparency
+ */
+const createCleanCardForDownload = (originalElement: HTMLElement): HTMLElement => {
+  const clone = originalElement.cloneNode(true) as HTMLElement;
+  
+  // Set position and visibility for off-screen rendering
+  clone.style.position = 'absolute';
+  clone.style.left = '-9999px';
+  clone.style.top = '-9999px';
+  clone.style.zIndex = '-1';
+  clone.style.backgroundColor = '#ffffff';
+  clone.style.color = '#000000';
+  clone.style.fontFamily = 'Arial, sans-serif';
+  clone.style.padding = '24px';
+  clone.style.borderRadius = '12px';
+  clone.style.border = '2px solid #e5e7eb';
+  clone.style.width = '600px';
+  clone.style.minHeight = '400px';
+  
+  // Remove all problematic classes and apply inline styles
+  const allElements = clone.querySelectorAll('*');
+  allElements.forEach((element: Element) => {
+    const el = element as HTMLElement;
+    el.className = '';
+    
+    // Apply solid colors based on element type
+    if (el.tagName === 'DIV') {
+      if (el.textContent?.includes('⚠️')) {
+        el.style.backgroundColor = '#fef3c7';
+        el.style.color = '#92400e';
+        el.style.padding = '12px';
+        el.style.borderRadius = '8px';
+        el.style.marginBottom = '16px';
+        el.style.border = '1px solid #fbbf24';
+      } else if (el.innerHTML.includes('Translation:')) {
+        el.style.backgroundColor = '#eff6ff';
+        el.style.color = '#1e40af';
+        el.style.padding = '12px';
+        el.style.borderRadius = '8px';
+        el.style.marginTop = '16px';
+        el.style.border = '1px solid #93c5fd';
+      }
+    }
+    
+    if (el.tagName === 'H3' || el.tagName === 'H4') {
+      el.style.color = '#1e40af';
+      el.style.fontWeight = 'bold';
+      el.style.marginBottom = '12px';
+    }
+    
+    if (el.tagName === 'SPAN') {
+      el.style.backgroundColor = '#dbeafe';
+      el.style.color = '#1e40af';
+      el.style.padding = '6px 12px';
+      el.style.borderRadius = '20px';
+      el.style.margin = '4px';
+      el.style.display = 'inline-block';
+      el.style.fontSize = '14px';
+      el.style.fontWeight = '500';
+    }
+  });
+  
+  return clone;
 };
 
 /**
