@@ -192,60 +192,62 @@ export class HybridHotelSearch {
     };
   }
   
-  // חיפוש פשוט עם GPT בלבד - מדויק ומהיר
+  // חיפוש היברידי - משלב נתונים קיימים עם GPT
   async search(filters: SearchFilters): Promise<HotelInfo[]> {
-    console.log('🔍 Starting search for:', filters);
+    console.log('🔍 Starting hybrid search for:', filters);
     
-    // חיפוש ישיר עם GPT למידע מדויק ועדכני
+    // קודם נחפש במאגר הקיים (מהיר ואמין)
+    console.log('📚 Searching in existing data first...');
+    const existingHotels = this.searchExistingData(filters);
+    console.log(`📚 Found ${existingHotels.length} hotels in existing data`);
+    
+    // אם יש לנו מלונות אטלנטיקה, נשים אותם ראשונים
+    const atlanticaHotels = existingHotels.filter(hotel => 
+      hotel.name.toLowerCase().includes('atlantica')
+    );
+    const otherExistingHotels = existingHotels.filter(hotel => 
+      !hotel.name.toLowerCase().includes('atlantica')
+    );
+    
+    console.log(`🏨 Found ${atlanticaHotels.length} Atlantica hotels`);
+    console.log(`🏨 Found ${otherExistingHotels.length} other existing hotels`);
+    
+    // נחפש גם עם GPT למלונות נוספים
+    let gptHotels: HotelInfo[] = [];
     try {
-      console.log('🚀 Searching with GPT for accurate results...');
-      const gptHotels = await this.searchWithGPT(filters);
+      console.log('🚀 Searching with GPT for additional results...');
+      gptHotels = await this.searchWithGPT(filters);
       console.log(`🤖 GPT found ${gptHotels.length} hotels`);
-      
-      if (gptHotels.length > 0) {
-        console.log('✅ Returning GPT results');
-        return gptHotels.slice(0, 10);
-      } else {
-        console.log('⚠️ GPT returned empty results');
-        // אם GPT לא מחזיר תוצאות, נחפש במאגר הקיים
-        console.log('🔍 Trying existing data as fallback...');
-        const existingHotels = this.searchExistingData(filters);
-        console.log(`📚 Found ${existingHotels.length} hotels in existing data`);
-        
-        if (existingHotels.length > 0) {
-          return existingHotels.slice(0, 8);
-        }
-        
-        return [{
-          name: "לא נמצאו מלונות",
-          location: filters.destination,
-          description: `לא נמצאו מלונות מתאימים לאלרגיה ${filters.allergies} ב${filters.destination}. אנא נסה יעד אחר או צור איתנו קשר לעזרה אישית.`,
-          url: "",
-          rating: 0,
-          starRating: "",
-          allergyFeatures: [],
-          reviews: [],
-          allergyAmenities: [],
-          amenities: []
-        }];
-      }
-      
     } catch (error) {
-      console.error('❌ GPT search failed:', error);
-      // במקרה של שגיאה, נחזיר הודעה ברורה
-      return [{
-        name: "שגיאה בחיפוש",
-        location: "נסה שוב",
-        description: `חיפוש נכשל עבור ${filters.destination}. שגיאה: ${error instanceof Error ? error.message : 'Unknown error'}. אנא נסה שוב או בחר יעד אחר.`,
-        url: "",
-        rating: 0,
-        starRating: "",
-        allergyFeatures: [],
-        reviews: [],
-        allergyAmenities: [],
-        amenities: []
-      }];
+      console.error('❌ GPT search failed, continuing with existing data:', error);
     }
+    
+    // נאחד את התוצאות - אטלנטיקה ראשונה, אחר כך הקיימים, ואז GPT
+    const combinedHotels = [
+      ...atlanticaHotels,
+      ...otherExistingHotels,
+      ...gptHotels
+    ];
+    
+    console.log(`🎯 Total combined hotels: ${combinedHotels.length}`);
+    
+    if (combinedHotels.length > 0) {
+      return combinedHotels.slice(0, 10);
+    }
+    
+    // אם באמת לא נמצא כלום
+    return [{
+      name: "לא נמצאו מלונות",
+      location: filters.destination,
+      description: `לא נמצאו מלונות מתאימים לאלרגיה ${filters.allergies} ב${filters.destination}. אנא נסה יעד אחר או צור איתנו קשר לעזרה אישית.`,
+      url: "",
+      rating: 0,
+      starRating: "",
+      allergyFeatures: [],
+      reviews: [],
+      allergyAmenities: [],
+      amenities: []
+    }];
   }
   
   private async searchWithGPT(filters: SearchFilters): Promise<HotelInfo[]> {
