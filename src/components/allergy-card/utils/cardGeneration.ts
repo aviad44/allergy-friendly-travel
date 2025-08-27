@@ -5,10 +5,6 @@ import { jsPDF } from 'jspdf';
 
 /**
  * Generates the text content for an allergy card
- * @param allergies List of allergies
- * @param isChild Whether to use child-friendly language
- * @param userName Optional name to include on the card
- * @returns Generated card text
  */
 export const generateCardText = (
   allergies: string[]
@@ -90,30 +86,168 @@ export const copyToClipboard = (generatedCard: string, translatedCard: string | 
 };
 
 /**
+ * Creates a simple, clean card element for download
+ */
+const createDownloadCard = (allergies: string[], translatedText: string | null): HTMLElement => {
+  const cardDiv = document.createElement('div');
+  cardDiv.style.cssText = `
+    width: 600px;
+    min-height: 400px;
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 30px;
+    border: 2px solid #cccccc;
+    border-radius: 12px;
+    box-sizing: border-box;
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+  `;
+
+  // Title
+  const title = document.createElement('h1');
+  title.textContent = 'Allergy Translation Card';
+  title.style.cssText = `
+    color: #1e40af;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 30px 0;
+    padding: 0;
+  `;
+  cardDiv.appendChild(title);
+
+  // Allergies section
+  const allergiesDiv = document.createElement('div');
+  allergiesDiv.style.cssText = `
+    background-color: #fef3c7;
+    border: 2px solid #f59e0b;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+  `;
+
+  const allergiesTitle = document.createElement('h2');
+  allergiesTitle.textContent = '⚠️ FOOD ALLERGY NOTIFICATION ⚠️';
+  allergiesTitle.style.cssText = `
+    color: #92400e;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 15px 0;
+    text-align: center;
+  `;
+  allergiesDiv.appendChild(allergiesTitle);
+
+  const allergiesText = document.createElement('p');
+  allergiesText.textContent = `I have severe allergies to: ${allergies.join(', ')}`;
+  allergiesText.style.cssText = `
+    color: #92400e;
+    font-size: 16px;
+    margin: 0 0 15px 0;
+    font-weight: 500;
+  `;
+  allergiesDiv.appendChild(allergiesText);
+
+  const warningText = document.createElement('p');
+  warningText.textContent = 'Cross-contamination can cause a serious allergic reaction. Please ensure that my meal is prepared without these allergens and that all cooking utensils and surfaces are thoroughly cleaned before preparing my food.';
+  warningText.style.cssText = `
+    color: #92400e;
+    font-size: 14px;
+    margin: 0 0 10px 0;
+  `;
+  allergiesDiv.appendChild(warningText);
+
+  const thankYouText = document.createElement('p');
+  thankYouText.textContent = 'Thank you for your assistance in this important health matter.';
+  thankYouText.style.cssText = `
+    color: #92400e;
+    font-size: 14px;
+    margin: 0;
+    font-style: italic;
+  `;
+  allergiesDiv.appendChild(thankYouText);
+
+  cardDiv.appendChild(allergiesDiv);
+
+  // Translation section
+  if (translatedText) {
+    const translationDiv = document.createElement('div');
+    translationDiv.style.cssText = `
+      background-color: #eff6ff;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    `;
+
+    const translationTitle = document.createElement('h3');
+    translationTitle.textContent = 'Translation:';
+    translationTitle.style.cssText = `
+      color: #1e40af;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0 0 15px 0;
+    `;
+    translationDiv.appendChild(translationTitle);
+
+    const translationText = document.createElement('p');
+    translationText.textContent = translatedText;
+    translationText.style.cssText = `
+      color: #1e40af;
+      font-size: 16px;
+      margin: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    `;
+    translationDiv.appendChild(translationText);
+
+    cardDiv.appendChild(translationDiv);
+  }
+
+  return cardDiv;
+};
+
+/**
  * Downloads the allergy card as a PDF file
  */
 export const downloadAsPDF = async () => {
-  const cardElement = document.getElementById('allergy-card');
-  if (!cardElement) {
+  const originalCard = document.getElementById('allergy-card');
+  if (!originalCard) {
     toast.error("Card element not found");
     return;
   }
 
+  // Get the allergy data from the original card
+  const allergiesElements = originalCard.querySelectorAll('[style*="background-color: #dbeafe"]');
+  const allergies: string[] = [];
+  allergiesElements.forEach(el => {
+    const text = el.textContent?.trim();
+    if (text) allergies.push(text);
+  });
+
+  // Get translation text
+  const translationElement = originalCard.querySelector('[style*="whiteSpace: pre-wrap"]:last-child');
+  const translatedText = translationElement?.textContent?.trim() || null;
+
   try {
     toast.loading("Generating PDF...");
     
-    const canvas = await html2canvas(cardElement, {
+    // Create a clean card for download
+    const downloadCard = createDownloadCard(allergies, translatedText);
+    document.body.appendChild(downloadCard);
+    
+    const canvas = await html2canvas(downloadCard, {
       scale: 2,
       useCORS: true,
       allowTaint: true,
-      backgroundColor: "#ffffff",
-      width: cardElement.scrollWidth,
-      height: cardElement.scrollHeight,
-      windowWidth: cardElement.scrollWidth,
-      windowHeight: cardElement.scrollHeight,
-      scrollX: 0,
-      scrollY: 0
+      backgroundColor: "#ffffff"
     });
+    
+    // Remove the temporary element
+    document.body.removeChild(downloadCard);
     
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({
@@ -138,45 +272,40 @@ export const downloadAsPDF = async () => {
  * Downloads the allergy card as a PNG image
  */
 export const downloadAsPNG = async () => {
-  const cardElement = document.getElementById('allergy-card');
-  if (!cardElement) {
+  const originalCard = document.getElementById('allergy-card');
+  if (!originalCard) {
     toast.error("Card element not found");
     return;
   }
 
+  // Get the allergy data from the original card
+  const allergiesElements = originalCard.querySelectorAll('[style*="background-color: #dbeafe"]');
+  const allergies: string[] = [];
+  allergiesElements.forEach(el => {
+    const text = el.textContent?.trim();
+    if (text) allergies.push(text);
+  });
+
+  // Get translation text
+  const translationElement = originalCard.querySelector('[style*="whiteSpace: pre-wrap"]:last-child');
+  const translatedText = translationElement?.textContent?.trim() || null;
+
   try {
     toast.loading("Generating PNG image...");
     
-    const canvas = await html2canvas(cardElement, {
+    // Create a clean card for download
+    const downloadCard = createDownloadCard(allergies, translatedText);
+    document.body.appendChild(downloadCard);
+    
+    const canvas = await html2canvas(downloadCard, {
       scale: 2,
       useCORS: true,
       allowTaint: true,
-      backgroundColor: "#ffffff",
-      onclone: function(clonedDoc) {
-        // Ensure all elements have solid backgrounds
-        const clonedElement = clonedDoc.getElementById('allergy-card');
-        if (clonedElement) {
-          clonedElement.style.backgroundColor = '#ffffff';
-          clonedElement.style.opacity = '1';
-          
-          // Make sure all child elements are visible with solid colors
-          const allElements = clonedElement.querySelectorAll('*');
-          allElements.forEach((el: Element) => {
-            const element = el as HTMLElement;
-            element.style.opacity = '1';
-            if (element.style.backgroundColor === 'transparent' || !element.style.backgroundColor) {
-              if (element.classList.contains('bg-blue-50')) {
-                element.style.backgroundColor = '#eff6ff';
-              } else if (element.classList.contains('bg-white')) {
-                element.style.backgroundColor = '#ffffff';
-              } else if (element.classList.contains('bg-blue-100')) {
-                element.style.backgroundColor = '#dbeafe';
-              }
-            }
-          });
-        }
-      }
+      backgroundColor: "#ffffff"
     });
+    
+    // Remove the temporary element
+    document.body.removeChild(downloadCard);
     
     const link = document.createElement('a');
     link.download = 'allergy-card.png';
