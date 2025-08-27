@@ -83,26 +83,35 @@ export const Step4Download: React.FC<Step4Props> = ({
       </div>
         
       {/* Live Card Preview */}
-      <div ref={cardRef} id="allergy-card" className={`
-        ${isDarkMode ? 'bg-blue-900 text-white' : 'bg-white'} 
-        rounded-xl overflow-hidden border border-blue-200 transition-all duration-300
-        relative
-      `} style={{ backgroundColor: isDarkMode ? '#1e40af' : '#ffffff' }}>
-        <CardContent className="p-6">
-          <div className="mb-4 text-center">
-            <h3 className={`font-semibold text-lg mb-2 ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
+      <div ref={cardRef} id="allergy-card" className="relative bg-white text-black border-2 border-gray-300 rounded-xl overflow-visible p-6 min-h-[500px] w-full max-w-none" style={{ 
+        backgroundColor: '#ffffff',
+        color: '#000000',
+        fontSize: '16px',
+        lineHeight: '1.6',
+        fontFamily: 'Arial, sans-serif'
+      }}>
+        <div className="p-0">
+          <div className="mb-6 text-center">
+            <h3 className="font-bold text-2xl mb-4 text-blue-800" style={{ color: '#1e40af', fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>
               Allergy Translation Card
             </h3>
           </div>
           
           {/* Allergies Section */}
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex flex-wrap gap-3 mb-6">
             {formattedAllergies.map((allergy, index) => (
               <span 
                 key={index}
-                className={`text-sm px-3 py-1.5 rounded-full font-medium ${
-                  isDarkMode ? 'bg-blue-800 text-blue-200' : 'bg-blue-100 text-blue-700'
-                }`}
+                className="text-sm px-4 py-2 rounded-full font-medium bg-blue-100 text-blue-800 border border-blue-300"
+                style={{ 
+                  backgroundColor: '#dbeafe',
+                  color: '#1e40af',
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  border: '1px solid #93c5fd'
+                }}
               >
                 {allergy}
               </span>
@@ -110,24 +119,35 @@ export const Step4Download: React.FC<Step4Props> = ({
           </div>
             
           {/* Original Text */}
-          <div className={`
-            whitespace-pre-wrap mb-4 p-3 rounded-lg
-            ${isDarkMode ? 'bg-blue-950' : 'bg-blue-50'}
-          `}>
-            {displayedCard}
+          <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6" style={{ 
+            backgroundColor: '#fefce8',
+            color: '#92400e',
+            padding: '16px',
+            borderRadius: '8px',
+            marginBottom: '24px',
+            border: '1px solid #fbbf24',
+            fontSize: '16px',
+            lineHeight: '1.6'
+          }}>
+            <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{displayedCard}</div>
           </div>
             
           {/* Translation */}
           {translatedCard && (
-            <div className={`pt-4 border-t ${isDarkMode ? 'border-blue-700' : 'border-blue-100'}`}>
-              <h4 className={`font-semibold mb-2 ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
+            <div className="pt-4 border-t border-gray-300" style={{ borderTop: '1px solid #d1d5db', paddingTop: '16px' }}>
+              <h4 className="font-bold mb-3 text-blue-800" style={{ color: '#1e40af', fontWeight: 'bold', marginBottom: '12px' }}>
                 Translation:
               </h4>
-              <div className={`
-                whitespace-pre-wrap p-3 rounded-lg 
-                ${isDarkMode ? 'bg-blue-950' : 'bg-white'}
-              `}>
-                {displayedTranslation}
+              <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg" style={{ 
+                backgroundColor: '#eff6ff',
+                color: '#1e40af',
+                padding: '16px',
+                borderRadius: '8px',
+                border: '1px solid #93c5fd',
+                fontSize: '16px',
+                lineHeight: '1.6'
+              }}>
+                <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{displayedTranslation}</div>
               </div>
             </div>
           )}
@@ -145,7 +165,7 @@ export const Step4Download: React.FC<Step4Props> = ({
               </Button>
             </div>
           )}
-        </CardContent>
+        </div>
       </div>
 
       {/* Enhanced Sharing Options */}

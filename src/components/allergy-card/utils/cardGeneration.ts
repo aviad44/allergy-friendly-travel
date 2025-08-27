@@ -107,30 +107,12 @@ export const downloadAsPDF = async () => {
       useCORS: true,
       allowTaint: true,
       backgroundColor: "#ffffff",
-      onclone: function(clonedDoc) {
-        // Ensure all elements have solid backgrounds
-        const clonedElement = clonedDoc.getElementById('allergy-card');
-        if (clonedElement) {
-          clonedElement.style.backgroundColor = '#ffffff';
-          clonedElement.style.opacity = '1';
-          
-          // Make sure all child elements are visible with solid colors
-          const allElements = clonedElement.querySelectorAll('*');
-          allElements.forEach((el: Element) => {
-            const element = el as HTMLElement;
-            element.style.opacity = '1';
-            if (element.style.backgroundColor === 'transparent' || !element.style.backgroundColor) {
-              if (element.classList.contains('bg-blue-50')) {
-                element.style.backgroundColor = '#eff6ff';
-              } else if (element.classList.contains('bg-white')) {
-                element.style.backgroundColor = '#ffffff';
-              } else if (element.classList.contains('bg-blue-100')) {
-                element.style.backgroundColor = '#dbeafe';
-              }
-            }
-          });
-        }
-      }
+      width: cardElement.scrollWidth,
+      height: cardElement.scrollHeight,
+      windowWidth: cardElement.scrollWidth,
+      windowHeight: cardElement.scrollHeight,
+      scrollX: 0,
+      scrollY: 0
     });
     
     const imgData = canvas.toDataURL('image/png');
