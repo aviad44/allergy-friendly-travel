@@ -244,6 +244,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   en: {
     "Milk": "Milk",
     "Eggs": "Eggs", 
+    "Unbaked eggs": "Unbaked eggs",
     "Tree nuts": "Tree nuts",
     "Peanuts": "Peanuts",
     "Shellfish": "Shellfish",
@@ -260,6 +261,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   he: {
     "Milk": "חלב",
     "Eggs": "ביצים",
+    "Unbaked eggs": "ביצים לא מבושלות",
     "Tree nuts": "אגוזי עץ",
     "Peanuts": "בוטנים",
     "Shellfish": "פירות ים",
@@ -276,6 +278,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   es: {
     "Milk": "Leche",
     "Eggs": "Huevos",
+    "Unbaked eggs": "Huevos crudos",
     "Tree nuts": "Frutos secos",
     "Peanuts": "Cacahuetes",
     "Shellfish": "Mariscos",
@@ -292,6 +295,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   fr: {
     "Milk": "Lait",
     "Eggs": "Œufs",
+    "Unbaked eggs": "Œufs crus",
     "Tree nuts": "Noix",
     "Peanuts": "Arachides",
     "Shellfish": "Fruits de mer",
@@ -308,6 +312,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   de: {
     "Milk": "Milch",
     "Eggs": "Eier",
+    "Unbaked eggs": "Rohe Eier",
     "Tree nuts": "Nüsse",
     "Peanuts": "Erdnüsse",
     "Shellfish": "Schalentiere",
@@ -324,6 +329,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   it: {
     "Milk": "Latte",
     "Eggs": "Uova",
+    "Unbaked eggs": "Uova crude",
     "Tree nuts": "Frutta a guscio",
     "Peanuts": "Arachidi",
     "Shellfish": "Crostacei",
@@ -340,6 +346,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   ja: {
     "Milk": "乳",
     "Eggs": "卵",
+    "Unbaked eggs": "生卵",
     "Tree nuts": "木の実",
     "Peanuts": "ピーナッツ",
     "Shellfish": "甲殻類",
@@ -356,6 +363,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   ko: {
     "Milk": "우유",
     "Eggs": "계란",
+    "Unbaked eggs": "익히지 않은 달걀",
     "Tree nuts": "견과류",
     "Peanuts": "땅콩",
     "Shellfish": "갑각류",
@@ -372,6 +380,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   zh: {
     "Milk": "牛奶",
     "Eggs": "鸡蛋",
+    "Unbaked eggs": "生鸡蛋",
     "Tree nuts": "坚果",
     "Peanuts": "花生",
     "Shellfish": "贝类",
@@ -388,6 +397,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   ru: {
     "Milk": "Молоко",
     "Eggs": "Яйца",
+    "Unbaked eggs": "Сырые яйца",
     "Tree nuts": "Орехи",
     "Peanuts": "Арахис",
     "Shellfish": "Моллюски",
@@ -404,6 +414,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   ar: {
     "Milk": "حليب",
     "Eggs": "بيض",
+    "Unbaked eggs": "بيض نيء",
     "Tree nuts": "المكسرات",
     "Peanuts": "فول سوداني",
     "Shellfish": "محار",
@@ -420,6 +431,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   hi: {
     "Milk": "दूध",
     "Eggs": "अंडे",
+    "Unbaked eggs": "कच्चे अंडे",
     "Tree nuts": "मेवे",
     "Peanuts": "मूंगफली",
     "Shellfish": "शेलफिश",
@@ -436,6 +448,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   pt: {
     "Milk": "Leite",
     "Eggs": "Ovos",
+    "Unbaked eggs": "Ovos crus",
     "Tree nuts": "Nozes",
     "Peanuts": "Amendoins",
     "Shellfish": "Marisco",
@@ -452,6 +465,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   nl: {
     "Milk": "Melk",
     "Eggs": "Eieren",
+    "Unbaked eggs": "Rauwe eieren",
     "Tree nuts": "Noten",
     "Peanuts": "Pinda's",
     "Shellfish": "Schaaldieren",
@@ -468,6 +482,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   tr: {
     "Milk": "Süt",
     "Eggs": "Yumurta",
+    "Unbaked eggs": "Çiğ yumurta",
     "Tree nuts": "Sert kabuklu meyveler",
     "Peanuts": "Yer fıstığı",
     "Shellfish": "Kabuklu deniz ürünleri",
@@ -484,6 +499,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   pl: {
     "Milk": "Mleko",
     "Eggs": "Jaja",
+    "Unbaked eggs": "Surowe jaja",
     "Tree nuts": "Orzechy drzewne",
     "Peanuts": "Orzeszki ziemne",
     "Shellfish": "Skorupiaki",
@@ -500,6 +516,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   vi: {
     "Milk": "Sữa",
     "Eggs": "Trứng",
+    "Unbaked eggs": "Trứng sống",
     "Tree nuts": "Các loại hạt",
     "Peanuts": "Đậu phộng",
     "Shellfish": "Tôm cua",
@@ -516,6 +533,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   th: {
     "Milk": "นม",
     "Eggs": "ไข่",
+    "Unbaked eggs": "ไข่ดิบ",
     "Tree nuts": "ถั่วต้นไม้",
     "Peanuts": "ถั่วลิสง",
     "Shellfish": "หอย",
@@ -532,6 +550,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   sv: {
     "Milk": "Mjölk",
     "Eggs": "Ägg",
+    "Unbaked eggs": "Rå ägg",
     "Tree nuts": "Nötter",
     "Peanuts": "Jordnötter",
     "Shellfish": "Skaldjur",
@@ -548,6 +567,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   da: {
     "Milk": "Mælk",
     "Eggs": "Æg",
+    "Unbaked eggs": "Rå æg",
     "Tree nuts": "Nødder",
     "Peanuts": "Jordnødder",
     "Shellfish": "Skaldyr",
@@ -564,6 +584,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   fi: {
     "Milk": "Maito",
     "Eggs": "Munat",
+    "Unbaked eggs": "Raa'at munat",
     "Tree nuts": "Pähkinät",
     "Peanuts": "Maapähkinät",
     "Shellfish": "Äyriäiset",
@@ -580,6 +601,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   no: {
     "Milk": "Melk",
     "Eggs": "Egg",
+    "Unbaked eggs": "Rå egg",
     "Tree nuts": "Nøtter",
     "Peanuts": "Peanøtter",
     "Shellfish": "Skalldyr",
@@ -596,6 +618,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   el: {
     "Milk": "Γάλα",
     "Eggs": "Αυγά",
+    "Unbaked eggs": "Μη μαγειρευμένα αυγά",
     "Tree nuts": "Ξηροί καρποί",
     "Peanuts": "Φιστίκια",
     "Shellfish": "Οστρακοειδή",
@@ -612,6 +635,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   cs: {
     "Milk": "Mléko",
     "Eggs": "Vejce",
+    "Unbaked eggs": "Syrová vejce",
     "Tree nuts": "Ořechy",
     "Peanuts": "Arašídy",
     "Shellfish": "Korýši",
@@ -628,6 +652,7 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
   hu: {
     "Milk": "Tej",
     "Eggs": "Tojás",
+    "Unbaked eggs": "Nyers tojás",
     "Tree nuts": "Diófélék",
     "Peanuts": "Földimogyoró",
     "Shellfish": "Rákfélék",
