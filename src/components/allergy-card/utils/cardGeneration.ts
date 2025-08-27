@@ -103,10 +103,15 @@ export const downloadAsPDF = async () => {
   try {
     toast.loading("Generating PDF...");
     const canvas = await html2canvas(cardElement, {
-      scale: 2, // Higher scale for better quality
+      scale: 3, // Higher scale for better quality
       useCORS: true,
       allowTaint: true,
-      backgroundColor: "#ffffff"
+      backgroundColor: "#ffffff",
+      removeContainer: true,
+      logging: false,
+      width: cardElement.scrollWidth,
+      height: cardElement.scrollHeight,
+      foreignObjectRendering: true
     });
     
     const imgData = canvas.toDataURL('image/png');
@@ -141,10 +146,15 @@ export const downloadAsPNG = async () => {
   try {
     toast.loading("Generating PNG image...");
     const canvas = await html2canvas(cardElement, {
-      scale: 2, // Higher scale for better quality
+      scale: 3, // Higher scale for better quality
       useCORS: true,
       allowTaint: true,
-      backgroundColor: "#ffffff"
+      backgroundColor: "#ffffff",
+      removeContainer: true,
+      logging: false,
+      width: cardElement.scrollWidth,
+      height: cardElement.scrollHeight,
+      foreignObjectRendering: true
     });
     
     const link = document.createElement('a');

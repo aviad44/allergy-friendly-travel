@@ -86,7 +86,8 @@ export const Step4Download: React.FC<Step4Props> = ({
       <div ref={cardRef} id="allergy-card" className={`
         ${isDarkMode ? 'bg-blue-900 text-white' : 'bg-white'} 
         rounded-xl overflow-hidden border border-blue-200 transition-all duration-300
-      `}>
+        relative
+      `} style={{ backgroundColor: isDarkMode ? '#1e40af' : '#ffffff' }}>
         <CardContent className="p-6">
           <div className="mb-4 text-center">
             <h3 className={`font-semibold text-lg mb-2 ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
