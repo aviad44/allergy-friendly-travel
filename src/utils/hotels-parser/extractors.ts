@@ -23,13 +23,26 @@ export const extractHotelName: HotelNameExtractor = (entry: string): string => {
   for (const pattern of namePatterns) {
     const nameMatch = entry.match(pattern);
     if (nameMatch?.[1]) {
-      return nameMatch[1].replace(/\*\*/g, '').trim();
+      let name = nameMatch[1].replace(/\*\*/g, '').trim();
+      // Remove brackets that might wrap the hotel name
+      name = name.replace(/^\[([^\]]+)\].*$/, '$1');
+      // Remove any trailing content after dots or other separators
+      name = name.replace(/\.{3,}.*$/, '').trim();
+      return name;
     }
   }
   
-  // Fallback: take the first non-empty line
+  // Fallback: take the first non-empty line and clean it
   const firstLine = entry.split('\n').find(line => line.trim() !== '');
-  return firstLine ? firstLine.replace(/^\d+\.\s*/, '').trim() : 'Unknown Hotel';
+  if (firstLine) {
+    let name = firstLine.replace(/^\d+\.\s*/, '').trim();
+    // Remove brackets that might wrap the hotel name
+    name = name.replace(/^\[([^\]]+)\].*$/, '$1');
+    // Remove any trailing content after dots
+    name = name.replace(/\.{3,}.*$/, '').trim();
+    return name;
+  }
+  return 'Unknown Hotel';
 };
 
 export const extractLocation: LocationExtractor = (entry: string): string => {

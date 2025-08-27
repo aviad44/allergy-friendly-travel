@@ -142,4 +142,5 @@ export type DestinationId =
   | 'airlines'
   | 'amsterdam'
   | 'italy'
-  | 'stockholm';
+  | 'stockholm'
+  | 'rhodes';

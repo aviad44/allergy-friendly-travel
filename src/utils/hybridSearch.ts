@@ -44,9 +44,18 @@ export class HybridHotelSearch {
   
   private isDestinationMatch(destinationKey: string, searchDestination: string): boolean {
     const searchLower = searchDestination.toLowerCase();
-    return destinationKey.toLowerCase().includes(searchLower) ||
-           destinationKey.replace('-', ' ').toLowerCase().includes(searchLower) ||
-           searchLower.includes(destinationKey.toLowerCase());
+    const keyLower = destinationKey.toLowerCase();
+    
+    // Enhanced matching for better results
+    return keyLower.includes(searchLower) ||
+           keyLower.replace('-', ' ').includes(searchLower) ||
+           searchLower.includes(keyLower) ||
+           // Match Greece destinations when searching for Greece, Greek islands, etc.
+           (searchLower.includes('greece') && (keyLower.includes('athens') || keyLower.includes('crete') || keyLower.includes('rhodes'))) ||
+           // Match Cyprus destinations
+           (searchLower.includes('cyprus') && keyLower.includes('cyprus')) ||
+           // Handle Rhodes specifically
+           (searchLower.includes('rhodes') && keyLower.includes('crete')); // Rhodes is close to Crete geographically
   }
   
   private isAllergyFriendly(hotel: Hotel, allergies: string): boolean {
