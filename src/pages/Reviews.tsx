@@ -26,14 +26,23 @@ const Reviews = () => {
       setIsLoading(true);
       setError(null);
       console.log("Fetching reviews from Supabase...");
+      console.log("Environment check - running on:", window.location.hostname);
+      console.log("User agent:", navigator.userAgent);
       
       const { data, error } = await supabase
         .from('reviews')
         .select('*')
         .order('created_at', { ascending: false });
 
+      console.log("Supabase response:", { data, error });
+
       if (error) {
-        console.error('Supabase error:', error);
+        console.error('Supabase error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
         throw error;
       }
       
@@ -54,12 +63,28 @@ const Reviews = () => {
       
       console.log("Processed reviews:", processedReviews);
       setReviews(processedReviews);
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-      setError("Failed to load reviews. Please try again later.");
+    } catch (error: any) {
+      console.error('Detailed error information:', {
+        name: error?.name,
+        message: error?.message,
+        stack: error?.stack,
+        cause: error?.cause,
+        isNetworkError: error?.message?.includes('fetch'),
+        fullError: error
+      });
+      
+      let errorMessage = "Failed to load reviews. Please try again later.";
+      
+      if (error?.message?.includes('fetch') || error?.message?.includes('network')) {
+        errorMessage = "Network connection issue. Please check your internet connection and try again.";
+      } else if (error?.code) {
+        errorMessage = `Database error (${error.code}): ${error.message}`;
+      }
+      
+      setError(errorMessage);
       toast({
         title: "Error loading reviews",
-        description: "Please check your connection and try again.",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
