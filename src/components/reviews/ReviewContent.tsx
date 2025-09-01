@@ -34,6 +34,25 @@ export const ReviewContent: React.FC<ReviewContentProps> = ({
   const [reviewText, setReviewText] = useState("");
   const { toast } = useToast();
 
+  const sendEmailNotification = async (reviewData: {
+    authorName: string;
+    reviewText: string;
+    rating: number;
+    destination?: string;
+    travelerType?: string;
+  }) => {
+    try {
+      console.log("Sending email notification for new review");
+      await supabase.functions.invoke('send-review-notification', {
+        body: reviewData
+      });
+      console.log("Email notification sent successfully");
+    } catch (error) {
+      console.error("Error sending email notification:", error);
+      // Don't show error to user - this is a background operation
+    }
+  };
+
   const handleSubmitReview = async () => {
     if (rating === 0) {
       toast({
@@ -67,6 +86,15 @@ export const ReviewContent: React.FC<ReviewContentProps> = ({
         .insert(newReview);
 
       if (error) throw error;
+
+      // Send email notification in background
+      sendEmailNotification({
+        authorName: "Guest",
+        reviewText: reviewText,
+        rating: rating,
+        destination: selectedDestination !== 'all' ? selectedDestination : undefined,
+        travelerType: selectedTravelerType !== 'all' ? selectedTravelerType : undefined
+      });
 
       setRating(0);
       setReviewText("");
