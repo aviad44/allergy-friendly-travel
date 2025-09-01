@@ -31,7 +31,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const emailResponse = await resend.emails.send({
       from: "Allergy Free Travel <onboarding@resend.dev>",
-      to: ["admin@allergyfreetravel.com"], // Replace with your actual admin email
+      to: ["aviad44@gmail.com"],
       subject: `ביקורת חדשה נוספה לאתר - ${rating} כוכבים`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl;">
