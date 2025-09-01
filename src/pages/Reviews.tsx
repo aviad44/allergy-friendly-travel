@@ -21,19 +21,26 @@ const Reviews = () => {
     fetchReviews();
   }, []);
 
-  const fetchReviews = async () => {
+  const fetchReviews = async (retryCount = 0) => {
     try {
       setIsLoading(true);
       setError(null);
-      console.log("Fetching reviews from Supabase...");
+      console.log(`Fetching reviews from Supabase... (attempt ${retryCount + 1})`);
       console.log("Environment check - running on:", window.location.hostname);
       console.log("User agent:", navigator.userAgent);
+      console.log("Connection type:", (navigator as any).connection?.effectiveType || 'unknown');
+      
+      // Add timeout for the request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
       
       const { data, error } = await supabase
         .from('reviews')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .abortSignal(controller.signal);
 
+      clearTimeout(timeoutId);
       console.log("Supabase response:", { data, error });
 
       if (error) {
@@ -53,12 +60,12 @@ const Reviews = () => {
       
       if (Array.isArray(data)) {
         processedReviews = data.map(review => ({
-            ...review,
-            author: review.author_name, // Map author_name to author
-            id: review.id, // Keep ID as a string
-            created_at: review.created_at || new Date().toISOString(),
-            rating: typeof review.rating === 'number' ? review.rating : 5
-          }));
+          ...review,
+          author: review.author_name, // Map author_name to author
+          id: review.id, // Keep ID as a string
+          created_at: review.created_at || new Date().toISOString(),
+          rating: typeof review.rating === 'number' ? review.rating : 5
+        }));
       }
       
       console.log("Processed reviews:", processedReviews);
@@ -69,13 +76,24 @@ const Reviews = () => {
         message: error?.message,
         stack: error?.stack,
         cause: error?.cause,
-        isNetworkError: error?.message?.includes('fetch'),
-        fullError: error
+        isNetworkError: error?.message?.includes('fetch') || error?.name === 'AbortError',
+        isTimeoutError: error?.name === 'AbortError',
+        fullError: error,
+        retryCount
       });
+      
+      // Retry logic for network errors
+      if ((error?.message?.includes('fetch') || error?.name === 'AbortError') && retryCount < 3) {
+        console.log(`Network error detected, retrying in ${(retryCount + 1) * 2} seconds...`);
+        setTimeout(() => {
+          fetchReviews(retryCount + 1);
+        }, (retryCount + 1) * 2000); // Exponential backoff: 2s, 4s, 6s
+        return;
+      }
       
       let errorMessage = "Failed to load reviews. Please try again later.";
       
-      if (error?.message?.includes('fetch') || error?.message?.includes('network')) {
+      if (error?.message?.includes('fetch') || error?.message?.includes('network') || error?.name === 'AbortError') {
         errorMessage = "Network connection issue. Please check your internet connection and try again.";
       } else if (error?.code) {
         errorMessage = `Database error (${error.code}): ${error.message}`;
