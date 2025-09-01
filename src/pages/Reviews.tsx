@@ -43,10 +43,7 @@ const Reviews = () => {
       let processedReviews: Review[] = [];
       
       if (Array.isArray(data)) {
-        // Filter out test/placeholder reviews
-        processedReviews = data
-          .filter(review => !["love this hotel", "loved this hotel", "Great hotel"].includes(review.text || ""))
-          .map(review => ({
+        processedReviews = data.map(review => ({
             ...review,
             author: review.author_name, // Map author_name to author
             id: review.id, // Keep ID as a string
