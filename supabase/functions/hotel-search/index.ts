@@ -141,28 +141,40 @@ Focus on hotels with proven track records, trained staff, and dedicated allergy 
     // Parse the JSON response from OpenAI
     let hotelResults;
     try {
+      // First try to parse directly
       hotelResults = JSON.parse(content);
     } catch (parseError) {
       console.error('❌ Failed to parse OpenAI JSON response:', parseError);
-      // Fallback: try to extract JSON from the content
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      
+      // Try to extract JSON from markdown code blocks
+      let cleanContent = content;
+      
+      // Remove markdown code block markers
+      cleanContent = cleanContent.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+      
+      // Try to find JSON object
+      const jsonMatch = cleanContent.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         try {
           hotelResults = JSON.parse(jsonMatch[0]);
+          console.log('✅ Successfully parsed JSON after cleaning markdown');
         } catch (secondParseError) {
           console.error('❌ Fallback JSON parse also failed:', secondParseError);
+          console.log('📝 Raw content that failed to parse:', content.substring(0, 500));
           return new Response(JSON.stringify({ 
             error: "Failed to parse hotel data",
-            raw_content: content
+            raw_content: content.substring(0, 500)
           }), {
             status: 500,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           });
         }
       } else {
+        console.error('❌ No valid JSON object found in response');
+        console.log('📝 Raw content:', content.substring(0, 500));
         return new Response(JSON.stringify({ 
           error: "No valid JSON found in response",
-          raw_content: content
+          raw_content: content.substring(0, 500)
         }), {
           status: 500,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
