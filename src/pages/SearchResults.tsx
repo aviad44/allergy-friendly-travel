@@ -129,9 +129,14 @@ const SearchResults = () => {
       try {
         console.log('🏨 Calling hotel-search function for:', { destination, allergies });
         
+        // Split allergies if it's a comma-separated string
+        const allergiesArray = allergies.includes(',') ? allergies.split(',').map(a => a.trim()) : [allergies];
+        
         const { data, error } = await supabase.functions.invoke('hotel-search', {
-          body: { destination, allergies: allergies.split(',') }
+          body: { destination, allergies: allergiesArray }
         });
+        
+        console.log('📡 Supabase function response:', { data, error });
         
         if (error) {
           console.error('❌ Hotel search error:', error);
@@ -143,8 +148,10 @@ const SearchResults = () => {
         
         if (data && data.results && data.results.length > 0) {
           setHotels(data.results);
+          console.log(`🏨 Found ${data.results.length} hotels`);
         } else {
           setError('No allergy-friendly hotels found for your search criteria.');
+          console.log('⚠️ No hotels found in response');
         }
       } catch (error) {
         console.error('💥 Search error:', error);
