@@ -8,6 +8,7 @@ import { destinationSuggestions, allergySuggestions } from "@/utils/searchSugges
 import { Autocomplete } from "./search/Autocomplete";
 import { MultiSelectAutocomplete } from "./search/MultiSelectAutocomplete";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { supabase } from "@/integrations/supabase/client";
 
 // Memoized components to prevent unnecessary re-renders
 const MemoizedAutocomplete = memo(Autocomplete);
@@ -76,17 +77,49 @@ export const SearchBar = () => {
     localStorage.setItem('recentSearch', JSON.stringify(searchData));
     setLastSearch(searchData);
     
-    // Show loading feedback immediately
-    toast({
-      title: "Searching...",
-      description: "Finding allergy-friendly hotels in " + destination,
-    });
-    
-    // Navigate to search results page with query parameters
-    const allergiesParam = allergies.join(',');
-    navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}`);
-    
-    setIsSearching(false);
+    try {
+      // Call the new hotel-search function directly
+      console.log('🔍 Searching for hotels with:', { destination, allergies });
+      
+      const { data, error } = await supabase.functions.invoke('hotel-search', {
+        body: { destination, allergies }
+      });
+      
+      if (error) {
+        console.error('❌ Hotel search error:', error);
+        toast({
+          title: "Search failed",
+          description: "Unable to search for hotels. Please try again.",
+          variant: "destructive"
+        });
+        setIsSearching(false);
+        return;
+      }
+      
+      console.log('✅ Hotel search results:', data);
+      
+      // Show success toast
+      toast({
+        title: "Hotels found!",
+        description: `Found ${data?.results?.length || 0} allergy-friendly hotels`,
+      });
+      
+      // Navigate to search results with the data
+      const allergiesParam = allergies.join(',');
+      navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}`, {
+        state: { searchResults: data }
+      });
+      
+    } catch (error) {
+      console.error('❌ Search error:', error);
+      toast({
+        title: "Search failed",
+        description: "An error occurred while searching. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSearching(false);
+    }
   }, [destination, allergies, navigate, toast]);
 
   return (

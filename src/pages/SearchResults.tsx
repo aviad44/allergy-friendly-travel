@@ -1,36 +1,107 @@
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { cleanResponseText } from "@/components/search/utils";
 
 import { HotelInfo } from "@/types/search";
-// Removed conflicting import - using unified parser through hybridSearch
 import { BackButton } from "@/components/search/BackButton";
 import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
-import { HotelList } from "@/components/search/hotel-list";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRef } from "react";
 
+// New hotel results display component
+interface HotelResultsProps {
+  hotels: any[];
+  destination: string;
+  allergies: string;
+}
+
+const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => {
+  if (!hotels || hotels.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <div className="text-gray-500 text-lg mb-2">⚠️ No safe options found for your filters.</div>
+        <p className="text-sm text-gray-400">Try adjusting your search criteria</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4 mt-6">
+      <h2 className="text-xl font-semibold text-gray-800">
+        Found {hotels.length} allergy-friendly hotels in {destination}
+      </h2>
+      
+      {hotels.map((hotel, index) => (
+        <div key={index} className="hotel-card bg-white border-radius-12 p-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <h3 className="text-lg font-semibold text-blue-800 mb-2">
+            {hotel.hotel_name || hotel.name} {hotel.city && `– ${hotel.city}`}{hotel.country && `, ${hotel.country}`}
+          </h3>
+          
+          {hotel.summary && (
+            <p className="text-gray-600 mb-3">{hotel.summary}</p>
+          )}
+          
+          {hotel.safety_score && (
+            <p className="mb-3">
+              <strong className="text-green-600">Safety score:</strong> 
+              <span className="ml-1 font-semibold">{hotel.safety_score}/10</span>
+            </p>
+          )}
+          
+          {hotel.reasons && hotel.reasons.length > 0 && (
+            <div className="mb-3">
+              <strong className="text-gray-700">Why it's safe:</strong>
+              <ul className="list-disc list-inside mt-1 space-y-1">
+                {hotel.reasons.map((reason: string, idx: number) => (
+                  <li key={idx} className="text-sm text-gray-600">{reason}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          {hotel.proof_points && hotel.proof_points.length > 0 && (
+            <div>
+              <strong className="text-gray-700">Proof:</strong>
+              <ul className="list-disc list-inside mt-1 space-y-1">
+                {hotel.proof_points.map((proof: any, idx: number) => (
+                  <li key={idx} className="text-sm">
+                    <a 
+                      href={proof.url} 
+                      target="_blank" 
+                      rel="nofollow noopener" 
+                      className="text-blue-600 hover:text-blue-800 underline"
+                    >
+                      {proof.title || proof.type || proof.url}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const requestTimeoutRef = useRef<number | null>(null);
   
   const destination = searchParams.get("destination") || "";
   const allergiesParam = searchParams.get("allergies") || "";
-  // Handle both comma-separated and single allergy formats for backward compatibility
-  const allergies = allergiesParam.includes(',') ? allergiesParam : allergiesParam;
+  const allergies = allergiesParam;
   
-  const [recommendation, setRecommendation] = useState(""); // reserved for future use
   const [isSearching, setIsSearching] = useState(false);
-  const [hotels, setHotels] = useState<HotelInfo[]>([]);
+  const [hotels, setHotels] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [searchStartTime, setSearchStartTime] = useState<number | null>(null);
   
   useEffect(() => {
     if (!destination || !allergies) {
@@ -43,55 +114,48 @@ const SearchResults = () => {
       return;
     }
     
+    // Check if we already have search results from navigation state
+    const existingResults = location.state?.searchResults;
+    if (existingResults && existingResults.results) {
+      console.log('✅ Using existing search results from navigation state');
+      setHotels(existingResults.results);
+      return;
+    }
+    
     const performSearch = async () => {
       setIsSearching(true);
       setError(null);
-      setSearchStartTime(Date.now());
       
       try {
-        console.log('🚀 Starting hybrid search for:', { destination, allergies });
+        console.log('🏨 Calling hotel-search function for:', { destination, allergies });
         
-        // שימוש במנוע החיפוש ההיברידי החדש
-        const { hybridSearch } = await import('@/utils/hybridSearch');
-        const results = await hybridSearch.search({ destination, allergies });
+        const { data, error } = await supabase.functions.invoke('hotel-search', {
+          body: { destination, allergies: allergies.split(',') }
+        });
         
-        if (searchStartTime) {
-          const searchTime = (Date.now() - searchStartTime) / 1000;
-          console.log(`Hybrid search completed in ${searchTime.toFixed(2)} seconds`);
+        if (error) {
+          console.error('❌ Hotel search error:', error);
+          setError('Failed to search for hotels. Please try again.');
+          return;
         }
         
-        console.log(`✅ Hybrid search found ${results.length} hotels`);
+        console.log('✅ Hotel search results:', data);
         
-        if (results && results.length > 0) {
-          setHotels(results);
+        if (data && data.results && data.results.length > 0) {
+          setHotels(data.results);
         } else {
-          setError('לא נמצאו מלונות מתאימים. אנא נסה חיפוש אחר.');
+          setError('No allergy-friendly hotels found for your search criteria.');
         }
       } catch (error) {
-        console.error('💥 Hybrid search error:', error);
-        setError('אירעה שגיאה בחיפוש. אנא נסה שוב מאוחר יותר.');
-        toast({
-          title: "Search Error",
-          description: "We couldn't complete your search. Please try again later.",
-          variant: "destructive"
-        });
+        console.error('💥 Search error:', error);
+        setError('An error occurred while searching. Please try again.');
       } finally {
         setIsSearching(false);
-        if (requestTimeoutRef.current) {
-          clearTimeout(requestTimeoutRef.current);
-        }
       }
     };
     
     performSearch();
-    
-    // Cleanup function to clear timeout if component unmounts
-    return () => {
-      if (requestTimeoutRef.current) {
-        clearTimeout(requestTimeoutRef.current);
-      }
-    };
-  }, [destination, allergies, toast, navigate]);
+  }, [destination, allergies, toast, navigate, location.state]);
 
 
   return (
@@ -113,11 +177,10 @@ const SearchResults = () => {
             {isSearching ? (
               <LoadingState />
             ) : (
-              <HotelList 
+              <HotelResults 
                 hotels={hotels} 
                 destination={destination} 
                 allergies={allergies}
-                error={error || undefined}
               />
             )}
           </div>
