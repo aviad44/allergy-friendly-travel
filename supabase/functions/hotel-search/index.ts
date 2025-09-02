@@ -64,7 +64,8 @@ CRITICAL REQUIREMENTS:
 - Rate safety from 1-10 based on actual allergy accommodation quality
 - Include specific reasons why each hotel is safe for the mentioned allergies
 - Include full address and direct booking links
-- Include authentic guest review quotes about allergy safety
+- ONLY include REAL, AUTHENTIC guest reviews from actual review platforms (TripAdvisor, Booking.com, Google Reviews, etc.)
+- If you cannot find real guest reviews about allergy safety, leave the guest_reviews array empty - DO NOT create fictional reviews
 
 Response format MUST be a JSON array of hotel objects with this exact structure:
 {
