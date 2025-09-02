@@ -132,25 +132,6 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
             </div>
           )}
           
-          {hotel.proof_points && hotel.proof_points.length > 0 && (
-            <div className="mb-4">
-              <strong className="text-gray-700 block mb-2">Proof & Resources:</strong>
-              <ul className="space-y-1">
-                {hotel.proof_points.map((proof: any, idx: number) => (
-                  <li key={idx} className="text-sm">
-                    <a 
-                      href={proof.url} 
-                      target="_blank" 
-                      rel="nofollow noopener" 
-                      className="text-blue-600 hover:text-blue-800 underline inline-flex items-center gap-1"
-                    >
-                      🔗 {proof.title || proof.type || proof.url}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
 
           {(hotel.booking_url || (hotel.hotel_name && hotel.city)) && (
             <div className="border-t pt-4">
