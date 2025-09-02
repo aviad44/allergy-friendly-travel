@@ -91,7 +91,28 @@ Response format MUST be a JSON array of hotel objects with this exact structure:
           },
           {
             role: "user", 
-            content: `Find 5-8 allergy-friendly hotels in ${destination} that safely accommodate guests with ${allergiesText} allergies. Focus on hotels with proven track records, trained staff, and dedicated allergy protocols.`
+            content: `Find 5-7 REAL allergy-friendly hotels in ${destination} that safely accommodate guests with ${allergiesText} allergies. 
+
+REQUIREMENTS:
+- Only real, existing hotels with verified names and addresses
+- Full street addresses with postal codes
+- Direct booking URLs (hotel websites or Booking.com/Expedia)
+- At least 1-2 authentic guest reviews about allergy safety
+- Specific allergy accommodation features
+
+For each hotel provide ALL required fields:
+- hotel_name: Real hotel name
+- city: City name
+- country: Country name  
+- address: Complete street address with postal code
+- summary: Brief allergy safety description
+- safety_score: Number 1-10
+- reasons: Array of 2-3 specific safety reasons
+- booking_url: Direct booking link (hotel website preferred)
+- guest_reviews: Array with text, author, source
+- proof_points: Array with type, title, url
+
+Focus on hotels with proven track records, trained staff, and dedicated allergy protocols.`
           }
         ],
         max_completion_tokens: 2000,

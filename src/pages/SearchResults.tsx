@@ -61,7 +61,7 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
               {hotel.country && `, ${hotel.country}`}
             </h3>
             
-            {hotel.address && (
+            {hotel.address ? (
               <div className="mb-3">
                 <p className="text-gray-600 text-sm mb-1">
                   <strong>Address:</strong> {hotel.address}
@@ -75,6 +75,20 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
                   📍 View on Google Maps
                 </a>
               </div>
+            ) : (
+              // Fallback if no address - create maps link with hotel name and city
+              (hotel.city || hotel.country) && (
+                <div className="mb-3">
+                  <a 
+                    href={createMapsUrl(hotel.hotel_name || hotel.name || '', `${hotel.city || ''} ${hotel.country || ''}`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1"
+                  >
+                    📍 View on Google Maps
+                  </a>
+                </div>
+              )
             )}
           </div>
           
@@ -138,10 +152,10 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
             </div>
           )}
 
-          {hotel.booking_url && (
+          {(hotel.booking_url || (hotel.hotel_name && hotel.city)) && (
             <div className="border-t pt-4">
               <a
-                href={createBookingUrl(hotel.booking_url)}
+                href={createBookingUrl(hotel.booking_url || `https://www.booking.com/searchresults.html?ss=${encodeURIComponent((hotel.hotel_name || '') + ' ' + (hotel.city || '') + ' ' + (hotel.country || ''))}`)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
