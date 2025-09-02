@@ -60,7 +60,6 @@ serve(async (req) => {
 CRITICAL REQUIREMENTS:
 - Only recommend REAL hotels that exist and have verified allergy-friendly services
 - Focus on hotels with dedicated allergy protocols, trained staff, and safe food preparation
-- Provide actionable proof points with real URLs when possible
 - Rate safety from 1-10 based on actual allergy accommodation quality
 - Include specific reasons why each hotel is safe for the mentioned allergies
 - Include full address and direct booking links
@@ -78,10 +77,6 @@ Response format MUST be a JSON array of hotel objects with this exact structure:
       "summary": "Brief description focusing on allergy safety",
       "safety_score": 8,
       "reasons": ["Specific reason 1", "Specific reason 2"],
-      "proof_points": [
-        {"type": "official_website", "title": "Hotel allergy policy", "url": "https://..."},
-        {"type": "certification", "title": "Allergy certification", "url": "https://..."}
-      ],
       "booking_url": "https://direct-booking-link.com",
       "guest_reviews": [
         {"text": "Authentic guest quote about allergy safety", "author": "Guest name", "source": "Review platform"}
@@ -111,7 +106,6 @@ For each hotel provide ALL required fields:
 - reasons: Array of 2-3 specific safety reasons
 - booking_url: Direct booking link (hotel website preferred)
 - guest_reviews: Array with text, author, source
-- proof_points: Array with type, title, url
 
 Focus on hotels with proven track records, trained staff, and dedicated allergy protocols.`
           }
