@@ -77,17 +77,12 @@ export const SearchBar = () => {
     localStorage.setItem('recentSearch', JSON.stringify(searchData));
     setLastSearch(searchData);
     
-    // Show loading feedback
-    toast({
-      title: "Searching...",
-      description: "Finding allergy-friendly hotels in " + destination,
-    });
-    
-    // Navigate to search results page with query parameters
+    // Navigate to search results page with query parameters and keep loading state
     const allergiesParam = allergies.join(',');
     navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}`);
     
-    setIsSearching(false);
+    // Keep isSearching true - will be handled by SearchResults page
+    // setIsSearching(false); - removed to maintain loading state
   }, [destination, allergies, navigate, toast]);
 
   return (

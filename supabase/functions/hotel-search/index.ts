@@ -63,6 +63,8 @@ CRITICAL REQUIREMENTS:
 - Provide actionable proof points with real URLs when possible
 - Rate safety from 1-10 based on actual allergy accommodation quality
 - Include specific reasons why each hotel is safe for the mentioned allergies
+- Include full address and direct booking links
+- Include authentic guest review quotes about allergy safety
 
 Response format MUST be a JSON array of hotel objects with this exact structure:
 {
@@ -70,13 +72,18 @@ Response format MUST be a JSON array of hotel objects with this exact structure:
     {
       "hotel_name": "Exact hotel name",
       "city": "City name",
-      "country": "Country name", 
+      "country": "Country name",
+      "address": "Full street address with postal code",
       "summary": "Brief description focusing on allergy safety",
       "safety_score": 8,
       "reasons": ["Specific reason 1", "Specific reason 2"],
       "proof_points": [
         {"type": "official_website", "title": "Hotel allergy policy", "url": "https://..."},
         {"type": "certification", "title": "Allergy certification", "url": "https://..."}
+      ],
+      "booking_url": "https://direct-booking-link.com",
+      "guest_reviews": [
+        {"text": "Authentic guest quote about allergy safety", "author": "Guest name", "source": "Review platform"}
       ]
     }
   ]

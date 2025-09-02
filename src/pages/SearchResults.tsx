@@ -29,57 +29,128 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
     );
   }
 
+  const createBookingUrl = (url: string) => {
+    if (!url) return '#';
+    const utmParams = new URLSearchParams({
+      utm_source: 'allergy-free-travel.com',
+      utm_medium: 'hotel_search',
+      utm_campaign: 'allergy_friendly_booking',
+      utm_content: 'hotel_recommendation'
+    });
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}${utmParams.toString()}`;
+  };
+
+  const createMapsUrl = (hotelName: string, address: string) => {
+    const query = encodeURIComponent(`${hotelName} ${address}`);
+    return `https://maps.google.com/?q=${query}`;
+  };
+
   return (
-    <div className="space-y-4 mt-6">
+    <div className="space-y-6 mt-6">
       <h2 className="text-xl font-semibold text-gray-800">
         Found {hotels.length} allergy-friendly hotels in {destination}
       </h2>
       
       {hotels.map((hotel, index) => (
-        <div key={index} className="hotel-card bg-white border-radius-12 p-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-lg font-semibold text-blue-800 mb-2">
-            {hotel.hotel_name || hotel.name} {hotel.city && `– ${hotel.city}`}{hotel.country && `, ${hotel.country}`}
-          </h3>
+        <div key={index} className="hotel-card bg-white rounded-lg p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-blue-800 mb-2">
+              {hotel.hotel_name || hotel.name}
+              {hotel.city && ` – ${hotel.city}`}
+              {hotel.country && `, ${hotel.country}`}
+            </h3>
+            
+            {hotel.address && (
+              <div className="mb-3">
+                <p className="text-gray-600 text-sm mb-1">
+                  <strong>Address:</strong> {hotel.address}
+                </p>
+                <a 
+                  href={createMapsUrl(hotel.hotel_name || hotel.name || '', hotel.address)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1"
+                >
+                  📍 View on Google Maps
+                </a>
+              </div>
+            )}
+          </div>
           
           {hotel.summary && (
             <p className="text-gray-600 mb-3">{hotel.summary}</p>
           )}
           
           {hotel.safety_score && (
-            <p className="mb-3">
-              <strong className="text-green-600">Safety score:</strong> 
-              <span className="ml-1 font-semibold">{hotel.safety_score}/10</span>
-            </p>
+            <div className="mb-3">
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-md text-sm font-medium">
+                Safety score: {hotel.safety_score}/10
+              </span>
+            </div>
           )}
           
           {hotel.reasons && hotel.reasons.length > 0 && (
-            <div className="mb-3">
-              <strong className="text-gray-700">Why it's safe:</strong>
-              <ul className="list-disc list-inside mt-1 space-y-1">
+            <div className="mb-4">
+              <strong className="text-gray-700 block mb-2">Why it's safe:</strong>
+              <ul className="list-disc list-inside space-y-1">
                 {hotel.reasons.map((reason: string, idx: number) => (
                   <li key={idx} className="text-sm text-gray-600">{reason}</li>
                 ))}
               </ul>
             </div>
           )}
+
+          {hotel.guest_reviews && hotel.guest_reviews.length > 0 && (
+            <div className="mb-4">
+              <strong className="text-gray-700 block mb-2">Guest Reviews:</strong>
+              {hotel.guest_reviews.map((review: any, idx: number) => (
+                <blockquote key={idx} className="border-l-4 border-blue-200 pl-4 mb-2 bg-blue-50 py-2 rounded-r">
+                  <p className="text-sm text-gray-700 italic">"{review.text}"</p>
+                  {review.author && (
+                    <cite className="text-xs text-gray-500 mt-1 block">
+                      – {review.author}
+                      {review.source && ` via ${review.source}`}
+                    </cite>
+                  )}
+                </blockquote>
+              ))}
+            </div>
+          )}
           
           {hotel.proof_points && hotel.proof_points.length > 0 && (
-            <div>
-              <strong className="text-gray-700">Proof:</strong>
-              <ul className="list-disc list-inside mt-1 space-y-1">
+            <div className="mb-4">
+              <strong className="text-gray-700 block mb-2">Proof & Resources:</strong>
+              <ul className="space-y-1">
                 {hotel.proof_points.map((proof: any, idx: number) => (
                   <li key={idx} className="text-sm">
                     <a 
                       href={proof.url} 
                       target="_blank" 
                       rel="nofollow noopener" 
-                      className="text-blue-600 hover:text-blue-800 underline"
+                      className="text-blue-600 hover:text-blue-800 underline inline-flex items-center gap-1"
                     >
-                      {proof.title || proof.type || proof.url}
+                      🔗 {proof.title || proof.type || proof.url}
                     </a>
                   </li>
                 ))}
               </ul>
+            </div>
+          )}
+
+          {hotel.booking_url && (
+            <div className="border-t pt-4">
+              <a
+                href={createBookingUrl(hotel.booking_url)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+              >
+                🏨 Book Now
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </div>
           )}
         </div>
