@@ -235,19 +235,9 @@ export class HybridHotelSearch {
       return combinedHotels.slice(0, 10);
     }
     
-    // אם באמת לא נמצא כלום
-    return [{
-      name: "לא נמצאו מלונות",
-      location: filters.destination,
-      description: `לא נמצאו מלונות מתאימים לאלרגיה ${filters.allergies} ב${filters.destination}. אנא נסה יעד אחר או צור איתנו קשר לעזרה אישית.`,
-      url: "",
-      rating: 0,
-      starRating: "",
-      allergyFeatures: [],
-      reviews: [],
-      allergyAmenities: [],
-      amenities: []
-    }];
+    // אם באמת לא נמצא כלום, נחזיר מערך ריק במקום מלון פיקטיבי
+    console.log('❌ No valid hotels found after filtering');
+    return [];
   }
   
   private async searchWithGPT(filters: SearchFilters): Promise<HotelInfo[]> {
@@ -354,13 +344,31 @@ export class HybridHotelSearch {
         console.log('- Check if markdown format is compatible with parser');
       }
       
-      // Convert to HotelInfo format if needed
+      // Convert to HotelInfo format and filter out invalid hotels
       console.log('🔄 CONVERTING TO HotelInfo FORMAT...');
-      const convertedHotels: HotelInfo[] = parsedHotels.map((hotel, index) => {
-        console.log(`🏨 Converting hotel ${index + 1}:`, hotel);
+      const convertedHotels: HotelInfo[] = parsedHotels
+        .filter(hotel => {
+          // Filter out hotels with invalid or placeholder names
+          const isValidHotel = hotel && 
+            hotel.name && 
+            hotel.name.trim().length > 0 &&
+            !hotel.name.toLowerCase().includes('hotel name not found') &&
+            !hotel.name.toLowerCase().includes('unknown hotel') &&
+            !hotel.name.toLowerCase().includes('not found') &&
+            !hotel.name.toLowerCase().includes('n/a') &&
+            hotel.name.length > 3;
+          
+          if (!isValidHotel) {
+            console.log(`❌ Filtering out invalid hotel: ${hotel?.name || 'No name'}`);
+          }
+          
+          return isValidHotel;
+        })
+        .map((hotel, index) => {
+        console.log(`🏨 Converting valid hotel ${index + 1}:`, hotel);
         const urlWithUtm = this.addUtmToUrl(hotel.url || '', filters.destination);
         return {
-          name: hotel.name || 'Unknown Hotel',
+          name: hotel.name,
           location: hotel.location || '',
           description: hotel.description || '',
           url: urlWithUtm,

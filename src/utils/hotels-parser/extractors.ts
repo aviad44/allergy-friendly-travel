@@ -32,14 +32,19 @@ export const extractHotelName: HotelNameExtractor = (entry: string): string => {
       // Remove any trailing content after dots or other separators
       name = name.replace(/\.{3,}.*$/, '').trim();
       
-      // Skip generic descriptions that aren't hotel names
-      if (name.toLowerCase().includes('these hotels') || 
-          name.toLowerCase().includes('this hotel') ||
-          name.toLowerCase().includes('provide various') ||
-          name.toLowerCase().includes('offer') ||
-          name.length < 3) {
-        continue;
-      }
+  // Skip generic descriptions, invalid names, or placeholder text
+  if (name.toLowerCase().includes('these hotels') || 
+      name.toLowerCase().includes('this hotel') ||
+      name.toLowerCase().includes('provide various') ||
+      name.toLowerCase().includes('offer') ||
+      name.toLowerCase().includes('hotel name not found') ||
+      name.toLowerCase().includes('not found') ||
+      name.toLowerCase().includes('n/a') ||
+      name.toLowerCase().includes('unknown') ||
+      name.toLowerCase().includes('no name') ||
+      name.length < 3) {
+    continue;
+  }
       
       return name;
     }
@@ -57,18 +62,23 @@ export const extractHotelName: HotelNameExtractor = (entry: string): string => {
     // Remove any trailing content after dots
     name = name.replace(/\.{3,}.*$/, '').trim();
     
-    // Skip generic descriptions
+    // Skip generic descriptions or invalid names
     if (name.toLowerCase().includes('these hotels') || 
         name.toLowerCase().includes('this hotel') ||
         name.toLowerCase().includes('provide various') ||
         name.toLowerCase().includes('offer') ||
+        name.toLowerCase().includes('hotel name not found') ||
+        name.toLowerCase().includes('not found') ||
+        name.toLowerCase().includes('n/a') ||
+        name.toLowerCase().includes('unknown') ||
+        name.toLowerCase().includes('no name') ||
         name.length < 3) {
-      return 'Hotel Name Not Found';
+      return null; // Return null instead of placeholder text
     }
     
     return name;
   }
-  return 'Hotel Name Not Found';
+  return null; // Return null when no valid name found
 };
 
 export const extractLocation: LocationExtractor = (entry: string): string => {

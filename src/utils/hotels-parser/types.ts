@@ -20,7 +20,7 @@ export interface ReviewInfo {
 }
 
 // Updated type definitions for our extractors with more specific return types
-export type HotelNameExtractor = (entry: string) => string;
+export type HotelNameExtractor = (entry: string) => string | null;
 export type LocationExtractor = (entry: string) => string;
 export type StarRatingExtractor = (entry: string) => string;
 export type AllergyFeaturesExtractor = (entry: string) => string[];

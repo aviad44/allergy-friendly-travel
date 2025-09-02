@@ -28,6 +28,13 @@ export const parseHotelsFromMarkdown = (markdownText: string): ParsedHotel[] => 
       .map(entry => {
         try {
           const name = extractHotelName(entry);
+          
+          // Skip entries with invalid hotel names
+          if (!name) {
+            console.log('Skipping entry with invalid hotel name');
+            return null;
+          }
+          
           const starRating = extractStarRating(entry);
           const rating = (starRating.match(/⭐/g) || []).length || parseFloat(starRating) || 0;
           const allergyFeatures = extractAllergyFeatures(entry);
