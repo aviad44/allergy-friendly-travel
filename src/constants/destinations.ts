@@ -26,5 +26,5 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   'airlines': "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80",
   'amsterdam': "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=1200&q=80",
   'italy': "/lovable-uploads/italy-restaurant-hero.jpg",
-  'madrid': "/src/assets/madrid-hero.jpg"
+  'madrid': "/lovable-uploads/madrid-hero.jpg"
 };

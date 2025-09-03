@@ -40,9 +40,9 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'airlines': 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80',
   'amsterdam': 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=1200&q=80',
   'italy': 'https://www.allergy-free-travel.com/lovable-uploads/italy-restaurant-hero.jpg',
-  'stockholm': '/src/assets/stockholm-hero.jpg',
+  'stockholm': '/lovable-uploads/stockholm-hero.jpg',
   'rhodes': 'https://images.unsplash.com/photo-1561435173-25c7db5fcee5?auto=format&fit=crop&w=1200&q=80',
-  'madrid': '/src/assets/madrid-hero.jpg'
+  'madrid': '/lovable-uploads/madrid-hero.jpg'
 };
 
 // Pre-load the default image for better performance
