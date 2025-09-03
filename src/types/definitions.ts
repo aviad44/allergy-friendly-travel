@@ -143,4 +143,5 @@ export type DestinationId =
   | 'amsterdam'
   | 'italy'
   | 'stockholm'
-  | 'rhodes';
+  | 'rhodes'
+  | 'madrid';

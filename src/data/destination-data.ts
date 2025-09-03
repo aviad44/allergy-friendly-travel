@@ -28,6 +28,7 @@ import { amsterdamContent } from './destination-amsterdam';
 import { italyContent } from './destination-italy';
 import { stockholmContent } from './destination-stockholm';
 import { rhodesContent } from './destination-rhodes';
+import { madridContent } from './destination-madrid';
 
 export const destinationData: Record<DestinationId, Partial<DestinationContent>> = {
   london: londonContent,
@@ -56,5 +57,6 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
   'amsterdam': amsterdamContent,
   'italy': italyContent,
   'stockholm': stockholmContent,
-  'rhodes': rhodesContent
+  'rhodes': rhodesContent,
+  'madrid': madridContent
 };
