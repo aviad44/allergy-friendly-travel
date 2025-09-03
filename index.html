@@ -24,9 +24,13 @@
     <link rel="preload" href="/src/index.css" as="style" />
     <link rel="preload" href="/src/main.tsx" as="script" crossorigin />
     
-    <!-- Preconnect for external resources to reduce request chains -->
+    <!-- Optimized font loading with only essential weights -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;600&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;600&display=swap" /></noscript>
+    
+    <!-- Preconnect for external resources -->
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     
@@ -99,8 +103,7 @@
     <!-- Robots directive -->
     <meta name="robots" content="index, follow" />
     
-    <!-- Load CSS with optimal priority -->
-    <link rel="stylesheet" href="/src/index.css" media="all" />
+    <!-- Critical CSS will be loaded via main.tsx for better control -->
     
     <!-- Structured Data - minimize and optimize -->
     <script type="application/ld+json">

@@ -42,38 +42,25 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Vendor chunks
-          'react-vendor': ['react', 'react-dom'],
-          'router': ['react-router-dom'],
+          // Core vendor chunk - only essential
+          'vendor': ['react', 'react-dom', 'react-router-dom'],
           
-          // UI components
-          'ui-components': [
-            '@/components/ui/button', 
-            '@/components/ui/card', 
-            '@/components/ui/toast'
+          // UI library chunk
+          'ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-sheet'
           ],
           
-          // Performance utilities
-          'performance': [
+          // Utilities chunk
+          'utils': [
             '@/utils/performanceOptimizer',
-            '@/hooks/usePerformanceOptimization'
-          ],
-          
-          // Image optimization
-          'image-optimization': [
             '@/utils/image-optimization',
-            '@/components/OptimizedImage'
-          ],
-          
-          // Destination pages (lazy loaded)
-          'destinations': [
-            '@/pages/destinations/Paris',
-            '@/pages/destinations/London',
-            '@/pages/destinations/Rome'
+            '@/lib/utils'
           ]
         },
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
+        chunkFileNames: 'assets/js/[name]-[hash:8].js',
+        entryFileNames: 'assets/js/[name]-[hash:8].js',
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name?.split('.');
           const ext = info?.[info.length - 1];
@@ -89,7 +76,7 @@ export default defineConfig(({ mode }) => ({
     },
     sourcemap: false,
     cssCodeSplit: true,
-    chunkSizeWarningLimit: 500, // More aggressive size limits
+    chunkSizeWarningLimit: 400, // Stricter size limits for mobile
     reportCompressedSize: false,
   },
   optimizeDeps: {
