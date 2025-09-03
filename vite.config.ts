@@ -48,8 +48,7 @@ export default defineConfig(({ mode }) => ({
           // UI library chunk
           'ui': [
             '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-sheet'
+            '@radix-ui/react-dropdown-menu'
           ],
           
           // Utilities chunk
