@@ -74,30 +74,112 @@ const AllergyTranslationCard = () => {
         </script>
       </Helmet>
       
-      <div className="container mx-auto px-4 py-12 max-w-5xl">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <h1 className="font-display text-3xl sm:text-4xl font-bold text-blue-800">Allergy Translation Card Generator</h1>
-          <SocialShareButton />
-        </div>
-        
-        <div className="mb-10">
-          <p className="text-lg text-blue-700 mb-4">
-            Traveling with food allergies? Create a free translation card to stay safe and understood anywhere in the world.
+      <main id="allergy-translation-card" className="container mx-auto px-4 py-6 max-w-5xl">
+        {/* HERO */}
+        <header className="text-center mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">
+            Create Your <strong>Allergy Translation Card</strong> (Free)
+          </h1>
+          <p className="text-gray-600 mb-4">
+            Choose your allergens, pick a language, and download or print a clear card you can show at restaurants when traveling.
           </p>
-          
-          <div className="bg-blue-50 p-4 rounded-lg mb-6 border border-blue-200">
-            <h2 className="text-lg font-semibold text-blue-800 mb-2">How it works:</h2>
-            <ol className="list-decimal pl-5 space-y-1">
-              <li>Select your food allergies from the common list or add custom ones</li>
-              <li>Choose your source and target languages</li>
-              <li>Preview your personalized translation card</li>
-              <li>Download or share your card for your travels</li>
-            </ol>
+          <div className="flex gap-3 justify-center flex-wrap">
+            <a href="#generator" className="px-4 py-3 bg-primary text-white rounded-lg text-decoration-none hover:bg-primary/90">
+              Generate my card
+            </a>
+            <a href="#examples" className="px-4 py-3 border border-primary text-primary rounded-lg text-decoration-none hover:bg-primary/10">
+              See examples
+            </a>
           </div>
-        </div>
-        
-        <AllergyCardGenerator />
-      </div>
+        </header>
+
+        {/* TRUST / BENEFITS */}
+        <section aria-label="Why use this card" className="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <h2 className="text-xl font-semibold mb-2">Clear, polite, and specific</h2>
+            <p className="text-gray-600">
+              Communicate your food allergies and cross-contact requirements in the local language. Keep a printed copy and a phone image.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold mb-2">Free and customizable</h2>
+            <p className="text-gray-600">
+              Select common allergens or add your own notes. Download as PDF/PNG and print at wallet size.
+            </p>
+          </div>
+        </section>
+
+        {/* GENERATOR */}
+        <section id="generator" className="border border-gray-200 rounded-lg p-4 mb-6">
+          <h2 className="text-xl font-semibold mb-4">Allergy Card Generator</h2>
+          <AllergyCardGenerator />
+        </section>
+
+        {/* EXAMPLE CARD */}
+        <section id="examples" className="mb-6">
+          <h2 className="text-xl font-semibold mb-2">Example: English Allergy Card (Preview)</h2>
+          <article className="border-2 border-dashed border-teal-200 p-3 rounded-lg bg-teal-50">
+            <p className="mb-2"><strong>Food Allergy Notice</strong></p>
+            <p className="mb-2">
+              I have a <strong>severe food allergy</strong> to: <em>milk, egg, wheat, peanut</em>. 
+              Please avoid <strong>cross-contact</strong>. Use clean utensils, pans, oil, and surfaces. 
+              Please confirm with the chef.
+            </p>
+            <p className="mb-0">Thank you for your help.</p>
+          </article>
+          <div className="mt-3">
+            <p className="text-sm text-gray-500">Wallet-size example (print & keep a phone photo).</p>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section id="faq" className="mb-6">
+          <h2 className="text-xl font-semibold mb-2">FAQ</h2>
+          <div className="space-y-2">
+            <details className="border border-gray-200 rounded p-3">
+              <summary className="cursor-pointer font-medium">Do restaurants accept these cards?</summary>
+              <p className="mt-2 text-gray-600">
+                Many do, and staff often appreciate the clarity. Still, always confirm verbally and ask to show the note to the chef.
+              </p>
+            </details>
+            <details className="border border-gray-200 rounded p-3">
+              <summary className="cursor-pointer font-medium">Will this prevent cross-contact?</summary>
+              <p className="mt-2 text-gray-600">
+                It helps you request it clearly, but kitchens differ. Ask for clean utensils, pans, oil, boards and surfaces.
+              </p>
+            </details>
+            <details className="border border-gray-200 rounded p-3">
+              <summary className="cursor-pointer font-medium">Is this medical advice?</summary>
+              <p className="mt-2 text-gray-600">
+                No. Carry your medications and follow your doctor's guidance.
+              </p>
+            </details>
+            <details className="border border-gray-200 rounded p-3">
+              <summary className="cursor-pointer font-medium">Can I add custom notes?</summary>
+              <p className="mt-2 text-gray-600">
+                Yes—add specific ingredients or preparation steps you need the kitchen to avoid.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        {/* RELATED RESOURCES */}
+        <nav aria-label="Related resources" className="mb-6">
+          <h3 className="text-lg font-semibold mb-2">Related resources</h3>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <a href="/destinations" className="text-primary hover:underline">
+                Allergy-friendly hotel guides by destination
+              </a>
+            </li>
+            <li>
+              <a href="/destinations" className="text-primary hover:underline">
+                Restaurant safety tips for travelers with food allergies
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </main>
     </>
   );
 };
