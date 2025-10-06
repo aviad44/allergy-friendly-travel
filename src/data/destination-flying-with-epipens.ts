@@ -105,6 +105,26 @@ export const flyingWithEpipensContent: Partial<DestinationContent> = {
       <p>Physician name licence contact details date and signature</p>
     </blockquote>
 
+    <section class="faq">
+      <h2>Frequently asked questions</h2>
+      <dl>
+        <dt>Can I carry EpiPens in my hand baggage in Europe</dt>
+        <dd>Yes. EpiPens and medically necessary medication belong in your cabin bag. Declare them at security.</dd>
+
+        <dt>Do I need a doctor's letter for syringes or liquid medicine over 100 ml</dt>
+        <dd>Carry a short letter or a prescription. In the United Kingdom it is required for liquid medicine above 100&nbsp;ml. Many airlines ask for documentation when you carry needles or syringes.</dd>
+
+        <dt>Can I bring a cooling gel pack for medication</dt>
+        <dd>Yes for medical purposes. Pack a small cooling element with the medicine in your cabin bag.</dd>
+
+        <dt>Why do rules differ between European airports</dt>
+        <dd>Airports are adopting new scanners at different speeds. Some already allow up to 2&nbsp;litres while others still use the 100&nbsp;ml limit. The medication exemption remains across Europe.</dd>
+
+        <dt>Which airlines in Europe allow EpiPens in the cabin</dt>
+        <dd>Major airlines in Europe permit EpiPens in hand baggage and many advise or require a doctor's letter or prescription in specific cases.</dd>
+      </dl>
+    </section>
+
     <h2>Bottom line</h2>
     <p>Carry your EpiPens and any essential medication in your cabin bag. Declare them at security. Bring proof that the treatment is yours and medically necessary. Expect some variation between airports as new scanners come online. If you follow these steps you will move through security quickly and focus on your trip.</p>
   `,
