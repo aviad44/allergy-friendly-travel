@@ -2,24 +2,24 @@ import { DestinationContent } from '@/types/definitions';
 import airplaneTakeoffImage from '@/assets/airplane-takeoff.jpg';
 
 export const flyingWithEpipensContent: Partial<DestinationContent> = {
-  title: "Europe Guide to Flying with EpiPens and Allergy Medication",
-  metaTitle: "Flying with EpiPens in Europe: Complete 2025 Guide | Airport & Airline Rules",
-  metaDescription: "Clear guidance for traveling in Europe with EpiPens and prescription medicines. What security rules allow, which airlines expect a doctor's letter, and how to pack for a smooth checkpoint. Updated September 2025.",
+  title: "Europe guide to flying with EpiPens and allergy medication",
+  metaTitle: "Europe guide to flying with EpiPens and allergy medication",
+  metaDescription: "Clear guidance for traveling in Europe with EpiPens and prescription medicines. What security rules allow, which airlines expect a doctor's letter, and how to pack for a smooth checkpoint. Updated 19 September 2025.",
   imageUrl: airplaneTakeoffImage,
   
   intro: {
-    title: "Flying with EpiPens and Allergy Medication in Europe",
+    title: "Europe guide to flying with EpiPens and allergy medication",
     description: "If you live with food allergies, keep your EpiPens and any essential medication in your cabin bag and be ready to show them at security. European airports permit medically necessary items when you declare them, and many airlines prefer that you carry a short doctor's letter or a copy of your prescription. That keeps your treatment within reach and speeds up screening.",
-    quickTip: "EpiPens in your cabin bag. Declare medication at security. Bring proof of medical need for any needles or for liquid medicine in containers larger than 100 ml."
+    quickTip: "Quick answer. EpiPens in your cabin bag. Declare medication at security. Bring proof of medical need for any needles or for liquid medicine in containers larger than 100 ml."
   },
 
   longDescription: `
-    <h2>What the Rules Look Like in Practice</h2>
+    <h2>What the rules look like in practice</h2>
 
     <h3>United Kingdom</h3>
     <p>Security permits essential medicines in containers larger than 100 ml in hand luggage, provided you carry proof that the medicine is prescribed to you when the container exceeds 100 ml.</p>
 
-    <h3>European Union Overview</h3>
+    <h3>European Union overview</h3>
     <p>The classic 100 ml liquid rule has been reintroduced at some airports while new scanners are standardised. The exemption for medication still applies across the bloc. Check your departure and connection airports before you fly.</p>
 
     <h3>Ireland</h3>
@@ -49,8 +49,8 @@ export const flyingWithEpipensContent: Partial<DestinationContent> = {
     <h3>Finland</h3>
     <p>Many airports still follow the 100 ml rule. Place larger containers in checked baggage unless they are permitted as medically necessary items at your specific checkpoint.</p>
 
-    <h2>What Airlines in Europe Say</h2>
-    <p>The common approach is simple: Medication and EpiPens belong in your cabin bag. Most airlines ask you to carry a short note or prescription when you travel with needles, syringes or liquid medication in a container larger than 100 ml.</p>
+    <h2>What airlines in Europe say</h2>
+    <p>The common approach is simple. Medication and EpiPens belong in your cabin bag. Most airlines ask you to carry a short note or prescription when you travel with needles, syringes or liquid medication in a container larger than 100 ml.</p>
 
     <h3>British Airways</h3>
     <p>You may take EpiPens and hypodermic needles in your hand baggage with a doctor's note or a prescription.</p>
@@ -85,77 +85,69 @@ export const flyingWithEpipensContent: Partial<DestinationContent> = {
     <h3>Ryanair</h3>
     <p>Standard quantities of auto injectors in your cabin bag are permitted. If you need to carry additional medical equipment beyond your baggage allowance, obtain the airline's medical equipment waiver in advance.</p>
 
-    <h2>The Smart Way to Pack and Pass Security</h2>
+    <h2>The smart way to pack and pass security</h2>
     <ul>
       <li>Place EpiPens and essential medicines in your cabin bag. Do not place them in checked baggage.</li>
       <li>Carry a short doctor's letter or a copy of your prescription in English. It is required in the United Kingdom for liquid medicine in containers larger than 100 ml and it speeds up screening across Europe.</li>
-      <li>At the checkpoint declare medication calmly and present it separately if requested. Use the phrase "medically necessary" if asked.</li>
+      <li>At the checkpoint declare medication calmly and present it separately if requested. Use the phrase medically necessary if asked.</li>
       <li>If your medicine needs to stay cold pack a small ice or gel pack and keep it with the medication.</li>
       <li>Check the exact rules for every airport on your route 48 to 72 hours before departure. Some airports already allow up to 2 litres while others still use the 100 ml rule.</li>
     </ul>
 
-    <h2>Doctor Letter Template</h2>
+    <h2>Doctor letter template</h2>
     <p>Keep it factual and brief. Print it or save it as a PDF on your phone.</p>
     <blockquote>
-      <p><strong>To whom it may concern</strong></p>
+      <p>To whom it may concern</p>
       <p>Patient name and date of birth</p>
       <p>Diagnosis indicating risk of anaphylaxis</p>
       <p>Medication required on person at all times including during the flight</p>
-      <p>Quantity for the trip (for example: two adrenaline auto injectors and an antihistamine syrup of 150 ml)</p>
-      <p>Physician name, licence, contact details, date and signature</p>
+      <p>Quantity for the trip for example two adrenaline auto injectors and an antihistamine syrup of 150 ml</p>
+      <p>Physician name licence contact details date and signature</p>
     </blockquote>
 
-    <h2>Bottom Line</h2>
+    <h2>Frequently asked questions</h2>
+    
+    <h3>Can I carry EpiPens in my hand baggage in Europe</h3>
+    <p>Yes. EpiPens and medically necessary medication belong in your cabin bag. Declare them at security.</p>
+
+    <h3>Do I need a doctor's letter for syringes or liquid medicine over 100 ml</h3>
+    <p>Carry a short letter or a prescription. In the United Kingdom it is required for liquid medicine above 100 ml. Many airlines ask for documentation when you carry needles or syringes.</p>
+
+    <h3>Can I bring a cooling gel pack for medication</h3>
+    <p>Yes for medical purposes. Pack a small cooling element with the medicine in your cabin bag.</p>
+
+    <h3>Why do rules differ between European airports</h3>
+    <p>Airports are adopting new scanners at different speeds. Some already allow up to 2 litres while others still use the 100 ml limit. The medication exemption remains across Europe.</p>
+
+    <h3>Which airlines in Europe allow EpiPens in the cabin</h3>
+    <p>Major airlines in Europe permit EpiPens in hand baggage and many advise or require a doctor's letter or prescription in specific cases.</p>
+
+    <h2>Bottom line</h2>
     <p>Carry your EpiPens and any essential medication in your cabin bag. Declare them at security. Bring proof that the treatment is yours and medically necessary. Expect some variation between airports as new scanners come online. If you follow these steps you will move through security quickly and focus on your trip.</p>
   `,
 
   faqs: [
     {
-      question: "Can I carry EpiPens in my hand baggage in Europe?",
+      question: "Can I carry EpiPens in my hand baggage in Europe",
       answer: "Yes. EpiPens and medically necessary medication belong in your cabin bag. Airports allow them when you declare them at security, including liquid medicine that exceeds 100 ml when it is needed during the journey."
     },
     {
-      question: "Do I need a doctor's letter for syringes or liquid medicine over 100 ml?",
+      question: "Do I need a doctor's letter for syringes or liquid medicine over 100 ml",
       answer: "A short letter or prescription is strongly recommended across Europe. In the United Kingdom it is required for liquid medicine in a container that is larger than 100 ml. Many airlines ask for a note when you carry needles or syringes."
     },
     {
-      question: "Can I bring an ice or gel pack to keep medicine cold?",
+      question: "Can I bring an ice or gel pack to keep medicine cold",
       answer: "In many European countries this is allowed for medical purposes. Pack a small cooling element and keep it with your medication in your cabin bag."
     },
     {
-      question: "Why do rules differ between European airports?",
+      question: "Why do rules differ between European airports",
       answer: "Airports are rolling out new scanners at different speeds. Some already allow liquids up to 2 litres while others still apply the 100 ml rule. The exemption for medication remains, so check the exact rules for every airport on your route before you fly."
     },
     {
-      question: "Which European airlines allow EpiPens in the cabin?",
+      question: "Which European airlines allow EpiPens in the cabin",
       answer: "Major airlines in Europe permit EpiPens in hand baggage. Many advise or require a doctor's letter or a prescription when you carry needles, syringes or liquid medicine in a container larger than 100 ml."
     }
   ],
 
-  travelTips: [
-    {
-      title: "Keep Medication in Cabin Bag",
-      description: "Never pack EpiPens or essential medication in checked baggage. They must be accessible during the flight."
-    },
-    {
-      title: "Carry Documentation",
-      description: "Always have a doctor's letter or prescription in English, especially for liquid medicine over 100 ml or syringes."
-    },
-    {
-      title: "Declare at Security",
-      description: "Inform security staff about your medication and present it separately when requested."
-    },
-    {
-      title: "Check Airport Rules",
-      description: "Verify the specific rules for each airport on your route 48-72 hours before departure, as regulations vary."
-    },
-    {
-      title: "Pack Cooling Elements",
-      description: "If medication requires refrigeration, pack a small ice or gel pack with your medicine."
-    },
-    {
-      title: "Know Airline Policies",
-      description: "Contact your airline in advance if you need to carry extra medical equipment beyond standard baggage allowance."
-    }
-  ]
+  travelTips: []
 };
