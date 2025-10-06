@@ -51,6 +51,7 @@ import Amsterdam from "./pages/destinations/Amsterdam";
 import Italy from "./pages/destinations/Italy";
 import Stockholm from "./pages/destinations/Stockholm";
 import Madrid from "./pages/destinations/Madrid";
+import FlyingWithEpipens from "./pages/destinations/FlyingWithEpipens";
 // import MenuScanner from "./pages/MenuScanner"; // Temporarily disabled
 
 const ScrollToTop = () => {
@@ -126,6 +127,7 @@ const AppContent = () => {
           <Route path="/destinations/italy" element={<Italy />} />
           <Route path="/destinations/stockholm" element={<Stockholm />} />
           <Route path="/destinations/madrid" element={<Madrid />} />
+          <Route path="/destinations/flying-with-epipens" element={<FlyingWithEpipens />} />
           {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}
           <Route path="/destinations/:destinationId" element={<NotFound />} />
         </Route>

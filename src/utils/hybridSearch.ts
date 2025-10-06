@@ -27,9 +27,14 @@ export class HybridHotelSearch {
         console.log(`✅ Destination ${key} matches search criteria`);
         destinationContent.hotels.forEach(hotel => {
           if (this.isAllergyFriendly(hotel, filters.allergies)) {
-            const intro = Array.isArray(destinationContent.intro) ? 
-              destinationContent.intro.join(' ') : 
-              destinationContent.intro || '';
+            let intro = '';
+            if (typeof destinationContent.intro === 'object' && !Array.isArray(destinationContent.intro)) {
+              intro = destinationContent.intro.description || destinationContent.intro.title || '';
+            } else {
+              intro = Array.isArray(destinationContent.intro) ? 
+                destinationContent.intro.join(' ') : 
+                destinationContent.intro || '';
+            }
             matchingHotels.push(this.convertToHotelInfo(hotel, intro, filters.destination));
           }
         });

@@ -76,7 +76,12 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   // Safely prepare intro content
   let introContent: string | string[] = "Find safe and comfortable accommodations for travelers with dietary restrictions.";
   if (content?.intro) {
-    introContent = content.intro;
+    if (typeof content.intro === 'object' && !Array.isArray(content.intro)) {
+      // Handle the new object format with title/description/quickTip
+      introContent = content.intro.description || content.intro.title || "Find safe and comfortable accommodations for travelers with dietary restrictions.";
+    } else {
+      introContent = content.intro;
+    }
   }
 
   if (!destination) {

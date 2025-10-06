@@ -68,12 +68,23 @@ export interface LanguageTable {
 }
 
 export interface DestinationContent {
-  intro: string | string[];
+  title?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  intro: string | string[] | {
+    title?: string;
+    description?: string;
+    quickTip?: string;
+  };
   imageUrl?: string;
   hotels?: Hotel[];
   restaurants?: Restaurant[];
   faqs?: FAQ[];
   tips?: TravelTip[];
+  travelTips?: Array<{
+    title: string;
+    description: string;
+  }>;
   languageTable?: LanguageTable;
   longDescription?: string;
   highlights?: string[];
@@ -144,4 +155,5 @@ export type DestinationId =
   | 'italy'
   | 'stockholm'
   | 'rhodes'
-  | 'madrid';
+  | 'madrid'
+  | 'flying-with-epipens';

@@ -191,5 +191,12 @@ export const destinations: Destination[] = [
     country: 'Spain',
     description: 'Top 10 Allergy-Friendly Hotels in Madrid',
     subtitle: 'Safe Accommodations for Food Allergies'
+  },
+  {
+    id: 'flying-with-epipens',
+    name: 'Flying with EpiPens',
+    country: 'Europe',
+    description: 'Europe Guide to Flying with EpiPens and Allergy Medication',
+    subtitle: 'Complete 2025 Guide to Airport & Airline Rules'
   }
 ];
