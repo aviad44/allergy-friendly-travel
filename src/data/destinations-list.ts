@@ -183,7 +183,8 @@ export const destinations: Destination[] = [
     name: 'Stockholm',
     country: 'Sweden',
     description: 'Allergy-Friendly Hotels & Gluten-Free Restaurants in Stockholm',
-    subtitle: 'Safe Accommodations and Dining for Food Allergies in Sweden\'s Capital'
+    subtitle: 'Safe Accommodations and Dining for Food Allergies in Sweden\'s Capital',
+    image: '/lovable-uploads/stockholm-hero.jpg'
   },
   {
     id: 'madrid',
