@@ -28,5 +28,6 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   'italy': "/lovable-uploads/italy-restaurant-hero.jpg",
   'madrid': "/lovable-uploads/madrid-hero.jpg",
   'stockholm': "/lovable-uploads/stockholm-hero.jpg",
-  'flying-with-epipens': "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80"
+  'flying-with-epipens': "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80",
+  'flying-with-epipens-north-america': "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80"
 };
