@@ -38,7 +38,8 @@ export const DestinationCard = ({
         'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
         'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
         'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
-        'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" // Update Athens to use the new luxury hotel lobby image
+        'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png", // Update Athens to use the new luxury hotel lobby image
+        'stockholm': "/lovable-uploads/stockholm-hero.jpg"
       };
       
       // ALWAYS check if the ID directly matches our critical destinations first
@@ -111,7 +112,8 @@ export const DestinationCard = ({
                 'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
                 'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
                 'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
-                'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png" // Updated Athens fallback 
+                'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png", // Updated Athens fallback
+                'stockholm': "/lovable-uploads/stockholm-hero.jpg"
               };
               
               let fallbackSrc;
