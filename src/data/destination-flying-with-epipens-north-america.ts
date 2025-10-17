@@ -30,50 +30,28 @@ export const flyingWithEpipensNorthAmericaContent: Partial<DestinationContent> =
     <p>The common approach is straightforward. Keep medication and EpiPens in your cabin bag and carry a short note or a prescription when you travel with needles or syringes.</p>
 
     <h3>United States airlines</h3>
-    
-    <h4>American Airlines</h4>
-    <p>The international travel guidance tells customers to carry medical documentation for medicines and a doctor letter if you need to use a syringe during flight.</p>
-    
-    <h4>United Airlines</h4>
-    <p>The accessibility page states you may bring medical syringes in your carry on and recommends carrying proof of prescription in case security asks.</p>
-    
-    <h4>Delta Air Lines</h4>
-    <p>The allergy page advises customers with peanut allergy to bring appropriate medication on board for example an EpiPen.</p>
-    
-    <h4>Southwest Airlines</h4>
-    <p>The help center explains that needles and syringes used to inject medication are allowed past security when packed with the medication for which they are needed.</p>
-    
-    <h4>Alaska Airlines</h4>
-    <p>The carry on exceptions page lists prescription medication and devices needed to administer them for example syringes and auto injections as accepted within the rules.</p>
-    
-    <h4>JetBlue</h4>
-    <p>The medication help page says you may bring associated supplies for example syringes pens infusers and saline solution and that medication should remain with you in your hand baggage.</p>
+    <p><strong>American Airlines.</strong> The international travel guidance tells customers to carry medical documentation for medicines and a doctor letter if you need to use a syringe during flight.</p>
+    <p><strong>United Airlines.</strong> The accessibility page states you may bring medical syringes in your carry on and recommends carrying proof of prescription in case security asks.</p>
+    <p><strong>Delta Air Lines.</strong> The allergy page advises customers with peanut allergy to bring appropriate medication on board for example an EpiPen.</p>
+    <p><strong>Southwest Airlines.</strong> The help center explains that needles and syringes used to inject medication are allowed past security when packed with the medication for which they are needed.</p>
+    <p><strong>Alaska Airlines.</strong> The carry on exceptions page lists prescription medication and devices needed to administer them for example syringes and auto injections as accepted within the rules.</p>
+    <p><strong>JetBlue.</strong> The medication help page says you may bring associated supplies for example syringes pens infusers and saline solution and that medication should remain with you in your hand baggage.</p>
 
     <h3>Canadian airlines</h3>
-    
-    <h4>Air Canada</h4>
-    <p>The carry on page instructs you to keep prescription medication with you and explicitly permits syringes or hypodermic needles for personal medical use for example EpiPen when the needle guards are intact and the items are accompanied by the prescription medication with a printed label.</p>
-    
-    <h4>WestJet</h4>
-    <p>The medical equipment and medication page accepts needles and syringes in your personal carry on item only when they are required to administer medication and accompanied by properly labelled medication. The airline also recommends carrying an epinephrine auto injector if prescribed for anaphylaxis.</p>
+    <p><strong>Air Canada.</strong> The carry on page instructs you to keep prescription medication with you and explicitly permits syringes or hypodermic needles for personal medical use for example EpiPen when the needle guards are intact and the items are accompanied by the prescription medication with a printed label.</p>
+    <p><strong>WestJet.</strong> The medical equipment and medication page accepts needles and syringes in your personal carry on item only when they are required to administer medication and accompanied by properly labelled medication. The airline also recommends carrying an epinephrine auto injector if prescribed for anaphylaxis.</p>
 
     <h3>Mexican airlines</h3>
-    
-    <h4>Aeroméxico</h4>
-    <p>Follows the general liquid rules and refers customers to security restrictions on the baggage pages so keep medicines in hand baggage and carry a prescription if you need liquids for the flight.</p>
-    
-    <h4>Volaris</h4>
-    <p>Advises travelers to carry medicines in hand baggage with a prescription and to take only reasonable quantities for the trip. The medical assistance page also notes that crew cannot administer medication.</p>
-    
-    <h4>Viva Aerobus</h4>
-    <p>States that liquid medicines in containers larger than 100 ml must be accompanied by medical proof.</p>
+    <p><strong>Aeroméxico.</strong> Follows the general liquid rules and refers customers to security restrictions on the baggage pages so keep medicines in hand baggage and carry a prescription if you need liquids for the flight.</p>
+    <p><strong>Volaris.</strong> Advises travelers to carry medicines in hand baggage with a prescription and to take only reasonable quantities for the trip. The medical assistance page also notes that crew cannot administer medication.</p>
+    <p><strong>Viva Aerobus.</strong> States that liquid medicines in containers larger than 100 ml must be accompanied by medical proof.</p>
 
     <h2>The smart way to pack and pass security</h2>
     <ul>
       <li>Place EpiPens and essential medicines in your cabin bag. Do not check them.</li>
       <li>Carry a short doctor letter or a copy of your prescription in English or Spanish as needed. A pharmacy label on the medicine helps at screening.</li>
-      <li>At the checkpoint declare medication calmly and present it separately if requested. Use the phrase medically necessary if asked.</li>
-      <li>If your medicine needs to stay cold pack a small ice or gel pack and keep it with the medication.</li>
+      <li>At the checkpoint declare medication calmly and present it separately if requested. Use the phrase "medically necessary" if asked.</li>
+      <li>If your medicine needs to stay cold, pack a small ice or gel pack and keep it with the medication.</li>
       <li>Check the exact rules for every airport on your route 48 to 72 hours before departure. Screening procedures can differ between airports.</li>
     </ul>
 
