@@ -148,7 +148,8 @@ export const destinations: Destination[] = [
     name: 'Gluten-Free Europe',
     country: 'Europe',
     description: 'Top 5 Gluten-Free Travel Destinations in Europe (2025)',
-    subtitle: 'Where to Travel in Europe If You\'re Gluten-Free or Have Celiac Disease'
+    subtitle: 'Where to Travel in Europe If You\'re Gluten-Free or Have Celiac Disease',
+    image: '/lovable-uploads/european-restaurant-diners.jpg'
   },
   {
     id: 'athens',

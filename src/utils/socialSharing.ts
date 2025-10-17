@@ -34,7 +34,7 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'toronto': 'https://www.allergy-free-travel.com/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png',
   'ayia-napa': 'https://www.allergy-free-travel.com/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png',
   'tuscany': 'https://www.allergy-free-travel.com/lovable-uploads/ea1edce9-b144-449c-a4c7-0e3f02c54be9.png',
-  'gluten-free-europe': 'https://www.allergy-free-travel.com/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png',
+  'gluten-free-europe': 'https://www.allergy-free-travel.com/lovable-uploads/european-restaurant-diners.jpg',
   'athens': 'https://www.allergy-free-travel.com/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png',
   'eilat': 'https://www.allergy-free-travel.com/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png',
   'airlines': 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80',
