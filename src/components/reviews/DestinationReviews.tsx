@@ -32,6 +32,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const isAthens = destinationId === 'athens' as DestinationId;
   const isEilat = destinationId === 'eilat' as DestinationId;
   const isStockholm = destinationId === 'stockholm' as DestinationId;
+  const isFlyingWithEpipensNA = destinationId === 'flying-with-epipens-north-america' as DestinationId;
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   
   // Enhanced debug logging to ensure data is loaded
@@ -126,7 +127,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                 restaurants={content?.restaurants} 
                 destinationName={destination.name}
               />
-            ) : (isEilat || destinationId === 'flying-with-epipens') ? (
+            ) : (isEilat || destinationId === 'flying-with-epipens' || isFlyingWithEpipensNA) ? (
               <LongDescriptionSection 
                 longDescription={content?.longDescription} 
                 hotel={content?.hotels && content.hotels.length > 0 ? content.hotels[0] : undefined}
