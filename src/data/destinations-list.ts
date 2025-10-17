@@ -198,6 +198,7 @@ export const destinations: Destination[] = [
     name: 'Flying with EpiPens',
     country: 'Europe',
     description: 'Europe Guide to Flying with EpiPens and Allergy Medication',
-    subtitle: 'Complete 2025 Guide to Airport & Airline Rules'
+    subtitle: 'Complete 2025 Guide to Airport & Airline Rules',
+    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80'
   }
 ];
