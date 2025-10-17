@@ -1,11 +1,11 @@
 import { DestinationContent } from '@/types/definitions';
-import airplaneTakeoffImage from '@/assets/airplane-takeoff.jpg';
+import europeanAirportTerminal from '@/assets/european-airport-terminal.jpg';
 
 export const flyingWithEpipensContent: Partial<DestinationContent> = {
   title: "Europe guide to flying with EpiPens and allergy medication",
   metaTitle: "Europe guide to flying with EpiPens and allergy medication",
   metaDescription: "Clear guidance for traveling in Europe with EpiPens and prescription medicines. What security rules allow, which airlines expect a doctor's letter, and how to pack for a smooth checkpoint. Updated 19 September 2025.",
-  imageUrl: airplaneTakeoffImage,
+  imageUrl: europeanAirportTerminal,
   
   intro: {
     title: "Europe guide to flying with EpiPens and allergy medication",

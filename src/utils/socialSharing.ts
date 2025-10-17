@@ -43,7 +43,7 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'stockholm': '/lovable-uploads/stockholm-hero.jpg',
   'rhodes': 'https://images.unsplash.com/photo-1561435173-25c7db5fcee5?auto=format&fit=crop&w=1200&q=80',
   'madrid': '/lovable-uploads/madrid-hero.jpg',
-  'flying-with-epipens': 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80',
+  'flying-with-epipens': '/src/assets/european-airport-terminal.jpg',
   'flying-with-epipens-north-america': '/src/assets/us-airport-terminal.jpg'
 };
 
