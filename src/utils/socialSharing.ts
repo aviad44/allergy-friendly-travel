@@ -44,7 +44,7 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'rhodes': 'https://images.unsplash.com/photo-1561435173-25c7db5fcee5?auto=format&fit=crop&w=1200&q=80',
   'madrid': '/lovable-uploads/madrid-hero.jpg',
   'flying-with-epipens': 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80',
-  'flying-with-epipens-north-america': 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80'
+  'flying-with-epipens-north-america': '/src/assets/us-airport-terminal.jpg'
 };
 
 // Pre-load the default image for better performance
