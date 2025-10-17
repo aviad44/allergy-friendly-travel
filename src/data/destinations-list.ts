@@ -199,7 +199,7 @@ export const destinations: Destination[] = [
     country: 'Europe',
     description: 'Europe Guide to Flying with EpiPens and Allergy Medication',
     subtitle: 'Complete 2025 Guide to Airport & Airline Rules',
-    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80'
+    image: '/lovable-uploads/airport-security-queue.jpg'
   },
   {
     id: 'flying-with-epipens-north-america',
@@ -207,6 +207,6 @@ export const destinations: Destination[] = [
     country: 'North America',
     description: 'North America Guide to Flying with EpiPens and Allergy Medication',
     subtitle: 'Complete 2025 Guide to TSA, CATSA & Airport Rules',
-    image: '/src/assets/us-airport-terminal.jpg'
+    image: '/lovable-uploads/us-airport-terminal.jpg'
   }
 ];

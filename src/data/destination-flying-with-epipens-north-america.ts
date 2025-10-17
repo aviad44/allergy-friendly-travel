@@ -1,12 +1,11 @@
 import { DestinationContent } from '@/types/definitions';
-import usAirportTerminal from '@/assets/us-airport-terminal.jpg';
 
 // North America guide for flying with EpiPens and allergy medication
 export const flyingWithEpipensNorthAmericaContent: Partial<DestinationContent> = {
   title: "North America guide to flying with EpiPens and allergy medication",
   metaTitle: "North America guide to flying with EpiPens and allergy medication",
   metaDescription: "Clear guidance for traveling in the United States, Canada and Mexico with EpiPens and prescription medicines. Airport screening rules, airline expectations, and a practical packing checklist. Updated 21 September 2025.",
-  imageUrl: usAirportTerminal,
+  imageUrl: "/lovable-uploads/us-airport-terminal.jpg",
   
   intro: {
     title: "North America guide to flying with EpiPens and allergy medication",
