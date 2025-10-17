@@ -28,6 +28,6 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   'italy': "/lovable-uploads/italy-restaurant-hero.jpg",
   'madrid': "/lovable-uploads/madrid-hero.jpg",
   'stockholm': "/lovable-uploads/stockholm-hero.jpg",
-  'flying-with-epipens': "/src/assets/european-airport-terminal.jpg",
+  'flying-with-epipens': "/src/assets/airport-security-queue.jpg",
   'flying-with-epipens-north-america': "/src/assets/us-airport-terminal.jpg"
 };
