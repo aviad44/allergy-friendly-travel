@@ -1,6 +1,7 @@
 import { DestinationContent } from '@/types/definitions';
 import airplaneTakeoffImage from '@/assets/airplane-takeoff.jpg';
 
+// North America guide for flying with EpiPens and allergy medication
 export const flyingWithEpipensNorthAmericaContent: Partial<DestinationContent> = {
   title: "North America guide to flying with EpiPens and allergy medication",
   metaTitle: "North America guide to flying with EpiPens and allergy medication",
