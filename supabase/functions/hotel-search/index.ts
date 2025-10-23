@@ -176,8 +176,9 @@ Focus on hotels with proven track records, trained staff, and dedicated allergy 
       }
     }
 
-    // Validate and filter results
-    const validResults = (hotelResults.results || []).filter(hotel => 
+    // Validate and filter results - handle both array and object with results property
+    const hotelsArray = Array.isArray(hotelResults) ? hotelResults : (hotelResults.results || []);
+    const validResults = hotelsArray.filter(hotel => 
       hotel.hotel_name && 
       hotel.hotel_name.trim().length > 3 &&
       !hotel.hotel_name.toLowerCase().includes('not found') &&
@@ -185,7 +186,7 @@ Focus on hotels with proven track records, trained staff, and dedicated allergy 
       !hotel.hotel_name.toLowerCase().includes('unknown')
     );
 
-    console.log(`✅ Returning ${validResults.length} valid hotels`);
+    console.log(`✅ Returning ${validResults.length} valid hotels out of ${hotelsArray.length} total`);
 
     return new Response(JSON.stringify({ 
       results: validResults,
