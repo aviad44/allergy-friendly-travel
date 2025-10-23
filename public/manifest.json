@@ -1,0 +1,25 @@
+{
+  "name": "Allergy-Free Travel",
+  "short_name": "AllergyTravel",
+  "description": "Find allergy-friendly hotels and restaurants worldwide",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#005566",
+  "icons": [
+    {
+      "src": "/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "lifestyle", "health"],
+  "orientation": "portrait-primary"
+}

@@ -86,7 +86,7 @@ export const DestinationCard = ({
             </div>
           )}
           
-          {/* Main image */}
+          {/* Main image with lazy loading */}
           <img
             src={imgSrc}
             alt={id === 'cyprus' 
@@ -112,7 +112,7 @@ export const DestinationCard = ({
                 'turkey': "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
                 'toronto': "/lovable-uploads/e6eaaffe-010b-46ee-859c-aacff4659ad1.png",
                 'barcelona': "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
-                'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png", // Updated Athens fallback
+                'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png",
                 'stockholm': "/lovable-uploads/stockholm-hero.jpg"
               };
               
@@ -132,7 +132,8 @@ export const DestinationCard = ({
                 setImageLoaded(true);
               }, 100);
             }}
-            loading="eager" // Use eager for important above-the-fold images
+            loading="lazy"
+            decoding="async"
             width="400"
             height="225"
           />

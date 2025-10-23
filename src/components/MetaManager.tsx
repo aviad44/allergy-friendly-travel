@@ -223,6 +223,15 @@ const computed: RouteMeta = useMemo(() => {
 
       {/* Direct image link for crawlers */}
       <link rel="image_src" href={absoluteImage} />
+      
+      {/* Additional SEO meta tags */}
+      <meta name="author" content="Allergy-Free Travel Team" />
+      <meta name="publisher" content="Allergy-Free Travel" />
+      
+      {/* Mobile optimization */}
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      <meta name="apple-mobile-web-app-title" content="Allergy-Free Travel" />
 
       {/* JSON-LD */}
       <script type="application/ld+json">{JSON.stringify(orgJson)}</script>

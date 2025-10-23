@@ -1,0 +1,3 @@
+Contact: mailto:contact@allergy-free-travel.com
+Preferred-Languages: en
+Canonical: https://www.allergy-free-travel.com/.well-known/security.txt

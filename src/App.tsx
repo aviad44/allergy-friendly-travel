@@ -53,6 +53,8 @@ import Stockholm from "./pages/destinations/Stockholm";
 import Madrid from "./pages/destinations/Madrid";
 import FlyingWithEpipens from "./pages/destinations/FlyingWithEpipens";
 import FlyingWithEpipensNorthAmerica from "./pages/destinations/FlyingWithEpipensNorthAmerica";
+import { SEOHead } from "@/components/SEOHead";
+import { DefaultMetaTags } from "@/components/DefaultMetaTags";
 // import MenuScanner from "./pages/MenuScanner"; // Temporarily disabled
 
 const ScrollToTop = () => {
@@ -83,6 +85,8 @@ const AppContent = () => {
   return (
     <>
       <ScrollToTop />
+      <SEOHead />
+      <DefaultMetaTags />
       <Toaster />
       <Routes>
         <Route element={<MainLayout />}>

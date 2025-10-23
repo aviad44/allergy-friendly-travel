@@ -9,6 +9,10 @@
     <!-- Favicon - updated to use the new logo -->
     <link rel="icon" href="/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png" type="image/png" />
     <link rel="apple-touch-icon" href="/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#005566" />
+    <meta name="msapplication-TileColor" content="#005566" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
     
     <!-- Critical CSS Inlining (optimized above-the-fold styles) -->
     <style>
@@ -25,14 +29,14 @@
     <link rel="preload" href="/src/main.tsx" as="script" crossorigin />
     
     <!-- Optimized font loading with only essential weights -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;600&display=swap" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;600&display=swap" /></noscript>
     
-    <!-- Preconnect for external resources -->
-    <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <!-- Preconnect for external resources with crossorigin -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     
     <!-- DNS prefetch as fallback -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
