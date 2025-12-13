@@ -45,7 +45,7 @@ export const DESTINATION_OG_IMAGES: Record<DestinationId, string> = {
   'madrid': '/lovable-uploads/madrid-hero.jpg',
   'flying-with-epipens': '/lovable-uploads/airport-security-queue.jpg',
   'flying-with-epipens-north-america': '/lovable-uploads/us-airport-terminal.jpg',
-  'warm-winter-destinations': '/src/assets/warm-winter-destinations-hero.jpg'
+  'warm-winter-destinations': '/lovable-uploads/warm-winter-hero.jpg'
 };
 
 // Pre-load the default image for better performance

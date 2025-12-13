@@ -5,19 +5,25 @@ export const warmWinterContent: DestinationContent = {
   metaTitle: "Warm Winter Destinations for Food Allergy Travelers | Allergy-Friendly Holidays 2025",
   metaDescription: "Discover the best warm winter and Christmas destinations for food-allergic travelers. Verified allergy-friendly hotels and restaurants in Madeira, Hurghada, Canary Islands, and Israel.",
   intro: "For travelers with food allergies, escaping the cold doesn't mean compromising safety or flavor. These warm winter and Christmas destinations offer sunshine, sea, and allergy-conscious hospitality, allowing you to relax and enjoy every bite. Only destinations and venues with verified positive feedback for allergy handling are listed — and every hotel and restaurant includes a direct official website link.",
-  longDescription: `
-    <h2>🌴 Madeira, Portugal — Atlantic Island Sun & Allergy-Aware Hotels</h2>
-    <p>Madeira offers a perfect winter climate and warm hospitality. With a rising number of allergy-conscious accommodations and local cuisine emphasizing fresh, simple ingredients, it's a great option for gluten-free, dairy-free, or nut-sensitive travelers.</p>
-    
-    <h2>☀️ Hurghada, Egypt — Red Sea Coast & Resort Comfort</h2>
-    <p>Hurghada is a reliable warm weather destination with modern resorts, many of which have experience in handling food sensitivities for international guests. Dining staff in high-end hotels are usually briefed on allergy safety.</p>
-    
-    <h2>🏖️ Canary Islands, Spain — Warm Spanish Island Escape</h2>
-    <p>The Canary Islands combine winter warmth with Spanish hospitality. Many upscale resorts and local restaurants provide allergen labeling or allow customization.</p>
-    
-    <h2>🇮🇱 Israel — Coastal Winter Sun & Allergy-Friendly Food Scene</h2>
-    <p>From Tel Aviv's cosmopolitan beaches to Eilat's desert warmth, Israel offers diverse scenery and a thriving culinary scene that embraces dietary needs. Many restaurants offer gluten-free, dairy-free, vegan, and nut-aware meals — often with staff trained to handle special requests.</p>
-  `,
+  regionDescriptions: {
+    madeira: `
+      <h2>Madeira, Portugal — Atlantic Island Sun & Allergy-Aware Hotels</h2>
+      <p>Madeira offers a perfect winter climate and warm hospitality. With a rising number of allergy-conscious accommodations and local cuisine emphasizing fresh, simple ingredients, it's a great option for gluten-free, dairy-free, or nut-sensitive travelers.</p>
+    `,
+    hurghada: `
+      <h2>Hurghada, Egypt — Red Sea Coast & Resort Comfort</h2>
+      <p>Hurghada is a reliable warm weather destination with modern resorts, many of which have experience in handling food sensitivities for international guests. Dining staff in high-end hotels are usually briefed on allergy safety.</p>
+    `,
+    canary: `
+      <h2>Canary Islands, Spain — Warm Spanish Island Escape</h2>
+      <p>The Canary Islands combine winter warmth with Spanish hospitality. Many upscale resorts and local restaurants provide allergen labeling or allow customization.</p>
+    `,
+    israel: `
+      <h2>Israel — Coastal Winter Sun & Allergy-Friendly Food Scene</h2>
+      <p>From Tel Aviv's cosmopolitan beaches to Eilat's desert warmth, Israel offers diverse scenery and a thriving culinary scene that embraces dietary needs. Many restaurants offer gluten-free, dairy-free, vegan, and nut-aware meals — often with staff trained to handle special requests.</p>
+    `
+  },
+  longDescription: '',
   hotels: [
     // Madeira Hotels
     {
