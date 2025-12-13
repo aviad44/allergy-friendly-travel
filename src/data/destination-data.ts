@@ -31,6 +31,7 @@ import { rhodesContent } from './destination-rhodes';
 import { madridContent } from './destination-madrid';
 import { flyingWithEpipensContent } from './destination-flying-with-epipens';
 import { flyingWithEpipensNorthAmericaContent } from './destination-flying-with-epipens-north-america';
+import { warmWinterContent } from './destination-warm-winter';
 
 export const destinationData: Record<DestinationId, Partial<DestinationContent>> = {
   london: londonContent,
@@ -62,5 +63,6 @@ export const destinationData: Record<DestinationId, Partial<DestinationContent>>
   'rhodes': rhodesContent,
   'madrid': madridContent,
   'flying-with-epipens': flyingWithEpipensContent,
-  'flying-with-epipens-north-america': flyingWithEpipensNorthAmericaContent
+  'flying-with-epipens-north-america': flyingWithEpipensNorthAmericaContent,
+  'warm-winter-destinations': warmWinterContent
 };
