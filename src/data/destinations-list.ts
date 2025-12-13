@@ -3,6 +3,14 @@ import { Destination } from '@/types/definitions';
 
 export const destinations: Destination[] = [
   {
+    id: 'warm-winter-destinations',
+    name: 'Warm Winter Destinations',
+    country: 'Multiple',
+    description: 'Warm Winter & Christmas Getaways for Food-Allergic Travelers',
+    subtitle: 'Best Sunny Destinations: Madeira, Hurghada, Canary Islands & Israel',
+    image: '/src/assets/warm-winter-destinations-hero.jpg'
+  },
+  {
     id: 'amsterdam',
     name: 'Amsterdam',
     country: 'Netherlands',

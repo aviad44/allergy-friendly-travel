@@ -157,4 +157,5 @@ export type DestinationId =
   | 'rhodes'
   | 'madrid'
   | 'flying-with-epipens'
-  | 'flying-with-epipens-north-america';
+  | 'flying-with-epipens-north-america'
+  | 'warm-winter-destinations';

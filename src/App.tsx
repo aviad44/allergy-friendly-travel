@@ -53,6 +53,7 @@ import Stockholm from "./pages/destinations/Stockholm";
 import Madrid from "./pages/destinations/Madrid";
 import FlyingWithEpipens from "./pages/destinations/FlyingWithEpipens";
 import FlyingWithEpipensNorthAmerica from "./pages/destinations/FlyingWithEpipensNorthAmerica";
+import WarmWinterDestinations from "./pages/destinations/WarmWinterDestinations";
 import { SEOHead } from "@/components/SEOHead";
 import { DefaultMetaTags } from "@/components/DefaultMetaTags";
 // import MenuScanner from "./pages/MenuScanner"; // Temporarily disabled
@@ -134,6 +135,7 @@ const AppContent = () => {
           <Route path="/destinations/madrid" element={<Madrid />} />
           <Route path="/destinations/flying-with-epipens" element={<FlyingWithEpipens />} />
           <Route path="/destinations/flying-with-epipens-north-america" element={<FlyingWithEpipensNorthAmerica />} />
+          <Route path="/destinations/warm-winter-destinations" element={<WarmWinterDestinations />} />
           {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}
           <Route path="/destinations/:destinationId" element={<NotFound />} />
         </Route>
