@@ -33,6 +33,7 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
   const isEilat = destinationId === 'eilat' as DestinationId;
   const isStockholm = destinationId === 'stockholm' as DestinationId;
   const isFlyingWithEpipensNA = destinationId === 'flying-with-epipens-north-america' as DestinationId;
+  const isWarmWinter = destinationId === 'warm-winter-destinations' as DestinationId;
   const textAlignment = isRTL ? 'text-right' : 'text-left';
   
   // Enhanced debug logging to ensure data is loaded
@@ -132,6 +133,22 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                 longDescription={content?.longDescription} 
                 hotel={content?.hotels && content.hotels.length > 0 ? content.hotels[0] : undefined}
               />
+            ) : isWarmWinter ? (
+              <>
+                <LongDescriptionSection 
+                  longDescription={content?.longDescription} 
+                />
+                <Separator className="bg-primary/10 h-0.5" />
+                <TopHotelsSection 
+                  hotels={content?.hotels || []}
+                  destinationName={destination.name}
+                  isLondon={isLondon}
+                />
+                <RestaurantsSection 
+                  restaurants={content?.restaurants} 
+                  destinationName={destination.name}
+                />
+              </>
             ) : (destinationId === 'airlines') ? null : (
               <TopHotelsSection 
                 hotels={content?.hotels || []}

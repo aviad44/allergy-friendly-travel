@@ -1,5 +1,6 @@
 
 import { Destination } from '@/types/definitions';
+import warmWinterHeroImage from '@/assets/warm-winter-destinations-hero.jpg';
 
 export const destinations: Destination[] = [
   {
@@ -8,7 +9,7 @@ export const destinations: Destination[] = [
     country: 'Multiple',
     description: 'Warm Winter & Christmas Getaways for Food-Allergic Travelers',
     subtitle: 'Best Sunny Destinations: Madeira, Hurghada, Canary Islands & Israel',
-    image: '/src/assets/warm-winter-destinations-hero.jpg'
+    image: warmWinterHeroImage
   },
   {
     id: 'amsterdam',
