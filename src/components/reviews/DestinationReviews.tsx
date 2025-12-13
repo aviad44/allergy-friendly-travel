@@ -17,6 +17,7 @@ import { LongDescriptionSection } from "./LongDescriptionSection";
 import { TravelTipsSection } from "./TravelTipsSection";
 import { LanguageTableSection } from "./LanguageTableSection";
 import { RelatedDestinations } from "./RelatedDestinations";
+import { MultiRegionHotelsSection } from "./MultiRegionHotelsSection";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -134,21 +135,12 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                 hotel={content?.hotels && content.hotels.length > 0 ? content.hotels[0] : undefined}
               />
             ) : isWarmWinter ? (
-              <>
-                <LongDescriptionSection 
-                  longDescription={content?.longDescription} 
-                />
-                <Separator className="bg-primary/10 h-0.5" />
-                <TopHotelsSection 
-                  hotels={content?.hotels || []}
-                  destinationName={destination.name}
-                  isLondon={isLondon}
-                />
-                <RestaurantsSection 
-                  restaurants={content?.restaurants} 
-                  destinationName={destination.name}
-                />
-              </>
+              <MultiRegionHotelsSection 
+                hotels={content?.hotels || []}
+                restaurants={content?.restaurants}
+                regionDescriptions={content?.regionDescriptions}
+                destinationName={destination.name}
+              />
             ) : (destinationId === 'airlines') ? null : (
               <TopHotelsSection 
                 hotels={content?.hotels || []}

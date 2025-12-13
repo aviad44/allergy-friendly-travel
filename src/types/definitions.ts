@@ -93,6 +93,8 @@ export interface DestinationContent {
     description: string;
     link: string;
   }>;
+  // Destination-specific sections for multi-region articles
+  regionDescriptions?: Record<string, string>;
 }
 
 export interface Restaurant {

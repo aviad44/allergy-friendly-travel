@@ -22,7 +22,8 @@ export const HeroImage = ({ imageUrl, altText, fallbackImage = "/placeholder.svg
     'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png",
     'flying-with-epipens': "/lovable-uploads/airport-security-queue.jpg",
     'flying-with-epipens-north-america': "/lovable-uploads/us-airport-terminal.jpg",
-    'gluten-free-europe': "/lovable-uploads/european-restaurant-diners.jpg"
+    'gluten-free-europe': "/lovable-uploads/european-restaurant-diners.jpg",
+    'warm-winter-destinations': "/lovable-uploads/warm-winter-hero.jpg"
   };
 
   // For critical destinations check if the URL contains the destination ID
