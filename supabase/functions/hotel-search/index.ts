@@ -51,66 +51,51 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4.1-2025-04-14",
+        model: "gpt-4o-mini",
+        response_format: { type: "json_object" },
         messages: [
           {
             role: "system",
-            content: `You are an expert travel advisor specializing in allergy-friendly accommodations. You provide ONLY real, verified hotels that are known for their excellent allergy accommodation services.
+            content: `You are an expert travel advisor specializing in allergy-friendly accommodations.
 
-CRITICAL REQUIREMENTS:
-- Only recommend REAL hotels that exist and have verified allergy-friendly services
-- Focus on hotels with dedicated allergy protocols, trained staff, and safe food preparation
-- Rate safety from 1-10 based on actual allergy accommodation quality
-- Include specific reasons why each hotel is safe for the mentioned allergies
-- Include full address and direct booking links
-- ONLY include REAL, AUTHENTIC guest reviews from actual review platforms (TripAdvisor, Booking.com, Google Reviews, etc.)
-- If you cannot find real guest reviews about allergy safety, leave the guest_reviews array empty - DO NOT create fictional reviews
+Return a JSON object with a "results" array containing 5-7 real hotels.
 
-Response format MUST be a JSON array of hotel objects with this exact structure:
+IMPORTANT: Return ONLY valid JSON, no markdown, no explanations.
+
+Each hotel object must have:
+- hotel_name: string (real hotel name)
+- city: string
+- country: string
+- address: string (full address with postal code)
+- summary: string (brief allergy safety description)
+- safety_score: number (1-10)
+- reasons: string[] (2-3 specific safety reasons)
+- booking_url: string (hotel website or Booking.com link)
+- guest_reviews: array of {text: string, author: string, source: string}
+
+Example response:
 {
   "results": [
     {
-      "hotel_name": "Exact hotel name",
-      "city": "City name",
-      "country": "Country name",
-      "address": "Full street address with postal code",
-      "summary": "Brief description focusing on allergy safety",
-      "safety_score": 8,
-      "reasons": ["Specific reason 1", "Specific reason 2"],
-      "booking_url": "https://direct-booking-link.com",
-      "guest_reviews": [
-        {"text": "Authentic guest quote about allergy safety", "author": "Guest name", "source": "Review platform"}
-      ]
+      "hotel_name": "Hotel Example",
+      "city": "Paris",
+      "country": "France",
+      "address": "123 Rue Example, 75001 Paris",
+      "summary": "Excellent allergy protocols with trained staff",
+      "safety_score": 9,
+      "reasons": ["Dedicated allergy-free kitchen", "Staff trained in allergen handling"],
+      "booking_url": "https://www.booking.com/hotel/example",
+      "guest_reviews": [{"text": "Great for allergies!", "author": "Guest", "source": "TripAdvisor"}]
     }
   ]
 }`
           },
           {
             role: "user", 
-            content: `Find 5-7 REAL allergy-friendly hotels in ${destination} that safely accommodate guests with ${allergiesText} allergies. 
-
-REQUIREMENTS:
-- Only real, existing hotels with verified names and addresses
-- Full street addresses with postal codes
-- Direct booking URLs (hotel websites or Booking.com/Expedia)
-- At least 1-2 authentic guest reviews about allergy safety
-- Specific allergy accommodation features
-
-For each hotel provide ALL required fields:
-- hotel_name: Real hotel name
-- city: City name
-- country: Country name  
-- address: Complete street address with postal code
-- summary: Brief allergy safety description
-- safety_score: Number 1-10
-- reasons: Array of 2-3 specific safety reasons
-- booking_url: Direct booking link (hotel website preferred)
-- guest_reviews: Array with text, author, source
-
-Focus on hotels with proven track records, trained staff, and dedicated allergy protocols.`
+            content: `Find 5-7 REAL allergy-friendly hotels in ${destination} for guests with ${allergiesText} allergies. Return only the JSON object with results array.`
           }
         ],
-        max_completion_tokens: 2000,
+        max_tokens: 2500,
       }),
     });
 
