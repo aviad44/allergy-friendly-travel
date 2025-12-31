@@ -35,7 +35,9 @@ export const ALL_ALLERGIES = [
   { name: "Cinnamon", emoji: "🪵", severity: "medium" },
   { name: "Avocado", emoji: "🥑", severity: "low" },
   { name: "Kiwi", emoji: "🥝", severity: "low" },
-  { name: "Banana", emoji: "🍌", severity: "low" }
+  { name: "Banana", emoji: "🍌", severity: "low" },
+  { name: "Pistachio", emoji: "🟢", severity: "high" },
+  { name: "Cashew", emoji: "🥜", severity: "high" }
 ];
 
 interface AllergySelectorProps {
