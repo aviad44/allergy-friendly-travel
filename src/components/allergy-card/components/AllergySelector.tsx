@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import cinnamonIcon from "@/assets/cinnamon-stick-icon.png";
+import pistachioIcon from "@/assets/pistachio-icon.png";
+import cashewIcon from "@/assets/cashew-icon.png";
 
 // Common allergy list with emojis and severity levels
 export const ALL_ALLERGIES = [
@@ -36,8 +38,8 @@ export const ALL_ALLERGIES = [
   { name: "Avocado", emoji: "🥑", severity: "low" },
   { name: "Kiwi", emoji: "🥝", severity: "low" },
   { name: "Banana", emoji: "🍌", severity: "low" },
-  { name: "Pistachio", emoji: "🟢", severity: "high" },
-  { name: "Cashew", emoji: "🥜", severity: "high" }
+  { name: "Pistachio", emoji: "pistachio", severity: "high", customIcon: true },
+  { name: "Cashew", emoji: "cashew", severity: "high", customIcon: true }
 ];
 
 interface AllergySelectorProps {
@@ -110,6 +112,18 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
                     <img 
                       src={cinnamonIcon} 
                       alt="Cinnamon stick" 
+                      className="w-5 h-5 object-contain"
+                    />
+                  ) : allergy.name === "Pistachio" ? (
+                    <img 
+                      src={pistachioIcon} 
+                      alt="Pistachio" 
+                      className="w-5 h-5 object-contain"
+                    />
+                  ) : allergy.name === "Cashew" ? (
+                    <img 
+                      src={cashewIcon} 
+                      alt="Cashew" 
                       className="w-5 h-5 object-contain"
                     />
                   ) : (
