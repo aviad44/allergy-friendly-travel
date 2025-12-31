@@ -267,7 +267,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Cinnamon",
     "Avocado": "Avocado",
     "Kiwi": "Kiwi",
-    "Banana": "Banana"
+    "Banana": "Banana",
+    "Pistachio": "Pistachio",
+    "Cashew": "Cashew"
   },
   he: {
     "Milk": "חלב",
@@ -295,7 +297,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "קינמון",
     "Avocado": "אבוקדו",
     "Kiwi": "קיווי",
-    "Banana": "בננה"
+    "Banana": "בננה",
+    "Pistachio": "פיסטוק",
+    "Cashew": "קשיו"
   },
   es: {
     "Milk": "Leche",
@@ -323,7 +327,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Canela",
     "Avocado": "Aguacate",
     "Kiwi": "Kiwi",
-    "Banana": "Plátano"
+    "Banana": "Plátano",
+    "Pistachio": "Pistacho",
+    "Cashew": "Anacardo"
   },
   fr: {
     "Milk": "Lait",
@@ -351,7 +357,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Cannelle",
     "Avocado": "Avocat",
     "Kiwi": "Kiwi",
-    "Banana": "Banane"
+    "Banana": "Banane",
+    "Pistachio": "Pistache",
+    "Cashew": "Noix de cajou"
   },
   de: {
     "Milk": "Milch",
@@ -379,7 +387,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Zimt",
     "Avocado": "Avocado",
     "Kiwi": "Kiwi",
-    "Banana": "Banane"
+    "Banana": "Banane",
+    "Pistachio": "Pistazie",
+    "Cashew": "Cashewnuss"
   },
   it: {
     "Milk": "Latte",
@@ -407,7 +417,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Cannella",
     "Avocado": "Avocado",
     "Kiwi": "Kiwi",
-    "Banana": "Banana"
+    "Banana": "Banana",
+    "Pistachio": "Pistacchio",
+    "Cashew": "Anacardio"
   },
   ja: {
     "Milk": "乳",
@@ -435,7 +447,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "シナモン",
     "Avocado": "アボカド",
     "Kiwi": "キウイ",
-    "Banana": "バナナ"
+    "Banana": "バナナ",
+    "Pistachio": "ピスタチオ",
+    "Cashew": "カシューナッツ"
   },
   ko: {
     "Milk": "우유",
@@ -463,7 +477,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "계피",
     "Avocado": "아보카도",
     "Kiwi": "키위",
-    "Banana": "바나나"
+    "Banana": "바나나",
+    "Pistachio": "피스타치오",
+    "Cashew": "캐슈넛"
   },
   zh: {
     "Milk": "牛奶",
@@ -491,7 +507,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "肉桂",
     "Avocado": "牛油果",
     "Kiwi": "猕猴桃",
-    "Banana": "香蕉"
+    "Banana": "香蕉",
+    "Pistachio": "开心果",
+    "Cashew": "腰果"
   },
   ru: {
     "Milk": "Молоко",
@@ -519,7 +537,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Корица",
     "Avocado": "Авокадо",
     "Kiwi": "Киви",
-    "Banana": "Банан"
+    "Banana": "Банан",
+    "Pistachio": "Фисташки",
+    "Cashew": "Кешью"
   },
   ar: {
     "Milk": "حليب",
@@ -547,7 +567,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "قرفة",
     "Avocado": "أفوكادو",
     "Kiwi": "كيوي",
-    "Banana": "موز"
+    "Banana": "موز",
+    "Pistachio": "فستق",
+    "Cashew": "كاجو"
   },
   hi: {
     "Milk": "दूध",
@@ -575,7 +597,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "दालचीनी",
     "Avocado": "एवोकाडो",
     "Kiwi": "कीवी",
-    "Banana": "केला"
+    "Banana": "केला",
+    "Pistachio": "पिस्ता",
+    "Cashew": "काजू"
   },
   pt: {
     "Milk": "Leite",
@@ -603,7 +627,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Canela",
     "Avocado": "Abacate",
     "Kiwi": "Kiwi",
-    "Banana": "Banana"
+    "Banana": "Banana",
+    "Pistachio": "Pistáchio",
+    "Cashew": "Castanha de caju"
   },
   nl: {
     "Milk": "Melk",
@@ -631,7 +657,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Kaneel",
     "Avocado": "Avocado",
     "Kiwi": "Kiwi",
-    "Banana": "Banaan"
+    "Banana": "Banaan",
+    "Pistachio": "Pistache",
+    "Cashew": "Cashewnoot"
   },
   tr: {
     "Milk": "Süt",
@@ -659,7 +687,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Tarçın",
     "Avocado": "Avokado",
     "Kiwi": "Kivi",
-    "Banana": "Muz"
+    "Banana": "Muz",
+    "Pistachio": "Antep fıstığı",
+    "Cashew": "Kaju"
   },
   pl: {
     "Milk": "Mleko",
@@ -687,7 +717,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Cynamon",
     "Avocado": "Awokado",
     "Kiwi": "Kiwi",
-    "Banana": "Banan"
+    "Banana": "Banan",
+    "Pistachio": "Pistacja",
+    "Cashew": "Nerkowiec"
   },
   vi: {
     "Milk": "Sữa",
@@ -715,7 +747,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Quế",
     "Avocado": "Quả bơ",
     "Kiwi": "Kiwi",
-    "Banana": "Chuối"
+    "Banana": "Chuối",
+    "Pistachio": "Hạt dẻ cười",
+    "Cashew": "Hạt điều"
   },
   th: {
     "Milk": "นม",
@@ -743,7 +777,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "อบเชย",
     "Avocado": "อะโวคาโด",
     "Kiwi": "กีวี",
-    "Banana": "กล้วย"
+    "Banana": "กล้วย",
+    "Pistachio": "พิสตาชิโอ",
+    "Cashew": "มะม่วงหิมพานต์"
   },
   sv: {
     "Milk": "Mjölk",
@@ -771,7 +807,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Kanel",
     "Avocado": "Avokado",
     "Kiwi": "Kiwi",
-    "Banana": "Banan"
+    "Banana": "Banan",
+    "Pistachio": "Pistage",
+    "Cashew": "Cashewnöt"
   },
   da: {
     "Milk": "Mælk",
@@ -799,7 +837,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Kanel",
     "Avocado": "Avocado",
     "Kiwi": "Kiwi",
-    "Banana": "Banan"
+    "Banana": "Banan",
+    "Pistachio": "Pistacie",
+    "Cashew": "Cashewnød"
   },
   fi: {
     "Milk": "Maito",
@@ -827,7 +867,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Kaneli",
     "Avocado": "Avokado",
     "Kiwi": "Kiivi",
-    "Banana": "Banaani"
+    "Banana": "Banaani",
+    "Pistachio": "Pistaasi",
+    "Cashew": "Cashewpähkinä"
   },
   no: {
     "Milk": "Melk",
@@ -855,7 +897,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Kanel",
     "Avocado": "Avokado",
     "Kiwi": "Kiwi",
-    "Banana": "Banan"
+    "Banana": "Banan",
+    "Pistachio": "Pistasj",
+    "Cashew": "Cashewnøtt"
   },
   el: {
     "Milk": "Γάλα",
@@ -883,7 +927,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Κανέλα",
     "Avocado": "Αβοκάντο",
     "Kiwi": "Ακτινίδιο",
-    "Banana": "Μπανάνα"
+    "Banana": "Μπανάνα",
+    "Pistachio": "Φιστίκι Αιγίνης",
+    "Cashew": "Κάσιους"
   },
   cs: {
     "Milk": "Mléko",
@@ -911,7 +957,9 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Skořice",
     "Avocado": "Avokádo",
     "Kiwi": "Kiwi",
-    "Banana": "Banán"
+    "Banana": "Banán",
+    "Pistachio": "Pistácie",
+    "Cashew": "Kešu"
   },
   hu: {
     "Milk": "Tej",
@@ -939,6 +987,8 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Cinnamon": "Fahéj",
     "Avocado": "Avokádó",
     "Kiwi": "Kivi",
-    "Banana": "Banán"
+    "Banana": "Banán",
+    "Pistachio": "Pisztácia",
+    "Cashew": "Kesudió"
   }
 };
