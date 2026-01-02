@@ -69,7 +69,9 @@ const specificAllergyKeywords: Record<string, string[]> = {
   'allergy friendly': []
 };
 
-const REVIEW_SCORE_THRESHOLD = 2;
+// Confidence thresholds
+const HIGH_CONFIDENCE_THRESHOLD = 3; // Allergy mention + handling context
+const MEDIUM_CONFIDENCE_THRESHOLD = 1; // At least one allergen mention
 
 function getPrimaryPhrase(allergies: string[]): string {
   const normalizedAllergies = allergies.map(a => a.toLowerCase().trim());
@@ -106,11 +108,19 @@ function scoreReview(reviewText: string, primaryPhrase: string): number {
   return score;
 }
 
+function getConfidenceLevel(score: number): 'high' | 'medium' | 'low' {
+  if (score >= HIGH_CONFIDENCE_THRESHOLD) return 'high';
+  if (score >= MEDIUM_CONFIDENCE_THRESHOLD) return 'medium';
+  return 'low';
+}
+
 function findBestReviewSnippet(
   reviews: any[], 
   primaryPhrase: string
-): { text: string; author: string; relativeTime: string; hasAllergyMention: boolean } | null {
-  if (!reviews || reviews.length === 0) return null;
+): { text: string; author: string; relativeTime: string; hasAllergyMention: boolean; score: number } {
+  if (!reviews || reviews.length === 0) {
+    return { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0 };
+  }
   
   // Score all reviews and find the best one
   let bestReview = null;
@@ -126,24 +136,20 @@ function findBestReviewSnippet(
     }
   }
   
-  // Only return as allergy-related if score meets threshold
-  if (bestScore >= REVIEW_SCORE_THRESHOLD && bestReview) {
+  // Only return as allergy-related if score meets threshold (at least 1)
+  if (bestScore >= MEDIUM_CONFIDENCE_THRESHOLD && bestReview) {
     const text = bestReview.text?.text || bestReview.text || '';
     return {
       text: text.length > 220 ? text.substring(0, 217) + '...' : text,
       author: bestReview.authorAttribution?.displayName || bestReview.author_name || '',
       relativeTime: bestReview.relativePublishTimeDescription || bestReview.relative_time_description || '',
-      hasAllergyMention: true
+      hasAllergyMention: true,
+      score: bestScore
     };
   }
   
-  // No allergy-relevant review found - return indicator with hasAllergyMention: false
-  return {
-    text: '',
-    author: '',
-    relativeTime: '',
-    hasAllergyMention: false
-  };
+  // No allergy-relevant review found
+  return { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0 };
 }
 
 // Simple in-memory cache
@@ -258,6 +264,7 @@ serve(async (req) => {
           
           const details = detailsData.result;
           const reviewSnippet = findBestReviewSnippet(details.reviews, primaryPhrase);
+          const confidenceLevel = getConfidenceLevel(reviewSnippet.score);
           
           return {
             name: details.name || place.name,
@@ -267,7 +274,8 @@ serve(async (req) => {
             openNow: details.opening_hours?.open_now,
             priceLevel: details.price_level,
             mapsUrl: details.url || `https://www.google.com/maps/place/?q=place_id:${place.place_id}`,
-            reviewSnippet: reviewSnippet
+            reviewSnippet: reviewSnippet,
+            confidenceLevel: confidenceLevel
           };
         } catch (err) {
           console.error(`❌ Error fetching details for ${place.name}:`, err);

@@ -3,12 +3,14 @@ import { RestaurantInfo } from "@/types/restaurant";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ReactNode } from "react";
 
 interface RestaurantCardProps {
   restaurant: RestaurantInfo;
+  confidenceBadge?: ReactNode;
 }
 
-export const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
+export const RestaurantCard = ({ restaurant, confidenceBadge }: RestaurantCardProps) => {
   const getPriceLevelDisplay = (level?: number) => {
     if (level === undefined || level === null) return null;
     return '€'.repeat(level);
@@ -36,9 +38,11 @@ export const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
           </div>
         </div>
         
-        <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
+        <div className="flex flex-wrap items-center gap-2 mt-2">
+          {confidenceBadge}
+          
           {restaurant.rating && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
               <span className="font-medium">{restaurant.rating.toFixed(1)}</span>
               {restaurant.totalRatings && (
@@ -48,7 +52,7 @@ export const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
           )}
           
           {restaurant.priceLevel !== undefined && restaurant.priceLevel > 0 && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <DollarSign className="h-4 w-4" />
               <span>{getPriceLevelDisplay(restaurant.priceLevel)}</span>
             </div>

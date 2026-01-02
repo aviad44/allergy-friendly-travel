@@ -1,7 +1,7 @@
-import { RestaurantInfo } from "@/types/restaurant";
+import { RestaurantInfo, ConfidenceLevel } from "@/types/restaurant";
 import { RestaurantCard } from "./RestaurantCard";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Info, ExternalLink, ArrowUpDown, Filter } from "lucide-react";
+import { Info, ExternalLink, ArrowUpDown, Filter, Shield, ShieldCheck, ShieldQuestion } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
 interface RestaurantResultsProps {
   restaurants: RestaurantInfo[];
@@ -20,7 +21,39 @@ interface RestaurantResultsProps {
   fallbackUrl: string;
 }
 
-type SortOption = 'rating' | 'reviews';
+type SortOption = 'confidence' | 'rating' | 'reviews';
+
+const confidenceOrder: Record<ConfidenceLevel, number> = {
+  high: 3,
+  medium: 2,
+  low: 1
+};
+
+const ConfidenceBadge = ({ level }: { level: ConfidenceLevel }) => {
+  switch (level) {
+    case 'high':
+      return (
+        <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 gap-1">
+          <ShieldCheck className="h-3 w-3" />
+          High confidence
+        </Badge>
+      );
+    case 'medium':
+      return (
+        <Badge variant="secondary" className="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 gap-1">
+          <Shield className="h-3 w-3" />
+          Medium confidence
+        </Badge>
+      );
+    case 'low':
+      return (
+        <Badge variant="secondary" className="bg-muted text-muted-foreground gap-1">
+          <ShieldQuestion className="h-3 w-3" />
+          Low confidence
+        </Badge>
+      );
+  }
+};
 
 export const RestaurantResults = ({ 
   restaurants, 
@@ -28,19 +61,29 @@ export const RestaurantResults = ({
   queryPhrase,
   fallbackUrl 
 }: RestaurantResultsProps) => {
-  const [sortBy, setSortBy] = useState<SortOption>('rating');
+  const [sortBy, setSortBy] = useState<SortOption>('confidence');
   const [showOnlyAllergyMentions, setShowOnlyAllergyMentions] = useState(false);
 
   const filteredAndSortedRestaurants = useMemo(() => {
     let filtered = [...restaurants];
     
-    // Apply allergy mention filter if enabled
+    // Apply allergy mention filter ONLY if user enables it
     if (showOnlyAllergyMentions) {
       filtered = filtered.filter(r => r.reviewSnippet?.hasAllergyMention);
     }
     
-    // Sort
-    if (sortBy === 'rating') {
+    // Sort by confidence first (default), then by selected secondary
+    if (sortBy === 'confidence') {
+      filtered.sort((a, b) => {
+        const confDiff = confidenceOrder[b.confidenceLevel] - confidenceOrder[a.confidenceLevel];
+        if (confDiff !== 0) return confDiff;
+        // Secondary sort by rating
+        if (b.rating !== a.rating) {
+          return (b.rating || 0) - (a.rating || 0);
+        }
+        return (b.totalRatings || 0) - (a.totalRatings || 0);
+      });
+    } else if (sortBy === 'rating') {
       filtered.sort((a, b) => {
         if (b.rating !== a.rating) {
           return (b.rating || 0) - (a.rating || 0);
@@ -59,11 +102,17 @@ export const RestaurantResults = ({
     [restaurants]
   );
 
+  const confidenceCounts = useMemo(() => ({
+    high: restaurants.filter(r => r.confidenceLevel === 'high').length,
+    medium: restaurants.filter(r => r.confidenceLevel === 'medium').length,
+    low: restaurants.filter(r => r.confidenceLevel === 'low').length,
+  }), [restaurants]);
+
   if (!restaurants || restaurants.length === 0) {
     return (
       <div className="text-center py-8 space-y-4">
         <div className="text-muted-foreground text-lg mb-2">
-          No restaurants found for your search.
+          No restaurants found for this location.
         </div>
         <p className="text-sm text-muted-foreground">
           Try a different destination or search directly on Google Maps.
@@ -85,17 +134,20 @@ export const RestaurantResults = ({
     <div className="space-y-4 mt-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h2 className="text-xl font-semibold text-foreground">
-          Found {restaurants.length} {queryPhrase} restaurants in {destination}
+          Found {restaurants.length} restaurants in {destination}
         </h2>
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="w-fit">
               <ArrowUpDown className="h-4 w-4 mr-2" />
-              Sort by {sortBy === 'rating' ? 'Rating' : 'Reviews'}
+              Sort by {sortBy === 'confidence' ? 'Confidence' : sortBy === 'rating' ? 'Rating' : 'Reviews'}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setSortBy('confidence')}>
+              Allergy confidence (highest first)
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setSortBy('rating')}>
               Rating (highest first)
             </DropdownMenuItem>
@@ -106,14 +158,24 @@ export const RestaurantResults = ({
         </DropdownMenu>
       </div>
 
+      {/* Confidence summary */}
+      <div className="flex flex-wrap gap-2 text-sm">
+        <span className="text-muted-foreground">Confidence breakdown:</span>
+        <span className="text-green-700 dark:text-green-400">{confidenceCounts.high} high</span>
+        <span className="text-muted-foreground">•</span>
+        <span className="text-amber-700 dark:text-amber-400">{confidenceCounts.medium} medium</span>
+        <span className="text-muted-foreground">•</span>
+        <span className="text-muted-foreground">{confidenceCounts.low} low</span>
+      </div>
+
       <Alert className="bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800">
         <Info className="h-4 w-4 text-amber-600" />
         <AlertDescription className="text-amber-800 dark:text-amber-200 text-sm">
-          Results are based on limited Google review snippets and are not a safety guarantee. Always verify directly with the restaurant.
+          Confidence levels are based on Google review snippets mentioning allergies. This is not a safety guarantee—always verify directly with the restaurant.
         </AlertDescription>
       </Alert>
 
-      {/* Filter toggle */}
+      {/* Optional filter toggle */}
       <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
         <Filter className="h-4 w-4 text-muted-foreground" />
         <div className="flex items-center gap-2">
@@ -123,7 +185,7 @@ export const RestaurantResults = ({
             onCheckedChange={setShowOnlyAllergyMentions}
           />
           <Label htmlFor="allergy-filter" className="text-sm cursor-pointer">
-            Show only restaurants with allergy mentions in review snippets
+            Show only restaurants with allergy-related mentions
             <span className="ml-1 text-muted-foreground">
               ({allergyMentionCount} of {restaurants.length})
             </span>
@@ -137,7 +199,7 @@ export const RestaurantResults = ({
             No restaurants with allergy-related review mentions found.
           </div>
           <p className="text-sm text-muted-foreground">
-            Try disabling the filter above, or search directly on Google Maps.
+            Disable the filter above to see all restaurants, or search directly on Google Maps.
           </p>
           <a
             href={fallbackUrl}
@@ -152,7 +214,11 @@ export const RestaurantResults = ({
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {filteredAndSortedRestaurants.map((restaurant, index) => (
-            <RestaurantCard key={index} restaurant={restaurant} />
+            <RestaurantCard 
+              key={index} 
+              restaurant={restaurant} 
+              confidenceBadge={<ConfidenceBadge level={restaurant.confidenceLevel} />}
+            />
           ))}
         </div>
       )}
@@ -171,3 +237,5 @@ export const RestaurantResults = ({
     </div>
   );
 };
+
+export { ConfidenceBadge };
