@@ -1,5 +1,5 @@
 
-import { Search } from "lucide-react";
+import { Search, Hotel, UtensilsCrossed, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useCallback, memo, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,17 +8,20 @@ import { destinationSuggestions, allergySuggestions } from "@/utils/searchSugges
 import { Autocomplete } from "./search/Autocomplete";
 import { MultiSelectAutocomplete } from "./search/MultiSelectAutocomplete";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { supabase } from "@/integrations/supabase/client";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 // Memoized components to prevent unnecessary re-renders
 const MemoizedAutocomplete = memo(Autocomplete);
 const MemoizedMultiSelectAutocomplete = memo(MultiSelectAutocomplete);
 
+type SearchMode = "hotels" | "restaurants";
+
 export const SearchBar = () => {
+  const [mode, setMode] = useState<SearchMode>("hotels");
   const [destination, setDestination] = useState("");
   const [allergies, setAllergies] = useState<string[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [lastSearch, setLastSearch] = useState<{destination: string, allergies: string[]} | null>(null);
+  const [lastSearch, setLastSearch] = useState<{destination: string, allergies: string[], mode?: SearchMode} | null>(null);
   const isMobile = useIsMobile();
   
   const { toast } = useToast();
@@ -57,14 +60,32 @@ export const SearchBar = () => {
     if (lastSearch) {
       setDestination(lastSearch.destination);
       setAllergies(lastSearch.allergies || []);
+      if (lastSearch.mode) {
+        setMode(lastSearch.mode);
+      }
     }
   }, [lastSearch]);
+
+  // Build Google Maps URL for restaurant search
+  const buildGoogleMapsUrl = useCallback((query: string) => {
+    const encodedQuery = encodeURIComponent(query);
+    return `https://www.google.com/maps/search/${encodedQuery}`;
+  }, []);
   
   const handleSearch = useCallback(async () => {
-    if (!destination || allergies.length === 0) {
+    if (!destination) {
       toast({
-        title: "Please fill in all fields",
-        description: "Both destination and at least one allergy type are required to help find suitable hotels",
+        title: "Please enter a destination",
+        description: "A destination is required to search",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (mode === "hotels" && allergies.length === 0) {
+      toast({
+        title: "Please select allergies",
+        description: "At least one allergy type is required to find suitable hotels",
         variant: "destructive"
       });
       return;
@@ -73,20 +94,70 @@ export const SearchBar = () => {
     setIsSearching(true);
     
     // Save recent search to localStorage
-    const searchData = { destination, allergies };
+    const searchData = { destination, allergies, mode };
     localStorage.setItem('recentSearch', JSON.stringify(searchData));
     setLastSearch(searchData);
-    
-    // Navigate to search results page with query parameters and keep loading state
-    const allergiesParam = allergies.join(',');
-    navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}`);
-    
-    // Keep isSearching true - will be handled by SearchResults page
-    // setIsSearching(false); - removed to maintain loading state
-  }, [destination, allergies, navigate, toast]);
+
+    if (mode === "restaurants") {
+      // Build query based on allergies or use generic "allergy friendly"
+      const query = allergies.length > 0 
+        ? `allergy friendly restaurants in ${destination}`
+        : `allergy friendly restaurants in ${destination}`;
+      
+      const mapsUrl = buildGoogleMapsUrl(query);
+      window.open(mapsUrl, '_blank', 'noopener,noreferrer');
+      setIsSearching(false);
+    } else {
+      // Hotels mode - navigate to search results page
+      const allergiesParam = allergies.join(',');
+      navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}`);
+    }
+  }, [destination, allergies, mode, navigate, toast, buildGoogleMapsUrl]);
+
+  // Handle viewing all restaurants (fallback link)
+  const handleViewAllRestaurants = useCallback(() => {
+    if (!destination) {
+      toast({
+        title: "Please enter a destination",
+        description: "A destination is required",
+        variant: "destructive"
+      });
+      return;
+    }
+    const mapsUrl = buildGoogleMapsUrl(`restaurants in ${destination}`);
+    window.open(mapsUrl, '_blank', 'noopener,noreferrer');
+  }, [destination, toast, buildGoogleMapsUrl]);
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-full">
+      {/* Search mode toggle */}
+      <div className="flex flex-col items-center gap-2">
+        <span className="text-sm text-white/80">Search for</span>
+        <ToggleGroup 
+          type="single" 
+          value={mode} 
+          onValueChange={(value) => value && setMode(value as SearchMode)}
+          className="bg-white/10 backdrop-blur-sm rounded-lg p-1"
+        >
+          <ToggleGroupItem 
+            value="hotels" 
+            aria-label="Search hotels"
+            className="data-[state=on]:bg-white data-[state=on]:text-primary px-4 py-2 rounded-md transition-all"
+          >
+            <Hotel className="h-4 w-4 mr-2" />
+            Hotels
+          </ToggleGroupItem>
+          <ToggleGroupItem 
+            value="restaurants" 
+            aria-label="Search restaurants"
+            className="data-[state=on]:bg-white data-[state=on]:text-primary px-4 py-2 rounded-md transition-all"
+          >
+            <UtensilsCrossed className="h-4 w-4 mr-2" />
+            Restaurants
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
       <div className="flex flex-col gap-4 w-full">
         {/* Destination input with autocomplete */}
         <div className="w-full">
@@ -102,7 +173,7 @@ export const SearchBar = () => {
         {/* Multi-select allergy input with autocomplete */}
         <div className="w-full">
           <MemoizedMultiSelectAutocomplete
-            placeholder="Select allergies (choose multiple)"
+            placeholder={mode === "hotels" ? "Select allergies (required)" : "Select allergies (optional)"}
             selectedValues={allergies}
             onSelectedValuesChange={handleAllergiesChange}
             suggestions={allergySuggestions}
@@ -117,6 +188,13 @@ export const SearchBar = () => {
           Use last search: {lastSearch.destination} with {Array.isArray(lastSearch.allergies) ? lastSearch.allergies.join(', ') : lastSearch.allergies} allergies
         </div>
       )}
+
+      {/* Restaurant mode notice */}
+      {mode === "restaurants" && (
+        <p className="text-xs text-white/70 text-center px-2">
+          Results are based on Google Maps data and are not a safety guarantee. Always verify with the restaurant.
+        </p>
+      )}
       
       {/* Search button */}
       <Button 
@@ -126,7 +204,18 @@ export const SearchBar = () => {
       >
         <Search className="h-4 w-4 sm:h-5 sm:w-5" />
         <span>{isSearching ? "Searching..." : "Search Now"}</span>
+        {mode === "restaurants" && <ExternalLink className="h-3 w-3 ml-1" />}
       </Button>
+
+      {/* Fallback link for restaurants */}
+      {mode === "restaurants" && destination && (
+        <button 
+          onClick={handleViewAllRestaurants}
+          className="text-xs text-blue-200 hover:text-white hover:underline text-center transition-colors"
+        >
+          View all restaurants in {destination} →
+        </button>
+      )}
     </div>
   );
 };
