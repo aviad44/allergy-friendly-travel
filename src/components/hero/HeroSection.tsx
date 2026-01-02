@@ -59,14 +59,11 @@ export const HeroSection = () => {
             style={{ backgroundColor: 'rgba(0, 85, 102, 0.4)' }}
           >
             <h1 className="text-[1.5rem] sm:text-[1.75rem] md:text-[2.2rem] font-bold leading-tight mb-3 sm:mb-4 text-white drop-shadow-md">
-              <span className="block">Find Your Perfect</span>
-              <span className="block">
-                Food Allergy Friendly Hotel
-              </span>
+              Find Allergy Friendly Hotels & Restaurants
             </h1>
             
             <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-6 sm:mb-8 text-white font-medium drop-shadow-md mx-auto max-w-full sm:max-w-xl">
-              Find hotels that understand your allergy needs for a safe and enjoyable stay
+              Travel safely with food allergies
             </p>
             
             <div className="transform transition-all duration-300 hover:scale-[1.02] w-full">
