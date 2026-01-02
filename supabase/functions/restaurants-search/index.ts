@@ -137,38 +137,12 @@ function findBestReviewSnippet(
     };
   }
   
-  // No allergy-relevant review found - return null to indicate no match
+  // No allergy-relevant review found - return indicator with hasAllergyMention: false
   return {
     text: '',
     author: '',
     relativeTime: '',
     hasAllergyMention: false
-  };
-}
-
-function findBestReviewSnippet(reviews: any[]): { text: string; author: string; relativeTime: string } | null {
-  if (!reviews || reviews.length === 0) return null;
-  
-  // First, try to find a review mentioning allergy-related keywords
-  for (const review of reviews) {
-    const reviewText = (review.text?.text || review.text || '').toLowerCase();
-    if (allergyKeywords.some(keyword => reviewText.includes(keyword))) {
-      const text = review.text?.text || review.text || '';
-      return {
-        text: text.length > 220 ? text.substring(0, 217) + '...' : text,
-        author: review.authorAttribution?.displayName || review.author_name || '',
-        relativeTime: review.relativePublishTimeDescription || review.relative_time_description || ''
-      };
-    }
-  }
-  
-  // Fallback: use the first (most relevant/recent) review
-  const firstReview = reviews[0];
-  const text = firstReview.text?.text || firstReview.text || '';
-  return {
-    text: text.length > 220 ? text.substring(0, 217) + '...' : text,
-    author: firstReview.authorAttribution?.displayName || firstReview.author_name || '',
-    relativeTime: firstReview.relativePublishTimeDescription || firstReview.relative_time_description || ''
   };
 }
 
