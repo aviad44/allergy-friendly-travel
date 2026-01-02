@@ -4,15 +4,15 @@ import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
-import { HotelInfo } from "@/types/search";
 import { BackButton } from "@/components/search/BackButton";
 import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
-import { AlertCircle } from "lucide-react";
+import { RestaurantResults } from "@/components/search/RestaurantResults";
+import { AlertCircle, ExternalLink } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useRef } from "react";
+import { RestaurantInfo } from "@/types/restaurant";
 
-// New hotel results display component
+// Hotel results display component
 interface HotelResultsProps {
   hotels: any[];
   destination: string;
@@ -159,17 +159,28 @@ const SearchResults = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const requestTimeoutRef = useRef<number | null>(null);
   
   const destination = searchParams.get("destination") || "";
   const allergiesParam = searchParams.get("allergies") || "";
+  const mode = searchParams.get("mode") || "hotels";
   const allergies = allergiesParam;
   
-  const [isSearching, setIsSearching] = useState(false);
+  // Hotels state
+  const [isSearchingHotels, setIsSearchingHotels] = useState(false);
   const [hotels, setHotels] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [hotelError, setHotelError] = useState<string | null>(null);
   
+  // Restaurants state
+  const [isSearchingRestaurants, setIsSearchingRestaurants] = useState(false);
+  const [restaurants, setRestaurants] = useState<RestaurantInfo[]>([]);
+  const [restaurantError, setRestaurantError] = useState<string | null>(null);
+  const [queryPhrase, setQueryPhrase] = useState<string>("");
+  const [fallbackUrl, setFallbackUrl] = useState<string>("");
+  
+  // Hotels search
   useEffect(() => {
+    if (mode !== "hotels") return;
+    
     if (!destination || !allergies) {
       toast({
         title: "Missing search parameters",
@@ -183,19 +194,18 @@ const SearchResults = () => {
     // Check if we already have search results from navigation state
     const existingResults = location.state?.searchResults;
     if (existingResults && existingResults.results) {
-      console.log('✅ Using existing search results from navigation state');
+      console.log('✅ Using existing hotel results from navigation state');
       setHotels(existingResults.results);
       return;
     }
     
     const performSearch = async () => {
-      setIsSearching(true);
-      setError(null);
+      setIsSearchingHotels(true);
+      setHotelError(null);
       
       try {
         console.log('🏨 Calling hotel-search function for:', { destination, allergies });
         
-        // Split allergies if it's a comma-separated string
         const allergiesArray = allergies.includes(',') ? allergies.split(',').map(a => a.trim()) : [allergies];
         
         const { data, error } = await supabase.functions.invoke('hotel-search', {
@@ -206,7 +216,7 @@ const SearchResults = () => {
         
         if (error) {
           console.error('❌ Hotel search error:', error);
-          setError('Failed to search for hotels. Please try again.');
+          setHotelError('Failed to search for hotels. Please try again.');
           return;
         }
         
@@ -216,50 +226,131 @@ const SearchResults = () => {
           setHotels(data.results);
           console.log(`🏨 Found ${data.results.length} hotels`);
         } else {
-          setError('No allergy-friendly hotels found for your search criteria.');
+          setHotelError('No allergy-friendly hotels found for your search criteria.');
           console.log('⚠️ No hotels found in response');
         }
       } catch (error) {
         console.error('💥 Search error:', error);
-        setError('An error occurred while searching. Please try again.');
+        setHotelError('An error occurred while searching. Please try again.');
       } finally {
-        setIsSearching(false);
+        setIsSearchingHotels(false);
       }
     };
     
     performSearch();
-  }, [destination, allergies, toast, navigate, location.state]);
+  }, [destination, allergies, mode, toast, navigate, location.state]);
 
+  // Restaurants search
+  useEffect(() => {
+    if (mode !== "restaurants") return;
+    
+    if (!destination) {
+      toast({
+        title: "Missing destination",
+        description: "Please perform a search from the home page",
+        variant: "destructive"
+      });
+      navigate("/");
+      return;
+    }
+    
+    const performRestaurantSearch = async () => {
+      setIsSearchingRestaurants(true);
+      setRestaurantError(null);
+      
+      try {
+        console.log('🍽️ Calling restaurants-search function for:', { destination, allergies });
+        
+        const allergiesArray = allergies ? (allergies.includes(',') ? allergies.split(',').map(a => a.trim()) : [allergies]) : [];
+        
+        const { data, error } = await supabase.functions.invoke('restaurants-search', {
+          body: { destination, allergies: allergiesArray }
+        });
+        
+        console.log('📡 Restaurant search response:', { data, error });
+        
+        if (error) {
+          console.error('❌ Restaurant search error:', error);
+          setRestaurantError('Failed to search for restaurants. Please try again.');
+          setFallbackUrl(`https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
+          return;
+        }
+        
+        if (data.error) {
+          setRestaurantError(data.error);
+          setFallbackUrl(data.fallbackUrl || `https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
+          return;
+        }
+        
+        console.log('✅ Restaurant search results:', data);
+        
+        setRestaurants(data.places || []);
+        setQueryPhrase(data.queryPhrase || 'allergy friendly');
+        setFallbackUrl(data.fallbackUrl || `https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
+        
+        console.log(`🍽️ Found ${data.places?.length || 0} restaurants`);
+      } catch (error) {
+        console.error('💥 Restaurant search error:', error);
+        setRestaurantError('An error occurred while searching for restaurants.');
+        setFallbackUrl(`https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
+      } finally {
+        setIsSearchingRestaurants(false);
+      }
+    };
+    
+    performRestaurantSearch();
+  }, [destination, allergies, mode, toast, navigate]);
+
+  const isLoading = mode === "hotels" ? isSearchingHotels : isSearchingRestaurants;
+  const error = mode === "hotels" ? hotelError : restaurantError;
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-6 max-w-4xl">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+          <BackButton />
+          
+          {mode === "hotels" && <SafetyNotice />}
 
-      <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 py-6 max-w-3xl">
-          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-            <BackButton />
-            <SafetyNotice />
+          {error && (
+            <Alert variant="destructive" className="my-4">
+              <AlertCircle className="h-4 w-4 mr-2" />
+              <AlertDescription className="flex items-center justify-between">
+                <span>{error}</span>
+                {mode === "restaurants" && fallbackUrl && (
+                  <a 
+                    href={fallbackUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-4 inline-flex items-center gap-1 text-primary-foreground underline hover:no-underline"
+                  >
+                    View on Google Maps
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                )}
+              </AlertDescription>
+            </Alert>
+          )}
 
-            {error && (
-              <Alert variant="destructive" className="my-4">
-                <AlertCircle className="h-4 w-4 mr-2" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            {isSearching ? (
-              <LoadingState />
-            ) : (
-              <HotelResults 
-                hotels={hotels} 
-                destination={destination} 
-                allergies={allergies}
-              />
-            )}
-          </div>
+          {isLoading ? (
+            <LoadingState />
+          ) : mode === "hotels" ? (
+            <HotelResults 
+              hotels={hotels} 
+              destination={destination} 
+              allergies={allergies}
+            />
+          ) : (
+            <RestaurantResults 
+              restaurants={restaurants}
+              destination={destination}
+              queryPhrase={queryPhrase}
+              fallbackUrl={fallbackUrl}
+            />
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
