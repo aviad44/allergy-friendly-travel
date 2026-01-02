@@ -1,8 +1,11 @@
+export type ConfidenceLevel = 'high' | 'medium' | 'low';
+
 export interface ReviewSnippet {
   text: string;
   author: string;
   relativeTime: string;
   hasAllergyMention: boolean;
+  score: number;
 }
 
 export interface RestaurantInfo {
@@ -14,6 +17,7 @@ export interface RestaurantInfo {
   priceLevel?: number;
   mapsUrl: string;
   reviewSnippet?: ReviewSnippet | null;
+  confidenceLevel: ConfidenceLevel;
 }
 
 export interface RestaurantSearchResponse {
