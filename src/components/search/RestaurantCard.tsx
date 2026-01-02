@@ -85,7 +85,7 @@ export const RestaurantCard = ({ restaurant, confidenceBadge }: RestaurantCardPr
                   )}
                 </p>
                 <p className="text-xs text-green-600 font-medium">
-                  Allergy-related Google review snippet
+                  Allergy mentioned by diner (Google review snippet)
                 </p>
               </div>
             </div>
@@ -95,27 +95,32 @@ export const RestaurantCard = ({ restaurant, confidenceBadge }: RestaurantCardPr
             <div className="flex items-start gap-2">
               <Info className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
               <p className="text-sm text-muted-foreground">
-                No allergy-related mentions found in available Google review snippets.
+                No allergy-related mentions found in available Google review snippets
               </p>
             </div>
           </div>
         )}
         
-        <Button 
-          variant="outline" 
-          className="w-full mt-2"
-          asChild
-        >
-          <a 
-            href={restaurant.mapsUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
+        <div className="space-y-2">
+          <Button 
+            variant="outline" 
+            className="w-full"
+            asChild
           >
-            <MapPin className="h-4 w-4 mr-2" />
-            View on Google Maps
-            <ExternalLink className="h-3 w-3 ml-2" />
-          </a>
-        </Button>
+            <a 
+              href={restaurant.mapsUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <MapPin className="h-4 w-4 mr-2" />
+              View on Google Maps
+              <ExternalLink className="h-3 w-3 ml-2" />
+            </a>
+          </Button>
+          <p className="text-xs text-muted-foreground text-center">
+            Always confirm allergy accommodations directly with the restaurant.
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
