@@ -38,3 +38,6 @@ verify_jwt = false
 
 [functions.send-review-notification]
 verify_jwt = false
+
+[functions.restaurants-search]
+verify_jwt = false

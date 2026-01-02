@@ -1,5 +1,5 @@
 
-import { Search, Hotel, UtensilsCrossed, ExternalLink } from "lucide-react";
+import { Search, Hotel, UtensilsCrossed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useCallback, memo, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -65,12 +65,6 @@ export const SearchBar = () => {
       }
     }
   }, [lastSearch]);
-
-  // Build Google Maps URL for restaurant search
-  const buildGoogleMapsUrl = useCallback((query: string) => {
-    const encodedQuery = encodeURIComponent(query);
-    return `https://www.google.com/maps/search/${encodedQuery}`;
-  }, []);
   
   const handleSearch = useCallback(async () => {
     if (!destination) {
@@ -99,34 +93,17 @@ export const SearchBar = () => {
     setLastSearch(searchData);
 
     if (mode === "restaurants") {
-      // Build query based on allergies or use generic "allergy friendly"
-      const query = allergies.length > 0 
-        ? `allergy friendly restaurants in ${destination}`
-        : `allergy friendly restaurants in ${destination}`;
-      
-      const mapsUrl = buildGoogleMapsUrl(query);
-      window.open(mapsUrl, '_blank', 'noopener,noreferrer');
+      // Navigate to search results with mode=restaurants
+      const allergiesParam = allergies.join(',');
+      navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}&mode=restaurants`);
       setIsSearching(false);
     } else {
       // Hotels mode - navigate to search results page
       const allergiesParam = allergies.join(',');
-      navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}`);
+      navigate(`/search-results?destination=${encodeURIComponent(destination)}&allergies=${encodeURIComponent(allergiesParam)}&mode=hotels`);
     }
-  }, [destination, allergies, mode, navigate, toast, buildGoogleMapsUrl]);
+  }, [destination, allergies, mode, navigate, toast]);
 
-  // Handle viewing all restaurants (fallback link)
-  const handleViewAllRestaurants = useCallback(() => {
-    if (!destination) {
-      toast({
-        title: "Please enter a destination",
-        description: "A destination is required",
-        variant: "destructive"
-      });
-      return;
-    }
-    const mapsUrl = buildGoogleMapsUrl(`restaurants in ${destination}`);
-    window.open(mapsUrl, '_blank', 'noopener,noreferrer');
-  }, [destination, toast, buildGoogleMapsUrl]);
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-full">
@@ -204,18 +181,7 @@ export const SearchBar = () => {
       >
         <Search className="h-4 w-4 sm:h-5 sm:w-5" />
         <span>{isSearching ? "Searching..." : "Search Now"}</span>
-        {mode === "restaurants" && <ExternalLink className="h-3 w-3 ml-1" />}
       </Button>
-
-      {/* Fallback link for restaurants */}
-      {mode === "restaurants" && destination && (
-        <button 
-          onClick={handleViewAllRestaurants}
-          className="text-xs text-blue-200 hover:text-white hover:underline text-center transition-colors"
-        >
-          View all restaurants in {destination} →
-        </button>
-      )}
     </div>
   );
 };
