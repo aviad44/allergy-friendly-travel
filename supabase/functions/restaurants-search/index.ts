@@ -35,14 +35,41 @@ const allergyPriority = [
   'vegan', 'vegetarian'
 ];
 
-// Keywords to look for in reviews
-const allergyKeywords = [
-  'allergy', 'allergen', 'allergic', 'dietary requirements', 'dietary',
-  'intolerance', 'gluten free', 'gluten-free', 'celiac', 'coeliac',
-  'nut allergy', 'nut-free', 'dairy free', 'dairy-free', 
-  'egg free', 'egg-free', 'sesame', 'vegan', 'vegetarian',
-  'food allergy', 'special diet', 'accommodating'
+// General allergy keywords (always included)
+const generalAllergyKeywords = [
+  'allergy', 'allergic', 'allergen', 'anaphylaxis', 'epipen',
+  'cross contamination', 'contamination', 'dietary restriction', 
+  'dietary requirements', 'intolerance', 'intolerant', 'sensitivity',
+  'special diet'
 ];
+
+// Accommodation keywords (positive signals)
+const accommodationKeywords = [
+  'accommodated', 'accommodate', 'careful', 'safe', 'staff', 'manager',
+  'chef', 'understood', 'protocol', 'separate', 'dedicated fryer', 
+  'took seriously'
+];
+
+// Allergy-specific keywords based on primary phrase
+const specificAllergyKeywords: Record<string, string[]> = {
+  'dairy free': ['dairy free', 'dairy-free', 'milk free', 'lactose free', 'casein', 'whey'],
+  'lactose free': ['dairy free', 'dairy-free', 'milk free', 'lactose free', 'casein', 'whey'],
+  'gluten free': ['gluten free', 'gluten-free', 'celiac', 'coeliac', 'gf', 'cross contamination'],
+  'celiac friendly': ['gluten free', 'gluten-free', 'celiac', 'coeliac', 'gf', 'cross contamination'],
+  'peanut allergy friendly': ['peanut', 'peanuts', 'nut', 'nuts', 'almond', 'walnut', 'cashew', 'hazelnut'],
+  'tree nut allergy friendly': ['peanut', 'peanuts', 'nut', 'nuts', 'almond', 'walnut', 'cashew', 'hazelnut'],
+  'nut allergy friendly': ['peanut', 'peanuts', 'nut', 'nuts', 'almond', 'walnut', 'cashew', 'hazelnut'],
+  'egg free': ['egg free', 'egg-free', 'eggs'],
+  'soy free': ['soy free', 'soy-free', 'soya'],
+  'sesame free': ['sesame free', 'sesame-free', 'sesame'],
+  'fish allergy friendly': ['seafood allergy', 'fish allergy', 'fish free'],
+  'shellfish allergy friendly': ['seafood allergy', 'shellfish allergy', 'shellfish free'],
+  'vegan': ['vegan', 'plant based', 'plant-based'],
+  'vegetarian': ['vegetarian', 'veggie'],
+  'allergy friendly': []
+};
+
+const REVIEW_SCORE_THRESHOLD = 2;
 
 function getPrimaryPhrase(allergies: string[]): string {
   const normalizedAllergies = allergies.map(a => a.toLowerCase().trim());
@@ -54,6 +81,69 @@ function getPrimaryPhrase(allergies: string[]): string {
   }
   
   return 'allergy friendly';
+}
+
+function scoreReview(reviewText: string, primaryPhrase: string): number {
+  const text = reviewText.toLowerCase();
+  let score = 0;
+  
+  // Check general allergy keywords
+  for (const keyword of generalAllergyKeywords) {
+    if (text.includes(keyword)) score++;
+  }
+  
+  // Check accommodation keywords
+  for (const keyword of accommodationKeywords) {
+    if (text.includes(keyword)) score++;
+  }
+  
+  // Check allergy-specific keywords based on primary phrase
+  const specificKeywords = specificAllergyKeywords[primaryPhrase] || [];
+  for (const keyword of specificKeywords) {
+    if (text.includes(keyword)) score++;
+  }
+  
+  return score;
+}
+
+function findBestReviewSnippet(
+  reviews: any[], 
+  primaryPhrase: string
+): { text: string; author: string; relativeTime: string; hasAllergyMention: boolean } | null {
+  if (!reviews || reviews.length === 0) return null;
+  
+  // Score all reviews and find the best one
+  let bestReview = null;
+  let bestScore = 0;
+  
+  for (const review of reviews) {
+    const reviewText = review.text?.text || review.text || '';
+    const score = scoreReview(reviewText, primaryPhrase);
+    
+    if (score > bestScore) {
+      bestScore = score;
+      bestReview = review;
+    }
+  }
+  
+  // Only return as allergy-related if score meets threshold
+  if (bestScore >= REVIEW_SCORE_THRESHOLD && bestReview) {
+    const text = bestReview.text?.text || bestReview.text || '';
+    return {
+      text: text.length > 220 ? text.substring(0, 217) + '...' : text,
+      author: bestReview.authorAttribution?.displayName || bestReview.author_name || '',
+      relativeTime: bestReview.relativePublishTimeDescription || bestReview.relative_time_description || '',
+      hasAllergyMention: true
+    };
+  }
+  
+  // No allergy-relevant review found - return null to indicate no match
+  return {
+    text: '',
+    author: '',
+    relativeTime: '',
+    hasAllergyMention: false
+  };
 }
 
 function findBestReviewSnippet(reviews: any[]): { text: string; author: string; relativeTime: string } | null {
@@ -119,7 +209,11 @@ serve(async (req) => {
 
     const allergiesArray = Array.isArray(allergies) ? allergies : [];
     const primaryPhrase = getPrimaryPhrase(allergiesArray);
-    const searchQuery = `${primaryPhrase} restaurants in ${destination}`;
+    // Include "allergy" in the search query when allergies are selected to increase relevance
+    const hasAllergies = allergiesArray.length > 0;
+    const searchQuery = hasAllergies 
+      ? `${primaryPhrase} allergy friendly restaurants in ${destination}`
+      : `${primaryPhrase} restaurants in ${destination}`;
     
     console.log('🔍 Search query:', searchQuery);
 
@@ -189,7 +283,7 @@ serve(async (req) => {
           }
           
           const details = detailsData.result;
-          const reviewSnippet = findBestReviewSnippet(details.reviews);
+          const reviewSnippet = findBestReviewSnippet(details.reviews, primaryPhrase);
           
           return {
             name: details.name || place.name,

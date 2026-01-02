@@ -2,6 +2,7 @@ export interface ReviewSnippet {
   text: string;
   author: string;
   relativeTime: string;
+  hasAllergyMention: boolean;
 }
 
 export interface RestaurantInfo {

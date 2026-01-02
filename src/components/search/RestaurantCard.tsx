@@ -1,4 +1,4 @@
-import { MapPin, Star, ExternalLink, Clock, DollarSign, Quote } from "lucide-react";
+import { MapPin, Star, ExternalLink, Clock, DollarSign, Quote, Info } from "lucide-react";
 import { RestaurantInfo } from "@/types/restaurant";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,8 @@ export const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
     if (level === undefined || level === null) return null;
     return '€'.repeat(level);
   };
+
+  const hasAllergyReview = restaurant.reviewSnippet?.hasAllergyMention && restaurant.reviewSnippet?.text;
 
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -62,26 +64,35 @@ export const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
           </div>
         )}
         
-        {restaurant.reviewSnippet && restaurant.reviewSnippet.text && (
-          <div className="bg-muted/50 rounded-lg p-3 border-l-2 border-primary/30">
+        {hasAllergyReview ? (
+          <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-3 border-l-2 border-green-500">
             <div className="flex items-start gap-2">
-              <Quote className="h-4 w-4 text-primary/60 shrink-0 mt-0.5" />
+              <Quote className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <p className="text-sm italic text-foreground/80">
-                  "{restaurant.reviewSnippet.text}"
+                  "{restaurant.reviewSnippet!.text}"
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {restaurant.reviewSnippet.author && (
-                    <span>— {restaurant.reviewSnippet.author}</span>
+                  {restaurant.reviewSnippet!.author && (
+                    <span>— {restaurant.reviewSnippet!.author}</span>
                   )}
-                  {restaurant.reviewSnippet.relativeTime && (
-                    <span className="ml-1">({restaurant.reviewSnippet.relativeTime})</span>
+                  {restaurant.reviewSnippet!.relativeTime && (
+                    <span className="ml-1">({restaurant.reviewSnippet!.relativeTime})</span>
                   )}
                 </p>
-                <p className="text-xs text-muted-foreground/70">
-                  Google review snippet
+                <p className="text-xs text-green-600 font-medium">
+                  Allergy-related Google review snippet
                 </p>
               </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-muted/50 rounded-lg p-3 border-l-2 border-muted-foreground/30">
+            <div className="flex items-start gap-2">
+              <Info className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+              <p className="text-sm text-muted-foreground">
+                No allergy-related mentions found in available Google review snippets.
+              </p>
             </div>
           </div>
         )}
