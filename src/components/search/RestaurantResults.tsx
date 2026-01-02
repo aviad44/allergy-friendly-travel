@@ -134,7 +134,7 @@ export const RestaurantResults = ({
     <div className="space-y-4 mt-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h2 className="text-xl font-semibold text-foreground">
-          Found {restaurants.length} restaurants in {destination}
+          Found {restaurants.length} restaurants in {destination} based on Google review mentions
         </h2>
         
         <DropdownMenu>
@@ -171,26 +171,31 @@ export const RestaurantResults = ({
       <Alert className="bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800">
         <Info className="h-4 w-4 text-amber-600" />
         <AlertDescription className="text-amber-800 dark:text-amber-200 text-sm">
-          Confidence levels are based on Google review snippets mentioning allergies. This is not a safety guarantee—always verify directly with the restaurant.
+          Results are based on limited Google review snippets. Always verify allergy handling directly with the restaurant.
         </AlertDescription>
       </Alert>
 
       {/* Optional filter toggle */}
-      <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-        <Filter className="h-4 w-4 text-muted-foreground" />
-        <div className="flex items-center gap-2">
-          <Switch
-            id="allergy-filter"
-            checked={showOnlyAllergyMentions}
-            onCheckedChange={setShowOnlyAllergyMentions}
-          />
-          <Label htmlFor="allergy-filter" className="text-sm cursor-pointer">
-            Show only restaurants with allergy-related mentions
-            <span className="ml-1 text-muted-foreground">
-              ({allergyMentionCount} of {restaurants.length})
-            </span>
-          </Label>
+      <div className="flex flex-col gap-2 p-3 bg-muted/50 rounded-lg">
+        <div className="flex items-center gap-3">
+          <Filter className="h-4 w-4 text-muted-foreground" />
+          <div className="flex items-center gap-2">
+            <Switch
+              id="allergy-filter"
+              checked={showOnlyAllergyMentions}
+              onCheckedChange={setShowOnlyAllergyMentions}
+            />
+            <Label htmlFor="allergy-filter" className="text-sm cursor-pointer">
+              Show only restaurants with allergy mentions
+              <span className="ml-1 text-muted-foreground">
+                ({allergyMentionCount} of {restaurants.length})
+              </span>
+            </Label>
+          </div>
         </div>
+        <p className="text-xs text-muted-foreground ml-7">
+          May significantly reduce results
+        </p>
       </div>
 
       {filteredAndSortedRestaurants.length === 0 && showOnlyAllergyMentions ? (
