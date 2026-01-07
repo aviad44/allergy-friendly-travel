@@ -5,7 +5,79 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Priority order for allergy phrases
+// ==========================================
+// LAYER A: Core Allergy Terms
+// ==========================================
+const layerATerms = [
+  // Core allergy terms
+  'allergy', 'allergies', 'allergic', 'allergen', 'allergens',
+  'food allergy', 'severe allergy', 'multiple allergies',
+  'allergy aware', 'allergy conscious', 'allergy safe', 'allergy friendly',
+  
+  // Gluten/Wheat/Celiac
+  'gluten', 'gluten free', 'glutenfree', 'celiac', 'coeliac', 'celiac disease',
+  'gluten intolerance', 'gluten intolerant', 'non celiac gluten sensitivity', 'ncgs',
+  'wheat', 'wheat free', 'no wheat', 'rye', 'barley', 'oats',
+  
+  // Dairy/Milk/Lactose
+  'dairy free', 'dairyfree', 'milk allergy', 'milk free', 'no milk',
+  'lactose', 'lactose free', 'lactosefree', 'lactose intolerant', 'lactose intolerance',
+  'casein', 'whey',
+  
+  // Egg
+  'egg allergy', 'egg free', 'eggfree', 'egg intolerance',
+  'albumin', 'egg white', 'egg yolk',
+  
+  // Peanut/Tree Nut
+  'peanut', 'peanut allergy', 'peanut free', 'peanutfree', 'groundnut',
+  'tree nut', 'nuts', 'nut allergy', 'nut free', 'nutfree',
+  'almond', 'hazelnut', 'walnut', 'pecan', 'cashew', 'pistachio',
+  'macadamia', 'brazil nut', 'pine nut',
+  
+  // Soy/Sesame/Fish/Shellfish
+  'soy', 'soya', 'soy allergy', 'soy free', 'soyfree', 'soy sauce',
+  'sesame', 'sesame free', 'tahini', 'sesame seeds',
+  'fish allergy', 'seafood allergy', 'shellfish', 'shellfish allergy',
+  'shrimp', 'prawn', 'crab', 'lobster', 'clam', 'oyster', 'scallop',
+  'mussels', 'squid', 'octopus', 'mollusc',
+  
+  // Other regulated allergens
+  'mustard', 'celery', 'lupin', 'sulfites', 'sulphites',
+  
+  // Misspellings
+  'alergy', 'alergies', 'alergic',
+  
+  // Abbreviations (only match as standalone words)
+  'gf', 'df', 'nf', 'ff', 'ef'
+];
+
+// ==========================================
+// LAYER B: Safety and Accommodation Signals
+// ==========================================
+const layerBTerms = [
+  // Safety and accommodation
+  'cross contamination', 'cross contamination risk', 'cross contact',
+  'traces', 'may contain', 'contains traces',
+  'shared kitchen', 'shared fryer', 'shared oil',
+  'allergen menu', 'allergen information', 'allergen list', 'ingredient list',
+  'dietary restrictions', 'dietary requirement', 'special diet', 'restricted diet',
+  'accommodated my allergy', 'can accommodate', 'accommodating', 'very accommodating',
+  'informed staff', 'knowledgeable staff', 'staff understood', 'took it seriously',
+  'safe to eat', 'felt safe', 'felt comfortable', 'cautious', 'careful',
+  'allergy protocol', 'allergy friendly kitchen'
+];
+
+// ==========================================
+// Strong Warning Phrases (bypass Layer B requirement)
+// ==========================================
+const strongWarningPhrases = [
+  'not safe', 'unsafe', 'wouldnt recommend for allergies', 'wouldn\'t recommend for allergies',
+  'reaction', 'allergic reaction', 'flare up', 'flareup',
+  'epipen', 'epi pen', 'adrenaline pen',
+  'anaphylaxis', 'anaphylactic', 'anaphylactic shock'
+];
+
+// Priority order for allergy phrases (for search query optimization)
 const allergyPhraseMap: Record<string, string> = {
   'celiac': 'celiac friendly',
   'celiac disease': 'celiac friendly',
@@ -27,38 +99,12 @@ const allergyPhraseMap: Record<string, string> = {
   'vegetarian': 'vegetarian',
 };
 
-// Priority order for phrase selection
 const allergyPriority = [
   'celiac disease', 'celiac', 'gluten', 'peanuts', 'peanut', 
   'tree nuts', 'tree nut', 'nuts', 'dairy', 'lactose',
   'eggs', 'egg', 'soy', 'fish', 'shellfish', 'sesame',
   'vegan', 'vegetarian'
 ];
-
-// STRICT allergy keywords - ONLY explicit allergy-related terms
-// These must be WORD BOUNDARY checked to avoid false positives
-// Generic words like "staff", "friendly", "careful" are NOT included
-const strictAllergyKeywords = [
-  // Core allergy terms
-  'allergy', 'allergies', 'allergic', 'allergen', 'allergens',
-  // Gluten/celiac
-  'gluten', 'gluten free', 'gluten-free', 'celiac', 'coeliac',
-  // Dairy
-  'dairy free', 'dairy-free', 'milk allergy', 'lactose', 'lactose free', 'lactose-free',
-  // Eggs
-  'egg allergy', 'egg free', 'egg-free',
-  // Nuts - be careful with "nuts" alone as it can be slang
-  'peanut allergy', 'peanut free', 'peanut-free', 'tree nut', 'nut allergy', 'nut free', 'nut-free',
-  // Other allergens
-  'soy free', 'soy-free', 'soy allergy', 'sesame', 'sesame free',
-  'fish allergy', 'shellfish', 'shellfish allergy',
-  // Safety terms
-  'cross contamination', 'cross-contamination', 'epipen', 'anaphylaxis', 'anaphylactic'
-];
-
-// Confidence thresholds
-const HIGH_CONFIDENCE_THRESHOLD = 2; // Multiple allergy mentions
-const MEDIUM_CONFIDENCE_THRESHOLD = 1; // At least one allergen mention
 
 function getPrimaryPhrase(allergies: string[]): string {
   const normalizedAllergies = allergies.map(a => a.toLowerCase().trim());
@@ -72,91 +118,186 @@ function getPrimaryPhrase(allergies: string[]): string {
   return 'allergy friendly';
 }
 
-// Check if text contains any strict allergy keyword with word boundary awareness
-function containsAllergyKeyword(text: string): boolean {
-  const lowerText = text.toLowerCase();
-  
-  for (const keyword of strictAllergyKeywords) {
-    // Create regex with word boundaries to avoid partial matches
-    const regex = new RegExp(`\\b${keyword.replace(/-/g, '[- ]?')}\\b`, 'i');
-    if (regex.test(lowerText)) {
-      console.log(`✅ Found allergy keyword "${keyword}" in review`);
-      return true;
-    }
-  }
-  return false;
+// ==========================================
+// Two-Layer Classification System
+// ==========================================
+
+// Normalize text for matching: lowercase, punctuation to spaces, collapse spaces
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s]/g, ' ')  // Replace punctuation with spaces
+    .replace(/\s+/g, ' ')      // Collapse multiple spaces
+    .trim();
 }
 
-function scoreReview(reviewText: string): number {
-  const text = reviewText.toLowerCase();
-  let score = 0;
+// Find all matching terms from a list using word boundary matching
+function findMatchingTerms(normalizedText: string, terms: string[]): string[] {
+  const matches: string[] = [];
+  for (const term of terms) {
+    const normalizedTerm = normalizeText(term);
+    // Use word boundary matching - escape special regex chars and allow flexible spacing
+    const regexPattern = normalizedTerm.replace(/\s+/g, '\\s+');
+    const regex = new RegExp(`\\b${regexPattern}\\b`, 'i');
+    if (regex.test(normalizedText)) {
+      matches.push(term);
+    }
+  }
+  return matches;
+}
+
+// Check for strong warning phrases
+function findStrongWarningPhrases(normalizedText: string): string[] {
+  const matches: string[] = [];
+  for (const phrase of strongWarningPhrases) {
+    const normalizedPhrase = normalizeText(phrase);
+    const regexPattern = normalizedPhrase.replace(/\s+/g, '\\s+');
+    const regex = new RegExp(`\\b${regexPattern}\\b`, 'i');
+    if (regex.test(normalizedText)) {
+      matches.push(phrase);
+    }
+  }
+  return matches;
+}
+
+// Main classification result interface
+interface ClassificationResult {
+  isAllergyRelated: boolean;
+  confidence: number;
+  matchedLayerATerms: string[];
+  matchedLayerBTerms: string[];
+  matchedStrongPhrases: string[];
+  shortReason: string;
+}
+
+// Main classification function implementing the two-layer rule
+function classifyReview(text: string): ClassificationResult {
+  const normalizedText = normalizeText(text);
   
-  // Only count STRICT allergy keywords with word boundary check
-  for (const keyword of strictAllergyKeywords) {
-    const regex = new RegExp(`\\b${keyword.replace(/-/g, '[- ]?')}\\b`, 'i');
-    if (regex.test(text)) {
-      score++;
+  const layerAMatches = findMatchingTerms(normalizedText, layerATerms);
+  const layerBMatches = findMatchingTerms(normalizedText, layerBTerms);
+  const strongPhraseMatches = findStrongWarningPhrases(normalizedText);
+  
+  const hasLayerA = layerAMatches.length > 0;
+  const hasLayerB = layerBMatches.length > 0;
+  const hasStrongPhrase = strongPhraseMatches.length > 0;
+  
+  // Decision rule:
+  // - (Layer A AND Layer B) = related
+  // - (Layer A AND Strong Warning) = related (exception rule)
+  const isAllergyRelated = (hasLayerA && hasLayerB) || (hasLayerA && hasStrongPhrase);
+  
+  // Calculate confidence score
+  let confidence = 0;
+  if (isAllergyRelated) {
+    const totalMatches = layerAMatches.length + layerBMatches.length + strongPhraseMatches.length;
+    if (hasStrongPhrase) {
+      // Strong phrases get higher base confidence
+      confidence = Math.min(0.95, 0.7 + (totalMatches * 0.05));
+    } else {
+      confidence = Math.min(0.9, 0.5 + (totalMatches * 0.08));
     }
   }
   
-  return score;
+  // Generate human-readable reason
+  let shortReason = '';
+  if (isAllergyRelated) {
+    if (hasStrongPhrase) {
+      shortReason = `Contains strong allergy warning: ${strongPhraseMatches[0]}`;
+    } else {
+      shortReason = `Matches allergy terms (${layerAMatches[0]}) with safety context (${layerBMatches[0]})`;
+    }
+  } else if (hasLayerA && !hasLayerB) {
+    shortReason = 'Contains allergy terms but lacks safety/accommodation context';
+  } else {
+    shortReason = 'No meaningful allergy-related content found';
+  }
+  
+  return {
+    isAllergyRelated,
+    confidence,
+    matchedLayerATerms: layerAMatches,
+    matchedLayerBTerms: layerBMatches,
+    matchedStrongPhrases: strongPhraseMatches,
+    shortReason
+  };
 }
 
-function getConfidenceLevel(hasAllergyMention: boolean, score: number): 'high' | 'medium' | 'low' {
-  // If no allergy mention was found, ALWAYS return low
-  if (!hasAllergyMention) return 'low';
-  
-  if (score >= HIGH_CONFIDENCE_THRESHOLD) return 'high';
-  if (score >= MEDIUM_CONFIDENCE_THRESHOLD) return 'medium';
+// Get confidence level based on classification
+type ConfidenceLevel = 'high' | 'medium' | 'low';
+
+function getConfidenceLevel(classification: ClassificationResult): ConfidenceLevel {
+  if (!classification.isAllergyRelated) {
+    return 'low';
+  }
+  if (classification.confidence >= 0.7 || classification.matchedStrongPhrases.length > 0) {
+    return 'high';
+  }
+  if (classification.confidence >= 0.5) {
+    return 'medium';
+  }
   return 'low';
 }
 
-function findBestReviewSnippet(
-  reviews: any[]
-): { text: string; author: string; relativeTime: string; hasAllergyMention: boolean; score: number } {
+// Review snippet interface
+interface ReviewSnippet {
+  text: string;
+  author: string;
+  relativeTime: string;
+  hasAllergyMention: boolean;
+  score: number;
+  matchedTerms: string[];
+}
+
+// Find the best allergy-related review snippet
+function findBestReviewSnippet(reviews: any[]): ReviewSnippet {
   if (!reviews || reviews.length === 0) {
-    return { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0 };
+    return { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0, matchedTerms: [] };
   }
   
-  // Score all reviews and find the best one with strict allergy keywords
-  let bestReview = null;
-  let bestScore = 0;
+  let bestReview: ReviewSnippet | null = null;
+  let bestScore = -1;
   
   for (const review of reviews) {
-    const reviewText = review.text?.text || review.text || '';
-    const score = scoreReview(reviewText);
+    const text = review.text?.text || review.text || '';
+    if (!text) continue;
     
-    // Log for debugging
-    if (score > 0) {
-      console.log(`📝 Review with score ${score}: "${reviewText.substring(0, 100)}..."`);
-    }
+    const classification = classifyReview(text);
     
-    if (score > bestScore) {
-      bestScore = score;
-      bestReview = review;
-    }
-  }
-  
-  // CRITICAL: Only mark as allergy-related if score >= threshold AND we verify keyword exists
-  if (bestScore >= MEDIUM_CONFIDENCE_THRESHOLD && bestReview) {
-    const text = bestReview.text?.text || bestReview.text || '';
-    
-    // Double-check that the text actually contains an allergy keyword
-    if (containsAllergyKeyword(text)) {
-      console.log(`✅ Allergy-related review found with score ${bestScore}`);
-      return {
+    // Only consider reviews that pass the two-layer test
+    if (classification.isAllergyRelated && classification.confidence > bestScore) {
+      bestScore = classification.confidence;
+      const allMatchedTerms = [
+        ...classification.matchedLayerATerms,
+        ...classification.matchedLayerBTerms,
+        ...classification.matchedStrongPhrases
+      ];
+      
+      console.log(`✅ Found allergy-related review (confidence: ${classification.confidence.toFixed(2)}): "${text.substring(0, 80)}..."`);
+      console.log(`   Layer A: [${classification.matchedLayerATerms.join(', ')}]`);
+      console.log(`   Layer B: [${classification.matchedLayerBTerms.join(', ')}]`);
+      if (classification.matchedStrongPhrases.length > 0) {
+        console.log(`   Strong phrases: [${classification.matchedStrongPhrases.join(', ')}]`);
+      }
+      
+      bestReview = {
         text: text.length > 220 ? text.substring(0, 217) + '...' : text,
-        author: bestReview.authorAttribution?.displayName || bestReview.author_name || '',
-        relativeTime: bestReview.relativePublishTimeDescription || bestReview.relative_time_description || '',
+        author: review.authorAttribution?.displayName || review.author_name || 'Anonymous',
+        relativeTime: review.relativePublishTimeDescription || review.relative_time_description || '',
         hasAllergyMention: true,
-        score: bestScore
+        score: classification.confidence,
+        matchedTerms: allMatchedTerms
       };
     }
   }
   
-  // No allergy-relevant review found - return empty, NEVER show generic quotes
-  console.log(`ℹ️ No allergy-related reviews found for this restaurant`);
-  return { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0 };
+  // If no allergy-related review found, return empty (NOT a generic review)
+  if (!bestReview) {
+    console.log(`ℹ️ No allergy-related reviews found (two-layer test failed for all reviews)`);
+    return { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0, matchedTerms: [] };
+  }
+  
+  return bestReview;
 }
 
 // Simple in-memory cache
@@ -196,7 +337,6 @@ serve(async (req) => {
 
     const allergiesArray = Array.isArray(allergies) ? allergies : [];
     const primaryPhrase = getPrimaryPhrase(allergiesArray);
-    // Include "allergy" in the search query when allergies are selected to increase relevance
     const hasAllergies = allergiesArray.length > 0;
     const searchQuery = hasAllergies 
       ? `${primaryPhrase} allergy friendly restaurants in ${destination}`
@@ -271,7 +411,13 @@ serve(async (req) => {
           
           const details = detailsData.result;
           const reviewSnippet = findBestReviewSnippet(details.reviews);
-          const confidenceLevel = getConfidenceLevel(reviewSnippet.hasAllergyMention, reviewSnippet.score);
+          
+          // Get classification-based confidence
+          let confidenceLevel: ConfidenceLevel = 'low';
+          if (reviewSnippet.hasAllergyMention && reviewSnippet.text) {
+            const classification = classifyReview(reviewSnippet.text);
+            confidenceLevel = getConfidenceLevel(classification);
+          }
           
           return {
             name: details.name || place.name,
@@ -281,8 +427,14 @@ serve(async (req) => {
             openNow: details.opening_hours?.open_now,
             priceLevel: details.price_level,
             mapsUrl: details.url || `https://www.google.com/maps/place/?q=place_id:${place.place_id}`,
-            reviewSnippet: reviewSnippet,
-            confidenceLevel: confidenceLevel
+            reviewSnippet: {
+              text: reviewSnippet.text,
+              author: reviewSnippet.author,
+              relativeTime: reviewSnippet.relativeTime,
+              hasAllergyMention: reviewSnippet.hasAllergyMention,
+              score: reviewSnippet.score
+            },
+            confidenceLevel
           };
         } catch (err) {
           console.error(`❌ Error fetching details for ${place.name}:`, err);
@@ -294,7 +446,28 @@ serve(async (req) => {
       places.push(...batchResults.filter(p => p !== null));
     }
 
-    console.log(`✅ Successfully processed ${places.length} restaurants`);
+    // Sort: allergy-mentioned restaurants first, then by confidence, then by rating
+    places.sort((a, b) => {
+      const aHasAllergy = a.reviewSnippet?.hasAllergyMention ? 1 : 0;
+      const bHasAllergy = b.reviewSnippet?.hasAllergyMention ? 1 : 0;
+      
+      if (aHasAllergy !== bHasAllergy) {
+        return bHasAllergy - aHasAllergy;
+      }
+      
+      const confidenceOrder = { high: 3, medium: 2, low: 1 };
+      const aConf = confidenceOrder[a.confidenceLevel] || 0;
+      const bConf = confidenceOrder[b.confidenceLevel] || 0;
+      
+      if (aConf !== bConf) {
+        return bConf - aConf;
+      }
+      
+      return (b.rating || 0) - (a.rating || 0);
+    });
+
+    const allergyMentionCount = places.filter(p => p.reviewSnippet?.hasAllergyMention).length;
+    console.log(`✅ Processed ${places.length} restaurants, ${allergyMentionCount} with verified allergy mentions (two-layer test)`);
 
     const response = {
       destination,
