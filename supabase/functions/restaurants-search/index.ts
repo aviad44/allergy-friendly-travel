@@ -36,23 +36,24 @@ const allergyPriority = [
 ];
 
 // STRICT allergy keywords - ONLY explicit allergy-related terms
+// These must be WORD BOUNDARY checked to avoid false positives
 // Generic words like "staff", "friendly", "careful" are NOT included
 const strictAllergyKeywords = [
   // Core allergy terms
-  'allergy', 'allergic', 'allergen',
+  'allergy', 'allergies', 'allergic', 'allergen', 'allergens',
   // Gluten/celiac
   'gluten', 'gluten free', 'gluten-free', 'celiac', 'coeliac',
   // Dairy
-  'dairy', 'milk allergy', 'lactose',
+  'dairy free', 'dairy-free', 'milk allergy', 'lactose', 'lactose free', 'lactose-free',
   // Eggs
-  'egg allergy', 'eggs',
-  // Nuts
-  'peanut', 'peanuts', 'tree nut', 'nuts',
+  'egg allergy', 'egg free', 'egg-free',
+  // Nuts - be careful with "nuts" alone as it can be slang
+  'peanut allergy', 'peanut free', 'peanut-free', 'tree nut', 'nut allergy', 'nut free', 'nut-free',
   // Other allergens
-  'soy', 'sesame',
-  'fish allergy', 'shellfish',
+  'soy free', 'soy-free', 'soy allergy', 'sesame', 'sesame free',
+  'fish allergy', 'shellfish', 'shellfish allergy',
   // Safety terms
-  'cross contamination', 'epipen'
+  'cross contamination', 'cross-contamination', 'epipen', 'anaphylaxis', 'anaphylactic'
 ];
 
 // Confidence thresholds
@@ -71,19 +72,40 @@ function getPrimaryPhrase(allergies: string[]): string {
   return 'allergy friendly';
 }
 
+// Check if text contains any strict allergy keyword with word boundary awareness
+function containsAllergyKeyword(text: string): boolean {
+  const lowerText = text.toLowerCase();
+  
+  for (const keyword of strictAllergyKeywords) {
+    // Create regex with word boundaries to avoid partial matches
+    const regex = new RegExp(`\\b${keyword.replace(/-/g, '[- ]?')}\\b`, 'i');
+    if (regex.test(lowerText)) {
+      console.log(`✅ Found allergy keyword "${keyword}" in review`);
+      return true;
+    }
+  }
+  return false;
+}
+
 function scoreReview(reviewText: string): number {
   const text = reviewText.toLowerCase();
   let score = 0;
   
-  // Only count STRICT allergy keywords - no generic words
+  // Only count STRICT allergy keywords with word boundary check
   for (const keyword of strictAllergyKeywords) {
-    if (text.includes(keyword)) score++;
+    const regex = new RegExp(`\\b${keyword.replace(/-/g, '[- ]?')}\\b`, 'i');
+    if (regex.test(text)) {
+      score++;
+    }
   }
   
   return score;
 }
 
-function getConfidenceLevel(score: number): 'high' | 'medium' | 'low' {
+function getConfidenceLevel(hasAllergyMention: boolean, score: number): 'high' | 'medium' | 'low' {
+  // If no allergy mention was found, ALWAYS return low
+  if (!hasAllergyMention) return 'low';
+  
   if (score >= HIGH_CONFIDENCE_THRESHOLD) return 'high';
   if (score >= MEDIUM_CONFIDENCE_THRESHOLD) return 'medium';
   return 'low';
@@ -104,25 +126,36 @@ function findBestReviewSnippet(
     const reviewText = review.text?.text || review.text || '';
     const score = scoreReview(reviewText);
     
+    // Log for debugging
+    if (score > 0) {
+      console.log(`📝 Review with score ${score}: "${reviewText.substring(0, 100)}..."`);
+    }
+    
     if (score > bestScore) {
       bestScore = score;
       bestReview = review;
     }
   }
   
-  // Only return as allergy-related if score meets threshold (at least 1 strict keyword)
+  // CRITICAL: Only mark as allergy-related if score >= threshold AND we verify keyword exists
   if (bestScore >= MEDIUM_CONFIDENCE_THRESHOLD && bestReview) {
     const text = bestReview.text?.text || bestReview.text || '';
-    return {
-      text: text.length > 220 ? text.substring(0, 217) + '...' : text,
-      author: bestReview.authorAttribution?.displayName || bestReview.author_name || '',
-      relativeTime: bestReview.relativePublishTimeDescription || bestReview.relative_time_description || '',
-      hasAllergyMention: true,
-      score: bestScore
-    };
+    
+    // Double-check that the text actually contains an allergy keyword
+    if (containsAllergyKeyword(text)) {
+      console.log(`✅ Allergy-related review found with score ${bestScore}`);
+      return {
+        text: text.length > 220 ? text.substring(0, 217) + '...' : text,
+        author: bestReview.authorAttribution?.displayName || bestReview.author_name || '',
+        relativeTime: bestReview.relativePublishTimeDescription || bestReview.relative_time_description || '',
+        hasAllergyMention: true,
+        score: bestScore
+      };
+    }
   }
   
-  // No allergy-relevant review found - return empty, never show generic quotes
+  // No allergy-relevant review found - return empty, NEVER show generic quotes
+  console.log(`ℹ️ No allergy-related reviews found for this restaurant`);
   return { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0 };
 }
 
@@ -238,7 +271,7 @@ serve(async (req) => {
           
           const details = detailsData.result;
           const reviewSnippet = findBestReviewSnippet(details.reviews);
-          const confidenceLevel = getConfidenceLevel(reviewSnippet.score);
+          const confidenceLevel = getConfidenceLevel(reviewSnippet.hasAllergyMention, reviewSnippet.score);
           
           return {
             name: details.name || place.name,
