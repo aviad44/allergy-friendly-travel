@@ -77,6 +77,49 @@ const strongWarningPhrases = [
   'anaphylaxis', 'anaphylactic', 'anaphylactic shock'
 ];
 
+// ==========================================
+// Multi-query Templates for Comprehensive Search
+// ==========================================
+const SEARCH_QUERY_TEMPLATES = [
+  '{phrase} allergy friendly restaurants in {destination}',
+  'gluten free restaurants in {destination}',
+  'celiac restaurants in {destination}',
+  'nut free options {destination}',
+  'dairy free options {destination}',
+  'vegan gluten free {destination}'
+];
+
+// Language mapping for destinations
+const DESTINATION_LANGUAGES: Record<string, string> = {
+  'prague': 'cs', 'czech': 'cs', 'czechia': 'cs',
+  'rome': 'it', 'italy': 'it', 'milan': 'it', 'florence': 'it', 'naples': 'it', 'venice': 'it', 'tuscany': 'it',
+  'paris': 'fr', 'france': 'fr', 'lyon': 'fr', 'nice': 'fr', 'marseille': 'fr',
+  'madrid': 'es', 'spain': 'es', 'barcelona': 'es', 'seville': 'es', 'valencia': 'es',
+  'berlin': 'de', 'germany': 'de', 'munich': 'de', 'frankfurt': 'de', 'hamburg': 'de',
+  'amsterdam': 'nl', 'netherlands': 'nl', 'rotterdam': 'nl',
+  'lisbon': 'pt', 'portugal': 'pt', 'porto': 'pt',
+  'athens': 'el', 'greece': 'el', 'crete': 'el', 'rhodes': 'el', 'santorini': 'el',
+  'vienna': 'de', 'austria': 'de', 'salzburg': 'de',
+  'stockholm': 'sv', 'sweden': 'sv', 'gothenburg': 'sv',
+  'copenhagen': 'da', 'denmark': 'da',
+  'oslo': 'no', 'norway': 'no',
+  'helsinki': 'fi', 'finland': 'fi',
+  'warsaw': 'pl', 'poland': 'pl', 'krakow': 'pl',
+  'budapest': 'hu', 'hungary': 'hu',
+  'brussels': 'nl', 'belgium': 'nl',
+  'zurich': 'de', 'switzerland': 'de', 'geneva': 'fr',
+  'tokyo': 'ja', 'japan': 'ja', 'osaka': 'ja', 'kyoto': 'ja',
+  'bangkok': 'th', 'thailand': 'th', 'phuket': 'th', 'chiang mai': 'th', 'koh samui': 'th',
+  'istanbul': 'tr', 'turkey': 'tr', 'antalya': 'tr',
+  'tel aviv': 'he', 'israel': 'he', 'jerusalem': 'he', 'eilat': 'he',
+  'dubai': 'ar', 'abu dhabi': 'ar', 'uae': 'ar',
+  'toronto': 'en', 'canada': 'en', 'vancouver': 'en', 'montreal': 'fr',
+  'new york': 'en', 'usa': 'en', 'los angeles': 'en', 'chicago': 'en', 'miami': 'en',
+  'london': 'en', 'uk': 'en', 'england': 'en', 'scotland': 'en',
+  'sydney': 'en', 'australia': 'en', 'melbourne': 'en',
+  'cyprus': 'el', 'ayia napa': 'el', 'paphos': 'el', 'limassol': 'el',
+};
+
 // Priority order for allergy phrases (for search query optimization)
 const allergyPhraseMap: Record<string, string> = {
   'celiac': 'celiac friendly',
@@ -118,6 +161,16 @@ function getPrimaryPhrase(allergies: string[]): string {
   return 'allergy friendly';
 }
 
+function getDestinationLanguage(destination: string): string {
+  const normalizedDest = destination.toLowerCase().trim();
+  for (const [key, lang] of Object.entries(DESTINATION_LANGUAGES)) {
+    if (normalizedDest.includes(key) || key.includes(normalizedDest)) {
+      return lang;
+    }
+  }
+  return 'en';
+}
+
 // ==========================================
 // Two-Layer Classification System
 // ==========================================
@@ -126,8 +179,8 @@ function getPrimaryPhrase(allergies: string[]): string {
 function normalizeText(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[^\w\s]/g, ' ')  // Replace punctuation with spaces
-    .replace(/\s+/g, ' ')      // Collapse multiple spaces
+    .replace(/[^\w\s]/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
 }
 
@@ -136,7 +189,6 @@ function findMatchingTerms(normalizedText: string, terms: string[]): string[] {
   const matches: string[] = [];
   for (const term of terms) {
     const normalizedTerm = normalizeText(term);
-    // Use word boundary matching - escape special regex chars and allow flexible spacing
     const regexPattern = normalizedTerm.replace(/\s+/g, '\\s+');
     const regex = new RegExp(`\\b${regexPattern}\\b`, 'i');
     if (regex.test(normalizedText)) {
@@ -182,24 +234,18 @@ function classifyReview(text: string): ClassificationResult {
   const hasLayerB = layerBMatches.length > 0;
   const hasStrongPhrase = strongPhraseMatches.length > 0;
   
-  // Decision rule:
-  // - (Layer A AND Layer B) = related
-  // - (Layer A AND Strong Warning) = related (exception rule)
   const isAllergyRelated = (hasLayerA && hasLayerB) || (hasLayerA && hasStrongPhrase);
   
-  // Calculate confidence score
   let confidence = 0;
   if (isAllergyRelated) {
     const totalMatches = layerAMatches.length + layerBMatches.length + strongPhraseMatches.length;
     if (hasStrongPhrase) {
-      // Strong phrases get higher base confidence
       confidence = Math.min(0.95, 0.7 + (totalMatches * 0.05));
     } else {
       confidence = Math.min(0.9, 0.5 + (totalMatches * 0.08));
     }
   }
   
-  // Generate human-readable reason
   let shortReason = '';
   if (isAllergyRelated) {
     if (hasStrongPhrase) {
@@ -225,6 +271,7 @@ function classifyReview(text: string): ClassificationResult {
 
 // Get confidence level based on classification
 type ConfidenceLevel = 'high' | 'medium' | 'low';
+type EvidenceStatus = 'evidence_found' | 'no_evidence' | 'insufficient_evidence';
 
 function getConfidenceLevel(classification: ClassificationResult): ConfidenceLevel {
   if (!classification.isAllergyRelated) {
@@ -264,7 +311,6 @@ function findBestReviewSnippet(reviews: any[]): ReviewSnippet {
     
     const classification = classifyReview(text);
     
-    // Only consider reviews that pass the two-layer test
     if (classification.isAllergyRelated && classification.confidence > bestScore) {
       bestScore = classification.confidence;
       const allMatchedTerms = [
@@ -272,13 +318,6 @@ function findBestReviewSnippet(reviews: any[]): ReviewSnippet {
         ...classification.matchedLayerBTerms,
         ...classification.matchedStrongPhrases
       ];
-      
-      console.log(`✅ Found allergy-related review (confidence: ${classification.confidence.toFixed(2)}): "${text.substring(0, 80)}..."`);
-      console.log(`   Layer A: [${classification.matchedLayerATerms.join(', ')}]`);
-      console.log(`   Layer B: [${classification.matchedLayerBTerms.join(', ')}]`);
-      if (classification.matchedStrongPhrases.length > 0) {
-        console.log(`   Strong phrases: [${classification.matchedStrongPhrases.join(', ')}]`);
-      }
       
       bestReview = {
         text: text.length > 220 ? text.substring(0, 217) + '...' : text,
@@ -291,25 +330,243 @@ function findBestReviewSnippet(reviews: any[]): ReviewSnippet {
     }
   }
   
-  // If no allergy-related review found, return empty (NOT a generic review)
   if (!bestReview) {
-    console.log(`ℹ️ No allergy-related reviews found (two-layer test failed for all reviews)`);
     return { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0, matchedTerms: [] };
   }
   
   return bestReview;
 }
 
-// Simple in-memory cache
-const cache = new Map<string, { data: any; timestamp: number }>();
-const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
-
-function getCacheKey(destination: string, phrase: string): string {
-  return `${destination.toLowerCase().trim()}_${phrase}`;
+// ==========================================
+// CACHING SYSTEM - 7 day TTL
+// ==========================================
+interface CachedPlaceDetails {
+  data: any;
+  timestamp: number;
 }
 
+interface CachedSearchResult {
+  data: any;
+  timestamp: number;
+}
+
+const placeDetailsCache = new Map<string, CachedPlaceDetails>();
+const searchResultsCache = new Map<string, CachedSearchResult>();
+const PLACE_DETAILS_CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+const SEARCH_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours for search results
+
+function getCachedPlaceDetails(placeId: string): any | null {
+  const cached = placeDetailsCache.get(placeId);
+  if (cached && Date.now() - cached.timestamp < PLACE_DETAILS_CACHE_TTL) {
+    return cached.data;
+  }
+  return null;
+}
+
+function setCachedPlaceDetails(placeId: string, data: any): void {
+  placeDetailsCache.set(placeId, { data, timestamp: Date.now() });
+}
+
+// ==========================================
+// GEOCODING
+// ==========================================
+interface GeoLocation {
+  lat: number;
+  lng: number;
+}
+
+async function geocodeDestination(destination: string, apiKey: string): Promise<GeoLocation | null> {
+  try {
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(destination)}&key=${apiKey}`;
+    const response = await fetch(geocodeUrl);
+    const data = await response.json();
+    
+    if (data.status === 'OK' && data.results?.[0]?.geometry?.location) {
+      const { lat, lng } = data.results[0].geometry.location;
+      console.log(`📍 Geocoded "${destination}" to lat:${lat}, lng:${lng}`);
+      return { lat, lng };
+    }
+    console.log(`⚠️ Geocoding failed for "${destination}": ${data.status}`);
+    return null;
+  } catch (error) {
+    console.error(`❌ Geocoding error for "${destination}":`, error);
+    return null;
+  }
+}
+
+// ==========================================
+// PAGINATION: Fetch up to 3 pages (60 results)
+// ==========================================
+async function fetchAllTextSearchResults(
+  query: string,
+  apiKey: string,
+  location: GeoLocation | null,
+  language: string,
+  maxPages: number = 3
+): Promise<any[]> {
+  const allResults: any[] = [];
+  let nextPageToken: string | null = null;
+  
+  for (let page = 0; page < maxPages; page++) {
+    let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&type=restaurant&key=${apiKey}&language=${language}`;
+    
+    if (location) {
+      url += `&location=${location.lat},${location.lng}&radius=25000`;
+    }
+    
+    if (nextPageToken) {
+      url += `&pagetoken=${nextPageToken}`;
+    }
+    
+    console.log(`🔍 Fetching page ${page + 1} for query: "${query}" (lang: ${language})`);
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
+      console.error(`❌ Text search failed (page ${page + 1}):`, data.status);
+      break;
+    }
+    
+    if (data.results && data.results.length > 0) {
+      allResults.push(...data.results);
+      console.log(`   Found ${data.results.length} results on page ${page + 1}`);
+    }
+    
+    nextPageToken = data.next_page_token;
+    
+    if (!nextPageToken) {
+      console.log(`   No more pages available`);
+      break;
+    }
+    
+    // Google requires a short delay before using next_page_token
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  }
+  
+  return allResults;
+}
+
+// ==========================================
+// MULTI-QUERY SEARCH WITH MERGE BY PLACE_ID
+// ==========================================
+interface CandidatePlace {
+  place_id: string;
+  name: string;
+  formatted_address: string;
+  rating?: number;
+  user_ratings_total?: number;
+  matchedQueries: string[];
+  matchCount: number;
+}
+
+async function runMultiQuerySearch(
+  destination: string,
+  primaryPhrase: string,
+  apiKey: string,
+  location: GeoLocation | null
+): Promise<CandidatePlace[]> {
+  const candidatesMap = new Map<string, CandidatePlace>();
+  const destLanguage = getDestinationLanguage(destination);
+  
+  // Run each query template in both local language and English
+  const languages = destLanguage !== 'en' ? [destLanguage, 'en'] : ['en'];
+  
+  for (const template of SEARCH_QUERY_TEMPLATES) {
+    const query = template
+      .replace('{phrase}', primaryPhrase)
+      .replace('{destination}', destination);
+    
+    for (const lang of languages) {
+      const results = await fetchAllTextSearchResults(query, apiKey, location, lang, 3);
+      
+      for (const place of results) {
+        if (!place.place_id) continue;
+        
+        const existing = candidatesMap.get(place.place_id);
+        if (existing) {
+          // Place already exists, add this query to matched queries
+          if (!existing.matchedQueries.includes(query)) {
+            existing.matchedQueries.push(query);
+            existing.matchCount++;
+          }
+        } else {
+          // New place
+          candidatesMap.set(place.place_id, {
+            place_id: place.place_id,
+            name: place.name,
+            formatted_address: place.formatted_address,
+            rating: place.rating,
+            user_ratings_total: place.user_ratings_total,
+            matchedQueries: [query],
+            matchCount: 1
+          });
+        }
+      }
+    }
+  }
+  
+  console.log(`📊 Multi-query search found ${candidatesMap.size} unique places`);
+  return Array.from(candidatesMap.values());
+}
+
+// ==========================================
+// CANDIDATE RANKING (before Place Details)
+// ==========================================
+function rankCandidates(candidates: CandidatePlace[]): CandidatePlace[] {
+  return candidates.sort((a, b) => {
+    // 1. Match count (appears in more queries = higher priority)
+    if (b.matchCount !== a.matchCount) {
+      return b.matchCount - a.matchCount;
+    }
+    // 2. Total ratings (popularity indicator)
+    if ((b.user_ratings_total || 0) !== (a.user_ratings_total || 0)) {
+      return (b.user_ratings_total || 0) - (a.user_ratings_total || 0);
+    }
+    // 3. Rating
+    return (b.rating || 0) - (a.rating || 0);
+  });
+}
+
+// ==========================================
+// FETCH PLACE DETAILS WITH CACHING
+// ==========================================
+async function fetchPlaceDetails(
+  placeId: string,
+  apiKey: string
+): Promise<any | null> {
+  // Check cache first
+  const cached = getCachedPlaceDetails(placeId);
+  if (cached) {
+    console.log(`📦 Cache hit for place: ${placeId}`);
+    return cached;
+  }
+  
+  try {
+    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,rating,user_ratings_total,opening_hours,price_level,url,reviews,website,editorial_summary,types,international_phone_number&key=${apiKey}`;
+    
+    const response = await fetch(detailsUrl);
+    const data = await response.json();
+    
+    if (data.status !== 'OK' || !data.result) {
+      console.log(`⚠️ Failed to get details for place ${placeId}: ${data.status}`);
+      return null;
+    }
+    
+    // Cache the result
+    setCachedPlaceDetails(placeId, data.result);
+    console.log(`💾 Cached details for place: ${placeId}`);
+    
+    return data.result;
+  } catch (error) {
+    console.error(`❌ Error fetching details for ${placeId}:`, error);
+    return null;
+  }
+}
+
+// ==========================================
+// MAIN SERVER
+// ==========================================
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -338,42 +595,19 @@ serve(async (req) => {
     const allergiesArray = Array.isArray(allergies) ? allergies : [];
     const primaryPhrase = getPrimaryPhrase(allergiesArray);
     const hasAllergies = allergiesArray.length > 0;
-    const searchQuery = hasAllergies 
-      ? `${primaryPhrase} allergy friendly restaurants in ${destination}`
-      : `${primaryPhrase} restaurants in ${destination}`;
     
-    console.log('🔍 Search query:', searchQuery);
+    console.log('🔍 Primary phrase:', primaryPhrase);
+    console.log('🌍 Destination language:', getDestinationLanguage(destination));
 
-    // Check cache
-    const cacheKey = getCacheKey(destination, primaryPhrase);
-    const cached = cache.get(cacheKey);
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-      console.log('📦 Returning cached results');
-      return new Response(
-        JSON.stringify(cached.data),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    // Step 1: Geocode destination
+    console.log('📍 Step 1: Geocoding destination...');
+    const location = await geocodeDestination(destination, apiKey);
 
-    // Step 1: Text Search to find restaurants
-    const textSearchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchQuery)}&type=restaurant&key=${apiKey}`;
-    
-    console.log('🔎 Performing text search...');
-    const searchResponse = await fetch(textSearchUrl);
-    const searchData = await searchResponse.json();
+    // Step 2: Run multi-query search with pagination
+    console.log('🔍 Step 2: Running multi-query search...');
+    const candidates = await runMultiQuerySearch(destination, primaryPhrase, apiKey, location);
 
-    if (searchData.status !== 'OK' && searchData.status !== 'ZERO_RESULTS') {
-      console.error('❌ Text search failed:', searchData.status, searchData.error_message);
-      return new Response(
-        JSON.stringify({ 
-          error: 'Failed to search for restaurants',
-          fallbackUrl: `https://www.google.com/maps/search/${encodeURIComponent(searchQuery)}`
-        }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    if (!searchData.results || searchData.results.length === 0) {
+    if (candidates.length === 0) {
       console.log('⚠️ No restaurants found');
       return new Response(
         JSON.stringify({ 
@@ -381,104 +615,126 @@ serve(async (req) => {
           mode: 'Restaurants',
           queryPhrase: primaryPhrase,
           places: [],
-          fallbackUrl: `https://www.google.com/maps/search/${encodeURIComponent(searchQuery)}`
+          fallbackUrl: `https://www.google.com/maps/search/allergy+friendly+restaurants+${encodeURIComponent(destination)}`
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Limit to 10 restaurants
-    const topResults = searchData.results.slice(0, 10);
-    console.log(`📍 Found ${topResults.length} restaurants, fetching details...`);
+    // Step 3: Rank candidates
+    console.log('📊 Step 3: Ranking candidates...');
+    const rankedCandidates = rankCandidates(candidates);
+    console.log(`📊 Top candidates by match count: ${rankedCandidates.slice(0, 5).map(c => `${c.name} (${c.matchCount} queries)`).join(', ')}`);
 
-    // Step 2: Fetch place details for each restaurant (with concurrency limit of 4)
+    // Step 4: Fetch Place Details only for top N (cost saving)
+    const TOP_N = 50; // Configurable limit
+    const topCandidates = rankedCandidates.slice(0, TOP_N);
+    console.log(`💰 Step 4: Fetching Place Details for top ${TOP_N} candidates...`);
+
     const places = [];
-    const batchSize = 4;
+    const batchSize = 5;
     
-    for (let i = 0; i < topResults.length; i += batchSize) {
-      const batch = topResults.slice(i, i + batchSize);
-      const batchPromises = batch.map(async (place: any) => {
-        try {
-          const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=name,formatted_address,rating,user_ratings_total,opening_hours,price_level,url,reviews&key=${apiKey}`;
-          
-          const detailsResponse = await fetch(detailsUrl);
-          const detailsData = await detailsResponse.json();
-          
-          if (detailsData.status !== 'OK' || !detailsData.result) {
-            console.log(`⚠️ Failed to get details for ${place.name}`);
-            return null;
-          }
-          
-          const details = detailsData.result;
-          const reviewSnippet = findBestReviewSnippet(details.reviews);
-          
-          // Get classification-based confidence
-          let confidenceLevel: ConfidenceLevel = 'low';
-          if (reviewSnippet.hasAllergyMention && reviewSnippet.text) {
-            const classification = classifyReview(reviewSnippet.text);
-            confidenceLevel = getConfidenceLevel(classification);
-          }
-          
-          return {
-            name: details.name || place.name,
-            address: details.formatted_address || place.formatted_address,
-            rating: details.rating || place.rating,
-            totalRatings: details.user_ratings_total || place.user_ratings_total,
-            openNow: details.opening_hours?.open_now,
-            priceLevel: details.price_level,
-            mapsUrl: details.url || `https://www.google.com/maps/place/?q=place_id:${place.place_id}`,
-            reviewSnippet: {
-              text: reviewSnippet.text,
-              author: reviewSnippet.author,
-              relativeTime: reviewSnippet.relativeTime,
-              hasAllergyMention: reviewSnippet.hasAllergyMention,
-              score: reviewSnippet.score
-            },
-            confidenceLevel
-          };
-        } catch (err) {
-          console.error(`❌ Error fetching details for ${place.name}:`, err);
-          return null;
+    for (let i = 0; i < topCandidates.length; i += batchSize) {
+      const batch = topCandidates.slice(i, i + batchSize);
+      const batchPromises = batch.map(async (candidate) => {
+        const details = await fetchPlaceDetails(candidate.place_id, apiKey);
+        if (!details) return null;
+        
+        const reviewSnippet = findBestReviewSnippet(details.reviews);
+        
+        // Determine evidence status
+        let evidenceStatus: EvidenceStatus = 'no_evidence';
+        let confidenceLevel: ConfidenceLevel = 'low';
+        
+        if (reviewSnippet.hasAllergyMention && reviewSnippet.text) {
+          const classification = classifyReview(reviewSnippet.text);
+          confidenceLevel = getConfidenceLevel(classification);
+          evidenceStatus = 'evidence_found';
+        } else if (details.reviews && details.reviews.length < 5) {
+          evidenceStatus = 'insufficient_evidence';
         }
+        
+        return {
+          name: details.name || candidate.name,
+          address: details.formatted_address || candidate.formatted_address,
+          rating: details.rating || candidate.rating,
+          totalRatings: details.user_ratings_total || candidate.user_ratings_total,
+          openNow: details.opening_hours?.open_now,
+          priceLevel: details.price_level,
+          mapsUrl: details.url || `https://www.google.com/maps/place/?q=place_id:${candidate.place_id}`,
+          website: details.website,
+          editorialSummary: details.editorial_summary?.overview,
+          types: details.types,
+          phone: details.international_phone_number,
+          reviewSnippet: {
+            text: reviewSnippet.text,
+            author: reviewSnippet.author,
+            relativeTime: reviewSnippet.relativeTime,
+            hasAllergyMention: reviewSnippet.hasAllergyMention,
+            score: reviewSnippet.score
+          },
+          confidenceLevel,
+          evidenceStatus,
+          matchCount: candidate.matchCount,
+          matchedQueries: candidate.matchedQueries
+        };
       });
       
       const batchResults = await Promise.all(batchPromises);
       places.push(...batchResults.filter(p => p !== null));
     }
 
-    // Sort: allergy-mentioned restaurants first, then by confidence, then by rating
+    // Step 5: Final sorting
+    console.log('📊 Step 5: Final sorting...');
     places.sort((a, b) => {
-      const aHasAllergy = a.reviewSnippet?.hasAllergyMention ? 1 : 0;
-      const bHasAllergy = b.reviewSnippet?.hasAllergyMention ? 1 : 0;
+      // 1. Evidence found first
+      const evidenceOrder = { evidence_found: 3, insufficient_evidence: 2, no_evidence: 1 };
+      const aEvidence = evidenceOrder[a.evidenceStatus] || 0;
+      const bEvidence = evidenceOrder[b.evidenceStatus] || 0;
+      if (aEvidence !== bEvidence) return bEvidence - aEvidence;
       
-      if (aHasAllergy !== bHasAllergy) {
-        return bHasAllergy - aHasAllergy;
-      }
-      
+      // 2. Confidence level
       const confidenceOrder = { high: 3, medium: 2, low: 1 };
       const aConf = confidenceOrder[a.confidenceLevel] || 0;
       const bConf = confidenceOrder[b.confidenceLevel] || 0;
+      if (aConf !== bConf) return bConf - aConf;
       
-      if (aConf !== bConf) {
-        return bConf - aConf;
-      }
+      // 3. Match count (appeared in more queries)
+      if (b.matchCount !== a.matchCount) return b.matchCount - a.matchCount;
       
+      // 4. Rating
       return (b.rating || 0) - (a.rating || 0);
     });
 
     const allergyMentionCount = places.filter(p => p.reviewSnippet?.hasAllergyMention).length;
-    console.log(`✅ Processed ${places.length} restaurants, ${allergyMentionCount} with verified allergy mentions (two-layer test)`);
+    const evidenceFoundCount = places.filter(p => p.evidenceStatus === 'evidence_found').length;
+    const insufficientCount = places.filter(p => p.evidenceStatus === 'insufficient_evidence').length;
+    
+    console.log(`✅ Processed ${places.length} restaurants:`);
+    console.log(`   📗 Evidence found: ${evidenceFoundCount}`);
+    console.log(`   📙 Insufficient evidence: ${insufficientCount}`);
+    console.log(`   📕 No evidence: ${places.length - evidenceFoundCount - insufficientCount}`);
+    console.log(`   🔍 Allergy mentions in reviews: ${allergyMentionCount}`);
+
+    const searchQuery = hasAllergies 
+      ? `${primaryPhrase} allergy friendly restaurants in ${destination}`
+      : `allergy friendly restaurants in ${destination}`;
 
     const response = {
       destination,
       mode: 'Restaurants',
       queryPhrase: primaryPhrase,
       places,
+      totalCandidates: candidates.length,
+      detailsFetched: places.length,
+      stats: {
+        evidenceFound: evidenceFoundCount,
+        insufficientEvidence: insufficientCount,
+        noEvidence: places.length - evidenceFoundCount - insufficientCount,
+        allergyMentions: allergyMentionCount
+      },
       fallbackUrl: `https://www.google.com/maps/search/${encodeURIComponent(searchQuery)}`
     };
-
-    // Cache the results
-    cache.set(cacheKey, { data: response, timestamp: Date.now() });
 
     return new Response(
       JSON.stringify(response),

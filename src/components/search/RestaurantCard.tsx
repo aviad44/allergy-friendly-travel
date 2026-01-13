@@ -1,5 +1,5 @@
-import { MapPin, Star, ExternalLink, Clock, DollarSign, Quote, Info } from "lucide-react";
-import { RestaurantInfo } from "@/types/restaurant";
+import { MapPin, Star, ExternalLink, Clock, DollarSign, Quote, Info, FileSearch, FileWarning, FileX, Globe, Hash } from "lucide-react";
+import { RestaurantInfo, EvidenceStatus } from "@/types/restaurant";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,10 @@ import { ReactNode } from "react";
 interface RestaurantCardProps {
   restaurant: RestaurantInfo;
   confidenceBadge?: ReactNode;
+  evidenceBadge?: ReactNode;
 }
 
-export const RestaurantCard = ({ restaurant, confidenceBadge }: RestaurantCardProps) => {
+export const RestaurantCard = ({ restaurant, confidenceBadge, evidenceBadge }: RestaurantCardProps) => {
   const getPriceLevelDisplay = (level?: number) => {
     if (level === undefined || level === null) return null;
     return '€'.repeat(level);
@@ -39,7 +40,15 @@ export const RestaurantCard = ({ restaurant, confidenceBadge }: RestaurantCardPr
         </div>
         
         <div className="flex flex-wrap items-center gap-2 mt-2">
+          {evidenceBadge}
           {confidenceBadge}
+          
+          {restaurant.matchCount && restaurant.matchCount > 1 && (
+            <Badge variant="outline" className="gap-1">
+              <Hash className="h-3 w-3" />
+              Matched {restaurant.matchCount} queries
+            </Badge>
+          )}
           
           {restaurant.rating && (
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
