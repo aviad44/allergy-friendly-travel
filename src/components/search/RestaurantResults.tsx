@@ -21,6 +21,10 @@ interface RestaurantResultsProps {
   fallbackUrl: string;
   totalCandidates?: number;
   stats?: RestaurantSearchStats;
+  mode?: 'fast' | 'deep';
+  expandSearchAvailable?: boolean;
+  onModeChange?: (mode: 'fast' | 'deep') => void;
+  isLoading?: boolean;
 }
 
 type SortOption = 'confidence' | 'rating' | 'reviews' | 'matchCount';
