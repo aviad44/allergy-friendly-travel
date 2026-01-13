@@ -256,36 +256,67 @@ export const RestaurantResults = ({
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <h2 className="text-xl font-semibold text-foreground">
-              Found {restaurants.length} restaurants in {destination}
+              {mode === 'fast' ? (
+                <>
+                  Top {evidenceCounts.evidenceFound > 0 ? evidenceCounts.evidenceFound : restaurants.length} restaurants with allergy evidence
+                </>
+              ) : (
+                <>
+                  Found {restaurants.length} restaurants in {destination}
+                </>
+              )}
             </h2>
-            {totalCandidates && totalCandidates > restaurants.length && (
+            {mode === 'fast' && evidenceCounts.evidenceFound > 0 && (
+              <p className="text-sm text-muted-foreground">
+                {evidenceCounts.evidenceFound} with verified evidence out of {restaurants.length} analyzed
+              </p>
+            )}
+            {mode === 'deep' && totalCandidates && totalCandidates > restaurants.length && (
               <p className="text-sm text-muted-foreground">
                 Analyzed {totalCandidates} candidates, showing top {restaurants.length}
               </p>
             )}
           </div>
           
-          {/* Mode Toggle Buttons */}
-          <div className="flex items-center gap-2">
+          {/* Mode Toggle + Evidence Filter */}
+          <div className="flex items-center gap-3">
+            {/* Mode Toggle Buttons */}
+            <div className="flex items-center gap-1.5 bg-muted/50 p-1 rounded-lg">
+              <Button
+                size="sm"
+                variant={mode === 'fast' ? 'default' : 'ghost'}
+                onClick={() => handleModeChange('fast')}
+                disabled={isLoading}
+                className="gap-1.5 h-8"
+              >
+                <Zap className="h-3.5 w-3.5" />
+                Fast
+              </Button>
+              <Button
+                size="sm"
+                variant={mode === 'deep' ? 'default' : 'ghost'}
+                onClick={() => handleModeChange('deep')}
+                disabled={isLoading}
+                className="gap-1.5 h-8"
+              >
+                <Layers className="h-3.5 w-3.5" />
+                Deep
+              </Button>
+            </div>
+            
+            {/* Prominent Evidence Filter Toggle - always visible */}
             <Button
               size="sm"
-              variant={mode === 'fast' ? 'default' : 'outline'}
-              onClick={() => handleModeChange('fast')}
-              disabled={isLoading}
-              className="gap-1.5"
+              variant={showOnlyAllergyMentions ? 'default' : 'outline'}
+              onClick={() => setShowOnlyAllergyMentions(!showOnlyAllergyMentions)}
+              className={`gap-1.5 h-8 ${showOnlyAllergyMentions ? 'bg-green-600 hover:bg-green-700' : ''}`}
             >
-              <Zap className="h-3.5 w-3.5" />
-              Fast
-            </Button>
-            <Button
-              size="sm"
-              variant={mode === 'deep' ? 'default' : 'outline'}
-              onClick={() => handleModeChange('deep')}
-              disabled={isLoading}
-              className="gap-1.5"
-            >
-              <Layers className="h-3.5 w-3.5" />
-              Deep
+              <ShieldCheck className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Evidence only</span>
+              <span className="sm:hidden">Safe</span>
+              <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
+                {evidenceCounts.evidenceFound}
+              </Badge>
             </Button>
           </div>
         </div>
@@ -293,9 +324,9 @@ export const RestaurantResults = ({
         {/* Mode Description */}
         <div className="text-xs text-muted-foreground bg-muted/30 rounded px-3 py-2">
           {mode === 'fast' ? (
-            <span><strong>Fast mode:</strong> Quick search showing only restaurants with verified allergy mentions</span>
+            <span><strong>Fast mode:</strong> Quick search showing restaurants with verified allergy mentions</span>
           ) : (
-            <span><strong>Deep mode:</strong> Comprehensive search showing all results including those without specific mentions</span>
+            <span><strong>Deep mode:</strong> Comprehensive search showing all results. {!showOnlyAllergyMentions && 'Click "Evidence only" for safety-focused results.'}</span>
           )}
         </div>
       </div>
@@ -306,7 +337,8 @@ export const RestaurantResults = ({
           <Search className="h-4 w-4 text-blue-600" />
           <AlertDescription className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <span className="text-blue-800 dark:text-blue-200">
-              Found few restaurants with allergy evidence in fast mode. Expand for more options.
+              <strong>Found {evidenceCounts.evidenceFound} restaurants with evidence</strong> out of {restaurants.length} analyzed. 
+              Expand search for more options.
             </span>
             <div className="flex gap-2">
               <Button 
@@ -387,30 +419,6 @@ export const RestaurantResults = ({
         </AlertDescription>
       </Alert>
 
-      {/* Filter toggle - default state depends on mode */}
-      <div className="flex flex-col gap-2 p-3 bg-muted/50 rounded-lg">
-        <div className="flex items-center gap-3">
-          <Filter className="h-4 w-4 text-muted-foreground" />
-          <div className="flex items-center gap-2">
-            <Switch
-              id="allergy-filter"
-              checked={showOnlyAllergyMentions}
-              onCheckedChange={setShowOnlyAllergyMentions}
-            />
-            <Label htmlFor="allergy-filter" className="text-sm cursor-pointer">
-              Show only restaurants with evidence found
-              <span className="ml-1 text-muted-foreground">
-                ({evidenceCounts.evidenceFound} of {restaurants.length})
-              </span>
-            </Label>
-          </div>
-        </div>
-        <p className="text-xs text-muted-foreground ml-7">
-          {mode === 'fast' 
-            ? 'Filter enabled by default in Fast mode' 
-            : 'Filter disabled by default in Deep mode to show all options'}
-        </p>
-      </div>
 
       {/* Results or empty state */}
       {filteredAndSortedRestaurants.length === 0 && showOnlyAllergyMentions ? (
