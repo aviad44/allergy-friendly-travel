@@ -6,6 +6,16 @@ const corsHeaders = {
 };
 
 // ==========================================
+// PERFORMANCE CONFIGURATION
+// ==========================================
+const MAX_PAGES_PER_QUERY = 2; // Reduced from 3 to save time (40 results per query max)
+const PAGE_DELAY_MS = 1500; // Reduced from 2000, still within Google's tolerance
+const TOP_N = 50; // Top candidates for Place Details
+const PARALLEL_DETAILS_BATCH = 10; // Increased from 5 for faster fetching
+const MAX_QUERIES = 4; // Limit number of query templates to reduce total time
+const MAX_TOTAL_TIME_MS = 25000; // 25 seconds max execution time for search phase
+
+// ==========================================
 // LAYER A: Core Allergy Terms
 // ==========================================
 const layerATerms = [
@@ -78,15 +88,13 @@ const strongWarningPhrases = [
 ];
 
 // ==========================================
-// Multi-query Templates for Comprehensive Search
+// Multi-query Templates - PRIORITIZED by relevance
 // ==========================================
 const SEARCH_QUERY_TEMPLATES = [
-  '{phrase} allergy friendly restaurants in {destination}',
-  'gluten free restaurants in {destination}',
-  'celiac restaurants in {destination}',
-  'nut free options {destination}',
-  'dairy free options {destination}',
-  'vegan gluten free {destination}'
+  '{phrase} restaurants in {destination}',  // Most specific based on user's allergy
+  'allergy friendly restaurants in {destination}',  // General allergy search
+  'celiac safe restaurants in {destination}',  // Celiac-specific
+  'dietary restrictions restaurants in {destination}'  // Broader dietary search
 ];
 
 // Language mapping for destinations
@@ -395,19 +403,26 @@ async function geocodeDestination(destination: string, apiKey: string): Promise<
 }
 
 // ==========================================
-// PAGINATION: Fetch up to 3 pages (60 results)
+// PAGINATION: Fetch up to MAX_PAGES_PER_QUERY pages
 // ==========================================
 async function fetchAllTextSearchResults(
   query: string,
   apiKey: string,
   location: GeoLocation | null,
   language: string,
-  maxPages: number = 3
+  maxPages: number = MAX_PAGES_PER_QUERY,
+  startTime: number = Date.now()
 ): Promise<any[]> {
   const allResults: any[] = [];
   let nextPageToken: string | null = null;
   
   for (let page = 0; page < maxPages; page++) {
+    // Check if we've exceeded time limit
+    if (Date.now() - startTime > MAX_TOTAL_TIME_MS) {
+      console.log(`⏱️ Time limit reached, stopping pagination at page ${page + 1}`);
+      break;
+    }
+    
     let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&type=restaurant&key=${apiKey}&language=${language}`;
     
     if (location) {
@@ -418,7 +433,6 @@ async function fetchAllTextSearchResults(
       url += `&pagetoken=${nextPageToken}`;
     }
     
-    console.log(`🔍 Fetching page ${page + 1} for query: "${query}" (lang: ${language})`);
     const response = await fetch(url);
     const data = await response.json();
     
@@ -429,18 +443,15 @@ async function fetchAllTextSearchResults(
     
     if (data.results && data.results.length > 0) {
       allResults.push(...data.results);
-      console.log(`   Found ${data.results.length} results on page ${page + 1}`);
+      console.log(`   [${language}] Page ${page + 1}: ${data.results.length} results`);
     }
     
     nextPageToken = data.next_page_token;
     
-    if (!nextPageToken) {
-      console.log(`   No more pages available`);
-      break;
-    }
+    if (!nextPageToken) break;
     
-    // Google requires a short delay before using next_page_token
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Reduced delay - Google tolerates 1.5s typically
+    await new Promise(resolve => setTimeout(resolve, PAGE_DELAY_MS));
   }
   
   return allResults;
@@ -463,57 +474,112 @@ async function runMultiQuerySearch(
   destination: string,
   primaryPhrase: string,
   apiKey: string,
-  location: GeoLocation | null
+  location: GeoLocation | null,
+  startTime: number = Date.now()
 ): Promise<CandidatePlace[]> {
   const candidatesMap = new Map<string, CandidatePlace>();
   const destLanguage = getDestinationLanguage(destination);
   
-  // Run each query template in both local language and English
-  const languages = destLanguage !== 'en' ? [destLanguage, 'en'] : ['en'];
+  // Run only English for speed, add local language only if time permits
+  const languages = ['en'];
+  const useLocalLang = destLanguage !== 'en';
+  
+  // Limit query templates based on MAX_QUERIES
+  const limitedTemplates = SEARCH_QUERY_TEMPLATES.slice(0, MAX_QUERIES);
   
   console.log(`\n${'='.repeat(60)}`);
-  console.log(`🔍 MULTI-QUERY SEARCH START`);
+  console.log(`🔍 FAST MULTI-QUERY SEARCH`);
   console.log(`   Destination: ${destination}`);
   console.log(`   Primary phrase: ${primaryPhrase}`);
-  console.log(`   Languages: ${languages.join(', ')}`);
-  console.log(`   Query templates: ${SEARCH_QUERY_TEMPLATES.length}`);
+  console.log(`   Languages: en${useLocalLang ? ` + ${destLanguage} (if time permits)` : ''}`);
+  console.log(`   Query templates: ${limitedTemplates.length} (limited for speed)`);
+  console.log(`   Time budget: ${MAX_TOTAL_TIME_MS}ms`);
   console.log(`${'='.repeat(60)}\n`);
   
   let queryIndex = 0;
-  const queryStats: { query: string; lang: string; pages: number; results: number }[] = [];
+  const queryStats: { query: string; lang: string; results: number; timeMs: number }[] = [];
   
-  for (const template of SEARCH_QUERY_TEMPLATES) {
+  // First pass: English queries (priority)
+  for (const template of limitedTemplates) {
+    if (Date.now() - startTime > MAX_TOTAL_TIME_MS) {
+      console.log(`⏱️ Time limit reached after ${queryIndex} queries`);
+      break;
+    }
+    
     const query = template
       .replace('{phrase}', primaryPhrase)
       .replace('{destination}', destination);
     
-    for (const lang of languages) {
-      queryIndex++;
-      console.log(`\n📋 Query ${queryIndex}/${SEARCH_QUERY_TEMPLATES.length * languages.length}: "${query}" [${lang}]`);
+    queryIndex++;
+    const queryStart = Date.now();
+    console.log(`📋 Query ${queryIndex}: "${query}" [en]`);
+    
+    const results = await fetchAllTextSearchResults(query, apiKey, location, 'en', MAX_PAGES_PER_QUERY, startTime);
+    
+    queryStats.push({
+      query,
+      lang: 'en',
+      results: results.length,
+      timeMs: Date.now() - queryStart
+    });
+    
+    for (const place of results) {
+      if (!place.place_id) continue;
       
-      const results = await fetchAllTextSearchResults(query, apiKey, location, lang, 3);
+      const existing = candidatesMap.get(place.place_id);
+      if (existing) {
+        if (!existing.matchedQueries.includes(query)) {
+          existing.matchedQueries.push(query);
+          existing.matchCount++;
+        }
+      } else {
+        candidatesMap.set(place.place_id, {
+          place_id: place.place_id,
+          name: place.name,
+          formatted_address: place.formatted_address,
+          rating: place.rating,
+          user_ratings_total: place.user_ratings_total,
+          matchedQueries: [query],
+          matchCount: 1
+        });
+      }
+    }
+  }
+  
+  // Second pass: Local language (only if time permits and we need more results)
+  if (useLocalLang && candidatesMap.size < 100 && Date.now() - startTime < MAX_TOTAL_TIME_MS * 0.7) {
+    console.log(`\n🌍 Adding local language (${destLanguage}) queries...`);
+    
+    for (const template of limitedTemplates.slice(0, 2)) { // Only first 2 templates
+      if (Date.now() - startTime > MAX_TOTAL_TIME_MS) break;
+      
+      const query = template
+        .replace('{phrase}', primaryPhrase)
+        .replace('{destination}', destination);
+      
+      queryIndex++;
+      const queryStart = Date.now();
+      console.log(`📋 Query ${queryIndex}: "${query}" [${destLanguage}]`);
+      
+      const results = await fetchAllTextSearchResults(query, apiKey, location, destLanguage, 1, startTime); // Only 1 page
       
       queryStats.push({
         query,
-        lang,
-        pages: Math.ceil(results.length / 20),
-        results: results.length
+        lang: destLanguage,
+        results: results.length,
+        timeMs: Date.now() - queryStart
       });
-      
-      console.log(`   → Retrieved ${results.length} results`);
       
       for (const place of results) {
         if (!place.place_id) continue;
         
         const existing = candidatesMap.get(place.place_id);
         if (existing) {
-          // Place already exists, add this query to matched queries
           if (!existing.matchedQueries.includes(query)) {
             existing.matchedQueries.push(query);
             existing.matchCount++;
           }
         } else {
-          // New place
           candidatesMap.set(place.place_id, {
             place_id: place.place_id,
             name: place.name,
@@ -528,31 +594,20 @@ async function runMultiQuerySearch(
     }
   }
   
-  // Log query statistics
+  // Log summary
+  const totalTime = Date.now() - startTime;
+  const totalResults = queryStats.reduce((sum, s) => sum + s.results, 0);
+  
   console.log(`\n${'='.repeat(60)}`);
-  console.log(`📊 QUERY STATISTICS`);
+  console.log(`📊 SEARCH SUMMARY (${totalTime}ms)`);
   console.log(`${'='.repeat(60)}`);
+  console.log(`   Queries executed: ${queryStats.length}`);
+  console.log(`   Total results: ${totalResults}`);
+  console.log(`   Unique places: ${candidatesMap.size}`);
+  console.log(`   Duplicates removed: ${totalResults - candidatesMap.size}`);
+  
   for (const stat of queryStats) {
-    console.log(`   [${stat.lang}] "${stat.query.substring(0, 50)}..." → ${stat.results} results (${stat.pages} pages)`);
-  }
-  
-  const totalResultsBeforeMerge = queryStats.reduce((sum, s) => sum + s.results, 0);
-  console.log(`\n📊 MERGE STATISTICS`);
-  console.log(`   Total results before merge: ${totalResultsBeforeMerge}`);
-  console.log(`   Unique places after merge: ${candidatesMap.size}`);
-  console.log(`   Duplicates removed: ${totalResultsBeforeMerge - candidatesMap.size}`);
-  
-  // Log match count distribution
-  const matchCountDist = new Map<number, number>();
-  for (const candidate of candidatesMap.values()) {
-    const count = matchCountDist.get(candidate.matchCount) || 0;
-    matchCountDist.set(candidate.matchCount, count + 1);
-  }
-  
-  console.log(`\n📊 MATCH COUNT DISTRIBUTION`);
-  const sortedMatchCounts = Array.from(matchCountDist.entries()).sort((a, b) => b[0] - a[0]);
-  for (const [matchCount, places] of sortedMatchCounts) {
-    console.log(`   ${matchCount} queries: ${places} places`);
+    console.log(`   [${stat.lang}] ${stat.results} results in ${stat.timeMs}ms`);
   }
   console.log(`${'='.repeat(60)}\n`);
   
@@ -642,6 +697,7 @@ serve(async (req) => {
       );
     }
 
+    const startTime = Date.now();
     const allergiesArray = Array.isArray(allergies) ? allergies : [];
     const primaryPhrase = getPrimaryPhrase(allergiesArray);
     const hasAllergies = allergiesArray.length > 0;
@@ -649,13 +705,15 @@ serve(async (req) => {
     console.log('🔍 Primary phrase:', primaryPhrase);
     console.log('🌍 Destination language:', getDestinationLanguage(destination));
 
-    // Step 1: Geocode destination
+    // Step 1: Geocode destination (quick, ~100ms)
     console.log('📍 Step 1: Geocoding destination...');
     const location = await geocodeDestination(destination, apiKey);
+    console.log(`⏱️ Geocoding took ${Date.now() - startTime}ms`);
 
     // Step 2: Run multi-query search with pagination
     console.log('🔍 Step 2: Running multi-query search...');
-    const candidates = await runMultiQuerySearch(destination, primaryPhrase, apiKey, location);
+    const candidates = await runMultiQuerySearch(destination, primaryPhrase, apiKey, location, startTime);
+    console.log(`⏱️ Search phase took ${Date.now() - startTime}ms`);
 
     if (candidates.length === 0) {
       console.log('⚠️ No restaurants found');
@@ -674,19 +732,22 @@ serve(async (req) => {
     // Step 3: Rank candidates
     console.log('📊 Step 3: Ranking candidates...');
     const rankedCandidates = rankCandidates(candidates);
-    console.log(`📊 Top candidates by match count: ${rankedCandidates.slice(0, 5).map(c => `${c.name} (${c.matchCount} queries)`).join(', ')}`);
+    console.log(`📊 Top candidates: ${rankedCandidates.slice(0, 5).map(c => `${c.name} (${c.matchCount})`).join(', ')}`);
 
     // Step 4: Fetch Place Details only for top N (cost saving)
-    const TOP_N = 50; // Configurable limit
     const topCandidates = rankedCandidates.slice(0, TOP_N);
     console.log(`💰 Step 4: Fetching Place Details for top ${TOP_N} candidates...`);
 
     const places = [];
-    const batchSize = 5;
+    let cacheHits = 0;
     
-    for (let i = 0; i < topCandidates.length; i += batchSize) {
-      const batch = topCandidates.slice(i, i + batchSize);
+    // Increased batch size for faster completion
+    for (let i = 0; i < topCandidates.length; i += PARALLEL_DETAILS_BATCH) {
+      const batch = topCandidates.slice(i, i + PARALLEL_DETAILS_BATCH);
       const batchPromises = batch.map(async (candidate) => {
+        const wasCached = getCachedPlaceDetails(candidate.place_id) !== null;
+        if (wasCached) cacheHits++;
+        
         const details = await fetchPlaceDetails(candidate.place_id, apiKey);
         if (!details) return null;
         
@@ -752,6 +813,8 @@ serve(async (req) => {
       const batchResults = await Promise.all(batchPromises);
       places.push(...batchResults.filter(p => p !== null));
     }
+    
+    console.log(`⏱️ Place Details phase took ${Date.now() - startTime}ms total`);
 
     // Step 5: Final sorting
     console.log('📊 Step 5: Final sorting...');
@@ -780,17 +843,16 @@ serve(async (req) => {
     const insufficientCount = places.filter(p => p.evidenceStatus === 'insufficient_evidence').length;
     const noEvidenceCount = places.length - evidenceFoundCount - insufficientCount;
     
-    // Calculate cache statistics
-    const cacheHits = places.filter(p => getCachedPlaceDetails((p as any).place_id)).length;
+    const totalTime = Date.now() - startTime;
     
     console.log(`\n${'='.repeat(60)}`);
-    console.log(`✅ FINAL RESULTS SUMMARY`);
+    console.log(`✅ FINAL RESULTS (${totalTime}ms total)`);
     console.log(`${'='.repeat(60)}`);
     console.log(`📊 Total candidates found: ${candidates.length}`);
     console.log(`📊 Top N selected for details: ${TOP_N}`);
     console.log(`📊 Place Details fetched: ${places.length}`);
-    console.log(`📊 Place Details from cache: ~${cacheHits} (approximate)`);
-    console.log(`📊 Place Details saved (not fetched): ${candidates.length - TOP_N}`);
+    console.log(`📊 Place Details from cache: ${cacheHits}`);
+    console.log(`📊 Place Details saved (not fetched): ${Math.max(0, candidates.length - TOP_N)}`);
     console.log(`\n📊 EVIDENCE STATUS DISTRIBUTION:`);
     console.log(`   📗 Evidence found: ${evidenceFoundCount} (${((evidenceFoundCount/places.length)*100).toFixed(1)}%)`);
     console.log(`   📙 Insufficient evidence: ${insufficientCount} (${((insufficientCount/places.length)*100).toFixed(1)}%)`);
@@ -821,7 +883,9 @@ serve(async (req) => {
         evidenceFound: evidenceFoundCount,
         insufficientEvidence: insufficientCount,
         noEvidence: noEvidenceCount,
-        allergyMentions: allergyMentionCount
+        allergyMentions: allergyMentionCount,
+        cacheHits,
+        totalTimeMs: totalTime
       },
       fallbackUrl: `https://www.google.com/maps/search/${encodeURIComponent(searchQuery)}`
     };
