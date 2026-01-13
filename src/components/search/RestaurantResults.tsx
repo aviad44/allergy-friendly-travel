@@ -35,9 +35,14 @@ export const RestaurantResults = ({
   // Loading state
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 space-y-4">
+      <div className="flex flex-col items-center justify-center py-16 space-y-6">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground text-sm">Searching for allergy-friendly restaurants...</p>
+        <div className="text-center space-y-2">
+          <p className="text-muted-foreground text-sm">Searching for allergy-friendly restaurants...</p>
+          <p className="text-xs text-muted-foreground/70 max-w-md">
+            Results are based on guest reviews mentioning allergies. Accuracy is not guaranteed.
+          </p>
+        </div>
       </div>
     );
   }
@@ -68,23 +73,33 @@ export const RestaurantResults = ({
 
   return (
     <div className="space-y-4">
-      {/* Simple header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-lg font-semibold text-foreground">
-            {restaurantsWithEvidence.length} restaurants with allergy mentions
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Verified mentions of "{queryPhrase}" in reviews
-          </p>
+      {/* Header with disclaimer */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">
+              {restaurantsWithEvidence.length} restaurants with allergy mentions
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Based on guest reviews in {destination}
+            </p>
+          </div>
+          
+          <Button variant="outline" size="sm" asChild className="gap-1.5 shrink-0">
+            <a href={fallbackUrl} target="_blank" rel="noopener noreferrer">
+              More on Google Maps
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </Button>
         </div>
         
-        <Button variant="outline" size="sm" asChild className="gap-1.5 shrink-0">
-          <a href={fallbackUrl} target="_blank" rel="noopener noreferrer">
-            More on Google Maps
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
-        </Button>
+        {/* Important disclaimer */}
+        <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+          <p className="text-xs text-amber-800 dark:text-amber-200">
+            <strong>Please note:</strong> These results are based on guest reviews mentioning allergies and dietary needs. 
+            We recommend always contacting the restaurant directly before your visit to confirm they can accommodate your specific requirements.
+          </p>
+        </div>
       </div>
 
       {/* Restaurant list - simple divider-based layout */}
@@ -95,8 +110,8 @@ export const RestaurantResults = ({
       </div>
 
       {/* Bottom CTA */}
-      <div className="text-center pt-2">
-        <p className="text-xs text-muted-foreground mb-2">
+      <div className="text-center pt-2 space-y-2">
+        <p className="text-xs text-muted-foreground">
           Looking for more options? Try searching directly on Google Maps.
         </p>
         <Button variant="ghost" size="sm" asChild className="gap-1.5">
@@ -106,6 +121,9 @@ export const RestaurantResults = ({
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
         </Button>
+        <p className="text-[10px] text-muted-foreground/60 mt-2">
+          Always verify allergen information directly with the restaurant before dining.
+        </p>
       </div>
     </div>
   );
