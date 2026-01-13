@@ -9,20 +9,20 @@ const corsHeaders = {
 // MODE CONFIGURATION
 // ==========================================
 const FAST_MODE = {
-  maxQueries: 3,          // Max 2-3 queries
+  maxQueries: 5,          // More queries for better coverage
   maxPagesPerQuery: 1,    // No pagination
-  topNForDetails: 12,     // Only fetch details for top 12
-  maxResultsReturned: 10, // Return max 10
-  minTextCharsForEvidence: 300,
+  topNForDetails: 20,     // Fetch details for top 20
+  maxResultsReturned: 15, // Return max 15
+  minTextCharsForEvidence: 100, // Lower threshold
   filterToEvidenceFound: true, // Show only evidence_found by default
 };
 
 const DEEP_MODE = {
-  maxQueries: 4,          // More queries
+  maxQueries: 6,          // More queries
   maxPagesPerQuery: 2,    // With pagination
   topNForDetails: 50,     // Fetch details for top 50
   maxResultsReturned: 50, // Return all
-  minTextCharsForEvidence: 200,
+  minTextCharsForEvidence: 50, // Very low threshold
   filterToEvidenceFound: false, // Show all results
 };
 
@@ -81,17 +81,27 @@ const strongWarningPhrases = [
 const DESTINATION_LANGUAGES: Record<string, string> = {
   'prague': 'cs', 'czech': 'cs',
   'rome': 'it', 'italy': 'it', 'milan': 'it', 'florence': 'it', 'tuscany': 'it',
-  'paris': 'fr', 'france': 'fr',
-  'madrid': 'es', 'spain': 'es', 'barcelona': 'es',
-  'berlin': 'de', 'germany': 'de', 'munich': 'de',
-  'amsterdam': 'nl', 'netherlands': 'nl',
-  'lisbon': 'pt', 'portugal': 'pt',
-  'athens': 'el', 'greece': 'el', 'crete': 'el',
-  'tokyo': 'ja', 'japan': 'ja',
-  'bangkok': 'th', 'thailand': 'th',
-  'istanbul': 'tr', 'turkey': 'tr',
-  'london': 'en', 'uk': 'en',
-  'new york': 'en', 'usa': 'en',
+  'venice': 'it', 'venezia': 'it', 'naples': 'it', 'napoli': 'it', 'bologna': 'it',
+  'paris': 'fr', 'france': 'fr', 'lyon': 'fr', 'nice': 'fr', 'marseille': 'fr',
+  'madrid': 'es', 'spain': 'es', 'barcelona': 'es', 'seville': 'es', 'valencia': 'es',
+  'berlin': 'de', 'germany': 'de', 'munich': 'de', 'frankfurt': 'de', 'hamburg': 'de',
+  'amsterdam': 'nl', 'netherlands': 'nl', 'rotterdam': 'nl',
+  'lisbon': 'pt', 'portugal': 'pt', 'porto': 'pt',
+  'athens': 'el', 'greece': 'el', 'crete': 'el', 'santorini': 'el', 'mykonos': 'el',
+  'tokyo': 'ja', 'japan': 'ja', 'osaka': 'ja', 'kyoto': 'ja',
+  'bangkok': 'th', 'thailand': 'th', 'phuket': 'th', 'chiang mai': 'th',
+  'istanbul': 'tr', 'turkey': 'tr', 'antalya': 'tr',
+  'london': 'en', 'uk': 'en', 'edinburgh': 'en', 'manchester': 'en',
+  'new york': 'en', 'usa': 'en', 'los angeles': 'en', 'chicago': 'en', 'miami': 'en',
+  'tel aviv': 'he', 'israel': 'he', 'jerusalem': 'he',
+  'vienna': 'de', 'austria': 'de', 'salzburg': 'de',
+  'zurich': 'de', 'switzerland': 'de', 'geneva': 'fr',
+  'brussels': 'nl', 'belgium': 'nl',
+  'dublin': 'en', 'ireland': 'en',
+  'copenhagen': 'da', 'denmark': 'da',
+  'stockholm': 'sv', 'sweden': 'sv',
+  'oslo': 'no', 'norway': 'no',
+  'helsinki': 'fi', 'finland': 'fi',
 };
 
 const allergyPhraseMap: Record<string, string> = {
@@ -158,17 +168,25 @@ function buildSearchQueries(
   // Query 2: Allergy friendly (general)
   queries.push(`allergy friendly restaurants in ${destination}`);
   
-  // Query 3: Gluten-specific if relevant (common search)
+  // Query 3: Dietary accommodating 
+  queries.push(`restaurants with dietary options in ${destination}`);
+  
+  // Query 4: Gluten-specific if relevant, else vegan/vegetarian (often allergen-aware)
   const allergyLower = allergies.map(a => a.toLowerCase()).join(' ');
   if (allergyLower.includes('gluten') || allergyLower.includes('celiac') || allergyLower.includes('coeliac')) {
     queries.push(`gluten free restaurants in ${destination}`);
-  } else if (mode === 'deep') {
-    // In deep mode, add more queries
-    queries.push(`dietary restrictions restaurants in ${destination}`);
+  } else if (allergyLower.includes('nut') || allergyLower.includes('peanut')) {
+    queries.push(`nut free restaurants in ${destination}`);
+  } else {
+    queries.push(`vegan friendly restaurants in ${destination}`);
   }
   
+  // Query 5: Generic with "safe"
+  queries.push(`safe dining restaurants ${destination}`);
+  
   if (mode === 'deep') {
-    queries.push(`safe dining ${primaryPhrase} ${destination}`);
+    // Extra queries for deep mode
+    queries.push(`dietary restrictions restaurants in ${destination}`);
   }
   
   return queries.slice(0, config.maxQueries);
@@ -225,25 +243,34 @@ function classifyReview(text: string): ClassificationResult {
   const hasLayerB = layerBMatches.length > 0;
   const hasStrongPhrase = strongPhraseMatches.length > 0;
   
-  const isAllergyRelated = (hasLayerA && hasLayerB) || (hasLayerA && hasStrongPhrase);
+  // RELAXED CRITERIA: Layer A alone is enough for evidence (user requested more results)
+  // Strong phrase or Layer B boosts confidence
+  const isAllergyRelated = hasLayerA;
   
   let confidence = 0;
   if (isAllergyRelated) {
     const totalMatches = layerAMatches.length + layerBMatches.length + strongPhraseMatches.length;
-    confidence = hasStrongPhrase 
-      ? Math.min(0.95, 0.7 + (totalMatches * 0.05))
-      : Math.min(0.9, 0.5 + (totalMatches * 0.08));
+    if (hasStrongPhrase) {
+      confidence = Math.min(0.95, 0.8 + (totalMatches * 0.03));
+    } else if (hasLayerB) {
+      confidence = Math.min(0.9, 0.6 + (totalMatches * 0.05));
+    } else {
+      // Layer A only - still valid but lower confidence
+      confidence = Math.min(0.7, 0.4 + (layerAMatches.length * 0.1));
+    }
   }
   
   let shortReason = '';
   if (isAllergyRelated) {
-    shortReason = hasStrongPhrase 
-      ? `Contains strong allergy warning: ${strongPhraseMatches[0]}`
-      : `Matches allergy terms (${layerAMatches[0]}) with safety context (${layerBMatches[0]})`;
-  } else if (hasLayerA && !hasLayerB) {
-    shortReason = 'Contains allergy terms but lacks safety/accommodation context';
+    if (hasStrongPhrase) {
+      shortReason = `Contains strong allergy warning: ${strongPhraseMatches[0]}`;
+    } else if (hasLayerB) {
+      shortReason = `Matches allergy terms (${layerAMatches[0]}) with safety context (${layerBMatches[0]})`;
+    } else {
+      shortReason = `Contains allergy terms: ${layerAMatches.slice(0, 3).join(', ')}`;
+    }
   } else {
-    shortReason = 'No meaningful allergy-related content found';
+    shortReason = 'No allergy-related content found';
   }
   
   return {
