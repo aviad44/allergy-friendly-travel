@@ -176,6 +176,9 @@ const SearchResults = () => {
   const [restaurantError, setRestaurantError] = useState<string | null>(null);
   const [queryPhrase, setQueryPhrase] = useState<string>("");
   const [fallbackUrl, setFallbackUrl] = useState<string>("");
+  const [restaurantMode, setRestaurantMode] = useState<'fast' | 'deep'>('fast');
+  const [expandSearchAvailable, setExpandSearchAvailable] = useState(false);
+  const [restaurantStats, setRestaurantStats] = useState<any>(null);
   
   // Hotels search
   useEffect(() => {
@@ -240,7 +243,56 @@ const SearchResults = () => {
     performSearch();
   }, [destination, allergies, mode, toast, navigate, location.state]);
 
-  // Restaurants search
+  // Restaurants search - extracted function to allow re-calling
+  const performRestaurantSearch = async (searchMode: 'fast' | 'deep' = restaurantMode) => {
+    if (!destination) return;
+    
+    setIsSearchingRestaurants(true);
+    setRestaurantError(null);
+    
+    try {
+      console.log('🍽️ Calling restaurants-search function for:', { destination, allergies, mode: searchMode });
+      
+      const allergiesArray = allergies ? (allergies.includes(',') ? allergies.split(',').map(a => a.trim()) : [allergies]) : [];
+      
+      const { data, error } = await supabase.functions.invoke('restaurants-search', {
+        body: { destination, allergies: allergiesArray, mode: searchMode }
+      });
+      
+      console.log('📡 Restaurant search response:', { data, error });
+      
+      if (error) {
+        console.error('❌ Restaurant search error:', error);
+        setRestaurantError('Failed to search for restaurants. Please try again.');
+        setFallbackUrl(`https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
+        return;
+      }
+      
+      if (data.error) {
+        setRestaurantError(data.error);
+        setFallbackUrl(data.fallbackUrl || `https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
+        return;
+      }
+      
+      console.log('✅ Restaurant search results:', data);
+      
+      setRestaurants(data.places || []);
+      setQueryPhrase(data.queryPhrase || 'allergy friendly');
+      setFallbackUrl(data.fallbackUrl || `https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
+      setExpandSearchAvailable(data.expandSearchAvailable || false);
+      setRestaurantStats(data.stats || null);
+      
+      console.log(`🍽️ Found ${data.places?.length || 0} restaurants (mode: ${searchMode})`);
+    } catch (error) {
+      console.error('💥 Restaurant search error:', error);
+      setRestaurantError('An error occurred while searching for restaurants.');
+      setFallbackUrl(`https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
+    } finally {
+      setIsSearchingRestaurants(false);
+    }
+  };
+
+  // Initial restaurant search
   useEffect(() => {
     if (mode !== "restaurants") return;
     
@@ -254,52 +306,14 @@ const SearchResults = () => {
       return;
     }
     
-    const performRestaurantSearch = async () => {
-      setIsSearchingRestaurants(true);
-      setRestaurantError(null);
-      
-      try {
-        console.log('🍽️ Calling restaurants-search function for:', { destination, allergies });
-        
-        const allergiesArray = allergies ? (allergies.includes(',') ? allergies.split(',').map(a => a.trim()) : [allergies]) : [];
-        
-        const { data, error } = await supabase.functions.invoke('restaurants-search', {
-          body: { destination, allergies: allergiesArray }
-        });
-        
-        console.log('📡 Restaurant search response:', { data, error });
-        
-        if (error) {
-          console.error('❌ Restaurant search error:', error);
-          setRestaurantError('Failed to search for restaurants. Please try again.');
-          setFallbackUrl(`https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
-          return;
-        }
-        
-        if (data.error) {
-          setRestaurantError(data.error);
-          setFallbackUrl(data.fallbackUrl || `https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
-          return;
-        }
-        
-        console.log('✅ Restaurant search results:', data);
-        
-        setRestaurants(data.places || []);
-        setQueryPhrase(data.queryPhrase || 'allergy friendly');
-        setFallbackUrl(data.fallbackUrl || `https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
-        
-        console.log(`🍽️ Found ${data.places?.length || 0} restaurants`);
-      } catch (error) {
-        console.error('💥 Restaurant search error:', error);
-        setRestaurantError('An error occurred while searching for restaurants.');
-        setFallbackUrl(`https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
-      } finally {
-        setIsSearchingRestaurants(false);
-      }
-    };
-    
-    performRestaurantSearch();
-  }, [destination, allergies, mode, toast, navigate]);
+    performRestaurantSearch('fast');
+  }, [destination, allergies, mode]);
+
+  // Handler for mode change from RestaurantResults component
+  const handleRestaurantModeChange = (newMode: 'fast' | 'deep') => {
+    setRestaurantMode(newMode);
+    performRestaurantSearch(newMode);
+  };
 
   const isLoading = mode === "hotels" ? isSearchingHotels : isSearchingRestaurants;
   const error = mode === "hotels" ? hotelError : restaurantError;
@@ -332,20 +346,27 @@ const SearchResults = () => {
             </Alert>
           )}
 
-          {isLoading ? (
-            <LoadingState />
-          ) : mode === "hotels" ? (
-            <HotelResults 
-              hotels={hotels} 
-              destination={destination} 
-              allergies={allergies}
-            />
+          {mode === "hotels" ? (
+            isSearchingHotels ? (
+              <LoadingState />
+            ) : (
+              <HotelResults 
+                hotels={hotels} 
+                destination={destination} 
+                allergies={allergies}
+              />
+            )
           ) : (
             <RestaurantResults 
               restaurants={restaurants}
               destination={destination}
               queryPhrase={queryPhrase}
               fallbackUrl={fallbackUrl}
+              mode={restaurantMode}
+              expandSearchAvailable={expandSearchAvailable}
+              onModeChange={handleRestaurantModeChange}
+              isLoading={isSearchingRestaurants}
+              stats={restaurantStats}
             />
           )}
         </div>
