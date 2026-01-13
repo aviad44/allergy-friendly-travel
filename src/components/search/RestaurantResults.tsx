@@ -1,8 +1,8 @@
 import { RestaurantInfo, ConfidenceLevel, EvidenceStatus, RestaurantSearchStats } from "@/types/restaurant";
 import { RestaurantCard } from "./RestaurantCard";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Info, ExternalLink, ArrowUpDown, Filter, Shield, ShieldCheck, ShieldQuestion, FileSearch, FileX, FileWarning } from "lucide-react";
-import { useState, useMemo } from "react";
+import { Info, ExternalLink, ArrowUpDown, Filter, Shield, ShieldCheck, ShieldQuestion, FileSearch, FileX, FileWarning, Zap, Layers, Loader2, Search } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -99,15 +99,27 @@ export const RestaurantResults = ({
   queryPhrase,
   fallbackUrl,
   totalCandidates,
-  stats
+  stats,
+  mode = 'fast',
+  expandSearchAvailable = false,
+  onModeChange,
+  isLoading = false
 }: RestaurantResultsProps) => {
   const [sortBy, setSortBy] = useState<SortOption>('confidence');
-  const [showOnlyAllergyMentions, setShowOnlyAllergyMentions] = useState(false);
+  
+  // In fast mode, default filter to ON (show only evidence_found)
+  // In deep mode, default filter to OFF (show all)
+  const [showOnlyAllergyMentions, setShowOnlyAllergyMentions] = useState(mode === 'fast');
+
+  // Update filter when mode changes
+  useEffect(() => {
+    setShowOnlyAllergyMentions(mode === 'fast');
+  }, [mode]);
 
   const filteredAndSortedRestaurants = useMemo(() => {
     let filtered = [...restaurants];
     
-    // Apply allergy mention filter ONLY if user enables it
+    // Apply allergy mention filter
     if (showOnlyAllergyMentions) {
       filtered = filtered.filter(r => r.evidenceStatus === 'evidence_found');
     }
@@ -115,13 +127,10 @@ export const RestaurantResults = ({
     // Sort based on selection
     if (sortBy === 'confidence') {
       filtered.sort((a, b) => {
-        // First by evidence status
         const evidenceDiff = evidenceOrder[b.evidenceStatus || 'no_evidence'] - evidenceOrder[a.evidenceStatus || 'no_evidence'];
         if (evidenceDiff !== 0) return evidenceDiff;
-        // Then by confidence
         const confDiff = confidenceOrder[b.confidenceLevel] - confidenceOrder[a.confidenceLevel];
         if (confDiff !== 0) return confDiff;
-        // Then by rating
         return (b.rating || 0) - (a.rating || 0);
       });
     } else if (sortBy === 'rating') {
@@ -152,42 +161,176 @@ export const RestaurantResults = ({
     low: restaurants.filter(r => r.confidenceLevel === 'low').length,
   }), [restaurants]);
 
+  const handleModeChange = (newMode: 'fast' | 'deep') => {
+    if (onModeChange && !isLoading) {
+      onModeChange(newMode);
+    }
+  };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 space-y-4">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        <p className="text-muted-foreground">
+          {mode === 'deep' ? 'Running deep search...' : 'Searching restaurants...'}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          This may take a few seconds
+        </p>
+      </div>
+    );
+  }
+
+  // No results at all
   if (!restaurants || restaurants.length === 0) {
     return (
-      <div className="text-center py-8 space-y-4">
-        <div className="text-muted-foreground text-lg mb-2">
-          No restaurants found for this location.
+      <div className="space-y-4 mt-6">
+        {/* Mode Toggle */}
+        <div className="flex items-center justify-center gap-2 p-3 bg-muted/30 rounded-lg">
+          <Button
+            size="sm"
+            variant={mode === 'fast' ? 'default' : 'outline'}
+            onClick={() => handleModeChange('fast')}
+            disabled={isLoading}
+            className="gap-1.5"
+          >
+            <Zap className="h-3.5 w-3.5" />
+            Fast
+          </Button>
+          <Button
+            size="sm"
+            variant={mode === 'deep' ? 'default' : 'outline'}
+            onClick={() => handleModeChange('deep')}
+            disabled={isLoading}
+            className="gap-1.5"
+          >
+            <Layers className="h-3.5 w-3.5" />
+            Deep
+          </Button>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Try a different destination or search directly on Google Maps.
-        </p>
-        <a
-          href={fallbackUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-primary hover:underline"
-        >
-          View results on Google Maps
-          <ExternalLink className="h-4 w-4" />
-        </a>
+
+        <div className="text-center py-8 space-y-4">
+          <Search className="h-12 w-12 mx-auto text-muted-foreground" />
+          <div className="text-muted-foreground text-lg">
+            No restaurants found for this location.
+          </div>
+          
+          {mode === 'fast' && (
+            <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 max-w-md mx-auto">
+              <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                Try expanding to a deeper search for more results
+              </p>
+              <Button 
+                onClick={() => handleModeChange('deep')} 
+                disabled={isLoading}
+                className="gap-1.5"
+              >
+                <Layers className="h-4 w-4" />
+                Expand to Deep Search
+              </Button>
+            </div>
+          )}
+          
+          <p className="text-sm text-muted-foreground">
+            Or search directly on Google Maps
+          </p>
+          <a
+            href={fallbackUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-primary hover:underline"
+          >
+            View results on Google Maps
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-4 mt-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-semibold text-foreground">
-            Found {restaurants.length} restaurants in {destination}
-          </h2>
-          {totalCandidates && totalCandidates > restaurants.length && (
-            <p className="text-sm text-muted-foreground">
-              Analyzed {totalCandidates} candidates, showing top {restaurants.length}
-            </p>
+      {/* Header with Mode Toggle */}
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-semibold text-foreground">
+              Found {restaurants.length} restaurants in {destination}
+            </h2>
+            {totalCandidates && totalCandidates > restaurants.length && (
+              <p className="text-sm text-muted-foreground">
+                Analyzed {totalCandidates} candidates, showing top {restaurants.length}
+              </p>
+            )}
+          </div>
+          
+          {/* Mode Toggle Buttons */}
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              variant={mode === 'fast' ? 'default' : 'outline'}
+              onClick={() => handleModeChange('fast')}
+              disabled={isLoading}
+              className="gap-1.5"
+            >
+              <Zap className="h-3.5 w-3.5" />
+              Fast
+            </Button>
+            <Button
+              size="sm"
+              variant={mode === 'deep' ? 'default' : 'outline'}
+              onClick={() => handleModeChange('deep')}
+              disabled={isLoading}
+              className="gap-1.5"
+            >
+              <Layers className="h-3.5 w-3.5" />
+              Deep
+            </Button>
+          </div>
+        </div>
+
+        {/* Mode Description */}
+        <div className="text-xs text-muted-foreground bg-muted/30 rounded px-3 py-2">
+          {mode === 'fast' ? (
+            <span><strong>Fast mode:</strong> Quick search showing only restaurants with verified allergy mentions</span>
+          ) : (
+            <span><strong>Deep mode:</strong> Comprehensive search showing all results including those without specific mentions</span>
           )}
         </div>
-        
+      </div>
+
+      {/* Expand Search Banner - shown when few results in fast mode */}
+      {mode === 'fast' && expandSearchAvailable && (
+        <Alert className="bg-blue-50 border-blue-200 dark:bg-blue-950/30 dark:border-blue-800">
+          <Search className="h-4 w-4 text-blue-600" />
+          <AlertDescription className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <span className="text-blue-800 dark:text-blue-200">
+              Found few restaurants with allergy evidence in fast mode. Expand for more options.
+            </span>
+            <div className="flex gap-2">
+              <Button 
+                size="sm" 
+                onClick={() => handleModeChange('deep')} 
+                disabled={isLoading}
+                className="gap-1.5"
+              >
+                <Layers className="h-3.5 w-3.5" />
+                Expand Search
+              </Button>
+              <Button size="sm" variant="outline" asChild>
+                <a href={fallbackUrl} target="_blank" rel="noopener noreferrer" className="gap-1.5">
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  Google Maps
+                </a>
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Sort Dropdown */}
+      <div className="flex justify-end">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="w-fit">
@@ -244,7 +387,7 @@ export const RestaurantResults = ({
         </AlertDescription>
       </Alert>
 
-      {/* Optional filter toggle */}
+      {/* Filter toggle - default state depends on mode */}
       <div className="flex flex-col gap-2 p-3 bg-muted/50 rounded-lg">
         <div className="flex items-center gap-3">
           <Filter className="h-4 w-4 text-muted-foreground" />
@@ -263,17 +406,37 @@ export const RestaurantResults = ({
           </div>
         </div>
         <p className="text-xs text-muted-foreground ml-7">
-          Filter to show only restaurants with verified allergy mentions in reviews
+          {mode === 'fast' 
+            ? 'Filter enabled by default in Fast mode' 
+            : 'Filter disabled by default in Deep mode to show all options'}
         </p>
       </div>
 
+      {/* Results or empty state */}
       {filteredAndSortedRestaurants.length === 0 && showOnlyAllergyMentions ? (
         <div className="text-center py-8 space-y-4">
           <div className="text-muted-foreground text-lg">
             No restaurants with allergy-related review mentions found.
           </div>
+          
+          {mode === 'fast' && (
+            <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 max-w-md mx-auto">
+              <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                Try expanding to a deeper search for more results
+              </p>
+              <Button 
+                onClick={() => handleModeChange('deep')} 
+                disabled={isLoading}
+                className="gap-1.5"
+              >
+                <Layers className="h-4 w-4" />
+                Expand to Deep Search
+              </Button>
+            </div>
+          )}
+          
           <p className="text-sm text-muted-foreground">
-            Disable the filter above to see all restaurants, or search directly on Google Maps.
+            Or disable the filter above to see all restaurants, or search directly on Google Maps.
           </p>
           <a
             href={fallbackUrl}

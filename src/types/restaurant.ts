@@ -33,17 +33,20 @@ export interface RestaurantSearchStats {
   evidenceFound: number;
   insufficientEvidence: number;
   noEvidence: number;
-  allergyMentions: number;
+  allergyMentions?: number;
+  cacheHits?: number;
+  totalTimeMs?: number;
 }
 
 export interface RestaurantSearchResponse {
   destination: string;
-  mode: 'Restaurants';
+  mode: 'fast' | 'deep';
   queryPhrase: string;
   places: RestaurantInfo[];
   totalCandidates?: number;
   detailsFetched?: number;
   stats?: RestaurantSearchStats;
+  expandSearchAvailable?: boolean;
   fallbackUrl: string;
   error?: string;
 }
