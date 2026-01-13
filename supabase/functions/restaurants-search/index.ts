@@ -9,20 +9,20 @@ const corsHeaders = {
 // MODE CONFIGURATION
 // ==========================================
 const FAST_MODE = {
-  maxQueries: 5,          // More queries for better coverage
-  maxPagesPerQuery: 1,    // No pagination
-  topNForDetails: 20,     // Fetch details for top 20
-  maxResultsReturned: 15, // Return max 15
-  minTextCharsForEvidence: 100, // Lower threshold
-  filterToEvidenceFound: true, // Show only evidence_found by default
+  maxQueries: 6,          // More queries for better coverage
+  maxPagesPerQuery: 2,    // Allow pagination for more results
+  topNForDetails: 30,     // Fetch details for top 30
+  maxResultsReturned: 20, // Return max 20
+  minTextCharsForEvidence: 50, // Low threshold
+  filterToEvidenceFound: true, // Show only evidence_found
 };
 
 const DEEP_MODE = {
-  maxQueries: 6,          // More queries
-  maxPagesPerQuery: 2,    // With pagination
-  topNForDetails: 50,     // Fetch details for top 50
+  maxQueries: 8,          // Even more queries
+  maxPagesPerQuery: 3,    // More pagination
+  topNForDetails: 60,     // Fetch details for top 60
   maxResultsReturned: 50, // Return all
-  minTextCharsForEvidence: 50, // Very low threshold
+  minTextCharsForEvidence: 30, // Very low threshold
   filterToEvidenceFound: false, // Show all results
 };
 
@@ -34,22 +34,56 @@ const MAX_TOTAL_TIME_MS = 25000;
 // LAYER A: Core Allergy Terms
 // ==========================================
 const layerATerms = [
+  // Core allergy terms
   'allergy', 'allergies', 'allergic', 'allergen', 'allergens',
   'food allergy', 'severe allergy', 'multiple allergies',
   'allergy aware', 'allergy conscious', 'allergy safe', 'allergy friendly',
-  'gluten', 'gluten free', 'glutenfree', 'celiac', 'coeliac', 'celiac disease',
-  'gluten intolerance', 'gluten intolerant', 'wheat', 'wheat free',
-  'dairy free', 'dairyfree', 'milk allergy', 'milk free',
-  'lactose', 'lactose free', 'lactosefree', 'lactose intolerant',
-  'egg allergy', 'egg free', 'eggfree',
-  'peanut', 'peanut allergy', 'peanut free', 'peanutfree',
-  'tree nut', 'nuts', 'nut allergy', 'nut free', 'nutfree',
-  'almond', 'hazelnut', 'walnut', 'pecan', 'cashew', 'pistachio',
-  'soy', 'soya', 'soy allergy', 'soy free', 'soyfree',
-  'sesame', 'sesame free',
+  'allergen free', 'allergen menu', 'allergen info',
+  
+  // Gluten/Celiac
+  'gluten', 'gluten free', 'glutenfree', 'gluten-free', 'celiac', 'coeliac', 'celiac disease',
+  'gluten intolerance', 'gluten intolerant', 'wheat', 'wheat free', 'wheat-free',
+  
+  // Dairy/Lactose
+  'dairy free', 'dairyfree', 'dairy-free', 'milk allergy', 'milk free',
+  'lactose', 'lactose free', 'lactosefree', 'lactose-free', 'lactose intolerant',
+  'non dairy', 'no dairy',
+  
+  // Eggs
+  'egg allergy', 'egg free', 'eggfree', 'egg-free', 'no eggs',
+  
+  // Nuts
+  'peanut', 'peanut allergy', 'peanut free', 'peanutfree', 'peanut-free',
+  'tree nut', 'nuts', 'nut allergy', 'nut free', 'nutfree', 'nut-free',
+  'almond', 'hazelnut', 'walnut', 'pecan', 'cashew', 'pistachio', 'macadamia',
+  'no nuts', 'without nuts',
+  
+  // Soy
+  'soy', 'soya', 'soy allergy', 'soy free', 'soyfree', 'soy-free',
+  
+  // Sesame
+  'sesame', 'sesame free', 'sesame-free',
+  
+  // Seafood
   'fish allergy', 'seafood allergy', 'shellfish', 'shellfish allergy',
-  'shrimp', 'crab', 'lobster',
-  'gf', 'df', 'nf'
+  'shrimp', 'crab', 'lobster', 'no shellfish', 'no seafood',
+  
+  // Dietary preferences often indicating allergen awareness
+  'vegan', 'vegan friendly', 'vegan options', 'plant based', 'plant-based',
+  'vegetarian', 'vegetarian friendly', 'vegetarian options',
+  
+  // Abbreviations
+  'gf', 'df', 'nf', 'v', 'vg',
+  
+  // International terms (Italian, Spanish, French, German)
+  'senza glutine', 'senza lattosio', 'senza noci', 'senza uova', // Italian
+  'sin gluten', 'sin lactosa', 'sin nueces', // Spanish
+  'sans gluten', 'sans lactose', 'sans noix', // French
+  'glutenfrei', 'laktosefrei', 'nussfrei', // German
+  
+  // Common phrases in reviews
+  'dietary needs', 'dietary requirements', 'special dietary',
+  'food sensitivities', 'food sensitivity', 'intolerance', 'intolerant'
 ];
 
 // ==========================================
@@ -161,6 +195,7 @@ function buildSearchQueries(
 ): string[] {
   const queries: string[] = [];
   const config = mode === 'fast' ? FAST_MODE : DEEP_MODE;
+  const allergyLower = allergies.map(a => a.toLowerCase()).join(' ');
   
   // Query 1: Primary allergy phrase (most specific)
   queries.push(`${primaryPhrase} restaurants in ${destination}`);
@@ -168,25 +203,28 @@ function buildSearchQueries(
   // Query 2: Allergy friendly (general)
   queries.push(`allergy friendly restaurants in ${destination}`);
   
-  // Query 3: Dietary accommodating 
-  queries.push(`restaurants with dietary options in ${destination}`);
+  // Query 3: Gluten free (very common, high signal)
+  queries.push(`gluten free restaurants in ${destination}`);
   
-  // Query 4: Gluten-specific if relevant, else vegan/vegetarian (often allergen-aware)
-  const allergyLower = allergies.map(a => a.toLowerCase()).join(' ');
-  if (allergyLower.includes('gluten') || allergyLower.includes('celiac') || allergyLower.includes('coeliac')) {
-    queries.push(`gluten free restaurants in ${destination}`);
-  } else if (allergyLower.includes('nut') || allergyLower.includes('peanut')) {
+  // Query 4: Vegan/vegetarian (often allergen-aware)
+  queries.push(`vegan restaurants in ${destination}`);
+  
+  // Query 5: Dietary restrictions
+  queries.push(`dietary restrictions restaurants in ${destination}`);
+  
+  // Query 6: Specific allergy if not already covered
+  if (allergyLower.includes('nut') || allergyLower.includes('peanut')) {
     queries.push(`nut free restaurants in ${destination}`);
+  } else if (allergyLower.includes('dairy') || allergyLower.includes('lactose')) {
+    queries.push(`dairy free restaurants in ${destination}`);
   } else {
-    queries.push(`vegan friendly restaurants in ${destination}`);
+    queries.push(`food allergy restaurants ${destination}`);
   }
-  
-  // Query 5: Generic with "safe"
-  queries.push(`safe dining restaurants ${destination}`);
   
   if (mode === 'deep') {
     // Extra queries for deep mode
-    queries.push(`dietary restrictions restaurants in ${destination}`);
+    queries.push(`safe dining ${destination}`);
+    queries.push(`healthy restaurants ${destination}`);
   }
   
   return queries.slice(0, config.maxQueries);
