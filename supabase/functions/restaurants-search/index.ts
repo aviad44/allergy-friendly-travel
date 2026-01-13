@@ -31,59 +31,64 @@ const PARALLEL_DETAILS_BATCH = 10;
 const MAX_TOTAL_TIME_MS = 25000;
 
 // ==========================================
-// LAYER A: Core Allergy Terms
+// STRICT LAYER A: Only Explicit Allergy/Free Terms
+// These are STRONG signals that directly indicate allergy awareness
 // ==========================================
-const layerATerms = [
-  // Core allergy terms
+const strictLayerATerms = [
+  // Core explicit allergy terms
   'allergy', 'allergies', 'allergic', 'allergen', 'allergens',
   'food allergy', 'severe allergy', 'multiple allergies',
   'allergy aware', 'allergy conscious', 'allergy safe', 'allergy friendly',
-  'allergen free', 'allergen menu', 'allergen info',
+  'allergen free', 'allergen menu', 'allergen info', 'allergen list',
   
-  // Gluten/Celiac
-  'gluten', 'gluten free', 'glutenfree', 'gluten-free', 'celiac', 'coeliac', 'celiac disease',
-  'gluten intolerance', 'gluten intolerant', 'wheat', 'wheat free', 'wheat-free',
+  // Explicit "free" terms (strong signals)
+  'gluten free', 'glutenfree', 'gluten-free',
+  'dairy free', 'dairyfree', 'dairy-free', 'milk free',
+  'lactose free', 'lactosefree', 'lactose-free',
+  'nut free', 'nutfree', 'nut-free', 'peanut free', 'peanutfree', 'peanut-free',
+  'egg free', 'eggfree', 'egg-free',
+  'soy free', 'soyfree', 'soy-free',
+  'sesame free', 'sesame-free',
+  'wheat free', 'wheat-free',
   
-  // Dairy/Lactose
-  'dairy free', 'dairyfree', 'dairy-free', 'milk allergy', 'milk free',
-  'lactose', 'lactose free', 'lactosefree', 'lactose-free', 'lactose intolerant',
-  'non dairy', 'no dairy',
+  // Medical conditions
+  'celiac', 'coeliac', 'celiac disease',
+  'lactose intolerant', 'gluten intolerant',
+  'food sensitivities', 'food sensitivity', 'intolerance', 'intolerant',
   
-  // Eggs
-  'egg allergy', 'egg free', 'eggfree', 'egg-free', 'no eggs',
+  // Explicit allergy phrases
+  'peanut allergy', 'nut allergy', 'tree nut allergy',
+  'milk allergy', 'egg allergy', 'soy allergy',
+  'fish allergy', 'seafood allergy', 'shellfish allergy',
   
-  // Nuts
-  'peanut', 'peanut allergy', 'peanut free', 'peanutfree', 'peanut-free',
-  'tree nut', 'nuts', 'nut allergy', 'nut free', 'nutfree', 'nut-free',
-  'almond', 'hazelnut', 'walnut', 'pecan', 'cashew', 'pistachio', 'macadamia',
-  'no nuts', 'without nuts',
-  
-  // Soy
-  'soy', 'soya', 'soy allergy', 'soy free', 'soyfree', 'soy-free',
-  
-  // Sesame
-  'sesame', 'sesame free', 'sesame-free',
-  
-  // Seafood
-  'fish allergy', 'seafood allergy', 'shellfish', 'shellfish allergy',
-  'shrimp', 'crab', 'lobster', 'no shellfish', 'no seafood',
-  
-  // Dietary preferences often indicating allergen awareness
-  'vegan', 'vegan friendly', 'vegan options', 'plant based', 'plant-based',
-  'vegetarian', 'vegetarian friendly', 'vegetarian options',
-  
-  // Abbreviations
-  'gf', 'df', 'nf', 'v', 'vg',
-  
-  // International terms (Italian, Spanish, French, German)
+  // International explicit "free" terms
   'senza glutine', 'senza lattosio', 'senza noci', 'senza uova', // Italian
   'sin gluten', 'sin lactosa', 'sin nueces', // Spanish
   'sans gluten', 'sans lactose', 'sans noix', // French
   'glutenfrei', 'laktosefrei', 'nussfrei', // German
   
-  // Common phrases in reviews
+  // Explicit dietary accommodation phrases
   'dietary needs', 'dietary requirements', 'special dietary',
-  'food sensitivities', 'food sensitivity', 'intolerance', 'intolerant'
+  'can accommodate', 'accommodated my', 'very accommodating',
+  
+  // Abbreviations in context (gf menu, df options, etc.)
+  'gf menu', 'gf options', 'df options', 'nf options',
+];
+
+// ==========================================
+// WEAK LAYER A: Ingredient mentions that need context
+// These alone are NOT enough - they need Layer B confirmation
+// ==========================================
+const weakLayerATerms = [
+  // Food items that could just be menu items
+  'gluten', 'dairy', 'lactose', 'wheat',
+  'peanut', 'peanuts', 'tree nut', 'nuts', 'almond', 'hazelnut', 'walnut', 
+  'pecan', 'cashew', 'pistachio', 'macadamia',
+  'soy', 'soya', 'sesame',
+  'shellfish', 'shrimp', 'crab', 'lobster',
+  'vegan', 'vegetarian', 'plant based', 'plant-based',
+  'no eggs', 'no dairy', 'no nuts', 'no shellfish', 'no seafood',
+  'without nuts', 'without dairy',
 ];
 
 // ==========================================
@@ -273,28 +278,43 @@ interface ClassificationResult {
 function classifyReview(text: string): ClassificationResult {
   const normalizedText = normalizeText(text);
   
-  const layerAMatches = findMatchingTerms(normalizedText, layerATerms);
+  // Check strict terms (strong signals)
+  const strictMatches = findMatchingTerms(normalizedText, strictLayerATerms);
+  // Check weak terms (need context)
+  const weakMatches = findMatchingTerms(normalizedText, weakLayerATerms);
   const layerBMatches = findMatchingTerms(normalizedText, layerBTerms);
   const strongPhraseMatches = findStrongWarningPhrases(normalizedText);
   
-  const hasLayerA = layerAMatches.length > 0;
+  const hasStrictLayerA = strictMatches.length > 0;
+  const hasWeakLayerA = weakMatches.length > 0;
   const hasLayerB = layerBMatches.length > 0;
   const hasStrongPhrase = strongPhraseMatches.length > 0;
   
-  // RELAXED CRITERIA: Layer A alone is enough for evidence (user requested more results)
-  // Strong phrase or Layer B boosts confidence
-  const isAllergyRelated = hasLayerA;
+  // STRICTER CRITERIA:
+  // - Strict Layer A terms alone are enough (explicit allergy mentions)
+  // - Weak Layer A terms MUST have Layer B or strong phrase context
+  // - Just mentioning "shrimp" or "lobster" is NOT enough
+  const isAllergyRelated = hasStrictLayerA || 
+    (hasWeakLayerA && (hasLayerB || hasStrongPhrase)) ||
+    hasStrongPhrase;
+  
+  // Combine matched terms for display
+  const allLayerAMatches = [...strictMatches, ...weakMatches];
   
   let confidence = 0;
   if (isAllergyRelated) {
-    const totalMatches = layerAMatches.length + layerBMatches.length + strongPhraseMatches.length;
     if (hasStrongPhrase) {
-      confidence = Math.min(0.95, 0.8 + (totalMatches * 0.03));
-    } else if (hasLayerB) {
-      confidence = Math.min(0.9, 0.6 + (totalMatches * 0.05));
-    } else {
-      // Layer A only - still valid but lower confidence
-      confidence = Math.min(0.7, 0.4 + (layerAMatches.length * 0.1));
+      // Highest confidence for strong warnings
+      confidence = 0.95;
+    } else if (hasStrictLayerA && hasLayerB) {
+      // Explicit allergy term + safety context
+      confidence = 0.9;
+    } else if (hasStrictLayerA) {
+      // Explicit allergy term alone
+      confidence = 0.75;
+    } else if (hasWeakLayerA && hasLayerB) {
+      // Weak term with context
+      confidence = 0.6;
     }
   }
   
@@ -302,10 +322,10 @@ function classifyReview(text: string): ClassificationResult {
   if (isAllergyRelated) {
     if (hasStrongPhrase) {
       shortReason = `Contains strong allergy warning: ${strongPhraseMatches[0]}`;
-    } else if (hasLayerB) {
-      shortReason = `Matches allergy terms (${layerAMatches[0]}) with safety context (${layerBMatches[0]})`;
-    } else {
-      shortReason = `Contains allergy terms: ${layerAMatches.slice(0, 3).join(', ')}`;
+    } else if (hasStrictLayerA) {
+      shortReason = `Explicit allergy mention: ${strictMatches.slice(0, 2).join(', ')}`;
+    } else if (hasWeakLayerA && hasLayerB) {
+      shortReason = `Allergy context: ${weakMatches[0]} with ${layerBMatches[0]}`;
     }
   } else {
     shortReason = 'No allergy-related content found';
@@ -314,7 +334,7 @@ function classifyReview(text: string): ClassificationResult {
   return {
     isAllergyRelated,
     confidence,
-    matchedLayerATerms: layerAMatches,
+    matchedLayerATerms: allLayerAMatches,
     matchedLayerBTerms: layerBMatches,
     matchedStrongPhrases: strongPhraseMatches,
     shortReason

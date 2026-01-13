@@ -198,3 +198,22 @@
     transform: translateY(0);
   }
 }
+
+/* Fork and knife wiggle animations for restaurant search */
+@keyframes fork-wiggle {
+  0%, 100% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+}
+
+@keyframes knife-wiggle {
+  0%, 100% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+}
