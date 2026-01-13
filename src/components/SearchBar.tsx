@@ -147,16 +147,18 @@ export const SearchBar = () => {
           />
         </div>
         
-        {/* Multi-select allergy input with autocomplete */}
-        <div className="w-full">
-          <MemoizedMultiSelectAutocomplete
-            placeholder={mode === "hotels" ? "Select allergies (required)" : "Select allergies (optional)"}
-            selectedValues={allergies}
-            onSelectedValuesChange={handleAllergiesChange}
-            suggestions={allergySuggestions}
-            className="bg-white/90 backdrop-blur-sm w-full text-sm sm:text-base"
-          />
-        </div>
+        {/* Multi-select allergy input with autocomplete - hidden for restaurants */}
+        {mode === "hotels" && (
+          <div className="w-full">
+            <MemoizedMultiSelectAutocomplete
+              placeholder="Select allergies (required)"
+              selectedValues={allergies}
+              onSelectedValuesChange={handleAllergiesChange}
+              suggestions={allergySuggestions}
+              className="bg-white/90 backdrop-blur-sm w-full text-sm sm:text-base"
+            />
+          </div>
+        )}
       </div>
       
       {/* Recent search suggestion */}
@@ -169,7 +171,7 @@ export const SearchBar = () => {
       {/* Restaurant mode notice */}
       {mode === "restaurants" && (
         <p className="text-xs text-white/70 text-center px-2">
-          Results are based on Google Maps data and are not a safety guarantee. Always verify with the restaurant.
+          We search for restaurants with allergy mentions in guest reviews. Results may vary and are not guaranteed.
         </p>
       )}
       
