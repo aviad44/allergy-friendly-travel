@@ -37,11 +37,14 @@ export const RestaurantResults = ({
     return (
       <div className="flex flex-col items-center justify-center py-16 space-y-6">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <div className="text-center space-y-2">
-          <p className="text-muted-foreground text-sm">Searching for allergy-friendly restaurants...</p>
-          <p className="text-xs text-muted-foreground/70 max-w-md">
-            Results are based on guest reviews mentioning allergies. Accuracy is not guaranteed.
-          </p>
+        <div className="text-center space-y-3">
+          <p className="text-foreground font-medium">Searching for allergy-friendly restaurants...</p>
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4 max-w-md mx-auto">
+            <p className="text-sm text-amber-800 dark:text-amber-200">
+              <strong>Please note:</strong> Results are based on guest reviews mentioning allergies. 
+              We recommend always contacting the restaurant directly to confirm they can accommodate your specific requirements.
+            </p>
+          </div>
         </div>
       </div>
     );
