@@ -471,13 +471,36 @@ async function runMultiQuerySearch(
   // Run each query template in both local language and English
   const languages = destLanguage !== 'en' ? [destLanguage, 'en'] : ['en'];
   
+  console.log(`\n${'='.repeat(60)}`);
+  console.log(`🔍 MULTI-QUERY SEARCH START`);
+  console.log(`   Destination: ${destination}`);
+  console.log(`   Primary phrase: ${primaryPhrase}`);
+  console.log(`   Languages: ${languages.join(', ')}`);
+  console.log(`   Query templates: ${SEARCH_QUERY_TEMPLATES.length}`);
+  console.log(`${'='.repeat(60)}\n`);
+  
+  let queryIndex = 0;
+  const queryStats: { query: string; lang: string; pages: number; results: number }[] = [];
+  
   for (const template of SEARCH_QUERY_TEMPLATES) {
     const query = template
       .replace('{phrase}', primaryPhrase)
       .replace('{destination}', destination);
     
     for (const lang of languages) {
+      queryIndex++;
+      console.log(`\n📋 Query ${queryIndex}/${SEARCH_QUERY_TEMPLATES.length * languages.length}: "${query}" [${lang}]`);
+      
       const results = await fetchAllTextSearchResults(query, apiKey, location, lang, 3);
+      
+      queryStats.push({
+        query,
+        lang,
+        pages: Math.ceil(results.length / 20),
+        results: results.length
+      });
+      
+      console.log(`   → Retrieved ${results.length} results`);
       
       for (const place of results) {
         if (!place.place_id) continue;
@@ -505,7 +528,34 @@ async function runMultiQuerySearch(
     }
   }
   
-  console.log(`📊 Multi-query search found ${candidatesMap.size} unique places`);
+  // Log query statistics
+  console.log(`\n${'='.repeat(60)}`);
+  console.log(`📊 QUERY STATISTICS`);
+  console.log(`${'='.repeat(60)}`);
+  for (const stat of queryStats) {
+    console.log(`   [${stat.lang}] "${stat.query.substring(0, 50)}..." → ${stat.results} results (${stat.pages} pages)`);
+  }
+  
+  const totalResultsBeforeMerge = queryStats.reduce((sum, s) => sum + s.results, 0);
+  console.log(`\n📊 MERGE STATISTICS`);
+  console.log(`   Total results before merge: ${totalResultsBeforeMerge}`);
+  console.log(`   Unique places after merge: ${candidatesMap.size}`);
+  console.log(`   Duplicates removed: ${totalResultsBeforeMerge - candidatesMap.size}`);
+  
+  // Log match count distribution
+  const matchCountDist = new Map<number, number>();
+  for (const candidate of candidatesMap.values()) {
+    const count = matchCountDist.get(candidate.matchCount) || 0;
+    matchCountDist.set(candidate.matchCount, count + 1);
+  }
+  
+  console.log(`\n📊 MATCH COUNT DISTRIBUTION`);
+  const sortedMatchCounts = Array.from(matchCountDist.entries()).sort((a, b) => b[0] - a[0]);
+  for (const [matchCount, places] of sortedMatchCounts) {
+    console.log(`   ${matchCount} queries: ${places} places`);
+  }
+  console.log(`${'='.repeat(60)}\n`);
+  
   return Array.from(candidatesMap.values());
 }
 
@@ -642,16 +692,32 @@ serve(async (req) => {
         
         const reviewSnippet = findBestReviewSnippet(details.reviews);
         
-        // Determine evidence status
+        // Improved evidence status determination
         let evidenceStatus: EvidenceStatus = 'no_evidence';
         let confidenceLevel: ConfidenceLevel = 'low';
         
+        // Calculate total review text length for determining if we have enough data
+        const reviews = details.reviews || [];
+        const totalReviewTextLength = reviews.reduce((sum: number, r: any) => {
+          const text = r.text?.text || r.text || '';
+          return sum + text.length;
+        }, 0);
+        
         if (reviewSnippet.hasAllergyMention && reviewSnippet.text) {
+          // Evidence found - we have an allergy-related review
           const classification = classifyReview(reviewSnippet.text);
           confidenceLevel = getConfidenceLevel(classification);
           evidenceStatus = 'evidence_found';
-        } else if (details.reviews && details.reviews.length < 5) {
+        } else if (
+          reviews.length === 0 ||                      // No reviews at all
+          totalReviewTextLength < 200 ||               // Very little text to analyze
+          (reviews.length < 3 && totalReviewTextLength < 500) // Few reviews with short text
+        ) {
+          // Insufficient evidence - not enough data to make a determination
           evidenceStatus = 'insufficient_evidence';
+        } else {
+          // No evidence - we analyzed enough reviews but found nothing
+          evidenceStatus = 'no_evidence';
         }
         
         return {
@@ -671,12 +737,15 @@ serve(async (req) => {
             author: reviewSnippet.author,
             relativeTime: reviewSnippet.relativeTime,
             hasAllergyMention: reviewSnippet.hasAllergyMention,
-            score: reviewSnippet.score
+            score: reviewSnippet.score,
+            matchedTerms: reviewSnippet.matchedTerms
           },
           confidenceLevel,
           evidenceStatus,
           matchCount: candidate.matchCount,
-          matchedQueries: candidate.matchedQueries
+          matchedQueries: candidate.matchedQueries,
+          reviewCount: reviews.length,
+          totalReviewTextLength
         };
       });
       
@@ -709,12 +778,33 @@ serve(async (req) => {
     const allergyMentionCount = places.filter(p => p.reviewSnippet?.hasAllergyMention).length;
     const evidenceFoundCount = places.filter(p => p.evidenceStatus === 'evidence_found').length;
     const insufficientCount = places.filter(p => p.evidenceStatus === 'insufficient_evidence').length;
+    const noEvidenceCount = places.length - evidenceFoundCount - insufficientCount;
     
-    console.log(`✅ Processed ${places.length} restaurants:`);
-    console.log(`   📗 Evidence found: ${evidenceFoundCount}`);
-    console.log(`   📙 Insufficient evidence: ${insufficientCount}`);
-    console.log(`   📕 No evidence: ${places.length - evidenceFoundCount - insufficientCount}`);
-    console.log(`   🔍 Allergy mentions in reviews: ${allergyMentionCount}`);
+    // Calculate cache statistics
+    const cacheHits = places.filter(p => getCachedPlaceDetails((p as any).place_id)).length;
+    
+    console.log(`\n${'='.repeat(60)}`);
+    console.log(`✅ FINAL RESULTS SUMMARY`);
+    console.log(`${'='.repeat(60)}`);
+    console.log(`📊 Total candidates found: ${candidates.length}`);
+    console.log(`📊 Top N selected for details: ${TOP_N}`);
+    console.log(`📊 Place Details fetched: ${places.length}`);
+    console.log(`📊 Place Details from cache: ~${cacheHits} (approximate)`);
+    console.log(`📊 Place Details saved (not fetched): ${candidates.length - TOP_N}`);
+    console.log(`\n📊 EVIDENCE STATUS DISTRIBUTION:`);
+    console.log(`   📗 Evidence found: ${evidenceFoundCount} (${((evidenceFoundCount/places.length)*100).toFixed(1)}%)`);
+    console.log(`   📙 Insufficient evidence: ${insufficientCount} (${((insufficientCount/places.length)*100).toFixed(1)}%)`);
+    console.log(`   📕 No evidence: ${noEvidenceCount} (${((noEvidenceCount/places.length)*100).toFixed(1)}%)`);
+    console.log(`   🔍 Allergy mentions in snippets: ${allergyMentionCount}`);
+    
+    // Log top 10 results
+    console.log(`\n📊 TOP 10 RESULTS:`);
+    places.slice(0, 10).forEach((p, i) => {
+      console.log(`   ${i+1}. ${p.name}`);
+      console.log(`      Evidence: ${p.evidenceStatus} | Confidence: ${p.confidenceLevel} | Match count: ${p.matchCount}`);
+      console.log(`      Rating: ${p.rating?.toFixed(1) || 'N/A'} (${p.totalRatings || 0} reviews)`);
+    });
+    console.log(`${'='.repeat(60)}\n`);
 
     const searchQuery = hasAllergies 
       ? `${primaryPhrase} allergy friendly restaurants in ${destination}`
@@ -730,7 +820,7 @@ serve(async (req) => {
       stats: {
         evidenceFound: evidenceFoundCount,
         insufficientEvidence: insufficientCount,
-        noEvidence: places.length - evidenceFoundCount - insufficientCount,
+        noEvidence: noEvidenceCount,
         allergyMentions: allergyMentionCount
       },
       fallbackUrl: `https://www.google.com/maps/search/${encodeURIComponent(searchQuery)}`

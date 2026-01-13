@@ -7,6 +7,7 @@ export interface ReviewSnippet {
   relativeTime: string;
   hasAllergyMention: boolean;
   score: number;
+  matchedTerms?: string[];
 }
 
 export interface RestaurantInfo {

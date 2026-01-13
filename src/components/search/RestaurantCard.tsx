@@ -1,4 +1,4 @@
-import { MapPin, Star, ExternalLink, Clock, DollarSign, Quote, Info, FileSearch, FileWarning, FileX, Globe, Hash } from "lucide-react";
+import { MapPin, Star, ExternalLink, Clock, DollarSign, Quote, AlertTriangle, HelpCircle, Hash } from "lucide-react";
 import { RestaurantInfo, EvidenceStatus } from "@/types/restaurant";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,91 @@ export const RestaurantCard = ({ restaurant, confidenceBadge, evidenceBadge }: R
   };
 
   const hasAllergyReview = restaurant.reviewSnippet?.hasAllergyMention && restaurant.reviewSnippet?.text;
+  const evidenceStatus = restaurant.evidenceStatus || 'no_evidence';
+
+  // Render review/evidence section based on status
+  const renderEvidenceSection = () => {
+    switch (evidenceStatus) {
+      case 'evidence_found':
+        if (hasAllergyReview) {
+          // Show the actual review snippet with matched terms
+          return (
+            <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-3 border-l-2 border-green-500">
+              <div className="flex items-start gap-2">
+                <Quote className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="text-sm italic text-foreground/80">
+                    "{restaurant.reviewSnippet!.text}"
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {restaurant.reviewSnippet!.author && (
+                      <span>— {restaurant.reviewSnippet!.author}</span>
+                    )}
+                    {restaurant.reviewSnippet!.relativeTime && (
+                      <span className="ml-1">({restaurant.reviewSnippet!.relativeTime})</span>
+                    )}
+                  </p>
+                  <p className="text-xs text-green-600 font-medium">
+                    ✓ Allergy-related evidence found in Google reviews
+                    {restaurant.reviewSnippet?.matchedTerms && restaurant.reviewSnippet.matchedTerms.length > 0 && (
+                      <span className="ml-1 font-normal">
+                        (matched: {restaurant.reviewSnippet.matchedTerms.slice(0, 3).join(', ')})
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+        // Fallback if evidence_found but no snippet text
+        return (
+          <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-3 border-l-2 border-green-500">
+            <div className="flex items-start gap-2">
+              <Quote className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
+              <p className="text-sm text-green-700 dark:text-green-400">
+                ✓ Allergy-related keywords detected in available reviews. Please verify specifics with the restaurant.
+              </p>
+            </div>
+          </div>
+        );
+
+      case 'insufficient_evidence':
+        return (
+          <div className="bg-amber-50 dark:bg-amber-950/30 rounded-lg p-3 border-l-2 border-amber-500">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="text-sm text-amber-800 dark:text-amber-200">
+                  Not enough review data available to confirm allergy safety.
+                </p>
+                <p className="text-xs text-amber-600 dark:text-amber-400">
+                  Please verify allergy accommodations directly with the restaurant before visiting.
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'no_evidence':
+      default:
+        return (
+          <div className="bg-muted/50 rounded-lg p-3 border-l-2 border-muted-foreground/30">
+            <div className="flex items-start gap-2">
+              <HelpCircle className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">
+                  No allergy mentions detected in the available reviews.
+                </p>
+                <p className="text-xs text-muted-foreground/80">
+                  This does not mean the restaurant is unsafe — only that no allergy-related information was found in the limited review data. Always confirm directly.
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+    }
+  };
 
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -77,38 +162,7 @@ export const RestaurantCard = ({ restaurant, confidenceBadge, evidenceBadge }: R
           </div>
         )}
         
-        {hasAllergyReview ? (
-          <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-3 border-l-2 border-green-500">
-            <div className="flex items-start gap-2">
-              <Quote className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <p className="text-sm italic text-foreground/80">
-                  "{restaurant.reviewSnippet!.text}"
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {restaurant.reviewSnippet!.author && (
-                    <span>— {restaurant.reviewSnippet!.author}</span>
-                  )}
-                  {restaurant.reviewSnippet!.relativeTime && (
-                    <span className="ml-1">({restaurant.reviewSnippet!.relativeTime})</span>
-                  )}
-                </p>
-                <p className="text-xs text-green-600 font-medium">
-                  Allergy mentioned by diner (Google review snippet)
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="bg-muted/50 rounded-lg p-3 border-l-2 border-muted-foreground/30">
-            <div className="flex items-start gap-2">
-              <Info className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-              <p className="text-sm text-muted-foreground">
-                No allergy-related mentions found in available Google review snippets
-              </p>
-            </div>
-          </div>
-        )}
+        {renderEvidenceSection()}
         
         <div className="space-y-2">
           <Button 
