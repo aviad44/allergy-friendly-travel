@@ -340,6 +340,56 @@ interface ReviewSnippet {
   matchedTerms: string[];
 }
 
+// Extract only the relevant sentence(s) containing allergy terms
+function extractAllergyRelevantSnippet(fullText: string, matchedTerms: string[]): string {
+  if (!fullText || matchedTerms.length === 0) return fullText;
+  
+  // Split text into sentences
+  const sentences = fullText.split(/(?<=[.!?])\s+/);
+  const relevantSentences: string[] = [];
+  
+  // Find sentences containing any matched term
+  for (const sentence of sentences) {
+    const normalizedSentence = normalizeText(sentence);
+    const hasMatch = matchedTerms.some(term => {
+      const normalizedTerm = normalizeText(term);
+      return normalizedSentence.includes(normalizedTerm);
+    });
+    
+    if (hasMatch) {
+      relevantSentences.push(sentence.trim());
+    }
+  }
+  
+  // If we found relevant sentences, return them (up to 250 chars)
+  if (relevantSentences.length > 0) {
+    let result = relevantSentences.join(' ');
+    if (result.length > 250) {
+      result = result.substring(0, 247) + '...';
+    }
+    return result;
+  }
+  
+  // Fallback: if no sentence-level match, try to find the phrase context
+  const normalizedFull = fullText.toLowerCase();
+  for (const term of matchedTerms) {
+    const normalizedTerm = term.toLowerCase();
+    const termIndex = normalizedFull.indexOf(normalizedTerm);
+    if (termIndex !== -1) {
+      // Extract context around the term (50 chars before, term, 100 chars after)
+      const start = Math.max(0, termIndex - 50);
+      const end = Math.min(fullText.length, termIndex + normalizedTerm.length + 100);
+      let snippet = fullText.substring(start, end);
+      if (start > 0) snippet = '...' + snippet;
+      if (end < fullText.length) snippet = snippet + '...';
+      return snippet;
+    }
+  }
+  
+  // Final fallback: return truncated original
+  return fullText.length > 200 ? fullText.substring(0, 197) + '...' : fullText;
+}
+
 function findBestReviewSnippet(reviews: any[]): ReviewSnippet {
   if (!reviews || reviews.length === 0) {
     return { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0, matchedTerms: [] };
@@ -356,17 +406,23 @@ function findBestReviewSnippet(reviews: any[]): ReviewSnippet {
     
     if (classification.isAllergyRelated && classification.confidence > bestScore) {
       bestScore = classification.confidence;
+      
+      const matchedTerms = [
+        ...classification.matchedLayerATerms,
+        ...classification.matchedLayerBTerms,
+        ...classification.matchedStrongPhrases
+      ];
+      
+      // Extract only the relevant part of the review
+      const relevantText = extractAllergyRelevantSnippet(text, matchedTerms);
+      
       bestReview = {
-        text: text.length > 220 ? text.substring(0, 217) + '...' : text,
+        text: relevantText,
         author: review.authorAttribution?.displayName || review.author_name || 'Anonymous',
         relativeTime: review.relativePublishTimeDescription || review.relative_time_description || '',
         hasAllergyMention: true,
         score: classification.confidence,
-        matchedTerms: [
-          ...classification.matchedLayerATerms,
-          ...classification.matchedLayerBTerms,
-          ...classification.matchedStrongPhrases
-        ]
+        matchedTerms
       };
     }
   }
