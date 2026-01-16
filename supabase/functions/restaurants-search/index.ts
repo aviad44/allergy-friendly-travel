@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -6,42 +7,59 @@ const corsHeaders = {
 };
 
 // ==========================================
-// MODE CONFIGURATION
+// MODE CONFIGURATION - OPTIMIZED FOR COST
 // ==========================================
 const FAST_MODE = {
-  maxQueries: 6,          // More queries for better coverage
-  maxPagesPerQuery: 2,    // Allow pagination for more results
-  topNForDetails: 30,     // Fetch details for top 30
-  maxResultsReturned: 20, // Return max 20
-  minTextCharsForEvidence: 50, // Low threshold
-  filterToEvidenceFound: true, // Show only evidence_found
+  maxQueries: 4,              // Reduced queries
+  maxPagesPerQuery: 1,        // Single page only
+  targetEvidenceResults: 8,   // Stop when we have 8 results with evidence
+  maxDetailsToFetch: 8,       // HARD LIMIT: Never fetch more than 8 details
+  maxResultsReturned: 8,      // Return max 8
+  minTextCharsForEvidence: 50,
+  filterToEvidenceFound: true,
 };
 
 const DEEP_MODE = {
-  maxQueries: 8,          // Even more queries
-  maxPagesPerQuery: 3,    // More pagination
-  topNForDetails: 60,     // Fetch details for top 60
-  maxResultsReturned: 50, // Return all
-  minTextCharsForEvidence: 30, // Very low threshold
-  filterToEvidenceFound: false, // Show all results
+  maxQueries: 6,
+  maxPagesPerQuery: 2,
+  targetEvidenceResults: 15,
+  maxDetailsToFetch: 20,
+  maxResultsReturned: 15,
+  minTextCharsForEvidence: 30,
+  filterToEvidenceFound: false,
 };
 
 const PAGE_DELAY_MS = 1500;
-const PARALLEL_DETAILS_BATCH = 10;
 const MAX_TOTAL_TIME_MS = 25000;
+const CACHE_TTL_DAYS = 7;
+
+// Daily quota guard - prevent runaway API calls
+const DAILY_DETAILS_QUOTA = 500;
+let dailyDetailsCount = 0;
+let quotaResetDate = new Date().toDateString();
+
+function checkAndIncrementQuota(): boolean {
+  const today = new Date().toDateString();
+  if (today !== quotaResetDate) {
+    quotaResetDate = today;
+    dailyDetailsCount = 0;
+  }
+  if (dailyDetailsCount >= DAILY_DETAILS_QUOTA) {
+    console.log(`⚠️ Daily quota exceeded: ${dailyDetailsCount}/${DAILY_DETAILS_QUOTA}`);
+    return false;
+  }
+  dailyDetailsCount++;
+  return true;
+}
 
 // ==========================================
 // STRICT LAYER A: Only Explicit Allergy/Free Terms
-// These are STRONG signals that directly indicate allergy awareness
 // ==========================================
 const strictLayerATerms = [
-  // Core explicit allergy terms
   'allergy', 'allergies', 'allergic', 'allergen', 'allergens',
   'food allergy', 'severe allergy', 'multiple allergies',
   'allergy aware', 'allergy conscious', 'allergy safe', 'allergy friendly',
   'allergen free', 'allergen menu', 'allergen info', 'allergen list',
-  
-  // Explicit "free" terms (strong signals)
   'gluten free', 'glutenfree', 'gluten-free',
   'dairy free', 'dairyfree', 'dairy-free', 'milk free',
   'lactose free', 'lactosefree', 'lactose-free',
@@ -50,37 +68,22 @@ const strictLayerATerms = [
   'soy free', 'soyfree', 'soy-free',
   'sesame free', 'sesame-free',
   'wheat free', 'wheat-free',
-  
-  // Medical conditions
   'celiac', 'coeliac', 'celiac disease',
   'lactose intolerant', 'gluten intolerant',
   'food sensitivities', 'food sensitivity', 'intolerance', 'intolerant',
-  
-  // Explicit allergy phrases
   'peanut allergy', 'nut allergy', 'tree nut allergy',
   'milk allergy', 'egg allergy', 'soy allergy',
   'fish allergy', 'seafood allergy', 'shellfish allergy',
-  
-  // International explicit "free" terms
-  'senza glutine', 'senza lattosio', 'senza noci', 'senza uova', // Italian
-  'sin gluten', 'sin lactosa', 'sin nueces', // Spanish
-  'sans gluten', 'sans lactose', 'sans noix', // French
-  'glutenfrei', 'laktosefrei', 'nussfrei', // German
-  
-  // Explicit dietary accommodation phrases
+  'senza glutine', 'senza lattosio', 'senza noci', 'senza uova',
+  'sin gluten', 'sin lactosa', 'sin nueces',
+  'sans gluten', 'sans lactose', 'sans noix',
+  'glutenfrei', 'laktosefrei', 'nussfrei',
   'dietary needs', 'dietary requirements', 'special dietary',
   'can accommodate', 'accommodated my', 'very accommodating',
-  
-  // Abbreviations in context (gf menu, df options, etc.)
   'gf menu', 'gf options', 'df options', 'nf options',
 ];
 
-// ==========================================
-// WEAK LAYER A: Ingredient mentions that need context
-// These alone are NOT enough - they need Layer B confirmation
-// ==========================================
 const weakLayerATerms = [
-  // Food items that could just be menu items
   'gluten', 'dairy', 'lactose', 'wheat',
   'peanut', 'peanuts', 'tree nut', 'nuts', 'almond', 'hazelnut', 'walnut', 
   'pecan', 'cashew', 'pistachio', 'macadamia',
@@ -91,9 +94,6 @@ const weakLayerATerms = [
   'without nuts', 'without dairy',
 ];
 
-// ==========================================
-// LAYER B: Safety and Accommodation Signals
-// ==========================================
 const layerBTerms = [
   'cross contamination', 'cross contact',
   'traces', 'may contain', 'contains traces',
@@ -106,9 +106,6 @@ const layerBTerms = [
   'allergy protocol', 'allergy friendly kitchen'
 ];
 
-// ==========================================
-// Strong Warning Phrases
-// ==========================================
 const strongWarningPhrases = [
   'not safe', 'unsafe', 'reaction', 'allergic reaction',
   'epipen', 'epi pen', 'anaphylaxis', 'anaphylactic'
@@ -190,7 +187,7 @@ function getDestinationLanguage(destination: string): string {
 }
 
 // ==========================================
-// QUERY TEMPLATES - Build based on mode
+// QUERY TEMPLATES
 // ==========================================
 function buildSearchQueries(
   destination: string,
@@ -202,34 +199,21 @@ function buildSearchQueries(
   const config = mode === 'fast' ? FAST_MODE : DEEP_MODE;
   const allergyLower = allergies.map(a => a.toLowerCase()).join(' ');
   
-  // Query 1: Primary allergy phrase (most specific)
   queries.push(`${primaryPhrase} restaurants in ${destination}`);
-  
-  // Query 2: Allergy friendly (general)
   queries.push(`allergy friendly restaurants in ${destination}`);
-  
-  // Query 3: Gluten free (very common, high signal)
   queries.push(`gluten free restaurants in ${destination}`);
   
-  // Query 4: Vegan/vegetarian (often allergen-aware)
-  queries.push(`vegan restaurants in ${destination}`);
-  
-  // Query 5: Dietary restrictions
-  queries.push(`dietary restrictions restaurants in ${destination}`);
-  
-  // Query 6: Specific allergy if not already covered
   if (allergyLower.includes('nut') || allergyLower.includes('peanut')) {
     queries.push(`nut free restaurants in ${destination}`);
   } else if (allergyLower.includes('dairy') || allergyLower.includes('lactose')) {
     queries.push(`dairy free restaurants in ${destination}`);
   } else {
-    queries.push(`food allergy restaurants ${destination}`);
+    queries.push(`dietary restrictions restaurants ${destination}`);
   }
   
   if (mode === 'deep') {
-    // Extra queries for deep mode
-    queries.push(`safe dining ${destination}`);
-    queries.push(`healthy restaurants ${destination}`);
+    queries.push(`vegan restaurants in ${destination}`);
+    queries.push(`food allergy restaurants ${destination}`);
   }
   
   return queries.slice(0, config.maxQueries);
@@ -278,9 +262,7 @@ interface ClassificationResult {
 function classifyReview(text: string): ClassificationResult {
   const normalizedText = normalizeText(text);
   
-  // Check strict terms (strong signals)
   const strictMatches = findMatchingTerms(normalizedText, strictLayerATerms);
-  // Check weak terms (need context)
   const weakMatches = findMatchingTerms(normalizedText, weakLayerATerms);
   const layerBMatches = findMatchingTerms(normalizedText, layerBTerms);
   const strongPhraseMatches = findStrongWarningPhrases(normalizedText);
@@ -290,30 +272,21 @@ function classifyReview(text: string): ClassificationResult {
   const hasLayerB = layerBMatches.length > 0;
   const hasStrongPhrase = strongPhraseMatches.length > 0;
   
-  // STRICTER CRITERIA:
-  // - Strict Layer A terms alone are enough (explicit allergy mentions)
-  // - Weak Layer A terms MUST have Layer B or strong phrase context
-  // - Just mentioning "shrimp" or "lobster" is NOT enough
   const isAllergyRelated = hasStrictLayerA || 
     (hasWeakLayerA && (hasLayerB || hasStrongPhrase)) ||
     hasStrongPhrase;
   
-  // Combine matched terms for display
   const allLayerAMatches = [...strictMatches, ...weakMatches];
   
   let confidence = 0;
   if (isAllergyRelated) {
     if (hasStrongPhrase) {
-      // Highest confidence for strong warnings
       confidence = 0.95;
     } else if (hasStrictLayerA && hasLayerB) {
-      // Explicit allergy term + safety context
       confidence = 0.9;
     } else if (hasStrictLayerA) {
-      // Explicit allergy term alone
       confidence = 0.75;
     } else if (hasWeakLayerA && hasLayerB) {
-      // Weak term with context
       confidence = 0.6;
     }
   }
@@ -360,15 +333,12 @@ interface ReviewSnippet {
   matchedTerms: string[];
 }
 
-// Extract only the relevant sentence(s) containing allergy terms
 function extractAllergyRelevantSnippet(fullText: string, matchedTerms: string[]): string {
   if (!fullText || matchedTerms.length === 0) return fullText;
   
-  // Split text into sentences
   const sentences = fullText.split(/(?<=[.!?])\s+/);
   const relevantSentences: string[] = [];
   
-  // Find sentences containing any matched term
   for (const sentence of sentences) {
     const normalizedSentence = normalizeText(sentence);
     const hasMatch = matchedTerms.some(term => {
@@ -381,7 +351,6 @@ function extractAllergyRelevantSnippet(fullText: string, matchedTerms: string[])
     }
   }
   
-  // If we found relevant sentences, return them (up to 250 chars)
   if (relevantSentences.length > 0) {
     let result = relevantSentences.join(' ');
     if (result.length > 250) {
@@ -390,13 +359,11 @@ function extractAllergyRelevantSnippet(fullText: string, matchedTerms: string[])
     return result;
   }
   
-  // Fallback: if no sentence-level match, try to find the phrase context
   const normalizedFull = fullText.toLowerCase();
   for (const term of matchedTerms) {
     const normalizedTerm = term.toLowerCase();
     const termIndex = normalizedFull.indexOf(normalizedTerm);
     if (termIndex !== -1) {
-      // Extract context around the term (50 chars before, term, 100 chars after)
       const start = Math.max(0, termIndex - 50);
       const end = Math.min(fullText.length, termIndex + normalizedTerm.length + 100);
       let snippet = fullText.substring(start, end);
@@ -406,7 +373,6 @@ function extractAllergyRelevantSnippet(fullText: string, matchedTerms: string[])
     }
   }
   
-  // Final fallback: return truncated original
   return fullText.length > 200 ? fullText.substring(0, 197) + '...' : fullText;
 }
 
@@ -433,7 +399,6 @@ function findBestReviewSnippet(reviews: any[]): ReviewSnippet {
         ...classification.matchedStrongPhrases
       ];
       
-      // Extract only the relevant part of the review
       const relevantText = extractAllergyRelevantSnippet(text, matchedTerms);
       
       bestReview = {
@@ -451,26 +416,71 @@ function findBestReviewSnippet(reviews: any[]): ReviewSnippet {
 }
 
 // ==========================================
-// CACHING SYSTEM
+// SUPABASE CACHING
 // ==========================================
-interface CachedPlaceDetails {
-  data: any;
-  timestamp: number;
+interface CachedRestaurant {
+  place_id: string;
+  name: string;
+  address: string;
+  rating: number | null;
+  total_ratings: number | null;
+  maps_url: string;
+  types: string[] | null;
+  review_snippet: ReviewSnippet | null;
+  confidence_level: ConfidenceLevel;
+  evidence_status: EvidenceStatus;
+  cached_at: string;
 }
 
-const placeDetailsCache = new Map<string, CachedPlaceDetails>();
-const PLACE_DETAILS_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
-
-function getCachedPlaceDetails(placeId: string): any | null {
-  const cached = placeDetailsCache.get(placeId);
-  if (cached && Date.now() - cached.timestamp < PLACE_DETAILS_CACHE_TTL) {
-    return cached.data;
+async function getCachedRestaurants(supabase: any, placeIds: string[]): Promise<Map<string, CachedRestaurant>> {
+  const cache = new Map<string, CachedRestaurant>();
+  if (placeIds.length === 0) return cache;
+  
+  try {
+    const { data, error } = await supabase
+      .from('restaurant_cache')
+      .select('*')
+      .in('place_id', placeIds);
+    
+    if (error) {
+      console.log('⚠️ Cache read error:', error.message);
+      return cache;
+    }
+    
+    const now = new Date();
+    const ttlMs = CACHE_TTL_DAYS * 24 * 60 * 60 * 1000;
+    
+    for (const row of data || []) {
+      const cachedAt = new Date(row.cached_at);
+      if (now.getTime() - cachedAt.getTime() < ttlMs) {
+        cache.set(row.place_id, row);
+      }
+    }
+    
+    console.log(`📦 Cache: ${cache.size}/${placeIds.length} hits`);
+  } catch (err) {
+    console.log('⚠️ Cache error:', err);
   }
-  return null;
+  
+  return cache;
 }
 
-function setCachedPlaceDetails(placeId: string, data: any): void {
-  placeDetailsCache.set(placeId, { data, timestamp: Date.now() });
+async function cacheRestaurants(supabase: any, restaurants: CachedRestaurant[]): Promise<void> {
+  if (restaurants.length === 0) return;
+  
+  try {
+    const { error } = await supabase
+      .from('restaurant_cache')
+      .upsert(restaurants, { onConflict: 'place_id' });
+    
+    if (error) {
+      console.log('⚠️ Cache write error:', error.message);
+    } else {
+      console.log(`💾 Cached ${restaurants.length} restaurants`);
+    }
+  } catch (err) {
+    console.log('⚠️ Cache write error:', err);
+  }
 }
 
 // ==========================================
@@ -501,7 +511,7 @@ async function geocodeDestination(destination: string, apiKey: string): Promise<
 }
 
 // ==========================================
-// TEXT SEARCH WITH OPTIONAL PAGINATION
+// TEXT SEARCH - Step A (Cheap)
 // ==========================================
 async function fetchTextSearchResults(
   query: string,
@@ -585,14 +595,10 @@ async function runSearch(
   console.log(`   Destination: ${destination}`);
   console.log(`   Primary phrase: ${primaryPhrase}`);
   console.log(`   Queries: ${queries.length}`);
-  console.log(`   Max pages per query: ${config.maxPagesPerQuery}`);
-  console.log(`   Top N for details: ${config.topNForDetails}`);
+  console.log(`   Max details to fetch: ${config.maxDetailsToFetch}`);
   console.log(`${'='.repeat(60)}\n`);
   
   let queryIndex = 0;
-  const queryStats: { query: string; results: number; timeMs: number }[] = [];
-  
-  // Run queries (destination language only in fast mode)
   const language = mode === 'fast' ? destLanguage : 'en';
   
   for (const query of queries) {
@@ -602,18 +608,11 @@ async function runSearch(
     }
     
     queryIndex++;
-    const queryStart = Date.now();
     console.log(`📋 Query ${queryIndex}/${queries.length}: "${query}" [${language}]`);
     
     const results = await fetchTextSearchResults(
       query, apiKey, location, language, config.maxPagesPerQuery, startTime
     );
-    
-    queryStats.push({
-      query,
-      results: results.length,
-      timeMs: Date.now() - queryStart
-    });
     
     for (const place of results) {
       if (!place.place_id) continue;
@@ -638,22 +637,7 @@ async function runSearch(
     }
   }
   
-  const totalResults = queryStats.reduce((sum, s) => sum + s.results, 0);
-  
-  console.log(`\n${'='.repeat(60)}`);
-  console.log(`📊 SEARCH SUMMARY (${Date.now() - startTime}ms)`);
-  console.log(`   Queries executed: ${queryStats.length}`);
-  console.log(`   Total results: ${totalResults}`);
-  console.log(`   Unique places: ${candidatesMap.size}`);
-  console.log(`   Duplicates removed: ${totalResults - candidatesMap.size}`);
-  
-  // matchCount distribution
-  const matchDist: Record<number, number> = {};
-  for (const c of candidatesMap.values()) {
-    matchDist[c.matchCount] = (matchDist[c.matchCount] || 0) + 1;
-  }
-  console.log(`   matchCount distribution: ${JSON.stringify(matchDist)}`);
-  console.log(`${'='.repeat(60)}\n`);
+  console.log(`📊 Total unique candidates: ${candidatesMap.size}`);
   
   return Array.from(candidatesMap.values());
 }
@@ -672,17 +656,18 @@ function rankCandidates(candidates: CandidatePlace[]): CandidatePlace[] {
 }
 
 // ==========================================
-// PLACE DETAILS
+// PLACE DETAILS - Step B (Minimal fields, no contact data)
 // ==========================================
-async function fetchPlaceDetails(placeId: string, apiKey: string): Promise<any | null> {
-  const cached = getCachedPlaceDetails(placeId);
-  if (cached) {
-    console.log(`📦 Cache hit: ${placeId}`);
-    return cached;
+async function fetchPlaceDetailsMinimal(placeId: string, apiKey: string): Promise<any | null> {
+  if (!checkAndIncrementQuota()) {
+    console.log(`⚠️ Quota exceeded, skipping ${placeId}`);
+    return null;
   }
   
   try {
-    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,rating,user_ratings_total,opening_hours,price_level,url,reviews,website,editorial_summary,types,international_phone_number&key=${apiKey}`;
+    // MINIMAL FIELDS - No website, phone, priceLevel, opening_hours
+    // Only fetch: name, address, rating, ratings count, url (maps link), reviews, types
+    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,rating,user_ratings_total,url,reviews,types&key=${apiKey}`;
     
     const response = await fetch(detailsUrl);
     const data = await response.json();
@@ -692,12 +677,28 @@ async function fetchPlaceDetails(placeId: string, apiKey: string): Promise<any |
       return null;
     }
     
-    setCachedPlaceDetails(placeId, data.result);
     return data.result;
   } catch (error) {
     console.error(`❌ Error fetching details:`, error);
     return null;
   }
+}
+
+// ==========================================
+// Result type (no contact fields)
+// ==========================================
+interface RestaurantResult {
+  name: string;
+  address: string;
+  rating: number | null;
+  totalRatings: number | null;
+  mapsUrl: string;
+  types?: string[];
+  reviewSnippet: ReviewSnippet;
+  confidenceLevel: ConfidenceLevel;
+  evidenceStatus: EvidenceStatus;
+  matchCount?: number;
+  placeId: string; // For lazy loading contact details
 }
 
 // ==========================================
@@ -731,6 +732,13 @@ serve(async (req) => {
       );
     }
 
+    // Initialize Supabase for caching
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const supabase = supabaseUrl && supabaseKey 
+      ? createClient(supabaseUrl, supabaseKey)
+      : null;
+
     const startTime = Date.now();
     const allergiesArray = Array.isArray(allergies) ? allergies : [];
     const primaryPhrase = getPrimaryPhrase(allergiesArray);
@@ -740,7 +748,7 @@ serve(async (req) => {
     // Step 1: Geocode
     const location = await geocodeDestination(destination, apiKey);
 
-    // Step 2: Multi-query search
+    // Step 2: Multi-query search (cheap - no details)
     const candidates = await runSearch(
       destination, primaryPhrase, allergiesArray, apiKey, location, searchMode, startTime
     );
@@ -759,81 +767,115 @@ serve(async (req) => {
       );
     }
 
-    // Step 3: Rank and select top N
+    // Step 3: Rank candidates
     const rankedCandidates = rankCandidates(candidates);
-    const topCandidates = rankedCandidates.slice(0, config.topNForDetails);
-    console.log(`💰 Fetching Place Details for top ${topCandidates.length} candidates...`);
-
-    // Step 4: Fetch Place Details
-    const places = [];
-    let cacheHits = 0;
     
-    for (let i = 0; i < topCandidates.length; i += PARALLEL_DETAILS_BATCH) {
-      const batch = topCandidates.slice(i, i + PARALLEL_DETAILS_BATCH);
-      const batchPromises = batch.map(async (candidate) => {
-        const wasCached = getCachedPlaceDetails(candidate.place_id) !== null;
-        if (wasCached) cacheHits++;
-        
-        const details = await fetchPlaceDetails(candidate.place_id, apiKey);
-        if (!details) return null;
-        
-        // Combine all text for evidence classification
-        const reviews = details.reviews || [];
-        const editorialSummary = details.editorial_summary?.overview || '';
-        const allText = [
-          ...reviews.map((r: any) => r.text?.text || r.text || ''),
-          editorialSummary
-        ].join(' ');
-        const totalTextChars = allText.length;
-        
-        const reviewSnippet = findBestReviewSnippet(reviews);
-        
-        // Determine evidence status based on total text chars
-        let evidenceStatus: EvidenceStatus = 'no_evidence';
-        let confidenceLevel: ConfidenceLevel = 'low';
-        
-        if (reviewSnippet.hasAllergyMention && reviewSnippet.text) {
-          const classification = classifyReview(reviewSnippet.text);
-          confidenceLevel = getConfidenceLevel(classification);
-          evidenceStatus = 'evidence_found';
-        } else if (reviews.length === 0 || totalTextChars < config.minTextCharsForEvidence) {
-          evidenceStatus = 'insufficient_evidence';
-        } else {
-          evidenceStatus = 'no_evidence';
-        }
-        
-        return {
-          name: details.name || candidate.name,
-          address: details.formatted_address || candidate.formatted_address,
-          rating: details.rating || candidate.rating,
-          totalRatings: details.user_ratings_total || candidate.user_ratings_total,
-          openNow: details.opening_hours?.open_now,
-          priceLevel: details.price_level,
-          mapsUrl: details.url || `https://www.google.com/maps/place/?q=place_id:${candidate.place_id}`,
-          website: details.website,
-          editorialSummary,
-          types: details.types,
-          phone: details.international_phone_number,
-          reviewSnippet: {
-            text: reviewSnippet.text,
-            author: reviewSnippet.author,
-            relativeTime: reviewSnippet.relativeTime,
-            hasAllergyMention: reviewSnippet.hasAllergyMention,
-            score: reviewSnippet.score,
-            matchedTerms: reviewSnippet.matchedTerms
-          },
-          confidenceLevel,
-          evidenceStatus,
-          matchCount: candidate.matchCount,
-          matchedQueries: candidate.matchedQueries,
-        };
-      });
+    // Step 4: Check cache first
+    const candidatePlaceIds = rankedCandidates.slice(0, config.maxDetailsToFetch * 2).map(c => c.place_id);
+    const cachedData = supabase ? await getCachedRestaurants(supabase, candidatePlaceIds) : new Map();
+    
+    // Step 5: Fetch details with EARLY STOPPING
+    const places: RestaurantResult[] = [];
+    let detailsFetched = 0;
+    let cacheHits = 0;
+    const toCache: CachedRestaurant[] = [];
+    
+    console.log(`💰 Fetching Place Details with early stop at ${config.targetEvidenceResults} evidence results...`);
+    
+    for (const candidate of rankedCandidates) {
+      // EARLY STOP: If we have enough evidence results, stop
+      const evidenceCount = places.filter(p => p.evidenceStatus === 'evidence_found').length;
+      if (evidenceCount >= config.targetEvidenceResults) {
+        console.log(`✅ Early stop: Got ${evidenceCount} evidence results`);
+        break;
+      }
       
-      const batchResults = await Promise.all(batchPromises);
-      places.push(...batchResults.filter(p => p !== null));
+      // HARD LIMIT: Never fetch more than maxDetailsToFetch
+      if (detailsFetched >= config.maxDetailsToFetch) {
+        console.log(`🛑 Hard limit: Fetched ${detailsFetched} details`);
+        break;
+      }
+      
+      // Check cache first
+      const cached = cachedData.get(candidate.place_id);
+      if (cached && cached.evidence_status === 'evidence_found') {
+        cacheHits++;
+        places.push({
+          name: cached.name,
+          address: cached.address,
+          rating: cached.rating,
+          totalRatings: cached.total_ratings,
+          mapsUrl: cached.maps_url,
+          types: cached.types || undefined,
+          reviewSnippet: cached.review_snippet || { text: '', author: '', relativeTime: '', hasAllergyMention: false, score: 0, matchedTerms: [] },
+          confidenceLevel: cached.confidence_level,
+          evidenceStatus: cached.evidence_status,
+          matchCount: candidate.matchCount,
+          placeId: candidate.place_id
+        });
+        continue;
+      }
+      
+      // Fetch from API
+      const details = await fetchPlaceDetailsMinimal(candidate.place_id, apiKey);
+      if (!details) continue;
+      
+      detailsFetched++;
+      
+      const reviews = details.reviews || [];
+      const reviewSnippet = findBestReviewSnippet(reviews);
+      
+      let evidenceStatus: EvidenceStatus = 'no_evidence';
+      let confidenceLevel: ConfidenceLevel = 'low';
+      
+      if (reviewSnippet.hasAllergyMention && reviewSnippet.text) {
+        const classification = classifyReview(reviewSnippet.text);
+        confidenceLevel = getConfidenceLevel(classification);
+        evidenceStatus = 'evidence_found';
+      } else if (reviews.length === 0) {
+        evidenceStatus = 'insufficient_evidence';
+      }
+      
+      const result: RestaurantResult = {
+        name: details.name || candidate.name,
+        address: details.formatted_address || candidate.formatted_address,
+        rating: details.rating || candidate.rating || null,
+        totalRatings: details.user_ratings_total || candidate.user_ratings_total || null,
+        mapsUrl: details.url || `https://www.google.com/maps/place/?q=place_id:${candidate.place_id}`,
+        types: details.types,
+        reviewSnippet,
+        confidenceLevel,
+        evidenceStatus,
+        matchCount: candidate.matchCount,
+        placeId: candidate.place_id
+      };
+      
+      places.push(result);
+      
+      // Prepare for caching
+      if (evidenceStatus === 'evidence_found') {
+        toCache.push({
+          place_id: candidate.place_id,
+          name: result.name,
+          address: result.address,
+          rating: result.rating,
+          total_ratings: result.totalRatings,
+          maps_url: result.mapsUrl,
+          types: result.types || null,
+          review_snippet: reviewSnippet,
+          confidence_level: confidenceLevel,
+          evidence_status: evidenceStatus,
+          cached_at: new Date().toISOString()
+        });
+      }
+    }
+    
+    // Step 6: Cache new results
+    if (supabase && toCache.length > 0) {
+      await cacheRestaurants(supabase, toCache);
     }
 
-    // Step 5: Sort and filter
+    // Step 7: Sort and filter
     places.sort((a, b) => {
       const evidenceOrder = { evidence_found: 3, insufficient_evidence: 2, no_evidence: 1 };
       const aEvidence = evidenceOrder[a.evidenceStatus] || 0;
@@ -845,7 +887,7 @@ serve(async (req) => {
         return confidenceOrder[b.confidenceLevel] - confidenceOrder[a.confidenceLevel];
       }
       
-      if (b.matchCount !== a.matchCount) return b.matchCount - a.matchCount;
+      if ((b.matchCount || 0) !== (a.matchCount || 0)) return (b.matchCount || 0) - (a.matchCount || 0);
       return (b.rating || 0) - (a.rating || 0);
     });
 
@@ -868,13 +910,10 @@ serve(async (req) => {
     console.log(`✅ FINAL RESULTS (${totalTime}ms)`);
     console.log(`   Mode: ${searchMode.toUpperCase()}`);
     console.log(`   Candidates found: ${candidates.length}`);
-    console.log(`   Details fetched: ${places.length}`);
+    console.log(`   Details fetched: ${detailsFetched}`);
     console.log(`   Cache hits: ${cacheHits}`);
     console.log(`   Evidence found: ${evidenceFoundCount}`);
-    console.log(`   Insufficient evidence: ${insufficientCount}`);
-    console.log(`   No evidence: ${noEvidenceCount}`);
     console.log(`   Returning: ${finalPlaces.length} results`);
-    console.log(`   Expand search available: ${searchMode === 'fast' && evidenceFoundCount < 5}`);
     console.log(`${'='.repeat(60)}\n`);
 
     const searchQuery = `${primaryPhrase} restaurants in ${destination}`;
@@ -887,7 +926,7 @@ serve(async (req) => {
         queryPhrase: primaryPhrase,
         places: finalPlaces,
         totalCandidates: candidates.length,
-        detailsFetched: places.length,
+        detailsFetched,
         stats: {
           evidenceFound: evidenceFoundCount,
           insufficientEvidence: insufficientCount,

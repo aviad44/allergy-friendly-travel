@@ -41,3 +41,6 @@ verify_jwt = false
 
 [functions.restaurants-search]
 verify_jwt = false
+
+[functions.get-restaurant-contact]
+verify_jwt = false

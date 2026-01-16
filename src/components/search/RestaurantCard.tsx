@@ -1,18 +1,54 @@
-import { MapPin, Star, ExternalLink, Quote } from "lucide-react";
-import { RestaurantInfo } from "@/types/restaurant";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { MapPin, Star, ExternalLink, Quote, Phone, Globe, Loader2 } from "lucide-react";
+import { RestaurantInfo, RestaurantContactInfo } from "@/types/restaurant";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 interface RestaurantCardProps {
   restaurant: RestaurantInfo;
 }
 
 export const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
+  const [contactInfo, setContactInfo] = useState<RestaurantContactInfo | null>(null);
+  const [isLoadingContact, setIsLoadingContact] = useState(false);
+  const [contactError, setContactError] = useState<string | null>(null);
+  
   const hasAllergyReview = restaurant.reviewSnippet?.hasAllergyMention && restaurant.reviewSnippet?.text;
+
+  const fetchContactDetails = async () => {
+    if (!restaurant.placeId || contactInfo) return;
+    
+    setIsLoadingContact(true);
+    setContactError(null);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('get-restaurant-contact', {
+        body: { placeId: restaurant.placeId }
+      });
+      
+      if (error) {
+        console.error('Contact fetch error:', error);
+        setContactError('Could not load contact info');
+        return;
+      }
+      
+      if (data.error) {
+        setContactError(data.error);
+        return;
+      }
+      
+      setContactInfo(data);
+    } catch (err) {
+      console.error('Contact fetch error:', err);
+      setContactError('Could not load contact info');
+    } finally {
+      setIsLoadingContact(false);
+    }
+  };
 
   return (
     <div className="border-b border-border py-4 last:border-b-0">
-      {/* Header row: Name + Rating + Open status */}
+      {/* Header row: Name + Rating */}
       <div className="flex items-start justify-between gap-3 mb-2">
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-foreground text-base leading-tight">
@@ -33,18 +69,6 @@ export const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
             )}
           </div>
         </div>
-        
-        {restaurant.openNow !== undefined && (
-          <Badge 
-            variant="outline"
-            className={restaurant.openNow 
-              ? "bg-green-50 text-green-700 border-green-200 shrink-0" 
-              : "bg-muted text-muted-foreground shrink-0"
-            }
-          >
-            {restaurant.openNow ? "Open" : "Closed"}
-          </Badge>
-        )}
       </div>
 
       {/* Allergy review quote - highlighted in green */}
@@ -74,23 +98,87 @@ export const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         </div>
       )}
 
+      {/* Contact info - shown after lazy load */}
+      {contactInfo && (
+        <div className="bg-muted/50 rounded-md p-3 my-3 space-y-2">
+          {contactInfo.phone && (
+            <a 
+              href={`tel:${contactInfo.phone}`}
+              className="flex items-center gap-2 text-sm text-primary hover:underline"
+            >
+              <Phone className="h-4 w-4" />
+              {contactInfo.phone}
+            </a>
+          )}
+          {contactInfo.website && (
+            <a 
+              href={contactInfo.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-primary hover:underline"
+            >
+              <Globe className="h-4 w-4" />
+              Visit website
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          )}
+          {contactInfo.openNow !== null && (
+            <p className={`text-sm ${contactInfo.openNow ? 'text-green-600' : 'text-muted-foreground'}`}>
+              {contactInfo.openNow ? '✓ Currently open' : 'Currently closed'}
+            </p>
+          )}
+          {!contactInfo.phone && !contactInfo.website && (
+            <p className="text-sm text-muted-foreground">No contact info available</p>
+          )}
+        </div>
+      )}
+      
+      {contactError && (
+        <p className="text-sm text-destructive my-2">{contactError}</p>
+      )}
+
       {/* Action buttons */}
-      <div className="flex items-center justify-between mt-3">
-        <Button 
-          variant="link" 
-          className="p-0 h-auto text-primary gap-1.5"
-          asChild
-        >
-          <a 
-            href={restaurant.mapsUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
+      <div className="flex items-center justify-between mt-3 gap-2 flex-wrap">
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="link" 
+            className="p-0 h-auto text-primary gap-1.5"
+            asChild
           >
-            <MapPin className="h-4 w-4" />
-            View on Google Maps
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
-        </Button>
+            <a 
+              href={restaurant.mapsUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <MapPin className="h-4 w-4" />
+              View on Maps
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </Button>
+          
+          {/* Lazy load contact details button */}
+          {restaurant.placeId && !contactInfo && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={fetchContactDetails}
+              disabled={isLoadingContact}
+              className="gap-1.5 text-muted-foreground hover:text-foreground"
+            >
+              {isLoadingContact ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                <>
+                  <Phone className="h-4 w-4" />
+                  Contact details
+                </>
+              )}
+            </Button>
+          )}
+        </div>
         
         <span className="text-xs text-muted-foreground">
           Always verify with restaurant
