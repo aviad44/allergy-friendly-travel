@@ -32,7 +32,7 @@ export const RestaurantResults = ({
       });
   }, [restaurants]);
 
-  // Loading state with fun knife and fork animation
+  // Loading state with knife and fork animation
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-16 space-y-6">
@@ -41,35 +41,26 @@ export const RestaurantResults = ({
           {/* Plate circle background */}
           <div className="absolute w-28 h-28 rounded-full border-4 border-muted-foreground/20 bg-muted/30" />
           
-          {/* Rotating container with knife, fork, and pan */}
-          <div className="animate-[cutlery-rotate_2.5s_linear_infinite] flex items-center justify-center gap-1">
-            {/* Fork */}
+          {/* Rotating container with knife and fork facing each other */}
+          <div className="animate-[cutlery-rotate_2s_linear_infinite]">
+            {/* Fork - left side, pointing up */}
             <svg 
               viewBox="0 0 24 24" 
-              className="w-7 h-7 text-foreground/80"
+              className="absolute w-8 h-8 text-foreground/80"
+              style={{ left: '20%', top: '50%', transform: 'translateY(-50%)' }}
               fill="currentColor"
             >
               <path d="M5 2v8c0 1.1.9 2 2 2v9c0 .55.45 1 1 1s1-.45 1-1v-9c1.1 0 2-.9 2-2V2H9v6H8V2H7v6H6V2H5z"/>
             </svg>
             
-            {/* Knife */}
+            {/* Knife - right side, pointing up, mirrored to face fork */}
             <svg 
               viewBox="0 0 24 24" 
-              className="w-7 h-7 text-foreground/80"
+              className="absolute w-8 h-8 text-foreground/80"
+              style={{ right: '20%', top: '50%', transform: 'translateY(-50%) scaleX(-1)' }}
               fill="currentColor"
             >
-              <path d="M19.78 2.2l-1.42 1.42 2.12 2.12c.78.78.78 2.05 0 2.83L17.66 11.4l-.71-.71-7.07 7.07-1.41-1.41 7.07-7.07-.71-.71 2.83-2.83c.78-.78.78-2.05 0-2.83l-2.12-2.12 1.42-1.42 2.82 2.82z"/>
-              <path d="M8 19l-4 4-2-2 4-4z"/>
-            </svg>
-            
-            {/* Pan */}
-            <svg 
-              viewBox="0 0 24 24" 
-              className="w-7 h-7 text-foreground/80"
-              fill="currentColor"
-            >
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2 12.93V16h-4v-1.07c-1.74-.66-3-2.27-3-4.93 0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.66-1.26 4.27-3 4.93z"/>
-              <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2z"/>
+              <path d="M18 2v17a2 2 0 01-2 2H9l9-19zM9 21h2V4.83L9 7.5V21z"/>
             </svg>
           </div>
         </div>
@@ -113,19 +104,17 @@ export const RestaurantResults = ({
 
   return (
     <div className="space-y-4">
-      {/* Header with disclaimer */}
+      {/* Header - full width stacked layout */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-foreground">
-              {restaurantsWithEvidence.length} restaurants with allergy mentions
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Based on guest reviews in {destination}
-            </p>
-          </div>
+        <div className="w-full">
+          <h2 className="text-lg font-semibold text-foreground">
+            {restaurantsWithEvidence.length} restaurants with allergy mentions
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Based on guest reviews in {destination}
+          </p>
           
-          <Button variant="outline" size="sm" asChild className="gap-1.5 shrink-0">
+          <Button variant="outline" size="sm" asChild className="gap-1.5 mt-2">
             <a href={fallbackUrl} target="_blank" rel="noopener noreferrer">
               More on Google Maps
               <ExternalLink className="h-3.5 w-3.5" />
