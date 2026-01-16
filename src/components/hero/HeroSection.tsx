@@ -34,10 +34,10 @@ export const HeroSection = () => {
 
   return (
     <section 
-      className="relative min-h-[100vh] flex items-center justify-center overflow-hidden w-full font-['Poppins']"
+      className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden w-full max-w-full font-['Poppins']"
     >
       {/* Optimized background image for LCP discovery */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 w-full h-full">
         <img
           src={heroImageUrl}
           alt="Beautiful poolside vacation scene with palm trees - Allergy-Free Travel"
@@ -52,8 +52,8 @@ export const HeroSection = () => {
         <div className="absolute inset-0 bg-black/5"></div>
       </div>
       
-      <div className="relative z-10 w-full px-3 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="w-full max-w-[95%] sm:max-w-[85%] md:max-w-[700px] mx-auto">
+      <div className="relative z-10 w-full px-4 sm:px-6 md:px-8 lg:px-10 max-w-7xl mx-auto box-border">
+        <div className="w-full max-w-[92%] sm:max-w-[85%] md:max-w-[700px] mx-auto">
           <div 
             className="text-center p-4 sm:p-6 md:p-8 lg:p-10 rounded-xl sm:rounded-2xl backdrop-blur-sm transition-all duration-300 ease-in-out"
             style={{ backgroundColor: 'rgba(0, 85, 102, 0.4)' }}
