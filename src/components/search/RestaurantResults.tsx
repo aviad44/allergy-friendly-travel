@@ -36,43 +36,40 @@ export const RestaurantResults = ({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-16 space-y-6">
-        {/* Animated knife and fork */}
-        <div className="relative w-24 h-24 flex items-center justify-center">
-          {/* Fork - tilts left and right */}
+        {/* Animated cutlery - matching site branding */}
+        <div className="relative w-32 h-32 flex items-center justify-center">
+          {/* Plate background */}
+          <div className="absolute w-28 h-28 rounded-full border-4 border-muted-foreground/20 bg-muted/30" />
+          
+          {/* Spoon - bounces up and down */}
           <svg 
             viewBox="0 0 24 24" 
-            className="absolute w-10 h-10 text-primary animate-[fork-wiggle_1.2s_ease-in-out_infinite] origin-bottom"
-            style={{ left: '15%', animationDelay: '0s' }}
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
+            className="absolute w-8 h-8 text-primary animate-[spoon-bounce_1s_ease-in-out_infinite]"
+            style={{ left: '8%', top: '30%' }}
+            fill="currentColor"
           >
-            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
-            <path d="M7 2v20" />
-            <path d="M3 2h8" />
-            <path d="M5 2v5" />
-            <path d="M9 2v5" />
+            <path d="M12 2C9.24 2 7 4.24 7 7c0 2.21 1.79 4 4 4v9c0 .55.45 1 1 1s1-.45 1-1v-9c2.21 0 4-1.79 4-4 0-2.76-2.24-5-5-5zm0 7c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
           </svg>
           
-          {/* Knife - tilts opposite direction */}
+          {/* Knife - tilts with cutting motion */}
           <svg 
             viewBox="0 0 24 24" 
-            className="absolute w-10 h-10 text-primary animate-[knife-wiggle_1.2s_ease-in-out_infinite] origin-bottom"
-            style={{ right: '15%', animationDelay: '0.1s' }}
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
+            className="absolute w-8 h-8 text-primary animate-[knife-cut_0.8s_ease-in-out_infinite]"
+            style={{ left: '35%', top: '25%' }}
+            fill="currentColor"
           >
-            <path d="M19 2v17a2 2 0 0 1-2 2H8" />
-            <path d="M19 2H5l10 8" />
+            <path d="M20 2v17a2 2 0 01-2 2H9l11-19zM9 21h2V4.83L9 7.5V21z"/>
           </svg>
           
-          {/* Optional plate circle behind */}
-          <div className="absolute w-20 h-20 rounded-full border-2 border-muted-foreground/20 -z-10" />
+          {/* Fork - wiggles side to side */}
+          <svg 
+            viewBox="0 0 24 24" 
+            className="absolute w-8 h-8 text-primary animate-[fork-wiggle_1.2s_ease-in-out_infinite]"
+            style={{ right: '8%', top: '30%' }}
+            fill="currentColor"
+          >
+            <path d="M5 2v8c0 1.1.9 2 2 2v9c0 .55.45 1 1 1s1-.45 1-1v-9c1.1 0 2-.9 2-2V2H9v6H8V2H7v6H6V2H5zm13 0v20c0 .55-.45 1-1 1s-1-.45-1-1V2h2z"/>
+          </svg>
         </div>
         
         <div className="text-center space-y-4">
