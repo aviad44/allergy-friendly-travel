@@ -13,20 +13,22 @@ export interface ReviewSnippet {
 export interface RestaurantInfo {
   name: string;
   address: string;
-  rating: number;
-  totalRatings: number;
-  openNow?: boolean;
-  priceLevel?: number;
+  rating: number | null;
+  totalRatings: number | null;
   mapsUrl: string;
-  website?: string;
-  editorialSummary?: string;
   types?: string[];
-  phone?: string;
   reviewSnippet?: ReviewSnippet | null;
   confidenceLevel: ConfidenceLevel;
   evidenceStatus: EvidenceStatus;
   matchCount?: number;
-  matchedQueries?: string[];
+  placeId?: string; // For lazy loading contact details
+}
+
+export interface RestaurantContactInfo {
+  placeId: string;
+  website: string | null;
+  phone: string | null;
+  openNow: boolean | null;
 }
 
 export interface RestaurantSearchStats {
