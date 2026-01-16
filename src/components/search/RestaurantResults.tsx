@@ -1,8 +1,9 @@
 import { RestaurantInfo } from "@/types/restaurant";
 import { RestaurantCard } from "./RestaurantCard";
-import { ExternalLink, Loader2, MapPin, UtensilsCrossed } from "lucide-react";
+import { ExternalLink, MapPin, UtensilsCrossed } from "lucide-react";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import restaurantLoadingIcon from "@/assets/restaurant-loading-icon.jpeg";
 
 interface RestaurantResultsProps {
   restaurants: RestaurantInfo[];
@@ -36,35 +37,17 @@ export const RestaurantResults = ({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-16 space-y-6">
-        {/* Animated cutlery rotating inside circle */}
-        <div className="relative w-32 h-32 flex items-center justify-center">
-          {/* Plate circle background */}
-          <div className="absolute w-28 h-28 rounded-full border-4 border-muted-foreground/20 bg-muted/30" />
-          
-          {/* Rotating container with knife and fork facing each other */}
-          <div className="animate-[cutlery-rotate_2s_linear_infinite]">
-            {/* Fork - left side, pointing up */}
-            <svg 
-              viewBox="0 0 24 24" 
-              className="absolute w-8 h-8 text-foreground/80"
-              style={{ left: '20%', top: '50%', transform: 'translateY(-50%)' }}
-              fill="currentColor"
-            >
-              <path d="M5 2v8c0 1.1.9 2 2 2v9c0 .55.45 1 1 1s1-.45 1-1v-9c1.1 0 2-.9 2-2V2H9v6H8V2H7v6H6V2H5z"/>
-            </svg>
-            
-            {/* Knife - right side, facing fork */}
-            <svg 
-              viewBox="0 0 24 24" 
-              className="absolute w-8 h-8 text-foreground/80"
-              style={{ right: '20%', top: '50%', transform: 'translateY(-50%)' }}
-              fill="currentColor"
-            >
-              <path d="M19.28 2c-.4 0-.72.32-.72.72V12c0 .39.32.72.72.72s.72-.33.72-.72V2.72c0-.4-.32-.72-.72-.72zM17.56 2v10c0 .39-.32.72-.72.72s-.72-.33-.72-.72V2h1.44zM14.12 2c-.4 0-.72.32-.72.72v8.56c0 .79.65 1.44 1.44 1.44h.72v8.56c0 .4.32.72.72.72s.72-.32.72-.72v-8.56h.72c.79 0 1.44-.65 1.44-1.44V2.72c0-.4-.32-.72-.72-.72h-4.32z"/>
-            </svg>
-          </div>
+        {/* Rotating icon (fork + plate + knife) */}
+        <div className="w-32 h-32 flex items-center justify-center">
+          <img
+            src={restaurantLoadingIcon}
+            alt="Restaurant search loading icon"
+            className="w-24 h-24 object-contain opacity-80 dark:invert animate-[cutlery-rotate_2s_linear_infinite]"
+            loading="eager"
+            decoding="async"
+          />
         </div>
-        
+
         <div className="text-center space-y-4">
           <p className="text-lg text-foreground font-medium">Searching for allergy-friendly restaurants...</p>
           <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4 max-w-md mx-auto">
