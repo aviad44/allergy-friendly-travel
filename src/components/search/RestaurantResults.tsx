@@ -53,14 +53,14 @@ export const RestaurantResults = ({
               <path d="M5 2v8c0 1.1.9 2 2 2v9c0 .55.45 1 1 1s1-.45 1-1v-9c1.1 0 2-.9 2-2V2H9v6H8V2H7v6H6V2H5z"/>
             </svg>
             
-            {/* Knife - right side, pointing up, mirrored to face fork */}
+            {/* Knife - right side, pointing up, facing fork */}
             <svg 
               viewBox="0 0 24 24" 
               className="absolute w-8 h-8 text-foreground/80"
-              style={{ right: '20%', top: '50%', transform: 'translateY(-50%) scaleX(-1)' }}
+              style={{ right: '20%', top: '50%', transform: 'translateY(-50%)' }}
               fill="currentColor"
             >
-              <path d="M18 2v17a2 2 0 01-2 2H9l9-19zM9 21h2V4.83L9 7.5V21z"/>
+              <path d="M9 2l1 4h1V2h1v4h1l1-4h1l-1 5v4c0 1.1-.9 2-2 2v10c0 .55-.45 1-1 1s-1-.45-1-1V13c-1.1 0-2-.9-2-2V7l-1-5h2z" transform="rotate(180 12 12)"/>
             </svg>
           </div>
         </div>
