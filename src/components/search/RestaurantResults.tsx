@@ -36,40 +36,42 @@ export const RestaurantResults = ({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-16 space-y-6">
-        {/* Animated cutlery - matching site branding */}
+        {/* Animated cutlery rotating inside circle */}
         <div className="relative w-32 h-32 flex items-center justify-center">
-          {/* Plate background */}
+          {/* Plate circle background */}
           <div className="absolute w-28 h-28 rounded-full border-4 border-muted-foreground/20 bg-muted/30" />
           
-          {/* Spoon - bounces up and down */}
-          <svg 
-            viewBox="0 0 24 24" 
-            className="absolute w-8 h-8 text-primary animate-[spoon-bounce_1s_ease-in-out_infinite]"
-            style={{ left: '8%', top: '30%' }}
-            fill="currentColor"
-          >
-            <path d="M12 2C9.24 2 7 4.24 7 7c0 2.21 1.79 4 4 4v9c0 .55.45 1 1 1s1-.45 1-1v-9c2.21 0 4-1.79 4-4 0-2.76-2.24-5-5-5zm0 7c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-          </svg>
-          
-          {/* Knife - tilts with cutting motion */}
-          <svg 
-            viewBox="0 0 24 24" 
-            className="absolute w-8 h-8 text-primary animate-[knife-cut_0.8s_ease-in-out_infinite]"
-            style={{ left: '35%', top: '25%' }}
-            fill="currentColor"
-          >
-            <path d="M20 2v17a2 2 0 01-2 2H9l11-19zM9 21h2V4.83L9 7.5V21z"/>
-          </svg>
-          
-          {/* Fork - wiggles side to side */}
-          <svg 
-            viewBox="0 0 24 24" 
-            className="absolute w-8 h-8 text-primary animate-[fork-wiggle_1.2s_ease-in-out_infinite]"
-            style={{ right: '8%', top: '30%' }}
-            fill="currentColor"
-          >
-            <path d="M5 2v8c0 1.1.9 2 2 2v9c0 .55.45 1 1 1s1-.45 1-1v-9c1.1 0 2-.9 2-2V2H9v6H8V2H7v6H6V2H5zm13 0v20c0 .55-.45 1-1 1s-1-.45-1-1V2h2z"/>
-          </svg>
+          {/* Rotating container with knife, fork, and pan */}
+          <div className="animate-[cutlery-rotate_2.5s_linear_infinite] flex items-center justify-center gap-1">
+            {/* Fork */}
+            <svg 
+              viewBox="0 0 24 24" 
+              className="w-7 h-7 text-foreground/80"
+              fill="currentColor"
+            >
+              <path d="M5 2v8c0 1.1.9 2 2 2v9c0 .55.45 1 1 1s1-.45 1-1v-9c1.1 0 2-.9 2-2V2H9v6H8V2H7v6H6V2H5z"/>
+            </svg>
+            
+            {/* Knife */}
+            <svg 
+              viewBox="0 0 24 24" 
+              className="w-7 h-7 text-foreground/80"
+              fill="currentColor"
+            >
+              <path d="M19.78 2.2l-1.42 1.42 2.12 2.12c.78.78.78 2.05 0 2.83L17.66 11.4l-.71-.71-7.07 7.07-1.41-1.41 7.07-7.07-.71-.71 2.83-2.83c.78-.78.78-2.05 0-2.83l-2.12-2.12 1.42-1.42 2.82 2.82z"/>
+              <path d="M8 19l-4 4-2-2 4-4z"/>
+            </svg>
+            
+            {/* Pan */}
+            <svg 
+              viewBox="0 0 24 24" 
+              className="w-7 h-7 text-foreground/80"
+              fill="currentColor"
+            >
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2 12.93V16h-4v-1.07c-1.74-.66-3-2.27-3-4.93 0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.66-1.26 4.27-3 4.93z"/>
+              <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2z"/>
+            </svg>
+          </div>
         </div>
         
         <div className="text-center space-y-4">

@@ -199,33 +199,12 @@
   }
 }
 
-/* Cutlery animations for restaurant search */
-@keyframes fork-wiggle {
-  0%, 100% {
-    transform: rotate(-12deg);
+/* Cutlery rotation animation for restaurant search */
+@keyframes cutlery-rotate {
+  0% {
+    transform: rotate(0deg);
   }
-  50% {
-    transform: rotate(12deg);
-  }
-}
-
-@keyframes knife-cut {
-  0%, 100% {
-    transform: rotate(0deg) translateY(0);
-  }
-  25% {
-    transform: rotate(-8deg) translateY(-2px);
-  }
-  75% {
-    transform: rotate(8deg) translateY(2px);
-  }
-}
-
-@keyframes spoon-bounce {
-  0%, 100% {
-    transform: translateY(0) rotate(-5deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(5deg);
+  100% {
+    transform: rotate(360deg);
   }
 }
