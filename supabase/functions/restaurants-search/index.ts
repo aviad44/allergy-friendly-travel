@@ -12,9 +12,10 @@ const corsHeaders = {
 const FAST_MODE = {
   maxQueries: 4,              // Reduced queries
   maxPagesPerQuery: 1,        // Single page only
-  targetEvidenceResults: 8,   // Stop when we have 8 results with evidence
+  targetEvidenceResults: 5,   // Stop when we have 5 results with evidence
   maxDetailsToFetch: 8,       // HARD LIMIT: Never fetch more than 8 details
-  maxResultsReturned: 8,      // Return max 8
+  maxResultsReturned: 5,      // Return max 5
+  minResultsReturned: 5,      // Always try to return at least 5
   minTextCharsForEvidence: 50,
   filterToEvidenceFound: true,
 };
@@ -891,10 +892,19 @@ serve(async (req) => {
       return (b.rating || 0) - (a.rating || 0);
     });
 
-    // Filter to evidence_found only in fast mode
+    // Filter to evidence_found only in fast mode, but fall back to include more if needed
     let filteredPlaces = places;
     if (config.filterToEvidenceFound) {
-      filteredPlaces = places.filter(p => p.evidenceStatus === 'evidence_found');
+      const evidenceOnly = places.filter(p => p.evidenceStatus === 'evidence_found');
+      const minResults = (config as typeof FAST_MODE).minResultsReturned || 3;
+      
+      // If we don't have enough evidence_found, include insufficient_evidence too
+      if (evidenceOnly.length < minResults) {
+        const insufficientEvidence = places.filter(p => p.evidenceStatus === 'insufficient_evidence');
+        filteredPlaces = [...evidenceOnly, ...insufficientEvidence];
+      } else {
+        filteredPlaces = evidenceOnly;
+      }
     }
     
     // Limit results
