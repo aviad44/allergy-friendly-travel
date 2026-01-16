@@ -35,6 +35,48 @@ export type Database = {
         }
         Relationships: []
       }
+      restaurant_cache: {
+        Row: {
+          address: string
+          cached_at: string
+          confidence_level: string
+          evidence_status: string
+          maps_url: string
+          name: string
+          place_id: string
+          rating: number | null
+          review_snippet: Json | null
+          total_ratings: number | null
+          types: string[] | null
+        }
+        Insert: {
+          address: string
+          cached_at?: string
+          confidence_level: string
+          evidence_status: string
+          maps_url: string
+          name: string
+          place_id: string
+          rating?: number | null
+          review_snippet?: Json | null
+          total_ratings?: number | null
+          types?: string[] | null
+        }
+        Update: {
+          address?: string
+          cached_at?: string
+          confidence_level?: string
+          evidence_status?: string
+          maps_url?: string
+          name?: string
+          place_id?: string
+          rating?: number | null
+          review_snippet?: Json | null
+          total_ratings?: number | null
+          types?: string[] | null
+        }
+        Relationships: []
+      }
       reviews: {
         Row: {
           author_name: string
