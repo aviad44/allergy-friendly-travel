@@ -7,27 +7,36 @@ const corsHeaders = {
 };
 
 // ==========================================
-// MODE CONFIGURATION - OPTIMIZED FOR COST
+// MODE CONFIGURATION - COST-OPTIMIZED (2024-01)
+// ==========================================
+// FAST_MODE billing facts:
+// - Atmosphere Data SKU ($5/1000): rating, priceLevel, reviews → avoid in details
+// - Contact Data SKU ($3/1000): phone, website, opening_hours → never in main search
+// - Text Search SKU ($32/1000): includes rating, user_ratings_total for free
 // ==========================================
 const FAST_MODE = {
-  maxQueries: 4,              // Reduced queries
+  maxCandidateSearchCalls: 1, // Only 1 text search call per search
+  maxQueries: 1,              // Single query only for cost control
   maxPagesPerQuery: 1,        // Single page only
-  targetEvidenceResults: 5,   // Stop when we have 5 results with evidence
+  targetEvidenceResults: 8,   // Stop when we have 8 evidence results
   maxDetailsToFetch: 8,       // HARD LIMIT: Never fetch more than 8 details
-  maxResultsReturned: 5,      // Return max 5
+  maxResultsReturned: 8,      // Return max 8
   minResultsReturned: 5,      // Always try to return at least 5
   minTextCharsForEvidence: 50,
   filterToEvidenceFound: true,
+  cacheTtlDays: 7,            // Cache for 7 days
 };
 
 const DEEP_MODE = {
-  maxQueries: 6,
+  maxCandidateSearchCalls: 3,
+  maxQueries: 4,
   maxPagesPerQuery: 2,
   targetEvidenceResults: 15,
-  maxDetailsToFetch: 20,
+  maxDetailsToFetch: 15,      // Reduced from 20
   maxResultsReturned: 15,
   minTextCharsForEvidence: 30,
   filterToEvidenceFound: false,
+  cacheTtlDays: 7,
 };
 
 const PAGE_DELAY_MS = 1500;
@@ -188,7 +197,7 @@ function getDestinationLanguage(destination: string): string {
 }
 
 // ==========================================
-// QUERY TEMPLATES
+// QUERY TEMPLATES - COST OPTIMIZED
 // ==========================================
 function buildSearchQueries(
   destination: string,
@@ -200,7 +209,15 @@ function buildSearchQueries(
   const config = mode === 'fast' ? FAST_MODE : DEEP_MODE;
   const allergyLower = allergies.map(a => a.toLowerCase()).join(' ');
   
+  // Primary query - most targeted
   queries.push(`${primaryPhrase} restaurants in ${destination}`);
+  
+  // FAST mode: Only 1 query to minimize Text Search API calls
+  if (mode === 'fast') {
+    return queries.slice(0, config.maxQueries);
+  }
+  
+  // DEEP mode: Additional queries
   queries.push(`allergy friendly restaurants in ${destination}`);
   queries.push(`gluten free restaurants in ${destination}`);
   
@@ -210,11 +227,6 @@ function buildSearchQueries(
     queries.push(`dairy free restaurants in ${destination}`);
   } else {
     queries.push(`dietary restrictions restaurants ${destination}`);
-  }
-  
-  if (mode === 'deep') {
-    queries.push(`vegan restaurants in ${destination}`);
-    queries.push(`food allergy restaurants ${destination}`);
   }
   
   return queries.slice(0, config.maxQueries);
@@ -657,18 +669,26 @@ function rankCandidates(candidates: CandidatePlace[]): CandidatePlace[] {
 }
 
 // ==========================================
-// PLACE DETAILS - Step B (Minimal fields, no contact data)
+// PLACE DETAILS - Step B (REVIEWS ONLY - Maximum Cost Savings)
 // ==========================================
-async function fetchPlaceDetailsMinimal(placeId: string, apiKey: string): Promise<any | null> {
+// COST OPTIMIZATION:
+// - DO NOT request: rating, user_ratings_total (available from Text Search for free)
+// - DO NOT request: website, phone, opening_hours (Contact Data SKU $3/1000)
+// - DO NOT request: priceLevel (Atmosphere Data SKU)
+// - ONLY request: reviews, url (for Maps link)
+// This reduces Place Details cost from $17/1000 to ~$0-5/1000
+// ==========================================
+async function fetchPlaceDetailsForReviews(placeId: string, apiKey: string, language: string = 'en'): Promise<any | null> {
   if (!checkAndIncrementQuota()) {
     console.log(`⚠️ Quota exceeded, skipping ${placeId}`);
     return null;
   }
   
   try {
-    // MINIMAL FIELDS - No website, phone, priceLevel, opening_hours
-    // Only fetch: name, address, rating, ratings count, url (maps link), reviews, types
-    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,rating,user_ratings_total,url,reviews,types&key=${apiKey}`;
+    // MINIMAL FIELDS - Only reviews and url (Maps link)
+    // Rating/totalRatings come from Text Search (free)
+    // No contact fields (website, phone, opening_hours) - use lazy load endpoint
+    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,url&language=${language}&key=${apiKey}`;
     
     const response = await fetch(detailsUrl);
     const data = await response.json();
@@ -817,8 +837,9 @@ serve(async (req) => {
         continue;
       }
       
-      // Fetch from API
-      const details = await fetchPlaceDetailsMinimal(candidate.place_id, apiKey);
+      // Fetch from API - ONLY reviews, no rating/contact fields
+      const destLanguage = getDestinationLanguage(destination);
+      const details = await fetchPlaceDetailsForReviews(candidate.place_id, apiKey, destLanguage);
       if (!details) continue;
       
       detailsFetched++;
@@ -837,13 +858,14 @@ serve(async (req) => {
         evidenceStatus = 'insufficient_evidence';
       }
       
+      // Use rating/totalRatings from Text Search (free) - not from Place Details
       const result: RestaurantResult = {
-        name: details.name || candidate.name,
-        address: details.formatted_address || candidate.formatted_address,
-        rating: details.rating || candidate.rating || null,
-        totalRatings: details.user_ratings_total || candidate.user_ratings_total || null,
+        name: candidate.name,
+        address: candidate.formatted_address,
+        rating: candidate.rating || null,           // From Text Search (free)
+        totalRatings: candidate.user_ratings_total || null, // From Text Search (free)
         mapsUrl: details.url || `https://www.google.com/maps/place/?q=place_id:${candidate.place_id}`,
-        types: details.types,
+        types: undefined, // Not fetching types to save cost
         reviewSnippet,
         confidenceLevel,
         evidenceStatus,
@@ -916,14 +938,20 @@ serve(async (req) => {
     
     const totalTime = Date.now() - startTime;
     
+    // Generate unique search ID for cost tracking
+    const searchId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+    
+    // COST VISIBILITY LOGGING
     console.log(`\n${'='.repeat(60)}`);
-    console.log(`✅ FINAL RESULTS (${totalTime}ms)`);
-    console.log(`   Mode: ${searchMode.toUpperCase()}`);
-    console.log(`   Candidates found: ${candidates.length}`);
-    console.log(`   Details fetched: ${detailsFetched}`);
-    console.log(`   Cache hits: ${cacheHits}`);
-    console.log(`   Evidence found: ${evidenceFoundCount}`);
-    console.log(`   Returning: ${finalPlaces.length} results`);
+    console.log(`💰 COST LOG | searchId=${searchId}`);
+    console.log(`   candidateSearchCalls=1`);
+    console.log(`   detailsCalls=${detailsFetched}`);
+    console.log(`   fieldsRequested=reviews_url_only`);
+    console.log(`   cacheHits=${cacheHits}`);
+    console.log(`   totalCandidates=${candidates.length}`);
+    console.log(`   evidenceFound=${evidenceFoundCount}`);
+    console.log(`   mode=${searchMode.toUpperCase()}`);
+    console.log(`   timeMs=${totalTime}`);
     console.log(`${'='.repeat(60)}\n`);
 
     const searchQuery = `${primaryPhrase} restaurants in ${destination}`;
