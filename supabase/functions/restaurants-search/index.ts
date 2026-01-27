@@ -15,12 +15,12 @@ const corsHeaders = {
 // - Text Search SKU ($32/1000): includes rating, user_ratings_total for free
 // ==========================================
 const FAST_MODE = {
-  maxCandidateSearchCalls: 1, // Only 1 text search call per search
-  maxQueries: 1,              // Single query only for cost control
+  maxCandidateSearchCalls: 3, // Allow 3 text search calls for better coverage
+  maxQueries: 3,              // Three queries for better allergy term coverage
   maxPagesPerQuery: 1,        // Single page only
   targetEvidenceResults: 8,   // Stop when we have 8 evidence results
-  maxDetailsToFetch: 8,       // HARD LIMIT: Never fetch more than 8 details
-  maxResultsReturned: 8,      // Return max 8
+  maxDetailsToFetch: 15,      // Allow up to 15 details to find 5-10 good results
+  maxResultsReturned: 10,     // Return max 10
   minResultsReturned: 5,      // Always try to return at least 5
   minTextCharsForEvidence: 50,
   filterToEvidenceFound: true,
@@ -102,6 +102,10 @@ const weakLayerATerms = [
   'vegan', 'vegetarian', 'plant based', 'plant-based',
   'no eggs', 'no dairy', 'no nuts', 'no shellfish', 'no seafood',
   'without nuts', 'without dairy',
+  // Common review patterns
+  'special diet', 'dietary', 'food restrictions', 'eating restrictions',
+  'menu for', 'options for', 'cater for', 'cater to',
+  'gf', 'df', 'vg', 'v option', 'v options',
 ];
 
 const layerBTerms = [
@@ -135,11 +139,11 @@ const DESTINATION_LANGUAGES: Record<string, string> = {
   'lisbon': 'pt', 'portugal': 'pt', 'porto': 'pt',
   'athens': 'el', 'greece': 'el', 'crete': 'el', 'santorini': 'el', 'mykonos': 'el',
   'tokyo': 'ja', 'japan': 'ja', 'osaka': 'ja', 'kyoto': 'ja',
-  'bangkok': 'th', 'thailand': 'th', 'phuket': 'th', 'chiang mai': 'th',
+  'bangkok': 'th', 'thailand': 'th', 'phuket': 'th', 'chiang mai': 'th', 'koh samui': 'th',
   'istanbul': 'tr', 'turkey': 'tr', 'antalya': 'tr',
   'london': 'en', 'uk': 'en', 'edinburgh': 'en', 'manchester': 'en',
   'new york': 'en', 'usa': 'en', 'los angeles': 'en', 'chicago': 'en', 'miami': 'en',
-  'tel aviv': 'he', 'israel': 'he', 'jerusalem': 'he',
+  'tel aviv': 'he', 'israel': 'he', 'jerusalem': 'he', 'eilat': 'he',
   'vienna': 'de', 'austria': 'de', 'salzburg': 'de',
   'zurich': 'de', 'switzerland': 'de', 'geneva': 'fr',
   'brussels': 'nl', 'belgium': 'nl',
@@ -148,6 +152,13 @@ const DESTINATION_LANGUAGES: Record<string, string> = {
   'stockholm': 'sv', 'sweden': 'sv',
   'oslo': 'no', 'norway': 'no',
   'helsinki': 'fi', 'finland': 'fi',
+  // Cyprus locations
+  'paphos': 'en', 'pafos': 'en', 'cyprus': 'en', 'limassol': 'en', 'larnaca': 'en', 'nicosia': 'en', 'ayia napa': 'en',
+  // Add more Mediterranean destinations
+  'rhodes': 'el', 'corfu': 'el', 'zakynthos': 'el',
+  'malta': 'en', 'valletta': 'en',
+  'dubrovnik': 'hr', 'croatia': 'hr', 'split': 'hr',
+  'abu dhabi': 'en', 'dubai': 'en', 'uae': 'en',
 };
 
 const allergyPhraseMap: Record<string, string> = {
@@ -197,7 +208,7 @@ function getDestinationLanguage(destination: string): string {
 }
 
 // ==========================================
-// QUERY TEMPLATES - COST OPTIMIZED
+// QUERY TEMPLATES - IMPROVED FOR ALLERGY DISCOVERY
 // ==========================================
 function buildSearchQueries(
   destination: string,
@@ -209,17 +220,30 @@ function buildSearchQueries(
   const config = mode === 'fast' ? FAST_MODE : DEEP_MODE;
   const allergyLower = allergies.map(a => a.toLowerCase()).join(' ');
   
-  // Primary query - most targeted
-  queries.push(`${primaryPhrase} restaurants in ${destination}`);
-  
-  // FAST mode: Only 1 query to minimize Text Search API calls
+  // FAST mode: Use 3 different query strategies for maximum coverage
   if (mode === 'fast') {
+    // Query 1: Primary phrase (e.g., "allergy friendly restaurants in Paphos")
+    queries.push(`${primaryPhrase} restaurants in ${destination}`);
+    
+    // Query 2: Gluten free - most common allergy term in reviews
+    if (!primaryPhrase.toLowerCase().includes('gluten')) {
+      queries.push(`gluten free restaurants in ${destination}`);
+    } else {
+      queries.push(`celiac safe restaurants ${destination}`);
+    }
+    
+    // Query 3: Vegan - often has overlap with allergy-friendly options
+    queries.push(`vegan vegetarian restaurants ${destination}`);
+    
     return queries.slice(0, config.maxQueries);
   }
   
   // DEEP mode: Additional queries
+  queries.push(`${primaryPhrase} restaurants in ${destination}`);
   queries.push(`allergy friendly restaurants in ${destination}`);
   queries.push(`gluten free restaurants in ${destination}`);
+  queries.push(`celiac restaurants ${destination}`);
+  queries.push(`vegan vegetarian restaurants ${destination}`);
   
   if (allergyLower.includes('nut') || allergyLower.includes('peanut')) {
     queries.push(`nut free restaurants in ${destination}`);
@@ -285,9 +309,19 @@ function classifyReview(text: string): ClassificationResult {
   const hasLayerB = layerBMatches.length > 0;
   const hasStrongPhrase = strongPhraseMatches.length > 0;
   
+  // Check for dietary indicators that suggest the restaurant is aware of dietary needs
+  const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
+  const hasDietaryIndicator = dietaryIndicators.some(ind => normalizedText.includes(ind));
+  
+  // Expanded classification: Consider vegan/vegetarian as evidence when in a positive review context
+  const positiveContextWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
+  const hasPositiveContext = positiveContextWords.some(word => normalizedText.includes(word));
+  
   const isAllergyRelated = hasStrictLayerA || 
     (hasWeakLayerA && (hasLayerB || hasStrongPhrase)) ||
-    hasStrongPhrase;
+    hasStrongPhrase ||
+    // NEW: Accept weak dietary mentions (vegan, vegetarian, gluten) in positive contexts
+    (hasDietaryIndicator && hasPositiveContext);
   
   const allLayerAMatches = [...strictMatches, ...weakMatches];
   
@@ -301,6 +335,9 @@ function classifyReview(text: string): ClassificationResult {
       confidence = 0.75;
     } else if (hasWeakLayerA && hasLayerB) {
       confidence = 0.6;
+    } else if (hasDietaryIndicator && hasPositiveContext) {
+      // Lower confidence for dietary-indicator-only matches
+      confidence = 0.4;
     }
   }
   
@@ -312,6 +349,9 @@ function classifyReview(text: string): ClassificationResult {
       shortReason = `Explicit allergy mention: ${strictMatches.slice(0, 2).join(', ')}`;
     } else if (hasWeakLayerA && hasLayerB) {
       shortReason = `Allergy context: ${weakMatches[0]} with ${layerBMatches[0]}`;
+    } else if (hasDietaryIndicator && hasPositiveContext) {
+      const matchedIndicator = dietaryIndicators.find(ind => normalizedText.includes(ind)) || 'dietary options';
+      shortReason = `Dietary awareness: ${matchedIndicator} options mentioned`;
     }
   } else {
     shortReason = 'No allergy-related content found';
@@ -609,10 +649,14 @@ async function runSearch(
   console.log(`   Primary phrase: ${primaryPhrase}`);
   console.log(`   Queries: ${queries.length}`);
   console.log(`   Max details to fetch: ${config.maxDetailsToFetch}`);
+  console.log(`   Geocoding: ${location ? 'SUCCESS' : 'FALLBACK (no location bias)'}`);
   console.log(`${'='.repeat(60)}\n`);
   
   let queryIndex = 0;
-  const language = mode === 'fast' ? destLanguage : 'en';
+  
+  // Always use English for reviews to find allergy mentions (most common language for reviews)
+  // The destination is already part of the query string
+  const language = 'en';
   
   for (const query of queries) {
     if (Date.now() - startTime > MAX_TOTAL_TIME_MS) {
@@ -838,14 +882,23 @@ serve(async (req) => {
       }
       
       // Fetch from API - ONLY reviews, no rating/contact fields
-      const destLanguage = getDestinationLanguage(destination);
-      const details = await fetchPlaceDetailsForReviews(candidate.place_id, apiKey, destLanguage);
+      // Always use English for reviews to maximize allergy term matches
+      const details = await fetchPlaceDetailsForReviews(candidate.place_id, apiKey, 'en');
       if (!details) continue;
       
       detailsFetched++;
       
       const reviews = details.reviews || [];
       const reviewSnippet = findBestReviewSnippet(reviews);
+      
+      // Debug: Log review analysis for first few candidates
+      if (detailsFetched <= 3) {
+        const reviewTexts = reviews.map((r: any) => r.text?.text || r.text || '').slice(0, 2);
+        console.log(`🔍 ${candidate.name}: ${reviews.length} reviews, hasEvidence=${reviewSnippet.hasAllergyMention}`);
+        if (reviewTexts.length > 0) {
+          console.log(`   Sample: "${reviewTexts[0]?.substring(0, 100)}..."`);
+        }
+      }
       
       let evidenceStatus: EvidenceStatus = 'no_evidence';
       let confidenceLevel: ConfidenceLevel = 'low';
