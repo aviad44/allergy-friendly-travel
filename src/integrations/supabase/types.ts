@@ -107,6 +107,81 @@ export type Database = {
         }
         Relationships: []
       }
+      search_cache: {
+        Row: {
+          allergies_normalized: string
+          created_at: string
+          destination_normalized: string
+          google_calls_count: number
+          id: string
+          language: string
+          mode: string
+          results_json: Json
+          results_returned: number
+        }
+        Insert: {
+          allergies_normalized: string
+          created_at?: string
+          destination_normalized: string
+          google_calls_count?: number
+          id?: string
+          language?: string
+          mode?: string
+          results_json: Json
+          results_returned?: number
+        }
+        Update: {
+          allergies_normalized?: string
+          created_at?: string
+          destination_normalized?: string
+          google_calls_count?: number
+          id?: string
+          language?: string
+          mode?: string
+          results_json?: Json
+          results_returned?: number
+        }
+        Relationships: []
+      }
+      search_log: {
+        Row: {
+          allergies: string[]
+          cache_hit: boolean
+          created_at: string
+          destination: string
+          duration_ms: number
+          google_calls_count: number
+          id: string
+          mode: string
+          results_returned: number
+          search_id: string
+        }
+        Insert: {
+          allergies?: string[]
+          cache_hit?: boolean
+          created_at?: string
+          destination: string
+          duration_ms?: number
+          google_calls_count?: number
+          id?: string
+          mode?: string
+          results_returned?: number
+          search_id: string
+        }
+        Update: {
+          allergies?: string[]
+          cache_hit?: boolean
+          created_at?: string
+          destination?: string
+          duration_ms?: number
+          google_calls_count?: number
+          id?: string
+          mode?: string
+          results_returned?: number
+          search_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
