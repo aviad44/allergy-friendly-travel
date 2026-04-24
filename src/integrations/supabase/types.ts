@@ -14,6 +14,196 @@ export type Database = {
   }
   public: {
     Tables: {
+      hotel_allergy_info: {
+        Row: {
+          allergen_type: string
+          created_at: string | null
+          hotel_id: string
+          id: string
+          notes: string | null
+          source_url: string | null
+          support_level: string | null
+        }
+        Insert: {
+          allergen_type: string
+          created_at?: string | null
+          hotel_id: string
+          id?: string
+          notes?: string | null
+          source_url?: string | null
+          support_level?: string | null
+        }
+        Update: {
+          allergen_type?: string
+          created_at?: string | null
+          hotel_id?: string
+          id?: string
+          notes?: string | null
+          source_url?: string | null
+          support_level?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hotel_allergy_info_hotel_id_fkey"
+            columns: ["hotel_id"]
+            isOneToOne: false
+            referencedRelation: "hotels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hotel_sources: {
+        Row: {
+          ai_summary: string | null
+          allergy_score: number | null
+          created_at: string | null
+          hotel_id: string | null
+          id: string
+          raw_text: string | null
+          scraped_at: string | null
+          snippet: string | null
+          source_type: string | null
+          source_url: string | null
+          title: string | null
+        }
+        Insert: {
+          ai_summary?: string | null
+          allergy_score?: number | null
+          created_at?: string | null
+          hotel_id?: string | null
+          id?: string
+          raw_text?: string | null
+          scraped_at?: string | null
+          snippet?: string | null
+          source_type?: string | null
+          source_url?: string | null
+          title?: string | null
+        }
+        Update: {
+          ai_summary?: string | null
+          allergy_score?: number | null
+          created_at?: string | null
+          hotel_id?: string | null
+          id?: string
+          raw_text?: string | null
+          scraped_at?: string | null
+          snippet?: string | null
+          source_type?: string | null
+          source_url?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hotel_sources_hotel_id_fkey"
+            columns: ["hotel_id"]
+            isOneToOne: false
+            referencedRelation: "hotels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hotels: {
+        Row: {
+          active: boolean | null
+          address: string | null
+          allergy_score: number | null
+          booking_url: string | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          hotel_chain: string | null
+          id: string
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          region: string | null
+          slug: string | null
+          stars: number | null
+          updated_at: string | null
+          verified: boolean | null
+          website_url: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          address?: string | null
+          allergy_score?: number | null
+          booking_url?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          hotel_chain?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          region?: string | null
+          slug?: string | null
+          stars?: number | null
+          updated_at?: string | null
+          verified?: boolean | null
+          website_url?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          address?: string | null
+          allergy_score?: number | null
+          booking_url?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          hotel_chain?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          region?: string | null
+          slug?: string | null
+          stars?: number | null
+          updated_at?: string | null
+          verified?: boolean | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      pipeline_log: {
+        Row: {
+          articles_created: number | null
+          error_message: string | null
+          finished_at: string | null
+          hotels_added: number | null
+          hotels_found: number | null
+          id: string
+          run_type: string | null
+          started_at: string | null
+          status: string | null
+        }
+        Insert: {
+          articles_created?: number | null
+          error_message?: string | null
+          finished_at?: string | null
+          hotels_added?: number | null
+          hotels_found?: number | null
+          id?: string
+          run_type?: string | null
+          started_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          articles_created?: number | null
+          error_message?: string | null
+          finished_at?: string | null
+          hotels_added?: number | null
+          hotels_found?: number | null
+          id?: string
+          run_type?: string | null
+          started_at?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -179,6 +369,105 @@ export type Database = {
           mode?: string
           results_returned?: number
           search_id?: string
+        }
+        Relationships: []
+      }
+      seo_articles: {
+        Row: {
+          ai_generated: boolean | null
+          content_html: string | null
+          content_markdown: string | null
+          created_at: string | null
+          focus_keyword: string | null
+          hotel_ids: string[] | null
+          id: string
+          meta_description: string | null
+          published_at: string | null
+          related_keywords: string[] | null
+          slug: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          word_count: number | null
+        }
+        Insert: {
+          ai_generated?: boolean | null
+          content_html?: string | null
+          content_markdown?: string | null
+          created_at?: string | null
+          focus_keyword?: string | null
+          hotel_ids?: string[] | null
+          id?: string
+          meta_description?: string | null
+          published_at?: string | null
+          related_keywords?: string[] | null
+          slug?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          word_count?: number | null
+        }
+        Update: {
+          ai_generated?: boolean | null
+          content_html?: string | null
+          content_markdown?: string | null
+          created_at?: string | null
+          focus_keyword?: string | null
+          hotel_ids?: string[] | null
+          id?: string
+          meta_description?: string | null
+          published_at?: string | null
+          related_keywords?: string[] | null
+          slug?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          word_count?: number | null
+        }
+        Relationships: []
+      }
+      seo_keywords: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          current_rank: number | null
+          difficulty: number | null
+          id: string
+          intent: string | null
+          keyword: string
+          monthly_volume: number | null
+          notes: string | null
+          priority: number | null
+          target_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          current_rank?: number | null
+          difficulty?: number | null
+          id?: string
+          intent?: string | null
+          keyword: string
+          monthly_volume?: number | null
+          notes?: string | null
+          priority?: number | null
+          target_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          current_rank?: number | null
+          difficulty?: number | null
+          id?: string
+          intent?: string | null
+          keyword?: string
+          monthly_volume?: number | null
+          notes?: string | null
+          priority?: number | null
+          target_url?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
