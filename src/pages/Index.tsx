@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { HOME_CONTENT } from "@/constants/home";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { MetaManager } from "@/components/MetaManager";
+import { AllergyHotelsGuide } from "@/components/home/AllergyHotelsGuide";
 
 // Lazy load non-critical components
 const FeaturedDestinations = lazy(() => 
@@ -50,6 +51,9 @@ export default function Index() {
           </Suspense>
         </div>
       </section>
+
+      {/* SEO content + FAQ targeting "allergy friendly hotels" */}
+      <AllergyHotelsGuide />
     </>
   );
 }
