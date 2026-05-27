@@ -1,19 +1,10 @@
-
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Rocket } from "lucide-react";
 import { MainMenu } from '@/components/MainMenu';
 import { HOME_CONTENT } from '@/constants/home';
 
 export const SiteHeader = () => {
   return (
     <header className="sticky top-0 z-50 w-full max-w-full overflow-hidden">
-      {/* Beta Banner */}
-      <div className="w-full bg-white text-gray-800 text-xs py-1.5 text-center flex items-center justify-center font-medium">
-        <Rocket className="h-3 w-3 mr-1.5 text-[#edab69]" />
-        Website in Beta
-      </div>
-      
       {/* Navigation */}
       <nav className="relative bg-white shadow-sm w-full">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center max-w-full box-border">
