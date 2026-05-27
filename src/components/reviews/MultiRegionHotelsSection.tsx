@@ -109,11 +109,9 @@ export const MultiRegionHotelsSection = ({
                   <CardContent className="space-y-3">
                     <p className="text-muted-foreground">{hotel.description}</p>
                     
-                    {hotel.quote && (
-                      <blockquote className="border-l-4 border-primary/30 pl-4 italic text-muted-foreground">
-                        "{hotel.quote}"
-                      </blockquote>
-                    )}
+                    <div className="text-sm text-muted-foreground bg-primary/5 rounded-lg p-3">
+                      Verified guest reviews are sourced from TripAdvisor, Booking.com, and Google Reviews.
+                    </div>
 
                     {hotel.allergenFriendly && hotel.allergenFriendly.length > 0 && (
                       <div className="flex flex-wrap gap-2">
