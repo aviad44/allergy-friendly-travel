@@ -42,11 +42,9 @@ export const CruiseDetails: React.FC<CruiseDetailsProps> = ({ cruiseLines }) => 
               ))}
             </ul>
             
-            {cruise.quote && (
-              <blockquote className="border-l-4 border-primary/30 pl-4 italic text-muted-foreground">
-                "{cruise.quote}" – {cruise.author}
-              </blockquote>
-            )}
+            <div className="text-sm text-muted-foreground bg-primary/5 rounded-lg p-3">
+              Verified guest reviews are sourced from TripAdvisor, Booking.com, and Google Reviews.
+            </div>
           </div>
           {index < cruiseLines.length - 1 && <Separator className="mt-10" />}
         </div>
