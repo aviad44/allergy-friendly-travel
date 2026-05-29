@@ -1,63 +1,7 @@
-
 User-agent: *
 Allow: /
+Crawl-delay: 1
 
-# Block development files and folders
-Disallow: /src/
-Disallow: /node_modules/
-Disallow: /components/
-Disallow: /data/
-Disallow: /hooks/
-Disallow: /lib/
-Disallow: /types/
-Disallow: /utils/
-Disallow: /constants/
-Disallow: /integrations/
-Disallow: /supabase/
-Disallow: /netlify/
-Disallow: /.git/
-Disallow: /.github/
-Disallow: /dist/
-Disallow: /build/
-
-# Block code file extensions
-Disallow: /*.js$
-Disallow: /*.ts$
-Disallow: /*.tsx$
-Disallow: /*.jsx$
-Disallow: /*.json$
-Disallow: /*.md$
-Disallow: /*.lock$
-Disallow: /*.toml$
-Disallow: /*.config.js$
-Disallow: /*.config.ts$
-Disallow: /*.css$
-Disallow: /*.scss$
-Disallow: /*.sass$
-
-# Block development and build files
-Disallow: /package.json
-Disallow: /package-lock.json
-Disallow: /yarn.lock
-Disallow: /bun.lockb
-Disallow: /tsconfig.json
-Disallow: /vite.config.ts
-Disallow: /tailwind.config.ts
-Disallow: /postcss.config.js
-Disallow: /components.json
-Disallow: /.gitignore
-Disallow: /README.md
-
-# Block file patterns in subdirectories
-Disallow: /*/*.ts
-Disallow: /*/*.tsx
-Disallow: /*/*.js
-Disallow: /*/*.jsx
-Disallow: /*/components/
-Disallow: /*/src/
-Disallow: /*/node_modules/
-
-# ALLOW social media and prerender bots - CRITICAL for social sharing
 User-agent: facebookexternalhit
 Allow: /
 
@@ -73,24 +17,13 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-User-agent: PinterestBot  
+User-agent: PinterestBot
 Allow: /
 
-User-agent: prerender
+User-agent: Prerender
 Allow: /
 
-User-agent: GoogleBot
+User-agent: Googlebot
 Allow: /
-Disallow: /src/
-Disallow: /node_modules/
-Disallow: /components/
-Disallow: /*.ts$
-Disallow: /*.tsx$
-Disallow: /*.js$
-Disallow: /*.jsx$
 
-# Crawl delay to reduce server load
-Crawl-delay: 1
-
-# Sitemap location
 Sitemap: https://www.allergy-free-travel.com/sitemap.xml
