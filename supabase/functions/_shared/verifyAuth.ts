@@ -13,9 +13,17 @@ export async function isAuthorized(req: Request): Promise<boolean> {
     const token = authHeader.replace("Bearer ", "").trim();
     if (!token) return false;
 
+    // Accept the project's publishable/anon key: the public app is fully
+    // anonymous (no login) and always sends this key via supabase-js. This
+    // still blocks arbitrary callers that don't present a Supabase token.
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
+    const publishableKey = Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
+    if (token === anonKey || token === publishableKey) return true;
+
+    // Otherwise, validate it as a real user JWT.
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
+      anonKey!,
     );
     const { data, error } = await supabase.auth.getClaims(token);
     return !error && !!data?.claims;
