@@ -1,6 +1,15 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
+
+const escapeHtml = (s: unknown) =>
+  String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -24,10 +33,20 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (!(await isAuthorized(req))) {
+    return unauthorizedResponse(corsHeaders);
+  }
+
   try {
     const { authorName, reviewText, rating, destination, travelerType }: ReviewNotificationRequest = await req.json();
 
     console.log("Sending review notification email for:", { authorName, rating });
+
+    const safeAuthorName = escapeHtml(authorName);
+    const safeReviewText = escapeHtml(reviewText);
+    const safeDestination = escapeHtml(destination);
+    const safeTravelerType = escapeHtml(travelerType);
+    const safeRating = Math.max(0, Math.min(5, Number(rating) || 0));
 
     const emailResponse = await resend.emails.send({
       from: "Allergy Free Travel <onboarding@resend.dev>",
