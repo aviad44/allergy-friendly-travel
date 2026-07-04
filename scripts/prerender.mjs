@@ -5,8 +5,8 @@
 // each route into dist/. Crawlers (and `curl`) then receive full HTML instead
 // of an empty <div id="root">.
 import http from 'node:http';
-import { readFile, readFileSync, mkdir, writeFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import puppeteer from 'puppeteer';
