@@ -333,6 +333,10 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (!(await isAuthorized(req))) {
+    return unauthorizedResponse(corsHeaders);
+  }
+
   const startTime = Date.now();
   const searchId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 
