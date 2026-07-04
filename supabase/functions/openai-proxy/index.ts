@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
+import { validateBody, z } from "../_shared/validation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,6 +15,10 @@ const MAX_TOKENS = 2000;
 const MAX_INPUT_LENGTH = 2000;
 const SYSTEM_PROMPT =
   "You are an AI assistant specializing in recommending allergy-friendly hotels worldwide. Your responses must be highly detailed and structured.";
+
+const inputSchema = z.object({
+  userInput: z.string().trim().min(1).max(MAX_INPUT_LENGTH),
+});
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -33,13 +38,9 @@ serve(async (req) => {
     }
 
     // Only accept userInput from the caller; validate it.
-    const { userInput } = await req.json();
-    if (!userInput || typeof userInput !== 'string' || userInput.length > MAX_INPUT_LENGTH) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid input' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    const validation = await validateBody(req, inputSchema, corsHeaders);
+    if (!validation.success) return validation.response;
+    const { userInput } = validation.data;
 
     const startTime = Date.now();
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
