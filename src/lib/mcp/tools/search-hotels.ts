@@ -23,7 +23,7 @@ export default defineTool({
   handler: ({ query, limit }) => {
     const q = query.trim().toLowerCase();
     const max = Math.max(1, Math.min(limit ?? 20, 50));
-    const nameById = new Map(destinations.map((d) => [d.id, d.name]));
+    const nameById = new Map<string, string>(destinations.map((d) => [d.id as string, d.name]));
     const results: any[] = [];
 
     for (const [id, content] of Object.entries(destinationData as Record<string, any>)) {
