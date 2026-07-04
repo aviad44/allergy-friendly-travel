@@ -1,6 +1,7 @@
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,6 +12,10 @@ serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  if (!(await isAuthorized(req))) {
+    return unauthorizedResponse(corsHeaders);
   }
 
   try {
@@ -123,10 +128,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('❌ Error in gpt-proxy function:', error);
     return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred',
-        details: error instanceof Error ? error.stack : undefined
-      }),
+      JSON.stringify({ error: 'An unexpected error occurred' }),
       { 
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }

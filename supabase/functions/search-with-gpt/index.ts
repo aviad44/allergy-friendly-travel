@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,6 +14,10 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') {
     console.log('✅ Handling CORS preflight');
     return new Response(null, { headers: corsHeaders });
+  }
+
+  if (!(await isAuthorized(req))) {
+    return unauthorizedResponse(corsHeaders);
   }
 
   try {
