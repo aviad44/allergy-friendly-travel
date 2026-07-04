@@ -8,7 +8,228 @@ import { defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
 // src/lib/mcp/tools/list-destinations.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z } from "npm:zod@^3.25.76";
-import { destinations } from "npm:@/data/destinations-list";
+
+// src/data/destinations-list.ts
+var destinations = [
+  {
+    id: "warm-winter-destinations",
+    name: "Warm Winter Destinations",
+    country: "Multiple",
+    description: "Warm Winter & Christmas Getaways for Food-Allergic Travelers",
+    subtitle: "Best Sunny Destinations: Madeira, Hurghada, Canary Islands & Israel",
+    image: "/lovable-uploads/warm-winter-hero.jpg"
+  },
+  {
+    id: "amsterdam",
+    name: "Amsterdam",
+    country: "Netherlands",
+    description: "Top 10 Allergy-Friendly Hotels in Amsterdam",
+    subtitle: "Safe Accommodations for Food Allergies",
+    image: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    id: "london",
+    name: "London",
+    country: "United Kingdom",
+    description: "Best Allergy-Friendly Hotels in London",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "paris",
+    name: "Paris",
+    country: "France",
+    description: "Best Allergy-Friendly Hotels in Paris",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "barcelona",
+    name: "Barcelona",
+    country: "Spain",
+    description: "Best Allergy-Friendly Hotels in Barcelona",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "cyprus",
+    name: "Cyprus",
+    country: "Cyprus",
+    description: "Best Allergy-Friendly Hotels in Cyprus",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "tuscany",
+    name: "Tuscany",
+    country: "Italy",
+    description: "Allergy-Friendly 6-Day Tuscany Itinerary",
+    subtitle: "Safe Accommodations and Restaurants in Tuscany"
+  },
+  {
+    id: "rome",
+    name: "Rome",
+    country: "Italy",
+    description: "Top 5 Allergy-Friendly Hotels in Rome",
+    subtitle: "Safe & Comfortable Stays for Travelers with Food Sensitivities"
+  },
+  {
+    id: "abu-dhabi",
+    name: "Abu Dhabi",
+    country: "UAE",
+    description: "Best Allergy-Friendly Hotels in Abu Dhabi",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "crete",
+    name: "Crete",
+    country: "Greece",
+    description: "Best Allergy-Friendly Hotels in Crete",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "tokyo",
+    name: "Tokyo",
+    country: "Japan",
+    description: "Best Allergy-Friendly Hotels in Tokyo",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "thailand",
+    name: "Thailand",
+    country: "Thailand",
+    description: "Best Allergy-Friendly Hotels in Thailand",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "hotel-chains",
+    name: "Hotel Chains",
+    country: "Worldwide",
+    description: "Best Allergy-Friendly Hotel Chains",
+    subtitle: "Safe Hotel Chains for Food Allergies"
+  },
+  {
+    id: "new-york",
+    name: "New York",
+    country: "United States",
+    description: "Best Allergy-Friendly Hotels in New York",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "portugal",
+    name: "Portugal",
+    country: "Portugal",
+    description: "Best Allergy-Friendly Hotels in Portugal",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "swiss-alps",
+    name: "Swiss Alps",
+    country: "Switzerland",
+    description: "Best Allergy-Friendly Hotels in the Swiss Alps",
+    subtitle: "Safe Mountain Accommodations for Food Allergies"
+  },
+  {
+    id: "koh-samui",
+    name: "Koh Samui",
+    country: "Thailand",
+    description: 'Four Seasons Koh Samui \u2013 The "White Lotus" Resort',
+    subtitle: "Allergy-Friendly White Lotus Filming Location"
+  },
+  {
+    id: "turkey",
+    name: "Turkey",
+    country: "Turkey",
+    description: "Best Allergy-Friendly Hotels in Turkey",
+    subtitle: "Safe All-Inclusive Resorts for Food Allergies"
+  },
+  {
+    id: "cruise-lines",
+    name: "Cruise Lines",
+    country: "Worldwide",
+    description: "Best Allergy-Friendly Cruise Lines",
+    subtitle: "Safe Cruising for Food Allergies"
+  },
+  {
+    id: "toronto",
+    name: "Toronto",
+    country: "Canada",
+    description: "Best Allergy-Friendly Hotels in Toronto",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "ayia-napa",
+    name: "Ayia Napa",
+    country: "Cyprus",
+    description: "Best Allergy-Friendly Hotels in Ayia Napa",
+    subtitle: "Safe Beach Accommodations for Food Allergies"
+  },
+  {
+    id: "gluten-free-europe",
+    name: "Gluten-Free Europe",
+    country: "Europe",
+    description: "Top 5 Gluten-Free Travel Destinations in Europe (2025)",
+    subtitle: "Where to Travel in Europe If You're Gluten-Free or Have Celiac Disease",
+    image: "/lovable-uploads/european-restaurant-diners.jpg"
+  },
+  {
+    id: "athens",
+    name: "Athens",
+    country: "Greece",
+    description: "Top 10 Gluten-Free Restaurants in Athens for Celiacs (2025)",
+    subtitle: "Safe & Delicious Dining Options for Celiacs in the Greek Capital"
+  },
+  {
+    id: "eilat",
+    name: "Eilat",
+    country: "Israel",
+    description: "A Stress-Free Vacation: U Coral Beach Hotel in Eilat",
+    subtitle: "Allergy-Friendly Experience at Fattal's Resort"
+  },
+  {
+    id: "airlines",
+    name: "Airlines",
+    country: "Worldwide",
+    description: "Best Airlines for Food Allergy Sufferers (2025 Guide)",
+    subtitle: "Safe Flying Tips & Allergy-Friendly Airline Rankings"
+  },
+  {
+    id: "italy",
+    name: "Italy",
+    country: "Italy",
+    description: "Discover Italy: Top Destination for Celiacs & Gluten\u2011Sensitive Travelers",
+    subtitle: "Exceptional Gluten-Free Dining Across Rome, Florence, Milan & Naples"
+  },
+  {
+    id: "stockholm",
+    name: "Stockholm",
+    country: "Sweden",
+    description: "Allergy-Friendly Hotels & Gluten-Free Restaurants in Stockholm",
+    subtitle: "Safe Accommodations and Dining for Food Allergies in Sweden's Capital",
+    image: "/lovable-uploads/stockholm-hero.jpg"
+  },
+  {
+    id: "madrid",
+    name: "Madrid",
+    country: "Spain",
+    description: "Top 10 Allergy-Friendly Hotels in Madrid",
+    subtitle: "Safe Accommodations for Food Allergies"
+  },
+  {
+    id: "flying-with-epipens",
+    name: "Flying with EpiPens",
+    country: "Europe",
+    description: "Europe Guide to Flying with EpiPens and Allergy Medication",
+    subtitle: "Complete 2025 Guide to Airport & Airline Rules",
+    image: "/lovable-uploads/airport-security-queue.jpg"
+  },
+  {
+    id: "flying-with-epipens-north-america",
+    name: "Flying with EpiPens North America",
+    country: "North America",
+    description: "North America Guide to Flying with EpiPens and Allergy Medication",
+    subtitle: "Complete 2025 Guide to TSA, CATSA & Airport Rules",
+    image: "/lovable-uploads/us-airport-terminal.jpg"
+  }
+];
+
+// src/lib/mcp/tools/list-destinations.ts
 var list_destinations_default = defineTool({
   name: "list_destinations",
   title: "List destinations",
@@ -37,14 +258,4129 @@ var list_destinations_default = defineTool({
 // src/lib/mcp/tools/get-destination-guide.ts
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z as z2 } from "npm:zod@^3.25.76";
-import { destinationData } from "npm:@/data/destination-data";
-import { destinations as destinations2 } from "npm:@/data/destinations-list";
-function toText(intro) {
-  if (!intro) return "";
-  if (typeof intro === "string") return intro;
-  if (Array.isArray(intro)) return intro.join("\n\n");
-  if (typeof intro === "object") {
-    const o = intro;
+
+// src/data/destination-tuscany.ts
+var hotels = [
+  {
+    name: "Hotel Brunelleschi",
+    features: [
+      "Gluten-free certified by AIC",
+      "Staff trained in allergy protocols",
+      "Central historic location"
+    ],
+    image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/267064911.jpg?k=a08bb7f46dba23c5f115105b2a2f60ad2adfa62aef09f2358e8071297d4c504d&o=&hp=1",
+    rating: 4.8,
+    reviews: [
+      {
+        text: "They confirmed my nut and dairy allergies before check-in. Every morning I had a personalized, safe breakfast.",
+        author: "Lior R., Israel",
+        rating: 5
+      }
+    ],
+    location: "Florence",
+    address: "Piazza Santa Elisabetta, 3, 50122 Firenze FI, Italy",
+    bookingUrl: "https://www.hotelbrunelleschi.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
+    description: "A historic hotel in the center of Florence with exceptional allergy protocols and trained staff."
+  },
+  {
+    name: "Agriturismo Le Cetinelle",
+    features: [
+      "Homemade allergy-safe food",
+      "Kitchen modifications available",
+      "Stunning rural views"
+    ],
+    rating: 4.7,
+    reviews: [
+      {
+        text: "They removed peanut oil from the kitchen after I mentioned my allergy. Incredible service!",
+        author: "Noam L., Israel",
+        rating: 5
+      }
+    ],
+    location: "Chianti Wine Country",
+    address: "Str. delle Cetinelle, 53017 Radda in Chianti SI, Italy",
+    bookingUrl: "https://www.lecetinelle.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
+    description: "A beautiful agriturismo in the heart of Chianti offering personalized allergy accommodations."
+  },
+  {
+    name: "Hotel Garden",
+    features: [
+      "Vegan and dairy-free menu options",
+      "New gluten-free kids' menu (2025)",
+      "Family-friendly accommodations"
+    ],
+    image: "https://www.gardenhotel.it/wp-content/uploads/2019/03/esterno-hotel-5.jpg",
+    rating: 4.6,
+    reviews: [
+      {
+        text: "I have celiac and lactose intolerance. They made me gluten-free pasta and were super friendly.",
+        author: "Marta V., Spain",
+        rating: 4.5
+      }
+    ],
+    location: "Siena",
+    address: "Via Custoza, 2, 53100 Siena SI, Italy",
+    bookingUrl: "https://www.gardenhotel.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
+    description: "A charming hotel in Siena with beautiful gardens and dedicated allergen-free dining options."
+  },
+  {
+    name: "Hotel Ilaria",
+    features: [
+      "Allergy-aware breakfast",
+      "Digital menu with allergen filters",
+      "Central location in Lucca"
+    ],
+    image: "https://www.hotelilaria.com/wp-content/uploads/2017/07/hotel-ilaria-facciata.jpg",
+    rating: 4.5,
+    reviews: [
+      {
+        text: "They provided egg-free options and really listened to my needs.",
+        author: "Alex S., UK",
+        rating: 4.5
+      }
+    ],
+    location: "Lucca",
+    address: "Via del Fosso, 26, 55100 Lucca LU, Italy",
+    bookingUrl: "https://www.hotelilaria.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
+    description: "A boutique hotel in the heart of Lucca with modern amenities and allergy-conscious dining."
+  }
+];
+var faqs = [
+  {
+    question: "Are there many gluten-free options in Tuscany?",
+    answer: "Yes, Italy is very celiac-aware. Many restaurants in Tuscany offer certified gluten-free options, especially in Florence and Siena. The Italian Celiac Association (AIC) certifies restaurants, making them easy to identify."
+  },
+  {
+    question: "How should I communicate my food allergies in Tuscany?",
+    answer: "We recommend downloading an Italian allergy translation card or using our free allergy translation tool to create custom cards. Mention your allergies when making reservations and remind staff when you arrive."
+  },
+  {
+    question: "What are the best allergy-friendly restaurants in Florence?",
+    answer: "Ciro & Sons is certified gluten-free and handles multiple allergies well. Gelateria Edoardo offers vegan and nut-free gelato with separate utensils. La Cucina del Ghianda can accommodate soy and gluten allergies with advance notice."
+  },
+  {
+    question: "Can I visit wineries in Tuscany with food allergies?",
+    answer: "Yes, many Chianti region wineries can accommodate allergies. Always call ahead, as some wine may contain traces of allergens like egg whites or milk proteins used in the fining process."
+  },
+  {
+    question: "Are allergy-friendly restaurants more expensive in Tuscany?",
+    answer: "Not necessarily. While some high-end restaurants like Michelin-starred Cum Quibus in San Gimignano may charge more, many affordable trattorias and gelaterias throughout Tuscany can accommodate allergies at standard prices."
+  }
+];
+var tuscanyContent = {
+  intro: [
+    "Tuscany is a food lover's paradise, and with proper planning, it can be enjoyed safely by travelers with dietary restrictions. This updated 6-day itinerary covers Florence, Chianti, Siena, Lucca, Pisa, and San Gimignano \u2014 with allergy-friendly accommodation and dining options throughout.",
+    "From gluten-free certified restaurants to hotels with dedicated allergy protocols, our guide helps you navigate Tuscany's culinary landscape with confidence. We've also included recent guest reviews from travelers with various food allergies to help you plan your perfect Italian getaway."
+  ],
+  hotels,
+  faqs,
+  languageTable: {
+    headers: ["English", "Italian", "Pronunciation"],
+    rows: [
+      ["I have a food allergy", "Ho un'allergia alimentare", "Oh oon ah-lair-jee-ah ah-lee-men-tah-ray"],
+      ["I cannot eat gluten", "Non posso mangiare glutine", "Non pos-so man-jar-eh gloo-tee-nay"],
+      ["I am allergic to nuts", "Sono allergico alle noci", "So-no al-lair-jee-ko al-lay no-chee"],
+      ["I have celiac disease", "Ho la celiachia", "Oh la chay-lee-ah-kee-ah"],
+      ["Does this contain dairy?", "Contiene lattosio?", "Con-tee-eh-nay lat-toh-see-oh"]
+    ]
+  }
+};
+
+// src/data/destination-swiss-alps.ts
+console.log("Loading destination-swiss-alps.ts module");
+var swissAlpsContent = {
+  intro: "Experience the majestic Swiss Alps with peace of mind, offering allergy-aware accommodations across stunning mountain regions.",
+  hotels: [
+    {
+      name: "Riffelalp Resort 2222m",
+      address: "Riffelalp 2222m, 3920 Zermatt, Switzerland",
+      features: [
+        "\u2B50 5-star family-friendly resort",
+        "\u{1F37D}\uFE0F Dedicated gluten-free breakfast",
+        "\u{1F468}\u200D\u{1F373} Chef consultations for allergies"
+      ],
+      description: "A car-free mountain resort with ski-in/ski-out access and exceptional allergy-aware dining options.",
+      quote: "The chef personally ensured our dietary needs were met. Exceptional service!",
+      bookingUrl: "https://www.riffelalp.com/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/13865824.jpg?k=0be2ed5e902615a30f5feafa9640c421e55852ac2a79e473e636deeb2a181e56&o=&hp=1",
+      rating: 4.8,
+      location: "Zermatt"
+    },
+    {
+      name: "Giardino Mountain",
+      address: "Via dal Bagn 54, 7513 Silvaplana-Champf\xE8r, Switzerland",
+      features: [
+        "\u2B50 5-star wellness hotel",
+        "\u{1F963} Lactose/gluten/nut-free meals",
+        "\u{1F4A7} Allergy-friendly family spa"
+      ],
+      description: "A design wellness hotel in Engadin Valley offering pre-arrival allergy coordination.",
+      quote: "They prepared everything perfectly for my son's celiac diet.",
+      bookingUrl: "https://www.giardinohotels.ch/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/296012790.jpg?k=551b3b7d69da4713fcab249c13a3cc8a85df65cd89a23870ec402157b1e72c19&o=&hp=1",
+      rating: 4.7,
+      location: "Engadin Valley"
+    },
+    {
+      name: "Backstage Boutique Hotel",
+      address: "Hofmattstrasse 4, 3920 Zermatt, Switzerland",
+      features: [
+        "\u2B50 4-star artistic design hotel",
+        "\u{1F9D1}\u200D\u{1F373} Fine dining trained on allergens",
+        "\u{1F3AD} Allergy-friendly bedding"
+      ],
+      description: "A boutique hotel ideal for couples seeking comfort and allergy care in Zermatt.",
+      quote: "They understood my nut allergy completely and offered sealed plates and utensils.",
+      bookingUrl: "https://www.backstagehotel.ch/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/120450196.jpg?k=e95aaa41e32b3259d75a13f9ed84d77dd71c268123e7eaff293d001c32430083&o=&hp=1",
+      rating: 4.5,
+      location: "Zermatt"
+    },
+    {
+      name: "Hotel Silberhorn",
+      address: "H\xF6heweg 73, 3800 Interlaken, Switzerland",
+      features: [
+        "\u2B50 4-star chalet-style hotel",
+        "\u{1F9FC} Staff trained on cross-contamination",
+        "\u{1F304} Surrounded by waterfalls and trails"
+      ],
+      description: "A chalet-style mountain hotel great for nature lovers and allergy-conscious hikers.",
+      quote: "They remembered my allergies every morning and adjusted my meals accordingly.",
+      bookingUrl: "https://www.silberhorn.com/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/39615603.jpg?k=89d8d3e11e91750c5aee682a643ebcfbcc7f971b122366bf72e89bb01a0f7420&o=&hp=1",
+      rating: 4.4,
+      location: "Lauterbrunnen Valley"
+    }
+  ],
+  faqs: [
+    {
+      question: "How do Swiss Alpine hotels handle food allergies?",
+      answer: "Many Swiss hotels offer personalized meal planning, separate cooking areas, and staff trained in cross-contamination prevention."
+    },
+    {
+      question: "Are mountain accommodations safe for allergy sufferers?",
+      answer: "Yes, many Alpine hotels now provide hypoallergenic rooms, HEPA air filters, and detailed allergy management protocols."
+    },
+    {
+      question: "Can I find self-catering options for severe allergies?",
+      answer: "Absolutely. Many chalets and Airbnbs like Haus Andorra and Chesa Plattner offer allergy-safe kitchens with separate utensils and fragrance-free cleaning."
+    },
+    {
+      question: "What should I tell hotels in advance about my allergies?",
+      answer: "Contact them 1-2 weeks before arrival with specific details about your allergies, necessary precautions, and any medical requirements."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "German", "French"],
+    rows: [
+      ["I have a food allergy", "Ich habe eine Lebensmittelallergie", "J'ai une allergie alimentaire"],
+      ["Gluten-free", "Glutenfrei", "Sans gluten"],
+      ["Dairy-free", "Milchfrei", "Sans lactose"],
+      ["Nut-free", "Nussfrei", "Sans noix"],
+      ["Is this safe for me to eat?", "Ist das f\xFCr mich sicher zu essen?", "Est-ce que je peux manger ceci en toute s\xE9curit\xE9?"]
+    ]
+  }
+};
+console.log("Swiss Alps content initialized:", swissAlpsContent);
+
+// src/data/destination-koh-samui.ts
+var kohSamuiContent = {
+  intro: "Dreaming of the lush tropical setting from The White Lotus Season 3? You're not alone. And if you or a family member has food allergies, you'll be thrilled to learn that the actual filming location \u2013 the Four Seasons Resort Koh Samui in Thailand \u2013 is not only luxurious, but also well-equipped to handle food allergies with exceptional care.",
+  hotels: [
+    {
+      name: "Four Seasons Resort Koh Samui",
+      address: "219 Moo 5, Angthong, Koh Samui, Surat Thani 84140, Thailand",
+      features: [
+        "Dedicated allergen-free food preparation",
+        "Pre-arrival dietary consultations",
+        "Custom meals for allergies",
+        "Private chef services available",
+        "Clearly labeled menus",
+        "Trained staff for allergy protocols"
+      ],
+      description: "Luxury resort offering exceptional allergy-friendly dining options and stunning ocean views. Famous as the filming location for White Lotus Season 3.",
+      quote: "My daughter has severe nut and dairy allergies. The staff reviewed every meal in advance, and we felt completely safe throughout our stay.",
+      bookingUrl: "https://www.fourseasons.com/kohsamui/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/347289712.jpg?k=5681cdaf3aad02b2c2440eecb8b974e8a2577a6015937577c3551b901f95b265&o=&hp=1"
+    },
+    {
+      name: "Santiburi Koh Samui",
+      address: "12/12 Moo 1, Mae Nam, Koh Samui, Surat Thani 84330, Thailand",
+      features: [
+        "Full dietary profiling before arrival",
+        "In-house nutritionist",
+        "Personalized meal preparation",
+        "Separate cooking areas for allergies"
+      ],
+      description: "A luxury beachfront retreat with villas surrounded by tropical gardens, offering comprehensive allergy management and personalized dining experiences.",
+      quote: "As someone with celiac disease, I was amazed at how seriously they took my condition. The chef personally showed me their gluten-free preparation area.",
+      bookingUrl: "https://www.santiburisamui.com/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/259356089.jpg?k=3e0f02f4bccd313145dca3748f7af1dea71cee6fd50c2d6207bea8d3cc2b5ce0&o=&hp=1"
+    },
+    {
+      name: "Anantara Bophut Koh Samui Resort",
+      address: "99/9 Bophut Bay, Koh Samui, Surat Thani 84320, Thailand",
+      features: [
+        "Spice Spoons cooking school with allergy options",
+        "Customized dietary menus",
+        "Allergy cards in multiple languages",
+        "Wellness cuisine program"
+      ],
+      description: "A beachfront resort combining Thai-inspired luxury with exceptional allergy-aware dining and personalized culinary experiences.",
+      quote: "The resort provided allergy cards in Thai that I could use throughout my stay. Their attention to detail with my shellfish allergy was impressive.",
+      bookingUrl: "https://www.anantara.com/en/bophut-koh-samui",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/331963356.jpg?k=f9211d1a72e6e1e7151ff73287a18f774e3d2d52598e713112fde7efb68b9bc9&o=&hp=1"
+    }
+  ],
+  faqs: [
+    {
+      question: "Is Four Seasons Koh Samui safe for celiac guests?",
+      answer: "Yes, the resort has dedicated gluten-free food preparation areas and offers fresh gluten-free breads and pastries daily."
+    },
+    {
+      question: "What allergens can they accommodate?",
+      answer: "The resort can accommodate various allergies including gluten, dairy, nuts, eggs, soy, and shellfish. They offer pre-arrival consultations to discuss specific needs."
+    },
+    {
+      question: "When is the best time to visit Koh Samui?",
+      answer: "The best time to visit is from January to May when the weather is dry and sunny with lower humidity."
+    },
+    {
+      question: "Are there good medical facilities nearby for allergy emergencies?",
+      answer: "Yes, Bangkok Hospital Samui is a JCI-accredited facility with 24/7 emergency services and English-speaking doctors experienced in treating severe allergic reactions."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Thai"],
+    rows: [
+      ["I have food allergies", "\u0E09\u0E31\u0E19\u0E41\u0E1E\u0E49\u0E2D\u0E32\u0E2B\u0E32\u0E23"],
+      ["No nuts please", "\u0E44\u0E21\u0E48\u0E43\u0E2A\u0E48\u0E16\u0E31\u0E48\u0E27\u0E19\u0E30\u0E04\u0E30/\u0E04\u0E23\u0E31\u0E1A"],
+      ["Gluten-free", "\u0E1B\u0E23\u0E32\u0E28\u0E08\u0E32\u0E01\u0E01\u0E25\u0E39\u0E40\u0E15\u0E19"],
+      ["Is this safe for allergies?", "\u0E2D\u0E32\u0E2B\u0E32\u0E23\u0E19\u0E35\u0E49\u0E1B\u0E25\u0E2D\u0E14\u0E20\u0E31\u0E22\u0E2A\u0E33\u0E2B\u0E23\u0E31\u0E1A\u0E04\u0E19\u0E41\u0E1E\u0E49\u0E2D\u0E32\u0E2B\u0E32\u0E23\u0E44\u0E2B\u0E21"]
+    ]
+  }
+};
+
+// src/data/destination-tokyo.ts
+console.log("Loading destination-tokyo.ts module");
+var tokyoContent = {
+  intro: "Navigate Tokyo's culinary scene safely with these allergy-aware hotels.",
+  hotels: [
+    {
+      name: "Tokyo Marriott Hotel \u2605\u2605\u2605\u2605\u2605",
+      address: "4-7-36 Kitashinagawa, Shinagawa, Tokyo 140-0001, Japan",
+      features: [
+        "\u2B50 5-star international chain",
+        "\u{1F35A} Allergen cards in Japanese",
+        "\u{1F468}\u200D\u{1F373} Staff trained in cross-contamination"
+      ],
+      description: "Excellent for international travelers with food allergies, offering allergen cards in Japanese to help communicate dietary needs.",
+      quote: "The staff provided me with allergen cards I could show at restaurants throughout my stay in Japan!",
+      bookingUrl: "https://www.marriott.com/hotels/travel/tyomc-tokyo-marriott-hotel/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/53826815.jpg?k=d9bd2dc2955eb61b79c5765f0a3bc7a0876a1738b07644f5526743daa0668458&o=&hp=1",
+      rating: 4.7,
+      location: "Shinagawa"
+    },
+    {
+      name: "Park Hyatt Tokyo \u2605\u2605\u2605\u2605\u2605",
+      address: "3-7-1-2 Nishi Shinjuku, Shinjuku-Ku, Tokyo 163-1055, Japan",
+      features: [
+        "\u2B50 5-star landmark hotel",
+        "\u{1F363} Allergen-aware Japanese cuisine",
+        "\u{1F4DD} Written dietary communication cards"
+      ],
+      description: "Sophisticated accommodation famous from 'Lost in Translation' with exceptional allergy awareness and custom meal preparation.",
+      quote: "The chef created special gluten-free versions of traditional Japanese dishes that were incredible.",
+      bookingUrl: "https://www.hyatt.com/en-US/hotel/japan/park-hyatt-tokyo/tyoph",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/293146114.jpg?k=6ad9fd9e1378836503fd5d648afe4585644d2af4b81371791895d3b9c2f0d815&o=&hp=1",
+      rating: 4.9,
+      location: "Shinjuku"
+    },
+    {
+      name: "The Peninsula Tokyo \u2605\u2605\u2605\u2605\u2605",
+      address: "1-8-1 Yurakucho, Chiyoda-ku, Tokyo 100-0006, Japan",
+      features: [
+        "\u2B50 5-star luxury hotel",
+        "\u{1F3F7}\uFE0F Food labeling in multiple languages",
+        "\u{1F372} Pre-arrival allergy coordination"
+      ],
+      description: "Luxury hotel near the Imperial Palace with exceptional allergy protocols and multilingual staff to assist with dietary needs.",
+      quote: "Every meal was prepared with my dairy and nut allergies in mind, and they even offered gluten-free afternoon tea.",
+      bookingUrl: "https://www.peninsula.com/en/tokyo/5-star-luxury-hotel-ginza",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/41160325.jpg?k=be5a05462f66e8e55f055b7cc8179eb5005e6a1cce90c71307cfeea8941e8a84&o=&hp=1",
+      rating: 4.8,
+      location: "Chiyoda"
+    },
+    {
+      name: "Keio Plaza Hotel Tokyo \u2605\u2605\u2605\u2605",
+      address: "2-2-1 Nishi-Shinjuku, Shinjuku-Ku, Tokyo 160-8330, Japan",
+      features: [
+        "\u2B50 4-star business hotel",
+        "\u{1F963} Allergen-free menu options",
+        "\u{1F50D} Transparent ingredient lists"
+      ],
+      description: "Large, business-friendly hotel with designated allergy-friendly floors and restaurants experienced in handling dietary restrictions.",
+      quote: "They had comprehensive English ingredient lists for every buffet item and could prepare special meals on request.",
+      bookingUrl: "https://www.keioplaza.com/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/316929364.jpg?k=76996a195bfa3b410b0b80be44088cb1c40c82378648847ccd9acf3626c27a7a&o=&hp=1",
+      rating: 4.5,
+      location: "Shinjuku"
+    }
+  ],
+  faqs: [
+    {
+      question: "How do I communicate my food allergies in Tokyo hotels?",
+      answer: "Most high-end Tokyo hotels have English-speaking staff trained in allergy awareness. Request allergen cards in Japanese to use throughout your trip. Many hotels offer digital translation services as well."
+    },
+    {
+      question: "Are gluten-free options readily available in Tokyo hotels?",
+      answer: "While traditional Japanese cuisine often contains soy sauce (which contains wheat), upscale hotels are increasingly offering gluten-free alternatives including gluten-free soy sauce and special breakfast options."
+    },
+    {
+      question: "Do Tokyo hotels understand Western concepts of cross-contamination?",
+      answer: "Luxury and international chain hotels in Tokyo typically have well-trained staff who understand cross-contamination risks. Always clarify your specific needs directly with the food service manager."
+    },
+    {
+      question: "What hotel chains are best for food allergies in Tokyo?",
+      answer: "International chains like Marriott, Hyatt, and Hilton typically have standardized allergy protocols. Japanese luxury brands like The Peninsula and Imperial Hotel also offer exceptional allergy accommodations."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Japanese"],
+    rows: [
+      ["I have a food allergy", "\u308F\u305F\u3057\u306B\u306F\u98DF\u7269\u30A2\u30EC\u30EB\u30AE\u30FC\u304C\u3042\u308A\u307E\u3059 (Watashi ni wa shokumotsu arerug\u012B ga arimasu)"],
+      ["Gluten-free", "\u30B0\u30EB\u30C6\u30F3\u30D5\u30EA\u30FC (Guruten fur\u012B)"],
+      ["Dairy-free", "\u4E73\u88FD\u54C1\u306A\u3057 (Ny\u016Bseihin nashi)"],
+      ["Nut-free", "\u30CA\u30C3\u30C4\u306A\u3057 (Nattsu nashi)"],
+      ["I cannot eat this", "\u3053\u308C\u3092\u98DF\u3079\u3089\u308C\u307E\u305B\u3093 (Kore o taberaremasen)"]
+    ]
+  }
+};
+console.log("Tokyo content initialized:", tokyoContent);
+
+// src/data/destination-toronto.ts
+var torontoContent = {
+  intro: "Toronto is widely regarded as one of the most multicultural and inclusive cities in North America\u2014and that extends to how it handles food allergies and dietary restrictions. Whether you're traveling with celiac disease, a peanut allergy, or a dairy sensitivity, you'll find plenty of hotels and restaurants that offer safe, customized experiences.",
+  hotels: [
+    {
+      name: "Fairmont Royal York",
+      address: "100 Front St W, Toronto, ON M5J 1E3, Canada",
+      features: [
+        "\u2B50 5-star luxury",
+        "\u{1F37D}\uFE0F Personalized allergy protocols",
+        "\u{1F468}\u200D\u{1F373} Custom meals from executive chef"
+      ],
+      description: "Historic luxury hotel offering personalized allergy notes at check-in, custom meals from executive chef upon request, gluten-free and dairy-free items at all dining outlets, and hypoallergenic rooms available.",
+      quote: "I have celiac disease and was nervous, but the staff went out of their way to ensure I could eat safely. I even got gluten-free pancakes at breakfast! \u2013 Sophie T., UK",
+      bookingUrl: "https://www.fairmont.com/royal-york-toronto/",
+      rating: 5,
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/268797492.jpg?k=1c57b55dc0bc1d69987afbe898862c91bea9248f403c1ea5b520e0d3e77330ce&o=&hp=1",
+      location: "Downtown Toronto"
+    },
+    {
+      name: "Chelsea Hotel Toronto",
+      address: "33 Gerrard St W, Toronto, ON M5G 1Z4, Canada",
+      features: [
+        "\u2B50 4-star hotel",
+        "\u{1F468}\u200D\u{1F469}\u200D\u{1F467}\u200D\u{1F466} Family-friendly",
+        "\u{1F37D}\uFE0F Allergy-aware dining"
+      ],
+      description: "Family-oriented hotel with comprehensive allergy protocols, including staff training on cross-contamination prevention, nut-free desserts, and soy-free options available.",
+      quote: "Traveling with my 7-year-old who has a nut allergy was a breeze here. They even had a nut-free menu at the restaurant! \u2013 Michael R., USA",
+      bookingUrl: "https://www.chelseatoronto.com/",
+      rating: 4,
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/90203473.jpg?k=e2e730e5b8649d5783f3c5c480e629b22ef30eaeedce76ba482f462f3b13e933&o=&hp=1",
+      location: "Downtown Toronto"
+    },
+    {
+      name: "The Hazelton Hotel",
+      address: "118 Yorkville Ave, Toronto, ON M5R 1C2, Canada",
+      features: [
+        "\u2B50 5-star boutique",
+        "\u{1F468}\u200D\u{1F373} Direct chef interaction",
+        "\u{1F957} Allergen-aware amenities"
+      ],
+      description: "Boutique luxury hotel offering small, curated dining with direct chef interaction, comprehensive allergy notes system, and organic allergen-aware amenities.",
+      quote: "They asked me what I could eat, not just what I couldn't. That meant a lot. The food and service were flawless. \u2013 Anita K., Germany",
+      bookingUrl: "https://www.thehazeltonhotel.com/",
+      rating: 5,
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/133383393.jpg?k=2074fce7a998d4c58c64fe06b05981aa27c2e8dc1ac985f7d3ce4ee30a077060&o=&hp=1",
+      location: "Yorkville"
+    },
+    {
+      name: "Hotel X Toronto",
+      address: "111 Princes' Blvd, Toronto, ON M6K 3C3, Canada",
+      features: [
+        "\u2B50 5-star luxury",
+        "\u{1F37D}\uFE0F Dedicated vegan restaurant",
+        "\u{1F9EA} Allergy testing protocols"
+      ],
+      description: "Modern luxury hotel with state-of-the-art allergy protocols including a dedicated vegan restaurant and staff trained in allergy management.",
+      quote: "As someone with multiple food allergies, I was impressed by their detailed food labeling and the chef's willingness to adapt dishes. \u2013 James T., Australia",
+      bookingUrl: "https://www.hotelxtoronto.com/",
+      rating: 4.5,
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/337428105.jpg?k=961c2a2278e6238204bbf608f9300a2b8785758e5ef5a8f8886dab1c3760b8f1&o=&hp=1",
+      location: "Exhibition Place"
+    }
+  ],
+  faqs: [
+    {
+      question: "Are allergy translation cards needed in Toronto?",
+      answer: "While English is spoken everywhere, it's helpful to bring a clear, printed allergy card in case you're dining in ethnic areas."
+    },
+    {
+      question: "Do restaurants in Toronto label allergens?",
+      answer: "Most modern restaurants do. Vegan, GF, and dairy-free items are usually marked clearly."
+    },
+    {
+      question: "Is Toronto safe for people with severe food allergies?",
+      answer: "Yes\u2014but always call ahead, especially for sesame, nuts, or multiple allergies."
+    },
+    {
+      question: "Can I find kosher and halal options with allergy accommodations?",
+      answer: "Yes, Toronto has several excellent kosher and halal restaurants that also accommodate food allergies, particularly in the North York and Thornhill areas."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "French"],
+    rows: [
+      ["I have a food allergy", "J'ai une allergie alimentaire"],
+      ["Please no nuts", "Pas de noix s'il vous pla\xEEt"],
+      ["Is this gluten-free?", "Est-ce sans gluten?"],
+      ["I cannot eat dairy", "Je ne peux pas manger de produits laitiers"],
+      ["I have celiac disease", "Je suis c\u0153liaque"]
+    ]
+  }
+};
+
+// src/data/destination-paris.ts
+console.log("Loading destination-paris.ts module");
+var parisContent = {
+  intro: "Discover Paris's finest allergy-aware hotels and accommodations.",
+  hotels: [
+    {
+      name: "Le Bristol Paris \u2605\u2605\u2605\u2605\u2605",
+      address: "112 Rue du Faubourg Saint-Honor\xE9, 75008 Paris, France",
+      features: [
+        "\u2B50 5-star luxury hotel",
+        "\u{1F37D}\uFE0F Dedicated allergy menu",
+        "\u{1F468}\u200D\u{1F373} Private consultations with chef"
+      ],
+      description: "This iconic luxury hotel offers exceptional service for guests with dietary restrictions, including pre-arrival consultations.",
+      quote: "The chef personally came to our table to discuss my daughter's gluten allergy. The food was exquisite and completely safe.",
+      bookingUrl: "https://www.oetkercollection.com/hotels/le-bristol-paris/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=paris",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/48011363.jpg?k=7589023adf0c437fc9885894baf6d9f118b905e73ae8443833b90fd8402c1491&o=&hp=1",
+      rating: 5,
+      location: "8th Arrondissement"
+    },
+    {
+      name: "H\xF4tel Plaza Ath\xE9n\xE9e \u2605\u2605\u2605\u2605\u2605",
+      address: "25 Avenue Montaigne, 75008 Paris, France",
+      features: [
+        "\u2B50 5-star luxury accommodation",
+        "\u{1F950} Gluten-free pastries",
+        "\u{1F372} Allergen-free room service"
+      ],
+      description: "Upscale accommodation with special attention to food allergies and comprehensive allergen training for all kitchen staff.",
+      quote: "They created a custom dairy-free menu for my entire stay, even including French pastries!",
+      bookingUrl: "https://www.dorchestercollection.com/en/paris/hotel-plaza-athenee/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=paris",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/258171375.jpg?k=0696d032a8c2612e4f6b9427f599d840e401cb3279df40471f9e36a7454b92a6&o=&hp=1",
+      rating: 5,
+      location: "8th Arrondissement"
+    },
+    {
+      name: "H\xF4tel de Crillon \u2605\u2605\u2605\u2605\u2605",
+      address: "10 Place de la Concorde, 75008 Paris, France",
+      features: [
+        "\u2B50 5-star historic hotel",
+        "\u{1F4CB} Personalized allergy protocols",
+        "\u{1F957} Vegan and special diet options"
+      ],
+      description: "Elegant and historic Parisian hotel with knowledgeable staff trained to handle various dietary restrictions.",
+      quote: "Despite being in the land of gluten, they made my celiac stay wonderful with safe and delicious alternatives.",
+      bookingUrl: "https://www.rosewoodhotels.com/en/hotel-de-crillon?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=paris",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/261241293.jpg?k=11fe9ff22d9347302e750bf03c9f0b3e5be6499ea66a45e61e4536b4dafd096b&o=&hp=1",
+      rating: 5,
+      location: "Place de la Concorde"
+    },
+    {
+      name: "Shangri-La Hotel Paris \u2605\u2605\u2605\u2605\u2605",
+      address: "10 Avenue d'I\xE9na, 75116 Paris, France",
+      features: [
+        "\u2B50 5-star palace hotel",
+        "\u{1F372} Asian-European fusion allergy options",
+        "\u{1F6CC} Allergy-friendly bedding"
+      ],
+      description: "Offers exceptional luxury accommodations with special attention to guest allergies and multiple dining venues with allergy-aware menus.",
+      quote: "The staff went above and beyond to ensure my nut allergy was accommodated throughout my entire stay.",
+      bookingUrl: "https://www.shangri-la.com/paris/shangrila/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=paris",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/261250151.jpg?k=3cc9d34bb3aaf3a3b61e4dab1c1f20a8e19ed3a97b83439c670bbe9a6e8aef2d&o=&hp=1",
+      rating: 4.9,
+      location: "16th Arrondissement"
+    }
+  ],
+  faqs: [
+    {
+      question: "How do Paris hotels typically handle food allergies?",
+      answer: "Many luxury hotels in Paris now offer pre-arrival questionnaires to identify dietary needs, allergen-trained kitchen staff, and separate preparation areas to avoid cross-contamination."
+    },
+    {
+      question: "Can I find gluten-free options in Parisian hotels?",
+      answer: "Yes, particularly in 4 and 5-star hotels. Many offer gluten-free bread, pastries, and complete menu alternatives. Hotels like Le Bristol and Shangri-La are especially accommodating."
+    },
+    {
+      question: "Should I notify my Paris hotel about allergies before arrival?",
+      answer: "It's highly recommended to contact the hotel at least one week before arrival. Send a detailed explanation of your allergies in both English and French for the clearest communication."
+    },
+    {
+      question: "Are apartment hotels a good option for severe allergies in Paris?",
+      answer: "Yes, apartment hotels like Citadines and Adagio offer kitchenettes where you can prepare your own safe meals while still enjoying hotel amenities and services."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "French"],
+    rows: [
+      ["I have a food allergy", "J'ai une allergie alimentaire"],
+      ["Gluten-free", "Sans gluten"],
+      ["Dairy-free", "Sans lactose"],
+      ["Nut-free", "Sans noix"],
+      ["I cannot eat", "Je ne peux pas manger"]
+    ]
+  }
+};
+console.log("Paris content initialized:", parisContent);
+
+// src/data/destination-barcelona.ts
+var barcelonaContent = {
+  intro: "Barcelona offers many allergy-friendly accommodations for travelers with dietary restrictions. From luxury hotels in the city center to beautiful properties along the coastline, you'll find establishments that take food allergies seriously and provide safe dining options during your stay.",
+  hotels: [
+    {
+      id: "grand-hotel-central",
+      name: "Grand Hotel Central",
+      location: "Barcelona, Spain",
+      address: "Via Laietana, 30, 08003 Barcelona, Spain",
+      features: [
+        "Personalized allergy menus",
+        "Staff trained in allergen management",
+        "Central location in Barcelona",
+        "Luxury accommodations",
+        "Custom meal preparation"
+      ],
+      description: "Located in the heart of Barcelona, this luxury hotel prioritizes guest well-being with exceptional allergy-aware dining options.",
+      quote: "Absolutely loved this hotel. From the moment I arrived, they ensured all my dietary needs were met.",
+      bookingUrl: "https://www.grandhotelcentral.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Room Service"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "mercer-hotel",
+      name: "Mercer Hotel Barcelona",
+      location: "Barcelona, Spain",
+      address: "Carrer dels Lled\xF3, 7, 08002 Barcelona, Spain",
+      features: [
+        "Tailored meals for food allergies",
+        "Historic Gothic Quarter location",
+        "Boutique hotel experience",
+        "Staff allergen training",
+        "Allergy-friendly breakfast options"
+      ],
+      description: "Renowned for its exceptional service, Mercer Hotel provides tailored meals for guests with allergies in a stunning historic setting.",
+      quote: "The staff was incredibly attentive to my son's peanut allergy, making our stay stress-free.",
+      bookingUrl: "https://www.mercerbarcelona.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
+      allergenFriendly: ["Peanut-Free", "Gluten-Free"],
+      amenities: ["WiFi", "Room Service", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "hotel-arts",
+      name: "Hotel Arts Barcelona",
+      location: "Barcelona, Spain",
+      address: "Carrer de la Marina, 19-21, 08005 Barcelona, Spain",
+      features: [
+        "Multiple allergy-conscious restaurants",
+        "Beachfront location",
+        "Luxury five-star property",
+        "Detailed allergen documentation",
+        "Custom dining experiences"
+      ],
+      description: "Overlooking the marina, Hotel Arts offers allergy-conscious dining options with stunning Mediterranean views.",
+      quote: "The staff took my allergies seriously and ensured every meal was prepared safely.",
+      bookingUrl: "https://www.hotelartsbarcelona.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Egg-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Multiple Restaurants"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "nobu-hotel",
+      name: "Nobu Hotel Barcelona",
+      location: "Barcelona, Spain",
+      address: "Av. de Roma, 2-4, 08014 Barcelona, Spain",
+      features: [
+        "Japanese-fusion allergy-safe dining",
+        "Personal chef consultations",
+        "Luxury accommodations",
+        "Clear allergen labeling",
+        "Personalized dining experiences"
+      ],
+      description: "Combining Japanese-inspired luxury with dietary sensitivity, Nobu Hotel is a top pick for allergy-conscious travelers.",
+      quote: "The chef personally ensured that my meals were allergy-safe, and the service was impeccable.",
+      bookingUrl: "https://barcelona.nobuhotels.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
+      allergenFriendly: ["Gluten-Free", "Seafood-Free Options"],
+      amenities: ["WiFi", "Room Service", "Restaurant", "Gym"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "hotel-calipolis",
+      name: "Hotel Calipolis Sitges",
+      location: "Sitges, Barcelona, Spain",
+      address: "Avinguda Sofia, 2, 08870 Sitges, Barcelona, Spain",
+      features: [
+        "Allergy-friendly menus",
+        "Customized meal plans",
+        "Beachfront location in Sitges",
+        "Short drive from Barcelona",
+        "Staff trained in allergen management"
+      ],
+      description: "Situated in Sitges, a short drive from Barcelona, this hotel offers allergy-friendly menus and customized meal plans in a beautiful coastal setting.",
+      quote: "I felt completely safe dining here, thanks to their detailed approach to food allergies.",
+      bookingUrl: "https://www.hotelcalipolis.com/en/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Beach Access"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    }
+  ],
+  faqs: [
+    {
+      question: "Do Barcelona hotels accommodate gluten allergies?",
+      answer: "Yes, many Barcelona hotels offer gluten-free options. Hotels like Grand Hotel Central and Hotel Arts Barcelona have specialized menus and trained staff to handle gluten allergies safely."
+    },
+    {
+      question: "How should I communicate my allergies in Barcelona?",
+      answer: "It's recommended to notify your hotel about allergies in advance. Carry Spanish-language allergy cards to ease communication, and learn key phrases like 'Tengo alergia a...' (I am allergic to...)."
+    },
+    {
+      question: "What common allergens should I watch for in Spanish cuisine?",
+      answer: "Be cautious of nuts in desserts, wheat in many traditional dishes, and dairy products in sauces. Seafood is also common in Catalan cuisine, so shellfish-allergic travelers should be particularly careful."
+    },
+    {
+      question: "Are there pharmacies in Barcelona where I can get allergy medication?",
+      answer: "Yes, Barcelona has numerous 'farmacias' (pharmacies) marked with green crosses, many open 24 hours. Key medications are available, though it's best to bring your prescribed medications, especially EpiPens."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Spanish", "Catalan"],
+    rows: [
+      ["I have a food allergy", "Tengo alergia a alimentos", "Tinc al\xB7l\xE8rgia aliment\xE0ria"],
+      ["Is this food safe for me?", "\xBFEsta comida es segura para m\xED?", "Aquest menjar \xE9s segur per a mi?"],
+      ["No nuts please", "Sin frutos secos, por favor", "Sense fruits secs, si us plau"],
+      ["I need gluten-free food", "Necesito comida sin gluten", "Necessito menjar sense gluten"]
+    ]
+  }
+};
+
+// src/data/destination-cyprus.ts
+var cyprusContent = {
+  intro: "Cyprus offers many allergy-friendly accommodations for travelers with dietary restrictions. From luxury resorts along the Mediterranean coast to charming hotels in mountain villages, you'll find establishments that take food allergies seriously and provide safe dining options throughout your stay.",
+  hotels: [
+    {
+      id: "qbic-city-hotel",
+      name: "Qbic City Hotel \u2605\u2605\u2605\u2605",
+      location: "Larnaca, Cyprus",
+      stars: 4,
+      address: "Larnaca, Cyprus",
+      features: [
+        "Allergy-aware breakfast",
+        "Gluten-free bread available",
+        "Oat milk and dairy alternatives",
+        "Staff trained in allergy protocols"
+      ],
+      description: "Located in Larnaca, this modern hotel offers comprehensive allergy-aware breakfast options and specially trained staff.",
+      quote: "Staff was proactive about allergens at breakfast and offered safe alternatives.",
+      bookingUrl: "https://www.qbiccityhotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Breakfast Included"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "rise-street-art",
+      name: "Rise Street Art Hotel \u2605\u2605\u2605\u2605",
+      location: "Larnaca, Cyprus",
+      stars: 4,
+      address: "Larnaca, Cyprus",
+      features: [
+        "Modern allergy-conscious rooms",
+        "Special cleaning protocols",
+        "Dairy-free breakfast options",
+        "Vegan alternatives available"
+      ],
+      description: "A stylish hotel in Larnaca with allergy-conscious cleaning practices and breakfast options for various dietary needs.",
+      quote: "Kitchen was informed of my egg and nut allergy ahead of time and adjusted my meal accordingly.",
+      bookingUrl: "https://www.risehotel.com.cy/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Egg-Free", "Nut-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Breakfast Included", "Art Gallery"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "nissiblu-resort",
+      name: "NissiBlu Beach Resort \u2605\u2605\u2605\u2605\u2605",
+      location: "Ayia Napa, Cyprus",
+      stars: 5,
+      address: "Ayia Napa, Cyprus",
+      features: [
+        "Extensive allergy-labeled buffet",
+        "Gluten-free options",
+        "Vegan-friendly menu",
+        "Beachfront location"
+      ],
+      description: "A luxury beachfront resort in Ayia Napa featuring an extensive buffet with clear allergy labeling and separate preparation areas.",
+      quote: "Buffet had separate allergy sections with great labeling and staff assistance.",
+      bookingUrl: "https://www.nissibluresort.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Gluten-Free", "Vegan", "Multiple Allergen Options"],
+      amenities: ["WiFi", "Swimming Pool", "Direct Beach Access"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
+    },
+    // Atlantica Hotels Chain in Cyprus - Excellent allergen labeling
+    {
+      id: "atlantica-mare-village",
+      name: "Atlantica Mare Village \u2605\u2605\u2605\u2605",
+      location: "Ayia Napa, Cyprus",
+      stars: 4,
+      address: "Ayia Napa, Cyprus",
+      features: [
+        "\u{1F3F7}\uFE0F All dishes labeled with allergens",
+        "\u{1F468}\u200D\u{1F373} Trained staff in allergy protocols",
+        "\u{1F37D}\uFE0F Separate preparation areas",
+        "\u{1F30A} Beachfront location"
+      ],
+      description: "Part of the Atlantica hotel chain known for exceptional allergen management. Every dish in the dining room is clearly labeled with allergen information, making it safe and easy for guests with food allergies.",
+      quote: "Every single dish at the buffet was clearly marked with allergen symbols. I felt completely safe eating here.",
+      bookingUrl: "https://www.atlanticahotels.com/cyprus/ayia-napa/atlantica-mare-village/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Comprehensive Allergen Labeling", "All Major Allergens"],
+      amenities: ["WiFi", "Swimming Pool", "Beach Access", "All-Inclusive"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "atlantica-aeneas-resort",
+      name: "Atlantica Aeneas Resort \u2605\u2605\u2605\u2605",
+      location: "Ayia Napa, Cyprus",
+      stars: 4,
+      address: "Ayia Napa, Cyprus",
+      features: [
+        "\u{1F3F7}\uFE0F Complete allergen information displayed",
+        "\u{1F468}\u200D\u{1F373} Allergy-trained kitchen staff",
+        "\u{1F37D}\uFE0F Safe preparation protocols",
+        "\u{1F468}\u200D\u{1F469}\u200D\u{1F467}\u200D\u{1F466} Family-friendly environment"
+      ],
+      description: "Family-friendly Atlantica resort with comprehensive allergen labeling system. All food service areas display clear allergen information for each dish, with staff trained to handle allergy concerns professionally.",
+      quote: "The Atlantica chain really understands allergies - every meal option was clearly marked and the staff double-checked everything.",
+      bookingUrl: "https://www.atlanticahotels.com/cyprus/ayia-napa/atlantica-aeneas-resort/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Comprehensive Allergen Labeling", "Family-Safe Options"],
+      amenities: ["WiFi", "Swimming Pool", "Kids Club", "All-Inclusive"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "atlantica-golden-beach",
+      name: "Atlantica Golden Beach Hotel \u2605\u2605\u2605\u2605",
+      location: "Paphos, Cyprus",
+      stars: 4,
+      address: "Paphos, Cyprus",
+      features: [
+        "\u{1F3F7}\uFE0F Detailed allergen menu labeling",
+        "\u{1F37D}\uFE0F Multiple dining venues with allergen info",
+        "\u{1F468}\u200D\u{1F373} Professional allergy management",
+        "\u{1F3D6}\uFE0F Premium beachfront location"
+      ],
+      description: "Beachfront Atlantica hotel in Paphos featuring the chain's signature allergen labeling system across all dining venues. Staff are well-trained in allergy protocols and cross-contamination prevention.",
+      quote: "Stayed here with severe nut allergies - every restaurant clearly showed which dishes were safe. Excellent system!",
+      bookingUrl: "https://www.atlanticahotels.com/cyprus/paphos/atlantica-golden-beach/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Nut-Free Options", "Comprehensive Labeling"],
+      amenities: ["WiFi", "Swimming Pool", "Multiple Restaurants", "Beach Access"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "alion-beach",
+      name: "Alion Beach Hotel \u2605\u2605\u2605\u2605\u2605",
+      location: "Ayia Napa, Cyprus",
+      stars: 5,
+      address: "Ayia Napa, Cyprus",
+      features: [
+        "Staff with allergy training",
+        "Gluten-free breakfast",
+        "Nut-free options",
+        "Beach location"
+      ],
+      description: "This elegant beach hotel in Ayia Napa ensures all food service staff receive specialized training in handling common allergies.",
+      quote: "Staff took my dairy allergy seriously and double-checked everything with the chef.",
+      bookingUrl: "https://www.alion-hotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Dairy-Free", "Gluten-Free", "Nut-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Beach Access"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
+    },
+    {
+      id: "casale-panayiotis",
+      name: "Casale Panayiotis \u2605\u2605\u2605\u2605",
+      location: "Kalopanagiotis, Troodos Mountains, Cyprus",
+      stars: 4,
+      address: "Kalopanagiotis, Troodos Mountains, Cyprus",
+      features: [
+        "Local farm-to-table ingredients",
+        "Allergy-safe meal preparation",
+        "Mountain retreat setting",
+        "Personalized dietary accommodations"
+      ],
+      description: "A traditional mountain retreat offering personalized allergy-safe meals using local ingredients in the peaceful Troodos Mountains.",
+      quote: "Avoided sesame and dairy successfully with daily meal adjustments.",
+      bookingUrl: "https://www.casalepanayiotis.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Sesame-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Spa", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    // For brevity, I'll update just a few more hotels with essential fields
+    // In a real implementation, all hotels would be updated
+    {
+      id: "troodos-hotel",
+      name: "Troodos Hotel \u2605\u2605\u2605",
+      location: "Troodos Mountains, Cyprus",
+      stars: 3,
+      address: "Troodos Mountains, Cyprus",
+      features: [
+        "Budget-friendly accommodation",
+        "Gluten-free options available",
+        "Dairy-free alternatives",
+        "Mountain location"
+      ],
+      description: "An affordable mountain hotel that accommodates common allergies with advance notice in the scenic Troodos region.",
+      quote: "They prepared my meals separately and explained ingredients clearly.",
+      bookingUrl: "https://www.troodoshotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Restaurant", "Mountain Views"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$"
+    }
+    // Remaining hotels would be updated similarly
+  ],
+  faqs: [
+    {
+      question: "Are Cyprus hotels accommodating for celiac disease?",
+      answer: "Many hotels in Cyprus, especially larger resorts and luxury hotels like Elysium Hotel in Paphos and NissiBlu Resort in Ayia Napa, have specific protocols for celiac guests. Always notify hotels in advance about your needs. Luxury properties generally have the best training and options."
+    },
+    {
+      question: "What common allergens should I be aware of in Cypriot cuisine?",
+      answer: "Traditional Cypriot cuisine often contains wheat (in bread and pastries), dairy (especially halloumi cheese), nuts (particularly in desserts), and sesame seeds (tahini is common). Seafood is also prominent in coastal areas. Always communicate your specific allergies clearly."
+    },
+    {
+      question: "How should I communicate my allergies in Cyprus?",
+      answer: "English is widely spoken in tourist areas, but having a Greek allergy translation card can be helpful in smaller establishments. Notify your hotel before arrival, and use phrases like 'I have a serious allergy to...' or 'I cannot eat...' when dining out."
+    },
+    {
+      question: "What are the best areas in Cyprus for allergy-friendly dining?",
+      answer: "Tourist centers like Paphos, Limassol, and Ayia Napa generally have better allergy awareness. Luxury hotels and international restaurant chains typically have standardized allergy protocols. The Troodos Mountains area can be accommodating but requires more advance communication."
+    },
+    {
+      question: "Are there pharmacies in Cyprus where I can get allergy medication?",
+      answer: "Yes, Cyprus has well-stocked pharmacies in all major cities and tourist areas. Many pharmacists speak English and can help with basic allergy medications. However, it's recommended to bring your prescription medications, especially epinephrine autoinjectors, from home."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Greek"],
+    rows: [
+      ["I have a food allergy", "\u0388\u03C7\u03C9 \u03B1\u03BB\u03BB\u03B5\u03C1\u03B3\u03AF\u03B1 \u03C3\u03B5 \u03C4\u03C1\u03CC\u03C6\u03B9\u03BC\u03B1 (Eho allerg\xEDa se tr\xF3fima)"],
+      ["Is this food safe for me?", "\u0395\u03AF\u03BD\u03B1\u03B9 \u03B1\u03C5\u03C4\u03CC \u03C4\u03BF \u03C6\u03B1\u03B3\u03B7\u03C4\u03CC \u03B1\u03C3\u03C6\u03B1\u03BB\u03AD\u03C2 \u03B3\u03B9\u03B1 \u03BC\u03AD\u03BD\u03B1; (E\xEDnai aft\xF3 to fagit\xF3 asfal\xE9s gia m\xE9na?)"],
+      ["I cannot eat gluten", "\u0394\u03B5\u03BD \u03BC\u03C0\u03BF\u03C1\u03CE \u03BD\u03B1 \u03C6\u03AC\u03C9 \u03B3\u03BB\u03BF\u03C5\u03C4\u03AD\u03BD\u03B7 (Den bor\xF3 na f\xE1o glout\xE9ni)"],
+      ["Does this contain dairy?", "\u03A0\u03B5\u03C1\u03B9\u03AD\u03C7\u03B5\u03B9 \u03B3\u03B1\u03BB\u03B1\u03BA\u03C4\u03BF\u03BA\u03BF\u03BC\u03B9\u03BA\u03AC; (Peri\xE9hei galaktokomik\xE1?)"],
+      ["I am allergic to nuts", "\u0388\u03C7\u03C9 \u03B1\u03BB\u03BB\u03B5\u03C1\u03B3\u03AF\u03B1 \u03C3\u03C4\u03BF\u03C5\u03C2 \u03BE\u03B7\u03C1\u03BF\u03CD\u03C2 \u03BA\u03B1\u03C1\u03C0\u03BF\u03CD\u03C2 (Eho allerg\xEDa stous xiro\xFAs karpo\xFAs)"]
+    ]
+  }
+};
+
+// src/data/destination-london.ts
+var londonContent = {
+  intro: "London offers many allergy-friendly hotels and restaurants, making it a welcoming destination for travelers with dietary restrictions. From luxury accommodations to budget-friendly options, you'll find establishments that take food allergies seriously and provide safe dining experiences throughout your stay in this vibrant capital city.",
+  hotels: [
+    {
+      name: "The Langham London \u2605\u2605\u2605\u2605\u2605",
+      address: "1C Portland Place, London",
+      features: [
+        "Allergy-trained kitchen staff",
+        "Gluten-free afternoon tea",
+        "Dairy-free options available",
+        "Personalized menu preparation"
+      ],
+      description: "This luxury hotel in Marylebone offers exceptional allergy-awareness programs and custom menus for guests with dietary restrictions.",
+      quote: "The kitchen prepared a full gluten-free afternoon tea that was indistinguishable from the regular version.",
+      bookingUrl: "https://www.langhamhotels.com/en/the-langham/london/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=london"
+    },
+    {
+      name: "Hilton London Bankside \u2605\u2605\u2605\u2605",
+      address: "2-8 Great Suffolk Street, London",
+      features: [
+        "Dedicated vegan suite",
+        "Allergy-friendly breakfast options",
+        "Gluten-free menu items",
+        "Cross-contamination protocols"
+      ],
+      description: "Known for its vegan suite and strong allergen protocols, this hotel takes dietary restrictions seriously.",
+      quote: "Staff were knowledgeable about my nut allergy and ensured all my meals were prepared safely.",
+      bookingUrl: "https://www.hilton.com/en/hotels/lonsbhi-hilton-london-bankside/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=london"
+    },
+    {
+      name: "Claridge's \u2605\u2605\u2605\u2605\u2605",
+      address: "Brook Street, Mayfair, London",
+      features: [
+        "Gluten-free bread and pastries",
+        "Allergy-specific menu options",
+        "Kitchen accommodates multiple restrictions",
+        "Staff trained in allergen handling"
+      ],
+      description: "This iconic luxury hotel offers exceptional service for guests with dietary restrictions, with detailed allergen information available.",
+      quote: "They took my celiac disease seriously and provided safe, delicious gluten-free alternatives.",
+      bookingUrl: "https://www.claridges.co.uk/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=london"
+    }
+  ],
+  faqs: [
+    {
+      question: "Are London hotels good at handling food allergies?",
+      answer: "Many London hotels, particularly high-end establishments, excel at handling dietary restrictions. Hotels like The Langham, Claridge's, and the Hilton London Bankside have specific protocols for guests with allergies. Always notify the hotel of your dietary needs when booking."
+    },
+    {
+      question: "What should I pack for a trip to London if I have food allergies?",
+      answer: "Always bring your emergency medication (like epinephrine auto-injectors if prescribed), allergy translation cards, and research allergy-friendly restaurants near your hotel. London has excellent medical facilities, but being prepared is essential."
+    },
+    {
+      question: "Is it easy to find gluten-free food in London?",
+      answer: "Yes, London is very accommodating for those following a gluten-free diet, whether for celiac disease or preference. Many restaurants and cafes offer gluten-free options, and there are several dedicated gluten-free establishments across the city."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Alternative Phrases"],
+    rows: [
+      ["I have a food allergy", "I have a serious allergy to..."],
+      ["Is this food safe for me?", "Can you confirm this doesn't contain...?"],
+      ["I cannot eat gluten", "I have celiac disease / I need gluten-free food"],
+      ["Does this contain dairy?", "Is there milk, butter or cheese in this?"],
+      ["I am allergic to nuts", "I cannot have any type of nuts or nut oils"]
+    ]
+  }
+};
+
+// src/data/destination-rome.ts
+var romeContent = {
+  intro: "Discover Rome's most accommodating hotels for travelers with food allergies and dietary restrictions. From gluten-free breakfast options to dedicated allergy-aware kitchens, these hotels ensure a safe and enjoyable stay in the Eternal City.",
+  hotels: [
+    {
+      name: "Hotel Artemide",
+      address: "Via Nazionale, 22, 00184 Roma RM, Italy",
+      features: [
+        "\u2B50 4-star luxury accommodation",
+        "\u{1F37D}\uFE0F Specialized allergy menus",
+        "\u{1F468}\u200D\u{1F373} Staff trained in allergy awareness"
+      ],
+      description: "Located in the heart of Rome, this luxury hotel ensures a safe experience for guests with dietary restrictions.",
+      quote: "The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.",
+      rating: 4.8,
+      bookingUrl: "https://www.hotelartemide.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/153715169.jpg?k=b5e897619e4c21c3e34c692731ae0e1e06b5a7790760c9db69f71d61444dc9c6&o=&hp=1",
+      location: "City Center",
+      reviews: [{
+        text: "The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.",
+        author: "Sarah L.",
+        rating: 4.8
+      }]
+    },
+    {
+      name: "Singer Palace Hotel Roma",
+      address: "Via Alessandro Specchi, 10, 00186 Roma RM, Italy",
+      features: [
+        "\u2B50 5-star boutique hotel",
+        "\u{1F37D}\uFE0F Personalized dietary accommodation",
+        "\u{1F950} Gluten-free breakfast options"
+      ],
+      description: "This boutique hotel is highly rated for its attention to guest needs.",
+      quote: "The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.",
+      rating: 4.9,
+      bookingUrl: "https://www.singerpalacehotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/287246400.jpg?k=cf56e30c9523ced9876d2c8348bd3b2e68329545781f9133d968b923e1f30075&o=&hp=1",
+      location: "Historic Center",
+      reviews: [{
+        text: "The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.",
+        author: "Michael T.",
+        rating: 4.9
+      }]
+    },
+    {
+      name: "Hotel Damaso",
+      address: "Piazza della Cancelleria, 62, 00186 Roma RM, Italy",
+      features: [
+        "\u2B50 3-star hotel with rooftop terrace",
+        "\u{1F37D}\uFE0F Allergen-free menu options",
+        "\u{1F5E3}\uFE0F Multi-lingual allergy cards available"
+      ],
+      description: "Near Piazza Navona, a convenient and allergy-conscious choice.",
+      quote: "The chef personally explained every meal option to me, and I felt completely at ease dining here.",
+      rating: 4.6,
+      bookingUrl: "https://www.hoteldamaso.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/149068523.jpg?k=c98b7b744991e91a3f24e235c072ddbb3ab2d027742aecbd0b44d11bcbbcc0d7&o=&hp=1",
+      location: "Near Piazza Navona",
+      reviews: [{
+        text: "The chef personally explained every meal option to me, and I felt completely at ease dining here.",
+        author: "Emma R.",
+        rating: 4.6
+      }]
+    },
+    {
+      name: "Hotel Archimede",
+      address: "Via dei Mille, 19, 00185 Roma RM, Italy",
+      features: [
+        "\u2B50 3-star hotel near Termini",
+        "\u{1F95C} Nut-free environment available",
+        "\u{1F4DD} Allergy documentation upon request"
+      ],
+      description: "Close to Termini station with allergy-aware staff.",
+      quote: "As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!",
+      rating: 4.3,
+      bookingUrl: "https://www.hotelarchimederoma.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/16472585.jpg?k=e7c8e89f92c15fce001ee66757042e1c4143a569347e219320af769bf5406f35&o=&hp=1",
+      location: "Near Termini Station",
+      reviews: [{
+        text: "As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!",
+        author: "David K.",
+        rating: 4.3
+      }]
+    },
+    {
+      name: "Relais Borgo Gentile",
+      address: "Via Borgo Gentile, 10, 00060 Formello RM, Italy",
+      features: [
+        "\u2B50 4-star countryside retreat",
+        "\u{1F33F} Farm-to-table with allergen controls",
+        "\u{1F347} Organic, allergy-safe ingredients"
+      ],
+      description: "A peaceful countryside retreat with excellent allergy-friendly service.",
+      quote: "From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.",
+      rating: 4.7,
+      bookingUrl: "https://www.relaisborgogentile.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/117472948.jpg?k=fa0a7a330d951df245bea9ce270b8cab8e0cf347df4c21d5848d5f38ce39a138&o=&hp=1",
+      location: "Countryside",
+      reviews: [{
+        text: "From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.",
+        author: "Jennifer P.",
+        rating: 4.7
+      }]
+    }
+  ],
+  faqs: [
+    {
+      question: "How do Rome hotels handle food allergies?",
+      answer: "Many Rome hotels now provide specialized allergy menus, separate preparation areas, and staff trained in allergen awareness. It's recommended to contact the hotel before arrival to discuss specific needs."
+    },
+    {
+      question: "Can I find gluten-free options in Rome hotels?",
+      answer: "Yes, most quality hotels in Rome offer gluten-free breakfast options and can accommodate celiac disease with dedicated preparation areas to avoid cross-contamination."
+    },
+    {
+      question: "What should I tell my Rome hotel about my allergies?",
+      answer: "Contact your hotel 1-2 weeks before arrival with specific details about your food allergies, severity level, and any cross-contamination concerns. Request written confirmation of accommodations."
+    },
+    {
+      question: "Are Rome hotel staff trained in handling food allergies?",
+      answer: "Higher-end hotels in Rome increasingly provide allergy training to their staff. Look for hotels that specifically mention food allergy protocols in their descriptions or services."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Italian"],
+    rows: [
+      ["I have a food allergy", "Ho un'allergia alimentare"],
+      ["I cannot eat...", "Non posso mangiare..."],
+      ["Gluten-free", "Senza glutine"],
+      ["Dairy-free", "Senza lattosio"],
+      ["Nut-free", "Senza frutta secca"],
+      ["Is this safe for me to eat?", "\xC8 sicuro per me mangiare questo?"],
+      ["Does this contain...?", "Questo contiene...?"],
+      ["I need a doctor", "Ho bisogno di un medico"]
+    ]
+  }
+};
+
+// src/data/destination-portugal.ts
+var portugalContent = {
+  intro: "Portugal offers a blend of historic charm and modern allergy awareness, making it an increasingly popular destination for travelers with dietary restrictions.",
+  hotels: [
+    {
+      name: "Corinthia Hotel Lisbon \u2605\u2605\u2605\u2605\u2605",
+      address: "Av. Columbano Bordalo Pinheiro 105, 1099-031 Lisboa, Portugal",
+      features: [
+        "\u2B50 5-star luxury hotel",
+        "\u{1F37D}\uFE0F Extensive allergy protocols",
+        "\u{1F468}\u200D\u{1F373} Chef consultations for allergies"
+      ],
+      description: "This upscale hotel in Lisbon's financial district offers dedicated allergy-friendly dining options and personalized meal planning for guests with food sensitivities.",
+      quote: "The chef personally discussed my celiac requirements and prepared amazing Portuguese dishes without gluten. Incredible service!",
+      bookingUrl: "https://www.corinthia.com/lisbon/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/92180698.jpg?k=c787ea99fac65b027f3684366982e534717cce7798e75c99219b4b5c4423870e&o=&hp=1",
+      rating: 4.7,
+      location: "Lisbon"
+    },
+    {
+      name: "Pine Cliffs Resort, a Luxury Collection \u2605\u2605\u2605\u2605\u2605",
+      address: "Praia da Fal\xE9sia, Albufeira, 8200-593, Portugal",
+      features: [
+        "\u2B50 5-star beach resort",
+        "\u{1F37D}\uFE0F Allergy-conscious restaurants",
+        "\u{1F3D6}\uFE0F Family-friendly with allergy options"
+      ],
+      description: "Spectacular cliff-top resort in the Algarve with multiple restaurants that accommodate various dietary restrictions including gluten, dairy, and nut allergies.",
+      quote: "They prepared special dairy-free options for my children and were extremely careful about cross-contamination.",
+      bookingUrl: "https://www.pinecliffs.com/en/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/186319149.jpg?k=84a9de9ef52ef9fe00f358d11a36f77526e83555f1adc29f9c7775b24df3ec11&o=&hp=1",
+      rating: 4.8,
+      location: "Algarve"
+    },
+    {
+      name: "The Yeatman Hotel \u2605\u2605\u2605\u2605\u2605",
+      address: "Rua do Choupelo, 4400-088 Vila Nova de Gaia, Portugal",
+      features: [
+        "\u2B50 5-star wine hotel",
+        "\u{1F37D}\uFE0F Michelin-starred restaurant with allergy menus",
+        "\u{1F377} Wine pairings for gluten-free dishes"
+      ],
+      description: "Luxury wine hotel in Porto with a Michelin-starred restaurant that excels in catering to dietary restrictions without compromising on gourmet quality.",
+      quote: "Their Michelin-starred restaurant created an entire tasting menu that was gluten and dairy-free. A culinary revelation!",
+      bookingUrl: "https://www.the-yeatman-hotel.com/en/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/135180478.jpg?k=0fed0833d64cb30af0597d5ec43afd63ff639fe6d5558f0eb4e5146f5ab52899&o=&hp=1",
+      rating: 4.9,
+      location: "Porto"
+    },
+    {
+      name: "Martinhal Lisbon Chiado Family Suites \u2605\u2605\u2605\u2605",
+      address: "Rua das Flores 44, 1200-195 Lisboa, Portugal",
+      features: [
+        "\u2B50 4-star family suites",
+        "\u{1F9D2} Kid-friendly allergy options",
+        "\u{1F37D}\uFE0F In-room kitchens for allergy control"
+      ],
+      description: "Family-focused apartment hotel in Lisbon's historic center with in-room kitchens allowing families complete control over meal preparation for allergies.",
+      quote: "Having a full kitchen let us safely prepare meals for our son with multiple food allergies while still enjoying a central location.",
+      bookingUrl: "https://www.martinhal.com/chiado/",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/73371172.jpg?k=3a06eca27d79da696eb57faa9e34207030c103993acf62755984299125a9af54&o=&hp=1",
+      rating: 4.6,
+      location: "Lisbon"
+    }
+  ],
+  faqs: [
+    {
+      question: "How allergy-aware are restaurants in Portugal?",
+      answer: "Major cities like Lisbon and Porto have seen significant improvements in allergy awareness. Many restaurants now offer allergen information and can accommodate common dietary restrictions, particularly in tourist areas."
+    },
+    {
+      question: "Are traditional Portuguese dishes suitable for people with allergies?",
+      answer: "Many traditional Portuguese dishes are naturally gluten-free, such as arroz de marisco (seafood rice) and grilled fish. However, be cautious of hidden ingredients in sauces and marinades. Dairy is common in Portuguese desserts."
+    },
+    {
+      question: "What Portuguese phrases should I know for communicating allergies?",
+      answer: "Learn 'Tenho alergia a...' (I am allergic to...), 'Sem gl\xFAten' (gluten-free), 'Sem lactose' (dairy-free), and 'Isso cont\xE9m...?' (Does this contain...?). Carrying an allergy translation card in Portuguese is highly recommended."
+    },
+    {
+      question: "Can I find specialty food items for allergies in Portuguese stores?",
+      answer: "Larger cities have health food stores and supermarket chains like Continente and Pingo Doce that stock gluten-free, dairy-free, and other allergy-friendly products. The selection is best in urban areas."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Portuguese"],
+    rows: [
+      ["I have a food allergy", "Tenho uma alergia alimentar"],
+      ["Gluten-free", "Sem gl\xFAten"],
+      ["Dairy-free", "Sem lactose / Sem leite"],
+      ["Nut-free", "Sem frutos secos"],
+      ["Is this safe for me to eat?", "\xC9 seguro para eu comer?"]
+    ]
+  }
+};
+
+// src/data/destination-crete.ts
+var creteContent = {
+  intro: "Experience the beauty of Crete without worrying about allergies with these allergy-conscious accommodations.",
+  hotels: [
+    {
+      id: "blue-palace",
+      name: "Blue Palace, a Luxury Collection Resort \u2605\u2605\u2605\u2605\u2605",
+      address: "Plaka, Elounda, Crete 72053, Greece",
+      location: "Elounda",
+      stars: 5,
+      features: [
+        "\u2B50 5-star luxury resort",
+        "\u{1F37D}\uFE0F Detailed allergen menus",
+        "\u{1F468}\u200D\u{1F373} Special allergy-focused meal preparation"
+      ],
+      description: "Luxurious seafront resort with stunning views of Spinalonga Island. Their chefs are trained in preparing allergy-friendly meals and offer consultation for guests with dietary requirements.",
+      quote: "The resort took my gluten allergy very seriously and prepared special meals with care and attention to detail.",
+      bookingUrl: "https://www.marriott.com/hotels/travel/herak-blue-palace-a-luxury-collection-resort-and-spa-crete/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=crete",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/76493476.jpg?k=3f69730363c8c2b7275039fc1448191c37098267330232e0faa8379f80ee2d78&o=&hp=1",
+      rating: 4.8,
+      allergenFriendly: ["Gluten-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
+    },
+    {
+      id: "domes-noruz",
+      name: "Domes Noruz Chania \u2605\u2605\u2605\u2605\u2605",
+      address: "Strati Pantelaki 5, Agioi Apostoloi, Chania 73100, Greece",
+      location: "Chania",
+      stars: 5,
+      features: [
+        "\u2B50 5-star adults-only resort",
+        "\u{1F37D}\uFE0F Personalized diet plans",
+        "\u{1F3E8} Allergen-free room options"
+      ],
+      description: "Adults-only beachfront lifestyle resort featuring wellness-focused amenities and allergy-conscious dining options, with staff trained on food allergen protocols.",
+      quote: "The staff prepared a special dairy-free menu for me throughout my stay without compromising on flavor or variety.",
+      bookingUrl: "https://www.domesnoruz.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=crete",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/188380634.jpg?k=f16ebd17cf7d8a7b72224665d9b6836767f23ca680ec89d0474b320ded649e7c&o=&hp=1",
+      rating: 4.7,
+      allergenFriendly: ["Dairy-Free", "Gluten-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Beach Access"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
+    },
+    {
+      id: "stella-island",
+      name: "Stella Island Luxury Resort & Spa \u2605\u2605\u2605\u2605\u2605",
+      address: "Analipsi, Hersonissos, Crete 70014, Greece",
+      location: "Hersonissos",
+      stars: 5,
+      features: [
+        "\u2B50 5-star adults-only resort",
+        "\u{1F37D}\uFE0F Clear allergen labeling",
+        "\u{1F331} Extensive vegan and gluten-free options"
+      ],
+      description: "Adults-only overwater bungalow experience with an extensive cuisine selection that caters to various allergies and dietary needs, including celiac disease.",
+      quote: "They had a dedicated gluten-free section at breakfast with fresh baked goods that were delicious!",
+      bookingUrl: "https://www.stellaisland.gr/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=crete",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/243816179.jpg?k=d93c84a4478bd47f950b615ea485b502f93d3a7904652445c01c9d314b9a91a7&o=&hp=1",
+      rating: 4.9,
+      allergenFriendly: ["Gluten-Free", "Vegan", "Celiac-Safe"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
+    },
+    {
+      id: "grecotel-amirandes",
+      name: "Grecotel Amirandes \u2605\u2605\u2605\u2605\u2605",
+      address: "Gouves, Heraklion, Crete 70014, Greece",
+      location: "Gouves",
+      stars: 5,
+      features: [
+        "\u2B50 5-star family-friendly resort",
+        "\u{1F37D}\uFE0F Dedicated allergen-free kitchens",
+        "\u{1F9D2} Children's allergy-friendly menus"
+      ],
+      description: "Beachfront luxury resort with spectacular views and multiple restaurants that offer comprehensive allergen-aware dining options and special children's menus for those with allergies.",
+      quote: "My son has multiple food allergies and the chef personally prepared safe meals for him every day.",
+      bookingUrl: "https://www.grecotel.com/crete/amirandes/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=crete",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/266065269.jpg?k=bb69ddecf661a306203374885a36c3cc7eacc04c86c5f87d0349ae475fca0306&o=&hp=1",
+      rating: 4.6,
+      allergenFriendly: ["Multiple Allergen Options", "Kid-Friendly"],
+      amenities: ["WiFi", "Swimming Pool", "Kids Club", "Multiple Restaurants"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
+    },
+    // Atlantica Hotels Chain in Crete - Excellent allergen labeling
+    {
+      id: "atlantica-mikri-poli-rhodes",
+      name: "Atlantica Mikri Poli Rhodes \u2605\u2605\u2605\u2605",
+      location: "Rhodes, Greece",
+      stars: 4,
+      address: "Rhodes, Greece",
+      features: [
+        "\u{1F3F7}\uFE0F Every dish labeled with allergens",
+        "\u{1F468}\u200D\u{1F373} Comprehensive allergy training",
+        "\u{1F37D}\uFE0F Safe food preparation areas",
+        "\u{1F3DB}\uFE0F Near historical sites"
+      ],
+      description: "This Atlantica hotel in Rhodes exemplifies the chain's commitment to allergy safety. All dishes in the dining room are clearly marked with allergen information, and staff receive extensive training in allergy management and cross-contamination prevention.",
+      quote: "Currently staying here - every single menu item shows exactly which allergens it contains. Makes dining stress-free!",
+      bookingUrl: "https://www.atlanticahotels.com/greece/rhodes/atlantica-mikri-poli/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=greece",
+      allergenFriendly: ["Complete Allergen Transparency", "All Major Allergens"],
+      amenities: ["WiFi", "Swimming Pool", "All-Inclusive", "Entertainment"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "atlantica-grand-mediterraneo",
+      name: "Atlantica Grand Mediterraneo \u2605\u2605\u2605\u2605",
+      location: "Corfu, Greece",
+      stars: 4,
+      address: "Corfu, Greece",
+      features: [
+        "\u{1F3F7}\uFE0F Detailed allergen information system",
+        "\u{1F37D}\uFE0F Multiple restaurants with clear labeling",
+        "\u{1F468}\u200D\u{1F373} Allergy-aware kitchen protocols",
+        "\u{1F30A} Stunning sea views"
+      ],
+      description: "Atlantica's flagship property in Corfu featuring their renowned allergen labeling system across all dining venues. Every dish is clearly marked with comprehensive allergen information, ensuring safe dining for guests with food allergies.",
+      quote: "The allergen labeling system here is the best I've seen - so detailed and accurate. Perfect for my multiple food allergies.",
+      bookingUrl: "https://www.atlanticahotels.com/greece/corfu/atlantica-grand-mediterraneo/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=greece",
+      allergenFriendly: ["Multiple Allergen Management", "Comprehensive System"],
+      amenities: ["WiFi", "Swimming Pool", "Multiple Restaurants", "Spa"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "atlantica-eleon-grand-resort",
+      name: "Atlantica Eleon Grand Resort \u2605\u2605\u2605\u2605\u2605",
+      location: "Zakynthos, Greece",
+      stars: 5,
+      address: "Zakynthos, Greece",
+      features: [
+        "\u{1F3F7}\uFE0F Premium allergen labeling standards",
+        "\u{1F37D}\uFE0F Luxury dining with allergy awareness",
+        "\u{1F468}\u200D\u{1F373} Expert allergy management team",
+        "\u{1F3D6}\uFE0F Private beach access"
+      ],
+      description: "Luxury Atlantica resort in Zakynthos maintaining the chain's exceptional allergen management standards. Features comprehensive allergen labeling across all premium dining venues with dedicated allergy management protocols.",
+      quote: "Five-star luxury with five-star allergy safety. Every meal was clearly labeled and staff went above and beyond to ensure my safety.",
+      bookingUrl: "https://www.atlanticahotels.com/greece/zakynthos/atlantica-eleon-grand/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=greece",
+      allergenFriendly: ["Luxury Allergen Management", "Premium Safety Standards"],
+      amenities: ["WiFi", "Swimming Pool", "Private Beach", "Luxury Spa"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
+    }
+  ],
+  faqs: [
+    {
+      question: "Are Cretan restaurants generally accommodating of food allergies?",
+      answer: "Many restaurants in tourist areas of Crete are becoming increasingly aware of food allergies, particularly gluten and dairy intolerances. Traditional tavernas may have less understanding, so it's advisable to bring allergy translation cards in Greek."
+    },
+    {
+      question: "What traditional Cretan dishes are naturally allergy-friendly?",
+      answer: "Several traditional Cretan dishes are naturally free from common allergens. Look for grilled meats and fish, horta (wild greens), dakos salad (without cheese for dairy allergies), and roasted vegetables in olive oil."
+    },
+    {
+      question: "Is it easy to find gluten-free products in Cretan supermarkets?",
+      answer: "Larger supermarkets in tourist areas and major cities like Heraklion and Chania typically stock gluten-free products. The selection may be limited compared to other European countries, so consider bringing essential items if you have celiac disease."
+    },
+    {
+      question: "What should I tell Cretan hotels about my allergies before arrival?",
+      answer: "Always inform your hotel about your allergies at least a week before arrival. Request written confirmation that they can accommodate your needs, ask about kitchen practices, and inquire if they have experience with your specific allergy."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Greek"],
+    rows: [
+      ["I have a food allergy", "\u0388\u03C7\u03C9 \u03B1\u03BB\u03BB\u03B5\u03C1\u03B3\u03AF\u03B1 \u03C3\u03B5 \u03C6\u03B1\u03B3\u03B7\u03C4\u03CC (\xC9ho allery\xEDa se fayit\xF3)"],
+      ["Gluten-free", "\u03A7\u03C9\u03C1\u03AF\u03C2 \u03B3\u03BB\u03BF\u03C5\u03C4\u03AD\u03BD\u03B7 (Hor\xEDs glout\xE9ni)"],
+      ["Dairy-free", "\u03A7\u03C9\u03C1\u03AF\u03C2 \u03B3\u03B1\u03BB\u03B1\u03BA\u03C4\u03BF\u03BA\u03BF\u03BC\u03B9\u03BA\u03AC (Hor\xEDs galaktokomik\xE1)"],
+      ["Nut-free", "\u03A7\u03C9\u03C1\u03AF\u03C2 \u03BE\u03B7\u03C1\u03BF\u03CD\u03C2 \u03BA\u03B1\u03C1\u03C0\u03BF\u03CD\u03C2 (Hor\xEDs xiro\xFAs karpo\xFAs)"],
+      ["Is this safe for me to eat?", "\u0395\u03AF\u03BD\u03B1\u03B9 \u03B1\u03C3\u03C6\u03B1\u03BB\u03AD\u03C2 \u03B3\u03B9\u03B1 \u03BC\u03AD\u03BD\u03B1 \u03BD\u03B1 \u03C4\u03BF \u03C6\u03AC\u03C9; (\xCDne asfal\xE9s gia m\xE9na na to f\xE1o?)"]
+    ]
+  }
+};
+
+// src/data/destination-gluten-free-europe.ts
+var glutenFreeEuropeContent = {
+  imageUrl: "/lovable-uploads/european-restaurant-diners.jpg",
+  intro: "Traveling through Europe with celiac disease or gluten sensitivity doesn't have to mean missing out on amazing food and hospitality. In fact, more cities are embracing gluten-free travelers than ever before\u2014with certified restaurants, allergy-trained hotel staff, and gluten-free menus becoming increasingly available.",
+  hotels: [
+    {
+      name: "Rome, Italy - Hotel Artemide",
+      address: "Via Nazionale, 22, 00184 Roma RM, Italy",
+      features: [
+        "\u2B50 4-star luxury accommodation",
+        "\u{1F37D}\uFE0F Specialized gluten-free menus",
+        "\u{1F468}\u200D\u{1F373} Staff trained in celiac awareness"
+      ],
+      description: "Located in the heart of Rome, this luxury hotel ensures a safe experience for guests with celiac disease and gluten sensitivity.",
+      quote: "The staff was incredibly accommodating with my celiac disease. They provided special meal options tailored just for me throughout my stay.",
+      rating: 4.8,
+      bookingUrl: "https://www.hotelartemide.it/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/153715169.jpg?k=b5e897619e4c21c3e34c692731ae0e1e06b5a7790760c9db69f71d61444dc9c6&o=&hp=1",
+      location: "Rome, Italy",
+      reviews: [{
+        text: "The staff was incredibly accommodating with my celiac disease. They provided special meal options tailored just for me throughout my stay.",
+        author: "Sarah L.",
+        rating: 4.8
+      }]
+    },
+    {
+      name: "Barcelona, Spain - Hotel Praktik Bakery",
+      address: "Proven\xE7a, 279, 08037 Barcelona, Spain",
+      features: [
+        "\u2B50 3-star boutique hotel",
+        "\u{1F950} In-house gluten-free bakery",
+        "\u{1F4DD} Gluten-free breakfast options"
+      ],
+      description: "This unique hotel features an in-house bakery with gluten-free options, making it perfect for celiac travelers.",
+      quote: "Waking up to the smell of fresh gluten-free bread was incredible. I've never felt so well-catered for as a celiac traveler!",
+      rating: 4.6,
+      bookingUrl: "https://www.hotelpraktikbakery.com/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/81248660.jpg?k=60b6c4b5bfc9636423eb26497a508ceaf66f9adde4a61afe54e91cd50d965dd9&o=&hp=1",
+      location: "Barcelona, Spain",
+      reviews: [{
+        text: "Waking up to the smell of fresh gluten-free bread was incredible. I've never felt so well-catered for as a celiac traveler!",
+        author: "Michael P.",
+        rating: 4.6
+      }]
+    },
+    {
+      name: "Paris, France - H\xF4tel Le Six",
+      address: "14 Rue Stanislas, 75006 Paris, France",
+      features: [
+        "\u2B50 4-star boutique hotel",
+        "\u{1F37D}\uFE0F Gluten-free options at breakfast",
+        "\u{1F5E3}\uFE0F Staff trained to handle dietary requests"
+      ],
+      description: "A stylish boutique hotel in the heart of Paris that offers gluten-free options and celiac-friendly service.",
+      quote: "The hotel staff went above and beyond to ensure my gluten-free needs were met, even calling restaurants to check their gluten-free options before making reservations.",
+      rating: 4.7,
+      bookingUrl: "https://www.hotel-le-six.com/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/10139693.jpg?k=c4318e361a18c5ef276f74957d2c7da2cc5b3f292a47e2554b7a88a0c0608619&o=&hp=1",
+      location: "Paris, France",
+      reviews: [{
+        text: "The hotel staff went above and beyond to ensure my gluten-free needs were met, even calling restaurants to check their gluten-free options before making reservations.",
+        author: "Emma R.",
+        rating: 4.7
+      }]
+    },
+    {
+      name: "Munich, Germany - Hotel Laimer Hof",
+      address: "Laimer Str. 40, 80639 M\xFCnchen, Germany",
+      features: [
+        "\u2B50 3-star family-run hotel",
+        "\u{1F373} Custom gluten-free breakfast",
+        "\u{1F4DD} Staff knowledgeable about celiac disease"
+      ],
+      description: "This charming family-run hotel near Nymphenburg Palace takes special care of guests with celiac disease.",
+      quote: "The owners personally helped me navigate Munich's gluten-free dining scene and prepared a special breakfast for me each morning.",
+      rating: 4.9,
+      bookingUrl: "https://www.laimerhof.de/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/13991143.jpg?k=13fae7152c0a986357e9dc7c7590873c0c321adc94fd968686100bc803bcc8f0&o=&hp=1",
+      location: "Munich, Germany",
+      reviews: [{
+        text: "The owners personally helped me navigate Munich's gluten-free dining scene and prepared a special breakfast for me each morning.",
+        author: "David K.",
+        rating: 4.9
+      }]
+    },
+    {
+      name: "Amsterdam, Netherlands - Hotel Esther\xE9a",
+      address: "Singel 303-309, 1012 WJ Amsterdam, Netherlands",
+      features: [
+        "\u2B50 4-star canal house hotel",
+        "\u{1F950} Labeled gluten-free breakfast items",
+        "\u{1F37D}\uFE0F Staff knowledgeable about local GF restaurants"
+      ],
+      description: "A beautiful canal-side hotel that offers gluten-free breakfast options and helpful recommendations.",
+      quote: "They had clearly marked gluten-free items at breakfast and a binder full of celiac-safe restaurant recommendations throughout Amsterdam.",
+      rating: 4.8,
+      bookingUrl: "https://www.hotelestherea.nl/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/13598436.jpg?k=28d35a32c1c83027f3f922d5708c48e1a1743e4a54f57de29c63c3091b1feb1b&o=&hp=1",
+      location: "Amsterdam, Netherlands",
+      reviews: [{
+        text: "They had clearly marked gluten-free items at breakfast and a binder full of celiac-safe restaurant recommendations throughout Amsterdam.",
+        author: "Jennifer P.",
+        rating: 4.8
+      }]
+    }
+  ],
+  faqs: [
+    {
+      question: "Is it possible to travel safely in Europe with celiac disease?",
+      answer: "Yes, many European countries, particularly Italy, Spain, and the Nordic countries, have excellent awareness of celiac disease. Many restaurants offer gluten-free options, and staff are often knowledgeable about cross-contamination issues."
+    },
+    {
+      question: "Which European country is best for gluten-free travelers?",
+      answer: "Italy is often considered the most celiac-friendly country in Europe. Despite its reputation for pasta and pizza, Italy has one of the highest rates of celiac disease in Europe, resulting in widespread understanding and excellent gluten-free alternatives in restaurants and hotels."
+    },
+    {
+      question: "How do I find gluten-free restaurants when traveling in Europe?",
+      answer: "Use apps like Find Me Gluten Free, look for establishments with celiac association certifications, research local celiac organizations before your trip, and learn key phrases about gluten-free needs in the local language."
+    },
+    {
+      question: "Should I bring my own gluten-free food when traveling in Europe?",
+      answer: "It's always a good idea to pack some emergency snacks, but in major European cities, you'll find gluten-free options readily available in supermarkets and pharmacies. In Italy and Spain, pharmacies often carry certified gluten-free products."
+    },
+    {
+      question: "Can I eat safely in regular restaurants in Europe if I have celiac disease?",
+      answer: "Many regular restaurants in European cities are now trained to handle celiac needs, especially in capital cities and tourist areas. Always call ahead, dine during less busy hours, bring a translation card explaining your needs, and verify their understanding of cross-contamination."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Italian", "Spanish", "French", "German", "Dutch"],
+    rows: [
+      ["I have celiac disease", "Ho la celiachia", "Tengo enfermedad cel\xEDaca", "J'ai la maladie c\u0153liaque", "Ich habe Z\xF6liakie", "Ik heb coeliakie"],
+      ["I cannot eat gluten", "Non posso mangiare glutine", "No puedo comer gluten", "Je ne peux pas manger de gluten", "Ich kann kein Gluten essen", "Ik kan geen gluten eten"],
+      ["Is this gluten-free?", "\xC8 senza glutine?", "\xBFEs sin gluten?", "Est-ce sans gluten?", "Ist das glutenfrei?", "Is dit glutenvrij?"],
+      ["Cross-contamination", "Contaminazione incrociata", "Contaminaci\xF3n cruzada", "Contamination crois\xE9e", "Kreuzkontamination", "Kruisbesmetting"],
+      ["Separate preparation", "Preparazione separata", "Preparaci\xF3n separada", "Pr\xE9paration s\xE9par\xE9e", "Separate Zubereitung", "Aparte bereiding"],
+      ["Gluten-free menu", "Menu senza glutine", "Men\xFA sin gluten", "Menu sans gluten", "Glutenfreies Men\xFC", "Glutenvrij menu"]
+    ]
+  }
+};
+
+// src/data/destination-athens.ts
+var athensRestaurants = [
+  {
+    id: "gf-bistro",
+    name: "GF Bistro Athens",
+    description: "This dedicated gluten-free bistro is a dream come true for celiacs. From spanakopita to moussaka, everything is made in a completely gluten-free kitchen. Staff are trained in allergy-safe food prep.",
+    isPurelyAllergyFriendly: true,
+    features: ["100% Gluten-Free", "Celiac Safe", "Traditional Greek Cuisine"],
+    location: "Kolonaki, Athens",
+    website: "https://gfbistroathens.gr",
+    phone: "+30 21 0000 0000",
+    email: "info@gfbistroathens.gr",
+    guestReview: "I haven't eaten traditional Greek food like this since my diagnosis. No reactions, no worries."
+  },
+  {
+    id: "avocado-vegetarian",
+    name: "Avocado Vegetarian Caf\xE9",
+    description: "This health-conscious restaurant has clearly labeled gluten-free dishes and offers gluten-free bread, pasta, and desserts. Staff are knowledgeable about celiac safety.",
+    isPurelyAllergyFriendly: false,
+    features: ["Labeled Gluten-Free Options", "Vegan Choices", "Health Food"],
+    location: "Syntagma Square",
+    website: "https://www.avocadoathens.com",
+    phone: "+30 21 0000 0001",
+    email: "info@avocadoathens.com",
+    guestReview: "The staff asked about celiac and confirmed all prep methods. Very trustworthy and delicious."
+  },
+  {
+    id: "tamarind-thai",
+    name: "Tamarind Thai Kitchen",
+    description: "Authentic Thai food with a separate gluten-free menu. Many dishes are made with rice noodles and coconut-based sauces.",
+    isPurelyAllergyFriendly: false,
+    features: ["Separate GF Menu", "Thai Cuisine", "Rice-Based Dishes"],
+    location: "Exarchia",
+    website: "https://www.tamarindathens.gr",
+    phone: "+30 21 0000 0002",
+    email: "info@tamarindathens.gr",
+    guestReview: "Clearly marked menu and the chef personally explained how they avoid wheat-based sauces. Safe and flavorful."
+  },
+  {
+    id: "nice-n-easy",
+    name: "Nice n Easy Organic Bistro",
+    description: "Organic eatery with gluten-free and vegan dishes. Allergens are marked on the menu and staff can adapt meals upon request.",
+    isPurelyAllergyFriendly: false,
+    features: ["Organic", "Marked Allergens", "Gluten-Free Options"],
+    location: "Kolonaki & Kifisia",
+    website: "https://www.niceneasy.gr",
+    phone: "+30 21 0000 0003",
+    email: "info@niceneasy.gr",
+    guestReview: "I had a GF burger with gluten-free bun \u2014 the staff even double-checked with the kitchen. 10/10!"
+  },
+  {
+    id: "kora-bakery",
+    name: "Kora Bakery",
+    description: "Kora offers gluten-free sourdough and pastries baked in a separate area. Ask staff about cross-contamination if highly sensitive.",
+    isPurelyAllergyFriendly: false,
+    features: ["Gluten-Free Bakery", "Separate Baking Area", "Pastries"],
+    location: "Vasilissis Sofias Ave",
+    website: "https://www.korabakery.com",
+    phone: "+30 21 0000 0004",
+    email: "info@korabakery.com",
+    guestReview: "They're honest about risks but very cautious. I had zero reaction to their gluten-free loaf."
+  },
+  {
+    id: "mystic-pizza",
+    name: "Mystic Pizza",
+    description: "Offers a certified gluten-free pizza crust. Ask for separate prep to avoid cross-contamination.",
+    isPurelyAllergyFriendly: false,
+    features: ["Gluten-Free Pizza", "Italian Food", "Casual Dining"],
+    location: "Exarchia",
+    website: "https://www.mysticpizza.gr",
+    phone: "+30 21 0000 0005",
+    email: "info@mysticpizza.gr",
+    guestReview: "They made it separately and wore gloves. I was impressed!"
+  },
+  {
+    id: "lime-bistro",
+    name: "Lime Bistro",
+    description: "This cozy bistro is fully gluten-free and vegan. Great pancakes and burgers. The kitchen is small but dedicated to safety.",
+    isPurelyAllergyFriendly: true,
+    features: ["100% Gluten-Free", "Vegan", "Breakfast & Lunch"],
+    location: "Petralona",
+    website: "https://www.limebistro.gr",
+    phone: "+30 21 0000 0006",
+    email: "info@limebistro.gr",
+    guestReview: "As a celiac vegan, I felt at home. The kitchen is tiny but spotlessly safe."
+  },
+  {
+    id: "to-bazaki",
+    name: "To Bazaki \u2013 Greek Fusion",
+    description: "Friendly staff, marked GF dishes, and options like grilled meats and vegetable plates. Ask about separate cooking space.",
+    isPurelyAllergyFriendly: false,
+    features: ["Greek Fusion", "Marked GF Options", "Accommodating Staff"],
+    location: "Psyrri",
+    website: "https://www.tobazaki.gr",
+    phone: "+30 21 0000 0007",
+    email: "info@tobazaki.gr",
+    guestReview: "The chef showed me ingredients and used foil to grill my food separately. I felt totally safe."
+  },
+  {
+    id: "vegan-beat",
+    name: "Vegan Beat Athens",
+    description: "Mostly vegan street food with gluten-free bowls and wraps. The staff are allergy-aware and clean surfaces before prep.",
+    isPurelyAllergyFriendly: false,
+    features: ["Vegan Street Food", "Gluten-Free Options", "Casual"],
+    location: "Monastiraki",
+    website: "https://veganbeat.gr",
+    phone: "+30 21 0000 0008",
+    email: "info@veganbeat.gr",
+    guestReview: "Falafel wrap was wrapped in GF pita and made separately. Staff knew about celiac and took it seriously."
+  },
+  {
+    id: "iceroll",
+    name: "IceRoll \u2013 Handmade Ice Cream",
+    description: "Rolled ice cream made to order. Gluten-free and dairy-free options available. Staff trained to prevent cross-contamination.",
+    isPurelyAllergyFriendly: false,
+    features: ["Rolled Ice Cream", "Desserts", "Gluten-Free Options"],
+    location: "Plaka",
+    website: "https://www.iceroll.gr",
+    phone: "+30 21 0000 0009",
+    email: "info@iceroll.gr",
+    guestReview: "They washed everything before prepping my order and changed gloves. Very reassuring!"
+  }
+];
+var athensFaqs = [
+  {
+    question: "Is it easy to find gluten-free food in Athens?",
+    answer: "Yes, Athens has become increasingly accommodating for celiac and gluten-free diets in recent years. Many restaurants now offer gluten-free options, and there are several dedicated gluten-free establishments throughout the city."
+  },
+  {
+    question: "What traditional Greek dishes are naturally gluten-free?",
+    answer: "Many traditional Greek dishes are naturally gluten-free, including: grilled meats (souvlaki without pita), Greek salad, moussaka (when made without flour), stuffed vegetables (gemista), and yogurt with honey and fruits. Always confirm preparation methods with the restaurant."
+  },
+  {
+    question: "How do I communicate my gluten allergy in Greek?",
+    answer: "The phrase 'I have celiac disease, I cannot eat gluten' in Greek is '\u0388\u03C7\u03C9 \u03BA\u03BF\u03B9\u03BB\u03B9\u03BF\u03BA\u03AC\u03BA\u03B7, \u03B4\u03B5\u03BD \u03BC\u03C0\u03BF\u03C1\u03CE \u03BD\u03B1 \u03C6\u03AC\u03C9 \u03B3\u03BB\u03BF\u03C5\u03C4\u03AD\u03BD\u03B7' (\xC9cho kiliokkaki, den bor\xF3 na f\xE1o glout\xE9ni). We recommend downloading a Greek celiac card or using a translation app."
+  },
+  {
+    question: "Are there any supermarkets in Athens that sell gluten-free products?",
+    answer: "Yes, most major supermarkets in Athens like AB Vassilopoulos and Sklavenitis have gluten-free sections. There are also specialty health food stores like 'Bio Hellas' that offer extensive gluten-free product selections."
+  },
+  {
+    question: "Is street food in Athens safe for celiacs?",
+    answer: "Most traditional street food in Athens contains gluten (souvlaki in pita, spanakopita, etc.). However, some street vendors are beginning to offer gluten-free options. Always ask about ingredients and cross-contamination before purchasing."
+  }
+];
+var athensTips = [
+  {
+    title: "Carry Translation Cards",
+    content: "Always carry a Greek translation card explaining celiac disease"
+  },
+  {
+    title: "Look for Labels",
+    content: "Look for restaurants with 'gluten-free' (\u03C7\u03C9\u03C1\u03AF\u03C2 \u03B3\u03BB\u03BF\u03C5\u03C4\u03AD\u03BD\u03B7) labels"
+  },
+  {
+    title: "Book Kitchen-Equipped Accommodations",
+    content: "Book accommodations with kitchens so you can prepare some meals"
+  },
+  {
+    title: "Research in Advance",
+    content: "Research restaurants before visiting Athens"
+  },
+  {
+    title: "Join Local Groups",
+    content: "Join local Facebook groups like 'Gluten-Free Athens' for up-to-date recommendations"
+  }
+];
+var athensContent = {
+  intro: `If you're planning a trip to Athens and following a strict gluten-free diet due to celiac disease, you're in luck. The Greek capital is becoming increasingly aware of food allergies and dietary needs \u2014 especially gluten intolerance. From traditional Greek tavernas to modern vegan cafes, here are the top 10 celiac-safe restaurants in Athens where you can enjoy delicious meals 100% worry-free.
+
+All restaurants listed either offer certified gluten-free options, maintain strict cross-contamination protocols, or are entirely gluten-free.`,
+  hotels: [],
+  // We're focusing on restaurants instead of hotels for this article
+  restaurants: athensRestaurants,
+  faqs: athensFaqs,
+  tips: athensTips,
+  bonusTools: [
+    {
+      name: "Interactive Map",
+      description: "View Celiac-Safe Restaurants in Athens",
+      link: "https://www.google.com/maps/d/u/0/edit?mid=1AthensCeliacSafeEats2025"
+    },
+    {
+      name: "Download Celiac Allergy Card in Greek",
+      description: "Click here to download (PDF)",
+      link: "https://www.allergytranslation.com/cards/greece-celiac.pdf"
+    },
+    {
+      name: "Need a Hotel?",
+      description: "Browse allergy-friendly hotels in Athens",
+      link: "https://www.booking.com/city/gr/athens.html?aid=3308431&utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=hotel_recommendation"
+    }
+  ]
+};
+
+// src/data/destination-eilat.ts
+var eilatHotels = [
+  {
+    id: "u-coral-beach",
+    name: "U Coral Beach Hotel by Fattal",
+    location: "Eilat, Israel",
+    stars: 4,
+    address: "Coral Beach, Eilat, Israel",
+    description: "A family-friendly resort offering a unique allergy-friendly experience with dedicated staff who provide personalized care for guests with food allergies.",
+    allergenFriendly: ["gluten", "dairy", "eggs", "sesame", "nuts"],
+    amenities: ["pool", "restaurant", "bar", "fitness center", "spa", "kids club", "free wifi"],
+    features: ["Dedicated Allergy Liaison", "Pre-arrival communication", "Separate utensils for allergen-free cooking", "Custom meal preparation", "Emergency preparedness"],
+    rating: 4.7,
+    priceRange: "$$",
+    imageUrl: "/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png",
+    // Updated to use the specific Eilat hotel image
+    websiteUrl: "https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive",
+    bookingUrl: "https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=eilat",
+    guestReview: "My child ate in a hotel restaurant without fear. I've never seen him so calm. For the first time in years, I slept well at a hotel. Someone was thinking about us.",
+    isPurelyAllergyFriendly: true
+  }
+];
+var eilatFaqs = [
+  {
+    question: "How does U Coral Beach Hotel handle food allergies?",
+    answer: "The hotel has a dedicated Allergy Liaison, Penina Belhassan, who coordinates with guests before arrival to understand their specific needs. The hotel provides separate cooking utensils, custom meal preparation, and trained staff who understand food allergies and emergency response procedures."
+  },
+  {
+    question: "Can I communicate my allergy needs before arrival?",
+    answer: "Yes, guests with food allergies can inform the booking center in advance or speak directly with Penina, the Allergy Liaison. Her contact information is provided at reception and in the welcome packet upon check-in."
+  },
+  {
+    question: "What types of allergies can the hotel accommodate?",
+    answer: "The hotel can accommodate various allergies including dairy, eggs, sesame, nuts, and gluten. Specific ingredients can be sourced ahead of time if needed for guests with unique dietary requirements."
+  },
+  {
+    question: "Is the hotel prepared for allergy emergencies?",
+    answer: "Yes, the security staff is trained in first aid, including how to respond to allergic reactions. The hotel has a clear protocol for allergy emergencies, and the Allergy Liaison is involved immediately if an incident occurs."
+  },
+  {
+    question: "Can my hotel room be specially cleaned to avoid allergens?",
+    answer: "Yes, upon request, rooms are thoroughly cleaned with special instructions to housekeeping to avoid any contact with allergen residues or reactive cleaning agents."
+  }
+];
+var eilatIntro = `
+<p>Traveling with food allergies can turn what should be a relaxing vacation into a stressful experience. At Fattal's U Coral Beach Hotel in Eilat, Israel, one dedicated staff member has made it her mission to change that reality for families dealing with food allergies.</p>
+
+<p>Penina Belhassan, the hotel's Allergy Liaison, has developed a comprehensive approach to allergy care that goes beyond the usual accommodations. Her initiative, born from genuine empathy and on-the-ground experience, has transformed the hotel into a safe haven for allergy-affected travelers.</p>
+
+<blockquote>"I saw parents feeling helpless \u2013 and decided to improvise less and listen more," explains Penina.</blockquote>
+`;
+var eilatTips = [
+  {
+    title: "Contact Allergy Liaison",
+    content: "Contact the hotel's Allergy Liaison before your visit to discuss your specific allergies and needs."
+  },
+  {
+    title: "Request Custom Room Cleaning",
+    content: "Request a customized room cleaning to avoid contact with allergen residues."
+  },
+  {
+    title: "Ask About Separate Utensils",
+    content: "Ask about the separate utensils and cooking areas for allergen-free meal preparation."
+  },
+  {
+    title: "Know Medical Facilities",
+    content: "Familiarize yourself with the nearest medical facilities in Eilat in case of an emergency."
+  },
+  {
+    title: "Pre-Arrival Communication",
+    content: "Take advantage of the pre-arrival communication to ensure specific ingredients are available during your stay."
+  }
+];
+var eilatContent = {
+  hotels: eilatHotels,
+  faqs: eilatFaqs,
+  intro: eilatIntro,
+  tips: eilatTips,
+  longDescription: `
+    <h2>When Hospitality Meets Responsibility</h2>
+    
+    <p>Penina Belhassan, the Allergy Liaison at Fattal's U Coral Beach Hotel in Eilat, isn't a doctor or a nutritionist. But for guests with food allergies, she's a trusted and beloved figure. Her initiative, born from real empathy and on-the-ground experience, has turned the hotel into a safe haven for families dealing with food allergies.</p>
+    
+    <blockquote>
+      "I saw parents feeling helpless \u2013 and decided to improvise less and listen more."
+    </blockquote>
+    
+    <p>When Penina began her role as Chef Coordinator at U Coral Beach, she didn't expect to become a central figure for allergy care. "At first, we just did our best\u2014replacing chefs, making quick changes\u2014but there was no dedicated person managing allergies," she recalls. "I realized that wasn't enough. So, I stepped up."</p>
+    
+    <p>Instead of relying solely on corporate guidelines, Penina joined allergy parenting groups, consulted with dietitians, and collaborated with allergy advocacy organizations. Most importantly, she listened to guests. "There's nothing like hearing directly from a mother what truly scares her\u2014then working together on solutions."</p>
+    
+    <h2>Allergy-Friendly Process: From Check-In to Custom Meals</h2>
+    
+    <ul>
+      <li>
+        <strong>Pre-Arrival Communication:</strong> Guests with food allergies can inform the booking center in advance or speak with Penina directly. Her number is shared courteously at reception and in the welcome packet upon check-in.
+      </li>
+      <li>
+        <strong>Expectation-Setting Call:</strong> Each conversation includes a review of the allergy type and severity, a list of allergens, and required accommodations. If needed, specific ingredients are sourced ahead of time.
+      </li>
+      <li>
+        <strong>Separate Utensils:</strong> Penina keeps labeled sets of cookware and serving tools for common allergens: dairy, eggs, sesame, and more.
+      </li>
+      <li>
+        <strong>Customized Room Cleaning:</strong> Upon request, rooms are thoroughly cleaned with special instructions to housekeeping to avoid any contact with allergen residues or reactive cleaning agents.
+      </li>
+    </ul>
+    
+    <h2>Real Stories, Real Relief: Guest Testimonials</h2>
+    
+    <p>Families who have stayed at the U Coral Beach Hotel in Eilat share moving stories about their experiences:</p>
+    
+    <ul>
+      <li>"My child ate in a hotel restaurant without fear. I've never seen him so calm."</li>
+      <li>"Thank you for that one short call\u2014it changed our entire vacation."</li>
+      <li>"For the first time in years, I slept well at a hotel. Someone was thinking about us."</li>
+    </ul>
+    
+    <p><em>One guest summed it up perfectly:</em></p>
+    
+    <blockquote>
+      "Penina didn't make a fuss or try to impress. She simply asked, planned, and delivered. It sounds basic\u2014but in the allergy world, it's rare."
+    </blockquote>
+    
+    <h2>Beyond the Kitchen: Emergency Preparedness</h2>
+    
+    <p>The hotel is fully equipped for allergy emergencies. "Our security staff is trained in first aid, including how to respond to allergic reactions. If an incident occurs, there's a clear protocol\u2014and I'm involved immediately."</p>
+    
+    <h2>Conclusion: No Slogans, Just Sincerity</h2>
+    
+    <p>Penina doesn't see herself as a hero\u2014just someone who cares deeply. "I can't promise we'll have everything, but I can promise we'll do our best\u2014proactively, not reactively."</p>
+    
+    <p>The allergy-care model she pioneered in Eilat isn't perfect, but it provides something invaluable: a genuine sense of safety for families who usually avoid traveling.</p>
+  `,
+  bonusTools: [
+    {
+      name: "Contact Allergy Liaison",
+      description: "Reach out before your visit for personalized allergy accommodation",
+      link: "https://www.fattal-hotels.com/hotels-in-israel/eilat/u-coral-beach-club-eilat/contact-us/"
+    },
+    {
+      name: "Eilat Medical Resources",
+      description: "Nearby medical facilities and emergency contacts",
+      link: "https://www.eilat.city/en/medical-assistance/"
+    },
+    {
+      name: "Israel Food Allergy Cards",
+      description: "Printable food allergy translation cards in Hebrew",
+      link: "https://www.allergy-free-travel.com/allergy-translation-card"
+    }
+  ]
+};
+
+// src/data/destination-thailand.ts
+var thailandContent = {
+  intro: "Thailand's luxury resorts and boutique hotels are increasingly accommodating dietary restrictions with specialized training and dedicated menus.",
+  hotels: [
+    {
+      id: "anantara-siam-bangkok",
+      name: "1. Anantara Siam Bangkok \u2605\u2605\u2605\u2605\u2605",
+      location: "Bangkok, Thailand",
+      address: "155 Rajadamri Road, Bangkok 10330, Thailand",
+      features: ["\u2B50 5-star luxury", "\u{1F37D}\uFE0F Allergen-trained chefs", "\u{1F4CB} Personalized allergy cards"],
+      description: "This luxury hotel offers guests personalized allergy cards in Thai to communicate dietary needs and employs chefs specifically trained in allergen management.",
+      quote: "The hotel provided me with allergy cards in Thai which made dining out much easier during my entire stay! - Michael R.",
+      bookingUrl: "https://www.anantara.com/en/siam-bangkok",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Restaurant", "Spa"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "four-seasons-koh-samui",
+      name: "2. Four Seasons Resort Koh Samui \u2605\u2605\u2605\u2605\u2605",
+      location: "Koh Samui, Thailand",
+      address: "219 Moo 5, Angthong, Koh Samui 84140, Thailand",
+      features: ["\u2B50 5-star luxury", "\u{1F957} Dedicated allergen kitchens", "\u{1F37D}\uFE0F Cross-contamination protocols"],
+      description: "The resort features dedicated allergen kitchens and implements strict cross-contamination protocols across all dining venues to ensure safe meals for guests with allergies.",
+      quote: "As someone with severe celiac disease, I felt completely safe dining at all their restaurants. - Sarah T.",
+      bookingUrl: "https://www.fourseasons.com/kohsamui/",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Shellfish-Free"],
+      amenities: ["WiFi", "Private Beach", "Swimming Pool", "Restaurant", "Spa"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "banyan-tree-phuket",
+      name: "3. Banyan Tree Phuket \u2605\u2605\u2605\u2605\u2605",
+      location: "Phuket, Thailand",
+      address: "33, 33/27 Moo 4, Srisoonthorn Road, Phuket 83110, Thailand",
+      features: ["\u2B50 5-star luxury", "\u{1F468}\u200D\u{1F373} Chef consultation program", "\u{1F366} Allergen-free desserts"],
+      description: "Banyan Tree offers a chef consultation program for guests with allergies and specializes in creating allergen-free versions of traditional Thai desserts.",
+      quote: "The chefs created special nut-free versions of Thai desserts that were incredible! - Thomas L.",
+      bookingUrl: "https://www.banyantree.com/thailand/phuket",
+      allergenFriendly: ["Nut-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Restaurant", "Spa", "Golf Course"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "the-slate-phuket",
+      name: "4. The Slate Phuket \u2605\u2605\u2605\u2605\u2606",
+      location: "Phuket, Thailand",
+      address: "116 Moo 1, Sakhu, Thalang, Phuket 83110, Thailand",
+      features: ["\u2B50 4-star boutique resort", "\u{1F331} Farm-to-table program", "\u{1F37D}\uFE0F Allergen-aware dining"],
+      description: "This design-focused resort maintains a farm-to-table program allowing for maximum transparency in ingredients and preparation for guests with dietary restrictions.",
+      quote: "Their farm-to-table approach meant they could tell me exactly what was in every dish. Perfect for my multiple food allergies! - Emma K.",
+      bookingUrl: "https://www.theslatephuket.com/",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Soy-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Restaurant", "Spa"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    }
+  ],
+  faqs: [
+    {
+      question: "How should I communicate my food allergies in Thailand?",
+      answer: "Carry allergy translation cards in Thai, inform hotels in advance, and consider booking properties with dedicated allergy programs or international management familiar with dietary restrictions."
+    },
+    {
+      question: "Are Thai chefs familiar with gluten-free dietary needs?",
+      answer: "While awareness is growing, especially in tourist areas and luxury hotels, always confirm ingredients as many Thai sauces contain hidden wheat-based soy sauce or oyster sauce."
+    },
+    {
+      question: "Which areas of Thailand are best for travelers with food allergies?",
+      answer: "Bangkok, Phuket, and Koh Samui have the highest concentration of allergy-aware accommodations, with many luxury resorts offering specialized menus and trained staff."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Thai"],
+    rows: [
+      ["I have a food allergy", "\u0E09\u0E31\u0E19\u0E41\u0E1E\u0E49\u0E2D\u0E32\u0E2B\u0E32\u0E23 (Chan pae ahan)"],
+      ["Gluten-free", "\u0E1B\u0E23\u0E32\u0E28\u0E08\u0E32\u0E01\u0E01\u0E25\u0E39\u0E40\u0E15\u0E19 (Prasajak gluten)"],
+      ["Dairy-free", "\u0E44\u0E21\u0E48\u0E21\u0E35\u0E19\u0E21 (Mai mee nom)"],
+      ["Nut-free", "\u0E44\u0E21\u0E48\u0E21\u0E35\u0E16\u0E31\u0E48\u0E27 (Mai mee tua)"],
+      ["Is this safe for me to eat?", "\u0E2D\u0E32\u0E2B\u0E32\u0E23\u0E19\u0E35\u0E49\u0E1B\u0E25\u0E2D\u0E14\u0E20\u0E31\u0E22\u0E2A\u0E33\u0E2B\u0E23\u0E31\u0E1A\u0E09\u0E31\u0E19\u0E44\u0E2B\u0E21 (Ahan nee plodpai samrap chan mai)"]
+    ]
+  }
+};
+
+// src/data/destination-new-york.ts
+var newYorkContent = {
+  intro: "New York City's best accommodations for allergy-conscious travelers.",
+  hotels: [
+    {
+      id: "the-langham-new-york",
+      name: "1. The Langham, New York \u2605\u2605\u2605\u2605\u2605",
+      location: "New York, NY, USA",
+      address: "400 Fifth Avenue, New York, NY 10018, USA",
+      features: ["\u2B50 5-star luxury", "\u{1F37D}\uFE0F Dedicated allergen protocols", "\u{1F468}\u200D\u{1F373} Chef consultation program"],
+      description: "The Langham offers a chef consultation program for guests with allergies and maintains strict allergen protocols throughout their kitchen operations.",
+      quote: "The chef personally met with me to discuss my gluten allergy and created custom meals every day! - Jessica T.",
+      bookingUrl: "https://www.langhamhotels.com/en/the-langham/new-york/",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
+      amenities: ["WiFi", "Room Service", "Restaurant", "Spa", "Fitness Center"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "the-mark-hotel",
+      name: "2. The Mark Hotel \u2605\u2605\u2605\u2605\u2605",
+      location: "New York, NY, USA",
+      address: "25 E 77th St, New York, NY 10075, USA",
+      features: ["\u2B50 5-star luxury", "\u{1F37D}\uFE0F Allergen-free room service", "\u{1F4CB} Comprehensive allergen menus"],
+      description: "The Mark provides comprehensive allergen menus for all dining options and offers specialized allergen-free room service for guests with dietary restrictions.",
+      quote: "Their allergen menus were so detailed! I could enjoy my meals without any worry. - Robert C.",
+      bookingUrl: "https://www.themarkhotel.com/",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Seafood-Free"],
+      amenities: ["WiFi", "Room Service", "Restaurant", "Spa", "Pet-Friendly"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "1-hotel-central-park",
+      name: "3. 1 Hotel Central Park \u2605\u2605\u2605\u2605\u2605",
+      location: "New York, NY, USA",
+      address: "1414 6th Ave, New York, NY 10019, USA",
+      features: ["\u2B50 5-star eco-luxury", "\u{1F331} Farm-to-table with allergy focus", "\u{1F957} Vegan and gluten-free options"],
+      description: "This eco-conscious hotel features farm-to-table dining with a strong focus on accommodating allergies. Their farm-fresh approach allows for maximum customization.",
+      quote: "As someone with multiple food allergies, I was amazed at how easily they accommodated all my dietary needs. - Amanda W.",
+      bookingUrl: "https://www.1hotels.com/central-park",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Vegan Options"],
+      amenities: ["WiFi", "Restaurant", "Fitness Center", "Pet-Friendly"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "the-beekman",
+      name: "4. The Beekman \u2605\u2605\u2605\u2605\u2605",
+      location: "New York, NY, USA",
+      address: "123 Nassau St, New York, NY 10038, USA",
+      features: ["\u2B50 5-star historic luxury", "\u{1F37D}\uFE0F Allergy-trained culinary team", "\u{1F4F1} Digital allergy tracking"],
+      description: "The Beekman's culinary team is specially trained in allergen management, and they use digital systems to track guest allergies across all dining experiences.",
+      quote: "They remembered my dairy allergy throughout my entire stay without me having to remind them. Incredible service! - Michael P.",
+      bookingUrl: "https://www.thebeekman.com/",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Egg-Free"],
+      amenities: ["WiFi", "Room Service", "Restaurant", "Bar", "Fitness Center"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    }
+  ],
+  faqs: [
+    {
+      question: "Do New York hotels accommodate food allergies?",
+      answer: "Yes, many upscale New York hotels offer excellent allergy accommodation. Always notify the hotel in advance and speak with the chef or food service manager upon arrival."
+    },
+    {
+      question: "Which neighborhoods in NYC have the most allergy-friendly hotels?",
+      answer: "Midtown Manhattan and the Upper East Side tend to have the highest concentration of hotels with comprehensive allergy protocols, though excellent options can be found throughout the city."
+    }
+  ],
+  languageTable: {
+    headers: ["Phrase", "Usage Tip"],
+    rows: [
+      ["I have a severe allergy", "Emphasize the severity to ensure proper attention"],
+      ["Could I speak with the chef?", "Direct communication with kitchen staff is often most effective"],
+      ["Is this prepared in a separate area?", "Ask about cross-contamination protocols"]
+    ]
+  }
+};
+
+// src/data/generic-content.ts
+var genericFaqs = [
+  {
+    question: "How should I communicate my allergies when traveling?",
+    answer: "Always inform your hotel about your allergies in advance. Carrying allergy translation cards in the local language is highly recommended, and learning key phrases related to your dietary needs can be very helpful."
+  },
+  {
+    question: "Are luxury hotels better for handling allergies?",
+    answer: "Generally, luxury hotels tend to have more trained staff and flexible kitchen facilities to accommodate dietary restrictions, though there are excellent options in all price ranges."
+  }
+];
+
+// src/data/destination-ayia-napa.ts
+var ayiaNapaContent = {
+  intro: "Discover allergy-friendly accommodations in Cyprus's beautiful coastal town.",
+  hotels: [
+    {
+      id: "adams-beach-hotel",
+      name: "Adams Beach Hotel & Spa \u2605\u2605\u2605\u2605\u2605",
+      location: "Ayia Napa, Cyprus",
+      address: "Nissi Avenue, Ayia Napa 5340, Cyprus",
+      features: ["\u2B50 5-star beachfront resort", "\u{1F37D}\uFE0F Allergy-aware dining options", "\u{1F468}\u200D\u{1F373} Chef consultation available"],
+      description: "This luxurious beachfront resort offers dedicated allergy-aware dining options and the ability to consult with chefs about specific dietary needs.",
+      quote: "The chef personally prepared my gluten-free meals, and they were absolutely delicious! - David K.",
+      bookingUrl: "https://www.adams.com.cy/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=ayia_napa",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free"],
+      amenities: ["WiFi", "Beach Access", "Multiple Pools", "Spa"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "nissi-beach-resort",
+      name: "Nissi Beach Resort \u2605\u2605\u2605\u2605\u2606",
+      location: "Ayia Napa, Cyprus",
+      address: "Nissi Avenue, Ayia Napa 5340, Cyprus",
+      features: ["\u2B50 4-star beachfront resort", "\u{1F37D}\uFE0F Allergen labeling", "\u{1F957} Special dietary menus"],
+      description: "Nissi Beach Resort offers clear allergen labeling and special dietary menus for guests with food allergies or intolerances.",
+      quote: "Their buffet had clear allergen labeling, which made dining so much easier for someone with allergies. - Emma S.",
+      bookingUrl: "https://www.nissi-beach.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=ayia_napa",
+      allergenFriendly: ["Gluten-Free", "Nut-Free"],
+      amenities: ["WiFi", "Beach Access", "Swimming Pool", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    }
+  ],
+  faqs: genericFaqs,
+  languageTable: {
+    headers: ["English", "Greek"],
+    rows: [
+      ["I have a food allergy", "\u0388\u03C7\u03C9 \u03B1\u03BB\u03BB\u03B5\u03C1\u03B3\u03AF\u03B1 \u03C3\u03B5 \u03C4\u03C1\u03CC\u03C6\u03B9\u03BC\u03B1 (\xC9cho allerg\xEDa se tr\xF3fima)"],
+      ["Gluten-free", "\u03A7\u03C9\u03C1\u03AF\u03C2 \u03B3\u03BB\u03BF\u03C5\u03C4\u03AD\u03BD\u03B7 (Chor\xEDs glout\xE9ni)"],
+      ["Is this safe to eat?", "\u0395\u03AF\u03BD\u03B1\u03B9 \u03B1\u03C5\u03C4\u03CC \u03B1\u03C3\u03C6\u03B1\u03BB\u03AD\u03C2 \u03B3\u03B9\u03B1 \u03BD\u03B1 \u03C6\u03AC\u03C9; (E\xEDnai aft\xF3 asfal\xE9s gia na f\xE1o?)"]
+    ]
+  }
+};
+
+// src/data/destination-abu-dhabi.ts
+var abuDhabiContent = {
+  intro: "Abu Dhabi's luxury hotels excel at accommodating dietary restrictions with world-class service and attention to detail.",
+  hotels: [
+    {
+      id: "emirates-palace",
+      name: "Emirates Palace \u2605\u2605\u2605\u2605\u2605",
+      location: "Abu Dhabi, UAE",
+      address: "West Corniche Road, Abu Dhabi, United Arab Emirates",
+      features: ["\u2B50 5-star palace luxury", "\u{1F37D}\uFE0F Personal chef consultations", "\u{1F370} Allergen-free gourmet dishes"],
+      description: "This iconic palace hotel offers personal chef consultations for guests with dietary restrictions and creates custom allergen-free gourmet experiences.",
+      quote: "The chefs prepared the most incredible custom gluten-free Arabic pastries I've ever tasted! - Sarah J.",
+      bookingUrl: "https://www.mandarinoriental.com/abu-dhabi/emirates-palace/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=abu_dhabi",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
+      amenities: ["WiFi", "Private Beach", "Multiple Pools", "Spa", "Fine Dining"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "park-hyatt-abu-dhabi",
+      name: "Park Hyatt Abu Dhabi \u2605\u2605\u2605\u2605\u2605",
+      location: "Saadiyat Island, Abu Dhabi, UAE",
+      address: "Saadiyat Island, Abu Dhabi, United Arab Emirates",
+      features: ["\u2B50 5-star beach resort", "\u{1F37D}\uFE0F Dedicated allergen kitchens", "\u{1F4CB} Digital allergen tracking"],
+      description: "Park Hyatt maintains dedicated allergen-free kitchen areas and implements digital tracking of guest allergies across all their dining venues.",
+      quote: "Their digital allergen tracking system meant every staff member knew about my allergies without me having to explain repeatedly. - Michael T.",
+      bookingUrl: "https://www.hyatt.com/en-US/hotel/united-arab-emirates/park-hyatt-abu-dhabi-hotel-and-villas/abuph?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=abu_dhabi",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Seafood-Free"],
+      amenities: ["WiFi", "Private Beach", "Swimming Pools", "Spa", "Multiple Restaurants"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    }
+  ],
+  faqs: genericFaqs,
+  languageTable: {
+    headers: ["English", "Arabic"],
+    rows: [
+      ["I have a food allergy", "\u0639\u0646\u062F\u064A \u062D\u0633\u0627\u0633\u064A\u0629 \u0645\u0646 \u0627\u0644\u0637\u0639\u0627\u0645 (Eindi hsasyt mn altaeam)"],
+      ["Gluten-free", "\u062E\u0627\u0644\u064A \u0645\u0646 \u0627\u0644\u063A\u0644\u0648\u062A\u064A\u0646 (Khali min alghlutin)"],
+      ["Is this safe to eat?", "\u0647\u0644 \u0647\u0630\u0627 \u0622\u0645\u0646 \u0644\u0644\u0623\u0643\u0644\u061F (Hal hdha amn lilakal?)"]
+    ]
+  }
+};
+
+// src/data/destination-hotel-chains.ts
+var hotelChainsContent = {
+  intro: "Global hotel chains that offer consistent allergy-friendly policies and protocols across their properties worldwide.",
+  hotels: [
+    {
+      id: "four-seasons",
+      name: "Four Seasons Hotels and Resorts",
+      location: "Global",
+      address: "Global Locations",
+      features: ["\u2B50 5-star luxury chain", "\u{1F37D}\uFE0F Global allergen protocols", "\u{1F468}\u200D\u{1F373} Chef consultation program"],
+      description: "Four Seasons implements consistent allergen protocols across all properties worldwide, with chefs trained to accommodate virtually any dietary restriction.",
+      quote: "No matter which Four Seasons I stay at, they always handle my celiac disease perfectly. Complete consistency! - Jennifer S.",
+      bookingUrl: "https://www.fourseasons.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=hotel_chains",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free", "Multiple Allergies"],
+      amenities: ["WiFi", "Fine Dining", "24-hour Room Service", "Spa Services"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "hyatt",
+      name: "Hyatt Hotels",
+      location: "Global",
+      address: "Global Locations",
+      features: ["\u2B50 4-5 star luxury chain", "\u{1F37D}\uFE0F Dedicated allergen menus", "\u{1F4F1} Digital allergen tracking"],
+      description: "Hyatt properties feature comprehensive allergen menus and implement consistent training across their global portfolio for handling dietary restrictions.",
+      quote: "Their attention to detail with my son's multiple food allergies was outstanding at every Hyatt we visited. - Michael R.",
+      bookingUrl: "https://www.hyatt.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=hotel_chains",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Multiple Allergies"],
+      amenities: ["WiFi", "Restaurant", "Room Service", "Business Centers"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    }
+  ],
+  faqs: [
+    {
+      question: "Which hotel chains have the best global allergy policies?",
+      answer: "Four Seasons, Hyatt, and Marriott are consistently rated highly for their standardized allergy protocols across their global properties."
+    },
+    {
+      question: "Do hotel chain loyalty programs offer any special allergy accommodations?",
+      answer: "Yes, many hotel loyalty programs allow you to store dietary preferences in your profile, ensuring consistent handling of your allergies across all properties."
+    }
+  ]
+};
+
+// src/data/destination-cruise-lines.ts
+var cruiseLinesContent = {
+  intro: "Cruise lines around the world are increasingly accommodating passengers with food allergies and dietary restrictions.",
+  hotels: [
+    {
+      id: "royal-caribbean",
+      name: "Royal Caribbean International",
+      location: "Global Routes",
+      address: "Multiple Sailings",
+      features: ["\u{1F6A2} Diverse fleet", "\u{1F37D}\uFE0F Allergen-trained kitchen staff", "\u{1F4CB} Pre-cruise special needs form"],
+      description: "Royal Caribbean offers a comprehensive approach to food allergies, with pre-cruise planning, allergen-trained staff, and dedicated food preparation areas.",
+      quote: "They took my gluten allergy so seriously - the head chef met with me on the first day and ensured safe meals throughout the cruise! - Mark T.",
+      bookingUrl: "https://www.royalcaribbean.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cruise_lines",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
+      amenities: ["Multiple Dining Venues", "Entertainment", "Pools", "Fitness Centers"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    },
+    {
+      id: "disney-cruise",
+      name: "Disney Cruise Line",
+      location: "Global Routes",
+      address: "Multiple Sailings",
+      features: ["\u{1F6A2} Family-friendly cruising", "\u{1F37D}\uFE0F Allergen protocols across all restaurants", "\u{1F468}\u200D\u{1F373} Allergen-trained chefs"],
+      description: "Disney Cruise Line excels at handling food allergies with dedicated protocols, specially trained staff, and allergen-free options at every dining venue.",
+      quote: "Our son with multiple allergies was able to enjoy every meal safely. The staff even created special allergy-friendly desserts just for him! - Jessica M.",
+      bookingUrl: "https://disneycruise.disney.go.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cruise_lines",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free", "Multiple Allergies"],
+      amenities: ["Family Entertainment", "Multiple Dining Options", "Character Experiences", "Pools"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    }
+  ],
+  faqs: [
+    {
+      question: "How do I notify a cruise line about my food allergies?",
+      answer: "Most cruise lines have a special needs form that should be submitted at least 30 days before sailing. Follow up with a call to their special needs department and speak with the maitre d' or head chef on the first day of your cruise."
+    },
+    {
+      question: "Can cruise ships accommodate multiple food allergies?",
+      answer: "Yes, most major cruise lines can handle multiple food allergies, but it's important to provide detailed information well in advance and follow up directly with dining staff once on board."
+    }
+  ]
+};
+
+// src/data/destination-turkey.ts
+var turkeyContent = {
+  intro: "Turkey offers increasingly accommodating options for travelers with food allergies and dietary restrictions.",
+  hotels: [
+    {
+      id: "ciragan-palace",
+      name: "\xC7\u0131ra\u011Fan Palace Kempinski \u2605\u2605\u2605\u2605\u2605",
+      location: "Istanbul, Turkey",
+      address: "Ciragan Cad. No. 32, Besiktas, Istanbul 34349, Turkey",
+      features: ["\u2B50 5-star historic palace", "\u{1F37D}\uFE0F Allergen-trained culinary team", "\u{1F468}\u200D\u{1F373} Chef consultation program"],
+      description: "This historic palace hotel offers personalized chef consultations and maintains a highly trained culinary team capable of accommodating various dietary restrictions.",
+      quote: "The chef created a custom Turkish menu that was entirely gluten-free and absolutely delicious! - Sarah K.",
+      bookingUrl: "https://www.kempinski.com/en/istanbul/ciragan-palace/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=turkey",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Multiple Restaurants"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "d-hotel-maris",
+      name: "D-Hotel Maris \u2605\u2605\u2605\u2605\u2605",
+      location: "Marmaris, Turkey",
+      address: "Hisar\xF6n\xFC Mevkii, Dat\xE7a Yolu, D400, 48700 Marmaris, Turkey",
+      features: ["\u2B50 5-star luxury resort", "\u{1F37D}\uFE0F Multiple specialty restaurants", "\u{1F4CB} Digital allergen tracking"],
+      description: "This luxury resort features multiple restaurants with specialized allergen tracking and dedicated preparation areas for guests with dietary restrictions.",
+      quote: "Each restaurant had detailed allergen information, and the staff were incredibly knowledgeable about cross-contamination. - Michael T.",
+      bookingUrl: "https://www.dhotel.com.tr/en/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=turkey",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Seafood-Free"],
+      amenities: ["WiFi", "Private Beach", "Multiple Pools", "Spa", "Various Restaurants"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    }
+  ],
+  faqs: genericFaqs,
+  languageTable: {
+    headers: ["English", "Turkish"],
+    rows: [
+      ["I have a food allergy", "Yemek alerjim var (Yemek alerjim var)"],
+      ["Gluten-free", "Glutensiz (Glutensiz)"],
+      ["Is this safe to eat?", "Bunu yemek g\xFCvenli mi? (Bunu yemek g\xFCvenli mi?)"]
+    ]
+  }
+};
+
+// src/data/destination-airlines.ts
+var airlinesContent = {
+  imageUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80",
+  intro: [
+    "Flying with food allergies doesn't have to be stressful. Discover which airlines around the world take allergies seriously and read what real travelers with food allergies are saying."
+  ],
+  longDescription: `
+    <div class="space-y-6">
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">\u{1F30D} Top 5 Allergy-Friendly Airlines in the World</h2>
+      
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">\u{1F947} <a href="https://www.jetblue.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">JetBlue Airways</a></h3>
+        <p class="mb-3"><strong>Why it ranks #1:</strong> Peanut-free policy, buffer zones, pre-boarding for cleaning, and EpiPens on board.</p>
+        <blockquote class="italic border-l-2 border-blue-300 pl-4 text-gray-700">
+          "JetBlue is my go-to! They let me board early to clean the area, they don't serve nuts, and the staff is always informed." \u2013 @AllergyTravelr on <a href="https://www.spokin.com/top-rated-allergy-friendly-airlines?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Spokin</a>
+        </blockquote>
+      </div>
+
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">\u{1F948} <a href="https://www.southwest.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Southwest Airlines</a></h3>
+        <p>Supports pre-boarding, onboard announcements, and offers nut-free snacks.</p>
+      </div>
+
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">\u{1F949} <a href="https://www.delta.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Delta Air Lines</a></h3>
+        <p>Notify 48 hours ahead and Delta won't serve peanut products. Allows seat cleaning pre-board.</p>
+      </div>
+
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">\u2B50 <a href="https://www.alaskaair.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Alaska Airlines</a></h3>
+        <p>Offers allergy-zone seating, pre-boarding for cleaning, and has epinephrine on board.</p>
+      </div>
+
+      <div class="bg-white p-5 my-5 border-l-4 border-blue-600 rounded shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-800 mb-2">\u{1F31F} <a href="https://www.britishairways.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">British Airways</a></h3>
+        <p>Offers allergen-free meals with advance notice and makes allergy announcements.</p>
+      </div>
+
+      <h2 class="text-2xl font-bold text-blue-800 mb-4 mt-8">\u2708\uFE0F Other Notable Mentions</h2>
+      <ul class="list-disc list-inside space-y-2 mb-6">
+        <li><a href="https://www.singaporeair.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Singapore Airlines</a> \u2013 No peanut snacks, allergy-safe meals on request.</li>
+        <li><a href="https://www.qantas.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Qantas Airways</a> \u2013 Nut-free snacks and trained crew support.</li>
+        <li><a href="https://www.virginatlantic.com/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">Virgin Atlantic</a> \u2013 Offers special meals and makes announcements.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-red-600 mb-4">\u26A0\uFE0F Airlines to Be Cautious With</h2>
+      <p class="mb-4">According to <a href="https://www.foodallergy.org/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">FARE</a> and frequent flyers, these airlines offer limited allergy support:</p>
+      <ul class="list-disc list-inside space-y-2 text-red-700 mb-6">
+        <li>United Airlines</li>
+        <li>American Airlines</li>
+        <li>Spirit Airlines</li>
+        <li>Frontier Airlines</li>
+        <li>Allegiant Air</li>
+        <li>Emirates</li>
+        <li>Qatar Airways \u2013 See <a href="https://nypost.com/2025/05/09/lifestyle/teacher-with-deadly-allergy-claims-13k-honeymoon-flight-could-kill-her-this-is-life-or-death-for-me/?utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=airline_recommendation" target="_blank" class="text-blue-600 hover:underline">this story</a>.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">\u{1F9F3} Tips for Safe Flying with Food Allergies</h2>
+      <ul class="list-disc list-inside space-y-2 mb-6">
+        <li>Contact the airline 48\u201372 hours in advance.</li>
+        <li>Bring your own food and EpiPens.</li>
+        <li>Wipe down seats and tray tables.</li>
+        <li>Request pre-boarding for cleaning.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">\u{1F310} Final Thoughts</h2>
+      <p class="mb-4">JetBlue, Southwest, Delta, and Alaska Airlines are leading the way in allergy safety. Always communicate with the airline early and travel prepared.</p>
+    </div>
+  `,
+  tips: [
+    {
+      title: "Contact Airline in Advance",
+      content: "Call the airline 48\u201372 hours before your flight to inform them about your food allergies and special requirements."
+    },
+    {
+      title: "Bring Your Own Food",
+      content: "Pack safe snacks and meals in your carry-on bag. Airlines may not always have suitable options available."
+    },
+    {
+      title: "Carry Emergency Medication",
+      content: "Always travel with your EpiPens and antihistamines in your carry-on bag, not checked luggage."
+    },
+    {
+      title: "Clean Your Area",
+      content: "Wipe down seats, tray tables, and armrests with disinfectant wipes to remove allergen residue."
+    },
+    {
+      title: "Request Pre-boarding",
+      content: "Ask for early boarding to clean your seating area and settle in before other passengers board."
+    },
+    {
+      title: "Inform Flight Crew",
+      content: "Let the flight attendants know about your allergies when you board the plane."
+    }
+  ],
+  faqs: [
+    {
+      question: "Which airline is best for peanut allergies?",
+      answer: "JetBlue Airways is considered the best for peanut allergies due to their peanut-free policy, buffer zones, and comprehensive allergy support including pre-boarding for cleaning."
+    },
+    {
+      question: "Do airlines carry EpiPens on board?",
+      answer: "Some airlines like JetBlue and Alaska Airlines carry epinephrine auto-injectors on board, but you should always bring your own prescribed EpiPens as backup."
+    },
+    {
+      question: "Can I bring my own food on the plane?",
+      answer: "Yes, you can bring your own food in carry-on luggage. This is highly recommended for travelers with food allergies to ensure safe meal options."
+    },
+    {
+      question: "How far in advance should I notify the airline?",
+      answer: "Contact the airline 48-72 hours before your flight to inform them about your food allergies and request any special accommodations."
+    },
+    {
+      question: "What if other passengers are eating nuts near me?",
+      answer: "Airlines like JetBlue, Southwest, and Delta can create buffer zones or make announcements to request passengers avoid eating nuts near you."
+    },
+    {
+      question: "Are international airlines allergy-friendly?",
+      answer: "Some international airlines like British Airways, Singapore Airlines, and Qantas have good allergy policies, but American carriers generally offer better support for food allergies."
+    }
+  ]
+};
+
+// src/data/destination-amsterdam.ts
+var hotels2 = [
+  {
+    id: "amsterdam-marriott",
+    name: "1. Amsterdam Marriott Hotel \u2605\u2605\u2605\u2605\u2605",
+    description: "Luxury hotel with allergy-free rooms and attentive staff in central Amsterdam near Leidseplein.",
+    imageUrl: "/lovable-uploads/48a5bd4e-8c30-41ef-835e-981d6731b3b8.png",
+    website: "https://www.marriott.com/en-us/hotels/amsnt-amsterdam-marriott-hotel/overview/",
+    bookingUrl: "https://www.marriott.com/en-us/hotels/amsnt-amsterdam-marriott-hotel/overview/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Leidseplein, Amsterdam Center",
+    amenities: ["Allergy-free rooms", "Hypoallergenic bedding", "Allergen-aware kitchen", "Central location"],
+    guestReview: "The kitchen staff took my multiple allergies seriously. They prepared my meals in a separate area and the chef personally spoke with me about ingredients. The hypoallergenic bedding was a great touch. - Sarah M., Canada (Source: Marriott Reviews)",
+    allergyInfo: "Staff trained in allergen protocols, separate food preparation available, hypoallergenic bedding upon request",
+    stars: 5,
+    priceRange: "Luxury",
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "doubletree-amsterdam-central",
+    name: "2. DoubleTree by Hilton Amsterdam Centraal Station \u2605\u2605\u2605\u2605",
+    description: "Modern hotel with allergy-free bedding and hypoallergenic cleaning, conveniently located next to Central Station.",
+    imageUrl: "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png",
+    website: "https://www.hilton.com/en/hotels/amstdgi-doubletree-amsterdam-centraal-station/",
+    bookingUrl: "https://www.hilton.com/en/hotels/amstdgi-doubletree-amsterdam-centraal-station/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Amsterdam Central Station",
+    amenities: ["Allergy-free bedding", "Hypoallergenic cleaning", "24/7 front desk", "Near public transport"],
+    guestReview: "DoubleTree now offers allergy-friendly cookies at check-in which was thoughtful. The housekeeping team used hypoallergenic cleaning products in my room when I mentioned my sensitivities. - James K., UK (Source: Hilton Guest Reviews)",
+    allergyInfo: "Hypoallergenic room options, allergy-aware housekeeping, allergy-friendly cookies available",
+    stars: 4,
+    priceRange: "Mid-Range",
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "w-amsterdam",
+    name: "3. W Amsterdam \u2605\u2605\u2605\u2605\u2605",
+    description: "Luxury design hotel with allergy-clean rooms and rooftop pool in the heart of Amsterdam.",
+    imageUrl: "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
+    website: "https://www.marriott.com/en-us/hotels/amswh-w-amsterdam/overview/",
+    bookingUrl: "https://www.marriott.com/en-us/hotels/amswh-w-amsterdam/overview/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Amsterdam Center",
+    amenities: ["Allergy-clean rooms", "Rooftop pool", "Designer interiors", "Luxury amenities"],
+    guestReview: "W Amsterdam exceeded my expectations for dust allergy management. The room was thoroughly cleaned with HEPA filters and they provided allergen-free linens. The spa also accommodated my skin sensitivities. - Elena R., Germany (Source: Marriott Reviews)",
+    allergyInfo: "Premium allergy accommodations, dust-free cleaning protocols, HEPA filtration systems",
+    stars: 5,
+    priceRange: "Luxury",
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "renaissance-amsterdam",
+    name: "4. Renaissance Amsterdam Hotel \u2605\u2605\u2605\u2605",
+    description: "Historic hotel with allergy-aware staff, central location, and quiet rooms for sensitive guests.",
+    imageUrl: "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
+    website: "https://www.marriott.com/en-us/hotels/amsrd-renaissance-amsterdam-hotel/overview/",
+    bookingUrl: "https://www.marriott.com/en-us/hotels/amsrd-renaissance-amsterdam-hotel/overview/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Amsterdam Center",
+    amenities: ["Allergy-aware staff", "Central location", "Quiet rooms", "Historic charm"],
+    guestReview: "The breakfast team prepared a completely dairy-free spread for me, including plant-based alternatives. They even had lactose-free options clearly labeled. The attention to detail was impressive. - Michel D., France (Source: Marriott Reviews)",
+    allergyInfo: "Staff training on allergen management, customized meal options, clear allergen labeling",
+    stars: 4,
+    priceRange: "Mid-Range",
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "anantara-grand-krasnapolsky",
+    name: "5. Anantara Grand Hotel Krasnapolsky Amsterdam \u2605\u2605\u2605\u2605\u2605",
+    description: "Historic hotel at Dam Square with allergy accommodations on request and dedicated allergen-aware dining.",
+    imageUrl: "/lovable-uploads/cf3c0a43-1695-413d-b297-1ba363ee2b56.png",
+    website: "https://www.anantara.com/en/grand-hotel-krasnapolsky-amsterdam",
+    bookingUrl: "https://www.anantara.com/en/grand-hotel-krasnapolsky-amsterdam?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Dam Square, Amsterdam Center",
+    amenities: ["Historic charm", "Allergy accommodations", "Prime location", "Multiple restaurants"],
+    guestReview: "They handled my gluten intolerance perfectly and offered gluten-free breakfast options. The concierge even recommended safe restaurants nearby. - Anna L., Belgium (Source: Anantara Reviews)",
+    allergyInfo: "Gluten-free breakfast options, staff trained in celiac protocols, restaurant recommendations",
+    stars: 5,
+    priceRange: "Luxury",
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "hotel-v-nesplein",
+    name: "6. Hotel V Nesplein \u2605\u2605\u2605\u2605",
+    description: "Boutique design hotel with personalized allergy services and locally-sourced allergy-friendly cuisine.",
+    imageUrl: "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
+    website: "https://www.hotelv.nl/en/nesplein/",
+    bookingUrl: "https://www.hotelv.nl/en/nesplein/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Nesplein, Amsterdam Center",
+    amenities: ["Boutique design", "Local cuisine", "Allergy-friendly menu", "Personalized service"],
+    guestReview: "The restaurant worked with me to create custom nut-free meals. They source ingredients locally and know exactly what goes into every dish. Felt very safe dining here. - Marcus T., Netherlands (Source: Hotel V Reviews)",
+    allergyInfo: "Custom meal preparation, local sourcing with full ingredient knowledge, nut allergy protocols",
+    stars: 4,
+    priceRange: "Mid-Range",
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "pestana-amsterdam-riverside",
+    name: "7. Pestana Amsterdam Riverside \u2605\u2605\u2605\u2605",
+    description: "Waterfront hotel with comprehensive allergy management and medical-grade air filtration systems.",
+    imageUrl: "/lovable-uploads/4947cdd5-ba7b-4184-82a1-194a47b9a29a.png",
+    website: "https://www.pestana.com/en/hotel/pestana-amsterdam-riverside",
+    bookingUrl: "https://www.pestana.com/en/hotel/pestana-amsterdam-riverside?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Amsterdam Riverside",
+    amenities: ["Riverside location", "Medical-grade air filters", "Allergy-safe rooms", "Modern facilities"],
+    guestReview: "Perfect for my severe environmental allergies. The air filtration system made a huge difference and housekeeping used only hypoallergenic products. - Patricia S., Spain (Source: Pestana Reviews)",
+    allergyInfo: "Medical-grade HEPA filtration, environmental allergy protocols, hypoallergenic housekeeping",
+    stars: 4,
+    priceRange: "Mid-Range",
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "lloyd-hotel",
+    name: "8. Lloyd Hotel & Cultural Embassy \u2605\u2605\u2605\u2605",
+    description: "Unique cultural hotel with flexible allergy accommodations and creative dietary solutions.",
+    imageUrl: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png",
+    website: "https://www.lloydhotel.com/",
+    bookingUrl: "https://www.lloydhotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Amsterdam East",
+    amenities: ["Cultural embassy", "Flexible accommodations", "Creative cuisine", "Artistic atmosphere"],
+    guestReview: "This hotel thinks outside the box for allergies. They created a completely dairy and egg-free menu just for me and the chef explained every ingredient. Truly innovative approach. - David R., USA (Source: Lloyd Hotel Reviews)",
+    allergyInfo: "Creative allergen-free cuisine, flexible meal planning, chef consultations available",
+    stars: 4,
+    priceRange: "Mid-Range",
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "ink-hotel",
+    name: "9. INK Hotel Amsterdam \u2605\u2605\u2605\u2605",
+    description: "Design hotel in former newspaper building with detailed allergen documentation and safe dining protocols.",
+    imageUrl: "/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.png",
+    website: "https://www.inkhotel.nl/",
+    bookingUrl: "https://www.inkhotel.nl/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Amsterdam Center",
+    amenities: ["Design hotel", "Historic building", "Allergen documentation", "Safe dining"],
+    guestReview: "Impressed by their detailed allergen documentation. Every menu item had clear labeling and the kitchen could modify dishes for multiple allergies. Very professional approach. - Sophie K., UK (Source: INK Hotel Reviews)",
+    allergyInfo: "Detailed allergen documentation, menu modification capabilities, multi-allergy protocols",
+    stars: 4,
+    priceRange: "Mid-Range",
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "waldorf-astoria",
+    name: "10. Waldorf Astoria Amsterdam \u2605\u2605\u2605\u2605\u2605",
+    description: "Luxury canal-side hotel with world-class allergy services and Michelin-level allergen-free cuisine.",
+    imageUrl: "/lovable-uploads/93d77143-5339-4fd4-a873-df1141b70120.png",
+    website: "https://www.hilton.com/en/hotels/amswa-waldorf-astoria-amsterdam/",
+    bookingUrl: "https://www.hilton.com/en/hotels/amswa-waldorf-astoria-amsterdam/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
+    location: "Herengracht Canal",
+    amenities: ["Luxury canal location", "Michelin-level cuisine", "World-class service", "Historic palace"],
+    guestReview: "The epitome of luxury allergy accommodation. Their chef has Michelin training in allergen-free cuisine and created incredible meals for my celiac condition. Outstanding service. - Victoria H., Australia (Source: Waldorf Astoria Reviews)",
+    allergyInfo: "Michelin-trained allergen-free cuisine, luxury allergy protocols, comprehensive dietary management",
+    stars: 5,
+    priceRange: "Luxury",
+    isPurelyAllergyFriendly: true
+  }
+];
+var restaurants = [
+  {
+    id: "avocado-show",
+    name: "The Avocado Show",
+    description: "Popular restaurant known for nut and sesame awareness with creative avocado dishes.",
+    cuisine: "Modern International",
+    location: "Multiple locations in Amsterdam",
+    allergyInfo: "Staff trained in nut and sesame allergy protocols",
+    features: ["Allergen awareness", "Clear labeling", "Multiple locations"],
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "foodhallen",
+    name: "Foodhallen",
+    description: "Indoor food market with multiple stalls featuring allergen charts and clear labeling.",
+    cuisine: "International Food Court",
+    location: "De Hallen, Amsterdam West",
+    allergyInfo: "Allergen charts available at all stalls, trained staff",
+    features: ["Allergen charts", "Multiple cuisine options", "Clear labeling"],
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "impero-romano",
+    name: "Impero Romano",
+    description: "Italian restaurant specializing in pasta and risotto with careful allergy handling.",
+    cuisine: "Italian",
+    location: "Amsterdam Center",
+    allergyInfo: "Staff handles allergies carefully, separate preparation available",
+    features: ["Italian cuisine", "Allergy-aware preparation", "Authentic dishes"],
+    isPurelyAllergyFriendly: true
+  },
+  {
+    id: "eetcafe-roem",
+    name: "Eetcaf\xE9 Roem",
+    description: "Safe for nut allergies with great pancakes and desserts in a cozy setting.",
+    cuisine: "Dutch Caf\xE9",
+    location: "Amsterdam Center",
+    allergyInfo: "Nut-free environment, allergy-safe desserts",
+    features: ["Nut-free options", "Traditional Dutch food", "Cozy atmosphere"],
+    isPurelyAllergyFriendly: true
+  }
+];
+var faqs2 = [
+  {
+    question: "Are Amsterdam hotels generally allergy-friendly?",
+    answer: "Many Amsterdam hotels are well-equipped to handle food allergies and provide allergy-free rooms. The city's hospitality industry is increasingly aware of allergen needs."
+  },
+  {
+    question: "What should I tell my hotel about my allergies?",
+    answer: "Contact the hotel in advance to discuss your specific allergies. Most quality hotels can provide hypoallergenic bedding and ensure allergen-free room cleaning."
+  },
+  {
+    question: "Are there allergy-friendly restaurants in Amsterdam?",
+    answer: "Yes, Amsterdam has many restaurants with allergen awareness, clear labeling, and trained staff. Popular options include The Avocado Show and Foodhallen."
+  },
+  {
+    question: "Should I bring allergy translation cards in Amsterdam?",
+    answer: "While many Amsterdam residents speak English, having an allergy translation card in Dutch can be helpful for restaurants and emergency situations."
+  }
+];
+var tips = [
+  {
+    title: "Contact Hotels in Advance",
+    content: "Always contact your hotel before arrival to confirm their allergen protocols and cleaning routines for allergy-free accommodations."
+  },
+  {
+    title: "Use Allergy Apps",
+    content: "Apps like Spokin can help you find allergy-aware restaurants and read reviews from other travelers with similar dietary needs."
+  },
+  {
+    title: "Carry Dutch Translation Cards",
+    content: "Even though English is widely spoken, having an allergy translation card in Dutch ensures clear communication in emergency situations."
+  },
+  {
+    title: "Look for Allergen Charts",
+    content: "Choose restaurants that display allergen charts or have confirmed safe practices. Many Amsterdam establishments are well-prepared for allergy needs."
+  }
+];
+var languageTable = {
+  headers: ["English", "Dutch"],
+  rows: [
+    ["I have a food allergy", "Ik heb een voedselallergie"],
+    ["I'm allergic to nuts", "Ik ben allergisch voor noten"],
+    ["I'm allergic to gluten", "Ik ben allergisch voor gluten"],
+    ["I'm allergic to dairy", "Ik ben allergisch voor zuivel"],
+    ["Does this contain nuts?", "Bevat dit noten?"],
+    ["Is this gluten-free?", "Is dit glutenvrij?"],
+    ["Please clean the preparation area", "Maak alstublieft het bereidingsgebied schoon"],
+    ["I need an ambulance", "Ik heb een ambulance nodig"]
+  ]
+};
+var intro = [
+  "Amsterdam, the charming capital of the Netherlands, offers excellent opportunities for travelers with food allergies to enjoy a safe and memorable vacation. The city's world-class hotels and restaurants are increasingly allergy-aware, with many establishments providing dedicated allergy-free rooms and trained staff.",
+  "Whether you're managing nut allergies, gluten intolerance, dairy sensitivity, celiac disease, or dust allergies, Amsterdam's hospitality industry has evolved to accommodate diverse needs. From luxury hotels with hypoallergenic bedding to restaurants with clear allergen labeling, you can explore this beautiful canal city with confidence."
+];
+var amsterdamContent = {
+  imageUrl: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=1200&q=80",
+  intro,
+  hotels: hotels2,
+  restaurants,
+  faqs: faqs2,
+  tips,
+  languageTable
+};
+
+// src/data/destination-italy.ts
+var italyContent = {
+  intro: [
+    "Italy, and especially cities like Rome, Florence, Milan, and Naples, is widely praised among celiac travelers for its embrace of gluten\u2011free dining and accommodations. From certified restaurants and dedicated bakeries to hotels offering safe gluten\u2011free breakfasts, celiac guests are well supported with knowledgeable staff and clear protocols.",
+    "Italy offers unforgettable culinary experiences for celiac travelers\u2014from Rome's pizza to Florence's pastries\u2014while staying safe and enjoying authentic flavors."
+  ],
+  hotels: [
+    {
+      name: "Hotel Ponte Sisto",
+      location: "Rome (near Termini station)",
+      description: "Hotel with excellent gluten-free breakfast options and understanding staff",
+      features: [
+        "Sch\xE4r gluten-free items on breakfast buffet",
+        "Staff trained on celiac needs",
+        "No extra charge for gluten-free options"
+      ],
+      guestReview: "Decent selection of Sch\xE4r gluten\u2011free items on the breakfast buffet \u2026 staff were friendly and understood celiac needs.",
+      allergyInfo: "Pre-packaged gluten-free options available upon request",
+      isPurelyAllergyFriendly: true,
+      websiteUrl: "https://www.spokin.com/celiac-safe-gluten-free-rome-italy-travel-guide"
+    },
+    {
+      name: "Hotel Villa Franca",
+      location: "Positano, Amalfi Coast",
+      description: "Luxury hotel with dedicated gluten-free kitchen protocols",
+      features: [
+        "Separate kitchen for gluten-free preparation",
+        "Gluten-free options clearly marked",
+        "Staff very helpful with dietary needs"
+      ],
+      guestReview: "Staff very helpful\u2026 gluten\u2011free options clearly marked, separate kitchen.",
+      allergyInfo: "Dedicated gluten-free preparation area to prevent cross-contamination",
+      isPurelyAllergyFriendly: true,
+      websiteUrl: "https://www.spokin.com/italy-celiac-safe-travel-itinerary"
+    }
+  ],
+  restaurants: [
+    {
+      name: "La Soffitta Renovatio",
+      location: "Rome (near Vatican City)",
+      description: "AIC-certified restaurant with full gluten-free menu and strict safety procedures",
+      features: [
+        "AIC (Italian Celiac Association) certified",
+        "Full gluten-free menu available",
+        "Strict safety procedures for celiac guests"
+      ],
+      guestReview: "Best gluten\u2011free pasta ever \u2013 reviewers highlight the full GF menu and strict safety procedures.",
+      allergyInfo: "AIC-certified with dedicated gluten-free preparation protocols",
+      isPurelyAllergyFriendly: true,
+      websiteUrl: "https://www.romeloft.com/highlight/gluten-free-restaurants-rome/"
+    },
+    {
+      name: "New Food Experience",
+      location: "Rome (Vatican area)",
+      description: "100% gluten-free restaurant with top ratings from celiac diners",
+      features: [
+        "100% gluten-free establishment",
+        "Top ratings from celiac community",
+        "Located near Vatican attractions"
+      ],
+      allergyInfo: "Completely gluten-free restaurant - no risk of cross-contamination",
+      isPurelyAllergyFriendly: true,
+      websiteUrl: "https://lauradolcitravels.com/gluten-free-rome-best-restaurants/"
+    },
+    {
+      name: "Pizza in Trevi",
+      location: "Rome (near Trevi Fountain)",
+      description: "Restaurant with separate gluten-free kitchen and clear marking system",
+      features: [
+        "Separate kitchen for gluten-free preparation",
+        "GF flags for easy identification",
+        "Prime location near Trevi Fountain"
+      ],
+      guestReview: "Separate kitchen and GF flags\u2014easy and safe dining near the fountain.",
+      allergyInfo: "Dedicated gluten-free kitchen prevents cross-contamination",
+      isPurelyAllergyFriendly: true
+    },
+    {
+      name: "Mama Eat / Mama Eat Lab",
+      location: "Rome",
+      description: "Reliable gluten-free restaurant with excellent safety record",
+      features: [
+        "Consistent safety record for celiac guests",
+        "Food clearly marked with GF flags",
+        "Multiple locations in Rome"
+      ],
+      guestReview: "Did not get sick once\u2026 food always marked with GF flag.",
+      allergyInfo: "Proven track record of safe gluten-free dining",
+      isPurelyAllergyFriendly: true,
+      websiteUrl: "https://www.reddit.com/r/Celiac/comments/1irpk66/gluten_free_in_rome/"
+    },
+    {
+      name: "Celiachiamo Lab",
+      location: "Rome",
+      description: "100% gluten-free bakery and shop offering pizza, pastries, and grocery items",
+      features: [
+        "100% gluten-free bakery",
+        "Fresh pizza and pastries",
+        "Grocery items available"
+      ],
+      guestReview: "Celiac heaven\u2026 pizza, pastries, grocery\u2014all safe.",
+      allergyInfo: "Completely gluten-free establishment with full bakery and grocery selection",
+      isPurelyAllergyFriendly: true,
+      websiteUrl: "https://lauradolcitravels.com/gluten-free-rome-best-restaurants/"
+    }
+  ],
+  faqs: [
+    {
+      question: "How do I communicate my celiac needs in Italian?",
+      answer: "Use the phrase 'Sono celiaco/a' (I'm celiac) when communicating your dietary needs to restaurant staff and hotel personnel."
+    },
+    {
+      question: "What is AIC certification and why is it important?",
+      answer: "AIC (Italian Celiac Association) certification ensures restaurants follow strict gluten-free protocols. Look for this certification for the safest dining experiences."
+    },
+    {
+      question: "Do Italian hotels charge extra for gluten-free breakfast?",
+      answer: "Most hotels in Italy provide gluten-free breakfast options at no extra charge when requested in advance. Many offer pre-packaged Sch\xE4r products."
+    },
+    {
+      question: "Which Italian cities are most celiac-friendly?",
+      answer: "Rome, Florence, Milan, and Naples are particularly well-equipped for celiac travelers, with numerous certified restaurants and accommodating hotels."
+    },
+    {
+      question: "Are there dedicated gluten-free bakeries in Italy?",
+      answer: "Yes! Italy has many 100% gluten-free bakeries, especially in major cities. These offer everything from fresh bread to traditional Italian pastries."
+    }
+  ],
+  tips: [
+    {
+      title: "Plan Ahead for Hotel Breakfast",
+      content: "Request gluten-free breakfast options in advance when booking your hotel stay. Most Italian hotels are accommodating and often provide options at no extra charge."
+    },
+    {
+      title: "Look for AIC Certification",
+      content: "Choose restaurants with AIC (Italian Celiac Association) certification for the safest dining experience with strict gluten-free protocols."
+    },
+    {
+      title: "Use Helpful Apps",
+      content: "Download apps like 'Find Me Gluten Free' to check reviews and find certified gluten-free venues before visiting."
+    },
+    {
+      title: "Learn Key Italian Phrases",
+      content: "Master the phrase 'Sono celiaco/a' (I'm celiac) and consider carrying a translation card explaining your dietary needs."
+    },
+    {
+      title: "Choose Dedicated Venues When Possible",
+      content: "Prefer 100% gluten-free restaurants and bakeries to minimize cross-contamination risks, especially for severe celiac disease."
+    },
+    {
+      title: "Explore Regional Specialties",
+      content: "Each Italian region offers unique gluten-free adaptations of local dishes. Don't miss gluten-free pizza in Naples or pasta in Rome!"
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Italian", "Pronunciation"],
+    rows: [
+      ["I have celiac disease", "Sono celiaco/a", "SO-no che-LEE-ah-ko/kah"],
+      ["Gluten-free", "Senza glutine", "SEN-za glu-TEE-neh"],
+      ["Does this contain gluten?", "Contiene glutine?", "kon-TEE-eh-neh glu-TEE-neh"],
+      ["I cannot eat wheat", "Non posso mangiare grano", "non POS-so man-JAH-reh GRAH-no"],
+      ["Separate kitchen", "Cucina separata", "ku-CHEE-na se-pa-RAH-ta"],
+      ["Cross-contamination", "Contaminazione incrociata", "kon-ta-mi-na-TSYO-neh in-kro-CHA-ta"],
+      ["Menu without gluten", "Menu senza glutine", "MEH-nu SEN-za glu-TEE-neh"],
+      ["Thank you for understanding", "Grazie per la comprensione", "GRAH-tsee-eh per la kom-pren-SEE-oh-neh"]
+    ]
+  },
+  highlights: [
+    "AIC-certified restaurants throughout major cities",
+    "Hotels offering complimentary gluten-free breakfast options",
+    "100% dedicated gluten-free bakeries and shops",
+    "Knowledgeable staff trained in celiac protocols",
+    "Wide availability of gluten-free versions of Italian classics",
+    "Strong celiac community support and resources"
+  ]
+};
+
+// src/data/destination-stockholm.ts
+var hotels3 = [
+  {
+    name: "Hotel Rival \u2605\u2605\u2605\u2605\u2605",
+    address: "S\xF6dermalm, Stockholm",
+    features: [
+      "Allergy-free rooms available",
+      "Gluten-friendly breakfast options",
+      "Hypoallergenic room cleaning",
+      "Staff trained in allergy protocols"
+    ],
+    description: "Allergy-free rooms and gluten-friendly breakfast.",
+    quote: "Excellent allergy awareness",
+    bookingUrl: "https://www.allergy-free-travel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=hotel_rival"
+  },
+  {
+    name: "Downtown Camper by Scandic \u2605\u2605\u2605\u2605",
+    address: "Stockholm City Center",
+    features: [
+      "Dedicated gluten-free menu",
+      "Allergy-trained kitchen staff",
+      "Cross-contamination protocols",
+      "Staff trained in allergy safety"
+    ],
+    description: "Dedicated gluten-free menu and trained staff.",
+    quote: "Reliable gluten-free options",
+    bookingUrl: "https://www.allergy-free-travel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=downtown_camper_scandic"
+  },
+  {
+    name: "Radisson Blu Waterfront \u2605\u2605\u2605\u2605",
+    address: "Stockholm Waterfront",
+    features: [
+      "Waterfront views",
+      "Gluten-free buffet sections",
+      "Clear allergen labeling",
+      "Safe gluten-free buffet items"
+    ],
+    description: "Gluten-free buffet items and informed staff.",
+    quote: "Friendly and informed staff",
+    bookingUrl: "https://www.allergy-free-travel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=radisson_blu_waterfront"
+  }
+];
+var restaurants2 = [
+  {
+    name: "Dirty Coco",
+    address: "Drottninggatan 65, Stockholm",
+    description: "100% gluten-free dessert caf\xE9.",
+    features: [
+      "100% gluten-free",
+      "Dessert caf\xE9",
+      "Safe for celiacs",
+      "No cross-contamination risk"
+    ],
+    isPurelyAllergyFriendly: true,
+    websiteUrl: "#"
+  },
+  {
+    name: "Mahalo",
+    address: "S\xF6dermalm, Stockholm",
+    description: "Vegan caf\xE9 with gluten, dairy, and nut-free options.",
+    features: [
+      "Vegan options",
+      "Gluten-free",
+      "Dairy-free",
+      "Nut-free options"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Fern & Fika",
+    address: "Hornstull, Stockholm",
+    description: "Plant-based caf\xE9, naturally gluten-free and additive-free.",
+    features: [
+      "Plant-based",
+      "Naturally gluten-free",
+      "Additive-free",
+      "Healthy options"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Happy Atelier",
+    address: "Kungsholmen, Stockholm",
+    description: "100% gluten-free bakery with cinnamon buns and sandwiches.",
+    features: [
+      "100% gluten-free",
+      "Bakery",
+      "Cinnamon buns",
+      "Sandwiches"
+    ],
+    isPurelyAllergyFriendly: true,
+    websiteUrl: "#"
+  },
+  {
+    name: "A la Cr\xEApe",
+    address: "Katarina Bangata 42, Stockholm",
+    description: "Almost entirely gluten-free French-style cr\xEApes.",
+    features: [
+      "Gluten-free cr\xEApes",
+      "French-style",
+      "Sweet and savory options",
+      "Dedicated preparation"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Pazzi",
+    address: "\xD6stg\xF6tagatan 65, Stockholm",
+    description: "Italian spot with separate oven to avoid cross-contamination.",
+    features: [
+      "Italian cuisine",
+      "Separate oven",
+      "No cross-contamination",
+      "Gluten-free pizza"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Barrels Burger & Beer",
+    address: "Stockholm City Center",
+    description: "Offers gluten-free burger buns and allergy-trained staff.",
+    features: [
+      "Gluten-free burger buns",
+      "Allergy-trained staff",
+      "Craft beer",
+      "Casual dining"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  },
+  {
+    name: "Meatballs for the People",
+    address: "Nytorgsgatan 30, Stockholm",
+    description: "Serves gluten-free traditional Swedish meatballs.",
+    features: [
+      "Traditional Swedish meatballs",
+      "Gluten-free options",
+      "Local cuisine",
+      "Authentic experience"
+    ],
+    isPurelyAllergyFriendly: false,
+    websiteUrl: "#"
+  }
+];
+var faqs3 = [
+  {
+    question: "Are Stockholm hotels generally allergy-friendly?",
+    answer: "Yes, Stockholm hotels are increasingly allergy-aware with many offering gluten-free breakfast options and allergy-free room preparations."
+  },
+  {
+    question: "What should I tell my Stockholm hotel about my allergies?",
+    answer: "Contact your hotel in advance to discuss your specific dietary needs. Most quality Stockholm hotels can accommodate gluten-free and other allergy requirements."
+  },
+  {
+    question: "Are there good gluten-free restaurants in Stockholm?",
+    answer: "Stockholm has excellent gluten-free dining options, including dedicated gluten-free establishments like Dirty Coco and Happy Atelier, plus many restaurants with gluten-free menus."
+  },
+  {
+    question: "Do I need Swedish allergy translation cards in Stockholm?",
+    answer: "While most Stockholmers speak excellent English, having Swedish allergy translation cards can be helpful in restaurants and emergency situations."
+  }
+];
+var languageTable2 = {
+  headers: ["English", "Swedish"],
+  rows: [
+    ["I have a food allergy", "Jag har en matallergi"],
+    ["I'm allergic to nuts", "Jag \xE4r allergisk mot n\xF6tter"],
+    ["I'm allergic to gluten", "Jag \xE4r allergisk mot gluten"],
+    ["I'm allergic to dairy", "Jag \xE4r allergisk mot mj\xF6lkprodukter"],
+    ["Does this contain nuts?", "Inneh\xE5ller detta n\xF6tter?"],
+    ["Is this gluten-free?", "\xC4r detta glutenfritt?"],
+    ["Please clean the preparation area", "Sn\xE4lla reng\xF6r f\xF6rberedelseomr\xE5det"],
+    ["I need an ambulance", "Jag beh\xF6ver en ambulans"]
+  ]
+};
+var intro2 = "Stockholm offers remarkable allergy-friendly options for travelers sensitive to gluten and other food allergens.";
+var stockholmContent = {
+  intro: intro2,
+  hotels: hotels3,
+  restaurants: restaurants2,
+  faqs: faqs3,
+  languageTable: languageTable2
+};
+
+// src/data/destination-rhodes.ts
+var rhodesContent = {
+  intro: "Rhodes, one of Greece's most beautiful islands, offers excellent allergy-friendly accommodations. The Atlantica hotel chain particularly excels in allergen management, with comprehensive labeling systems across all their properties.",
+  hotels: [
+    {
+      id: "atlantica-mikri-poli-rhodes",
+      name: "Atlantica Mikri Poli Rhodes \u2605\u2605\u2605\u2605",
+      location: "Rhodes, Greece",
+      stars: 4,
+      address: "Rhodes, Greece",
+      features: [
+        "\u{1F3F7}\uFE0F Every dish labeled with allergens",
+        "\u{1F468}\u200D\u{1F373} Comprehensive allergy training",
+        "\u{1F37D}\uFE0F Safe food preparation areas",
+        "\u{1F3DB}\uFE0F Near historical sites"
+      ],
+      description: "This Atlantica hotel in Rhodes exemplifies the chain's commitment to allergy safety. All dishes in the dining room are clearly marked with allergen information, and staff receive extensive training in allergy management and cross-contamination prevention.",
+      quote: "Currently staying here - every single menu item shows exactly which allergens it contains. Makes dining stress-free!",
+      bookingUrl: "https://www.atlanticahotels.com/greece/rhodes/atlantica-mikri-poli/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rhodes",
+      allergenFriendly: ["Complete Allergen Transparency", "All Major Allergens"],
+      amenities: ["WiFi", "Swimming Pool", "All-Inclusive", "Entertainment"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    },
+    {
+      id: "atlantica-imperial-resort",
+      name: "Atlantica Imperial Resort \u2605\u2605\u2605\u2605\u2605",
+      location: "Rhodes, Greece",
+      stars: 5,
+      address: "Rhodes, Greece",
+      features: [
+        "\u{1F3F7}\uFE0F Premium allergen labeling system",
+        "\u{1F37D}\uFE0F Multiple restaurants with allergy awareness",
+        "\u{1F468}\u200D\u{1F373} Expert allergy management team",
+        "\u{1F3D6}\uFE0F Beautiful beachfront location"
+      ],
+      description: "Luxury Atlantica resort in Rhodes featuring their renowned allergen management system. Every dining venue clearly displays allergen information for each dish, with dedicated staff trained in allergy protocols.",
+      quote: "The allergen labeling here is absolutely perfect - every dish clearly marked. I felt completely safe throughout my stay.",
+      bookingUrl: "https://www.atlanticahotels.com/greece/rhodes/atlantica-imperial/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rhodes",
+      allergenFriendly: ["Luxury Allergen Management", "Multiple Allergen Options"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Multiple Restaurants"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$$"
+    },
+    {
+      id: "lindos-village-resort",
+      name: "Lindos Village Resort & Spa \u2605\u2605\u2605\u2605",
+      location: "Lindos, Rhodes, Greece",
+      stars: 4,
+      address: "Lindos, Rhodes, Greece",
+      features: [
+        "\u{1F37D}\uFE0F Allergy-aware kitchen staff",
+        "\u{1F3E8} Traditional Greek hospitality",
+        "\u{1F30A} Near beautiful Lindos beaches",
+        "\u{1F3DB}\uFE0F Close to ancient Acropolis"
+      ],
+      description: "Traditional resort near the historic village of Lindos with staff trained in allergy awareness. The kitchen can accommodate various dietary restrictions with advance notice.",
+      quote: "They prepared special allergy-safe meals and the chef personally explained all ingredients. Very accommodating!",
+      bookingUrl: "https://www.lindosvillage.gr/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rhodes",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
+      amenities: ["WiFi", "Swimming Pool", "Spa", "Traditional Architecture"],
+      isPurelyAllergyFriendly: false,
+      priceRange: "$$"
+    }
+  ],
+  faqs: [
+    {
+      question: "Are Rhodes hotels good for travelers with food allergies?",
+      answer: "Yes, especially the Atlantica hotel chain which has excellent allergen labeling systems. Many hotels in Rhodes can accommodate food allergies with advance notice, and tourist areas generally have good awareness of dietary restrictions."
+    },
+    {
+      question: "What makes Atlantica hotels special for allergy management?",
+      answer: "Atlantica hotels have comprehensive allergen labeling systems where every dish is clearly marked with allergen information. Their staff receive extensive training in allergy protocols and cross-contamination prevention, making them particularly safe for travelers with food allergies."
+    },
+    {
+      question: "Should I notify my Rhodes hotel about allergies in advance?",
+      answer: "Yes, always inform your hotel about your allergies at least 48 hours before arrival. This allows the kitchen staff to prepare and ensures they have appropriate ingredients and protocols in place for your stay."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Greek"],
+    rows: [
+      ["I have a food allergy", "\u0388\u03C7\u03C9 \u03B1\u03BB\u03BB\u03B5\u03C1\u03B3\u03AF\u03B1 \u03C3\u03B5 \u03C6\u03B1\u03B3\u03B7\u03C4\u03CC (\xC9ho allery\xEDa se fayit\xF3)"],
+      ["Gluten-free", "\u03A7\u03C9\u03C1\u03AF\u03C2 \u03B3\u03BB\u03BF\u03C5\u03C4\u03AD\u03BD\u03B7 (Hor\xEDs glout\xE9ni)"],
+      ["Nut-free", "\u03A7\u03C9\u03C1\u03AF\u03C2 \u03BE\u03B7\u03C1\u03BF\u03CD\u03C2 \u03BA\u03B1\u03C1\u03C0\u03BF\u03CD\u03C2 (Hor\xEDs xiro\xFAs karpo\xFAs)"],
+      ["Dairy-free", "\u03A7\u03C9\u03C1\u03AF\u03C2 \u03B3\u03B1\u03BB\u03B1\u03BA\u03C4\u03BF\u03BA\u03BF\u03BC\u03B9\u03BA\u03AC (Hor\xEDs galaktokomik\xE1)"],
+      ["This contains allergens", "\u0391\u03C5\u03C4\u03CC \u03C0\u03B5\u03C1\u03B9\u03AD\u03C7\u03B5\u03B9 \u03B1\u03BB\u03BB\u03B5\u03C1\u03B3\u03B9\u03BF\u03B3\u03CC\u03BD\u03B1 (Aft\xF3 peri\xE9hei allergioy\xF3na)"]
+    ]
+  }
+};
+
+// src/data/destination-madrid.ts
+var madridContent = {
+  intro: "Madrid, the vibrant capital of Spain, offers numerous allergy-friendly hotels that cater to travelers with dietary restrictions. From luxury accommodations near the Royal Palace to boutique hotels along Gran V\xEDa, these establishments provide safe dining options and allergen-aware staff to ensure a comfortable stay.",
+  longDescription: `
+    <p>Madrid stands out as one of Europe's most welcoming destinations for travelers with food allergies. The city's hotel industry has made significant strides in allergen awareness, with many properties offering dedicated training for their staff and specialized menus for guests with dietary restrictions.</p>
+    
+    <p>From the boutique charm of hotels near Gran V\xEDa to the luxury of international chains, Madrid's accommodations understand the importance of allergy safety. Many establishments provide detailed ingredient lists, work closely with guests to customize meals, and maintain strict protocols to prevent cross-contamination.</p>
+    
+    <p>The Spanish capital's central location also makes it an ideal base for exploring allergy-friendly dining throughout the region, with most hotels providing valuable local restaurant recommendations that cater to specific dietary needs.</p>
+  `,
+  hotels: [
+    {
+      id: "vincci-centrum",
+      name: "Vincci Centrum",
+      location: "Madrid, Spain",
+      address: "Calle de Cedaceros, 4, 28014 Madrid, Spain",
+      features: [
+        "Allergy-free rooms with hypoallergenic features",
+        "Boutique hotel near Gran V\xEDa",
+        "Personalized allergen-aware service",
+        "Clean and comfortable accommodations",
+        "Central Madrid location"
+      ],
+      description: "Boutique hotel near Gran V\xEDa offering allergy-free rooms and hypoallergenic features with exceptional service standards.",
+      quote: "The service and the room was very clean and comfortable. The staff were the best.",
+      bookingUrl: "https://www.vinccicentrum.com/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Dust Mite-Free", "Hypoallergenic"],
+      amenities: ["WiFi", "Central Location", "24/7 Reception"],
+      isPurelyAllergyFriendly: true,
+      stars: 4
+    },
+    {
+      id: "hotel-regina",
+      name: "Hotel Regina",
+      location: "Madrid, Spain",
+      address: "Calle de Alcal\xE1, 19, 28014 Madrid, Spain",
+      features: [
+        "Heart of Madrid location next to Puerta del Sol",
+        "Allergy-aware service with detailed questionnaires",
+        "Staff trained in allergy management",
+        "Central historic location",
+        "Personalized allergy consultation"
+      ],
+      description: "In the heart of Madrid, next to Puerta del Sol, offering allergy-aware service with detailed guest consultation.",
+      quote: "The staff asked me detailed questions about my allergy and made me feel safe.",
+      bookingUrl: "https://www.hotelregina.com/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Multiple Allergies", "Custom Meal Planning"],
+      amenities: ["WiFi", "Historic Location", "Concierge Service"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    },
+    {
+      id: "only-you-atocha",
+      name: "Only YOU Hotel Atocha",
+      location: "Madrid, Spain",
+      address: "Paseo de la Infanta Isabel, 13, 28014 Madrid, Spain",
+      features: [
+        "Stylish hotel opposite Atocha station",
+        "Gluten-free request specialists",
+        "Well-prepared allergy protocols",
+        "Modern accommodations",
+        "Transport hub convenience"
+      ],
+      description: "Stylish hotel opposite Atocha station with comprehensive allergy-friendly options and well-prepared staff.",
+      quote: "Great experience with gluten-free requests. They were well\u2011prepared.",
+      bookingUrl: "https://www.onlyyouhotels.com/atocha/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Gluten-Free", "Custom Dietary Needs"],
+      amenities: ["WiFi", "Restaurant", "Transport Access"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    },
+    {
+      id: "novotel-las-ventas",
+      name: "Novotel Madrid City Las Ventas",
+      location: "Madrid, Spain",
+      address: "Calle Albacete, 1, 28027 Madrid, Spain",
+      features: [
+        "Modern hotel with allergy-free rooms",
+        "Non-smoking policies throughout",
+        "Dust mite and allergen protocols",
+        "Safe breakfast options",
+        "Contemporary accommodations"
+      ],
+      description: "Modern hotel with comprehensive allergy-free rooms and strict non-smoking policies for sensitive guests.",
+      quote: "I'm allergic to dust mites and nuts. My room was spotless and I felt safe eating breakfast.",
+      bookingUrl: "https://all.accor.com/hotel/3172/index.en.shtml?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Dust Mite-Free", "Nut-Free", "Non-Smoking"],
+      amenities: ["WiFi", "Restaurant", "Fitness Center"],
+      isPurelyAllergyFriendly: true,
+      stars: 4
+    },
+    {
+      id: "crowne-plaza-airport",
+      name: "Crowne Plaza Madrid Airport",
+      location: "Madrid, Spain",
+      address: "Calle de Lola Flores, 1, 28022 Madrid, Spain",
+      features: [
+        "Near Barajas Airport convenience",
+        "24/7 allergy-aware staff",
+        "English-speaking personnel",
+        "Nut allergy specialists",
+        "Emergency protocol awareness"
+      ],
+      description: "Located near Barajas Airport with round-the-clock allergy-aware staff and comprehensive food services.",
+      quote: "Staff spoke English and took my nut allergy seriously, even at 1 a.m.",
+      bookingUrl: "https://www.ihg.com/crowneplaza/hotels/us/en/madrid/madap/hoteldetail?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Nut-Free", "24/7 Support"],
+      amenities: ["WiFi", "Airport Shuttle", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    },
+    {
+      id: "westin-cuzco",
+      name: "The Westin Madrid Cuzco",
+      location: "Madrid, Spain",
+      address: "Paseo de la Castellana, 49, 28046 Madrid, Spain",
+      features: [
+        "Luxury allergy-conscious dining",
+        "Specialized bedding options",
+        "High-end allergen protocols",
+        "Gluten-free menu specialists",
+        "Premium accommodations"
+      ],
+      description: "Luxury option with comprehensive allergy-conscious dining and specialized bedding options for sensitive guests.",
+      quote: "Wonderful staff and gluten-free options made my stay safe.",
+      bookingUrl: "https://www.marriott.com/hotels/travel/madwi-the-westin-madrid-cuzco/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Gluten-Free", "Luxury Allergen Care"],
+      amenities: ["WiFi", "Spa", "Fine Dining", "Premium Service"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "dear-hotel",
+      name: "Dear Hotel Madrid",
+      location: "Madrid, Spain",
+      address: "Gran V\xEDa, 80, 28013 Madrid, Spain",
+      features: [
+        "Boutique hotel with allergy-sensitive staff",
+        "Personal chef consultations",
+        "Dairy allergy specialists",
+        "Tailored food options",
+        "Gran V\xEDa location"
+      ],
+      description: "Boutique hotel with allergy-sensitive staff and personalized chef consultations for safe dining experiences.",
+      quote: "Beautiful room, and the chef personally discussed my dairy allergy.",
+      bookingUrl: "https://www.dearhotelmadrid.com/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Dairy-Free", "Personal Chef Service"],
+      amenities: ["WiFi", "Restaurant", "Boutique Experience"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    },
+    {
+      id: "catalonia-plaza-mayor",
+      name: "Catalonia Plaza Mayor",
+      location: "Madrid, Spain",
+      address: "Calle de Atocha, 36, 28012 Madrid, Spain",
+      features: [
+        "Central location near Plaza Mayor",
+        "Printed allergen lists available",
+        "Comprehensive allergen documentation",
+        "Staff allergen training",
+        "Historic area access"
+      ],
+      description: "Centrally located near Plaza Mayor with comprehensive allergen-aware dining and detailed documentation.",
+      quote: "The staff had a printed allergen list and gave me peace of mind.",
+      bookingUrl: "https://www.hoteles-catalonia.com/en/hotel/madrid/catalonia-plaza-mayor/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Comprehensive Allergen Lists", "Documentation"],
+      amenities: ["WiFi", "Restaurant", "Historic Location"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    },
+    {
+      id: "coolrooms-atocha",
+      name: "CoolRooms Palacio de Atocha",
+      location: "Madrid, Spain",
+      address: "Calle de Atocha, 34, 28012 Madrid, Spain",
+      features: [
+        "Kitchen staff trained in allergen safety",
+        "Egg allergy adaptation specialists",
+        "Menu customization services",
+        "Boutique hotel experience",
+        "Personalized dining approach"
+      ],
+      description: "Boutique hotel with kitchen staff specifically trained in allergen safety and menu adaptation services.",
+      quote: "Not only did they understand my egg allergy, they adapted the menu for me.",
+      bookingUrl: "https://www.coolrooms.es/palacio-de-atocha/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Egg-Free", "Menu Adaptation"],
+      amenities: ["WiFi", "Restaurant", "Custom Dining"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    },
+    {
+      id: "radisson-blu-prado",
+      name: "Radisson Blu Hotel, Madrid Prado",
+      location: "Madrid, Spain",
+      address: "Calle de Morat\xEDn, 52, 28014 Madrid, Spain",
+      features: [
+        "Trusted by allergy travelers",
+        "Central Madrid location",
+        "Allergy-free room options",
+        "Chef ingredient consultations",
+        "Proven track record"
+      ],
+      description: "Trusted by allergy travelers worldwide, offering central location with comprehensive allergy-free room options.",
+      quote: "I was able to successfully eat at this hotel. The chef went over every ingredient.",
+      bookingUrl: "https://www.radissonhotels.com/en-us/hotels/radisson-blu-madrid-prado?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
+      allergenFriendly: ["Ingredient Transparency", "Chef Consultation"],
+      amenities: ["WiFi", "Restaurant", "Central Location"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    }
+  ],
+  faqs: [
+    {
+      question: "Do Madrid hotels accommodate food allergies effectively?",
+      answer: "Yes, Madrid hotels have excellent allergy accommodation standards. Many properties like Vincci Centrum and Hotel Regina have specialized protocols, trained staff, and detailed allergen documentation to ensure guest safety."
+    },
+    {
+      question: "How should I communicate my allergies in Madrid?",
+      answer: "Notify your hotel in advance and consider carrying Spanish allergy cards. Key phrases include 'Tengo alergia a...' (I am allergic to...) and 'Sin [ingredient], por favor' (Without [ingredient], please)."
+    },
+    {
+      question: "What allergens are common in Spanish cuisine?",
+      answer: "Watch for nuts in desserts, wheat in many dishes, dairy in sauces, and olive oil (which may cross-contaminate with nuts). Seafood is also prevalent, so shellfish-allergic travelers should be cautious."
+    },
+    {
+      question: "Are there pharmacies in Madrid for allergy medication?",
+      answer: "Yes, Madrid has numerous 'farmacias' with green cross signs, many open 24 hours. However, always bring your prescribed medications, especially EpiPens, as specific brands may not be available."
+    },
+    {
+      question: "Which Madrid neighborhoods are best for allergy-friendly hotels?",
+      answer: "The city center (near Gran V\xEDa and Puerta del Sol) and the Prado area offer the highest concentration of allergy-aware hotels with easy access to medical facilities and allergy-friendly restaurants."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Spanish", "Pronunciation"],
+    rows: [
+      ["I have a food allergy", "Tengo alergia alimentaria", "TEN-go ah-LER-hee-ah ah-lee-men-TAH-ree-ah"],
+      ["I am allergic to nuts", "Soy al\xE9rgico a los frutos secos", "soy ah-LER-hee-ko ah los FROO-tos SEH-kos"],
+      ["Is this safe for me?", "\xBFEsto es seguro para m\xED?", "ES-to es se-GOO-ro PAH-rah mee"],
+      ["No gluten please", "Sin gluten, por favor", "seen GLOO-ten por fah-VOR"],
+      ["I need dairy-free food", "Necesito comida sin l\xE1cteos", "neh-seh-SEE-to ko-MEE-dah seen LAHK-teh-os"],
+      ["Emergency", "Emergencia", "eh-mer-HEN-see-ah"],
+      ["Call a doctor", "Llame a un m\xE9dico", "YAH-meh ah oon MEH-dee-ko"],
+      ["I have an EpiPen", "Tengo un EpiPen", "TEN-go oon EpiPen"]
+    ]
+  },
+  restaurants: [
+    {
+      name: "Celicioso",
+      address: "Calle Hortaleza, 3, Madrid",
+      description: "100% gluten-free restaurant and bakery offering safe dining for celiac travelers.",
+      allergyInfo: "Gluten-Free, Celiac-Safe"
+    },
+    {
+      name: "La Biotika",
+      address: "Calle Amor de Dios, 3, Madrid",
+      description: "Organic restaurant with excellent allergy awareness and multiple dietary options.",
+      allergyInfo: "Gluten-Free, Vegan, Organic"
+    }
+  ]
+};
+
+// src/data/destination-flying-with-epipens.ts
+var flyingWithEpipensContent = {
+  title: "Europe guide to flying with EpiPens and allergy medication",
+  metaTitle: "Europe guide to flying with EpiPens and allergy medication",
+  metaDescription: "Clear guidance for traveling in Europe with EpiPens and prescription medicines. What security rules allow, which airlines expect a doctor's letter, and how to pack for a smooth checkpoint. Updated 19 September 2025.",
+  imageUrl: "/lovable-uploads/airport-security-queue.jpg",
+  intro: {
+    title: "Europe guide to flying with EpiPens and allergy medication",
+    description: "If you live with food allergies, keep your EpiPens and any essential medication in your cabin bag and be ready to show them at security. European airports permit medically necessary items when you declare them, and many airlines prefer that you carry a short doctor's letter or a copy of your prescription. That keeps your treatment within reach and speeds up screening.",
+    quickTip: "Quick answer. EpiPens in your cabin bag. Declare medication at security. Bring proof of medical need for any needles or for liquid medicine in containers larger than 100 ml."
+  },
+  longDescription: `
+    <h2>What the rules look like in practice</h2>
+
+    <h3>United Kingdom</h3>
+    <p>Security permits essential medicines in containers larger than 100 ml in hand luggage, provided you carry proof that the medicine is prescribed to you when the container exceeds 100 ml.</p>
+
+    <h3>European Union overview</h3>
+    <p>The classic 100 ml liquid rule has been reintroduced at some airports while new scanners are standardised. The exemption for medication still applies across the bloc. Check your departure and connection airports before you fly.</p>
+
+    <h3>Ireland</h3>
+    <p>Dublin Airport allows liquids and gels in containers up to 2 litres. Rules at your return or connection airport may differ, so verify both directions.</p>
+
+    <h3>Italy</h3>
+    <p>Rome Fiumicino confirms liquids in containers up to 2 litres following the introduction of new scanners. If you connect elsewhere, confirm that the other airport accepts the same allowance.</p>
+
+    <h3>Netherlands</h3>
+    <p>Amsterdam Schiphol states that medication may be carried in hand baggage, including packages above 100 ml, when you can show it is needed during the journey.</p>
+
+    <h3>Spain</h3>
+    <p>Liquid medicines are exempt from the liquid restrictions when required for the trip. Present them separately at the checkpoint.</p>
+
+    <h3>Switzerland</h3>
+    <p>Zurich Airport applies the 100 ml rule to regular liquids and allows larger quantities of liquid medication that are needed for the journey.</p>
+
+    <h3>Norway</h3>
+    <p>The 100 ml rule does not apply to liquid medicine. You can bring a small cooling element when medication must be kept cold. A prescription or letter helps the process.</p>
+
+    <h3>Sweden</h3>
+    <p>Some checkpoints no longer require you to remove liquids or devices, while others still apply the 100 ml limit. Keep liquid medication easy to show and check your specific airport page.</p>
+
+    <h3>Poland</h3>
+    <p>Larger liquid containers can be permitted when the checkpoint has equipment to test them. Airports are adopting new scanners gradually, so verify the rule for your departure point.</p>
+
+    <h3>Finland</h3>
+    <p>Many airports still follow the 100 ml rule. Place larger containers in checked baggage unless they are permitted as medically necessary items at your specific checkpoint.</p>
+
+    <h2>What airlines in Europe say</h2>
+    <p>The common approach is simple. Medication and EpiPens belong in your cabin bag. Most airlines ask you to carry a short note or prescription when you travel with needles, syringes or liquid medication in a container larger than 100 ml.</p>
+
+    <h3>British Airways</h3>
+    <p>You may take EpiPens and hypodermic needles in your hand baggage with a doctor's note or a prescription.</p>
+
+    <h3>easyJet</h3>
+    <p>Needles and syringes for a medical condition are allowed. Bring a letter from your healthcare practitioner confirming the medication. Gel packs to keep medicine cool are allowed in the cabin.</p>
+
+    <h3>Aer Lingus</h3>
+    <p>You can take EpiPens and hypodermic needles in your carry on with a doctor's note or a prescription. Liquid medication that you need during the flight belongs in your carry on.</p>
+
+    <h3>KLM</h3>
+    <p>Pack medication in hand baggage and bring an English language prescription for medicines and any syringes so staff can check it if needed.</p>
+
+    <h3>SWISS</h3>
+    <p>An English medical certificate is recommended when you travel with medication and syringes in your hand baggage.</p>
+
+    <h3>Lufthansa</h3>
+    <p>If you carry medication and syringes in your hand baggage, a doctor's confirmation that the items are medically necessary is recommended.</p>
+
+    <h3>Norwegian</h3>
+    <p>Label medication and carry a prescription or medical certificate in your hand baggage. International certificates should be in English.</p>
+
+    <h3>Finnair</h3>
+    <p>Keep medication in your hand baggage and carry a prescription or a doctor's letter, especially when your treatment involves injections.</p>
+
+    <h3>Iberia</h3>
+    <p>A medical certificate may be requested for needles, syringes or liquid medication in a container larger than 100 ml.</p>
+
+    <h3>Vueling</h3>
+    <p>Medication for use on board is permitted. Security may ask for a certificate when you carry syringes or similar items.</p>
+
+    <h3>Ryanair</h3>
+    <p>Standard quantities of auto injectors in your cabin bag are permitted. If you need to carry additional medical equipment beyond your baggage allowance, obtain the airline's medical equipment waiver in advance.</p>
+
+    <h2>The smart way to pack and pass security</h2>
+    <ul>
+      <li>Place EpiPens and essential medicines in your cabin bag. Do not place them in checked baggage.</li>
+      <li>Carry a short doctor's letter or a copy of your prescription in English. It is required in the United Kingdom for liquid medicine in containers larger than 100 ml and it speeds up screening across Europe.</li>
+      <li>At the checkpoint declare medication calmly and present it separately if requested. Use the phrase medically necessary if asked.</li>
+      <li>If your medicine needs to stay cold pack a small ice or gel pack and keep it with the medication.</li>
+      <li>Check the exact rules for every airport on your route 48 to 72 hours before departure. Some airports already allow up to 2 litres while others still use the 100 ml rule.</li>
+    </ul>
+
+    <h2>Doctor letter template</h2>
+    <p>Keep it factual and brief. Print it or save it as a PDF on your phone.</p>
+    <blockquote>
+      <p>To whom it may concern</p>
+      <p>Patient name and date of birth</p>
+      <p>Diagnosis indicating risk of anaphylaxis</p>
+      <p>Medication required on person at all times including during the flight</p>
+      <p>Quantity for the trip for example two adrenaline auto injectors and an antihistamine syrup of 150 ml</p>
+      <p>Physician name licence contact details date and signature</p>
+    </blockquote>
+
+    <h2>Bottom line</h2>
+    <p>Carry your EpiPens and any essential medication in your cabin bag. Declare them at security. Bring proof that the treatment is yours and medically necessary. Expect some variation between airports as new scanners come online. If you follow these steps you will move through security quickly and focus on your trip.</p>
+  `,
+  faqs: [
+    {
+      question: "Can I carry EpiPens in my hand baggage in Europe",
+      answer: "Yes. EpiPens and medically necessary medication belong in your cabin bag. Declare them at security."
+    },
+    {
+      question: "Do I need a doctor's letter for syringes or liquid medicine over 100 ml",
+      answer: "Carry a short letter or a prescription. In the United Kingdom it is required for liquid medicine above 100 ml. Many airlines ask for documentation when you carry needles or syringes."
+    },
+    {
+      question: "Can I bring a cooling gel pack for medication",
+      answer: "Yes for medical purposes. Pack a small cooling element with the medicine in your cabin bag."
+    },
+    {
+      question: "Why do rules differ between European airports",
+      answer: "Airports are adopting new scanners at different speeds. Some already allow up to 2 litres while others still use the 100 ml limit. The medication exemption remains across Europe."
+    },
+    {
+      question: "Which airlines in Europe allow EpiPens in the cabin",
+      answer: "Major airlines in Europe permit EpiPens in hand baggage and many advise or require a doctor's letter or prescription in specific cases."
+    }
+  ],
+  travelTips: []
+};
+
+// src/data/destination-flying-with-epipens-north-america.ts
+var flyingWithEpipensNorthAmericaContent = {
+  title: "North America guide to flying with EpiPens and allergy medication",
+  metaTitle: "North America guide to flying with EpiPens and allergy medication",
+  metaDescription: "Clear guidance for traveling in the United States, Canada and Mexico with EpiPens and prescription medicines. Airport screening rules, airline expectations, and a practical packing checklist. Updated 21 September 2025.",
+  imageUrl: "/lovable-uploads/us-airport-terminal.jpg",
+  intro: {
+    title: "North America guide to flying with EpiPens and allergy medication",
+    description: "If you live with food allergies, keep your EpiPens and all essential medication in your cabin bag and be ready to show them at security. Airports in the United States and Canada allow medically necessary items when you declare them, and many airlines prefer that you carry a short doctor letter or a copy of your prescription. That keeps your treatment within reach and speeds up screening.",
+    quickTip: "Quick answer. EpiPens in your cabin bag. Declare medication at security. Bring proof of medical need for any needles and for liquid medicine in containers larger than 100 ml."
+  },
+  longDescription: `
+    <h2>What the rules look like in practice</h2>
+
+    <h3>United States</h3>
+    <p>TSA allows larger amounts of medically necessary liquids, gels and aerosols in reasonable quantities for your trip when you declare them at the checkpoint. Unused syringes are allowed when they are accompanied by injectable medication. Keep medicines easy to show and expect additional screening if an item alarms the scanner.</p>
+
+    <h3>Canada</h3>
+    <p>CATSA confirms that prescription and essential non prescription medicines are exempt from the liquid limits when you declare them for inspection. Jet injectors such as EpiPens are permitted in carry on and checked baggage for personal medical use. Documentation is not mandatory but can help speed the process.</p>
+
+    <h3>Mexico</h3>
+    <p>Airports publish the standard 100 ml rule for regular liquids. Some airport and airline pages note that liquid medicines may be carried in hand baggage when you have a prescription and you bring only the quantity reasonably needed for your trip. Always check the security page of your departure airport and your airline before you fly.</p>
+
+    <h2>What airlines say in North America</h2>
+    <p>The common approach is straightforward. Keep medication and EpiPens in your cabin bag and carry a short note or a prescription when you travel with needles or syringes.</p>
+
+    <h3>United States airlines</h3>
+    <p><strong>American Airlines.</strong> The international travel guidance tells customers to carry medical documentation for medicines and a doctor letter if you need to use a syringe during flight.</p>
+    <p><strong>United Airlines.</strong> The accessibility page states you may bring medical syringes in your carry on and recommends carrying proof of prescription in case security asks.</p>
+    <p><strong>Delta Air Lines.</strong> The allergy page advises customers with peanut allergy to bring appropriate medication on board for example an EpiPen.</p>
+    <p><strong>Southwest Airlines.</strong> The help center explains that needles and syringes used to inject medication are allowed past security when packed with the medication for which they are needed.</p>
+    <p><strong>Alaska Airlines.</strong> The carry on exceptions page lists prescription medication and devices needed to administer them for example syringes and auto injections as accepted within the rules.</p>
+    <p><strong>JetBlue.</strong> The medication help page says you may bring associated supplies for example syringes pens infusers and saline solution and that medication should remain with you in your hand baggage.</p>
+
+    <h3>Canadian airlines</h3>
+    <p><strong>Air Canada.</strong> The carry on page instructs you to keep prescription medication with you and explicitly permits syringes or hypodermic needles for personal medical use for example EpiPen when the needle guards are intact and the items are accompanied by the prescription medication with a printed label.</p>
+    <p><strong>WestJet.</strong> The medical equipment and medication page accepts needles and syringes in your personal carry on item only when they are required to administer medication and accompanied by properly labelled medication. The airline also recommends carrying an epinephrine auto injector if prescribed for anaphylaxis.</p>
+
+    <h3>Mexican airlines</h3>
+    <p><strong>Aerom\xE9xico.</strong> Follows the general liquid rules and refers customers to security restrictions on the baggage pages so keep medicines in hand baggage and carry a prescription if you need liquids for the flight.</p>
+    <p><strong>Volaris.</strong> Advises travelers to carry medicines in hand baggage with a prescription and to take only reasonable quantities for the trip. The medical assistance page also notes that crew cannot administer medication.</p>
+    <p><strong>Viva Aerobus.</strong> States that liquid medicines in containers larger than 100 ml must be accompanied by medical proof.</p>
+
+    <h2>The smart way to pack and pass security</h2>
+    <ul>
+      <li>Place EpiPens and essential medicines in your cabin bag. Do not check them.</li>
+      <li>Carry a short doctor letter or a copy of your prescription in English or Spanish as needed. A pharmacy label on the medicine helps at screening.</li>
+      <li>At the checkpoint declare medication calmly and present it separately if requested. Use the phrase "medically necessary" if asked.</li>
+      <li>If your medicine needs to stay cold, pack a small ice or gel pack and keep it with the medication.</li>
+      <li>Check the exact rules for every airport on your route 48 to 72 hours before departure. Screening procedures can differ between airports.</li>
+    </ul>
+
+    <h2>Doctor letter template</h2>
+    <p>Keep the wording factual and brief. Print it or save it as a PDF on your phone.</p>
+    <blockquote>
+      <p>To whom it may concern</p>
+      <p>Patient name and date of birth</p>
+      <p>Diagnosis indicating risk of anaphylaxis</p>
+      <p>Medication required on person at all times including during the flight</p>
+      <p>Quantity for the trip for example two adrenaline auto injectors and an antihistamine syrup of 150 ml</p>
+      <p>Physician name licence contact details date and signature</p>
+    </blockquote>
+
+    <h2>Bottom line</h2>
+    <p>Carry your EpiPens and any essential medication in your cabin bag. Declare them at security. Bring proof that the treatment is yours and medically necessary. Check the exact airport and airline rules before you travel. If you follow these steps you will move through security quickly and focus on your trip.</p>
+  `,
+  faqs: [
+    {
+      question: "Can I carry EpiPens in my hand baggage in the United States and Canada",
+      answer: "Yes. EpiPens and medically necessary medication belong in your cabin bag. Declare them at security and be ready for additional screening if requested."
+    },
+    {
+      question: "Do I need a letter for syringes or liquid medicine over 100 ml",
+      answer: "Carry a short letter or a prescription. Several airlines ask for documentation and a pharmacy label helps in Canada and Mexico."
+    },
+    {
+      question: "What is different in Mexico",
+      answer: "Airports publish the 100 ml rule for regular liquids. Some airport and airline pages say liquid medicines may be carried when you have a prescription and bring only what you reasonably need for the trip. Always check your airport and airline pages before you fly."
+    },
+    {
+      question: "Can I bring a cooling gel pack for medication",
+      answer: "Yes for medical purposes. Pack a small cooling element with the medicine in your cabin bag and present it at screening if asked."
+    },
+    {
+      question: "Do airlines carry epinephrine on board",
+      answer: "Airlines carry emergency medical kits. Many kits contain epinephrine in a vial rather than an auto injector. You should still carry your own prescribed auto injectors."
+    }
+  ],
+  travelTips: []
+};
+
+// src/data/destination-warm-winter.ts
+var warmWinterContent = {
+  title: "Warm Winter & Christmas Getaways for Food-Allergic Travelers",
+  metaTitle: "Warm Winter Destinations for Food Allergy Travelers | Allergy-Friendly Holidays 2025",
+  metaDescription: "Discover the best warm winter and Christmas destinations for food-allergic travelers. Verified allergy-friendly hotels and restaurants in Madeira, Hurghada, Canary Islands, and Israel.",
+  intro: "For travelers with food allergies, escaping the cold doesn't mean compromising safety or flavor. These warm winter and Christmas destinations offer sunshine, sea, and allergy-conscious hospitality, allowing you to relax and enjoy every bite. Only destinations and venues with verified positive feedback for allergy handling are listed \u2014 and every hotel and restaurant includes a direct official website link.",
+  regionDescriptions: {
+    madeira: `
+      <h2>Madeira, Portugal \u2014 Atlantic Island Sun & Allergy-Aware Hotels</h2>
+      <p>Madeira offers a perfect winter climate and warm hospitality. With a rising number of allergy-conscious accommodations and local cuisine emphasizing fresh, simple ingredients, it's a great option for gluten-free, dairy-free, or nut-sensitive travelers.</p>
+    `,
+    hurghada: `
+      <h2>Hurghada, Egypt \u2014 Red Sea Coast & Resort Comfort</h2>
+      <p>Hurghada is a reliable warm weather destination with modern resorts, many of which have experience in handling food sensitivities for international guests. Dining staff in high-end hotels are usually briefed on allergy safety.</p>
+    `,
+    canary: `
+      <h2>Canary Islands, Spain \u2014 Warm Spanish Island Escape</h2>
+      <p>The Canary Islands combine winter warmth with Spanish hospitality. Many upscale resorts and local restaurants provide allergen labeling or allow customization.</p>
+    `,
+    israel: `
+      <h2>Israel \u2014 Coastal Winter Sun & Allergy-Friendly Food Scene</h2>
+      <p>From Tel Aviv's cosmopolitan beaches to Eilat's desert warmth, Israel offers diverse scenery and a thriving culinary scene that embraces dietary needs. Many restaurants offer gluten-free, dairy-free, vegan, and nut-aware meals \u2014 often with staff trained to handle special requests.</p>
+    `
+  },
+  longDescription: "",
+  hotels: [
+    // Madeira Hotels
+    {
+      id: "reids-palace-madeira",
+      name: "Reid's Palace, A Belmond Hotel",
+      location: "Madeira, Portugal",
+      address: "Estrada Monumental 139, 9000-098 Funchal, Portugal",
+      features: [
+        "Luxury cliff-top hotel with Atlantic views",
+        "Allergy-conscious dining options",
+        "Fresh local ingredients",
+        "Staff trained in dietary requirements",
+        "Multiple dining venues"
+      ],
+      description: "Iconic luxury hotel perched on Madeira's cliffs, offering refined dining with attention to dietary needs and fresh Atlantic cuisine.",
+      quote: "The staff took my allergies seriously and the chef personally ensured my meals were safe.",
+      bookingUrl: "https://www.belmond.com/hotels/europe/portugal/madeira/belmond-reids-palace?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Aware"],
+      amenities: ["WiFi", "Spa", "Pool", "Fine Dining"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "cliff-bay-madeira",
+      name: "Hotel The Cliff Bay (PortoBay)",
+      location: "Madeira, Portugal",
+      address: "Estrada Monumental 147, 9004-532 Funchal, Portugal",
+      features: [
+        "Award-winning dining",
+        "Allergy menu options available",
+        "Ocean-view restaurants",
+        "Experienced culinary team",
+        "Fresh seafood focus"
+      ],
+      description: "Five-star hotel with multiple restaurants offering carefully prepared meals for guests with dietary restrictions.",
+      quote: "The buffet had clear allergen labels and the staff helped me navigate safely.",
+      bookingUrl: "https://www.portobay.com/en/hotels/portugal/madeira-island/the-cliff-bay/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Allergen Labeling", "Custom Meals"],
+      amenities: ["WiFi", "Spa", "Pool", "Restaurant"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "melia-madeira-mare",
+      name: "Meli\xE1 Madeira Mare",
+      location: "Madeira, Portugal",
+      address: "Rua Leichlingen 2, 9004-538 Funchal, Portugal",
+      features: [
+        "Beachfront location",
+        "All-inclusive options",
+        "Allergy-aware buffet service",
+        "Modern accommodations",
+        "Scenic ocean views"
+      ],
+      description: "Modern beachfront hotel with comprehensive all-inclusive dining that caters to various dietary needs.",
+      quote: "Great attention to my gluten intolerance at every meal.",
+      bookingUrl: "https://www.melia.com/en/hotels/portugal/funchal/melia-madeira-mare?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Gluten-Free", "All-Inclusive Safe"],
+      amenities: ["WiFi", "Pool", "Restaurant", "Beach Access"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "savoy-palace-madeira",
+      name: "Savoy Palace",
+      location: "Madeira, Portugal",
+      address: "Avenida do Infante 25, 9004-542 Funchal, Portugal",
+      features: [
+        "Ultra-luxury resort",
+        "Multiple dining venues",
+        "Personalized dietary service",
+        "Rooftop infinity pool",
+        "Spa facilities"
+      ],
+      description: "Madeira's newest luxury resort offering exceptional service and personalized attention to dietary requirements across multiple restaurants.",
+      quote: "The concierge arranged allergy-safe dining at every restaurant in the hotel.",
+      bookingUrl: "https://www.savoypalace.com/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Personalized Service", "Multiple Options"],
+      amenities: ["WiFi", "Spa", "Pool", "Fine Dining", "Rooftop Bar"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    // Hurghada Hotels
+    {
+      id: "steigenberger-aldau",
+      name: "Steigenberger ALDAU Beach Hotel",
+      location: "Hurghada, Egypt",
+      address: "Yussif Afifi Road, Hurghada, Red Sea Governorate, Egypt",
+      features: [
+        "Red Sea beachfront",
+        "All-inclusive dining",
+        "International staff training",
+        "Multiple restaurants",
+        "Allergy-aware kitchen"
+      ],
+      description: "Premium Red Sea resort with internationally trained staff experienced in handling food allergies for global guests.",
+      quote: "The kitchen staff were briefed on my allergies and I felt completely safe.",
+      bookingUrl: "https://www.steigenberger.com/en/hotels/all-hotels/egypt/hurghada/steigenberger-aldau-beach-hotel?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["International Standards", "All-Inclusive Safe"],
+      amenities: ["WiFi", "Beach", "Pool", "Spa", "Water Sports"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "baron-palace-hurghada",
+      name: "Baron Palace Sahl Hasheesh",
+      location: "Hurghada, Egypt",
+      address: "Sahl Hasheesh Road, Hurghada, Red Sea Governorate, Egypt",
+      features: [
+        "Luxury all-inclusive resort",
+        "Dedicated allergy protocols",
+        "International cuisine",
+        "Private beach",
+        "Premium service"
+      ],
+      description: "Upscale all-inclusive resort with comprehensive allergen awareness and diverse international dining options.",
+      quote: "Staff noted my allergies at check-in and the restaurants were well prepared.",
+      bookingUrl: "https://www.baronhotels.com/baron-palace-sahl-hasheesh?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Allergen Protocols", "All-Inclusive"],
+      amenities: ["WiFi", "Beach", "Pool", "Spa", "Multiple Restaurants"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "jaz-bluemarine-hurghada",
+      name: "JAZ Bluemarine",
+      location: "Hurghada, Egypt",
+      address: "Hurghada-Safaga Road, Hurghada, Red Sea Governorate, Egypt",
+      features: [
+        "Family-friendly resort",
+        "All-inclusive dining",
+        "Buffet with allergen info",
+        "Kids allergy awareness",
+        "Reef access"
+      ],
+      description: "Family-oriented resort with attentive staff who understand food sensitivities and provide safe dining options.",
+      quote: "Traveling with allergic children was stress-free here.",
+      bookingUrl: "https://www.jazhotels.com/en/egypt/hurghada/jaz-bluemarine?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Family-Friendly", "Kid-Safe Options"],
+      amenities: ["WiFi", "Beach", "Pool", "Kids Club", "Water Sports"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    // Canary Islands Hotels
+    {
+      id: "princesa-yaiza-lanzarote",
+      name: "Princesa Yaiza Suite Hotel Resort",
+      location: "Lanzarote, Canary Islands, Spain",
+      address: "Avenida Papagayo 22, 35580 Playa Blanca, Lanzarote, Spain",
+      features: [
+        "Award-winning family resort",
+        "Multiple dining venues",
+        "Allergen menu labeling",
+        "Kids allergy programs",
+        "Beach location"
+      ],
+      description: "Top-rated family resort in Lanzarote with exceptional attention to food allergies and comprehensive allergen labeling.",
+      quote: "Every restaurant had clear allergen information and the chefs were accommodating.",
+      bookingUrl: "https://www.princesayaiza.com/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Allergen Labeling", "Family-Safe"],
+      amenities: ["WiFi", "Beach", "Pool", "Spa", "Kids Club"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "botanico-tenerife",
+      name: "Hotel Botanico & The Oriental Spa Garden",
+      location: "Tenerife, Canary Islands, Spain",
+      address: "Calle Richard J. Yeoward 1, 38400 Puerto de la Cruz, Tenerife, Spain",
+      features: [
+        "Luxury botanical setting",
+        "Gourmet dining options",
+        "Personalized dietary service",
+        "Award-winning spa",
+        "Tropical gardens"
+      ],
+      description: "Elegant Tenerife hotel surrounded by tropical gardens, offering refined cuisine with attention to dietary restrictions.",
+      quote: "The restaurant staff went above and beyond for my nut allergy.",
+      bookingUrl: "https://www.hotelbotanico.com/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Nut-Free Options", "Gourmet Safe"],
+      amenities: ["WiFi", "Spa", "Pool", "Gardens", "Fine Dining"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "vincci-plantacion-tenerife",
+      name: "Vincci Selecci\xF3n La Plantaci\xF3n del Sur",
+      location: "Tenerife, Canary Islands, Spain",
+      address: "Roque Nublo 1, 38670 Costa Adeje, Tenerife, Spain",
+      features: [
+        "Adults-only luxury",
+        "Personalized service",
+        "Allergen-aware dining",
+        "Ocean views",
+        "Tranquil atmosphere"
+      ],
+      description: "Sophisticated adults-only resort with personalized dining experiences and careful attention to food allergies.",
+      quote: "Perfect for a relaxing allergy-safe holiday. Staff were attentive and knowledgeable.",
+      bookingUrl: "https://www.vinccihoteles.com/en/hotels/spain/tenerife/vincci-seleccion-la-plantacion-del-sur?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Personalized Dining", "Allergen-Aware"],
+      amenities: ["WiFi", "Spa", "Pool", "Restaurant", "Adults-Only"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    // Tel Aviv Hotels
+    {
+      id: "saul-hotel-tel-aviv",
+      name: "The Saul Hotel",
+      location: "Tel Aviv, Israel",
+      address: "17 HaYarkon Street, Tel Aviv, Israel",
+      features: [
+        "Beachfront boutique hotel",
+        "Allergy-conscious breakfast",
+        "Central location",
+        "Staff allergen training",
+        "Mediterranean cuisine"
+      ],
+      description: "Stylish boutique hotel on Tel Aviv's beachfront with excellent attention to food allergies and dietary needs.",
+      quote: "The breakfast buffet had everything labeled and staff knew exactly what to recommend.",
+      bookingUrl: "https://www.atlas.co.il/saul-hotel-tel-aviv?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Allergen Labeling", "Staff Training"],
+      amenities: ["WiFi", "Beach Access", "Restaurant", "Central Location"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    },
+    {
+      id: "vera-hotel-tel-aviv",
+      name: "The Vera",
+      location: "Tel Aviv, Israel",
+      address: "39 Ben Yehuda Street, Tel Aviv, Israel",
+      features: [
+        "Modern boutique design",
+        "Allergy-friendly dining",
+        "Central city location",
+        "Beach proximity",
+        "Contemporary amenities"
+      ],
+      description: "Contemporary boutique hotel with a focus on guest wellness and dietary accommodation.",
+      quote: "They handled my multiple allergies with professionalism and care.",
+      bookingUrl: "https://www.atlas.co.il/vera-hotel-tel-aviv?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Multiple Allergies", "Wellness Focus"],
+      amenities: ["WiFi", "Rooftop", "Restaurant", "Modern Design"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    },
+    {
+      id: "savoy-seaside-tel-aviv",
+      name: "Savoy Seaside Hotel",
+      location: "Tel Aviv, Israel",
+      address: "5 Geula Street, Tel Aviv, Israel",
+      features: [
+        "Historic boutique hotel",
+        "Personalized service",
+        "Allergy-aware staff",
+        "Beach location",
+        "Charming atmosphere"
+      ],
+      description: "Historic boutique hotel with personalized service and genuine care for guests with food allergies.",
+      quote: "Old-world charm with modern allergy awareness. Felt very safe here.",
+      bookingUrl: "https://www.atlas.co.il/savoy-sea-side-hotel-tel-aviv?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Personalized Care", "Staff Awareness"],
+      amenities: ["WiFi", "Beach", "Restaurant", "Boutique"],
+      isPurelyAllergyFriendly: false,
+      stars: 3
+    },
+    // Eilat Hotels
+    {
+      id: "dan-eilat",
+      name: "Dan Eilat Hotel",
+      location: "Eilat, Israel",
+      address: "North Beach, Eilat, Israel",
+      features: [
+        "Luxury beachfront resort",
+        "All-inclusive options",
+        "Comprehensive allergy protocols",
+        "Multiple restaurants",
+        "Red Sea views"
+      ],
+      description: "Premier Red Sea resort with extensive allergy protocols and diverse dining options for all dietary needs.",
+      quote: "Dan Hotels have excellent allergy awareness. Every meal was safe and delicious.",
+      bookingUrl: "https://www.danhotels.com/eilathotels/daneilathotel?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Comprehensive Protocols", "All-Inclusive Safe"],
+      amenities: ["WiFi", "Beach", "Pool", "Spa", "Multiple Restaurants"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "dan-panorama-eilat",
+      name: "Dan Panorama Eilat",
+      location: "Eilat, Israel",
+      address: "North Beach, Eilat, Israel",
+      features: [
+        "Family-friendly resort",
+        "Kids allergy programs",
+        "All-inclusive dining",
+        "Beach activities",
+        "Pool complex"
+      ],
+      description: "Family-oriented resort with dedicated attention to children's food allergies and comprehensive dining options.",
+      quote: "Traveling with allergic kids was stress-free. The kids club was aware and prepared.",
+      bookingUrl: "https://www.danhotels.com/eilathotels/danpanoramaeilathotel?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Kid-Safe", "Family-Friendly"],
+      amenities: ["WiFi", "Beach", "Pool", "Kids Club", "Water Sports"],
+      isPurelyAllergyFriendly: false,
+      stars: 5
+    },
+    {
+      id: "isrotel-yam-suf",
+      name: "Isrotel Yam Suf",
+      location: "Eilat, Israel",
+      address: "Coral Beach, Eilat, Israel",
+      features: [
+        "All-suite resort",
+        "All-inclusive dining",
+        "Allergen-aware kitchen",
+        "Coral reef access",
+        "Family activities"
+      ],
+      description: "All-suite family resort with comprehensive all-inclusive dining that caters to various food allergies.",
+      quote: "The all-inclusive buffet was clearly labeled and safe for my celiac daughter.",
+      bookingUrl: "https://www.isrotel.com/isrotel-yam-suf?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
+      allergenFriendly: ["Gluten-Free", "All-Inclusive"],
+      amenities: ["WiFi", "Beach", "Pool", "Kids Club", "Diving"],
+      isPurelyAllergyFriendly: false,
+      stars: 4
+    }
+  ],
+  restaurants: [
+    // Tel Aviv Restaurants
+    {
+      name: "Anastasia Cafe",
+      address: "54 Frishman Street, Tel Aviv, Israel",
+      description: "100% vegan cafe with extensive allergy awareness. Popular for gluten-free and nut-free options in a trendy Tel Aviv setting.",
+      allergyInfo: "Vegan, Gluten-Free, Nut-Free Options",
+      websiteUrl: "https://www.facebook.com/AnastasiaTelaviv/",
+      isPurelyAllergyFriendly: true
+    },
+    {
+      name: "Gluteria",
+      address: "2 Mohiliver Street, Tel Aviv, Israel",
+      description: "Dedicated gluten-free bakery and cafe. 100% gluten-free facility, perfect for celiacs and gluten-sensitive travelers.",
+      allergyInfo: "100% Gluten-Free Facility",
+      websiteUrl: "https://www.gluteria.co.il/",
+      isPurelyAllergyFriendly: true
+    },
+    {
+      name: "Meshek Barzilay",
+      address: "6 Ahad Ha'Am Street, Tel Aviv, Israel",
+      description: "Organic vegetarian restaurant with excellent allergy awareness. Offers vegan, gluten-free, and allergen-aware dining.",
+      allergyInfo: "Vegetarian, Vegan, Gluten-Free, Organic",
+      websiteUrl: "https://www.meshekbarzilay.co.il/",
+      isPurelyAllergyFriendly: false
+    },
+    {
+      name: "Cafe Optimi",
+      address: "12 Maskit Street, Herzliya, Israel",
+      description: "Health-focused cafe with comprehensive allergen menu. Known for accommodating multiple food allergies and dietary restrictions.",
+      allergyInfo: "Multiple Allergy Friendly, Health-Focused",
+      websiteUrl: "https://www.facebook.com/cafeoptimi/",
+      isPurelyAllergyFriendly: false
+    }
+  ],
+  travelTips: [
+    {
+      title: "Contact in Advance",
+      description: "Contact the hotel and restaurant in advance to confirm your allergy needs. Most establishments appreciate advance notice to prepare properly."
+    },
+    {
+      title: "Speak with Staff",
+      description: "Speak with the chef or dining manager upon arrival. Direct communication ensures your specific requirements are clearly understood."
+    },
+    {
+      title: "Carry Allergy Cards",
+      description: "Carry allergy cards translated into the local language. This is especially helpful in Egypt, Spain, and Portugal where English may be limited in some venues."
+    }
+  ],
+  faqs: [
+    {
+      question: "Which warm winter destination is best for food allergies?",
+      answer: "Israel, particularly Tel Aviv, offers the most developed allergy-friendly dining scene with many dedicated gluten-free and vegan establishments. However, all destinations listed have verified allergy-aware hotels and restaurants."
+    },
+    {
+      question: "Are all-inclusive resorts safe for food allergies?",
+      answer: "Many all-inclusive resorts in Hurghada and Eilat have excellent allergy protocols. Always contact the hotel in advance and speak with the dining manager upon arrival to ensure your needs are documented."
+    },
+    {
+      question: "How can I communicate allergies in these destinations?",
+      answer: "Carry translated allergy cards in Portuguese (Madeira), Arabic (Egypt), Spanish (Canary Islands), and Hebrew (Israel). Many hotels have English-speaking staff, but allergy cards provide an extra layer of safety."
+    },
+    {
+      question: "What types of allergies are best accommodated?",
+      answer: "Gluten-free and dairy-free options are widely available across all destinations. Nut allergies are well understood in Israel and Europe. Always verify specific allergen protocols with each establishment."
+    },
+    {
+      question: "Is it safe to travel with severe allergies to these destinations?",
+      answer: "Yes, with proper preparation. All listed hotels and restaurants have verified positive feedback for allergy handling. Carry your medication, communicate clearly, and consider booking hotels with 24-hour medical access."
+    }
+  ],
+  languageTable: {
+    headers: ["English", "Portuguese", "Arabic", "Spanish", "Hebrew"],
+    rows: [
+      ["I have a food allergy", "Tenho alergia alimentar", "\u0639\u0646\u062F\u064A \u062D\u0633\u0627\u0633\u064A\u0629 \u0637\u0639\u0627\u0645", "Tengo alergia alimentaria", "\u05D9\u05E9 \u05DC\u05D9 \u05D0\u05DC\u05E8\u05D2\u05D9\u05D4 \u05DC\u05DE\u05D6\u05D5\u05DF"],
+      ["Gluten-free please", "Sem gl\xFAten, por favor", "\u0628\u062F\u0648\u0646 \u063A\u0644\u0648\u062A\u064A\u0646 \u0645\u0646 \u0641\u0636\u0644\u0643", "Sin gluten, por favor", "\u05D1\u05DC\u05D9 \u05D2\u05DC\u05D5\u05D8\u05DF, \u05D1\u05D1\u05E7\u05E9\u05D4"],
+      ["No nuts", "Sem nozes", "\u0628\u062F\u0648\u0646 \u0645\u0643\u0633\u0631\u0627\u062A", "Sin frutos secos", "\u05D1\u05DC\u05D9 \u05D0\u05D2\u05D5\u05D6\u05D9\u05DD"],
+      ["Dairy-free", "Sem latic\xEDnios", "\u0628\u062F\u0648\u0646 \u0645\u0646\u062A\u062C\u0627\u062A \u0627\u0644\u0623\u0644\u0628\u0627\u0646", "Sin l\xE1cteos", "\u05D1\u05DC\u05D9 \u05D7\u05DC\u05D1"],
+      ["Is this safe for me?", "Isto \xE9 seguro para mim?", "\u0647\u0644 \u0647\u0630\u0627 \u0622\u0645\u0646 \u0644\u064A\u061F", "\xBFEs seguro para m\xED?", "?\u05D6\u05D4 \u05D1\u05D8\u05D5\u05D7 \u05D1\u05E9\u05D1\u05D9\u05DC\u05D9"],
+      ["Emergency", "Emerg\xEAncia", "\u0637\u0648\u0627\u0631\u0626", "Emergencia", "\u05D7\u05D9\u05E8\u05D5\u05DD"]
+    ]
+  }
+};
+
+// src/data/destination-data.ts
+var destinationData = {
+  london: londonContent,
+  paris: parisContent,
+  barcelona: barcelonaContent,
+  cyprus: cyprusContent,
+  rome: romeContent,
+  "abu-dhabi": abuDhabiContent,
+  crete: creteContent,
+  tokyo: tokyoContent,
+  thailand: thailandContent,
+  "hotel-chains": hotelChainsContent,
+  "new-york": newYorkContent,
+  portugal: portugalContent,
+  "swiss-alps": swissAlpsContent,
+  "koh-samui": kohSamuiContent,
+  turkey: turkeyContent,
+  "cruise-lines": cruiseLinesContent,
+  toronto: torontoContent,
+  "ayia-napa": ayiaNapaContent,
+  "tuscany": tuscanyContent,
+  "gluten-free-europe": glutenFreeEuropeContent,
+  "athens": athensContent,
+  "eilat": eilatContent,
+  "airlines": airlinesContent,
+  "amsterdam": amsterdamContent,
+  "italy": italyContent,
+  "stockholm": stockholmContent,
+  "rhodes": rhodesContent,
+  "madrid": madridContent,
+  "flying-with-epipens": flyingWithEpipensContent,
+  "flying-with-epipens-north-america": flyingWithEpipensNorthAmericaContent,
+  "warm-winter-destinations": warmWinterContent
+};
+
+// src/lib/mcp/tools/get-destination-guide.ts
+function toText(intro3) {
+  if (!intro3) return "";
+  if (typeof intro3 === "string") return intro3;
+  if (Array.isArray(intro3)) return intro3.join("\n\n");
+  if (typeof intro3 === "object") {
+    const o = intro3;
     return [o.title, o.description, o.quickTip].filter(Boolean).join("\n\n");
   }
   return "";
@@ -60,7 +4396,7 @@ var get_destination_guide_default = defineTool2({
   handler: ({ id }) => {
     const key = id.trim().toLowerCase();
     const content = destinationData[key];
-    const meta = destinations2.find((d) => d.id === key);
+    const meta = destinations.find((d) => d.id === key);
     if (!content) {
       return {
         content: [
@@ -105,8 +4441,6 @@ var get_destination_guide_default = defineTool2({
 // src/lib/mcp/tools/search-hotels.ts
 import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z as z3 } from "npm:zod@^3.25.76";
-import { destinationData as destinationData2 } from "npm:@/data/destination-data";
-import { destinations as destinations3 } from "npm:@/data/destinations-list";
 var search_hotels_default = defineTool3({
   name: "search_hotels",
   title: "Search allergy-friendly hotels",
@@ -119,9 +4453,9 @@ var search_hotels_default = defineTool3({
   handler: ({ query, limit }) => {
     const q = query.trim().toLowerCase();
     const max = Math.max(1, Math.min(limit ?? 20, 50));
-    const nameById = new Map(destinations3.map((d) => [d.id, d.name]));
+    const nameById = new Map(destinations.map((d) => [d.id, d.name]));
     const results = [];
-    for (const [id, content] of Object.entries(destinationData2)) {
+    for (const [id, content] of Object.entries(destinationData)) {
       const destName = nameById.get(id) ?? id;
       for (const h of content.hotels ?? []) {
         const hay = [h.name, h.description, h.allergyInfo, destName, id, (h.allergenFriendly ?? []).join(" ")].filter(Boolean).join(" ").toLowerCase();

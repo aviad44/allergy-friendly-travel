@@ -1,7 +1,7 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { destinationData } from "@/data/destination-data";
-import { destinations } from "@/data/destinations-list";
+import { destinationData } from "../../../data/destination-data";
+import { destinations } from "../../../data/destinations-list";
 
 function toText(intro: unknown): string {
   if (!intro) return "";
