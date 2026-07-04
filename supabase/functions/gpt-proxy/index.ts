@@ -2,11 +2,16 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
+import { validateBody, z } from "../_shared/validation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const promptSchema = z.object({
+  prompt: z.string().trim().min(1).max(4000),
+});
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -27,9 +32,11 @@ serve(async (req) => {
 
     console.log('⏱️ Function invocation started at:', new Date().toISOString());
 
-    // Parse request body
-    const { prompt } = await req.json();
-    
+    // Validate request body
+    const validation = await validateBody(req, promptSchema, corsHeaders);
+    if (!validation.success) return validation.response;
+    const { prompt } = validation.data;
+
     console.log('✅ Processing search request with prompt:', { 
       promptPreview: prompt.substring(0, 50) + (prompt.length > 50 ? '...' : ''),
     });
