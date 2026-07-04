@@ -348,14 +348,11 @@ serve(async (req) => {
   const searchId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 
   try {
-    const { destination, allergies, mode = 'fast' } = await req.json();
+    const validation = await validateBody(req, restaurantsSchema, corsHeaders);
+    if (!validation.success) return validation.response;
+    const { destination, allergies, mode } = validation.data;
 
     console.log(`🔍 [${searchId}] dest="${destination}", allergies=${JSON.stringify(allergies)}`);
-
-    if (!destination) {
-      return new Response(JSON.stringify({ error: 'Destination is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
 
     const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
     if (!apiKey) {
