@@ -1,7 +1,5 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { isAuthorized } from "../_shared/verifyAuth.ts";
-import { validateBody, z } from "../_shared/validation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -32,11 +30,6 @@ const createJsonResponse = (data: any, status = 200) => {
   });
 }
 
-const translateSchema = z.object({
-  text: z.string().trim().min(1).max(5000),
-  targetLanguage: z.string().trim().min(1).max(60),
-});
-
 serve(async (req) => {
   // Log request details for debugging
   console.log(`Received ${req.method} request`);
@@ -44,10 +37,6 @@ serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(JSON.stringify({}), { headers: corsHeaders });
-  }
-
-  if (!(await isAuthorized(req))) {
-    return createJsonResponse({ error: 'Unauthorized', translatedText: null }, 401);
   }
 
   // Only allow POST requests
@@ -60,13 +49,45 @@ serve(async (req) => {
   }
 
   try {
-    // Validate request body (keeps translate-card's { translatedText } shape)
-    const validation = await validateBody(req, translateSchema, corsHeaders, {
-      onError: (payload, status) =>
-        createJsonResponse({ ...(payload as object), translatedText: null }, status),
-    });
-    if (!validation.success) return validation.response;
-    const { text, targetLanguage } = validation.data;
+    // Get request body and convert to text for safe parsing
+    let requestBody: string;
+    try {
+      requestBody = await req.text();
+      console.log("Received request body length:", requestBody.length);
+    } catch (textError) {
+      console.error("Failed to get request body as text:", textError);
+      return createJsonResponse(
+        { error: 'Failed to read request body', translatedText: null },
+        400
+      );
+    }
+    
+    let requestData;
+    
+    try {
+      requestData = JSON.parse(requestBody);
+      console.log("Successfully parsed request body");
+    } catch (parseError) {
+      console.error("Failed to parse request body:", parseError);
+      return createJsonResponse(
+        {
+          error: 'Invalid JSON in request body',
+          receivedText: requestBody.substring(0, 100), // First 100 chars for debug
+          translatedText: null
+        },
+        400
+      );
+    }
+    
+    const { text, targetLanguage } = requestData;
+
+    if (!text || !targetLanguage) {
+      console.error("Missing required fields:", { hasText: !!text, hasTargetLanguage: !!targetLanguage });
+      return createJsonResponse(
+        { error: 'Missing text or target language', translatedText: null },
+        400
+      );
+    }
 
     const apiKey = Deno.env.get('OPENAI_API_KEY');
     if (!apiKey) {

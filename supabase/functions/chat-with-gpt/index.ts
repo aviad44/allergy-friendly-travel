@@ -1,34 +1,16 @@
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
-import { validateBody, z } from "../_shared/validation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const chatSchema = z.object({
-  messages: z
-    .array(
-      z.object({
-        role: z.enum(['system', 'user', 'assistant']),
-        content: z.string().min(1).max(8000),
-      }),
-    )
-    .min(1)
-    .max(50),
-});
-
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
-  }
-
-  if (!(await isAuthorized(req))) {
-    return unauthorizedResponse(corsHeaders);
   }
 
   try {
@@ -38,10 +20,12 @@ serve(async (req) => {
       throw new Error('OpenAI API key is not configured');
     }
 
-    // Validate request body
-    const validation = await validateBody(req, chatSchema, corsHeaders);
-    if (!validation.success) return validation.response;
-    const { messages } = validation.data;
+    // Parse request body
+    const { messages } = await req.json();
+    if (!messages || !Array.isArray(messages)) {
+      console.error('❌ Invalid messages format:', messages);
+      throw new Error('Invalid request format: messages array is required');
+    }
 
     console.log('✅ Processing chat request with messages');
 
@@ -88,7 +72,10 @@ serve(async (req) => {
   } catch (error) {
     console.error('❌ Error in chat-with-gpt function:', error);
     return new Response(
-      JSON.stringify({ error: 'An unexpected error occurred' }),
+      JSON.stringify({ 
+        error: error instanceof Error ? error.message : 'An unexpected error occurred',
+        details: error instanceof Error ? error.stack : undefined
+      }),
       { 
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }

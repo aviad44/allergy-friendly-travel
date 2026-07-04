@@ -1,25 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
-import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
-import { validateBody, z } from "../_shared/validation.ts";
-
-// Escape HTML special characters to prevent HTML/phishing injection in emails
-const escapeHtml = (s: string) =>
-  String(s)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const contactSchema = z.object({
-  name: z.string().trim().min(1).max(200),
-  email: z.string().trim().max(320).regex(EMAIL_REGEX, "Invalid email address"),
-  message: z.string().trim().min(1).max(5000),
-});
 
 // Initialize Resend with API key
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
@@ -42,27 +23,27 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  if (!(await isAuthorized(req))) {
-    return unauthorizedResponse(corsHeaders);
-  }
-
   try {
-    {
-      const validation = await validateBody(req, contactSchema, corsHeaders, {
-        onError: (payload, status) =>
-          new Response(JSON.stringify({ ...(payload as object), success: false }), {
-            status,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }),
-      });
-      if (!validation.success) return validation.response;
-      const { name, email, message } = validation.data;
+    let requestData;
+    try {
+      requestData = await req.json();
+      const { name, email, message } = requestData;
       console.log(`✅ Request data parsed: ${name} (${email})`);
 
-      // Escaped, safe versions for HTML interpolation
-      const safeName = escapeHtml(name);
-      const safeEmail = escapeHtml(email);
-      const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
+      // Validate required fields
+      if (!name || !email || !message) {
+        console.error("❌ Missing required fields", { name, email, message: message ? "provided" : "missing" });
+        return new Response(
+          JSON.stringify({ 
+            error: "Missing required fields: name, email, and message are required",
+            success: false 
+          }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      }
 
       // Debug Resend API key
       console.log("📧 Attempting to use Resend with API key status:", !!resendApiKey);
@@ -90,10 +71,10 @@ serve(async (req) => {
           subject: "New Contact Form Submission - Allergy Free Travel",
           html: `
             <h2>New Contact Form Submission</h2>
-            <p><strong>Name:</strong> ${safeName}</p>
-            <p><strong>Email:</strong> ${safeEmail}</p>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
             <p><strong>Message:</strong></p>
-            <p>${safeMessage}</p>
+            <p>${message.replace(/\n/g, '<br>')}</p>
           `,
         });
 
@@ -124,10 +105,10 @@ serve(async (req) => {
             subject: "We've received your message - Allergy Free Travel",
             html: `
               <h2>Thank you for contacting Allergy Free Travel!</h2>
-              <p>Dear ${safeName},</p>
+              <p>Dear ${name},</p>
               <p>We've received your message and will get back to you as soon as possible.</p>
               <p>Here's a copy of your message:</p>
-              <p>${safeMessage}</p>
+              <p>${message.replace(/\n/g, '<br>')}</p>
               <p>Best regards,</p>
               <p>The Allergy Free Travel Team</p>
             `,
@@ -171,6 +152,19 @@ serve(async (req) => {
           }
         );
       }
+    } catch (parseError) {
+      console.error("❌ Failed to parse request body:", parseError);
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid request body", 
+          details: parseError instanceof Error ? parseError.message : 'Unknown parsing error',
+          success: false
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
     }
   } catch (error) {
     console.error('❌ Error in send-contact-email function:', error);

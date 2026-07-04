@@ -1,18 +1,11 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
-import { allergiesSchema, validateBody, z } from "../_shared/validation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
 };
-
-const searchSchema = z.object({
-  destination: z.string().trim().min(1).max(200),
-  allergies: allergiesSchema,
-});
 
 serve(async (req) => {
   console.log('🚀 Edge Function started!');
@@ -22,17 +15,25 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  if (!(await isAuthorized(req))) {
-    return unauthorizedResponse(corsHeaders);
-  }
-
   try {
     console.log('📋 Request method:', req.method);
     console.log('📋 Request URL:', req.url);
     
-    const validation = await validateBody(req, searchSchema, corsHeaders);
-    if (!validation.success) return validation.response;
-    const { destination, allergies } = validation.data;
+    const requestData = await req.json();
+    console.log('📨 Received data:', requestData);
+    
+    const { destination, allergies } = requestData;
+    
+    if (!destination || !allergies) {
+      console.log('❌ Missing required data');
+      return new Response(JSON.stringify({ 
+        error: "Missing destination or allergies",
+        received: { destination, allergies }
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     console.log('🔑 API Key exists:', !!OPENAI_API_KEY);

@@ -1,15 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
-import { validateBody, z } from "../_shared/validation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-const contactSchema = z.object({
-  placeId: z.string().trim().min(1).max(300),
-});
 
 // Daily quota guard
 const DAILY_CONTACT_QUOTA = 200;
@@ -35,16 +29,17 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  if (!(await isAuthorized(req))) {
-    return unauthorizedResponse(corsHeaders);
-  }
-
   try {
-    const validation = await validateBody(req, contactSchema, corsHeaders);
-    if (!validation.success) return validation.response;
-    const { placeId } = validation.data;
-
+    const { placeId } = await req.json();
+    
     console.log('📞 Contact details request for:', placeId);
+
+    if (!placeId) {
+      return new Response(
+        JSON.stringify({ error: 'placeId is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
     if (!apiKey) {

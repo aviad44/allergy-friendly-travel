@@ -1,18 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
-import { allergiesSchema, validateBody, z } from "../_shared/validation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-const restaurantsSchema = z.object({
-  destination: z.string().trim().min(1).max(200),
-  allergies: z.array(z.string().trim().min(1).max(100)).max(50).optional().default([]),
-  mode: z.enum(['fast']).optional().default('fast'),
-});
 
 // ==========================================
 // FAST MODE CONFIG — Cost-optimized
@@ -340,19 +332,18 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  if (!(await isAuthorized(req))) {
-    return unauthorizedResponse(corsHeaders);
-  }
-
   const startTime = Date.now();
   const searchId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 
   try {
-    const validation = await validateBody(req, restaurantsSchema, corsHeaders);
-    if (!validation.success) return validation.response;
-    const { destination, allergies, mode } = validation.data;
+    const { destination, allergies, mode = 'fast' } = await req.json();
 
     console.log(`🔍 [${searchId}] dest="${destination}", allergies=${JSON.stringify(allergies)}`);
+
+    if (!destination) {
+      return new Response(JSON.stringify({ error: 'Destination is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
 
     const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
     if (!apiKey) {
