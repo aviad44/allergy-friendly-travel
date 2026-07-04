@@ -51,22 +51,22 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "Allergy Free Travel <onboarding@resend.dev>",
       to: ["aviad44@gmail.com"],
-      subject: `ביקורת חדשה נוספה לאתר - ${rating} כוכבים`,
+      subject: `ביקורת חדשה נוספה לאתר - ${safeRating} כוכבים`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; direction: rtl;">
           <h1 style="color: #2563eb; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">ביקורת חדשה נוספה לאתר</h1>
           
           <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <h3 style="margin: 0 0 10px 0; color: #374151;">פרטי הביקורת:</h3>
-            <p><strong>שם המחבר:</strong> ${authorName}</p>
-            <p><strong>דירוג:</strong> ${'⭐'.repeat(rating)} (${rating}/5)</p>
-            ${destination ? `<p><strong>יעד:</strong> ${destination}</p>` : ''}
-            ${travelerType ? `<p><strong>סוג נוסע:</strong> ${travelerType}</p>` : ''}
+            <p><strong>שם המחבר:</strong> ${safeAuthorName}</p>
+            <p><strong>דירוג:</strong> ${'⭐'.repeat(safeRating)} (${safeRating}/5)</p>
+            ${safeDestination ? `<p><strong>יעד:</strong> ${safeDestination}</p>` : ''}
+            ${safeTravelerType ? `<p><strong>סוג נוסע:</strong> ${safeTravelerType}</p>` : ''}
           </div>
           
           <div style="background-color: #f0f9ff; padding: 15px; border-radius: 8px; border-right: 4px solid #2563eb;">
             <h3 style="margin: 0 0 10px 0; color: #1e40af;">תוכן הביקורת:</h3>
-            <p style="line-height: 1.6; color: #374151;">"${reviewText}"</p>
+            <p style="line-height: 1.6; color: #374151;">"${safeReviewText}"</p>
           </div>
           
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
