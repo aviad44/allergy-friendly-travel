@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "allergy-friendly-travel-mcp",
+      "version": "0.1.0",
+      "title": "Allergy-Friendly Travel MCP"
+    },
+    "tools": [
+      {
+        "name": "list_destinations",
+        "title": "List destinations",
+        "description": "List all allergy-friendly travel destination guides on the site, with id, name, country, and a short description. Use the returned id with get_destination_guide.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Optional case-insensitive filter matched against name, country, or description."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_destination_guide",
+        "title": "Get destination guide",
+        "description": "Get the full allergy-friendly guide for one destination by its id (from list_destinations): intro, hotels, restaurants, FAQs, and travel tips.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Destination id, e.g. 'london', 'paris', 'tuscany'."
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_hotels",
+        "title": "Search allergy-friendly hotels",
+        "description": "Search allergy-friendly hotels across all destination guides by keyword (hotel name, destination, or allergy info). Returns matching hotels with the destination they belong to.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Keyword, e.g. 'gluten-free London', 'nut-free', or a hotel name."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max results to return. Defaults to 20."
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
