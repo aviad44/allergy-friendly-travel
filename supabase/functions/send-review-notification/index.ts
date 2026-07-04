@@ -2,6 +2,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
+import { validateBody, z } from "../_shared/validation.ts";
 
 const escapeHtml = (s: unknown) =>
   String(s ?? "")
@@ -19,13 +20,13 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface ReviewNotificationRequest {
-  authorName: string;
-  reviewText: string;
-  rating: number;
-  destination?: string;
-  travelerType?: string;
-}
+const reviewSchema = z.object({
+  authorName: z.string().trim().min(1).max(200),
+  reviewText: z.string().trim().min(1).max(5000),
+  rating: z.coerce.number().min(0).max(5),
+  destination: z.string().trim().max(200).optional(),
+  travelerType: z.string().trim().max(200).optional(),
+});
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -38,7 +39,9 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { authorName, reviewText, rating, destination, travelerType }: ReviewNotificationRequest = await req.json();
+    const validation = await validateBody(req, reviewSchema, corsHeaders);
+    if (!validation.success) return validation.response;
+    const { authorName, reviewText, rating, destination, travelerType } = validation.data;
 
     console.log("Sending review notification email for:", { authorName, rating });
 
