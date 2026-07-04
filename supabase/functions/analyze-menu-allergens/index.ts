@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
+import { validateBody, z } from "../_shared/validation.ts";
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
@@ -8,6 +9,11 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const menuSchema = z.object({
+  menuText: z.string().trim().min(1).max(20000),
+  targetAllergens: z.array(z.string().trim().min(1).max(100)).max(50).default([]),
+});
 
 interface AllergenMatch {
   allergen: string;
@@ -25,14 +31,9 @@ serve(async (req) => {
   }
 
   try {
-    const { menuText, targetAllergens = [] } = await req.json();
-
-    if (!menuText || typeof menuText !== 'string') {
-      return new Response(
-        JSON.stringify({ error: 'Menu text is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    const validation = await validateBody(req, menuSchema, corsHeaders, { maxBytes: 50_000 });
+    if (!validation.success) return validation.response;
+    const { menuText, targetAllergens } = validation.data;
 
     const systemPrompt = `You are a CRITICAL SAFETY allergen detection system for restaurant menus. Lives depend on your accuracy.
 

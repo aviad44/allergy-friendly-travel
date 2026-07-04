@@ -2,11 +2,24 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { isAuthorized, unauthorizedResponse } from "../_shared/verifyAuth.ts";
+import { validateBody, z } from "../_shared/validation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const chatSchema = z.object({
+  messages: z
+    .array(
+      z.object({
+        role: z.enum(['system', 'user', 'assistant']),
+        content: z.string().min(1).max(8000),
+      }),
+    )
+    .min(1)
+    .max(50),
+});
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -25,12 +38,10 @@ serve(async (req) => {
       throw new Error('OpenAI API key is not configured');
     }
 
-    // Parse request body
-    const { messages } = await req.json();
-    if (!messages || !Array.isArray(messages)) {
-      console.error('❌ Invalid messages format:', messages);
-      throw new Error('Invalid request format: messages array is required');
-    }
+    // Validate request body
+    const validation = await validateBody(req, chatSchema, corsHeaders);
+    if (!validation.success) return validation.response;
+    const { messages } = validation.data;
 
     console.log('✅ Processing chat request with messages');
 
