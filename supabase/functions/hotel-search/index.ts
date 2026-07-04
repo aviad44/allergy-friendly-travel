@@ -29,11 +29,11 @@ serve(async (req) => {
       });
     }
 
-    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
-    if (!OPENAI_API_KEY) {
+    if (!LOVABLE_API_KEY) {
       return new Response(JSON.stringify({ 
-        error: "OpenAI API key not configured"
+        error: "AI gateway key not configured"
       }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -44,14 +44,14 @@ serve(async (req) => {
     
     console.log('🤖 Making OpenAI request for:', destination, 'with allergies:', allergiesText);
     
-    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+    const openaiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "google/gemini-2.5-flash",
         response_format: { type: "json_object" },
         messages: [
           {
@@ -95,13 +95,20 @@ Example response:
             content: `Find 5-7 REAL allergy-friendly hotels in ${destination} for guests with ${allergiesText} allergies. Return only the JSON object with results array.`
           }
         ],
-        max_tokens: 2500,
       }),
     });
 
     if (!openaiResponse.ok) {
       const errorData = await openaiResponse.json();
       console.log('❌ OpenAI API error:', errorData);
+      if (openaiResponse.status === 429) {
+        return new Response(JSON.stringify({ 
+          error: "Search is busy right now. Please try again in a moment."
+        }), {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
       return new Response(JSON.stringify({ 
         error: "Failed to get hotel recommendations",
         details: errorData.error?.message || "Unknown error"
