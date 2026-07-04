@@ -1,5 +1,6 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { isAuthorized } from "../_shared/verifyAuth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -37,6 +38,10 @@ serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(JSON.stringify({}), { headers: corsHeaders });
+  }
+
+  if (!(await isAuthorized(req))) {
+    return createJsonResponse({ error: 'Unauthorized', translatedText: null }, 401);
   }
 
   // Only allow POST requests
