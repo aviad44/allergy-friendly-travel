@@ -45,7 +45,6 @@ const STRICT_TERMS = [
   'sans gluten', 'sans lactose', 'sans noix',
   'glutenfrei', 'laktosefrei', 'nussfrei',
   'dietary needs', 'dietary requirements', 'special dietary',
-  'can accommodate', 'accommodated my', 'very accommodating',
   'gf menu', 'gf options', 'df options', 'nf options',
   'room service allergy', 'breakfast allergy', 'buffet allergy',
 ];
@@ -159,7 +158,7 @@ function classifyAndExtract(reviewText: string, author: string, relativeTime: st
     relativeTime,
     hasAllergyMention: true,
     score,
-    matchedTerms: allMatched.slice(0, 6),
+    matchedTerms: [...new Set(allMatched)].slice(0, 6),
   };
 }
 
