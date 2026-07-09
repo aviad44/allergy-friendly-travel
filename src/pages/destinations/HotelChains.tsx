@@ -7,12 +7,9 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 import { DESTINATION_OG_IMAGES } from "@/utils/socialSharing";
+import { MetaManager } from "@/components/MetaManager";
 
 export default function HotelChains() {
-  // SEO metadata
-  const pageTitle = "Top Allergy-Friendly Hotel Chains Worldwide (2025 Guide)";
-  const pageDescription = "Discover the top global hotel chains with allergy-friendly and celiac-safe food policies. Learn which hotels accommodate food allergies and offer certified allergy-safe services.";
-  const canonicalUrl = "https://www.allergy-free-travel.com/destinations/hotel-chains";
   const imageUrl = DESTINATION_OG_IMAGES['hotel-chains'];
   
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
@@ -26,7 +23,8 @@ export default function HotelChains() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      
+      <MetaManager />
+
       {/* Hero Image */}
       <div className="relative h-60 sm:h-72 md:h-96 overflow-hidden">
         <img 

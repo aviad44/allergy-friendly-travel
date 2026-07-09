@@ -6,6 +6,7 @@ import {
   AccordionTrigger 
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MetaManager } from "@/components/MetaManager";
 
 export default function FAQ() {
   const faqCategories = [
@@ -121,6 +122,7 @@ export default function FAQ() {
 
   return (
     <div className="min-h-screen bg-white">
+      <MetaManager />
 
       <main className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="max-w-4xl mx-auto space-y-10">

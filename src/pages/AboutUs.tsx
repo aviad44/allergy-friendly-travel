@@ -1,12 +1,14 @@
 
 import React from "react";
 
+import { MetaManager } from "@/components/MetaManager";
 import { StructuredData } from "@/components/StructuredData";
 
 const AboutUs = () => {
   return (
     <div className="min-h-screen bg-gray-50 w-full">
-      
+      <MetaManager />
+
       <StructuredData
         type="article"
         title="About Allergy-Free Travel - Our Mission to Make Travel Safe for Everyone"

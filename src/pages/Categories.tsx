@@ -2,6 +2,7 @@
 import { MapPin, Star, Shield, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { MetaManager } from "@/components/MetaManager";
 
 const categories = [
   {
@@ -60,6 +61,7 @@ const destinationArticles = [
 const Categories = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 px-4">
+      <MetaManager />
       <div className="container max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <Link to="/">
