@@ -14,6 +14,7 @@ const MenuScanner = () => {
         }}
       />
       
+      <h1 className="sr-only">Menu Allergen Scanner</h1>
       <MenuScannerComponent />
     </>
   );

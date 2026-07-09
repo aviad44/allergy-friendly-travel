@@ -152,7 +152,8 @@ const Reviews = () => {
 
       <div className="hero-gradient absolute inset-0 z-0" />
       <div className="relative z-10">
-        <div className="container mx-auto px-4 py-12 max-w-6xl"> 
+        <div className="container mx-auto px-4 py-12 max-w-6xl">
+          <h1 className="sr-only">Allergy-Friendly Hotel Reviews from Real Travelers</h1>
           {error && (
             <Alert variant="destructive" className="mb-6">
               <AlertCircle className="h-4 w-4 mr-2" />
