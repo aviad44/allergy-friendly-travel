@@ -56,6 +56,8 @@ import FlyingWithEpipensNorthAmerica from "./pages/destinations/FlyingWithEpipen
 import WarmWinterDestinations from "./pages/destinations/WarmWinterDestinations";
 import { SEOHead } from "@/components/SEOHead";
 import { DefaultMetaTags } from "@/components/DefaultMetaTags";
+import Articles from "@/pages/Articles";
+import ArticleDetail from "@/pages/ArticleDetail";
 // import MenuScanner from "./pages/MenuScanner"; // Temporarily disabled
 
 const ScrollToTop = () => {
@@ -112,6 +114,8 @@ const AppContent = () => {
           <Route path="/destinations/tuscany" element={<Tuscany />} />
           <Route path="/destinations/gluten-free-europe" element={<GlutenFreeEurope />} />
           <Route path="/search-results" element={<SearchResults />} />
+          <Route path="/articles" element={<Articles />} />
+          <Route path="/articles/:slug" element={<ArticleDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/categories" element={<Categories />} />

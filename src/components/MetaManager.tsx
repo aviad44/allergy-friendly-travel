@@ -128,6 +128,13 @@ const routeMeta: Record<string, RouteMeta> = {
     description: "Personalized results for your allergy-friendly hotel search.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
+  "/articles": {
+    title: "Allergy-Friendly Travel Guides | Allergy-Free Travel",
+    description:
+      "Destination guides built from real Google reviews mentioning food allergies — real hotels, real evidence, no invented reviews.",
+    image: DEFAULT_SOCIAL_IMAGE,
+    type: "website",
+  },
   "/language-stats": {
     title: "Language Usage Statistics - Allergy Card Translations",
     description: "View statistics on which languages are most requested for allergy card translations to help improve our service.",

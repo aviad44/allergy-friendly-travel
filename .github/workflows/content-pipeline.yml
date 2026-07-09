@@ -1,0 +1,54 @@
+name: Content Pipeline (Real Hotel Discovery + Article Generation)
+
+# Runs every 2 days. Calls the content-pipeline Supabase Edge Function, which:
+#   1. Discovers real hotels for the next destination via Google Places, keeping
+#      only reviews that actually mention food allergies (no AI-invented content).
+#   2. Writes an SEO article grounded only in that real evidence and publishes it.
+# All secrets (Google Places, OpenAI) live in Supabase, not here — this workflow
+# only needs the public Supabase URL and anon key, both already committed in .env.
+
+on:
+  schedule:
+    - cron: "0 9 */2 * *"   # every 2 days at 09:00 UTC
+  workflow_dispatch: {}       # allow manual trigger from the GitHub Actions UI
+
+jobs:
+  run-pipeline:
+    name: Run content pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Call content-pipeline Edge Function
+        id: call
+        run: |
+          SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
+          SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/content-pipeline" \
+            -H "Content-Type: application/json" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -d '{}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response: $BODY"
+          echo "body=$BODY" >> "$GITHUB_OUTPUT"
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::content-pipeline returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+      - name: Write job summary
+        if: always()
+        run: |
+          echo "## Content Pipeline Run" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          echo '${{ steps.call.outputs.body }}' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
