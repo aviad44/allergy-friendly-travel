@@ -112,6 +112,7 @@ const Categories = () => {
                   <img
                     src={article.image}
                     alt={article.title}
+                    loading="lazy"
                     className="object-cover w-full h-48 group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>

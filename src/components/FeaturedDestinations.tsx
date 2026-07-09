@@ -166,7 +166,7 @@ export const FeaturedDestinations = () => {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {FEATURED_DESTINATIONS.slice(0, 6).map((destination) => {
+        {FEATURED_DESTINATIONS.slice(0, 6).map((destination, index) => {
           // Get the image from our centralized constants if available
           const imageToUse = destination.destId && destinationImages[destination.destId] 
             ? destinationImages[destination.destId] 
@@ -197,8 +197,8 @@ export const FeaturedDestinations = () => {
                     className={`object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105 ${loadedImages[destination.id] ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => handleImageLoaded(destination.id)}
                     onError={(e) => handleImageError(destination.id, e)}
-                    loading="eager"
-                    fetchPriority="high"
+                    loading={index < 2 ? "eager" : "lazy"}
+                    fetchPriority={index < 2 ? "high" : "auto"}
                     width="390" 
                     height="244"
                     decoding="async"
