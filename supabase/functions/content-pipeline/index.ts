@@ -286,7 +286,7 @@ async function generateArticle(openaiKey: string, destination: { city: string; c
     .in('hotel_id', hotelIds)
     .eq('source_type', 'google');
 
-  if (!sources || sources.length === 0) return null;
+  if (!sources || sources.length === 0) return { article: null, errorDetail: 'No hotel_sources rows found for discovered hotel IDs' };
 
   const evidenceBlock = sources.map((s: any, i: number) =>
     `Hotel ${i + 1}: ${s.hotels?.name}\nAddress: ${s.hotels?.address || 'N/A'}\nReal Google review excerpt: "${s.raw_text}"`
@@ -320,17 +320,18 @@ Write a JSON object with this exact shape, no markdown fences:
   });
 
   if (!res.ok) {
-    console.error('OpenAI API error:', res.status, await res.text());
-    return null;
+    const bodyText = await res.text();
+    console.error('OpenAI API error:', res.status, bodyText);
+    return { article: null, errorDetail: `OpenAI API ${res.status}: ${bodyText.slice(0, 300)}` };
   }
 
   const data = await res.json();
   const raw = data.choices?.[0]?.message?.content || "";
   try {
-    return JSON.parse(raw.replace(/```json\s*/g, '').replace(/```\s*/g, ''));
+    return { article: JSON.parse(raw.replace(/```json\s*/g, '').replace(/```\s*/g, '')), errorDetail: null };
   } catch (e) {
     console.error('Failed to parse article JSON:', e, raw.slice(0, 300));
-    return null;
+    return { article: null, errorDetail: `JSON parse failed: ${String(e)}. Raw: ${raw.slice(0, 300)}` };
   }
 }
 
@@ -393,7 +394,7 @@ serve(async (req) => {
 
       try {
         const hotelIds = discovery.discovered.map(d => d.hotelId);
-        const article = await generateArticle(openaiKey, destination, hotelIds, supabase);
+        const { article, errorDetail } = await generateArticle(openaiKey, destination, hotelIds, supabase);
 
         if (article?.slug && article?.content_markdown) {
           const wordCount = article.content_markdown.split(/\s+/).length;
@@ -420,7 +421,7 @@ serve(async (req) => {
           }).eq('id', contentLog.id);
         } else {
           await supabase.from('pipeline_log').update({
-            status: 'error', error_message: 'AI did not return a valid article', finished_at: new Date().toISOString(),
+            status: 'error', error_message: errorDetail || 'AI did not return a valid article', finished_at: new Date().toISOString(),
           }).eq('id', contentLog.id);
         }
       } catch (err) {
