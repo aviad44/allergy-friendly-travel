@@ -208,8 +208,8 @@ async function discoverHotels(supabase: any, apiKey: string, destination: { city
   const discovered: { hotelId: string; name: string; allergens: string[] }[] = [];
   let detailsFetched = 0;
 
-  for (const candidate of candidates.slice(0, 12)) {
-    if (detailsFetched >= 10) break;
+  for (const candidate of candidates.slice(0, 20)) {
+    if (detailsFetched >= 20) break;
     const details = await fetchDetails(candidate.place_id, apiKey);
     detailsFetched++;
     const reviews = details?.reviews || [];
