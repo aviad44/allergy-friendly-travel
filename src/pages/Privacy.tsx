@@ -18,7 +18,7 @@ const Privacy = () => {
       
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <section className="bg-white p-8 rounded-lg shadow-sm">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-6 text-blue-800">Privacy Policy</h2>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-6 text-blue-800">Privacy Policy</h1>
           <p className="text-gray-600 italic mb-6">Last Updated: {currentDate}</p>
 
           <p className="mb-6">This Privacy Policy describes how we collect, use, and protect your personal information when you use our website, which helps travelers with food allergies find allergy-friendly hotels.</p>
