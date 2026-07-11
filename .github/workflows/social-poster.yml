@@ -1,0 +1,53 @@
+name: Social Poster (Facebook + Instagram)
+
+# Runs daily. Calls the social-poster Supabase Edge Function, which posts the
+# oldest published article that hasn't been shared yet to Facebook and/or
+# Instagram, using a real Unsplash photo and a caption built from the
+# article's actual title/description — no invented content.
+# All secrets (Facebook, Instagram, Unsplash) live in Supabase, not here.
+
+on:
+  schedule:
+    - cron: "0 15 * * *"   # daily at 15:00 UTC
+  workflow_dispatch: {}       # allow manual trigger from the GitHub Actions UI
+
+jobs:
+  run-social-poster:
+    name: Post latest article to social
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Call social-poster Edge Function
+        id: call
+        run: |
+          SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
+          SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/social-poster" \
+            -H "Content-Type: application/json" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -d '{}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response: $BODY"
+          echo "body=$BODY" >> "$GITHUB_OUTPUT"
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::social-poster returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+      - name: Write job summary
+        if: always()
+        run: |
+          echo "## Social Poster Run" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          echo '${{ steps.call.outputs.body }}' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
