@@ -379,9 +379,13 @@ export type Database = {
           content_markdown: string | null
           created_at: string | null
           focus_keyword: string | null
+          hero_image_credit: string | null
+          hero_image_url: string | null
           hotel_ids: string[] | null
           id: string
           meta_description: string | null
+          posted_to_facebook_at: string | null
+          posted_to_instagram_at: string | null
           published_at: string | null
           related_keywords: string[] | null
           slug: string | null
@@ -396,9 +400,13 @@ export type Database = {
           content_markdown?: string | null
           created_at?: string | null
           focus_keyword?: string | null
+          hero_image_credit?: string | null
+          hero_image_url?: string | null
           hotel_ids?: string[] | null
           id?: string
           meta_description?: string | null
+          posted_to_facebook_at?: string | null
+          posted_to_instagram_at?: string | null
           published_at?: string | null
           related_keywords?: string[] | null
           slug?: string | null
@@ -413,9 +421,13 @@ export type Database = {
           content_markdown?: string | null
           created_at?: string | null
           focus_keyword?: string | null
+          hero_image_credit?: string | null
+          hero_image_url?: string | null
           hotel_ids?: string[] | null
           id?: string
           meta_description?: string | null
+          posted_to_facebook_at?: string | null
+          posted_to_instagram_at?: string | null
           published_at?: string | null
           related_keywords?: string[] | null
           slug?: string | null
@@ -603,9 +615,3 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-
-export const Constants = {
-  public: {
-    Enums: {},
-  },
-} as const

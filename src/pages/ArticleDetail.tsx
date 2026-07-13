@@ -12,6 +12,8 @@ interface Article {
   content_markdown: string | null;
   hotel_ids: string[] | null;
   published_at: string | null;
+  hero_image_url: string | null;
+  hero_image_credit: string | null;
 }
 
 interface HotelRef {
@@ -36,7 +38,7 @@ const ArticleDetail = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('seo_articles')
-        .select('title, slug, meta_description, content_markdown, hotel_ids, published_at')
+        .select('title, slug, meta_description, content_markdown, hotel_ids, published_at, hero_image_url, hero_image_credit')
         .eq('slug', slug)
         .eq('status', 'published')
         .single();
@@ -86,6 +88,20 @@ const ArticleDetail = () => {
 
         <article className="bg-white">
           <h1 className="font-display text-3xl sm:text-4xl font-bold mb-6 text-blue-800">{article.title}</h1>
+
+          {article.hero_image_url && (
+            <figure className="mb-8">
+              <img
+                src={article.hero_image_url}
+                alt={article.title}
+                className="w-full h-64 sm:h-96 object-cover rounded-lg"
+                loading="eager"
+              />
+              {article.hero_image_credit && (
+                <figcaption className="text-xs text-gray-500 mt-2">{article.hero_image_credit}</figcaption>
+              )}
+            </figure>
+          )}
 
           <div className="prose prose-blue max-w-none mb-10">
             <ReactMarkdown>{article.content_markdown || ''}</ReactMarkdown>

@@ -198,6 +198,43 @@ function slugifyHotel(name: string, city: string): string {
   return `${name}-${city}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
+interface UnsplashPhoto {
+  url: string;
+  credit: string;
+}
+
+// Unsplash API guidelines require: (1) attribution to photographer + Unsplash,
+// (2) a "download" tracking ping when a photo is used in production.
+async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<UnsplashPhoto | null> {
+  try {
+    const searchRes = await fetch(
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape&content_filter=high`,
+      { headers: { Authorization: `Client-ID ${accessKey}` } }
+    );
+    if (!searchRes.ok) {
+      console.error('Unsplash search failed:', searchRes.status, await searchRes.text());
+      return null;
+    }
+    const data = await searchRes.json();
+    const photo = data.results?.[0];
+    if (!photo) return null;
+
+    try {
+      await fetch(`${photo.links.download_location}&client_id=${accessKey}`);
+    } catch (err) {
+      console.error('Unsplash download ping failed (non-fatal):', err);
+    }
+
+    return {
+      url: photo.urls.regular,
+      credit: `Photo by ${photo.user.name} on Unsplash (${photo.links.html})`,
+    };
+  } catch (err) {
+    console.error('Unsplash fetch error:', err);
+    return null;
+  }
+}
+
 // ==========================================
 // STEP 1: Discover real hotels + real allergy evidence for a destination
 // ==========================================
@@ -288,11 +325,16 @@ async function generateArticle(openaiKey: string, destination: { city: string; c
 
   if (!sources || sources.length === 0) return { article: null, errorDetail: 'No hotel_sources rows found for discovered hotel IDs' };
 
+  const allowedNames: string[] = sources.map((s: any) => s.hotels?.name).filter(Boolean);
   const evidenceBlock = sources.map((s: any, i: number) =>
     `Hotel ${i + 1}: ${s.hotels?.name}\nAddress: ${s.hotels?.address || 'N/A'}\nReal Google review excerpt: "${s.raw_text}"`
   ).join('\n\n');
+  const allowedNamesList = allowedNames.map((n, i) => `${i + 1}. ${n}`).join('\n');
 
   const prompt = `You are writing a factual travel guide article for a food-allergy travel website. You may ONLY use the real hotels and real review excerpts provided below — do not invent hotels, quotes, or reviewer names. Do not attribute quotes to specific reviewer names (say "one guest wrote" instead).
+
+THE ONLY HOTELS YOU ARE ALLOWED TO NAME ANYWHERE IN THIS ARTICLE (including the introduction and conclusion — do not name any other hotel, even a real, famous one you know from training data):
+${allowedNamesList}
 
 Destination: ${destination.city}, ${destination.country}
 
@@ -306,7 +348,8 @@ Write a JSON object with this exact shape, no markdown fences:
   "meta_description": "150-160 char meta description",
   "focus_keyword": "primary keyword phrase",
   "related_keywords": ["keyword1", "keyword2", "keyword3"],
-  "content_markdown": "full article in Markdown, 500-800 words: intro, a section per hotel referencing its real review excerpt (paraphrase or quote it directly, never invent new claims beyond what the excerpt supports), a short practical tips section, and a conclusion"
+  "content_markdown": "full article in Markdown, 500-800 words: intro, a section per hotel referencing its real review excerpt (paraphrase or quote it directly, never invent new claims beyond what the excerpt supports), a short practical tips section, and a conclusion. The conclusion must only reference hotels from the allowed list above.",
+  "hotels_mentioned": ["every hotel name you named anywhere in content_markdown, including the conclusion — must be an exact or near-exact match to names from the allowed list above"]
 }`;
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -327,12 +370,32 @@ Write a JSON object with this exact shape, no markdown fences:
 
   const data = await res.json();
   const raw = data.choices?.[0]?.message?.content || "";
+  let article: any;
   try {
-    return { article: JSON.parse(raw.replace(/```json\s*/g, '').replace(/```\s*/g, '')), errorDetail: null };
+    article = JSON.parse(raw.replace(/```json\s*/g, '').replace(/```\s*/g, ''));
   } catch (e) {
     console.error('Failed to parse article JSON:', e, raw.slice(0, 300));
     return { article: null, errorDetail: `JSON parse failed: ${String(e)}. Raw: ${raw.slice(0, 300)}` };
   }
+
+  // Safety net: the model self-reports every hotel name it used (including in the
+  // conclusion, where fabrication has actually happened in practice — it named a real
+  // but unrelated hotel that was never in the evidence). Reject rather than publish
+  // if any self-reported name doesn't match one we actually provided.
+  const normalizeName = (s: string) => s.toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
+  const normalizedAllowed = allowedNames.map(normalizeName);
+  const mentioned: string[] = Array.isArray(article.hotels_mentioned) ? article.hotels_mentioned : [];
+  const unrecognized = mentioned.filter((m) => {
+    const norm = normalizeName(String(m));
+    return !normalizedAllowed.some((allowed) => norm.includes(allowed) || allowed.includes(norm));
+  });
+
+  if (unrecognized.length > 0) {
+    console.error('Fabricated hotel names detected:', unrecognized, 'allowed:', allowedNames);
+    return { article: null, errorDetail: `Rejected: article mentioned hotel(s) not in the real evidence list: ${unrecognized.join(', ')}` };
+  }
+
+  return { article, errorDetail: null };
 }
 
 // ==========================================
@@ -345,6 +408,7 @@ serve(async (req) => {
   const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
   const openaiKey = Deno.env.get('OPENAI_API_KEY');
+  const unsplashKey = Deno.env.get('UNSPLASH_ACCESS_KEY');
 
   if (!supabaseUrl || !supabaseKey || !apiKey) {
     return new Response(JSON.stringify({ error: 'Missing required environment configuration' }),
@@ -398,6 +462,17 @@ serve(async (req) => {
 
         if (article?.slug && article?.content_markdown) {
           const wordCount = article.content_markdown.split(/\s+/).length;
+
+          let heroImageUrl: string | null = null;
+          let heroImageCredit: string | null = null;
+          if (unsplashKey) {
+            const photo = await fetchUnsplashPhoto(`${destination.city} travel`, unsplashKey);
+            if (photo) {
+              heroImageUrl = photo.url;
+              heroImageCredit = photo.credit;
+            }
+          }
+
           const { error: insertErr } = await supabase.from('seo_articles').upsert({
             title: article.title,
             slug: article.slug,
@@ -409,6 +484,8 @@ serve(async (req) => {
             word_count: wordCount,
             status: 'published',
             ai_generated: true,
+            hero_image_url: heroImageUrl,
+            hero_image_credit: heroImageCredit,
             published_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           }, { onConflict: 'slug' });
