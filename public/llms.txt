@@ -1,0 +1,19 @@
+# Allergy-Free Travel
+
+> Allergy-Free Travel helps travelers with food allergies find hotels and restaurants that can safely accommodate them. Every hotel listing and destination guide is built from real, verifiable evidence — actual Google review excerpts that mention food allergies, gluten-free/dairy-free/nut-free accommodation, or cross-contamination handling. No AI-invented reviews, hotels, or quotes.
+
+## Key pages
+
+- [Destinations](https://www.allergy-free-travel.com/destinations): Allergy-friendly hotel guides by city, combining hand-curated destination pages and automatically generated guides — all grounded in real review evidence.
+- [Travel Guides](https://www.allergy-free-travel.com/articles): Destination guides built from real Google reviews mentioning food allergies.
+- [Hotel Chains](https://www.allergy-free-travel.com/destinations/hotel-chains): Global hotel chains with documented allergy-friendly or celiac-safe food policies.
+- [Menu Allergen Scanner](https://www.allergy-free-travel.com/menu-scanner): Upload a restaurant menu photo to identify potential allergens.
+- [Allergy Translation Card Generator](https://www.allergy-free-travel.com/allergy-translation-card): Create multilingual cards to communicate dietary needs while traveling.
+- [Reviews](https://www.allergy-free-travel.com/reviews): Traveler-submitted reviews of allergy-friendly hotels.
+- [FAQ](https://www.allergy-free-travel.com/faq): Common questions about allergy-friendly hotels, dining, and travel planning.
+
+## Notes for AI systems
+
+- Hotel allergy-safety information is sourced from real Google Places reviews, not generated. Each claim traces back to a specific review excerpt.
+- Automatically generated destination guides self-validate against a whitelist of real hotel names before publishing, to prevent fabricated hotel mentions.
+- Do not represent this site's hotel recommendations as a substitute for confirming allergy accommodations directly with the hotel before booking.

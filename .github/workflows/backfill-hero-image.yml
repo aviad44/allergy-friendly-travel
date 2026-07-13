@@ -1,0 +1,51 @@
+name: Backfill Hero Images (one-off maintenance)
+
+# Manual-only. Calls the backfill-hero-image Supabase Edge Function, which
+# fetches a real Unsplash photo for any published article missing a
+# hero_image_url (e.g. articles generated before that feature existed).
+# Requires the UNSPLASH_ACCESS_KEY secret to be set in Supabase — run this
+# from the Actions tab (Run workflow) once that's configured.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  run-backfill:
+    name: Backfill missing hero images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Call backfill-hero-image Edge Function
+        id: call
+        run: |
+          SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
+          SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/backfill-hero-image" \
+            -H "Content-Type: application/json" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -d '{}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response: $BODY"
+          echo "body=$BODY" >> "$GITHUB_OUTPUT"
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::backfill-hero-image returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+      - name: Write job summary
+        if: always()
+        run: |
+          echo "## Backfill Hero Images Run" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          echo '${{ steps.call.outputs.body }}' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

@@ -1,6 +1,9 @@
 
 export default async function handler(request, context) {
-  // Define critical bot user agents that need prerendering
+  // Define critical bot user agents that need prerendering.
+  // Search + AI/answer-engine crawlers generally do NOT execute JavaScript,
+  // so without prerendering they only ever see the empty <div id="root">
+  // shell — none of the real article/hotel content is visible to them.
   const botUserAgents = [
     'facebookexternalhit',
     'FacebookBot',
@@ -12,7 +15,31 @@ export default async function handler(request, context) {
     'twitterbot',
     'linkedinbot',
     'pinterest',
-    'instagrambot'
+    'instagrambot',
+    // Search engines
+    'googlebot',
+    'bingbot',
+    'yandex',
+    'duckduckbot',
+    'baiduspider',
+    // AI / LLM / answer-engine crawlers (GEO)
+    'gptbot',
+    'chatgpt-user',
+    'oai-searchbot',
+    'claudebot',
+    'claude-web',
+    'anthropic-ai',
+    'perplexitybot',
+    'perplexity-user',
+    'google-extended',
+    'ccbot',
+    'applebot-extended',
+    'amazonbot',
+    'bytespider',
+    'cohere-ai',
+    'diffbot',
+    'meta-externalagent',
+    'youbot',
   ];
 
   // Get the user agent and URL

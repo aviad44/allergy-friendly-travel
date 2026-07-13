@@ -51,6 +51,36 @@ export function breadcrumbJsonLd({ baseUrl, pathname }: BreadcrumbInput) {
   };
 }
 
+type ArticleInput = {
+  baseUrl: string;
+  slug: string;
+  title: string;
+  description?: string;
+  image?: string;
+  datePublished?: string;
+  dateModified?: string;
+};
+
+export function articleJsonLd({ baseUrl, slug, title, description, image, datePublished, dateModified }: ArticleInput) {
+  const url = `${baseUrl}/articles/${slug}`;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    ...(description ? { description } : {}),
+    ...(image ? { image: [image] } : {}),
+    ...(datePublished ? { datePublished } : {}),
+    dateModified: dateModified || datePublished,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    author: { '@type': 'Organization', name: 'Allergy-Free Travel' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Allergy-Free Travel',
+      logo: { '@type': 'ImageObject', url: `${baseUrl}/og-image.png` },
+    },
+  };
+}
+
 type HotelInput = {
   baseUrl: string;
   destId: string;
