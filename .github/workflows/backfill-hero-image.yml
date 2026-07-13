@@ -1,17 +1,13 @@
 name: Backfill Hero Images (one-off maintenance)
 
-# One-off. Calls the backfill-hero-image Supabase Edge Function, which
+# Manual-only. Calls the backfill-hero-image Supabase Edge Function, which
 # fetches a real Unsplash photo for any published article missing a
 # hero_image_url (e.g. articles generated before that feature existed).
-# Triggers on push to this file since workflow_dispatch requires Actions
-# write scope this integration doesn't have; the function itself is
-# idempotent (only touches rows where hero_image_url is null).
+# Requires the UNSPLASH_ACCESS_KEY secret to be set in Supabase — run this
+# from the Actions tab (Run workflow) once that's configured.
 
 on:
   workflow_dispatch: {}
-  push:
-    paths:
-      - '.github/workflows/backfill-hero-image.yml'
 
 jobs:
   run-backfill:
