@@ -3,7 +3,11 @@ import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 import { MetaManager } from "@/components/MetaManager";
+import { articleJsonLd } from "@/utils/jsonld";
+import { getAbsoluteImageUrl, DEFAULT_SOCIAL_IMAGE } from "@/utils/socialSharing";
 import NotFound from "@/pages/NotFound";
+
+const BASE_URL = "https://www.allergy-free-travel.com";
 
 interface Article {
   title: string;
@@ -12,6 +16,7 @@ interface Article {
   content_markdown: string | null;
   hotel_ids: string[] | null;
   published_at: string | null;
+  updated_at: string | null;
   hero_image_url: string | null;
   hero_image_credit: string | null;
 }
@@ -38,7 +43,7 @@ const ArticleDetail = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('seo_articles')
-        .select('title, slug, meta_description, content_markdown, hotel_ids, published_at, hero_image_url, hero_image_credit')
+        .select('title, slug, meta_description, content_markdown, hotel_ids, published_at, updated_at, hero_image_url, hero_image_credit')
         .eq('slug', slug)
         .eq('status', 'published')
         .single();
@@ -77,7 +82,17 @@ const ArticleDetail = () => {
         dynamicData={{
           title: article.title,
           description: article.meta_description || undefined,
+          image: article.hero_image_url || undefined,
           type: "article",
+          jsonLdExtra: articleJsonLd({
+            baseUrl: BASE_URL,
+            slug: article.slug,
+            title: article.title,
+            description: article.meta_description || undefined,
+            image: getAbsoluteImageUrl(article.hero_image_url || DEFAULT_SOCIAL_IMAGE),
+            datePublished: article.published_at || undefined,
+            dateModified: article.updated_at || undefined,
+          }),
         }}
       />
 
