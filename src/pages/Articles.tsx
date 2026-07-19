@@ -8,6 +8,7 @@ interface ArticleSummary {
   title: string;
   meta_description: string | null;
   published_at: string | null;
+  hero_image_url: string | null;
 }
 
 const Articles = () => {
@@ -18,7 +19,7 @@ const Articles = () => {
     const fetchArticles = async () => {
       const { data, error } = await supabase
         .from('seo_articles')
-        .select('slug, title, meta_description, published_at')
+        .select('slug, title, meta_description, published_at, hero_image_url')
         .eq('status', 'published')
         .order('published_at', { ascending: false });
 
@@ -57,12 +58,22 @@ const Articles = () => {
             <Link
               key={article.slug}
               to={`/articles/${article.slug}`}
-              className="block bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow"
+              className="block bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             >
-              <h2 className="text-lg font-semibold text-blue-800 mb-2">{article.title}</h2>
-              {article.meta_description && (
-                <p className="text-sm text-gray-600 line-clamp-3">{article.meta_description}</p>
+              {article.hero_image_url && (
+                <img
+                  src={article.hero_image_url}
+                  alt={article.title}
+                  loading="lazy"
+                  className="w-full h-40 object-cover"
+                />
               )}
+              <div className="p-6">
+                <h2 className="text-lg font-semibold text-blue-800 mb-2">{article.title}</h2>
+                {article.meta_description && (
+                  <p className="text-sm text-gray-600 line-clamp-3">{article.meta_description}</p>
+                )}
+              </div>
             </Link>
           ))}
         </div>
