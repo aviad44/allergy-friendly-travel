@@ -50,6 +50,26 @@ jobs:
             " >> "$GITHUB_STEP_SUMMARY"
             echo "" >> "$GITHUB_STEP_SUMMARY"
             echo "⚠️ = below the target of 90. Full HTML reports (with the actual LCP/CLS numbers and specific fixes) are attached as the \`lighthouse-reports\` artifact on this run." >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            node -e "
+              const rows = JSON.parse(require('fs').readFileSync('reports/summary.json', 'utf8'));
+              for (const r of rows) {
+                console.log(\`### \${r.route}\`);
+                console.log('');
+                console.log('Core Web Vitals: ' + Object.entries(r.metrics || {}).map(([k, v]) => \`\${k}=\${v}\`).join(', '));
+                console.log('');
+                if (r.perfOpportunities && r.perfOpportunities.length) {
+                  console.log('**Performance issues:**');
+                  for (const a of r.perfOpportunities) console.log(\`- \${a.title}\${a.displayValue ? ' (' + a.displayValue + ')' : ''}\`);
+                  console.log('');
+                }
+                if (r.bpIssues && r.bpIssues.length) {
+                  console.log('**Best Practices issues:**');
+                  for (const a of r.bpIssues) console.log(\`- \${a.title}\${a.displayValue ? ' (' + a.displayValue + ')' : ''}\`);
+                  console.log('');
+                }
+              }
+            " >> "$GITHUB_STEP_SUMMARY"
           else
             echo "No summary.json was produced — the run likely errored before completing. Check the logs above." >> "$GITHUB_STEP_SUMMARY"
           fi

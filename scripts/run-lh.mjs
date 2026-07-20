@@ -23,6 +23,40 @@ function slugifyRoute(route) {
   return route.replace(/^\//, '').replace(/\//g, '-');
 }
 
+const KEY_METRICS = [
+  'first-contentful-paint',
+  'largest-contentful-paint',
+  'total-blocking-time',
+  'cumulative-layout-shift',
+  'speed-index',
+];
+
+// Pulls the specific audits dragging a category's score down, sorted by
+// weight (impact), so the CI summary shows *why* a score is low, not just
+// the number.
+function getLowScoringAudits(lhr, categoryId, limit = 8) {
+  const category = lhr.categories[categoryId];
+  if (!category) return [];
+  return category.auditRefs
+    .filter((ref) => ref.weight > 0)
+    .map((ref) => ({ ref, audit: lhr.audits[ref.id] }))
+    .filter(({ audit }) => audit && audit.score !== null && audit.score < 0.9)
+    .sort((a, b) => b.ref.weight - a.ref.weight)
+    .slice(0, limit)
+    .map(({ audit }) => ({
+      id: audit.id,
+      title: audit.title,
+      score: audit.score,
+      displayValue: audit.displayValue || '',
+    }));
+}
+
+function getMetrics(lhr) {
+  return Object.fromEntries(
+    KEY_METRICS.map((id) => [id, lhr.audits[id]?.displayValue || 'n/a'])
+  );
+}
+
 await fs.mkdir('reports', { recursive: true });
 
 const summary = [];
@@ -56,15 +90,28 @@ try {
 
     const runnerResult = await lighthouse(url, options, config);
     const reportHtml = runnerResult.report;
-    const { categories } = runnerResult.lhr;
+    const { lhr } = runnerResult;
+    const { categories } = lhr;
     const scores = Object.fromEntries(
       Object.entries(categories).map(([k, v]) => [k, Math.round((v.score || 0) * 100)])
     );
     console.log(`[LH][${r}] perf:${scores.performance} a11y:${scores.accessibility} seo:${scores.seo} bp:${scores['best-practices']}`);
 
+    const metrics = getMetrics(lhr);
+    console.log(`[LH][${r}] metrics: ${Object.entries(metrics).map(([k, v]) => `${k}=${v}`).join(' ')}`);
+
+    const perfOpportunities = getLowScoringAudits(lhr, 'performance');
+    const bpIssues = getLowScoringAudits(lhr, 'best-practices');
+    for (const a of perfOpportunities) {
+      console.log(`[LH][${r}][perf] ${a.id}: ${a.title} ${a.displayValue ? `(${a.displayValue})` : ''} score=${a.score}`);
+    }
+    for (const a of bpIssues) {
+      console.log(`[LH][${r}][bp] ${a.id}: ${a.title} ${a.displayValue ? `(${a.displayValue})` : ''} score=${a.score}`);
+    }
+
     const outPath = path.join('reports', `lh-${slugifyRoute(r)}.html`);
     await fs.writeFile(outPath, reportHtml);
-    summary.push({ route: r, url, scores, reportFile: path.basename(outPath) });
+    summary.push({ route: r, url, scores, metrics, perfOpportunities, bpIssues, reportFile: path.basename(outPath) });
   }
 } catch (e) {
   console.error('[LH] Error:', e);
