@@ -1,7 +1,13 @@
 
 export default async function handler(request, context) {
-  // Define critical bot user agents that need prerendering
+  // Define critical bot user agents that need prerendering.
+  // This is a pure client-rendered SPA — without prerendering, any bot that
+  // doesn't execute JavaScript sees only the empty <div id="root"> shell.
+  // Search + AI-answer-engine crawlers (GPTBot, ClaudeBot, PerplexityBot,
+  // Google-Extended, CCBot, etc.) do not execute JS, so they were previously
+  // getting no content at all from this site.
   const botUserAgents = [
+    // Social link-preview crawlers (pre-existing)
     'facebookexternalhit',
     'FacebookBot',
     'facebook',
@@ -12,7 +18,33 @@ export default async function handler(request, context) {
     'twitterbot',
     'linkedinbot',
     'pinterest',
-    'instagrambot'
+    'instagrambot',
+    // Traditional search crawlers
+    'googlebot',
+    'bingbot',
+    'duckduckbot',
+    'duckassistbot',
+    'yandexbot',
+    'baiduspider',
+    // AI answer-engine / LLM crawlers
+    'gptbot',
+    'oai-searchbot',
+    'chatgpt-user',
+    'claudebot',
+    'claude-user',
+    'claude-searchbot',
+    'anthropic-ai',
+    'perplexitybot',
+    'perplexity-user',
+    'google-extended',
+    'ccbot',
+    'bytespider',
+    'amazonbot',
+    'applebot',
+    'applebot-extended',
+    'meta-externalagent',
+    'diffbot',
+    'youbot'
   ];
 
   // Get the user agent and URL

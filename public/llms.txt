@@ -1,0 +1,30 @@
+# Allergy-Free Travel
+
+> Allergy-Free Travel helps people with food allergies, celiac disease, and other dietary restrictions find safe hotels and restaurants worldwide. Destination guides and hotel reviews are built from verified evidence (real Google reviews mentioning food allergies) — hotels and quotes are never invented.
+
+## Destination guides
+Hotel recommendations by city/region, each including real guest reviews that mention specific food allergies (gluten, dairy, nuts, shellfish, etc.), practical safety tips, and links to book directly.
+
+- [All destinations](https://www.allergy-free-travel.com/destinations)
+- [Paris](https://www.allergy-free-travel.com/destinations/paris)
+- [London](https://www.allergy-free-travel.com/destinations/london)
+- [Rome](https://www.allergy-free-travel.com/destinations/rome)
+- [New York](https://www.allergy-free-travel.com/destinations/new-york)
+- [Tokyo](https://www.allergy-free-travel.com/destinations/tokyo)
+- [Top allergy-friendly hotel chains worldwide](https://www.allergy-free-travel.com/destinations/hotel-chains)
+- [Best cruise lines for food allergies](https://www.allergy-free-travel.com/destinations/cruise-lines)
+- [Flying with EpiPens: airport and airline rules](https://www.allergy-free-travel.com/destinations/flying-with-epipens)
+
+## Auto-generated travel guides
+New destination guides published every 2 days, grounded only in real, verified hotel reviews that explicitly mention food allergies — no AI-invented hotels or quotes.
+
+- [All guides](https://www.allergy-free-travel.com/articles)
+
+## Tools
+- [Allergy translation card generator](https://www.allergy-free-travel.com/allergy-translation-card) — create a printable card explaining your food allergies in the local language.
+- [Menu allergen scanner](https://www.allergy-free-travel.com/menu-scanner) — upload a photo of a restaurant menu to identify potential allergens.
+
+## Reference
+- [Frequently asked questions](https://www.allergy-free-travel.com/faq)
+- [About us](https://www.allergy-free-travel.com/about)
+- [Traveler reviews](https://www.allergy-free-travel.com/reviews)
