@@ -45,42 +45,23 @@
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     
     <!-- Primary Meta Tags -->
-    <meta name="description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more dietary restrictions worldwide." />
     <meta name="author" content="Allergy Free Travel" />
     <meta name="keywords" content="allergy-friendly travel, food allergy hotels, gluten-free accommodation, dairy-free travel, nut-free hotels, allergen-free vacation, safe travel with allergies" />
-    
-    <!-- FACEBOOK OPEN GRAPH TAGS - ABSOLUTELY ESSENTIAL FOR SOCIAL SHARING -->
-    <meta property="og:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions" />
-    <meta property="og:description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.allergy-free-travel.com/" />
-    <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
-    <meta property="og:image:secure_url" content="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Poolside vacation scene with palm trees – Allergy-Free Travel" />
-    <meta property="og:site_name" content="Allergy-Free Travel" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="fb:app_id" content="allergy.free.travel" />
-    
-    <!-- Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@allergyfreetravel" />
-    <meta name="twitter:title" content="Allergy-Friendly Travel Guide | Safe Hotels & Tips for Dietary Restrictions" />
-    <meta name="twitter:description" content="Your #1 resource for allergy-friendly hotels, restaurants and travel guides. Find accommodations that cater to food allergies, gluten-free, dairy-free and more." />
-    <meta name="twitter:image" content="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
-    <meta name="twitter:image:alt" content="Poolside vacation scene with palm trees – Allergy-Free Travel" />
-    
-    <!-- WhatsApp specific meta tags - Critical for WhatsApp sharing -->
-    <link itemprop="thumbnailUrl" href="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" /> 
-    <span itemprop="thumbnail" itemscope itemtype="http://schema.org/ImageObject"> 
-      <link itemprop="url" href="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" /> 
-    </span>
-    
-    <!-- Facebook specific link tag - helps with certain Facebook scrapers -->
-    <link rel="image_src" href="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
-    
+
+    <!--
+      Per-page description, canonical, og:*, twitter:*, robots, and JSON-LD
+      are all set dynamically per route by MetaManager (react-helmet-async) —
+      see src/components/MetaManager.tsx. Do NOT hardcode them here: this
+      file is the one static shell served for every route (SPA), so a
+      hardcoded canonical/description/og:url here creates a SECOND,
+      conflicting tag alongside MetaManager's correct per-route one on every
+      non-homepage page (e.g. two different <link rel="canonical"> on
+      /destinations/paris — one pointing here at "/", one at the real page).
+      That confused Google into potentially canonicalizing destination pages
+      back to the homepage. Verified live via Search Console's Rich Results
+      Test on 2026-07-20 before this fix.
+    -->
+
     <!-- Optimized Analytics - defer loading to improve initial page load -->
     <script>
       // Defer analytics until after critical content loads
@@ -101,23 +82,7 @@
       });
     </script>
     
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.allergy-free-travel.com/" />
-    
-    <!-- Robots directive -->
-    <meta name="robots" content="index, follow" />
-    
     <!-- Critical CSS will be loaded via main.tsx for better control -->
-    
-    <!-- Structured Data - minimize and optimize -->
-    <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Organization","name":"Allergy Free Travel","url":"https://www.allergy-free-travel.com","logo":"https://www.allergy-free-travel.com/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png","image":"https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png","description":"Helping travelers with food allergies and dietary restrictions find safe accommodations worldwide."}
-    </script>
-    
-    <!-- Additional image metadata for Facebook/WhatsApp-->
-    <meta property="og:image" content="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
-    <meta property="og:image:url" content="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
-    <meta property="og:image:secure_url" content="https://www.allergy-free-travel.com/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" />
 </head>
 <body>
     <div id="root"></div>

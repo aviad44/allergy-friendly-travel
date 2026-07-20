@@ -242,9 +242,11 @@ const computed: RouteMeta = useMemo(() => {
       <meta property="og:image:height" content="630" />
       <meta property="og:site_name" content="Allergy-Free Travel" />
       <meta property="og:locale" content="en_US" />
+      <meta property="fb:app_id" content="allergy.free.travel" />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@allergyfreetravel" />
       <meta name="twitter:title" content={computed.title} />
       <meta name="twitter:description" content={computed.description} />
       <meta name="twitter:image" content={absoluteImage} />
