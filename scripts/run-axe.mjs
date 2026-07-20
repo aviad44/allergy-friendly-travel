@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import puppeteer from 'puppeteer';
-import { source as axeSource } from 'axe-core';
+import axeCore from 'axe-core';
+
+const axeSource = axeCore.source;
 
 const BASE_URL = process.env.PREVIEW_URL
   || process.env.DEPLOY_PRIME_URL
