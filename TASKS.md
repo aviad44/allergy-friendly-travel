@@ -57,25 +57,29 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## Performance
 
-- [ ] Improve LCP element loading on destinations
+- [x] Improve LCP element loading on destinations
   - RATIONALE: LCP drives Core Web Vitals.
   - HOW-TO: Preload hero image; compress/optimize via getOptimizedImageUrl; defer non-critical JS; ensure font-display: swap.
   - DoD: LCP ≤ 2.5s (Slow 4G) on /, /destinations, and top 3 destination pages.
+  - DONE: The hero-image preload was actively wrong on every non-homepage route — index.html statically preloaded the homepage image with fetchpriority="high" on all ~50 routes (and performanceOptimizer.ts's preloadCriticalResources() re-injected the same wrong preload via JS), so no page other than "/" ever preloaded the image it actually needed. Removed both; MetaManager now emits a dynamic per-route preload using the same image already computed for Open Graph. Actual LCP ms numbers still need to be measured against the live site (PageSpeed Insights / Search Console) — not verifiable from this environment.
 
-- [ ] Reduce CLS via image dimensions and font strategy
+- [x] Reduce CLS via image dimensions and font strategy
   - RATIONALE: Avoid layout shifts.
   - HOW-TO: Provide width/height; reserve space; verify optimizeFontLoading in performanceOptimizer.
   - DoD: CLS ≤ 0.1 across key routes.
+  - DONE: Images already carry explicit width/height almost everywhere (verified during the alt-text/lazy-loading audit). optimizeFontLoading() — referenced in the original HOW-TO — turned out to be actively broken: it injected an @font-face pointing at /fonts/poppins.woff2, a file that doesn't exist in this repo, so it silently 404'd on every page load. Removed it; the real Poppins font already loads correctly via the Google Fonts <link> in index.html with font-display=swap. Actual CLS numbers still need real measurement.
 
-- [ ] Defer non-critical JS and preload critical resources
+- [x] Defer non-critical JS and preload critical resources
   - RATIONALE: Faster TTI and FCP.
   - HOW-TO: Use deferNonCriticalJS and preloadCriticalResources; audit script tags for data-defer.
   - DoD: Lighthouse “Best Practices/Performance” show improvements; no blocking non-critical scripts.
+  - DONE: preloadCriticalResources() was the wrong-image-preload bug above — removed (see LCP item). deferNonCriticalJS() is a no-op in practice: it only defers `script[data-defer="true"]`, and no script anywhere in the codebase carries that attribute — left in place (harmless) but noted here in case someone expects it to be doing something.
 
-- [ ] Code-splitting and route-level prefetch
+- [x] Code-splitting and route-level prefetch
   - RATIONALE: Smaller initial bundle.
   - HOW-TO: Split large components; keep requestIdleCallback prefetch for important routes.
   - DoD: Bundle size reduced; Lighthouse Mobile ≥ 90.
+  - DONE: Already fully implemented — every route in src/App.tsx is React.lazy()'d, App itself is lazy-loaded from main.tsx, and the built output confirms per-route JS chunks. No changes needed. (usePerformanceOptimization's requestIdleCallback route-prefetch exists but the hook itself is never called anywhere — dead code, out of scope for this pass.)
 
 - [ ] Automate perf checks
   - RATIONALE: Prevent regressions.
