@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { DEFAULT_SOCIAL_IMAGE, DESTINATION_OG_IMAGES, getAbsoluteImageUrl } from "@/utils/socialSharing";
 import { buildCanonical } from "@/utils/seo";
 import { organizationJsonLd, breadcrumbJsonLd, hotelJsonLd } from "@/utils/jsonld";
+import { destinations } from "@/data/destinations-list";
 
 export type MetaType = "website" | "article" | "profile";
 
@@ -38,7 +39,7 @@ const BASE_URL = "https://www.allergy-free-travel.com";
 // Central route metadata registry
 const routeMeta: Record<string, RouteMeta> = {
   "/": {
-    title: "Allergy-Friendly Travel Guide | Safe Hotels & Tips for Food Allergies",
+    title: "Allergy-Friendly Travel Guide | Safe Hotels & Dining",
     description:
       "Find safe hotels and restaurants for food allergies. Expert travel guides for gluten-free, dairy-free, nut-free travelers. Book with confidence worldwide.",
     image:
@@ -120,7 +121,7 @@ const routeMeta: Record<string, RouteMeta> = {
   "/destinations/hotel-chains": {
     title: "Top Allergy-Friendly Hotel Chains Worldwide (2025 Guide)",
     description:
-      "Discover the top global hotel chains with allergy-friendly and celiac-safe food policies. Learn which hotels accommodate food allergies and offer certified allergy-safe services.",
+      "Explore global hotel chains offering allergy-friendly, celiac-safe food policies for travelers with dietary needs.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
   "/search-results": {
@@ -154,15 +155,35 @@ const computed: RouteMeta = useMemo(() => {
   // Prefer exact match, then fallback to base path (e.g., /destinations)
   const base = routeMeta[key] || routeMeta[key.split("/").slice(0, 2).join("/")] || routeMeta["/"];
 
-  // Destination-specific overrides
+  // Destination-specific overrides — built from the same description/subtitle
+  // data the on-page H1 uses, so the <title>/meta description actually match
+  // what the page is about (rather than a generic "Hotels in X" template that
+  // was wrong for topic pages like /destinations/airlines).
   if (isDestination && destId) {
+    const dest = destinations.find((d) => d.id === destId);
     const prettyName = destId
       .replace(/-/g, " ")
       .replace(/\b\w/g, (m) => m.toUpperCase());
     const destImage = DESTINATION_OG_IMAGES[destId as keyof typeof DESTINATION_OG_IMAGES] || DEFAULT_SOCIAL_IMAGE;
+
+    let title: string;
+    let description: string;
+    if (dest?.description) {
+      const suffix = " | Allergy-Free Travel";
+      title = dest.description.length + suffix.length <= 60 ? `${dest.description}${suffix}` : dest.description;
+      if (title.length > 60) title = `${title.slice(0, 57)}...`;
+      description = dest.subtitle
+        ? `${dest.description}. ${dest.subtitle}. Reviews for food-allergy travelers.`
+        : `${dest.description}. Reviews and tips for food-allergy travelers.`;
+      if (description.length > 160) description = `${dest.description}.`;
+    } else {
+      title = `Allergy-Friendly Hotels in ${prettyName} | Safe Dining Guide`;
+      description = `Discover the best allergy-friendly hotels in ${prettyName}. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.`;
+    }
+
     return {
-      title: `Allergy-Friendly Hotels in ${prettyName} | Safe Dining Guide`,
-      description: `Discover the best allergy-friendly hotels in ${prettyName}. Expert reviews of accommodations catering to gluten-free, dairy-free, and other dietary needs.`,
+      title,
+      description,
       image: destImage,
       type: "website",
       canonical: `${BASE_URL}${path}`,

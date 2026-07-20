@@ -22,9 +22,9 @@ export const DestinationInfo = ({ name, country }: DestinationInfoProps) => {
               <Hotel className="h-4 w-4 text-white" aria-hidden="true" />
             </div>
           </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-1 text-white/90">
+          <p className="text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-1 text-white/90">
             {name}
-          </h1>
+          </p>
           <p className="text-lg text-white/70">
             {country}
           </p>

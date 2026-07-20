@@ -4,9 +4,9 @@ import React from "react";
 export const ReviewsHeader: React.FC = () => {
   return (
     <>
-      <h1 className="reviews-title text-3xl md:text-4xl lg:text-5xl mb-4">
+      <h2 className="reviews-title text-3xl md:text-4xl lg:text-5xl mb-4">
         Traveler Reviews
-      </h1>
+      </h2>
       <p className="reviews-subtitle text-lg md:text-xl mb-8 max-w-2xl">
         Share your experience and help other travelers
       </p>

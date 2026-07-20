@@ -5,10 +5,10 @@ import { Ship, Clipboard, Globe, Check } from 'lucide-react';
 export const CruiseIntro: React.FC = () => {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-      <h1 className="text-3xl md:text-4xl font-bold text-primary mb-6 flex items-center">
+      <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6 flex items-center">
         <Ship className="mr-3 h-8 w-8 text-primary" />
         Best Cruise Lines for Travelers with Food Allergies
-      </h1>
+      </h2>
 
       <section className="mb-10">
         <p className="text-lg text-muted-foreground mb-6">
