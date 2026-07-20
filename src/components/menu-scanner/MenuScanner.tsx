@@ -295,10 +295,11 @@ export const MenuScanner = () => {
           {selectedImage && (
             <div className="space-y-4">
               <h3 className="font-semibold">Uploaded Image:</h3>
-              <img 
-                src={selectedImage} 
-                alt="Menu to scan" 
+              <img
+                src={selectedImage}
+                alt="Menu to scan"
                 className="max-w-full h-auto rounded-lg border max-h-64 object-contain"
+                loading="lazy"
               />
             </div>
           )}

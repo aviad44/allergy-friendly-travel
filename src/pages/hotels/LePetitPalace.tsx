@@ -20,6 +20,7 @@ const LePetitPalace = () => {
             src="https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1920&q=80"
             alt="Le Petit Palace"
             className="w-full h-full object-cover"
+            loading="eager"
           />
           <div className="absolute inset-0 bg-black/40" />
           <div className="absolute bottom-0 p-8 text-white">

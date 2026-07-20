@@ -10,8 +10,9 @@ export const CruiseHero: React.FC<CruiseHeroProps> = ({ baseUrl }) => {
     <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] overflow-hidden">
       <img 
         src="https://images.unsplash.com/photo-1548574505-5e239809ee19?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
-        alt="Luxury cruise ship sailing on blue ocean - allergy-friendly cruising" 
+        alt="Luxury cruise ship sailing on blue ocean - allergy-friendly cruising"
         className="absolute inset-0 w-full h-full object-cover"
+        loading="eager"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
       <div className="absolute inset-0 flex items-center justify-center">

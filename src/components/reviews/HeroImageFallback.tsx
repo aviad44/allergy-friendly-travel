@@ -22,6 +22,7 @@ export const HeroImageFallback = ({
           alt={`Fallback for ${altText}`}
           className="w-full h-full object-cover"
           aria-hidden="true"
+          loading="eager"
         />
       )}
     </div>

@@ -31,7 +31,7 @@ const FEATURED_HOTELS = [
 export const FeaturedHotels = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {FEATURED_HOTELS.map((hotel) => (
+      {FEATURED_HOTELS.map((hotel, index) => (
         <Link to={hotel.href} key={hotel.id}>
           <Card className="overflow-hidden group cursor-pointer h-full">
             <div className="relative aspect-[16/10] overflow-hidden">
@@ -39,6 +39,7 @@ export const FeaturedHotels = () => {
                 src={hotel.image}
                 alt={hotel.name}
                 className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                loading={index === 0 ? "eager" : "lazy"}
               />
             </div>
             <div className="p-4">

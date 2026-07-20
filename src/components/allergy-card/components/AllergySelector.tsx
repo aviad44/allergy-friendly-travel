@@ -113,18 +113,21 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
                       src={cinnamonIcon} 
                       alt="Cinnamon stick" 
                       className="w-5 h-5 object-contain"
+                      loading="lazy"
                     />
                   ) : allergy.name === "Pistachio" ? (
                     <img 
                       src={pistachioIcon} 
                       alt="Pistachio" 
                       className="w-5 h-5 object-contain"
+                      loading="lazy"
                     />
                   ) : allergy.name === "Cashew" ? (
                     <img 
                       src={cashewIcon} 
                       alt="Cashew" 
                       className="w-5 h-5 object-contain"
+                      loading="lazy"
                     />
                   ) : (
                     <span className="text-lg">{allergy.emoji}</span>

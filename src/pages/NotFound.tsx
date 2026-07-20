@@ -33,10 +33,11 @@ const NotFound = () => {
       {/* Error content */}
       <div className="flex-grow flex items-center justify-center p-4 mt-20">
         <div className="max-w-md w-full text-center space-y-6">
-          <img 
+          <img
             src="/lovable-uploads/0963bc18-ba0e-4f90-b259-dd5a82880eae.png"
             alt="404 Error"
             className="w-full max-w-xs mx-auto"
+            loading="eager"
           />
           
           <h1 className="text-4xl font-display font-bold text-gray-800">Page Not Found</h1>

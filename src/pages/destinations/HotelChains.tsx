@@ -36,6 +36,7 @@ export default function HotelChains() {
             // Fall back to another reliable Pexels image
             (e.target as HTMLImageElement).src = "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=1";
           }}
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
         <div className="absolute inset-0 flex items-center justify-center text-center px-4">
