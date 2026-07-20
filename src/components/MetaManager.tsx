@@ -230,6 +230,7 @@ const computed: RouteMeta = useMemo(() => {
       <meta name="description" content={computed.description} />
       <link rel="canonical" href={canonicalUrl} />
       {dynamicData?.robots && <meta name="robots" content={dynamicData.robots} />}
+      <link rel="preload" as="image" href={absoluteImage} fetchPriority="high" />
 
       {/* Open Graph */}
       <meta property="og:type" content={computed.type || "website"} />

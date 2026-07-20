@@ -23,8 +23,15 @@
       @font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;src:local('Poppins Regular'),local('Poppins-Regular')}
     </style>
     
-    <!-- Preload critical resources with highest priority -->
-    <link rel="preload" href="/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png" as="image" fetchpriority="high" type="image/png" />
+    <!--
+      Preload critical resources with highest priority.
+      No hero-image preload here on purpose: this file is the one static
+      shell served for every route, but the hero image differs per route
+      (see MetaManager, which preloads the correct per-route image
+      dynamically). A hardcoded preload here previously always pointed at
+      the homepage image, wasting priority bandwidth on every other page
+      while never actually preloading what that page needed.
+    -->
     <link rel="preload" href="/src/index.css" as="style" />
     <link rel="preload" href="/src/main.tsx" as="script" crossorigin />
     

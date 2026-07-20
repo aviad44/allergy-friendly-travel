@@ -15,25 +15,6 @@ export const createOptimizedObserver = (callback: IntersectionObserverCallback) 
   return new IntersectionObserver(callback, options);
 };
 
-// Preload critical resources
-export const preloadCriticalResources = () => {
-  const criticalResources = [
-    { href: '/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png', as: 'image' },
-    { href: '/src/index.css', as: 'style' }
-  ];
-
-  criticalResources.forEach(resource => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.href = resource.href;
-    link.as = resource.as;
-    if (resource.as === 'image') {
-      link.type = 'image/png';
-    }
-    document.head.appendChild(link);
-  });
-};
-
 // Optimize image loading with WebP detection
 export const getOptimizedImageUrl = (originalUrl: string, width = 1200, quality = 80): string => {
   // Check if browser supports WebP
@@ -61,20 +42,6 @@ export const deferNonCriticalJS = () => {
       script.defer = true;
     }
   });
-};
-
-// Optimize font loading
-export const optimizeFontLoading = () => {
-  // Add font-display: swap to improve CLS
-  const styleSheet = document.createElement('style');
-  styleSheet.textContent = `
-    @font-face {
-      font-family: 'Poppins';
-      font-display: swap;
-      src: local('Poppins'), url('/fonts/poppins.woff2') format('woff2');
-    }
-  `;
-  document.head.appendChild(styleSheet);
 };
 
 // Monitor and report performance metrics with proper typing
@@ -130,10 +97,6 @@ export const trackPerformanceMetrics = () => {
 
 // Initialize all optimizations
 export const initPerformanceOptimizations = () => {
-  // Run immediately
-  preloadCriticalResources();
-  optimizeFontLoading();
-  
   // Run after DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
