@@ -120,9 +120,24 @@ export default function FAQ() {
     }
   ];
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqCategories.flatMap((category) =>
+      category.questions.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      }))
+    ),
+  };
+
   return (
     <div className="min-h-screen bg-white">
-      <MetaManager />
+      <MetaManager dynamicData={{ jsonLdExtra: faqJsonLd }} />
 
       <main className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="max-w-4xl mx-auto space-y-10">

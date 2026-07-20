@@ -70,6 +70,19 @@ const ArticleDetail = () => {
     return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading…</div>;
   }
 
+  const articleUrl = `https://www.allergy-free-travel.com/articles/${article.slug}`;
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.meta_description || undefined,
+    image: article.hero_image_url || undefined,
+    datePublished: article.published_at || undefined,
+    mainEntityOfPage: articleUrl,
+    author: { "@type": "Organization", name: "Allergy-Free Travel" },
+    publisher: { "@type": "Organization", name: "Allergy-Free Travel" },
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <MetaManager
@@ -77,7 +90,10 @@ const ArticleDetail = () => {
         dynamicData={{
           title: article.title,
           description: article.meta_description || undefined,
+          image: article.hero_image_url || undefined,
           type: "article",
+          canonical: articleUrl,
+          jsonLdExtra: articleJsonLd,
         }}
       />
 
