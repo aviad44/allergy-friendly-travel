@@ -29,25 +29,29 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Use MetaManager route registry + dynamic handling for /search-results; remove CanonicalTags/SocialTags usage where redundant.
   - DoD: Grep shows no <Helmet> in src/pages/** (except inside MetaManager); each route renders one set of tags; canonical normalized via buildCanonical.
 
-- [ ] Ensure single H1 per page and descriptive meta titles/descriptions
+- [x] Ensure single H1 per page and descriptive meta titles/descriptions
   - RATIONALE: Improves CTR and relevancy; avoids SEO penalties.
   - HOW-TO: Audit src/pages/** and src/components/** headers; enforce one <h1/> per page; use MetaManager to set title/description.
   - DoD: Every route has a single H1 and title (< 60 chars) + meta description (< 160 chars) including “allergy-friendly hotels”.
+  - DONE: Found and fixed 3 real duplicate-H1 cases hiding in composed components (all ~30 destination pages via DestinationInfo+DestinationHeader, /destinations/cruise-lines via CruiseHero+CruiseIntro, /reviews via the sr-only H1 + ReviewsHeader) — demoted the redundant one to <p>/<h2> in each case. Shortened homepage title (69→52 chars) and /destinations/hotel-chains description (178→114 chars). Rebuilt the dynamic per-destination title/description to use each destination's real description/subtitle instead of a generic "Hotels in X" template that was both wrong for topic pages (airlines, flying-with-epipens*) and over budget for 4/30 destinations.
 
-- [ ] Canonical tags + JSON-LD where relevant
+- [x] Canonical tags + JSON-LD where relevant
   - RATIONALE: Prevents duplicate content; enhances rich results.
   - HOW-TO: Use CanonicalTags and StructuredData components where pages have variants (reviews, destinations, hotels).
   - DoD: All primary pages contain <link rel="canonical"/>; applicable pages include valid JSON-LD.
+  - DONE: MetaManager already emitted canonical + Organization/Breadcrumb/Hotel JSON-LD everywhere. Added the two missing high-value ones: FAQPage schema on /faq (20 real Q&A pairs, zero rich-result markup before) and Article schema + canonical + real OG image on /articles/[slug] (previously always fell back to the generic site image even when the article had its own hero_image_url).
 
-- [ ] Robots/sitemap correctness
+- [x] Robots/sitemap correctness
   - RATIONALE: Guides crawlers and indexing.
   - HOW-TO: Review public/robots.txt and public/sitemap.xml; ensure important routes are not blocked and are listed.
   - DoD: Verified robots/sitemap entries for top routes and destinations.
+  - DONE: Already correct — robots.txt allows all, sitemap is served dynamically (netlify/functions/sitemap.cjs) with live lastmod dates and auto-included published articles from Supabase. No changes needed.
 
-- [ ] Image alt text and lazy loading
+- [x] Image alt text and lazy loading
   - RATIONALE: SEO + accessibility + performance.
   - HOW-TO: Use OptimizedImage; ensure descriptive alt for all images.
   - DoD: No <img> missing alt; lazy loading enabled where non-critical.
+  - DONE: Audited every <img> in src/**; alt text was already complete and non-empty everywhere. Added explicit loading="eager"/"lazy" to the ~9 images that had neither (heroes/banners → eager, cards/icons/previews → lazy).
 
 ---
 
