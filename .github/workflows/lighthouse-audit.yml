@@ -1,0 +1,98 @@
+name: Lighthouse & Accessibility Audit
+
+# Runs weekly and can be triggered manually. Tests the live production site
+# directly (not a Netlify deploy preview) — Lighthouse/axe scores are what we
+# track over time, not tied to a specific commit, so there's no need to guess
+# when a given deploy has finished.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # every Monday at 06:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  lighthouse:
+    name: Lighthouse audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Lighthouse
+        env:
+          URL: https://www.allergy-free-travel.com
+        run: npm run lh
+
+      - name: Write job summary
+        if: always()
+        run: |
+          echo "## Lighthouse Audit (mobile, simulated Slow 4G)" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f reports/summary.json ]; then
+            echo "| Route | Performance | Accessibility | SEO | Best Practices |" >> "$GITHUB_STEP_SUMMARY"
+            echo "|---|---|---|---|---|" >> "$GITHUB_STEP_SUMMARY"
+            node -e "
+              const rows = JSON.parse(require('fs').readFileSync('reports/summary.json', 'utf8'));
+              const flag = (n) => n >= 90 ? String(n) : '⚠️ ' + n;
+              for (const r of rows) {
+                const s = r.scores;
+                console.log(\`| \${r.route} | \${flag(s.performance)} | \${flag(s.accessibility)} | \${flag(s.seo)} | \${flag(s['best-practices'])} |\`);
+              }
+            " >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "⚠️ = below the target of 90. Full HTML reports (with the actual LCP/CLS numbers and specific fixes) are attached as the \`lighthouse-reports\` artifact on this run." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No summary.json was produced — the run likely errored before completing. Check the logs above." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: reports/
+          retention-days: 30
+
+  accessibility:
+    name: Accessibility audit (axe)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run axe accessibility audit
+        id: axe
+        env:
+          URL: https://www.allergy-free-travel.com
+        run: node scripts/run-axe.mjs > axe-output.log 2>&1; echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Write job summary
+        if: always()
+        run: |
+          echo "## Accessibility Audit (axe-core, WCAG 2 A/AA)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat axe-output.log >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail if critical issues found
+        if: steps.axe.outputs.exit_code != '0'
+        run: exit 1

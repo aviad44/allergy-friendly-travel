@@ -25,6 +25,8 @@ function slugifyRoute(route) {
 
 await fs.mkdir('reports', { recursive: true });
 
+const summary = [];
+
 const chrome = await launch({ chromeFlags: ['--headless', '--no-sandbox', '--disable-gpu'] });
 try {
   for (const r of routes) {
@@ -62,10 +64,12 @@ try {
 
     const outPath = path.join('reports', `lh-${slugifyRoute(r)}.html`);
     await fs.writeFile(outPath, reportHtml);
+    summary.push({ route: r, url, scores, reportFile: path.basename(outPath) });
   }
 } catch (e) {
   console.error('[LH] Error:', e);
   process.exitCode = 1;
 } finally {
   await chrome.kill();
+  await fs.writeFile(path.join('reports', 'summary.json'), JSON.stringify(summary, null, 2));
 }

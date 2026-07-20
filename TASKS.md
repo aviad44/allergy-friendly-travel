@@ -81,10 +81,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - DoD: Bundle size reduced; Lighthouse Mobile ≥ 90.
   - DONE: Already fully implemented — every route in src/App.tsx is React.lazy()'d, App itself is lazy-loaded from main.tsx, and the built output confirms per-route JS chunks. No changes needed. (usePerformanceOptimization's requestIdleCallback route-prefetch exists but the hook itself is never called anywhere — dead code, out of scope for this pass.)
 
-- [ ] Automate perf checks
+- [x] Automate perf checks
   - RATIONALE: Prevent regressions.
   - HOW-TO: Use node ./scripts/run-lh.mjs; consider CI integration later.
   - DoD: Report HTML generated in /reports for key routes per run.
+  - DONE: Added .github/workflows/lighthouse-audit.yml — runs weekly (Mondays) and on-demand (workflow_dispatch) against the live production site. Two jobs: Lighthouse (mobile, simulated Slow 4G, all 4 categories) posts a scores table to the run's job summary and uploads the full HTML reports as a downloadable artifact; axe accessibility audit posts violation counts to the summary and fails the job on any critical WCAG issue. run-lh.mjs now also writes reports/summary.json so the workflow can build the table. Also added `npm run lh` for running it locally.
 
 ---
 
