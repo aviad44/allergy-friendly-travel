@@ -16,7 +16,10 @@ const routes = [
   '/destinations/rome',
 ];
 
-const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+// channel: 'chrome' reuses the system-installed Chrome (present on GitHub-hosted
+// runners and most dev machines) instead of Puppeteer's own bundled Chromium,
+// which isn't guaranteed to be downloaded/available in every environment.
+const browser = await puppeteer.launch({ channel: 'chrome', headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
 let totalCritical = 0;
 try {
   const page = await browser.newPage();

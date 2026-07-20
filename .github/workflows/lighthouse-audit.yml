@@ -83,7 +83,12 @@ jobs:
         id: axe
         env:
           URL: https://www.allergy-free-travel.com
-        run: node scripts/run-axe.mjs > axe-output.log 2>&1; echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+        run: |
+          set +e
+          node scripts/run-axe.mjs 2>&1 | tee axe-output.log
+          exit_code=${PIPESTATUS[0]}
+          set -e
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
 
       - name: Write job summary
         if: always()
