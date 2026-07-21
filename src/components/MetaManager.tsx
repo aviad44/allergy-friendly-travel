@@ -230,7 +230,11 @@ const computed: RouteMeta = useMemo(() => {
       <meta name="description" content={computed.description} />
       <link rel="canonical" href={canonicalUrl} />
       {dynamicData?.robots && <meta name="robots" content={dynamicData.robots} />}
-      <link rel="preload" as="image" href={absoluteImage} fetchPriority="high" />
+      {/* No image preload here: `computed.image` is the OG/social-share
+          image, which on several routes (e.g. "/") is a different image
+          than the actual on-page hero — preloading it wasted bandwidth on
+          an unused image at high priority. The real hero <img> tags already
+          carry loading="eager"/fetchPriority="high" directly. */}
 
       {/* Open Graph */}
       <meta property="og:type" content={computed.type || "website"} />

@@ -46,7 +46,12 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           // Core vendor chunk - only essential
           'vendor': ['react', 'react-dom', 'react-router-dom'],
-          
+
+          // Split out so it's fetched in parallel (via modulepreload) with
+          // whichever route chunk needs it, instead of being inlined into
+          // that chunk and blocking its parse/execute on the network fetch.
+          'supabase': ['@supabase/supabase-js'],
+
           // UI library chunk
           'ui': [
             '@radix-ui/react-dialog',

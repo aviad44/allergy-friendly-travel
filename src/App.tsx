@@ -12,6 +12,10 @@ import { MainLayout } from '@/components/MainLayout';
 import { HelmetProvider } from 'react-helmet-async';
 import { SEOHead } from "@/components/SEOHead";
 import { DefaultMetaTags } from "@/components/DefaultMetaTags";
+// Statically imported (not lazy): "/" is the single most common landing
+// route, so lazy-loading it only added a chunk-fetch round trip before its
+// LCP hero image could even be discovered — pure cost, no bundle savings.
+import Index from '@/pages/Index';
 
 const DestinationsIndex = lazy(() => import('@/pages/destinations'));
 const London = lazy(() => import('@/pages/destinations/London'));
@@ -31,7 +35,6 @@ const SwissAlps = lazy(() => import('@/pages/destinations/SwissAlps'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const AboutUs = lazy(() => import('@/pages/AboutUs'));
 const Categories = lazy(() => import('@/pages/Categories'));
-const Index = lazy(() => import('@/pages/Index'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const DirectChat = lazy(() => import('@/pages/DirectChat'));
 const Reviews = lazy(() => import('@/pages/Reviews'));

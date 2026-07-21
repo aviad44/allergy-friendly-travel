@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -7,30 +7,6 @@ export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const isMobile = useIsMobile();
   const heroImageUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
-  
-  // Critical: Preload hero image immediately when component mounts
-  useEffect(() => {
-    // Create high-priority preload link
-    const preloadLink = document.createElement('link');
-    preloadLink.rel = 'preload';
-    preloadLink.as = 'image';
-    preloadLink.href = heroImageUrl;
-    preloadLink.fetchPriority = 'high';
-    
-    // Insert at the beginning of head for maximum priority
-    const firstChild = document.head.firstChild;
-    if (firstChild) {
-      document.head.insertBefore(preloadLink, firstChild);
-    } else {
-      document.head.appendChild(preloadLink);
-    }
-    
-    return () => {
-      if (document.head.contains(preloadLink)) {
-        document.head.removeChild(preloadLink);
-      }
-    };
-  }, []);
 
   return (
     <section 
