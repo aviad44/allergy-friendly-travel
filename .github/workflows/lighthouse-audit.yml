@@ -68,6 +68,20 @@ jobs:
                   for (const a of r.bpIssues) console.log(\`- \${a.title}\${a.displayValue ? ' (' + a.displayValue + ')' : ''}\`);
                   console.log('');
                 }
+                if (r.lcpElement) {
+                  console.log('**LCP element:** \`' + r.lcpElement.selector + '\` — ' + r.lcpElement.snippet);
+                  console.log('');
+                }
+                if (r.consoleErrors && r.consoleErrors.length) {
+                  console.log('**Console errors:**');
+                  for (const e of r.consoleErrors) console.log(\`- (\${e.source}) \${e.description} \${e.url}\`);
+                  console.log('');
+                }
+                if (r.thirdPartySummary && r.thirdPartySummary.length) {
+                  console.log('**Third-party scripts:**');
+                  for (const t of r.thirdPartySummary) console.log(\`- \${t.entity}: \${Math.round(t.transferSize / 1024)}KB, \${t.blockingTime}ms blocking\`);
+                  console.log('');
+                }
               }
             " >> "$GITHUB_STEP_SUMMARY"
           else

@@ -57,6 +57,45 @@ function getMetrics(lhr) {
   );
 }
 
+const truncate = (s, n) => (s && s.length > n ? `${s.slice(0, n)}…` : s);
+
+// The scores/opportunities alone don't say *what* the LCP element actually
+// is or *why* the console has errors — pull those specifics so a bad guess
+// about the root cause (like assuming it's always the hero image) can be
+// checked against reality instead of re-guessed.
+function getLcpElement(lhr) {
+  const items = lhr.audits['largest-contentful-paint-element']?.details?.items;
+  const nodeItem = items?.find((i) => i.node)?.node;
+  if (!nodeItem) return null;
+  return {
+    selector: nodeItem.selector || '',
+    snippet: truncate(nodeItem.snippet || '', 200),
+    nodeLabel: nodeItem.nodeLabel || '',
+  };
+}
+
+function getConsoleErrors(lhr, limit = 5) {
+  const items = lhr.audits['errors-in-console']?.details?.items || [];
+  return items.slice(0, limit).map((i) => ({
+    source: i.source || '',
+    description: truncate(i.description || '', 200),
+    url: i.url || '',
+  }));
+}
+
+function getThirdPartySummary(lhr, limit = 5) {
+  const items = lhr.audits['third-party-summary']?.details?.items || [];
+  return items
+    .slice()
+    .sort((a, b) => (b.blockingTime || 0) - (a.blockingTime || 0))
+    .slice(0, limit)
+    .map((i) => ({
+      entity: i.entity?.text || i.entity || 'unknown',
+      transferSize: i.transferSize || 0,
+      blockingTime: Math.round(i.blockingTime || 0),
+    }));
+}
+
 await fs.mkdir('reports', { recursive: true });
 
 const summary = [];
@@ -109,9 +148,35 @@ try {
       console.log(`[LH][${r}][bp] ${a.id}: ${a.title} ${a.displayValue ? `(${a.displayValue})` : ''} score=${a.score}`);
     }
 
+    const lcpElement = getLcpElement(lhr);
+    if (lcpElement) {
+      console.log(`[LH][${r}][lcp-element] ${lcpElement.selector} :: ${lcpElement.snippet}`);
+    }
+
+    const consoleErrors = getConsoleErrors(lhr);
+    for (const e of consoleErrors) {
+      console.log(`[LH][${r}][console-error] (${e.source}) ${e.description} ${e.url}`);
+    }
+
+    const thirdPartySummary = getThirdPartySummary(lhr);
+    for (const t of thirdPartySummary) {
+      console.log(`[LH][${r}][third-party] ${t.entity}: transfer=${t.transferSize}B blocking=${t.blockingTime}ms`);
+    }
+
     const outPath = path.join('reports', `lh-${slugifyRoute(r)}.html`);
     await fs.writeFile(outPath, reportHtml);
-    summary.push({ route: r, url, scores, metrics, perfOpportunities, bpIssues, reportFile: path.basename(outPath) });
+    summary.push({
+      route: r,
+      url,
+      scores,
+      metrics,
+      perfOpportunities,
+      bpIssues,
+      lcpElement,
+      consoleErrors,
+      thirdPartySummary,
+      reportFile: path.basename(outPath),
+    });
   }
 } catch (e) {
   console.error('[LH] Error:', e);
