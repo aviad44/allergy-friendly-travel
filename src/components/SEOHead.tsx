@@ -28,13 +28,10 @@ export const SEOHead = () => {
       
       {/* Format Detection */}
       <meta name="format-detection" content="telephone=no" />
-      
-      {/* Security Headers */}
-      <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-      <meta httpEquiv="X-Frame-Options" content="SAMEORIGIN" />
-      
-      {/* Performance Hints */}
-      <link rel="preload" as="font" type="font/woff2" crossOrigin="anonymous" />
+      {/* X-Content-Type-Options and X-Frame-Options are set as real HTTP
+          headers in netlify.toml — browsers don't honor either one via
+          <meta>, and Chrome logs a console error for X-Frame-Options
+          specifically, so setting them here was pure dead weight. */}
     </Helmet>
   );
 };
