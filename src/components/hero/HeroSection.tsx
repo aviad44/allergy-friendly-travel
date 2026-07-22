@@ -6,24 +6,32 @@ import { useIsMobile } from '@/hooks/use-mobile';
 export const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const isMobile = useIsMobile();
-  const heroImageUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86.png";
+  // Same source photo, pre-resized to WebP at several widths (was a single
+  // 246KB PNG at native 1920x960 served to every viewport, including
+  // 360px-wide mobile screens where it was 15-20x more pixels than needed).
+  const heroImageUrl = "/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86-1200w.webp";
+  const heroSrcSet = [640, 960, 1200, 1600, 1920]
+    .map((w) => `/lovable-uploads/91b0eae8-ef34-4d1d-9d6e-6e4a4a62fb86-${w}w.webp ${w}w`)
+    .join(', ');
 
   return (
-    <section 
+    <section
       className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden w-full max-w-full font-['Poppins']"
     >
       {/* Optimized background image for LCP discovery */}
       <div className="absolute inset-0 w-full h-full">
         <img
           src={heroImageUrl}
+          srcSet={heroSrcSet}
+          sizes="100vw"
           alt="Beautiful poolside vacation scene with palm trees - Allergy-Free Travel"
           className="w-full h-full object-cover"
           onLoad={() => setImageLoaded(true)}
           loading="eager"
           fetchPriority="high"
           decoding="sync"
-          width="1335"
-          height="1034"
+          width="1920"
+          height="960"
         />
         <div className="absolute inset-0 bg-black/5"></div>
       </div>

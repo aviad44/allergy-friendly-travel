@@ -120,13 +120,6 @@ export const FeaturedDestinations = () => {
     });
     
     setDestinationImages(imageMap);
-    
-    // Preload the images
-    Object.entries(imageMap).forEach(([destId, imageUrl]) => {
-      const img = new Image();
-      img.src = imageUrl;
-      console.log(`FeaturedDestinations: Preloading image for ${destId}: ${imageUrl}`);
-    });
   }, []);
   
   // Handle image load success
