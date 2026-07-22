@@ -63,14 +63,28 @@ const truncate = (s, n) => (s && s.length > n ? `${s.slice(0, n)}…` : s);
 // is or *why* the console has errors — pull those specifics so a bad guess
 // about the root cause (like assuming it's always the hero image) can be
 // checked against reality instead of re-guessed.
+//
+// This audit's `details` is a *list* of two tables (see lighthouse's
+// largest-contentful-paint-element.js): items[0] is the element table
+// (its own .items[0].node is the actual element), items[1] is a phase
+// breakdown table (TTFB / Load Delay / Load Time / Render Delay, each
+// with a % of total LCP) — that breakdown is what actually explains
+// *where* the LCP time goes, not just what the element is.
 function getLcpElement(lhr) {
-  const items = lhr.audits['largest-contentful-paint-element']?.details?.items;
-  const nodeItem = items?.find((i) => i.node)?.node;
+  const listItems = lhr.audits['largest-contentful-paint-element']?.details?.items;
+  const elementTable = listItems?.[0];
+  const phaseTable = listItems?.[1];
+  const nodeItem = elementTable?.items?.[0]?.node;
   if (!nodeItem) return null;
   return {
     selector: nodeItem.selector || '',
     snippet: truncate(nodeItem.snippet || '', 200),
     nodeLabel: nodeItem.nodeLabel || '',
+    phases: (phaseTable?.items || []).map((p) => ({
+      phase: p.phase,
+      percent: p.percent,
+      timingMs: Math.round(p.timing || 0),
+    })),
   };
 }
 
@@ -151,6 +165,9 @@ try {
     const lcpElement = getLcpElement(lhr);
     if (lcpElement) {
       console.log(`[LH][${r}][lcp-element] ${lcpElement.selector} :: ${lcpElement.snippet}`);
+      for (const p of lcpElement.phases) {
+        console.log(`[LH][${r}][lcp-phase] ${p.phase}: ${p.timingMs}ms (${p.percent})`);
+      }
     }
 
     const consoleErrors = getConsoleErrors(lhr);

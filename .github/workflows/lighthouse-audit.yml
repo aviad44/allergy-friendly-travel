@@ -70,6 +70,10 @@ jobs:
                 }
                 if (r.lcpElement) {
                   console.log('**LCP element:** \`' + r.lcpElement.selector + '\` — ' + r.lcpElement.snippet);
+                  if (r.lcpElement.phases && r.lcpElement.phases.length) {
+                    console.log('');
+                    for (const p of r.lcpElement.phases) console.log(\`- \${p.phase}: \${p.timingMs}ms (\${p.percent})\`);
+                  }
                   console.log('');
                 }
                 if (r.consoleErrors && r.consoleErrors.length) {
