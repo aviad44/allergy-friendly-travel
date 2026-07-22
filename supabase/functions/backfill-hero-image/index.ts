@@ -13,6 +13,16 @@ const corsHeaders = {
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
+  // Manual maintenance function, not on any schedule — but still reachable
+  // by anyone who finds the URL without this check, burning Unsplash API
+  // quota for no reason. Same shared-secret pattern as content-pipeline /
+  // social-poster, sent via the x-cron-secret header when invoked manually.
+  const cronSecret = Deno.env.get('CRON_SHARED_SECRET');
+  if (cronSecret && req.headers.get('x-cron-secret') !== cronSecret) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   const unsplashKey = Deno.env.get('UNSPLASH_ACCESS_KEY');

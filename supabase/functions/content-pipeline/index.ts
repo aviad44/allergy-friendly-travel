@@ -404,6 +404,18 @@ Write a JSON object with this exact shape, no markdown fences:
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
+  // This function makes paid API calls (Google Maps, OpenAI) and writes to
+  // production tables — it's meant to be triggered only by the scheduled
+  // GitHub Action, not by anyone who finds the URL. verify_jwt is off because
+  // the workflow authenticates with the public anon key (committed in .env,
+  // bundled into every visitor's browser), which doesn't gate access at all,
+  // so this checks a separate shared secret the workflow sends explicitly.
+  const cronSecret = Deno.env.get('CRON_SHARED_SECRET');
+  if (cronSecret && req.headers.get('x-cron-secret') !== cronSecret) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');

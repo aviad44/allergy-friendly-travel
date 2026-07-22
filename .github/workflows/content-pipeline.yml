@@ -23,6 +23,8 @@ jobs:
 
       - name: Call content-pipeline Edge Function
         id: call
+        env:
+          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
         run: |
           SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
           SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
@@ -31,6 +33,7 @@ jobs:
             -H "Content-Type: application/json" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H "x-cron-secret: $CRON_SHARED_SECRET" \
             -d '{}')
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
