@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 import { MetaManager } from "@/components/MetaManager";
+import { TopHotelsSection } from "@/components/reviews/TopHotelsSection";
+import { Hotel } from "@/types/definitions";
 import NotFound from "@/pages/NotFound";
 
 interface Article {
@@ -16,18 +18,34 @@ interface Article {
   hero_image_credit: string | null;
 }
 
-interface HotelRef {
+interface HotelRow {
   id: string;
   name: string;
   address: string | null;
+  city: string | null;
   website_url: string | null;
   booking_url: string | null;
+  allergy_score: number | null;
 }
+
+const ALLERGEN_FEATURE_LABELS: Record<string, string> = {
+  gluten: "🌾 Gluten-free options",
+  dairy: "🥛 Dairy-free options",
+  nuts: "🥜 Nut-aware kitchen",
+  peanuts: "🥜 Peanut-aware kitchen",
+  eggs: "🥚 Egg-free options",
+  soy: "🫘 Soy-free options",
+  shellfish: "🦐 Shellfish-aware kitchen",
+  sesame: "Sesame-aware kitchen",
+  vegan: "🌱 Vegan options",
+  vegetarian: "🌱 Vegetarian options",
+};
 
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<Article | null>(null);
-  const [hotels, setHotels] = useState<HotelRef[]>([]);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [destinationCity, setDestinationCity] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -52,11 +70,54 @@ const ArticleDetail = () => {
       setArticle(data);
 
       if (data.hotel_ids && data.hotel_ids.length > 0) {
-        const { data: hotelRows } = await supabase
-          .from('hotels')
-          .select('id, name, address, website_url, booking_url')
-          .in('id', data.hotel_ids);
-        if (hotelRows) setHotels(hotelRows);
+        const [{ data: hotelRows }, { data: sourceRows }, { data: allergyRows }] = await Promise.all([
+          supabase
+            .from('hotels')
+            .select('id, name, address, city, website_url, booking_url, allergy_score')
+            .in('id', data.hotel_ids),
+          supabase
+            .from('hotel_sources')
+            .select('hotel_id, snippet, raw_text')
+            .in('hotel_id', data.hotel_ids)
+            .eq('source_type', 'google'),
+          supabase
+            .from('hotel_allergy_info')
+            .select('hotel_id, allergen_type, support_level')
+            .in('hotel_id', data.hotel_ids),
+        ]);
+
+        if (hotelRows) {
+          // Real evidence gathered by content-pipeline: an actual guest review
+          // excerpt per hotel and, where the automated classifier recognized
+          // specific allergens, structured per-allergen support info. Falls
+          // back to a generic badge when no allergen was specifically matched
+          // — never invents a claim the review didn't make.
+          const mergedHotels: Hotel[] = (hotelRows as HotelRow[]).map((hotel) => {
+            const source = sourceRows?.find((s) => s.hotel_id === hotel.id);
+            const allergens = (allergyRows || []).filter((a) => a.hotel_id === hotel.id);
+
+            const features = allergens.length > 0
+              ? allergens.map((a) => ALLERGEN_FEATURE_LABELS[a.allergen_type] || `${a.allergen_type} options`)
+              : ['✅ Allergy-conscious reviews from real guests'];
+
+            if (hotel.allergy_score) {
+              features.push(`🛡️ Allergy score: ${hotel.allergy_score}/5`);
+            }
+
+            return {
+              id: hotel.id,
+              name: hotel.name,
+              address: hotel.address || undefined,
+              features,
+              quote: source?.raw_text || source?.snippet || undefined,
+              bookingUrl: hotel.booking_url || hotel.website_url || undefined,
+              description: '',
+            };
+          });
+          setHotels(mergedHotels);
+          const firstCity = (hotelRows as HotelRow[]).find((h) => h.city)?.city;
+          if (firstCity) setDestinationCity(firstCity);
+        }
       }
 
       setIsLoading(false);
@@ -119,35 +180,22 @@ const ArticleDetail = () => {
             </figure>
           )}
 
-          <div className="prose prose-blue max-w-none mb-10">
-            <ReactMarkdown>{article.content_markdown || ''}</ReactMarkdown>
-          </div>
+          {article.meta_description && (
+            <p className="text-lg text-muted-foreground mb-8">{article.meta_description}</p>
+          )}
 
           {hotels.length > 0 && (
-            <section className="border-t pt-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Hotels mentioned in this guide</h2>
-              <div className="space-y-4">
-                {hotels.map((hotel) => (
-                  <div key={hotel.id} className="border border-gray-200 rounded-lg p-4">
-                    <h3 className="font-semibold text-blue-800">{hotel.name}</h3>
-                    {hotel.address && <p className="text-sm text-gray-600 mb-2">{hotel.address}</p>}
-                    <div className="flex flex-wrap gap-3">
-                      {hotel.website_url && (
-                        <a href={hotel.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                          Hotel Website
-                        </a>
-                      )}
-                      {hotel.booking_url && (
-                        <a href={hotel.booking_url} target="_blank" rel="noopener noreferrer" className="text-sm text-teal-600 hover:text-teal-800 font-medium">
-                          Check Availability on Booking.com
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+            <div className="mb-10">
+              <TopHotelsSection
+                hotels={hotels}
+                destinationName={destinationCity || article.title}
+              />
+            </div>
           )}
+
+          <div className="prose prose-blue max-w-none mb-10 border-t pt-8">
+            <ReactMarkdown>{article.content_markdown || ''}</ReactMarkdown>
+          </div>
         </article>
       </div>
     </div>

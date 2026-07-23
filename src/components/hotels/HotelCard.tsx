@@ -103,12 +103,18 @@ export const HotelCard = ({
         {description && (
           <p className="text-xs text-muted-foreground line-clamp-2">{description}</p>
         )}
-        
-        <div className="bg-primary/5 rounded-lg p-3 relative mt-1">
-          <p className="text-xs text-primary/80 relative z-10">
-            Verified guest reviews are sourced from TripAdvisor, Booking.com, and Google Reviews.
-          </p>
-        </div>
+
+        {quote ? (
+          <blockquote className="bg-primary/5 rounded-lg p-3 relative mt-1 border-l-2 border-primary/30">
+            <p className="text-xs text-primary/90 relative z-10 italic line-clamp-3">"{quote}"</p>
+          </blockquote>
+        ) : (
+          <div className="bg-primary/5 rounded-lg p-3 relative mt-1">
+            <p className="text-xs text-primary/80 relative z-10">
+              Verified guest reviews are sourced from TripAdvisor, Booking.com, and Google Reviews.
+            </p>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="pt-0 pb-4 px-4">
         <Button 
