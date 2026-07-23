@@ -149,7 +149,14 @@ function classifyAndExtract(reviewText: string): ReviewSnippet | null {
   const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
   const hasDietary = dietaryIndicators.some(d => norm.includes(d));
 
-  const isRelevant = hasStrict || hasWarning || (hasWeak && (hasSafety || hasWarning)) || (hasDietary && hasPositive);
+  // hasWarning alone used to be enough ('unsafe', 'reaction', 'not safe' —
+  // meant to catch allergy-reaction safety concerns), but those words are
+  // generic enough to match completely unrelated complaints (a real review
+  // about staff harassment matched on "unsafe" and got a 0.95 allergy score
+  // purely from that). Now requires a warning phrase to co-occur with an
+  // actual dietary/allergen term, so an out-of-context "unsafe" no longer
+  // qualifies on its own.
+  const isRelevant = hasStrict || (hasWarning && (hasWeak || hasDietary)) || (hasWeak && (hasSafety || hasWarning)) || (hasDietary && hasPositive);
   if (!isRelevant) return null;
 
   let score = 0;
@@ -430,12 +437,26 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   try {
-    const { count } = await supabase
-      .from('pipeline_log')
-      .select('*', { count: 'exact', head: true })
-      .eq('run_type', 'hotel_discovery');
+    // Optional manual override (e.g. { "city": "Dublin", "country": "Ireland" })
+    // to re-check a specific destination on demand instead of following the
+    // rotation — used for re-verifying a destination that already has hotels/
+    // an article, since the 30-city rotation only revisits each one every
+    // ~30 runs.
+    let destination: { city: string; country: string } | undefined;
+    try {
+      const body = await req.json();
+      if (body?.city && body?.country) destination = { city: body.city, country: body.country };
+    } catch {
+      // no/invalid JSON body — fall through to the normal rotation
+    }
 
-    const destination = DESTINATIONS[(count || 0) % DESTINATIONS.length];
+    if (!destination) {
+      const { count } = await supabase
+        .from('pipeline_log')
+        .select('*', { count: 'exact', head: true })
+        .eq('run_type', 'hotel_discovery');
+      destination = DESTINATIONS[(count || 0) % DESTINATIONS.length];
+    }
     console.log(`Pipeline run — destination: ${destination.city}, ${destination.country}`);
 
     const { data: discoveryLog } = await supabase
@@ -461,7 +482,58 @@ serve(async (req) => {
     }
 
     let articleResult: any = null;
-    if (discovery.discovered.length >= 1 && openaiKey) {
+    if (discovery.discovered.length >= 1) {
+      const newHotelIds = discovery.discovered.map(d => d.hotelId);
+
+      // Does a published article already cover this destination? Detected by
+      // checking whether any published article's hotel_ids overlaps with any
+      // hotel we've ever recorded for this city — not just this run's finds,
+      // since a previous run may have discovered a different subset.
+      const { data: cityHotels } = await supabase.from('hotels').select('id').eq('city', destination.city);
+      const cityHotelIds = (cityHotels || []).map((h: any) => h.id);
+
+      let existingArticle: { id: string; slug: string; title: string; hotel_ids: string[] } | null = null;
+      if (cityHotelIds.length > 0) {
+        const { data: existing } = await supabase
+          .from('seo_articles')
+          .select('id, slug, title, hotel_ids')
+          .eq('status', 'published')
+          .overlaps('hotel_ids', cityHotelIds)
+          .limit(1)
+          .maybeSingle();
+        existingArticle = existing;
+      }
+
+      if (existingArticle) {
+        // Real hotels the automated classifier has already surfaced evidence
+        // for exist on this page — add any newly-discovered ones to the same
+        // article's hotel_ids rather than writing a second, separate article
+        // for the same city. The article page renders hotel cards live from
+        // hotel_ids (real name/address/review/allergy-score each time), so
+        // this alone is enough for the new hotel to appear with real evidence
+        // — no need to regenerate the AI-written prose.
+        const mergedHotelIds = [...new Set([...(existingArticle.hotel_ids || []), ...newHotelIds])];
+        const addedCount = mergedHotelIds.length - (existingArticle.hotel_ids || []).length;
+
+        if (addedCount > 0) {
+          const { error: updateErr } = await supabase
+            .from('seo_articles')
+            .update({ hotel_ids: mergedHotelIds, updated_at: new Date().toISOString() })
+            .eq('id', existingArticle.id);
+
+          await supabase.from('pipeline_log').insert({
+            run_type: 'content_generation',
+            status: updateErr ? 'error' : 'success',
+            articles_updated: updateErr ? 0 : 1,
+            error_message: updateErr ? updateErr.message : null,
+            finished_at: new Date().toISOString(),
+          });
+
+          if (!updateErr) articleResult = { slug: existingArticle.slug, title: existingArticle.title, updated: true, hotelsAdded: addedCount };
+        } else {
+          console.log(`No new hotels for existing article "${existingArticle.slug}" — all ${newHotelIds.length} discovered hotel(s) already linked.`);
+        }
+      } else if (openaiKey) {
       const { data: contentLog } = await supabase
         .from('pipeline_log')
         .insert({ run_type: 'content_generation', status: 'running' })
@@ -469,7 +541,7 @@ serve(async (req) => {
         .single();
 
       try {
-        const hotelIds = discovery.discovered.map(d => d.hotelId);
+        const hotelIds = newHotelIds;
         const { article, errorDetail } = await generateArticle(openaiKey, destination, hotelIds, supabase);
 
         if (article?.slug && article?.content_markdown) {
@@ -517,6 +589,7 @@ serve(async (req) => {
         await supabase.from('pipeline_log').update({
           status: 'error', error_message: String(err), finished_at: new Date().toISOString(),
         }).eq('id', contentLog.id);
+      }
       }
     }
 
