@@ -6,6 +6,7 @@ import { ReviewContent } from "@/components/reviews/ReviewContent";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { Review, sortOptions } from "@/types/definitions";
+import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderReady";
 
 const Reviews = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -18,6 +19,7 @@ const Reviews = () => {
 
 
   useEffect(() => {
+    markPrerenderNotReady();
     fetchReviews();
   }, []);
 
@@ -106,6 +108,7 @@ const Reviews = () => {
       
       console.log("Processed reviews:", processedReviews);
       setReviews(processedReviews);
+      markPrerenderReady();
     } catch (error: any) {
       console.error('Detailed error information:', {
         name: error?.name,
@@ -141,6 +144,7 @@ const Reviews = () => {
         description: errorMessage,
         variant: "destructive"
       });
+      markPrerenderReady();
     } finally {
       setIsLoading(false);
     }

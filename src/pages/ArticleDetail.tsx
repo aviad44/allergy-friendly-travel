@@ -6,6 +6,7 @@ import { MetaManager } from "@/components/MetaManager";
 import { TopHotelsSection } from "@/components/reviews/TopHotelsSection";
 import { Hotel } from "@/types/definitions";
 import NotFound from "@/pages/NotFound";
+import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderReady";
 
 interface Article {
   title: string;
@@ -54,6 +55,7 @@ const ArticleDetail = () => {
 
     const fetchArticle = async () => {
       setIsLoading(true);
+      markPrerenderNotReady();
       const { data, error } = await supabase
         .from('seo_articles')
         .select('title, slug, meta_description, content_markdown, hotel_ids, published_at, hero_image_url, hero_image_credit')
@@ -64,6 +66,7 @@ const ArticleDetail = () => {
       if (error || !data) {
         setNotFound(true);
         setIsLoading(false);
+        markPrerenderReady();
         return;
       }
 
@@ -121,6 +124,7 @@ const ArticleDetail = () => {
       }
 
       setIsLoading(false);
+      markPrerenderReady();
     };
 
     fetchArticle();

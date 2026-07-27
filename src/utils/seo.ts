@@ -6,7 +6,13 @@ export function buildCanonical(input: string): string {
     url.hostname = url.hostname.toLowerCase();
     url.pathname = url.pathname.toLowerCase();
 
-    // Strip known tracking params
+    // Strip known tracking/non-canonical params. Any param not stripped
+    // here produces a *different* self-referencing canonical URL (e.g.
+    // "?lang=fr" was left in, so Google indexed it as a separate duplicate
+    // of the base page instead of folding it in) — /search-results is the
+    // one route that intentionally varies its canonical by query params
+    // (destination/allergies), and it passes its own explicit canonical
+    // string rather than relying on this list, so it's unaffected.
     const paramsToRemove = [
       'utm_source',
       'utm_medium',
@@ -17,6 +23,9 @@ export function buildCanonical(input: string): string {
       'fbclid',
       'ref',
       'ref_src',
+      'lang',
+      'source',
+      'via',
     ];
 
     paramsToRemove.forEach((p) => url.searchParams.delete(p));
