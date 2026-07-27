@@ -1,12 +1,11 @@
 
 [build]
-  command = "npm run build"
+  # Prerender runs after the Vite build: it visits every real route with a
+  # headless browser and writes the fully-rendered HTML into dist/<route>/,
+  # so Netlify serves real content to everyone (bots included) as a plain
+  # static file — no third-party rendering service in the request path.
+  command = "npm run build && npm run prerender"
   publish = "dist"
-
-# Edge functions with improved bot detection - this has highest priority
-[[edge_functions]]
-  path = "/*"
-  function = "optimize-static-assets"
 
 # Redirect code files and internal folders to 404
 [[redirects]]
@@ -182,7 +181,6 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Content-Security-Policy = "upgrade-insecure-requests"
-    X-Prerender-Token = "${PRERENDER_TOKEN}"
     Access-Control-Allow-Origin = "*"
 
 # Cache control for static assets

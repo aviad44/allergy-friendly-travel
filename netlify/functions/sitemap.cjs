@@ -54,6 +54,9 @@ function urlEntry(loc, lastmod, changefreq, priority) {
   return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
 }
 
+exports.STATIC_PATHS = STATIC_PATHS;
+exports.BASE_URL = BASE_URL;
+
 exports.handler = async () => {
   const today = new Date().toISOString().split('T')[0];
   const entries = STATIC_PATHS.map((p) =>
