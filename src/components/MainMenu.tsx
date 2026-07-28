@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, Home, MapPin, Star, MessageCircle, Info, HelpCircle, Shield } from "lucide-react";
+import { Menu, Home, MapPin, Star, MessageCircle, Info, HelpCircle, Shield, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const menuItems = [
@@ -15,6 +15,11 @@ const menuItems = [
     title: "Destinations",
     icon: MapPin,
     href: "/destinations"
+  },
+  {
+    title: "Travel Guides",
+    icon: BookOpen,
+    href: "/articles"
   },
   {
     title: "Allergy Card",

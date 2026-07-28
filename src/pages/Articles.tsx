@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { MetaManager } from "@/components/MetaManager";
+import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderReady";
 
 interface ArticleSummary {
   slug: string;
@@ -16,6 +17,7 @@ const Articles = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    markPrerenderNotReady();
     const fetchArticles = async () => {
       const { data, error } = await supabase
         .from('seo_articles')
@@ -25,6 +27,7 @@ const Articles = () => {
 
       if (!error && data) setArticles(data);
       setIsLoading(false);
+      markPrerenderReady();
     };
     fetchArticles();
   }, []);
@@ -77,6 +80,13 @@ const Articles = () => {
             </Link>
           ))}
         </div>
+
+        <p className="mt-10 text-sm text-gray-600">
+          Looking for a specific destination?{" "}
+          <Link to="/destinations" className="text-blue-600 hover:text-blue-800 font-medium">
+            Browse all destination guides →
+          </Link>
+        </p>
       </div>
     </div>
   );

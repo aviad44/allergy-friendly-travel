@@ -42,11 +42,17 @@ const ALLERGEN_FEATURE_LABELS: Record<string, string> = {
   vegetarian: "🌱 Vegetarian options",
 };
 
+interface RelatedArticle {
+  slug: string;
+  title: string;
+}
+
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<Article | null>(null);
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [destinationCity, setDestinationCity] = useState<string | null>(null);
+  const [relatedArticles, setRelatedArticles] = useState<RelatedArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -71,6 +77,15 @@ const ArticleDetail = () => {
       }
 
       setArticle(data);
+
+      const { data: related } = await supabase
+        .from('seo_articles')
+        .select('slug, title')
+        .eq('status', 'published')
+        .neq('slug', slug)
+        .order('published_at', { ascending: false })
+        .limit(3);
+      if (related) setRelatedArticles(related);
 
       if (data.hotel_ids && data.hotel_ids.length > 0) {
         const [{ data: hotelRows }, { data: sourceRows }, { data: allergyRows }] = await Promise.all([
@@ -200,6 +215,28 @@ const ArticleDetail = () => {
           <div className="prose prose-blue max-w-none mb-10 border-t pt-8">
             <ReactMarkdown>{article.content_markdown || ''}</ReactMarkdown>
           </div>
+
+          {relatedArticles.length > 0 && (
+            <div className="border-t pt-8 mb-6">
+              <h2 className="text-lg font-semibold text-blue-800 mb-4">More Guides</h2>
+              <ul className="space-y-2">
+                {relatedArticles.map((a) => (
+                  <li key={a.slug}>
+                    <Link to={`/articles/${a.slug}`} className="text-blue-600 hover:text-blue-800">
+                      {a.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <p className="text-sm text-gray-600">
+            Looking for a specific destination?{" "}
+            <Link to="/destinations" className="text-blue-600 hover:text-blue-800 font-medium">
+              Browse all destination guides →
+            </Link>
+          </p>
         </article>
       </div>
     </div>
