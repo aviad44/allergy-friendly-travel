@@ -443,43 +443,62 @@ serve(async (req) => {
     // an article, since the 30-city rotation only revisits each one every
     // ~30 runs.
     let destination: { city: string; country: string } | undefined;
+    let manualOverride = false;
     try {
       const body = await req.json();
-      if (body?.city && body?.country) destination = { city: body.city, country: body.country };
+      if (body?.city && body?.country) { destination = { city: body.city, country: body.country }; manualOverride = true; }
     } catch {
       // no/invalid JSON body — fall through to the normal rotation
     }
 
-    if (!destination) {
+    let baseCount = 0;
+    if (!manualOverride) {
       const { count } = await supabase
         .from('pipeline_log')
         .select('*', { count: 'exact', head: true })
         .eq('run_type', 'hotel_discovery');
-      destination = DESTINATIONS[(count || 0) % DESTINATIONS.length];
+      baseCount = count || 0;
     }
-    console.log(`Pipeline run — destination: ${destination.city}, ${destination.country}`);
 
-    const { data: discoveryLog } = await supabase
-      .from('pipeline_log')
-      .insert({ run_type: 'hotel_discovery', status: 'running' })
-      .select('id')
-      .single();
+    // A single city with zero allergy-relevant reviews on a given day
+    // shouldn't mean skipping this run's article entirely — try the next
+    // city in rotation instead, up to a bounded number of attempts (manual
+    // overrides stay single-shot: the caller asked for that one city).
+    const MAX_ATTEMPTS = manualOverride ? 1 : 5;
+    const attemptedDestinations: string[] = [];
+    let discovery: Awaited<ReturnType<typeof discoverHotels>> | undefined;
 
-    let discovery;
-    try {
-      discovery = await discoverHotels(supabase, apiKey, destination);
-      await supabase.from('pipeline_log').update({
-        status: 'success',
-        hotels_found: discovery.candidatesFound,
-        hotels_added: discovery.discovered.length,
-        finished_at: new Date().toISOString(),
-      }).eq('id', discoveryLog.id);
-    } catch (err) {
-      await supabase.from('pipeline_log').update({
-        status: 'error', error_message: String(err), finished_at: new Date().toISOString(),
-      }).eq('id', discoveryLog.id);
-      throw err;
+    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+      if (!manualOverride) {
+        destination = DESTINATIONS[(baseCount + attempt) % DESTINATIONS.length];
+      }
+      console.log(`Pipeline run — destination: ${destination!.city}, ${destination!.country} (attempt ${attempt + 1}/${MAX_ATTEMPTS})`);
+      attemptedDestinations.push(`${destination!.city}, ${destination!.country}`);
+
+      const { data: discoveryLog } = await supabase
+        .from('pipeline_log')
+        .insert({ run_type: 'hotel_discovery', status: 'running' })
+        .select('id')
+        .single();
+
+      try {
+        discovery = await discoverHotels(supabase, apiKey, destination!);
+        await supabase.from('pipeline_log').update({
+          status: 'success',
+          hotels_found: discovery.candidatesFound,
+          hotels_added: discovery.discovered.length,
+          finished_at: new Date().toISOString(),
+        }).eq('id', discoveryLog.id);
+      } catch (err) {
+        await supabase.from('pipeline_log').update({
+          status: 'error', error_message: String(err), finished_at: new Date().toISOString(),
+        }).eq('id', discoveryLog.id);
+        throw err;
+      }
+
+      if (discovery.discovered.length >= 1) break;
     }
+    discovery = discovery!;
 
     let articleResult: any = null;
     if (discovery.discovered.length >= 1) {
@@ -594,7 +613,8 @@ serve(async (req) => {
     }
 
     return new Response(JSON.stringify({
-      destination: `${destination.city}, ${destination.country}`,
+      destination: `${destination!.city}, ${destination!.country}`,
+      attemptedDestinations,
       hotelsFound: discovery.candidatesFound,
       hotelsWithEvidence: discovery.discovered.length,
       article: articleResult,
