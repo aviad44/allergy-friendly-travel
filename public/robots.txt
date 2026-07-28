@@ -27,8 +27,8 @@ User-agent: Googlebot
 Allow: /
 
 # AI answer-engine / LLM crawlers — explicitly welcomed. These do not
-# execute JavaScript; see netlify/edge-functions/optimize-static-assets.js
-# for the prerendering that serves them real content.
+# execute JavaScript; see scripts/prerender.mjs for the build-time static
+# rendering that serves them real content instead of an empty SPA shell.
 User-agent: GPTBot
 Allow: /
 

@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { MetaManager } from "@/components/MetaManager";
+import { destinationHotelsJsonLd } from "@/utils/jsonld";
 import { DestinationHero } from "./DestinationHero";
 import { LanguageCode, Destination, DestinationId } from "@/types/definitions";
 import { Separator } from "@/components/ui/separator";
@@ -102,9 +103,13 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
     console.error(`Missing content data for: ${destinationId}`);
   }
 
+  const hotelsJsonLd = content?.hotels?.length
+    ? destinationHotelsJsonLd(content.hotels)
+    : undefined;
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <MetaManager />
+      <MetaManager dynamicData={hotelsJsonLd?.length ? { jsonLdExtra: hotelsJsonLd } : undefined} />
       <DestinationHero destination={destination} />
 
       <main className="container mx-auto px-3 sm:px-5 lg:px-6 py-4 sm:py-6 -mt-14 sm:-mt-16 relative z-10 flex-grow">

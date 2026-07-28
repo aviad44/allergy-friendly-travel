@@ -22,7 +22,6 @@ New destination guides published every 2 days, grounded only in real, verified h
 
 ## Tools
 - [Allergy translation card generator](https://www.allergy-free-travel.com/allergy-translation-card) — create a printable card explaining your food allergies in the local language.
-- [Menu allergen scanner](https://www.allergy-free-travel.com/menu-scanner) — upload a photo of a restaurant menu to identify potential allergens.
 
 ## Reference
 - [Frequently asked questions](https://www.allergy-free-travel.com/faq)

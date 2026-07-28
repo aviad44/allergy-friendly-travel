@@ -1,6 +1,5 @@
 
 import { DestinationContent } from '@/types/definitions';
-import { genericFaqs, genericIntro } from './generic-content';
 
 export const hotelChainsContent: DestinationContent = {
   intro: "Global hotel chains that offer consistent allergy-friendly policies and protocols across their properties worldwide.",

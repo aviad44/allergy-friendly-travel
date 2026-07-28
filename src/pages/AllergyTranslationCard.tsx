@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { HOME_CONTENT } from "@/constants/home";
 import { AllergyCardGenerator } from '@/components/allergy-card/AllergyCardGenerator';
@@ -285,22 +286,22 @@ const AllergyTranslationCard = () => {
         <nav aria-label="Related travel resources" className="mb-8">
           <h3 className="text-xl font-semibold mb-4 text-center">🔗 More Allergy Travel Resources</h3>
           <div className="grid md:grid-cols-2 gap-4">
-            <a href="/destinations" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+            <Link to="/destinations" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
               <h4 className="font-semibold text-primary mb-2">🏨 Allergy-Friendly Hotels</h4>
               <p className="text-sm text-gray-600">Find safe accommodation with allergy-friendly dining options worldwide</p>
-            </a>
-            <a href="/menu-scanner" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <h4 className="font-semibold text-primary mb-2">📱 Menu Allergen Scanner</h4>
-              <p className="text-sm text-gray-600">Scan restaurant menus to identify potential allergens instantly</p>
-            </a>
-            <a href="/destinations" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+            </Link>
+            <Link to="/reviews" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              <h4 className="font-semibold text-primary mb-2">⭐ Traveler Reviews</h4>
+              <p className="text-sm text-gray-600">Read real experiences from travelers managing food allergies abroad</p>
+            </Link>
+            <Link to="/articles" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
               <h4 className="font-semibold text-primary mb-2">🍽️ Restaurant Safety Tips</h4>
               <p className="text-sm text-gray-600">Essential guidelines for dining safely with food allergies while traveling</p>
-            </a>
-            <a href="/contact" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+            </Link>
+            <Link to="/contact" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
               <h4 className="font-semibold text-primary mb-2">💬 Allergy Travel Consultation</h4>
               <p className="text-sm text-gray-600">Get personalized advice for your allergy-friendly travel planning</p>
-            </a>
+            </Link>
           </div>
         </nav>
       </main>

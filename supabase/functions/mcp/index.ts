@@ -2347,18 +2347,6 @@ var newYorkContent = {
   }
 };
 
-// src/data/generic-content.ts
-var genericFaqs = [
-  {
-    question: "How should I communicate my allergies when traveling?",
-    answer: "Always inform your hotel about your allergies in advance. Carrying allergy translation cards in the local language is highly recommended, and learning key phrases related to your dietary needs can be very helpful."
-  },
-  {
-    question: "Are luxury hotels better for handling allergies?",
-    answer: "Generally, luxury hotels tend to have more trained staff and flexible kitchen facilities to accommodate dietary restrictions, though there are excellent options in all price ranges."
-  }
-];
-
 // src/data/destination-ayia-napa.ts
 var ayiaNapaContent = {
   intro: "Discover allergy-friendly accommodations in Cyprus's beautiful coastal town.",
@@ -2392,7 +2380,16 @@ var ayiaNapaContent = {
       stars: 4
     }
   ],
-  faqs: genericFaqs,
+  faqs: [
+    {
+      question: "Are Ayia Napa's beach resorts equipped for severe food allergies?",
+      answer: "Most dining here is buffet-style, which makes cross-contact a real risk for severe allergies. Look for resorts with clear allergen labeling like Nissi Beach Resort, and ask the buffet chef for an a-la-carte alternative plate if labeling looks unclear."
+    },
+    {
+      question: "What local Cypriot dishes should I watch out for with dairy or nut allergies?",
+      answer: "Halloumi is a dairy staple in almost every meze spread, and many local pastries and desserts contain nuts (similar to baklava). Flag these two categories specifically when speaking to hotel restaurant staff."
+    }
+  ],
   languageTable: {
     headers: ["English", "Greek"],
     rows: [
@@ -2436,7 +2433,16 @@ var abuDhabiContent = {
       stars: 5
     }
   ],
-  faqs: genericFaqs,
+  faqs: [
+    {
+      question: "Do Abu Dhabi's luxury hotels charge extra for allergen-specific meals?",
+      answer: "Generally no. At 5-star properties like Emirates Palace and Park Hyatt, allergen-aware menu adjustments and chef consultations are part of the standard personalized service, not a paid add-on."
+    },
+    {
+      question: "How far in advance should I notify a hotel in Abu Dhabi about my allergies?",
+      answer: "Aim for 48\u201372 hours before arrival if you want a personal chef consultation, which several of the city's top palace and resort hotels offer. Same-day notice usually still gets you a safe meal, just with less menu customization."
+    }
+  ],
   languageTable: {
     headers: ["English", "Arabic"],
     rows: [
@@ -2570,7 +2576,16 @@ var turkeyContent = {
       stars: 5
     }
   ],
-  faqs: genericFaqs,
+  faqs: [
+    {
+      question: "Is Turkish cuisine easy to navigate with a gluten allergy?",
+      answer: "Turkish menus lean heavily on bread and wheat-based pastries, but grilled meats, fish, and vegetable dishes (k\xF6fte, izgara, most meze) are naturally gluten-free. Confirm with kitchen staff that shared grills and fryers aren't also used for breaded items."
+    },
+    {
+      question: "Do all-inclusive resorts in Turkey label allergens on their buffets?",
+      answer: "Larger 5-star resorts like the ones above increasingly label common allergens on buffet cards, but labeling isn't universal. Ask to speak with the chef or duty manager on arrival \u2014 most high-end Turkish resorts will prepare a separate plate on request."
+    }
+  ],
   languageTable: {
     headers: ["English", "Turkish"],
     rows: [

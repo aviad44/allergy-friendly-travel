@@ -1,6 +1,5 @@
 
 import { DestinationContent } from '@/types/definitions';
-import { genericFaqs, genericIntro } from './generic-content';
 
 export const abuDhabiContent: DestinationContent = {
   intro: "Abu Dhabi's luxury hotels excel at accommodating dietary restrictions with world-class service and attention to detail.",
@@ -34,7 +33,16 @@ export const abuDhabiContent: DestinationContent = {
       stars: 5
     }
   ],
-  faqs: genericFaqs,
+  faqs: [
+    {
+      question: "Do Abu Dhabi's luxury hotels charge extra for allergen-specific meals?",
+      answer: "Generally no. At 5-star properties like Emirates Palace and Park Hyatt, allergen-aware menu adjustments and chef consultations are part of the standard personalized service, not a paid add-on."
+    },
+    {
+      question: "How far in advance should I notify a hotel in Abu Dhabi about my allergies?",
+      answer: "Aim for 48–72 hours before arrival if you want a personal chef consultation, which several of the city's top palace and resort hotels offer. Same-day notice usually still gets you a safe meal, just with less menu customization."
+    }
+  ],
   languageTable: {
     headers: ["English", "Arabic"],
     rows: [
