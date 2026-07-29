@@ -65,14 +65,22 @@ exports.handler = async () => {
   );
 
   try {
-    const supabaseUrl = process.env.VITE_SUPABASE_URL;
-    const supabaseKey = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    // Same fallback pattern as scripts/prerender.mjs: these are the public
+    // anon key/URL (safe to hardcode, not a secret) — without a fallback,
+    // this silently skipped every article/restaurant URL whenever Netlify's
+    // function runtime didn't have these env vars set, which is exactly
+    // what was happening (confirmed live: 0 article/restaurant URLs in the
+    // sitemap despite published content existing).
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://embuxlxugjkjgsusrmlx.supabase.co';
+    const supabaseKey = process.env.VITE_SUPABASE_PUBLISHABLE_KEY
+      || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtYnV4bHh1Z2pramdzdXNybWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQwODAxMjgsImV4cCI6MjA0OTY1NjEyOH0.iVA1pxwT2_GUBMBCIovf45o23E84FsGu8HByFDQOscQ';
     if (supabaseUrl && supabaseKey) {
       const supabase = createClient(supabaseUrl, supabaseKey);
-      const { data: articles } = await supabase
+      const { data: articles, error } = await supabase
         .from('seo_articles')
         .select('slug, content_type, published_at, updated_at')
         .eq('status', 'published');
+      if (error) console.error('Sitemap: Supabase query returned an error:', error);
 
       for (const article of articles || []) {
         const lastmod = (article.updated_at || article.published_at || today).split('T')[0];
