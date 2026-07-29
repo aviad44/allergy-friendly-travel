@@ -1,6 +1,6 @@
 name: Content Pipeline (Real Hotel Discovery + Article Generation)
 
-# Runs every 2 days. Calls the content-pipeline Supabase Edge Function, which:
+# Runs daily. Calls the content-pipeline Supabase Edge Function, which:
 #   1. Discovers real hotels for the next destination via Google Places, keeping
 #      only reviews that actually mention food allergies (no AI-invented content).
 #   2. Writes an SEO article grounded only in that real evidence and publishes it.
@@ -9,7 +9,10 @@ name: Content Pipeline (Real Hotel Discovery + Article Generation)
 
 on:
   schedule:
-    - cron: "0 9 */2 * *"   # every 2 days at 09:00 UTC
+    # Daily at 09:00 UTC — with hotel/restaurant alternation, each content
+    # type still publishes roughly every 2 days, matching the original
+    # hotel-only cadence from before restaurants existed.
+    - cron: "0 9 * * *"
   workflow_dispatch:
     inputs:
       content_type:
