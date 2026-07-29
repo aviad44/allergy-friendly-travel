@@ -15,6 +15,7 @@ interface Article {
   content_markdown: string | null;
   restaurant_ids: string[] | null;
   published_at: string | null;
+  updated_at: string | null;
   hero_image_url: string | null;
   hero_image_credit: string | null;
 }
@@ -68,7 +69,7 @@ const RestaurantDetail = () => {
       markPrerenderNotReady();
       const { data, error } = await supabase
         .from('seo_articles')
-        .select('title, slug, meta_description, content_markdown, restaurant_ids, published_at, hero_image_url, hero_image_credit')
+        .select('title, slug, meta_description, content_markdown, restaurant_ids, published_at, updated_at, hero_image_url, hero_image_credit')
         .eq('slug', slug)
         .eq('status', 'published')
         .eq('content_type', 'restaurant')
@@ -147,6 +148,7 @@ const RestaurantDetail = () => {
     description: article.meta_description || undefined,
     image: article.hero_image_url || undefined,
     datePublished: article.published_at || undefined,
+    dateModified: article.updated_at || article.published_at || undefined,
     mainEntityOfPage: articleUrl,
     author: { "@type": "Organization", name: "Allergy-Free Travel" },
     publisher: { "@type": "Organization", name: "Allergy-Free Travel" },

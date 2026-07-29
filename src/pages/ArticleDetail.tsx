@@ -15,6 +15,7 @@ interface Article {
   content_markdown: string | null;
   hotel_ids: string[] | null;
   published_at: string | null;
+  updated_at: string | null;
   hero_image_url: string | null;
   hero_image_credit: string | null;
 }
@@ -64,7 +65,7 @@ const ArticleDetail = () => {
       markPrerenderNotReady();
       const { data, error } = await supabase
         .from('seo_articles')
-        .select('title, slug, meta_description, content_markdown, hotel_ids, published_at, hero_image_url, hero_image_credit')
+        .select('title, slug, meta_description, content_markdown, hotel_ids, published_at, updated_at, hero_image_url, hero_image_credit')
         .eq('slug', slug)
         .eq('status', 'published')
         .single();
@@ -158,6 +159,7 @@ const ArticleDetail = () => {
     description: article.meta_description || undefined,
     image: article.hero_image_url || undefined,
     datePublished: article.published_at || undefined,
+    dateModified: article.updated_at || article.published_at || undefined,
     mainEntityOfPage: articleUrl,
     author: { "@type": "Organization", name: "Allergy-Free Travel" },
     publisher: { "@type": "Organization", name: "Allergy-Free Travel" },
