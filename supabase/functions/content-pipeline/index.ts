@@ -345,6 +345,42 @@ async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<Uns
   }
 }
 
+// Pinterest is the highest-leverage passive distribution channel for a new
+// travel-content domain: its own search surfaces content on relevance signals
+// much faster than Google trusts a young domain. This is a fire-and-forget
+// side effect of publishing — never let it block or fail the actual article
+// publish, hence the try/catch swallowing everything and returning silently
+// when the token/board aren't configured yet.
+async function publishToPinterest(
+  token: string,
+  boardId: string,
+  params: { title: string; description: string; slug: string; basePath: 'articles' | 'restaurants'; imageUrl: string | null }
+): Promise<void> {
+  if (!params.imageUrl) return; // Pinterest requires an image; skip silently if we have none
+  try {
+    const link = `https://www.allergy-free-travel.com/${params.basePath}/${params.slug}`;
+    const res = await fetch('https://api.pinterest.com/v5/pins', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        board_id: boardId,
+        title: params.title.slice(0, 100),
+        description: params.description.slice(0, 500),
+        link,
+        media_source: { source_type: 'image_url', url: params.imageUrl },
+      }),
+    });
+    if (!res.ok) {
+      console.error('Pinterest pin creation failed (non-fatal):', res.status, await res.text());
+    }
+  } catch (err) {
+    console.error('Pinterest publish error (non-fatal):', err);
+  }
+}
+
 // ==========================================
 // STEP 1: Discover real hotels + real allergy evidence for a destination
 // ==========================================
@@ -689,6 +725,8 @@ serve(async (req) => {
   const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
   const openaiKey = Deno.env.get('OPENAI_API_KEY');
   const unsplashKey = Deno.env.get('UNSPLASH_ACCESS_KEY');
+  const pinterestToken = Deno.env.get('PINTEREST_ACCESS_TOKEN');
+  const pinterestBoardId = Deno.env.get('PINTEREST_BOARD_ID');
 
   if (!supabaseUrl || !supabaseKey || !apiKey) {
     return new Response(JSON.stringify({ error: 'Missing required environment configuration' }),
@@ -879,6 +917,16 @@ serve(async (req) => {
           if (insertErr) throw insertErr;
           articleResult = { slug: article.slug, title: article.title };
 
+          if (pinterestToken && pinterestBoardId) {
+            await publishToPinterest(pinterestToken, pinterestBoardId, {
+              title: article.title,
+              description: article.meta_description,
+              slug: article.slug,
+              basePath: 'articles',
+              imageUrl: heroImageUrl,
+            });
+          }
+
           await supabase.from('pipeline_log').update({
             status: 'success', articles_created: 1, finished_at: new Date().toISOString(),
           }).eq('id', contentLog.id);
@@ -978,6 +1026,16 @@ serve(async (req) => {
 
             if (insertErr) throw insertErr;
             articleResult = { slug: article.slug, title: article.title };
+
+            if (pinterestToken && pinterestBoardId) {
+              await publishToPinterest(pinterestToken, pinterestBoardId, {
+                title: article.title,
+                description: article.meta_description,
+                slug: article.slug,
+                basePath: 'restaurants',
+                imageUrl: heroImageUrl,
+              });
+            }
 
             await supabase.from('pipeline_log').update({
               status: 'success', articles_created: 1, finished_at: new Date().toISOString(),
