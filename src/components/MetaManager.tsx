@@ -119,7 +119,7 @@ const routeMeta: Record<string, RouteMeta> = {
     image: DEFAULT_SOCIAL_IMAGE,
   },
   "/destinations/hotel-chains": {
-    title: "Top Allergy-Friendly Hotel Chains Worldwide (2025 Guide)",
+    title: "Top Allergy-Friendly Hotel Chains Worldwide",
     description:
       "Explore global hotel chains offering allergy-friendly, celiac-safe food policies for travelers with dietary needs.",
     image: DEFAULT_SOCIAL_IMAGE,

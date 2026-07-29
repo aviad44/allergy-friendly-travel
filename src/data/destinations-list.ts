@@ -155,7 +155,7 @@ export const destinations: Destination[] = [
     id: 'gluten-free-europe',
     name: 'Gluten-Free Europe',
     country: 'Europe',
-    description: 'Top 5 Gluten-Free Travel Destinations in Europe (2025)',
+    description: 'Top 5 Gluten-Free Travel Destinations in Europe',
     subtitle: 'Where to Travel in Europe If You\'re Gluten-Free or Have Celiac Disease',
     image: '/lovable-uploads/european-restaurant-diners.jpg'
   },
@@ -163,7 +163,7 @@ export const destinations: Destination[] = [
     id: 'athens',
     name: 'Athens',
     country: 'Greece',
-    description: 'Top 10 Gluten-Free Restaurants in Athens for Celiacs (2025)',
+    description: 'Top 10 Gluten-Free Restaurants in Athens for Celiacs',
     subtitle: 'Safe & Delicious Dining Options for Celiacs in the Greek Capital'
   },
   {
@@ -177,7 +177,7 @@ export const destinations: Destination[] = [
     id: 'airlines',
     name: 'Airlines',
     country: 'Worldwide',
-    description: 'Best Airlines for Food Allergy Sufferers (2025 Guide)',
+    description: 'Best Airlines for Food Allergy Sufferers',
     subtitle: 'Safe Flying Tips & Allergy-Friendly Airline Rankings'
   },
   {
@@ -207,7 +207,7 @@ export const destinations: Destination[] = [
     name: 'Flying with EpiPens',
     country: 'Europe',
     description: 'Europe Guide to Flying with EpiPens and Allergy Medication',
-    subtitle: 'Complete 2025 Guide to Airport & Airline Rules',
+    subtitle: 'Complete Guide to Airport & Airline Rules',
     image: '/lovable-uploads/airport-security-queue.jpg'
   },
   {
@@ -215,7 +215,7 @@ export const destinations: Destination[] = [
     name: 'Flying with EpiPens North America',
     country: 'North America',
     description: 'North America Guide to Flying with EpiPens and Allergy Medication',
-    subtitle: 'Complete 2025 Guide to TSA, CATSA & Airport Rules',
+    subtitle: 'Complete Guide to TSA, CATSA & Airport Rules',
     image: '/lovable-uploads/us-airport-terminal.jpg'
   }
 ];
