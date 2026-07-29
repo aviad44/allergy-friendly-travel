@@ -77,7 +77,7 @@ export const DestinationHero = ({ destination }: DestinationHeroProps) => {
     // Use our shared utility to update all meta tags at once
     updateMetaTags(
       imageUrl,
-      `Allergy-Friendly Hotels in ${destName} | Safe Travel Guide 2025`,
+      `Allergy-Friendly Hotels in ${destName} | Safe Travel Guide`,
       `Discover the best allergy-friendly hotels in ${destName}. Comprehensive guide to accommodations catering to food allergies, gluten-free, and special dietary needs.`
     );
     

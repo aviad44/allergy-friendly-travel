@@ -41,7 +41,7 @@ export default function HotelChains() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
         <div className="absolute inset-0 flex items-center justify-center text-center px-4">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white max-w-4xl leading-tight">
-            🌍 Top Global Hotel Chains with Food Allergy-Friendly Policies (2025 Guide)
+            🌍 Top Global Hotel Chains with Food Allergy-Friendly Policies
           </h1>
         </div>
       </div>

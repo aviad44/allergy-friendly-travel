@@ -69,7 +69,7 @@ const cruiseLines: CruiseLine[] = [
 ];
 
 const CruiseLines = () => {
-  const pageTitle = "Top Cruise Lines for Food Allergies (2025) – Real Reviews & Rankings";
+  const pageTitle = "Top Cruise Lines for Food Allergies – Real Reviews & Rankings";
   const pageDescription = "Explore the best cruise lines for travelers with food allergies. Real reviews, expert rankings, and top safety practices for celiac, nut, dairy, and gluten sensitivities.";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/cruise-lines";
   const imageUrl = DESTINATION_OG_IMAGES['cruise-lines'];

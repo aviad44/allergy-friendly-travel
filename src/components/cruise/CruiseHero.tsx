@@ -22,7 +22,7 @@ export const CruiseHero: React.FC<CruiseHeroProps> = ({ baseUrl }) => {
             <span className="inline-block text-teal-300"> for Food Allergies</span>
           </h1>
           <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto">
-            Real Reviews & Expert Rankings for 2025
+            Real Reviews & Expert Rankings
           </p>
         </div>
       </div>

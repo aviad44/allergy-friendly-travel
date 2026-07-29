@@ -7,7 +7,7 @@ import { DESTINATION_OG_IMAGES } from '@/utils/socialSharing';
 
 const Portugal = () => {
   // SEO metadata
-  const pageTitle = "Allergy-Friendly Hotels in Portugal (2025 Guide) | Safe Travel";
+  const pageTitle = "Allergy-Friendly Hotels in Portugal | Safe Travel Guide";
   const pageDescription = "Allergy-friendly hotels in Portugal for travelers with food allergies. Family-friendly, gluten-free, dairy-free, and nut-aware accommodations in Lisbon, Algarve, and Porto.";
   const canonicalUrl = "https://www.allergy-free-travel.com/destinations/portugal";
   const imageUrl = DESTINATION_OG_IMAGES['portugal'];
