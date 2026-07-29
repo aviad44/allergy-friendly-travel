@@ -245,7 +245,11 @@ function classifyAndExtract(reviewText: string): ReviewSnippet | null {
 
   const positiveWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
   const hasPositive = positiveWords.some(w => norm.includes(w));
-  const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
+  // vegan/vegetarian/plant-based excluded: this +hasPositive path has no
+  // safety-language requirement, so "great vegan food!" alone would pass as
+  // allergy evidence. They still count via WEAK_TERMS, which does require
+  // safety/warning co-occurrence.
+  const dietaryIndicators = ['gluten', 'dairy free', 'lactose'];
   const hasDietary = dietaryIndicators.some(d => norm.includes(d));
 
   // hasWarning alone used to be enough ('unsafe', 'reaction', 'not safe' —
