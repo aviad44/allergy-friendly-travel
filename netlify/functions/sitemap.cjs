@@ -14,6 +14,7 @@ const STATIC_PATHS = [
   { path: '/reviews', changefreq: 'weekly', priority: '0.8' },
   { path: '/destinations', changefreq: 'weekly', priority: '0.9' },
   { path: '/articles', changefreq: 'daily', priority: '0.9' },
+  { path: '/restaurants', changefreq: 'daily', priority: '0.9' },
   { path: '/allergy-translation-card', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/london', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/paris', changefreq: 'monthly', priority: '0.8' },
@@ -70,12 +71,13 @@ exports.handler = async () => {
       const supabase = createClient(supabaseUrl, supabaseKey);
       const { data: articles } = await supabase
         .from('seo_articles')
-        .select('slug, published_at, updated_at')
+        .select('slug, content_type, published_at, updated_at')
         .eq('status', 'published');
 
       for (const article of articles || []) {
         const lastmod = (article.updated_at || article.published_at || today).split('T')[0];
-        entries.push(urlEntry(`${BASE_URL}/articles/${article.slug}`, lastmod, 'weekly', '0.7'));
+        const base = article.content_type === 'restaurant' ? 'restaurants' : 'articles';
+        entries.push(urlEntry(`${BASE_URL}/${base}/${article.slug}`, lastmod, 'weekly', '0.7'));
       }
     }
   } catch (err) {

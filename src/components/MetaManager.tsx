@@ -136,6 +136,13 @@ const routeMeta: Record<string, RouteMeta> = {
     image: DEFAULT_SOCIAL_IMAGE,
     type: "website",
   },
+  "/restaurants": {
+    title: "Allergy-Friendly Restaurant Guides | Allergy-Free Travel",
+    description:
+      "Restaurant guides built from real Google reviews mentioning food allergies — real restaurants, real evidence, no invented reviews.",
+    image: DEFAULT_SOCIAL_IMAGE,
+    type: "website",
+  },
   "/language-stats": {
     title: "Language Usage Statistics - Allergy Card Translations",
     description: "View statistics on which languages are most requested for allergy card translations to help improve our service.",

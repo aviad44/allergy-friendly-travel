@@ -62,6 +62,8 @@ const FlyingWithEpipensNorthAmerica = lazy(() => import('./pages/destinations/Fl
 const WarmWinterDestinations = lazy(() => import('./pages/destinations/WarmWinterDestinations'));
 const Articles = lazy(() => import('@/pages/Articles'));
 const ArticleDetail = lazy(() => import('@/pages/ArticleDetail'));
+const Restaurants = lazy(() => import('@/pages/Restaurants'));
+const RestaurantDetail = lazy(() => import('@/pages/RestaurantDetail'));
 // import MenuScanner from "./pages/MenuScanner"; // Temporarily disabled
 
 const RouteLoader = () => (
@@ -127,6 +129,8 @@ const AppContent = () => {
             <Route path="/search-results" element={<SearchResults />} />
             <Route path="/articles" element={<Articles />} />
             <Route path="/articles/:slug" element={<ArticleDetail />} />
+            <Route path="/restaurants" element={<Restaurants />} />
+            <Route path="/restaurants/:slug" element={<RestaurantDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/categories" element={<Categories />} />

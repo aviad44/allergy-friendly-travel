@@ -45,12 +45,15 @@ async function getRoutes() {
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     const { data: articles, error } = await supabase
       .from('seo_articles')
-      .select('slug')
+      .select('slug, content_type')
       .eq('status', 'published');
     if (error) throw error;
-    for (const a of articles || []) routes.add(`/articles/${a.slug}`);
+    for (const a of articles || []) {
+      const base = a.content_type === 'restaurant' ? 'restaurants' : 'articles';
+      routes.add(`/${base}/${a.slug}`);
+    }
   } catch (err) {
-    console.warn('[prerender] Could not fetch published article slugs, skipping /articles/*:', err.message);
+    console.warn('[prerender] Could not fetch published article slugs, skipping /articles/* and /restaurants/*:', err.message);
   }
 
   return [...routes];

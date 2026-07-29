@@ -20,6 +20,11 @@ New destination guides published every 2 days, grounded only in real, verified h
 
 - [All guides](https://www.allergy-free-travel.com/articles)
 
+## Restaurant guides
+Restaurant recommendations by city, built the same way as the hotel guides above — only from real Google reviews that specifically mention food allergies.
+
+- [All restaurant guides](https://www.allergy-free-travel.com/restaurants)
+
 ## Tools
 - [Allergy translation card generator](https://www.allergy-free-travel.com/allergy-translation-card) — create a printable card explaining your food allergies in the local language.
 

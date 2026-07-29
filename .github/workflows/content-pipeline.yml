@@ -10,7 +10,13 @@ name: Content Pipeline (Real Hotel Discovery + Article Generation)
 on:
   schedule:
     - cron: "0 9 */2 * *"   # every 2 days at 09:00 UTC
-  workflow_dispatch: {}       # allow manual trigger from the GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      content_type:
+        description: "Force hotel or restaurant instead of the automatic alternation (leave blank for normal runs)"
+        type: choice
+        options: ["", "hotel", "restaurant"]
+        default: ""
 
 jobs:
   run-pipeline:
@@ -25,16 +31,23 @@ jobs:
         id: call
         env:
           CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+          CONTENT_TYPE: ${{ github.event.inputs.content_type }}
         run: |
           SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
           SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          if [ -n "$CONTENT_TYPE" ]; then
+            REQUEST_BODY=$(printf '{"contentType":"%s"}' "$CONTENT_TYPE")
+          else
+            REQUEST_BODY='{}'
+          fi
 
           RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/content-pipeline" \
             -H "Content-Type: application/json" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
             -H "x-cron-secret: $CRON_SHARED_SECRET" \
-            -d '{}')
+            -d "$REQUEST_BODY")
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
           BODY=$(echo "$RESPONSE" | sed '$d')

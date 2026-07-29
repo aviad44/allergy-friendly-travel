@@ -171,6 +171,7 @@ export type Database = {
       pipeline_log: {
         Row: {
           articles_created: number | null
+          articles_updated: number | null
           error_message: string | null
           finished_at: string | null
           hotels_added: number | null
@@ -182,6 +183,7 @@ export type Database = {
         }
         Insert: {
           articles_created?: number | null
+          articles_updated?: number | null
           error_message?: string | null
           finished_at?: string | null
           hotels_added?: number | null
@@ -193,6 +195,7 @@ export type Database = {
         }
         Update: {
           articles_created?: number | null
+          articles_updated?: number | null
           error_message?: string | null
           finished_at?: string | null
           hotels_added?: number | null
@@ -224,6 +227,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      restaurant_allergy_info: {
+        Row: {
+          allergen_type: string
+          created_at: string | null
+          id: string
+          notes: string | null
+          restaurant_id: string
+          source_url: string | null
+          support_level: string | null
+        }
+        Insert: {
+          allergen_type: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          restaurant_id: string
+          source_url?: string | null
+          support_level?: string | null
+        }
+        Update: {
+          allergen_type?: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          restaurant_id?: string
+          source_url?: string | null
+          support_level?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_allergy_info_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       restaurant_cache: {
         Row: {
@@ -264,6 +305,113 @@ export type Database = {
           review_snippet?: Json | null
           total_ratings?: number | null
           types?: string[] | null
+        }
+        Relationships: []
+      }
+      restaurant_sources: {
+        Row: {
+          ai_summary: string | null
+          allergy_score: number | null
+          created_at: string | null
+          id: string
+          raw_text: string | null
+          restaurant_id: string | null
+          snippet: string | null
+          source_type: string | null
+          source_url: string | null
+          title: string | null
+        }
+        Insert: {
+          ai_summary?: string | null
+          allergy_score?: number | null
+          created_at?: string | null
+          id?: string
+          raw_text?: string | null
+          restaurant_id?: string | null
+          snippet?: string | null
+          source_type?: string | null
+          source_url?: string | null
+          title?: string | null
+        }
+        Update: {
+          ai_summary?: string | null
+          allergy_score?: number | null
+          created_at?: string | null
+          id?: string
+          raw_text?: string | null
+          restaurant_id?: string | null
+          snippet?: string | null
+          source_type?: string | null
+          source_url?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_sources_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      restaurants: {
+        Row: {
+          active: boolean | null
+          address: string | null
+          allergy_score: number | null
+          booking_url: string | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          cuisine_type: string | null
+          id: string
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          slug: string | null
+          updated_at: string | null
+          verified: boolean | null
+          website_url: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          address?: string | null
+          allergy_score?: number | null
+          booking_url?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          cuisine_type?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          slug?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+          website_url?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          address?: string | null
+          allergy_score?: number | null
+          booking_url?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          cuisine_type?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          slug?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+          website_url?: string | null
         }
         Relationships: []
       }
@@ -377,6 +525,7 @@ export type Database = {
           ai_generated: boolean | null
           content_html: string | null
           content_markdown: string | null
+          content_type: string
           created_at: string | null
           focus_keyword: string | null
           hero_image_credit: string | null
@@ -388,6 +537,7 @@ export type Database = {
           posted_to_instagram_at: string | null
           published_at: string | null
           related_keywords: string[] | null
+          restaurant_ids: string[] | null
           slug: string | null
           status: string | null
           title: string
@@ -398,6 +548,7 @@ export type Database = {
           ai_generated?: boolean | null
           content_html?: string | null
           content_markdown?: string | null
+          content_type?: string
           created_at?: string | null
           focus_keyword?: string | null
           hero_image_credit?: string | null
@@ -409,6 +560,7 @@ export type Database = {
           posted_to_instagram_at?: string | null
           published_at?: string | null
           related_keywords?: string[] | null
+          restaurant_ids?: string[] | null
           slug?: string | null
           status?: string | null
           title: string
@@ -419,6 +571,7 @@ export type Database = {
           ai_generated?: boolean | null
           content_html?: string | null
           content_markdown?: string | null
+          content_type?: string
           created_at?: string | null
           focus_keyword?: string | null
           hero_image_credit?: string | null
@@ -430,6 +583,7 @@ export type Database = {
           posted_to_instagram_at?: string | null
           published_at?: string | null
           related_keywords?: string[] | null
+          restaurant_ids?: string[] | null
           slug?: string | null
           status?: string | null
           title?: string
