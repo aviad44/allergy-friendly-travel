@@ -3,10 +3,10 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // src/lib/mcp/index.ts
-import { defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
+import { defineMcp } from "npm:@lovable.dev/mcp-js@0.20.1";
 
 // src/lib/mcp/tools/list-destinations.ts
-import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
+import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.1";
 import { z } from "npm:zod@^3.25.76";
 
 // src/data/destinations-list.ts
@@ -164,7 +164,7 @@ var destinations = [
     id: "gluten-free-europe",
     name: "Gluten-Free Europe",
     country: "Europe",
-    description: "Top 5 Gluten-Free Travel Destinations in Europe (2025)",
+    description: "Top 5 Gluten-Free Travel Destinations in Europe",
     subtitle: "Where to Travel in Europe If You're Gluten-Free or Have Celiac Disease",
     image: "/lovable-uploads/european-restaurant-diners.jpg"
   },
@@ -172,7 +172,7 @@ var destinations = [
     id: "athens",
     name: "Athens",
     country: "Greece",
-    description: "Top 10 Gluten-Free Restaurants in Athens for Celiacs (2025)",
+    description: "Top 10 Gluten-Free Restaurants in Athens for Celiacs",
     subtitle: "Safe & Delicious Dining Options for Celiacs in the Greek Capital"
   },
   {
@@ -186,7 +186,7 @@ var destinations = [
     id: "airlines",
     name: "Airlines",
     country: "Worldwide",
-    description: "Best Airlines for Food Allergy Sufferers (2025 Guide)",
+    description: "Best Airlines for Food Allergy Sufferers",
     subtitle: "Safe Flying Tips & Allergy-Friendly Airline Rankings"
   },
   {
@@ -216,7 +216,7 @@ var destinations = [
     name: "Flying with EpiPens",
     country: "Europe",
     description: "Europe Guide to Flying with EpiPens and Allergy Medication",
-    subtitle: "Complete 2025 Guide to Airport & Airline Rules",
+    subtitle: "Complete Guide to Airport & Airline Rules",
     image: "/lovable-uploads/airport-security-queue.jpg"
   },
   {
@@ -224,7 +224,7 @@ var destinations = [
     name: "Flying with EpiPens North America",
     country: "North America",
     description: "North America Guide to Flying with EpiPens and Allergy Medication",
-    subtitle: "Complete 2025 Guide to TSA, CATSA & Airport Rules",
+    subtitle: "Complete Guide to TSA, CATSA & Airport Rules",
     image: "/lovable-uploads/us-airport-terminal.jpg"
   }
 ];
@@ -256,7 +256,7 @@ var list_destinations_default = defineTool({
 });
 
 // src/lib/mcp/tools/get-destination-guide.ts
-import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.20.0";
+import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.20.1";
 import { z as z2 } from "npm:zod@^3.25.76";
 
 // src/data/destination-tuscany.ts
@@ -4454,7 +4454,7 @@ var get_destination_guide_default = defineTool2({
 });
 
 // src/lib/mcp/tools/search-hotels.ts
-import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.20.0";
+import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.20.1";
 import { z as z3 } from "npm:zod@^3.25.76";
 var search_hotels_default = defineTool3({
   name: "search_hotels",
@@ -4505,5 +4505,5 @@ var mcp_default = defineMcp({
 });
 
 // lovable-mcp-supabase-entry.ts
-import { createSupabaseHandler } from "npm:@lovable.dev/mcp-js@0.20.0/stacks/supabase";
+import { createSupabaseHandler } from "npm:@lovable.dev/mcp-js@0.20.1/stacks/supabase";
 Deno.serve(createSupabaseHandler(mcp_default, { functionName: "mcp" }));
