@@ -236,6 +236,15 @@ export const COMPLETE_TRANSLATIONS: TranslationData = {
     allergyPrefix: "",
     crossContamination: "A keresztszennyeződés súlyos allergiás reakciót okozhat. Kérjük, győződjenek meg arról, hogy az ételem ezen allergének nélkül készül, és hogy minden konyhai eszköz és felület alaposan meg van tisztítva az ételem elkészítése előtt.",
     thankYou: "Köszönöm a segítségüket ebben a fontos egészségügyi kérdésben."
+  },
+
+  // Georgian - ქართული
+  ka: {
+    title: "შეტყობინება საკვებზე ალერგიის შესახებ",
+    mainText: "მე მაქვს მძიმე ალერგია შემდეგ პროდუქტებზე:",
+    allergyPrefix: "",
+    crossContamination: "ჯვარედინი დაბინძურება შეიძლება გამოიწვიოს მძიმე ალერგიული რეაქცია. გთხოვთ, დარწმუნდეთ, რომ ჩემი კერძი მომზადებულია ამ ალერგენების გარეშე და რომ ყველა სამზარეულო ჭურჭელი და ზედაპირი საფუძვლიანად გაიწმინდა ჩემი საკვების მომზადებამდე.",
+    thankYou: "გმადლობთ დახმარებისთვის ამ მნიშვნელოვან ჯანმრთელობის საკითხში."
   }
 };
 
