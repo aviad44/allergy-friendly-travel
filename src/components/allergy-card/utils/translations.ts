@@ -236,6 +236,15 @@ export const COMPLETE_TRANSLATIONS: TranslationData = {
     allergyPrefix: "",
     crossContamination: "A keresztszennyeződés súlyos allergiás reakciót okozhat. Kérjük, győződjenek meg arról, hogy az ételem ezen allergének nélkül készül, és hogy minden konyhai eszköz és felület alaposan meg van tisztítva az ételem elkészítése előtt.",
     thankYou: "Köszönöm a segítségüket ebben a fontos egészségügyi kérdésben."
+  },
+
+  // Georgian - ქართული
+  ka: {
+    title: "შეტყობინება საკვებზე ალერგიის შესახებ",
+    mainText: "მე მაქვს მძიმე ალერგია შემდეგ პროდუქტებზე:",
+    allergyPrefix: "",
+    crossContamination: "ჯვარედინი დაბინძურება შეიძლება გამოიწვიოს მძიმე ალერგიული რეაქცია. გთხოვთ, დარწმუნდეთ, რომ ჩემი კერძი მომზადებულია ამ ალერგენების გარეშე და რომ ყველა სამზარეულო ჭურჭელი და ზედაპირი საფუძვლიანად გაიწმინდა ჩემი საკვების მომზადებამდე.",
+    thankYou: "გმადლობთ დახმარებისთვის ამ მნიშვნელოვან ჯანმრთელობის საკითხში."
   }
 };
 
@@ -990,5 +999,35 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Banana": "Banán",
     "Pistachio": "Pisztácia",
     "Cashew": "Kesudió"
+  },
+  ka: {
+    "Milk": "რძე",
+    "Eggs": "კვერცხი",
+    "Unbaked eggs": "ნედლი კვერცხი",
+    "Tree nuts": "კაკლოვანები",
+    "Peanuts": "არაქისი",
+    "Shellfish": "მოლუსკები და კიბოსნაირები",
+    "Fish": "თევზი",
+    "Soy": "სოია",
+    "Wheat": "ხორბალი",
+    "Gluten": "გლუტენი",
+    "Sesame": "სეზამი",
+    "Celery": "ნიახური",
+    "Mustard": "მდოგვი",
+    "Lupin": "ლუპინი",
+    "Sulphites": "სულფიტები",
+    "Sulfites": "სულფიტები",
+    "Molluscs": "მოლუსკები",
+    "Crustaceans": "კიბოსნაირები",
+    "Peas": "ბარდა",
+    "Lentils": "ოსპი",
+    "Beans": "ლობიო",
+    "Corn": "სიმინდი",
+    "Cinnamon": "დარიჩინი",
+    "Avocado": "ავოკადო",
+    "Kiwi": "კივი",
+    "Banana": "ბანანი",
+    "Pistachio": "ფისტა",
+    "Cashew": "კეშიუ"
   }
 };

@@ -42,6 +42,7 @@ const languageMap: Record<string, string> = {
   he: "Hebrew",
   cs: "Czech",
   hu: "Hungarian",
+  ka: "Georgian",
 };
 
 /**
