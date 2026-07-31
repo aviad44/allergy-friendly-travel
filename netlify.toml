@@ -165,6 +165,20 @@
   to = "/destinations/new-york"
   status = 301
 
+# "Travel Guides" (/articles) was folded into the Destinations category —
+# hotel-type auto-generated guides now live at /destinations/:slug instead
+# of /articles/:slug, same slug either way. 301s preserve any search/social
+# equity already accrued under the old URLs.
+[[redirects]]
+  from = "/articles/*"
+  to = "/destinations/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/articles"
+  to = "/destinations"
+  status = 301
+
 # Default handling for regular users - MUST come after all specific redirects
 [[redirects]]
   from = "/*"

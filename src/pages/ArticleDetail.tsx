@@ -7,6 +7,7 @@ import { TopHotelsSection } from "@/components/reviews/TopHotelsSection";
 import { Hotel } from "@/types/definitions";
 import NotFound from "@/pages/NotFound";
 import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderReady";
+import { destinationHotelsJsonLd } from "@/utils/jsonld";
 
 interface Article {
   title: string;
@@ -68,6 +69,7 @@ const ArticleDetail = () => {
         .select('title, slug, meta_description, content_markdown, hotel_ids, published_at, updated_at, hero_image_url, hero_image_credit')
         .eq('slug', slug)
         .eq('status', 'published')
+        .eq('content_type', 'hotel')
         .single();
 
       if (error || !data) {
@@ -83,6 +85,7 @@ const ArticleDetail = () => {
         .from('seo_articles')
         .select('slug, title')
         .eq('status', 'published')
+        .eq('content_type', 'hotel')
         .neq('slug', slug)
         .order('published_at', { ascending: false })
         .limit(3);
@@ -151,7 +154,7 @@ const ArticleDetail = () => {
     return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading…</div>;
   }
 
-  const articleUrl = `https://www.allergy-free-travel.com/articles/${article.slug}`;
+  const articleUrl = `https://www.allergy-free-travel.com/destinations/${article.slug}`;
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -164,24 +167,28 @@ const ArticleDetail = () => {
     author: { "@type": "Organization", name: "Allergy-Free Travel" },
     publisher: { "@type": "Organization", name: "Allergy-Free Travel" },
   };
+  // Same real-evidence-only Review/AggregateRating builder used on restaurant
+  // guide pages, so hotel guides carry the same structured-data richness.
+  const hotelsJsonLd = destinationHotelsJsonLd(
+    hotels.map((h) => ({ name: h.name, quote: h.quote }))
+  );
 
   return (
     <div className="min-h-screen bg-white">
       <MetaManager
-        routeKey="/articles"
         dynamicData={{
           title: article.title,
           description: article.meta_description || undefined,
           image: article.hero_image_url || undefined,
           type: "article",
           canonical: articleUrl,
-          jsonLdExtra: articleJsonLd,
+          jsonLdExtra: [articleJsonLd, ...hotelsJsonLd],
         }}
       />
 
       <div className="container mx-auto px-4 py-12 max-w-3xl">
-        <Link to="/articles" className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-6 inline-block">
-          &larr; All guides
+        <Link to="/destinations" className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-6 inline-block">
+          &larr; All destinations
         </Link>
 
         <article className="bg-white">
@@ -224,7 +231,7 @@ const ArticleDetail = () => {
               <ul className="space-y-2">
                 {relatedArticles.map((a) => (
                   <li key={a.slug}>
-                    <Link to={`/articles/${a.slug}`} className="text-blue-600 hover:text-blue-800">
+                    <Link to={`/destinations/${a.slug}`} className="text-blue-600 hover:text-blue-800">
                       {a.title}
                     </Link>
                   </li>

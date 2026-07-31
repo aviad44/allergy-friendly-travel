@@ -294,7 +294,7 @@ const AllergyTranslationCard = () => {
               <h4 className="font-semibold text-primary mb-2">⭐ Traveler Reviews</h4>
               <p className="text-sm text-gray-600">Read real experiences from travelers managing food allergies abroad</p>
             </Link>
-            <Link to="/articles" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+            <Link to="/restaurants" className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
               <h4 className="font-semibold text-primary mb-2">🍽️ Restaurant Safety Tips</h4>
               <p className="text-sm text-gray-600">Essential guidelines for dining safely with food allergies while traveling</p>
             </Link>

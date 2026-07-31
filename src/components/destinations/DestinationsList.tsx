@@ -25,6 +25,7 @@ export const DestinationsList = () => {
         .from('seo_articles')
         .select('slug, title, meta_description, hero_image_url, hotel_ids')
         .eq('status', 'published')
+        .eq('content_type', 'hotel')
         .order('published_at', { ascending: false });
 
       if (!articles || articles.length === 0) return;
@@ -118,7 +119,7 @@ export const DestinationsList = () => {
             country={article.country}
             description={article.description}
             image={article.image}
-            path={`/articles/${article.slug}`}
+            path={`/destinations/${article.slug}`}
           />
         ))}
       </div>

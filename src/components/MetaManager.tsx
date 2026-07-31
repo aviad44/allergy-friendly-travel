@@ -129,13 +129,6 @@ const routeMeta: Record<string, RouteMeta> = {
     description: "Personalized results for your allergy-friendly hotel search.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
-  "/articles": {
-    title: "Allergy-Friendly Travel Guides | Allergy-Free Travel",
-    description:
-      "Destination guides built from real Google reviews mentioning food allergies — real hotels, real evidence, no invented reviews.",
-    image: DEFAULT_SOCIAL_IMAGE,
-    type: "website",
-  },
   "/restaurants": {
     title: "Allergy-Friendly Restaurant Guides | Allergy-Free Travel",
     description:
@@ -165,8 +158,11 @@ const computed: RouteMeta = useMemo(() => {
   // Destination-specific overrides — built from the same description/subtitle
   // data the on-page H1 uses, so the <title>/meta description actually match
   // what the page is about (rather than a generic "Hotels in X" template that
-  // was wrong for topic pages like /destinations/airlines).
-  if (isDestination && destId) {
+  // was wrong for topic pages like /destinations/airlines). Skipped when the
+  // caller passes its own dynamicData.title (e.g. an auto-generated article
+  // mounted at /destinations/:slug) — otherwise this branch would silently
+  // discard the real AI-written title/description in favor of this guess.
+  if (isDestination && destId && !dynamicData?.title) {
     const dest = destinations.find((d) => d.id === destId);
     const prettyName = destId
       .replace(/-/g, " ")
@@ -229,7 +225,7 @@ const computed: RouteMeta = useMemo(() => {
     logo: `${BASE_URL}/og-image.png`,
   });
   const breadcrumbsJson = breadcrumbJsonLd({ baseUrl: BASE_URL, pathname: path });
-  const hotelJson = isDestination && destId ? hotelJsonLd({ baseUrl: BASE_URL, destId, image: absoluteImage }) : null;
+  const hotelJson = isDestination && destId && !dynamicData?.title ? hotelJsonLd({ baseUrl: BASE_URL, destId, image: absoluteImage }) : null;
 
   return (
     <Helmet>

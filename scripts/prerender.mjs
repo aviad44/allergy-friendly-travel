@@ -49,11 +49,11 @@ async function getRoutes() {
       .eq('status', 'published');
     if (error) throw error;
     for (const a of articles || []) {
-      const base = a.content_type === 'restaurant' ? 'restaurants' : 'articles';
+      const base = a.content_type === 'restaurant' ? 'restaurants' : 'destinations';
       routes.add(`/${base}/${a.slug}`);
     }
   } catch (err) {
-    console.warn('[prerender] Could not fetch published article slugs, skipping /articles/* and /restaurants/*:', err.message);
+    console.warn('[prerender] Could not fetch published article slugs, skipping /destinations/* and /restaurants/*:', err.message);
   }
 
   return [...routes];

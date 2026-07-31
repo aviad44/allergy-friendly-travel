@@ -60,7 +60,6 @@ const Madrid = lazy(() => import('./pages/destinations/Madrid'));
 const FlyingWithEpipens = lazy(() => import('./pages/destinations/FlyingWithEpipens'));
 const FlyingWithEpipensNorthAmerica = lazy(() => import('./pages/destinations/FlyingWithEpipensNorthAmerica'));
 const WarmWinterDestinations = lazy(() => import('./pages/destinations/WarmWinterDestinations'));
-const Articles = lazy(() => import('@/pages/Articles'));
 const ArticleDetail = lazy(() => import('@/pages/ArticleDetail'));
 const Restaurants = lazy(() => import('@/pages/Restaurants'));
 const RestaurantDetail = lazy(() => import('@/pages/RestaurantDetail'));
@@ -127,8 +126,6 @@ const AppContent = () => {
             <Route path="/destinations/tuscany" element={<Tuscany />} />
             <Route path="/destinations/gluten-free-europe" element={<GlutenFreeEurope />} />
             <Route path="/search-results" element={<SearchResults />} />
-            <Route path="/articles" element={<Articles />} />
-            <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/restaurants" element={<Restaurants />} />
             <Route path="/restaurants/:slug" element={<RestaurantDetail />} />
             <Route path="/contact" element={<Contact />} />
@@ -156,7 +153,12 @@ const AppContent = () => {
             <Route path="/destinations/flying-with-epipens-north-america" element={<FlyingWithEpipensNorthAmerica />} />
             <Route path="/destinations/warm-winter-destinations" element={<WarmWinterDestinations />} />
             {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}
-            <Route path="/destinations/:destinationId" element={<NotFound />} />
+            {/* Catch-all for auto-generated hotel-guide slugs not covered by a
+                static page above (React Router ranks literal segments above
+                this dynamic one, so none of the routes above are shadowed).
+                ArticleDetail renders its own NotFound if the slug doesn't
+                exist in seo_articles. */}
+            <Route path="/destinations/:slug" element={<ArticleDetail />} />
           </Route>
         </Routes>
       </Suspense>

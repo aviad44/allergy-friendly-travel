@@ -12,8 +12,7 @@ const STATIC_PATHS = [
   { path: '/terms', changefreq: 'monthly', priority: '0.6' },
   { path: '/categories', changefreq: 'weekly', priority: '0.8' },
   { path: '/reviews', changefreq: 'weekly', priority: '0.8' },
-  { path: '/destinations', changefreq: 'weekly', priority: '0.9' },
-  { path: '/articles', changefreq: 'daily', priority: '0.9' },
+  { path: '/destinations', changefreq: 'daily', priority: '0.9' },
   { path: '/restaurants', changefreq: 'daily', priority: '0.9' },
   { path: '/allergy-translation-card', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/london', changefreq: 'monthly', priority: '0.8' },
@@ -84,7 +83,7 @@ exports.handler = async () => {
 
       for (const article of articles || []) {
         const lastmod = (article.updated_at || article.published_at || today).split('T')[0];
-        const base = article.content_type === 'restaurant' ? 'restaurants' : 'articles';
+        const base = article.content_type === 'restaurant' ? 'restaurants' : 'destinations';
         entries.push(urlEntry(`${BASE_URL}/${base}/${article.slug}`, lastmod, 'weekly', '0.7'));
       }
     }
