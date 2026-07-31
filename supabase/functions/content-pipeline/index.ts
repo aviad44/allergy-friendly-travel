@@ -354,7 +354,7 @@ async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<Uns
 async function publishToPinterest(
   token: string,
   boardId: string,
-  params: { title: string; description: string; slug: string; basePath: 'articles' | 'restaurants'; imageUrl: string | null }
+  params: { title: string; description: string; slug: string; basePath: 'destinations' | 'restaurants'; imageUrl: string | null }
 ): Promise<void> {
   if (!params.imageUrl) return; // Pinterest requires an image; skip silently if we have none
   try {
@@ -922,7 +922,7 @@ serve(async (req) => {
               title: article.title,
               description: article.meta_description,
               slug: article.slug,
-              basePath: 'articles',
+              basePath: 'destinations',
               imageUrl: heroImageUrl,
             });
           }
