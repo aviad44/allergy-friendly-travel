@@ -4,6 +4,7 @@ import { DestinationCard } from './DestinationCard';
 import { DESTINATION_IMAGES } from '@/constants/destinations';
 import { destinations } from '@/data/destinations-list';
 import { supabase } from '@/integrations/supabase/client';
+import { getSeasonTier } from '@/utils/seasonality';
 
 interface AutoArticleCard {
   slug: string;
@@ -11,6 +12,39 @@ interface AutoArticleCard {
   country: string;
   description: string;
   image: string;
+}
+
+interface DestinationCardItem {
+  id: string;
+  name: string;
+  country: string;
+  description: string;
+  image: string;
+  path: string;
+  seasonKey: string;
+}
+
+// Hardcoded image overrides for specific static destinations — kept as a
+// plain lookup (not inlined per-render) since it never depends on props.
+const CRITICAL_IMAGE_MAP: Record<string, string> = {
+  'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
+  'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
+  'crete': DESTINATION_IMAGES['crete'],
+  'turkey': DESTINATION_IMAGES['turkey'],
+  'toronto': DESTINATION_IMAGES['toronto'],
+  'barcelona': DESTINATION_IMAGES['barcelona'],
+  'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png", // Add Munich to critical images
+  'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png", // Athens hotel lobby image
+  'eilat': "/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png", // Eilat beach resort image
+  'airlines': "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80", // Airlines airplane image
+  'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png" // Gluten-free Europe image
+};
+
+function resolveStaticImage(destinationId: string, destinationName: string): string {
+  if (destinationId in CRITICAL_IMAGE_MAP) return CRITICAL_IMAGE_MAP[destinationId];
+  const imageKey = destinationId as keyof typeof DESTINATION_IMAGES;
+  if (DESTINATION_IMAGES[imageKey]) return DESTINATION_IMAGES[imageKey];
+  return `https://placehold.co/400x225/1e3a8a/ffffff?text=${destinationName}`;
 }
 
 export const DestinationsList = () => {
@@ -60,66 +94,45 @@ export const DestinationsList = () => {
     fetchAutoArticles();
   }, []);
 
+  // One combined list, sorted so destinations in season right now (e.g.
+  // beach/summer spots in July, ski/winter-sun spots in January) surface
+  // first — ahead of season-neutral city breaks, which in turn come ahead
+  // of destinations currently out of season. Array.prototype.sort is stable,
+  // so within each tier the original ordering (static list order, then auto
+  // articles newest-first) is preserved.
+  const items: DestinationCardItem[] = [
+    ...destinations.map((destination) => ({
+      id: destination.id,
+      name: destination.name,
+      country: destination.country,
+      description: destination.description,
+      image: resolveStaticImage(destination.id, destination.name),
+      path: `/destinations/${destination.id}`,
+      seasonKey: destination.id,
+    })),
+    ...autoArticles.map((article) => ({
+      id: article.slug,
+      name: article.name,
+      country: article.country,
+      description: article.description,
+      image: article.image,
+      path: `/destinations/${article.slug}`,
+      seasonKey: article.name,
+    })),
+  ].sort((a, b) => getSeasonTier(a.seasonKey) - getSeasonTier(b.seasonKey));
+
   return (
     <section className="py-8 md:py-12 container mx-auto px-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {destinations.map((destination) => {
-          // CRITICAL: Hardcoded paths for specific destinations
-          const criticalImageMap: Record<string, string> = {
-            'hotel-chains': "/lovable-uploads/0ec03a74-44c3-4178-8f9e-afc0117ce674.png",
-            'cyprus': "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
-            'crete': DESTINATION_IMAGES['crete'], 
-            'turkey': DESTINATION_IMAGES['turkey'],
-            'toronto': DESTINATION_IMAGES['toronto'], 
-            'barcelona': DESTINATION_IMAGES['barcelona'],
-            'munich': "/lovable-uploads/0d8276b6-5aeb-41fa-9498-d91afef68aeb.png", // Add Munich to critical images
-            'athens': "/lovable-uploads/18709218-6a75-419b-a128-9afbde81c142.png", // Athens hotel lobby image
-            'eilat': "/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png", // Eilat beach resort image
-            'airlines': "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80", // Airlines airplane image
-            'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png" // Gluten-free Europe image
-          };
-          
-          // Get image value with fallbacks
-          let imageValue = '';
-          
-          // First check critical destinations mapping
-          if (destination.id in criticalImageMap) {
-            imageValue = criticalImageMap[destination.id];
-          }
-          // Then try central DESTINATION_IMAGES
-          else {
-            const imageKey = destination.id as keyof typeof DESTINATION_IMAGES;
-            imageValue = DESTINATION_IMAGES[imageKey] || '';
-          }
-          
-          // If still no image, use a placeholder
-          if (!imageValue) {
-            imageValue = `https://placehold.co/400x225/1e3a8a/ffffff?text=${destination.name}`;
-          }
-          
-          console.log(`DestinationsList: ${destination.name} (${destination.id}) using image: ${imageValue}`);
-          
-          return (
-            <DestinationCard
-              key={destination.id}
-              id={destination.id}
-              name={destination.name}
-              country={destination.country}
-              description={destination.description}
-              image={imageValue}
-              path={`/destinations/${destination.id}`}
-            />
-          );
-        })}
-        {autoArticles.map((article) => (
+        {items.map((item) => (
           <DestinationCard
-            key={article.slug}
-            id={article.slug}
-            name={article.name}
-            country={article.country}
-            description={article.description}
-            image={article.image}
-            path={`/destinations/${article.slug}`}
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            country={item.country}
+            description={item.description}
+            image={item.image}
+            path={item.path}
           />
         ))}
       </div>
