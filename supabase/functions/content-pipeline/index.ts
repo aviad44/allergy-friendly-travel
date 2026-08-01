@@ -350,19 +350,69 @@ async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<Uns
 // much faster than Google trusts a young domain. This is a fire-and-forget
 // side effect of publishing — never let it block or fail the actual article
 // publish, hence the try/catch swallowing everything and returning silently
-// when the token/board aren't configured yet.
+// when the credentials/board aren't configured yet.
+//
+// Pinterest access tokens expire after 30 days and must be renewed via the
+// refresh token — and Pinterest rotates the refresh token itself on every
+// use (the old one stops working the moment a new one is issued). A static
+// Supabase secret can't hold a value that changes every run, so the current
+// refresh token lives in the pinterest_auth table instead, and this
+// function persists the newly-issued one back to that table after each
+// successful refresh — otherwise the *next* run's refresh call would fail
+// with an already-consumed token.
 async function publishToPinterest(
-  token: string,
+  supabase: any,
+  clientId: string,
+  clientSecret: string,
   boardId: string,
   params: { title: string; description: string; slug: string; basePath: 'destinations' | 'restaurants'; imageUrl: string | null }
 ): Promise<void> {
   if (!params.imageUrl) return; // Pinterest requires an image; skip silently if we have none
   try {
+    const { data: authRow, error: authErr } = await supabase
+      .from('pinterest_auth')
+      .select('refresh_token')
+      .eq('id', true)
+      .single();
+    if (authErr || !authRow) {
+      console.error('Pinterest publish skipped: no stored refresh token (non-fatal):', authErr?.message);
+      return;
+    }
+
+    const basicAuth = btoa(`${clientId}:${clientSecret}`);
+    const tokenRes = await fetch('https://api.pinterest.com/v5/oauth/token', {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: authRow.refresh_token }),
+    });
+    if (!tokenRes.ok) {
+      console.error('Pinterest token refresh failed (non-fatal):', tokenRes.status, await tokenRes.text());
+      return;
+    }
+    const tokenData = await tokenRes.json();
+    const accessToken: string | undefined = tokenData.access_token;
+    const newRefreshToken: string | undefined = tokenData.refresh_token;
+    if (!accessToken) {
+      console.error('Pinterest token refresh returned no access_token (non-fatal)');
+      return;
+    }
+
+    if (newRefreshToken && newRefreshToken !== authRow.refresh_token) {
+      const { error: updateErr } = await supabase
+        .from('pinterest_auth')
+        .update({ refresh_token: newRefreshToken, updated_at: new Date().toISOString() })
+        .eq('id', true);
+      if (updateErr) console.error('Pinterest: failed to persist rotated refresh token (non-fatal):', updateErr.message);
+    }
+
     const link = `https://www.allergy-free-travel.com/${params.basePath}/${params.slug}`;
     const res = await fetch('https://api.pinterest.com/v5/pins', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -725,7 +775,8 @@ serve(async (req) => {
   const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
   const openaiKey = Deno.env.get('OPENAI_API_KEY');
   const unsplashKey = Deno.env.get('UNSPLASH_ACCESS_KEY');
-  const pinterestToken = Deno.env.get('PINTEREST_ACCESS_TOKEN');
+  const pinterestClientId = Deno.env.get('PINTEREST_CLIENT_ID');
+  const pinterestClientSecret = Deno.env.get('PINTEREST_CLIENT_SECRET');
   const pinterestBoardId = Deno.env.get('PINTEREST_BOARD_ID');
 
   if (!supabaseUrl || !supabaseKey || !apiKey) {
@@ -917,8 +968,8 @@ serve(async (req) => {
           if (insertErr) throw insertErr;
           articleResult = { slug: article.slug, title: article.title };
 
-          if (pinterestToken && pinterestBoardId) {
-            await publishToPinterest(pinterestToken, pinterestBoardId, {
+          if (pinterestClientId && pinterestClientSecret && pinterestBoardId) {
+            await publishToPinterest(supabase, pinterestClientId, pinterestClientSecret, pinterestBoardId, {
               title: article.title,
               description: article.meta_description,
               slug: article.slug,
@@ -1027,8 +1078,8 @@ serve(async (req) => {
             if (insertErr) throw insertErr;
             articleResult = { slug: article.slug, title: article.title };
 
-            if (pinterestToken && pinterestBoardId) {
-              await publishToPinterest(pinterestToken, pinterestBoardId, {
+            if (pinterestClientId && pinterestClientSecret && pinterestBoardId) {
+              await publishToPinterest(supabase, pinterestClientId, pinterestClientSecret, pinterestBoardId, {
                 title: article.title,
                 description: article.meta_description,
                 slug: article.slug,
