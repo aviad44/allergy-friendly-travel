@@ -431,6 +431,78 @@ async function publishToPinterest(
   }
 }
 
+// Facebook Page cross-posting — same fire-and-forget, non-fatal pattern as
+// Pinterest: never let it block or fail the actual article publish. The
+// Page Access Token was issued via Facebook Login for Business (User access
+// token variation) and does not expire (confirmed via /debug_token:
+// expires_at: 0), so unlike Pinterest there's no refresh-token rotation to
+// manage — the token is just a static Supabase secret.
+async function publishToFacebook(
+  pageId: string,
+  pageAccessToken: string,
+  params: { title: string; description: string; slug: string; basePath: 'destinations' | 'restaurants'; imageUrl: string | null }
+): Promise<void> {
+  if (!params.imageUrl) return; // photo posts require an image; skip silently if we have none
+  try {
+    const link = `https://www.allergy-free-travel.com/${params.basePath}/${params.slug}`;
+    const caption = `${params.title}\n\n${params.description}\n\n${link}`;
+    const res = await fetch(`https://graph.facebook.com/v25.0/${pageId}/photos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: params.imageUrl, caption, access_token: pageAccessToken }),
+    });
+    if (!res.ok) {
+      console.error('Facebook Page post failed (non-fatal):', res.status, await res.text());
+    }
+  } catch (err) {
+    console.error('Facebook publish error (non-fatal):', err);
+  }
+}
+
+// Instagram content publishing is a two-step process — create a media
+// container from the image URL + caption, then publish that container —
+// unlike Facebook/Pinterest's single-call posting. Uses the same Page
+// Access Token as publishToFacebook (the Instagram Business Account is
+// connected to the Page, so instagram_basic/instagram_content_publish ride
+// on that same token rather than a separate Instagram login).
+async function publishToInstagram(
+  igUserId: string,
+  pageAccessToken: string,
+  params: { title: string; description: string; slug: string; basePath: 'destinations' | 'restaurants'; imageUrl: string | null }
+): Promise<void> {
+  if (!params.imageUrl) return;
+  try {
+    const link = `https://www.allergy-free-travel.com/${params.basePath}/${params.slug}`;
+    const caption = `${params.title}\n\n${params.description}\n\n${link}`;
+
+    const containerRes = await fetch(`https://graph.facebook.com/v25.0/${igUserId}/media`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image_url: params.imageUrl, caption, access_token: pageAccessToken }),
+    });
+    if (!containerRes.ok) {
+      console.error('Instagram media container creation failed (non-fatal):', containerRes.status, await containerRes.text());
+      return;
+    }
+    const creationId = (await containerRes.json()).id;
+    if (!creationId) {
+      console.error('Instagram media container returned no id (non-fatal)');
+      return;
+    }
+
+    const publishRes = await fetch(`https://graph.facebook.com/v25.0/${igUserId}/media_publish`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ creation_id: creationId, access_token: pageAccessToken }),
+    });
+    if (!publishRes.ok) {
+      console.error('Instagram media publish failed (non-fatal):', publishRes.status, await publishRes.text());
+    }
+  } catch (err) {
+    console.error('Instagram publish error (non-fatal):', err);
+  }
+}
+
 // ==========================================
 // STEP 1: Discover real hotels + real allergy evidence for a destination
 // ==========================================
@@ -778,6 +850,9 @@ serve(async (req) => {
   const pinterestClientId = Deno.env.get('PINTEREST_CLIENT_ID');
   const pinterestClientSecret = Deno.env.get('PINTEREST_CLIENT_SECRET');
   const pinterestBoardId = Deno.env.get('PINTEREST_BOARD_ID');
+  const facebookPageId = Deno.env.get('FACEBOOK_PAGE_ID');
+  const facebookPageAccessToken = Deno.env.get('FACEBOOK_PAGE_ACCESS_TOKEN');
+  const instagramBusinessAccountId = Deno.env.get('INSTAGRAM_BUSINESS_ACCOUNT_ID');
 
   if (!supabaseUrl || !supabaseKey || !apiKey) {
     return new Response(JSON.stringify({ error: 'Missing required environment configuration' }),
@@ -977,6 +1052,24 @@ serve(async (req) => {
               imageUrl: heroImageUrl,
             });
           }
+          if (facebookPageId && facebookPageAccessToken) {
+            await publishToFacebook(facebookPageId, facebookPageAccessToken, {
+              title: article.title,
+              description: article.meta_description,
+              slug: article.slug,
+              basePath: 'destinations',
+              imageUrl: heroImageUrl,
+            });
+          }
+          if (instagramBusinessAccountId && facebookPageAccessToken) {
+            await publishToInstagram(instagramBusinessAccountId, facebookPageAccessToken, {
+              title: article.title,
+              description: article.meta_description,
+              slug: article.slug,
+              basePath: 'destinations',
+              imageUrl: heroImageUrl,
+            });
+          }
 
           await supabase.from('pipeline_log').update({
             status: 'success', articles_created: 1, finished_at: new Date().toISOString(),
@@ -1080,6 +1173,24 @@ serve(async (req) => {
 
             if (pinterestClientId && pinterestClientSecret && pinterestBoardId) {
               await publishToPinterest(supabase, pinterestClientId, pinterestClientSecret, pinterestBoardId, {
+                title: article.title,
+                description: article.meta_description,
+                slug: article.slug,
+                basePath: 'restaurants',
+                imageUrl: heroImageUrl,
+              });
+            }
+            if (facebookPageId && facebookPageAccessToken) {
+              await publishToFacebook(facebookPageId, facebookPageAccessToken, {
+                title: article.title,
+                description: article.meta_description,
+                slug: article.slug,
+                basePath: 'restaurants',
+                imageUrl: heroImageUrl,
+              });
+            }
+            if (instagramBusinessAccountId && facebookPageAccessToken) {
+              await publishToInstagram(instagramBusinessAccountId, facebookPageAccessToken, {
                 title: article.title,
                 description: article.meta_description,
                 slug: article.slug,
