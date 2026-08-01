@@ -47,6 +47,45 @@ async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<Uns
   }
 }
 
+// Fallback when Unsplash has nothing good for a query — Pixabay's free tier
+// (no attribution required by its Content License, kept here anyway for
+// consistency with the Unsplash credit) covers the gap.
+async function fetchPixabayPhoto(query: string, apiKey: string): Promise<UnsplashPhoto | null> {
+  try {
+    const res = await fetch(
+      `https://pixabay.com/api/?key=${apiKey}&q=${encodeURIComponent(query)}&image_type=photo&orientation=horizontal&safesearch=true&per_page=3`
+    );
+    if (!res.ok) {
+      console.error('Pixabay search failed:', res.status, await res.text());
+      return null;
+    }
+    const data = await res.json();
+    const hit = data.hits?.[0];
+    if (!hit) return null;
+    return { url: hit.largeImageURL, credit: `Photo by ${hit.user} on Pixabay` };
+  } catch (err) {
+    console.error('Pixabay fetch error:', err);
+    return null;
+  }
+}
+
+// A reliably attractive, recognizable shot of the destination itself beats a
+// mediocre/irrelevant photo that's more narrowly "on topic" (e.g. a random
+// plate of food) — skyline/landmark queries are what both providers do best,
+// and Pixabay only gets tried if Unsplash has nothing.
+async function fetchDestinationPhoto(city: string, unsplashKey?: string, pixabayKey?: string): Promise<UnsplashPhoto | null> {
+  const query = `${city} skyline`;
+  if (unsplashKey) {
+    const photo = await fetchUnsplashPhoto(query, unsplashKey);
+    if (photo) return photo;
+  }
+  if (pixabayKey) {
+    const photo = await fetchPixabayPhoto(query, pixabayKey);
+    if (photo) return photo;
+  }
+  return null;
+}
+
 function buildCaption(title: string, metaDescription: string, articleUrl: string): string {
   return `${title}\n\n${metaDescription}\n\nFull guide (link in profile / below): ${articleUrl}\n\n#AllergyFriendlyTravel #FoodAllergy #GlutenFreeTravel #CeliacTravel #TravelSafe`;
 }
@@ -108,6 +147,7 @@ serve(async (req) => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   const unsplashKey = Deno.env.get('UNSPLASH_ACCESS_KEY');
+  const pixabayKey = Deno.env.get('PIXABAY_API_KEY');
   const fbPageId = Deno.env.get('FACEBOOK_PAGE_ID');
   const fbPageToken = Deno.env.get('FACEBOOK_PAGE_ACCESS_TOKEN');
   const igUserId = Deno.env.get('INSTAGRAM_BUSINESS_ACCOUNT_ID');
@@ -130,7 +170,7 @@ serve(async (req) => {
     // the backlog in publish order; each platform tracked independently below).
     const { data: article, error: fetchErr } = await supabase
       .from('seo_articles')
-      .select('id, title, meta_description, slug, hotel_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at')
+      .select('id, title, meta_description, slug, content_type, hotel_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at')
       .eq('status', 'published')
       .or('posted_to_facebook_at.is.null,posted_to_instagram_at.is.null')
       .order('published_at', { ascending: true })
@@ -147,24 +187,30 @@ serve(async (req) => {
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const articleUrl = `${SITE_URL}/articles/${article.slug}`;
+    // content_type determines the live URL path — hotel guides live under
+    // /destinations/, restaurant guides under /restaurants/ (the old shared
+    // /articles/ path was removed when those categories were split/merged).
+    const basePath = article.content_type === 'restaurant' ? 'restaurants' : 'destinations';
+    const articleUrl = `${SITE_URL}/${basePath}/${article.slug}`;
 
     // Resolve a real image: reuse one already fetched for this article, else search Unsplash
     // by the first cited hotel's city (falls back to the article title if no hotel is linked).
     let imageUrl = article.hero_image_url as string | null;
     let imageCredit = article.hero_image_credit as string | null;
 
-    if (!imageUrl && unsplashKey) {
-      let searchQuery = article.title;
+    if (!imageUrl) {
+      let city: string | null = null;
       if (article.hotel_ids && article.hotel_ids.length > 0) {
         const { data: hotel } = await supabase
           .from('hotels')
           .select('city')
           .eq('id', article.hotel_ids[0])
           .maybeSingle();
-        if (hotel?.city) searchQuery = `${hotel.city} travel`;
+        if (hotel?.city) city = hotel.city;
       }
-      const photo = await fetchUnsplashPhoto(searchQuery, unsplashKey);
+      const photo = city
+        ? await fetchDestinationPhoto(city, unsplashKey, pixabayKey)
+        : (unsplashKey ? await fetchUnsplashPhoto(article.title, unsplashKey) : null);
       if (photo) {
         imageUrl = photo.url;
         imageCredit = photo.credit;

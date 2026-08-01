@@ -345,6 +345,45 @@ async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<Uns
   }
 }
 
+// Fallback when Unsplash has nothing good for a query — Pixabay's free tier
+// (no attribution required by its Content License, kept here anyway for
+// consistency with the Unsplash credit) covers the gap.
+async function fetchPixabayPhoto(query: string, apiKey: string): Promise<UnsplashPhoto | null> {
+  try {
+    const res = await fetch(
+      `https://pixabay.com/api/?key=${apiKey}&q=${encodeURIComponent(query)}&image_type=photo&orientation=horizontal&safesearch=true&per_page=3`
+    );
+    if (!res.ok) {
+      console.error('Pixabay search failed:', res.status, await res.text());
+      return null;
+    }
+    const data = await res.json();
+    const hit = data.hits?.[0];
+    if (!hit) return null;
+    return { url: hit.largeImageURL, credit: `Photo by ${hit.user} on Pixabay` };
+  } catch (err) {
+    console.error('Pixabay fetch error:', err);
+    return null;
+  }
+}
+
+// A reliably attractive, recognizable shot of the destination itself beats a
+// mediocre/irrelevant photo that's more narrowly "on topic" (e.g. a random
+// plate of food) — skyline/landmark queries are what both providers do best,
+// and Pixabay only gets tried if Unsplash has nothing.
+async function fetchDestinationPhoto(city: string, unsplashKey?: string, pixabayKey?: string): Promise<UnsplashPhoto | null> {
+  const query = `${city} skyline`;
+  if (unsplashKey) {
+    const photo = await fetchUnsplashPhoto(query, unsplashKey);
+    if (photo) return photo;
+  }
+  if (pixabayKey) {
+    const photo = await fetchPixabayPhoto(query, pixabayKey);
+    if (photo) return photo;
+  }
+  return null;
+}
+
 // Pinterest is the highest-leverage passive distribution channel for a new
 // travel-content domain: its own search surfaces content on relevance signals
 // much faster than Google trusts a young domain. This is a fire-and-forget
@@ -431,77 +470,12 @@ async function publishToPinterest(
   }
 }
 
-// Facebook Page cross-posting — same fire-and-forget, non-fatal pattern as
-// Pinterest: never let it block or fail the actual article publish. The
-// Page Access Token was issued via Facebook Login for Business (User access
-// token variation) and does not expire (confirmed via /debug_token:
-// expires_at: 0), so unlike Pinterest there's no refresh-token rotation to
-// manage — the token is just a static Supabase secret.
-async function publishToFacebook(
-  pageId: string,
-  pageAccessToken: string,
-  params: { title: string; description: string; slug: string; basePath: 'destinations' | 'restaurants'; imageUrl: string | null }
-): Promise<void> {
-  if (!params.imageUrl) return; // photo posts require an image; skip silently if we have none
-  try {
-    const link = `https://www.allergy-free-travel.com/${params.basePath}/${params.slug}`;
-    const caption = `${params.title}\n\n${params.description}\n\n${link}`;
-    const res = await fetch(`https://graph.facebook.com/v25.0/${pageId}/photos`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: params.imageUrl, caption, access_token: pageAccessToken }),
-    });
-    if (!res.ok) {
-      console.error('Facebook Page post failed (non-fatal):', res.status, await res.text());
-    }
-  } catch (err) {
-    console.error('Facebook publish error (non-fatal):', err);
-  }
-}
-
-// Instagram content publishing is a two-step process — create a media
-// container from the image URL + caption, then publish that container —
-// unlike Facebook/Pinterest's single-call posting. Uses the same Page
-// Access Token as publishToFacebook (the Instagram Business Account is
-// connected to the Page, so instagram_basic/instagram_content_publish ride
-// on that same token rather than a separate Instagram login).
-async function publishToInstagram(
-  igUserId: string,
-  pageAccessToken: string,
-  params: { title: string; description: string; slug: string; basePath: 'destinations' | 'restaurants'; imageUrl: string | null }
-): Promise<void> {
-  if (!params.imageUrl) return;
-  try {
-    const link = `https://www.allergy-free-travel.com/${params.basePath}/${params.slug}`;
-    const caption = `${params.title}\n\n${params.description}\n\n${link}`;
-
-    const containerRes = await fetch(`https://graph.facebook.com/v25.0/${igUserId}/media`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image_url: params.imageUrl, caption, access_token: pageAccessToken }),
-    });
-    if (!containerRes.ok) {
-      console.error('Instagram media container creation failed (non-fatal):', containerRes.status, await containerRes.text());
-      return;
-    }
-    const creationId = (await containerRes.json()).id;
-    if (!creationId) {
-      console.error('Instagram media container returned no id (non-fatal)');
-      return;
-    }
-
-    const publishRes = await fetch(`https://graph.facebook.com/v25.0/${igUserId}/media_publish`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ creation_id: creationId, access_token: pageAccessToken }),
-    });
-    if (!publishRes.ok) {
-      console.error('Instagram media publish failed (non-fatal):', publishRes.status, await publishRes.text());
-    }
-  } catch (err) {
-    console.error('Instagram publish error (non-fatal):', err);
-  }
-}
+// Facebook Page + Instagram cross-posting is handled by the separate
+// social-poster Edge Function (its own daily GitHub Action), which tracks
+// posted_to_facebook_at/posted_to_instagram_at per article and works
+// through any backlog — intentionally NOT duplicated here to avoid
+// double-posting the same article once immediately and again from that
+// backlog sweep.
 
 // ==========================================
 // STEP 1: Discover real hotels + real allergy evidence for a destination
@@ -850,9 +824,7 @@ serve(async (req) => {
   const pinterestClientId = Deno.env.get('PINTEREST_CLIENT_ID');
   const pinterestClientSecret = Deno.env.get('PINTEREST_CLIENT_SECRET');
   const pinterestBoardId = Deno.env.get('PINTEREST_BOARD_ID');
-  const facebookPageId = Deno.env.get('FACEBOOK_PAGE_ID');
-  const facebookPageAccessToken = Deno.env.get('FACEBOOK_PAGE_ACCESS_TOKEN');
-  const instagramBusinessAccountId = Deno.env.get('INSTAGRAM_BUSINESS_ACCOUNT_ID');
+  const pixabayKey = Deno.env.get('PIXABAY_API_KEY');
 
   if (!supabaseUrl || !supabaseKey || !apiKey) {
     return new Response(JSON.stringify({ error: 'Missing required environment configuration' }),
@@ -1014,12 +986,10 @@ serve(async (req) => {
 
           let heroImageUrl: string | null = null;
           let heroImageCredit: string | null = null;
-          if (unsplashKey) {
-            const photo = await fetchUnsplashPhoto(`${destination.city} travel`, unsplashKey);
-            if (photo) {
-              heroImageUrl = photo.url;
-              heroImageCredit = photo.credit;
-            }
+          const photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
+          if (photo) {
+            heroImageUrl = photo.url;
+            heroImageCredit = photo.credit;
           }
 
           const { error: insertErr } = await supabase.from('seo_articles').upsert({
@@ -1045,24 +1015,6 @@ serve(async (req) => {
 
           if (pinterestClientId && pinterestClientSecret && pinterestBoardId) {
             await publishToPinterest(supabase, pinterestClientId, pinterestClientSecret, pinterestBoardId, {
-              title: article.title,
-              description: article.meta_description,
-              slug: article.slug,
-              basePath: 'destinations',
-              imageUrl: heroImageUrl,
-            });
-          }
-          if (facebookPageId && facebookPageAccessToken) {
-            await publishToFacebook(facebookPageId, facebookPageAccessToken, {
-              title: article.title,
-              description: article.meta_description,
-              slug: article.slug,
-              basePath: 'destinations',
-              imageUrl: heroImageUrl,
-            });
-          }
-          if (instagramBusinessAccountId && facebookPageAccessToken) {
-            await publishToInstagram(instagramBusinessAccountId, facebookPageAccessToken, {
               title: article.title,
               description: article.meta_description,
               slug: article.slug,
@@ -1142,12 +1094,10 @@ serve(async (req) => {
 
             let heroImageUrl: string | null = null;
             let heroImageCredit: string | null = null;
-            if (unsplashKey) {
-              const photo = await fetchUnsplashPhoto(`${destination.city} restaurant food`, unsplashKey);
-              if (photo) {
-                heroImageUrl = photo.url;
-                heroImageCredit = photo.credit;
-              }
+            const photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
+            if (photo) {
+              heroImageUrl = photo.url;
+              heroImageCredit = photo.credit;
             }
 
             const { error: insertErr } = await supabase.from('seo_articles').upsert({
@@ -1173,24 +1123,6 @@ serve(async (req) => {
 
             if (pinterestClientId && pinterestClientSecret && pinterestBoardId) {
               await publishToPinterest(supabase, pinterestClientId, pinterestClientSecret, pinterestBoardId, {
-                title: article.title,
-                description: article.meta_description,
-                slug: article.slug,
-                basePath: 'restaurants',
-                imageUrl: heroImageUrl,
-              });
-            }
-            if (facebookPageId && facebookPageAccessToken) {
-              await publishToFacebook(facebookPageId, facebookPageAccessToken, {
-                title: article.title,
-                description: article.meta_description,
-                slug: article.slug,
-                basePath: 'restaurants',
-                imageUrl: heroImageUrl,
-              });
-            }
-            if (instagramBusinessAccountId && facebookPageAccessToken) {
-              await publishToInstagram(instagramBusinessAccountId, facebookPageAccessToken, {
                 title: article.title,
                 description: article.meta_description,
                 slug: article.slug,
