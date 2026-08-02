@@ -285,15 +285,32 @@ function classifyAndExtract(reviewText: string): ReviewSnippet | null {
   return { text: snippetText, score, matchedTerms: allMatched.slice(0, 6), allergens };
 }
 
+// Google returns up to 20 results per page, up to 3 pages (60 total) via
+// next_page_token. Previously this only fetched page 1, capping the
+// candidate pool at 20 regardless of how many real hotels/restaurants
+// Google actually has for the city — a real limit on top of the separate,
+// unavoidable one of 5 reviews per place from fetchDetails below.
 async function textSearch(query: string, apiKey: string, placeType: string = 'lodging'): Promise<any[]> {
-  const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&type=${placeType}&language=en&key=${apiKey}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
-    console.error(`Text Search failed: ${data.status}`);
-    return [];
+  const baseUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&type=${placeType}&language=en&key=${apiKey}`;
+  let results: any[] = [];
+  let nextPageToken: string | undefined;
+
+  for (let page = 0; page < 3; page++) {
+    const url = nextPageToken ? `${baseUrl}&pagetoken=${nextPageToken}` : baseUrl;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
+      console.error(`Text Search failed: ${data.status}`);
+      break;
+    }
+    results = results.concat(data.results || []);
+    nextPageToken = data.next_page_token;
+    if (!nextPageToken) break;
+    // A freshly issued next_page_token isn't valid for a few seconds.
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
-  return data.results || [];
+
+  return results;
 }
 
 async function fetchDetails(placeId: string, apiKey: string): Promise<any | null> {
@@ -487,8 +504,8 @@ async function discoverHotels(supabase: any, apiKey: string, destination: { city
   const discovered: { hotelId: string; name: string; allergens: string[] }[] = [];
   let detailsFetched = 0;
 
-  for (const candidate of candidates.slice(0, 20)) {
-    if (detailsFetched >= 20) break;
+  for (const candidate of candidates.slice(0, 60)) {
+    if (detailsFetched >= 60) break;
     const details = await fetchDetails(candidate.place_id, apiKey);
     detailsFetched++;
     const reviews = details?.reviews || [];
@@ -567,8 +584,8 @@ async function discoverRestaurants(supabase: any, apiKey: string, destination: {
   const discovered: { restaurantId: string; name: string; allergens: string[] }[] = [];
   let detailsFetched = 0;
 
-  for (const candidate of candidates.slice(0, 20)) {
-    if (detailsFetched >= 20) break;
+  for (const candidate of candidates.slice(0, 60)) {
+    if (detailsFetched >= 60) break;
     const details = await fetchDetails(candidate.place_id, apiKey);
     detailsFetched++;
     const reviews = details?.reviews || [];
