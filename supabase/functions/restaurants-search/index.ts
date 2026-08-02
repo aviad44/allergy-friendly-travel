@@ -21,7 +21,6 @@ const FAST_MODE = {
 // ALLERGY KEYWORD LISTS
 // ==========================================
 const STRICT_TERMS = [
-  'allergy', 'allergies', 'allergic', 'allergen', 'allergens',
   'food allergy', 'severe allergy', 'multiple allergies',
   'allergy aware', 'allergy conscious', 'allergy safe', 'allergy friendly',
   'allergen free', 'allergen menu', 'allergen info', 'allergen list',
@@ -77,6 +76,13 @@ const WARNING_PHRASES = [
   'epipen', 'epi pen', 'anaphylaxis', 'anaphylactic',
 ];
 
+// Bare 'allergy'/'allergies'/'allergic'/'allergen'/'allergens' match any kind
+// of allergy — dust, pet, pollen, not just food. Unlike the more specific
+// STRICT_TERMS phrases above, these only count as evidence when paired with
+// something that shows the allergy discussion was actually about food.
+const GENERIC_ALLERGY_TERMS = ['allergy', 'allergies', 'allergic', 'allergen', 'allergens'];
+const FOOD_CONTEXT_TERMS = ['food', 'meal', 'meals', 'eat', 'eating', 'ate', 'menu', 'kitchen', 'diet', 'dish', 'dishes', 'cook', 'cooked', 'chef', 'restaurant', 'dining', 'breakfast', 'lunch', 'dinner', 'buffet', 'snack'];
+
 // ==========================================
 // TEXT HELPERS
 // ==========================================
@@ -114,29 +120,37 @@ function classifyAndExtract(reviewText: string, author: string, relativeTime: st
   const weakMatches = findTerms(norm, WEAK_TERMS);
   const safetyMatches = findTerms(norm, SAFETY_TERMS);
   const warningMatches = findTerms(norm, WARNING_PHRASES);
+  const genericAllergyMatches = findTerms(norm, GENERIC_ALLERGY_TERMS);
+  const foodContextMatches = findTerms(norm, FOOD_CONTEXT_TERMS);
 
   const hasStrict = strictMatches.length > 0;
   const hasWeak = weakMatches.length > 0;
   const hasSafety = safetyMatches.length > 0;
   const hasWarning = warningMatches.length > 0;
+  const hasGenericAllergy = genericAllergyMatches.length > 0;
+  const hasFoodContext = foodContextMatches.length > 0;
 
   const positiveWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
   const hasPositive = positiveWords.some(w => norm.includes(w));
   const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
   const hasDietary = dietaryIndicators.some(d => norm.includes(d));
 
-  const isRelevant = hasStrict || hasWarning || (hasWeak && (hasSafety || hasWarning)) || (hasDietary && hasPositive);
+  // Generic allergy words only count as strong evidence when paired with
+  // food context; a generic 'unsafe'/'reaction' warning only counts when
+  // paired with a dietary term.
+  const hasFoodAllergyEvidence = hasStrict || (hasGenericAllergy && (hasWeak || hasDietary || hasSafety || hasFoodContext));
+  const isRelevant = hasFoodAllergyEvidence || (hasWarning && (hasWeak || hasDietary)) || (hasWeak && (hasSafety || hasWarning)) || (hasDietary && hasPositive);
 
   if (!isRelevant) return null;
 
   let score = 0;
   if (hasWarning) score = 0.95;
-  else if (hasStrict && hasSafety) score = 0.9;
-  else if (hasStrict) score = 0.75;
+  else if (hasFoodAllergyEvidence && hasSafety) score = 0.9;
+  else if (hasFoodAllergyEvidence) score = 0.75;
   else if (hasWeak && hasSafety) score = 0.6;
   else if (hasDietary && hasPositive) score = 0.4;
 
-  const allMatched = [...strictMatches, ...weakMatches, ...safetyMatches, ...warningMatches];
+  const allMatched = [...strictMatches, ...weakMatches, ...safetyMatches, ...warningMatches, ...(hasFoodAllergyEvidence ? genericAllergyMatches : [])];
 
   // Extract only sentences with allergy terms
   const sentences = reviewText.split(/(?<=[.!?])\s+/);
