@@ -6,6 +6,12 @@ name: Content Pipeline (Real Hotel Discovery + Article Generation)
 #   2. Writes an SEO article grounded only in that real evidence and publishes it.
 # All secrets (Google Places, OpenAI) live in Supabase, not here — this workflow
 # only needs the public Supabase URL and anon key, both already committed in .env.
+#
+# Manual runs can target a specific destination instead of the automatic
+# rotation by filling in the city + country inputs (e.g. to fulfil a direct
+# request for a destination not yet in DESTINATIONS) — content_type still
+# picks hotel vs restaurant, and needs to be run once per type since a single
+# manual-override run only ever produces one article.
 
 on:
   schedule:
@@ -19,6 +25,14 @@ on:
         description: "Force hotel or restaurant instead of the automatic alternation (leave blank for normal runs)"
         type: choice
         options: ["", "hotel", "restaurant"]
+        default: ""
+      city:
+        description: "Manual override: specific city to discover instead of the next one in rotation (requires country too, leave both blank for normal runs)"
+        type: string
+        default: ""
+      country:
+        description: "Manual override: country for the city above"
+        type: string
         default: ""
 
 jobs:
@@ -35,15 +49,21 @@ jobs:
         env:
           CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
           CONTENT_TYPE: ${{ github.event.inputs.content_type }}
+          CITY: ${{ github.event.inputs.city }}
+          COUNTRY: ${{ github.event.inputs.country }}
         run: |
           SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
           SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
 
-          if [ -n "$CONTENT_TYPE" ]; then
-            REQUEST_BODY=$(printf '{"contentType":"%s"}' "$CONTENT_TYPE")
-          else
-            REQUEST_BODY='{}'
-          fi
+          # jq builds the body so city/country/contentType are safely
+          # JSON-escaped regardless of what's typed into the dispatch inputs.
+          REQUEST_BODY=$(jq -n \
+            --arg contentType "$CONTENT_TYPE" \
+            --arg city "$CITY" \
+            --arg country "$COUNTRY" \
+            '{}
+             + (if $contentType != "" then {contentType: $contentType} else {} end)
+             + (if $city != "" and $country != "" then {city: $city, country: $country} else {} end)')
 
           RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/content-pipeline" \
             -H "Content-Type: application/json" \
