@@ -1,0 +1,94 @@
+name: Batch Re-expand Low-Hotel-Count Articles
+
+# One-off maintenance workflow (no schedule) — re-runs the (now-expanded,
+# 60-candidate) hotel discovery for every published article that currently
+# has only 1-2 hotels, lowest count first, to see whether the wider Google
+# Places search surfaces more real evidence for these destinations.
+#
+# Re-running a city that already has an article is safe: content-pipeline's
+# existingArticle merge path adds any newly found hotels to the SAME
+# article's hotel_ids instead of creating a duplicate — a no-op if nothing
+# new turns up.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  batch-reexpand:
+    name: Re-run discovery for thin articles
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Re-run discovery for each destination
+        env:
+          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+        run: |
+          SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
+          SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          # city;country pairs, lowest hotel count first. The city string
+          # must match exactly what's already stored on the hotel rows
+          # (a couple have a trailing space) so the edge function's
+          # merge-by-city lookup finds the existing article instead of
+          # missing it and trying to start a new one.
+          DESTINATIONS=(
+            "Bali;Indonesia"
+            "Slovakia;Slovakia"
+            "Budapest;Hungary"
+            "Cancun;Mexico"
+            "Dubai;UAE"
+            "Seoul;South Korea"
+            "Bangkok;Thailand"
+            "Majorca ;Spain"
+            "Kyoto;Japan"
+            "Prague;Czech Republic"
+            "Salou;Spain"
+            "Seville;Spain"
+            "Vancouver;Canada"
+            "Berlin;Germany"
+            "Copenhagen;Denmark"
+            "Jamaica ;Jamaica"
+            "Los Angeles;USA"
+            "Montreal;Canada"
+            "Osaka;Japan"
+            "Zurich;Switzerland"
+          )
+
+          echo "## Batch Re-expand Results" >> "$GITHUB_STEP_SUMMARY"
+
+          for entry in "${DESTINATIONS[@]}"; do
+            CITY="${entry%;*}"
+            COUNTRY="${entry#*;}"
+
+            REQUEST_BODY=$(jq -n --arg city "$CITY" --arg country "$COUNTRY" '{city: $city, country: $country, contentType: "hotel"}')
+
+            echo "Running: $CITY, $COUNTRY"
+            RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/content-pipeline" \
+              -H "Content-Type: application/json" \
+              -H "apikey: $SUPABASE_ANON_KEY" \
+              -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+              -H "x-cron-secret: $CRON_SHARED_SECRET" \
+              -d "$REQUEST_BODY")
+
+            HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+            BODY=$(echo "$RESPONSE" | sed '$d')
+
+            echo "- **$CITY, $COUNTRY** (HTTP $HTTP_CODE): \`$BODY\`" >> "$GITHUB_STEP_SUMMARY"
+
+            # Be polite to Google's API between back-to-back discovery runs.
+            sleep 3
+          done
+
+      - name: Trigger Netlify rebuild
+        if: always()
+        env:
+          NETLIFY_BUILD_HOOK_URL: ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
+        run: |
+          if [ -z "$NETLIFY_BUILD_HOOK_URL" ]; then
+            echo "::warning::NETLIFY_BUILD_HOOK_URL secret not set — skipping rebuild trigger"
+            exit 0
+          fi
+          curl -sS -X POST "$NETLIFY_BUILD_HOOK_URL"
