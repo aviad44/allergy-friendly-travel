@@ -85,7 +85,10 @@ export const DestinationsList = () => {
             name: hotel?.city || article.title,
             country: hotel?.country || '',
             description: article.meta_description || '',
-            image: article.hero_image_url || `https://placehold.co/400x225/1e3a8a/ffffff?text=${encodeURIComponent(hotel?.city || article.title)}`,
+            // No `?text=` — DestinationCard already overlays the name/country
+            // on every card, so baking it into the placeholder image too
+            // doubled up as two overlapping labels on cards with no real photo.
+            image: article.hero_image_url || 'https://placehold.co/400x225/1e3a8a/ffffff',
           };
         })
       );

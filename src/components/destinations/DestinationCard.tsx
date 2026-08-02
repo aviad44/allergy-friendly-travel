@@ -66,8 +66,9 @@ export const DestinationCard = ({
         return DESTINATION_IMAGES[destKey];
       }
       
-      // Final fallback - use placeholder with name
-      return `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
+      // Final fallback — no `?text=`, since the title overlay below already
+      // renders the name/country; baking it into the image too doubled it up.
+      return `https://placehold.co/400x225/1e3a8a/ffffff`;
     };
     
     const url = processImageUrl();
@@ -121,7 +122,7 @@ export const DestinationCard = ({
                 console.log(`DestinationCard: Using fallback for ${id}: ${errorFallbacks[id]}`);
                 fallbackSrc = errorFallbacks[id];
               } else {
-                fallbackSrc = `https://placehold.co/400x225/1e3a8a/ffffff?text=${name}`;
+                fallbackSrc = `https://placehold.co/400x225/1e3a8a/ffffff`;
               }
               
               // Apply the fallback directly
