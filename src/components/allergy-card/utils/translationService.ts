@@ -43,6 +43,7 @@ const languageMap: Record<string, string> = {
   cs: "Czech",
   hu: "Hungarian",
   ka: "Georgian",
+  ro: "Romanian",
 };
 
 /**

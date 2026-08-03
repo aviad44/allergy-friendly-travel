@@ -245,6 +245,15 @@ export const COMPLETE_TRANSLATIONS: TranslationData = {
     allergyPrefix: "",
     crossContamination: "ჯვარედინი დაბინძურება შეიძლება გამოიწვიოს მძიმე ალერგიული რეაქცია. გთხოვთ, დარწმუნდეთ, რომ ჩემი კერძი მომზადებულია ამ ალერგენების გარეშე და რომ ყველა სამზარეულო ჭურჭელი და ზედაპირი საფუძვლიანად გაიწმინდა ჩემი საკვების მომზადებამდე.",
     thankYou: "გმადლობთ დახმარებისთვის ამ მნიშვნელოვან ჯანმრთელობის საკითხში."
+  },
+
+  // Romanian - Română
+  ro: {
+    title: "NOTIFICARE PRIVIND ALERGIA ALIMENTARĂ",
+    mainText: "Am alergii severe la următoarele alimente:",
+    allergyPrefix: "",
+    crossContamination: "Contaminarea încrucișată poate provoca o reacție alergică gravă. Vă rugăm să vă asigurați că masa mea este preparată fără acești alergeni și că toate ustensilele de bucătărie și suprafețele sunt curățate temeinic înainte de prepararea mâncării mele.",
+    thankYou: "Vă mulțumesc pentru asistența dumneavoastră în această importantă problemă de sănătate."
   }
 };
 
@@ -1029,5 +1038,35 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Banana": "ბანანი",
     "Pistachio": "ფისტა",
     "Cashew": "კეშიუ"
+  },
+  ro: {
+    "Milk": "Lapte",
+    "Eggs": "Ouă",
+    "Unbaked eggs": "Ouă crude",
+    "Tree nuts": "Nuci",
+    "Peanuts": "Alune de pământ",
+    "Shellfish": "Fructe de mare",
+    "Fish": "Pește",
+    "Soy": "Soia",
+    "Wheat": "Grâu",
+    "Gluten": "Gluten",
+    "Sesame": "Susan",
+    "Celery": "Țelină",
+    "Mustard": "Muștar",
+    "Lupin": "Lupin",
+    "Sulphites": "Sulfiți",
+    "Sulfites": "Sulfiți",
+    "Molluscs": "Moluște",
+    "Crustaceans": "Crustacee",
+    "Peas": "Mazăre",
+    "Lentils": "Linte",
+    "Beans": "Fasole",
+    "Corn": "Porumb",
+    "Cinnamon": "Scorțișoară",
+    "Avocado": "Avocado",
+    "Kiwi": "Kiwi",
+    "Banana": "Banană",
+    "Pistachio": "Fistic",
+    "Cashew": "Caju"
   }
 };
