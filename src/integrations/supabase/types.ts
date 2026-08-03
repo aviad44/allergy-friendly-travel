@@ -168,6 +168,24 @@ export type Database = {
         }
         Relationships: []
       }
+      pinterest_auth: {
+        Row: {
+          id: boolean
+          refresh_token: string
+          updated_at: string
+        }
+        Insert: {
+          id?: boolean
+          refresh_token: string
+          updated_at?: string
+        }
+        Update: {
+          id?: boolean
+          refresh_token?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pipeline_log: {
         Row: {
           articles_created: number | null
