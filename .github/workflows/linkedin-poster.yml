@@ -1,0 +1,58 @@
+name: LinkedIn Poster (Weekly Business Digest)
+
+# Runs weekly. Calls the linkedin-poster Supabase Edge Function, which posts
+# one business-toned text summary of everything new since the last post
+# (destination count, a few highlights, no per-article spam) to the company
+# Page. Deliberately much lower frequency than the Facebook/Instagram
+# poster — LinkedIn's audience and culture reward this pace and tone, not
+# daily consumer-travel posts. See linkedin-poster/index.ts for the reasoning.
+
+on:
+  schedule:
+    # Monday 09:00 UTC — once a week.
+    - cron: "0 9 * * 1"
+  workflow_dispatch: {}
+
+jobs:
+  run-linkedin-poster:
+    name: Post weekly LinkedIn digest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Call linkedin-poster Edge Function
+        id: call
+        env:
+          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+        run: |
+          SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
+          SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/linkedin-poster" \
+            -H "Content-Type: application/json" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H "x-cron-secret: $CRON_SHARED_SECRET" \
+            -d '{}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response: $BODY"
+          echo "body=$BODY" >> "$GITHUB_OUTPUT"
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::linkedin-poster returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+      - name: Write job summary
+        if: always()
+        run: |
+          echo "## LinkedIn Poster Run" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          echo '${{ steps.call.outputs.body }}' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
