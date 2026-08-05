@@ -90,25 +90,62 @@ function buildCaption(title: string, metaDescription: string, articleUrl: string
   return `${title}\n\n${metaDescription}\n\nFull guide (link in profile / below): ${articleUrl}\n\n#AllergyFriendlyTravel #FoodAllergy #GlutenFreeTravel #CeliacTravel #TravelSafe`;
 }
 
-async function postToFacebook(pageId: string, pageToken: string, imageUrl: string, caption: string): Promise<{ ok: boolean; detail: string }> {
+interface PlaceMatch {
+  id: string;
+  name: string;
+}
+
+// Resolves a destination name to a Facebook Place ID so posts can carry the
+// same location tag a manually-created post would (e.g. "Ayia Napa, Cyprus"
+// under the account name). Both the Facebook photo-post `place` param and
+// Instagram's `location_id` param take this same kind of ID. Best-effort:
+// Meta has restricted this search endpoint's public availability multiple
+// times over the years and it may need extra Page permissions this token
+// doesn't have — a failed or empty search just means the post goes out
+// untagged, it never blocks the post itself.
+async function findPlaceId(query: string, pageToken: string, lat?: number | null, lng?: number | null): Promise<PlaceMatch | null> {
+  try {
+    const params = new URLSearchParams({ type: 'place', q: query, access_token: pageToken });
+    if (lat != null && lng != null) {
+      params.set('center', `${lat},${lng}`);
+      params.set('distance', '20000'); // city-scale radius, not street-scale
+    }
+    const res = await fetch(`https://graph.facebook.com/${GRAPH_API_VERSION}/search?${params.toString()}`);
+    const data = await res.json();
+    if (!res.ok || !Array.isArray(data.data) || data.data.length === 0) {
+      console.error('Place search returned nothing for', query, ':', JSON.stringify(data).slice(0, 300));
+      return null;
+    }
+    return { id: data.data[0].id, name: data.data[0].name };
+  } catch (err) {
+    console.error('Place search error (non-fatal):', err);
+    return null;
+  }
+}
+
+async function postToFacebook(pageId: string, pageToken: string, imageUrl: string, caption: string, placeId?: string | null): Promise<{ ok: boolean; detail: string }> {
+  const body: Record<string, string> = { url: imageUrl, caption, access_token: pageToken };
+  if (placeId) body.place = placeId;
   const res = await fetch(`https://graph.facebook.com/${GRAPH_API_VERSION}/${pageId}/photos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url: imageUrl, caption, access_token: pageToken }),
+    body: JSON.stringify(body),
   });
-  const body = await res.json();
+  const resBody = await res.json();
   if (!res.ok) {
-    console.error('Facebook post failed:', body);
-    return { ok: false, detail: JSON.stringify(body).slice(0, 300) };
+    console.error('Facebook post failed:', resBody);
+    return { ok: false, detail: JSON.stringify(resBody).slice(0, 300) };
   }
-  return { ok: true, detail: JSON.stringify(body) };
+  return { ok: true, detail: JSON.stringify(resBody) };
 }
 
-async function postToInstagram(igUserId: string, pageToken: string, imageUrl: string, caption: string): Promise<{ ok: boolean; detail: string }> {
+async function postToInstagram(igUserId: string, pageToken: string, imageUrl: string, caption: string, placeId?: string | null): Promise<{ ok: boolean; detail: string }> {
+  const mediaRequest: Record<string, string> = { image_url: imageUrl, caption, access_token: pageToken };
+  if (placeId) mediaRequest.location_id = placeId;
   const createRes = await fetch(`https://graph.facebook.com/${GRAPH_API_VERSION}/${igUserId}/media`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ image_url: imageUrl, caption, access_token: pageToken }),
+    body: JSON.stringify(mediaRequest),
   });
   const createBody = await createRes.json();
   if (!createRes.ok || !createBody.id) {
@@ -170,7 +207,7 @@ serve(async (req) => {
     // the backlog in publish order; each platform tracked independently below).
     const { data: article, error: fetchErr } = await supabase
       .from('seo_articles')
-      .select('id, title, meta_description, slug, content_type, hotel_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at')
+      .select('id, title, meta_description, slug, content_type, hotel_ids, restaurant_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at')
       .eq('status', 'published')
       .or('posted_to_facebook_at.is.null,posted_to_instagram_at.is.null')
       .order('published_at', { ascending: true })
@@ -193,21 +230,36 @@ serve(async (req) => {
     const basePath = article.content_type === 'restaurant' ? 'restaurants' : 'destinations';
     const articleUrl = `${SITE_URL}/${basePath}/${article.slug}`;
 
+    // Resolve the article's destination once — used both for the Unsplash
+    // fallback search below and for the Facebook/Instagram location tag.
+    // hotel guides key off the first cited hotel; restaurant guides off the
+    // first cited restaurant (same table shape: city/country/lat/lng).
+    let city: string | null = null;
+    let country: string | null = null;
+    let lat: number | null = null;
+    let lng: number | null = null;
+    const placeTable = article.content_type === 'restaurant' ? 'restaurants' : 'hotels';
+    const placeIds = article.content_type === 'restaurant' ? article.restaurant_ids : article.hotel_ids;
+    if (placeIds && placeIds.length > 0) {
+      const { data: place } = await supabase
+        .from(placeTable)
+        .select('city, country, latitude, longitude')
+        .eq('id', placeIds[0])
+        .maybeSingle();
+      if (place) {
+        city = place.city?.trim() || null;
+        country = place.country || null;
+        lat = place.latitude ?? null;
+        lng = place.longitude ?? null;
+      }
+    }
+
     // Resolve a real image: reuse one already fetched for this article, else search Unsplash
-    // by the first cited hotel's city (falls back to the article title if no hotel is linked).
+    // by the destination city (falls back to the article title if none is linked).
     let imageUrl = article.hero_image_url as string | null;
     let imageCredit = article.hero_image_credit as string | null;
 
     if (!imageUrl) {
-      let city: string | null = null;
-      if (article.hotel_ids && article.hotel_ids.length > 0) {
-        const { data: hotel } = await supabase
-          .from('hotels')
-          .select('city')
-          .eq('id', article.hotel_ids[0])
-          .maybeSingle();
-        if (hotel?.city) city = hotel.city;
-      }
       const photo = city
         ? await fetchDestinationPhoto(city, unsplashKey, pixabayKey)
         : (unsplashKey ? await fetchUnsplashPhoto(article.title, unsplashKey) : null);
@@ -230,16 +282,24 @@ serve(async (req) => {
 
     const caption = buildCaption(article.title, article.meta_description || '', articleUrl);
 
+    // Best-effort location tag — same Facebook Place ID system backs both
+    // platforms' tagging, so one lookup covers both posts below.
+    let place: PlaceMatch | null = null;
+    if (city && fbPageToken) {
+      const query = country ? `${city}, ${country}` : city;
+      place = await findPlaceId(query, fbPageToken, lat, lng);
+    }
+
     const results: Record<string, string> = {};
     const errors: string[] = [];
 
     if (article.posted_to_facebook_at) {
       results.facebook = 'already posted';
     } else if (fbPageId && fbPageToken) {
-      const fbResult = await postToFacebook(fbPageId, fbPageToken, imageUrl, caption);
+      const fbResult = await postToFacebook(fbPageId, fbPageToken, imageUrl, caption, place?.id);
       if (fbResult.ok) {
         await supabase.from('seo_articles').update({ posted_to_facebook_at: new Date().toISOString() }).eq('id', article.id);
-        results.facebook = 'posted';
+        results.facebook = place ? `posted (tagged: ${place.name})` : 'posted (no location match)';
       } else {
         errors.push(`Facebook: ${fbResult.detail}`);
       }
@@ -250,10 +310,10 @@ serve(async (req) => {
     if (article.posted_to_instagram_at) {
       results.instagram = 'already posted';
     } else if (igUserId && fbPageToken) {
-      const igResult = await postToInstagram(igUserId, fbPageToken, imageUrl, caption);
+      const igResult = await postToInstagram(igUserId, fbPageToken, imageUrl, caption, place?.id);
       if (igResult.ok) {
         await supabase.from('seo_articles').update({ posted_to_instagram_at: new Date().toISOString() }).eq('id', article.id);
-        results.instagram = 'posted';
+        results.instagram = place ? `posted (tagged: ${place.name})` : 'posted (no location match)';
       } else {
         errors.push(`Instagram: ${igResult.detail}`);
       }
