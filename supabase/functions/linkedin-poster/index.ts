@@ -20,6 +20,11 @@ interface NewArticle {
 // consumer travel-inspiration copy — a weekly summary of what got added and
 // why it's real (evidence-based, not marketing) fits how the platform is
 // actually used, unlike a daily per-article post would.
+//
+// Deliberately no link in here: LinkedIn's algorithm measurably suppresses
+// reach on posts with an outbound link in the body (it wants attention kept
+// on-platform). The link goes into the first comment instead, added right
+// after the post is created — see postComment below.
 function buildCaption(newArticles: NewArticle[], totalHotels: number, totalDestinations: number): string {
   const places = newArticles
     .map(a => a.city ? (a.country ? `${a.city}, ${a.country}` : a.city) : a.title)
@@ -35,9 +40,7 @@ function buildCaption(newArticles: NewArticle[], totalHotels: number, totalDesti
     '',
     `Every listing is built from a real, public review that specifically mentions a food allergy experience, not a marketing claim on a hotel's own website. Nothing is written or invented by us — if the only review we can find is negative, that stays too.`,
     '',
-    `We now cover ${totalDestinations} destinations and ${totalHotels}+ verified hotels and restaurants worldwide.`,
-    '',
-    SITE_URL,
+    `We now cover ${totalDestinations} destinations and ${totalHotels}+ verified hotels and restaurants worldwide. Full list in the comments.`,
   ].join('\n');
 }
 
@@ -70,6 +73,34 @@ async function postToLinkedIn(orgId: string, accessToken: string, text: string):
   }
   const postId = res.headers.get('x-restli-id') || '';
   return { ok: true, detail: postId };
+}
+
+// Adds the destination-index link as the first comment, right after the post
+// goes up — the whole reason buildCaption keeps the post body link-free.
+// Best-effort: if this fails, the post itself already succeeded, so it's
+// logged but never turned into a run failure.
+async function postComment(shareUrn: string, orgId: string, accessToken: string, text: string): Promise<{ ok: boolean; detail: string }> {
+  const encodedUrn = encodeURIComponent(shareUrn);
+  const res = await fetch(`https://api.linkedin.com/v2/socialActions/${encodedUrn}/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
+      'X-Restli-Protocol-Version': '2.0.0',
+      'LinkedIn-Version': LINKEDIN_API_VERSION,
+    },
+    body: JSON.stringify({
+      actor: `urn:li:organization:${orgId}`,
+      message: { text },
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error('LinkedIn comment failed (non-fatal):', res.status, body);
+    return { ok: false, detail: `${res.status}: ${body.slice(0, 300)}` };
+  }
+  return { ok: true, detail: 'commented' };
 }
 
 serve(async (req) => {
@@ -175,11 +206,14 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
+    const commentResult = await postComment(result.detail, orgId, accessToken, `Full list: ${SITE_URL}/destinations`);
+
     return new Response(JSON.stringify({
       posted: true,
       newArticlesCount: newArticles.length,
       caption,
       linkedinPostId: result.detail,
+      linkComment: commentResult.ok ? 'posted' : `failed (non-fatal): ${commentResult.detail}`,
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (error) {
