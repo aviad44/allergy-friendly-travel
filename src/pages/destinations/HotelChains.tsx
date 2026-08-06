@@ -73,7 +73,7 @@ export default function HotelChains() {
                       Hyatt Allergy Policy <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/hotel/us/hyatt.html?aid=1234567&utm_source=allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href="https://www.booking.com/searchresults.html?ss=Hyatt" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Hyatt <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -98,7 +98,7 @@ export default function HotelChains() {
                       Marriott Cleanliness & Allergy Info <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/hotel/us/marriott.html?aid=1234567&utm_source=allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href="https://www.booking.com/searchresults.html?ss=Marriott" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Marriott <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -122,7 +122,7 @@ export default function HotelChains() {
                       Four Seasons Wellness Dining <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/hotel/us/four-seasons.html?aid=1234567&utm_source=allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href="https://www.booking.com/searchresults.html?ss=Four%20Seasons" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Four Seasons <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -147,7 +147,7 @@ export default function HotelChains() {
                       Hilton CleanStay Program <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/hotel/us/hilton.html?aid=1234567&utm_source=allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href="https://www.booking.com/searchresults.html?ss=Hilton" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Hilton <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -172,7 +172,7 @@ export default function HotelChains() {
                       Accor ALLSAFE Program <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/hotel/us/accor.html?aid=1234567&utm_source=allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href="https://www.booking.com/searchresults.html?ss=Accor" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Accor <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -197,7 +197,7 @@ export default function HotelChains() {
                       IHG Clean Promise <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/hotel/us/ihg.html?aid=1234567&utm_source=allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href="https://www.booking.com/searchresults.html?ss=IHG" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book IHG <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>

@@ -2021,7 +2021,7 @@ All restaurants listed either offer certified gluten-free options, maintain stri
     {
       name: "Need a Hotel?",
       description: "Browse allergy-friendly hotels in Athens",
-      link: "https://www.booking.com/city/gr/athens.html?aid=3308431&utm_source=AllergyFriendlyHotelFinder&utm_medium=chatbot&utm_campaign=hotel_recommendation"
+      link: "https://www.booking.com/city/gr/athens.html"
     }
   ]
 };
