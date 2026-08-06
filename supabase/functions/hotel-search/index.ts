@@ -15,7 +15,7 @@ const FAST_MODE = {
   maxDetailsToFetch: 8,
   targetResults: 8,
   maxReviewsToScan: 5,
-  cacheTtlDays: 14,
+  cacheTtlDays: 30,
 };
 
 // ==========================================
@@ -261,12 +261,20 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 }
 
 // ==========================================
-// SEARCH-LEVEL CACHE (14-day TTL) — reuses search_cache table with mode='hotels_fast'
+// SEARCH-LEVEL CACHE (30-day TTL) — reuses search_cache table with mode='hotels_fast'
 // ==========================================
-function buildCacheKey(destination: string, allergies: string[]): { dest: string; allg: string } {
+// Keyed on the *primary phrase* actually used in the Google query, not the
+// raw allergy list the user picked — two different allergy selections that
+// both resolve to the same primaryPhrase (e.g. Peanuts alone vs Peanuts +
+// Tree Nuts + Sesame, both "peanut allergy friendly") produce the identical
+// Google query and result set, so treating them as separate cache entries
+// was pure waste. classifyAndExtract scans for any allergy evidence
+// generically, not filtered to the user's specific list, so this is safe —
+// the result set was already fully determined by (destination, primaryPhrase).
+function buildCacheKey(destination: string, primaryPhrase: string): { dest: string; allg: string } {
   return {
     dest: destination.toLowerCase().trim(),
-    allg: [...allergies].map(a => a.toLowerCase().trim()).sort().join(','),
+    allg: primaryPhrase.toLowerCase().trim(),
   };
 }
 
@@ -443,7 +451,7 @@ serve(async (req) => {
     const fallbackUrl = `https://www.google.com/maps/search/${encodeURIComponent(queryPhrase)}`;
 
     // ---- STEP 1: Search-level cache ----
-    const { dest: cDest, allg: cAllg } = buildCacheKey(destination, allergiesArray);
+    const { dest: cDest, allg: cAllg } = buildCacheKey(destination, primaryPhrase);
 
     if (supabase) {
       const cached = await getCachedSearch(supabase, cDest, cAllg);
@@ -469,7 +477,13 @@ serve(async (req) => {
 
     if (candidates.length === 0) {
       const dur = Date.now() - startTime;
-      if (supabase) await logSearch(supabase, searchId, destination, allergiesArray, googleCalls, 0, false, dur);
+      if (supabase) {
+        // Cache the empty result too — a repeat of the same (destination,
+        // primaryPhrase) that genuinely has no Google candidates would
+        // otherwise re-pay for the Text Search call every single time.
+        await setCachedSearch(supabase, cDest, cAllg, { results: [], googleCallsCount: googleCalls }, 0);
+        await logSearch(supabase, searchId, destination, allergiesArray, googleCalls, 0, false, dur);
+      }
       return new Response(JSON.stringify({
         results: [], total: 0, fallbackUrl,
       }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -530,9 +544,13 @@ serve(async (req) => {
     const dur = Date.now() - startTime;
 
     // ---- STEP 4: Persist real evidence, cache & log (best-effort, never fails the response) ----
+    // Cache regardless of result count — a zero-result search that isn't
+    // cached just repeats its full ~9-call cost every time it's searched
+    // again, for the exact same "nothing found" answer (this was the
+    // single biggest source of wasted spend before this fix).
     if (supabase) {
+      await setCachedSearch(supabase, cDest, cAllg, { results, googleCallsCount: googleCalls }, results.length);
       if (results.length > 0) {
-        await setCachedSearch(supabase, cDest, cAllg, { results, googleCallsCount: googleCalls }, results.length);
         await persistEvidence(supabase, destination, allergiesArray, results);
       }
       await logSearch(supabase, searchId, destination, allergiesArray, googleCalls, results.length, false, dur);

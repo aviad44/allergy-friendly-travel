@@ -14,7 +14,7 @@ const FAST_MODE = {
   maxDetailsToFetch: 8,      // Hard cap: never more than 8 Details calls
   targetResults: 8,          // Stop once we have 8 with allergy quotes
   maxReviewsToScan: 5,       // Per place, scan first 5 reviews
-  cacheTtlDays: 14,
+  cacheTtlDays: 30,
 };
 
 // ==========================================
@@ -260,12 +260,16 @@ async function fetchReviews(placeId: string, apiKey: string): Promise<any | null
 }
 
 // ==========================================
-// SEARCH-LEVEL CACHE (14-day TTL)
+// SEARCH-LEVEL CACHE (30-day TTL)
 // ==========================================
-function buildCacheKey(destination: string, allergies: string[]): { dest: string; allg: string } {
+// Keyed on the *primary phrase* actually used in the Google query, not the
+// raw allergy list the user picked — see hotel-search/index.ts for the full
+// rationale (same fix, same reasoning, both search functions share this
+// pattern).
+function buildCacheKey(destination: string, primaryPhrase: string): { dest: string; allg: string } {
   return {
     dest: destination.toLowerCase().trim(),
-    allg: [...allergies].map(a => a.toLowerCase().trim()).sort().join(','),
+    allg: primaryPhrase.toLowerCase().trim(),
   };
 }
 
@@ -374,7 +378,7 @@ serve(async (req) => {
     const fallbackUrl = `https://www.google.com/maps/search/${encodeURIComponent(queryPhrase)}`;
 
     // ---- STEP 1: Search-level cache ----
-    const { dest: cDest, allg: cAllg } = buildCacheKey(destination, allergiesArray);
+    const { dest: cDest, allg: cAllg } = buildCacheKey(destination, primaryPhrase);
 
     if (supabase) {
       const cached = await getCachedSearch(supabase, cDest, cAllg);
@@ -402,7 +406,13 @@ serve(async (req) => {
 
     if (candidates.length === 0) {
       const dur = Date.now() - startTime;
-      if (supabase) await logSearch(supabase, searchId, destination, allergiesArray, googleCalls, 0, false, dur);
+      if (supabase) {
+        // Cache the empty result too — see setCachedSearch call in STEP 4
+        // below for why this matters (repeat zero-result searches were the
+        // single biggest source of wasted API spend before this fix).
+        await setCachedSearch(supabase, cDest, cAllg, { places: [], queryPhrase: primaryPhrase, googleCallsCount: googleCalls }, 0);
+        await logSearch(supabase, searchId, destination, allergiesArray, googleCalls, 0, false, dur);
+      }
       return new Response(JSON.stringify({
         destination, mode: 'fast', queryPhrase: primaryPhrase,
         places: [], totalCandidates: 0, detailsFetched: 0,
@@ -464,9 +474,13 @@ serve(async (req) => {
     const dur = Date.now() - startTime;
 
     // ---- STEP 4: Cache & log ----
+    // Cache regardless of result count — see the candidates.length===0 branch
+    // above for why (a zero-result search that isn't cached repeats its full
+    // cost every time it's searched again, for the same "nothing found"
+    // answer).
     const cachePayload = { places: results, queryPhrase: primaryPhrase, googleCallsCount: googleCalls };
     if (supabase) {
-      if (results.length > 0) await setCachedSearch(supabase, cDest, cAllg, cachePayload, results.length);
+      await setCachedSearch(supabase, cDest, cAllg, cachePayload, results.length);
       await logSearch(supabase, searchId, destination, allergiesArray, googleCalls, results.length, false, dur);
     }
 
