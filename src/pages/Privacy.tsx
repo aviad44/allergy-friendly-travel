@@ -48,7 +48,7 @@ const Privacy = () => {
           <p className="mb-6">We do not sell or rent your personal information. We may share non-identifiable, aggregated data for analytics or improvement purposes. If you click on a booking link, your data will be subject to the third-party site's policies.</p>
 
           <h3 className="font-display text-xl font-semibold mb-3 text-blue-700">5. Cookies and Tracking Technologies</h3>
-          <p className="mb-6">We use cookies and similar technologies to understand user behavior and improve our services. You can manage your cookie preferences via your browser settings.</p>
+          <p className="mb-6">We use cookies and similar technologies to understand user behavior and improve our services, including Google Analytics and the Meta Pixel (Facebook/Instagram). The Meta Pixel helps us measure the performance of our Facebook and Instagram ads and understand which searches on our site lead visitors here from those ads. It does not affect the hotel or restaurant results we show you. You can manage your cookie preferences via your browser settings, and you can control how Meta uses your data through your Facebook ad preferences.</p>
 
           <h3 className="font-display text-xl font-semibold mb-3 text-blue-700">6. Third-Party Links</h3>
           <p className="mb-6">Our site contains links to third-party platforms, such as hotel booking websites. We are not responsible for their privacy practices. We recommend reviewing their privacy policies before sharing any personal information.</p>

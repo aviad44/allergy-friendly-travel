@@ -12,6 +12,7 @@ import { RestaurantResults } from "@/components/search/RestaurantResults";
 import { AlertCircle, ExternalLink } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RestaurantInfo } from "@/types/restaurant";
+import { trackSiteSearch } from "@/utils/metaPixel";
 
 // Hotel results display component
 interface HotelResultsProps {
@@ -183,7 +184,9 @@ const SearchResults = () => {
       navigate("/");
       return;
     }
-    
+
+    trackSiteSearch(destination, "hotels");
+
     // Check if we already have search results from navigation state
     const existingResults = location.state?.searchResults;
     if (existingResults && existingResults.results) {
@@ -236,7 +239,9 @@ const SearchResults = () => {
   // Restaurants search
   const performRestaurantSearch = async () => {
     if (!destination) return;
-    
+
+    trackSiteSearch(destination, "restaurants");
+
     setIsSearchingRestaurants(true);
     setRestaurantError(null);
     

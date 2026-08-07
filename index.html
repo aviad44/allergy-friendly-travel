@@ -83,12 +83,37 @@
         script.async = true;
         script.src = 'https://www.googletagmanager.com/gtag/js?id=G-5PWZX00PL4';
         document.head.appendChild(script);
-        
+
         // Send pageview after everything is loaded
         setTimeout(() => gtag('event', 'page_view'), 100);
       });
     </script>
-    
+
+    <!--
+      Meta Pixel — same deferred-load rationale as Analytics above: the fbq
+      stub queues calls immediately, but fbevents.js itself only loads after
+      window 'load' so it never competes with initial render. Used for ad
+      campaign tracking/retargeting (see src/pages/SearchResults.tsx for the
+      Search event fired on real search attempts) and disclosed in Privacy.tsx.
+    -->
+    <script>
+      window.addEventListener('load', function() {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1064364525938635');
+        fbq('track', 'PageView');
+      });
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1064364525938635&ev=PageView&noscript=1"
+    /></noscript>
+
     <!-- Critical CSS will be loaded via main.tsx for better control -->
 </head>
 <body>
