@@ -1,8 +1,6 @@
 
 import React from 'react';
 import { DestinationReviews } from '@/components/reviews/DestinationReviews';
-import { SocialTags } from "@/components/SocialTags";
-import { CanonicalTags } from "@/components/CanonicalTags";
 import { DESTINATION_OG_IMAGES } from '@/utils/socialSharing';
 
 const AthensGlutenFree = () => {
@@ -13,14 +11,6 @@ const AthensGlutenFree = () => {
 
   return (
     <>
-      <CanonicalTags canonicalUrl={canonicalUrl} />
-      <SocialTags
-        title={pageTitle}
-        description={pageDescription}
-        imageUrl={imageUrl}
-        url={canonicalUrl}
-        type="article"
-      />
       <DestinationReviews destinationId="athens" />
     </>
   );

@@ -1,8 +1,5 @@
 
 import { DestinationReviews } from "@/components/reviews/DestinationReviews";
-import { SocialTags } from "@/components/SocialTags";
-import { CanonicalTags } from "@/components/CanonicalTags";
-
 const Barcelona = () => {
   // SEO metadata with absolute URLs for proper social sharing
   const pageTitle = "Allergy-Friendly Hotels in Barcelona | Safe Dining for Dietary Restrictions";
@@ -14,14 +11,6 @@ const Barcelona = () => {
 
   return (
     <>
-      <CanonicalTags canonicalUrl={canonicalUrl} />
-      <SocialTags
-        title={pageTitle}
-        description={pageDescription}
-        imageUrl={imageUrl}
-        url={canonicalUrl}
-        type="article"
-      />
       <DestinationReviews destinationId="barcelona" />
     </>
   );

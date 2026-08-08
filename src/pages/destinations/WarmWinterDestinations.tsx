@@ -1,7 +1,4 @@
 import { DestinationReviews } from "@/components/reviews/DestinationReviews";
-import { SocialTags } from "@/components/SocialTags";
-import { CanonicalTags } from "@/components/CanonicalTags";
-
 const WarmWinterDestinations = () => {
   const pageTitle = "Warm Winter & Christmas Getaways for Food-Allergic Travelers";
   const pageDescription = "Discover the best warm winter destinations for food-allergic travelers. Verified allergy-friendly hotels and restaurants in Madeira, Hurghada, Canary Islands, and Israel.";
@@ -10,14 +7,6 @@ const WarmWinterDestinations = () => {
 
   return (
     <>
-      <CanonicalTags canonicalUrl={canonicalUrl} />
-      <SocialTags
-        title={pageTitle}
-        description={pageDescription}
-        imageUrl={imageUrl}
-        url={canonicalUrl}
-        type="article"
-      />
       <DestinationReviews destinationId="warm-winter-destinations" />
     </>
   );

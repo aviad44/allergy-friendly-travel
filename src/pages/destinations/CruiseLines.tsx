@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { SocialTags } from "@/components/SocialTags";
-import { CanonicalTags } from "@/components/CanonicalTags";
+import { MetaManager } from "@/components/MetaManager";
 import { DESTINATION_OG_IMAGES } from '@/utils/socialSharing';
 import { CruiseHero } from '@/components/cruise/CruiseHero';
 import { CruiseIntro } from '@/components/cruise/CruiseIntro';
@@ -76,13 +75,15 @@ const CruiseLines = () => {
 
   return (
     <div className="min-h-screen bg-background pb-12">
-      <CanonicalTags canonicalUrl={canonicalUrl} />
-      <SocialTags
-        title={pageTitle}
-        description={pageDescription}
-        imageUrl={imageUrl}
-        url={canonicalUrl}
-        type="article"
+      <MetaManager
+        routeKey="/destinations/cruise-lines"
+        dynamicData={{
+          title: pageTitle,
+          description: pageDescription,
+          image: imageUrl,
+          canonical: canonicalUrl,
+          type: "article",
+        }}
       />
 
       <CruiseHero baseUrl={canonicalUrl} />
