@@ -45,6 +45,7 @@ const languageMap: Record<string, string> = {
   hu: "Hungarian",
   ka: "Georgian",
   ro: "Romanian",
+  sk: "Slovak",
 };
 
 /**
@@ -62,13 +63,13 @@ export const getAvailableLanguageCodes = (): string[] => {
 };
 
 /**
- * Get language map for dropdowns
+ * Get language map for dropdowns, sorted alphabetically by language name
+ * (A to Z) so the list is easy to scan regardless of insertion order above.
  */
 export const getLanguageOptions = () => {
-  return Object.entries(languageMap).map(([code, name]) => ({
-    value: code,
-    label: name
-  }));
+  return Object.entries(languageMap)
+    .map(([code, name]) => ({ value: code, label: name }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 };
 
 /**
