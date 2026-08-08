@@ -58,7 +58,7 @@ export const HotelCard = ({
   const CardIcon = isChalet ? Home : isResort ? Bed : Bed;
 
   return (
-    <Card className="w-full transition-all duration-300 hover:shadow-lg border-primary/20 overflow-hidden group">
+    <Card className="w-full min-w-0 transition-all duration-300 hover:shadow-lg border-primary/20 overflow-hidden group">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 h-2"></div>
       
       <CardHeader className="space-y-2 sm:space-y-3 pt-5 pb-2 px-4">

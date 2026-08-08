@@ -23,7 +23,16 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
         <Star className="mr-2 h-6 w-6 text-amber-500" aria-hidden="true" />
         Top Allergy-Friendly Hotels in {destinationName}
       </h2>
-      <div className="grid gap-6 sm:gap-8 md:gap-10">
+      {/*
+        min-w-0 on the grid and on every grid item below: CSS Grid items get
+        the same "automatic minimum size = content size" default as flex
+        items, so without it a long address or a wide row of badges inside
+        HotelCard stretches the grid cell (and the whole page) past the
+        viewport instead of wrapping/truncating inside it — the min-w-0
+        added to HotelCard's own internal flex rows never got a bounded box
+        to shrink into in the first place. Confirmed live on iPhone 13.
+      */}
+      <div className="grid gap-6 sm:gap-8 md:gap-10 min-w-0">
         {isLondon ? (
           <>
             <HotelCard 
@@ -64,7 +73,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
           </>
         ) : hasHotels ? (
           hotels.map((hotel, index) => (
-            <div key={hotel.id || index}>
+            <div key={hotel.id || index} className="min-w-0">
               <HotelCard
                 name={hotel.name}
                 address={hotel.address || hotel.location}
