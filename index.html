@@ -110,13 +110,12 @@
         fbq('track', 'PageView');
       });
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1064364525938635&ev=PageView&noscript=1"
-    /></noscript>
-
     <!-- Critical CSS will be loaded via main.tsx for better control -->
 </head>
 <body>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1064364525938635&amp;ev=PageView&amp;noscript=1"
+      alt="" /></noscript>
     <div id="root"></div>
     <!-- Move all non-critical scripts to end of body for better performance -->
     <script type="module" src="/src/main.tsx"></script>
