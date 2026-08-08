@@ -37,22 +37,22 @@ export const CustomAllergyInput: React.FC<CustomAllergyInputProps> = ({
   };
 
   return (
-    <div>
+    <div className="min-w-0">
       <Label htmlFor="custom-allergy" className="mb-2 block">Add Custom Allergy or Dietary Restriction</Label>
-      <div className="flex gap-2">
+      <div className="flex gap-2 min-w-0">
         <Input
           id="custom-allergy"
           placeholder="Enter custom allergy (e.g., Avocado)"
           value={customAllergy}
           onChange={(e) => setCustomAllergy(e.target.value)}
           onKeyDown={handleCustomAllergyKeyDown}
-          className="flex-1 bg-white"
+          className="flex-1 min-w-0 bg-white"
         />
-        <Button 
-          type="button" 
+        <Button
+          type="button"
           onClick={handleAddClick}
           disabled={!customAllergy.trim()}
-          className="bg-teal-600 hover:bg-teal-700"
+          className="bg-teal-600 hover:bg-teal-700 shrink-0"
         >
           <Plus className="h-4 w-4 mr-1" />
           Add

@@ -283,11 +283,20 @@ serve(async (req) => {
     const caption = buildCaption(article.title, article.meta_description || '', articleUrl);
 
     // Best-effort location tag — same Facebook Place ID system backs both
-    // platforms' tagging, so one lookup covers both posts below.
+    // platforms' tagging, so one lookup covers both posts below. Tried live
+    // on "Zurich, Switzerland" (2026-08-08): Meta's search returned zero
+    // results for the combined "city, country" query even with lat/lng
+    // centering, so it's worth one cheap retry on the bare city name before
+    // giving up — a differently-indexed Place entry for just "Zurich" is a
+    // real possibility, and this costs nothing when the first query already
+    // succeeds.
     let place: PlaceMatch | null = null;
     if (city && fbPageToken) {
       const query = country ? `${city}, ${country}` : city;
       place = await findPlaceId(query, fbPageToken, lat, lng);
+      if (!place && country) {
+        place = await findPlaceId(city, fbPageToken, lat, lng);
+      }
     }
 
     const results: Record<string, string> = {};
