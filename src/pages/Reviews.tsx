@@ -23,6 +23,19 @@ const Reviews = () => {
     fetchReviews();
   }, []);
 
+  // The self-hosted prerender step (scripts/prerender.mjs) drives this page
+  // with headless Chrome and gives markPrerenderReady() a 12s budget before
+  // snapshotting anyway. Puppeteer's default automated browser sets
+  // navigator.webdriver = true, which real visitors' browsers never do — so
+  // this is a safe way to tell "the bot writing our static HTML" apart from
+  // "a person on a flaky connection". Real users still get the full 3-retry,
+  // 10s-per-attempt resilience below; the bot gets one fast attempt and
+  // moves on, so the snapshot Google actually indexes captures real content
+  // (or a clean error state) instead of freezing mid-spinner past the
+  // 12s window — which is what was silently shipping an empty
+  // /reviews page to Googlebot and keeping it out of the index.
+  const isPrerenderBot = typeof navigator !== 'undefined' && navigator.webdriver === true;
+
   const fetchReviews = async (retryCount = 0) => {
     try {
       setIsLoading(true);
@@ -70,7 +83,7 @@ const Reviews = () => {
       
       // Add timeout for the request
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), isPrerenderBot ? 4000 : 10000);
       
       const { data, error } = await supabase
         .from('reviews')
@@ -121,8 +134,11 @@ const Reviews = () => {
         retryCount
       });
       
-      // Retry logic for network errors
-      if ((error?.message?.includes('fetch') || error?.name === 'AbortError') && retryCount < 3) {
+      // Retry logic for network errors — skipped for the prerender bot (see
+      // isPrerenderBot above): it needs a fast, final answer within the
+      // snapshot's 12s budget, not a 2s/4s/6s backoff cascade that blows
+      // straight through it.
+      if (!isPrerenderBot && (error?.message?.includes('fetch') || error?.name === 'AbortError') && retryCount < 3) {
         console.log(`Network error detected, retrying in ${(retryCount + 1) * 2} seconds...`);
         setTimeout(() => {
           fetchReviews(retryCount + 1);
