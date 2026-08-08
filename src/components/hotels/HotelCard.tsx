@@ -62,8 +62,8 @@ export const HotelCard = ({
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 h-2"></div>
       
       <CardHeader className="space-y-2 sm:space-y-3 pt-5 pb-2 px-4">
-        <div className="flex justify-between items-start">
-          <CardTitle className="text-lg font-display text-primary/90 flex items-center gap-2 line-clamp-1">
+        <div className="flex justify-between items-start min-w-0">
+          <CardTitle className="text-lg font-display text-primary/90 flex items-center gap-2 line-clamp-1 min-w-0">
             <CardIcon className="h-4 w-4 shrink-0 text-primary/70" />
             <span>{cleanName}</span>
           </CardTitle>
@@ -76,11 +76,11 @@ export const HotelCard = ({
           )}
         </div>
         <CardDescription>
-          <a 
+          <a
             href={getGoogleMapsUrl(cleanName, address)}
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="flex items-center text-xs text-muted-foreground hover:text-primary transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center text-xs text-muted-foreground hover:text-primary transition-colors min-w-0"
           >
             <MapPin className="h-3.5 w-3.5 mr-1 shrink-0 text-primary/70" />
             <span className="truncate">{address}</span>

@@ -89,22 +89,22 @@ export const HotelCard: React.FC<HotelCardProps> = ({
           </div>
         )}
         
-        <div className="p-4 flex-1 flex flex-col">
+        <div className="p-4 flex-1 flex flex-col min-w-0">
           {/* Hotel Name and Stars - MORE COMPACT */}
-          <div className="flex justify-between items-start mb-1.5">
-            <h2 className="text-base font-bold text-gray-900 line-clamp-1">{cleanHotelName}</h2>
+          <div className="flex justify-between items-start mb-1.5 min-w-0">
+            <h2 className="text-base font-bold text-gray-900 line-clamp-1 min-w-0">{cleanHotelName}</h2>
             <div className="flex ml-1.5 shrink-0">
               {renderStars()}
             </div>
           </div>
-          
+
           {/* Simplified Location with Map Link */}
           {simplifiedLocation && (
-            <a 
+            <a
               href={getGoogleMapsUrl(cleanHotelName, hotel.location || '')}
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="flex items-center text-gray-500 text-xs mb-2 hover:text-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center text-gray-500 text-xs mb-2 hover:text-primary min-w-0"
             >
               <MapPin className="h-3 w-3 mr-1 shrink-0" />
               <span className="truncate">{simplifiedLocation}</span>
