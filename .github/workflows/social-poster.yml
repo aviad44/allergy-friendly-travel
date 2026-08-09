@@ -1,14 +1,20 @@
 name: Social Poster (Facebook + Instagram)
 
-# Runs daily. Calls the social-poster Supabase Edge Function, which posts the
-# oldest published article that hasn't been shared yet to Facebook and/or
-# Instagram, using a real Unsplash photo and a caption built from the
-# article's actual title/description — no invented content.
+# Runs 3x/day. Calls the social-poster Supabase Edge Function, which posts up
+# to a few of the oldest published articles that haven't been shared yet to
+# Facebook and/or Instagram, using a real Unsplash photo and a caption built
+# from the article's actual title/description — no invented content.
 # All secrets (Facebook, Instagram, Unsplash) live in Supabase, not here.
+#
+# Was a single run/day posting one article/run — with content-pipeline
+# publishing roughly 1-2 articles/day, the backlog never cleared (31 of 35
+# published articles had never been posted, confirmed 2026-08-09). Running
+# more often, paired with the function now processing a small batch per
+# call, lets it actually catch up instead of falling further behind.
 
 on:
   schedule:
-    - cron: "0 15 * * *"   # daily at 15:00 UTC
+    - cron: "0 */8 * * *"   # 00:00, 08:00, 16:00 UTC
   workflow_dispatch: {}       # allow manual trigger from the GitHub Actions UI
 
 jobs:

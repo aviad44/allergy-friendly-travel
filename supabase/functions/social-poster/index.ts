@@ -196,34 +196,54 @@ serve(async (req) => {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const { data: logRow } = await supabase
-    .from('pipeline_log')
-    .insert({ run_type: 'social_post', status: 'running' })
-    .select('id')
-    .single();
+  // Process a few oldest-unposted articles per run instead of just one.
+  // content-pipeline publishes roughly 1-2 articles/day, and this used to
+  // post only the single oldest backlog item per invocation — with the
+  // cron running once a day, new articles arrived faster than the backlog
+  // could clear, so anything published after the first couple of weeks
+  // (confirmed: 31 of 35 published articles had never been posted) sat
+  // behind an ever-growing queue and never went out. A small batch per run
+  // (paired with running the workflow a few times a day instead of once)
+  // lets it actually catch up without dumping the whole backlog at once.
+  const BATCH_SIZE = 3;
 
-  try {
-    // Oldest published article still missing at least one platform's post (work through
-    // the backlog in publish order; each platform tracked independently below).
-    const { data: article, error: fetchErr } = await supabase
-      .from('seo_articles')
-      .select('id, title, meta_description, slug, content_type, hotel_ids, restaurant_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at')
-      .eq('status', 'published')
-      .or('posted_to_facebook_at.is.null,posted_to_instagram_at.is.null')
-      .order('published_at', { ascending: true })
-      .limit(1)
-      .maybeSingle();
+  const { data: articles, error: fetchErr } = await supabase
+    .from('seo_articles')
+    .select('id, title, meta_description, slug, content_type, hotel_ids, restaurant_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at')
+    .eq('status', 'published')
+    .or('posted_to_facebook_at.is.null,posted_to_instagram_at.is.null')
+    .order('published_at', { ascending: true })
+    .limit(BATCH_SIZE);
 
-    if (fetchErr) throw fetchErr;
+  if (fetchErr) {
+    await supabase.from('pipeline_log').insert({
+      run_type: 'social_post', status: 'error', error_message: String(fetchErr), finished_at: new Date().toISOString(),
+    });
+    return new Response(JSON.stringify({ error: 'social-poster failed', message: String(fetchErr) }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
 
-    if (!article) {
-      await supabase.from('pipeline_log').update({
-        status: 'success', error_message: 'No unposted published articles found', finished_at: new Date().toISOString(),
-      }).eq('id', logRow.id);
-      return new Response(JSON.stringify({ message: 'No unposted articles' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
+  if (!articles || articles.length === 0) {
+    await supabase.from('pipeline_log').insert({
+      run_type: 'social_post', status: 'success', error_message: 'No unposted published articles found', finished_at: new Date().toISOString(),
+    });
+    return new Response(JSON.stringify({ message: 'No unposted articles' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
 
+  // Each article gets its own pipeline_log row and is handled independently —
+  // one bad post (e.g. a transient Graph API error) shouldn't stop the rest
+  // of the batch from going out.
+  const summaries: unknown[] = [];
+
+  for (const article of articles) {
+    const { data: logRow } = await supabase
+      .from('pipeline_log')
+      .insert({ run_type: 'social_post', status: 'running' })
+      .select('id')
+      .single();
+
+    try {
     // content_type determines the live URL path — hotel guides live under
     // /destinations/, restaurant guides under /restaurants/ (the old shared
     // /articles/ path was removed when those categories were split/merged).
@@ -276,8 +296,8 @@ serve(async (req) => {
       await supabase.from('pipeline_log').update({
         status: 'error', error_message: 'No image available (Unsplash key missing or search returned nothing)', finished_at: new Date().toISOString(),
       }).eq('id', logRow.id);
-      return new Response(JSON.stringify({ error: 'No image available for this article' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      summaries.push({ article: { slug: article.slug, title: article.title }, error: 'No image available for this article' });
+      continue;
     }
 
     const caption = buildCaption(article.title, article.meta_description || '', articleUrl);
@@ -337,19 +357,23 @@ serve(async (req) => {
       finished_at: new Date().toISOString(),
     }).eq('id', logRow.id);
 
-    return new Response(JSON.stringify({
+    summaries.push({
       article: { slug: article.slug, title: article.title },
       imageCredit,
       results,
       errors,
-    }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    });
 
-  } catch (error) {
-    await supabase.from('pipeline_log').update({
-      status: 'error', error_message: String(error), finished_at: new Date().toISOString(),
-    }).eq('id', logRow.id);
-    console.error('social-poster error:', error);
-    return new Response(JSON.stringify({ error: 'social-poster failed', message: String(error) }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    } catch (error) {
+      await supabase.from('pipeline_log').update({
+        status: 'error', error_message: String(error), finished_at: new Date().toISOString(),
+      }).eq('id', logRow.id);
+      console.error('social-poster error for', article.slug, ':', error);
+      summaries.push({ article: { slug: article.slug, title: article.title }, error: String(error) });
+      // Keep going — one article failing shouldn't stop the rest of the batch.
+    }
   }
+
+  return new Response(JSON.stringify({ processed: summaries.length, summaries }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 });
