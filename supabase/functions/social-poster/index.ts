@@ -196,23 +196,22 @@ serve(async (req) => {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // Process a few oldest-unposted articles per run instead of just one.
-  // content-pipeline publishes roughly 1-2 articles/day, and this used to
-  // post only the single oldest backlog item per invocation — with the
-  // cron running once a day, new articles arrived faster than the backlog
-  // could clear, so anything published after the first couple of weeks
-  // (confirmed: 31 of 35 published articles had never been posted) sat
-  // behind an ever-growing queue and never went out. A small batch per run
-  // (paired with running the workflow a few times a day instead of once)
-  // lets it actually catch up without dumping the whole backlog at once.
-  const BATCH_SIZE = 3;
+  // One post per day, newest article first — by design. This intentionally
+  // does not try to work through the backlog of older unposted articles
+  // (there's a real one: most of the ~35 published articles predate this
+  // automation and were never posted, and that's fine, it's a young
+  // automation). Ordering by published_at descending means each daily run
+  // picks whatever was most recently published, so social stays roughly in
+  // sync with the freshest content instead of slowly crawling forward
+  // through months of old backlog.
+  const BATCH_SIZE = 1;
 
   const { data: articles, error: fetchErr } = await supabase
     .from('seo_articles')
     .select('id, title, meta_description, slug, content_type, hotel_ids, restaurant_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at')
     .eq('status', 'published')
     .or('posted_to_facebook_at.is.null,posted_to_instagram_at.is.null')
-    .order('published_at', { ascending: true })
+    .order('published_at', { ascending: false })
     .limit(BATCH_SIZE);
 
   if (fetchErr) {
