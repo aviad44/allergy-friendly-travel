@@ -1,10 +1,14 @@
 name: Social Poster (Facebook + Instagram)
 
-# Runs daily. Calls the social-poster Supabase Edge Function, which posts the
-# oldest published article that hasn't been shared yet to Facebook and/or
-# Instagram, using a real Unsplash photo and a caption built from the
-# article's actual title/description — no invented content.
+# Runs once daily. Calls the social-poster Supabase Edge Function, which
+# posts the single newest published article that hasn't been shared yet to
+# Facebook and/or Instagram, using a real Unsplash photo and a caption built
+# from the article's actual title/description — no invented content.
 # All secrets (Facebook, Instagram, Unsplash) live in Supabase, not here.
+#
+# By design this doesn't try to work through older unposted articles from
+# before this automation existed — one fresh post a day is the goal, not
+# catching up on backlog.
 
 on:
   schedule:
