@@ -20,7 +20,6 @@ import { TravelTipsSection } from "./TravelTipsSection";
 import { LanguageTableSection } from "./LanguageTableSection";
 import { RelatedDestinations } from "./RelatedDestinations";
 import { MultiRegionHotelsSection } from "./MultiRegionHotelsSection";
-import { AllergyCardPromo } from "@/components/AllergyCardPromo";
 
 interface DestinationPageProps {
   destinationId: DestinationId;
@@ -170,14 +169,12 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
               isAthens={isAthens}
             />
 
-            <LanguageTableSection
+            <LanguageTableSection 
               languageTable={content?.languageTable}
               textAlignment={textAlignment}
             />
 
-            <AllergyCardPromo />
-
-            <RelatedDestinations
+            <RelatedDestinations 
               currentDestination={destinationId} 
               textAlignment={textAlignment}
             />

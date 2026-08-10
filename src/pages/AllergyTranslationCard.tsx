@@ -1,26 +1,17 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 import { HOME_CONTENT } from "@/constants/home";
 import { AllergyCardGenerator } from '@/components/allergy-card/AllergyCardGenerator';
 import { SocialShareButton } from '@/components/allergy-card/SocialShareButton';
-
-// Single source of truth for the language count so the page copy can never
-// drift from what the generator actually supports again — this page used to
-// say "50+ languages" everywhere while the tool itself supported 28. Real
-// count, not a round marketing number, matters here: AI answer engines
-// (ChatGPT, Perplexity, Google AI Overviews) cross-check claims like this
-// against the live tool, and an inflated number is exactly the kind of thing
-// that erodes the trust signal GEO depends on.
-const SUPPORTED_LANGUAGE_COUNT = 28;
 
 const AllergyTranslationCard = () => {
   return (
     <>
       <Helmet>
-        <title>Free Allergy Translation Card Generator | {SUPPORTED_LANGUAGE_COUNT} Languages | Food Allergy Travel Cards</title>
-        <meta name="description" content={`Create free allergy translation cards instantly. Download printable food allergy cards in ${SUPPORTED_LANGUAGE_COUNT} languages for safe restaurant dining while traveling. No registration required.`} />
+        <title>Free Allergy Translation Card Generator | 50+ Languages | Food Allergy Travel Cards</title>
+        <meta name="description" content="Create free allergy translation cards instantly. Download printable food allergy cards in 50+ languages for safe restaurant dining while traveling. No registration required." />
         <meta name="keywords" content="allergy translation card, food allergy card, allergy travel card, dining card, restaurant allergy card, travel with allergies, food allergy translation, allergy communication card, gluten free card, dairy free card" />
         <link rel="canonical" href="https://www.allergy-free-travel.com/allergy-translation-card" />
         <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
@@ -30,8 +21,8 @@ const AllergyTranslationCard = () => {
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={`Free Allergy Translation Card Generator | ${SUPPORTED_LANGUAGE_COUNT} Languages`} />
-        <meta property="og:description" content={`Create free printable allergy translation cards in ${SUPPORTED_LANGUAGE_COUNT} languages. Essential tool for travelers with food allergies. Download instantly.`} />
+        <meta property="og:title" content="Free Allergy Translation Card Generator | 50+ Languages" />
+        <meta property="og:description" content="Create free printable allergy translation cards in 50+ languages. Essential tool for travelers with food allergies. Download instantly." />
         <meta property="og:url" content="https://www.allergy-free-travel.com/allergy-translation-card" />
         <meta property="og:image" content="https://www.allergy-free-travel.com/assets/og/allergy-translation-card.png" />
         <meta property="og:image:width" content="1200" />
@@ -41,18 +32,18 @@ const AllergyTranslationCard = () => {
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Free Allergy Translation Card Generator" />
-        <meta name="twitter:description" content={`Create free printable allergy cards in ${SUPPORTED_LANGUAGE_COUNT} languages for safe restaurant dining while traveling.`} />
+        <meta name="twitter:description" content="Create free printable allergy cards in 50+ languages for safe restaurant dining while traveling." />
         <meta name="twitter:image" content="https://www.allergy-free-travel.com/assets/og/allergy-translation-card.png" />
         <meta name="twitter:creator" content="@AllergyFreeTravel" />
 
-        {/* Hreflang — only the URLs that actually exist. Per-language sub-pages
-            (e.g. /allergy-translation-card/spanish) were listed here before but
-            were never built, so every one of those hreflang entries pointed at
-            a 404. Broken hreflang doesn't just fail silently, Search Console
-            flags it as an error and it undermines confidence in the rest of
-            the page's signals. */}
+        {/* Hreflang */}
         <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card" hrefLang="x-default" />
         <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card" hrefLang="en" />
+        <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card/spanish" hrefLang="es" />
+        <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card/italian" hrefLang="it" />
+        <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card/french" hrefLang="fr" />
+        <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card/thai" hrefLang="th" />
+        <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card/japanese" hrefLang="ja" />
 
         {/* JSON-LD: WebApplication */}
         <script type="application/ld+json">
@@ -62,13 +53,13 @@ const AllergyTranslationCard = () => {
             "name": "Free Allergy Translation Card Generator",
             "alternateName": ["Food Allergy Card Generator", "Allergy Dining Card", "Travel Allergy Card"],
             "url": "https://www.allergy-free-travel.com/allergy-translation-card",
-            "description": `Free online tool to create printable allergy translation cards in ${SUPPORTED_LANGUAGE_COUNT} languages for safe restaurant dining while traveling`,
+            "description": "Free online tool to create printable allergy translation cards in 50+ languages for safe restaurant dining while traveling",
             "applicationCategory": "HealthApplication",
             "applicationSubCategory": "Food Allergy Management",
             "operatingSystem": "Web",
             "browserRequirements": "HTML5, CSS3, JavaScript",
             "isAccessibleForFree": true,
-            "inLanguage": ["en", "es", "fr", "de", "it", "ja", "ko", "zh", "ru", "ar", "hi", "pt", "nl", "tr", "pl", "vi", "th", "sv", "da", "fi", "no", "el", "he", "cs", "hu", "ka", "ro", "sk"],
+            "inLanguage": ["en", "es", "it", "fr", "th", "ja", "de", "pt", "he", "ar", "zh"],
             "publisher": {
               "@type": "Organization",
               "name": "Allergy-Free Travel",
@@ -90,58 +81,36 @@ const AllergyTranslationCard = () => {
           })}
         </script>
 
-        {/* JSON-LD: BreadcrumbList — matches the visual breadcrumb below,
-            gives Google and AI crawlers an explicit, machine-readable
-            statement of where this page sits in the site. */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.allergy-free-travel.com/" },
-              { "@type": "ListItem", "position": 2, "name": "Allergy Translation Card Generator", "item": "https://www.allergy-free-travel.com/allergy-translation-card" }
-            ]
-          })}
-        </script>
-
-        {/* JSON-LD: FAQPage — kept word-for-word identical to the visible FAQ
-            section below. Google's structured-data guidelines require the
-            two to match; a mismatch (questions in the markup that aren't
-            actually shown to visitors) can get a page disqualified from FAQ
-            rich results, which is what the previous version of this block
-            had, three of its six questions never appeared on the page. */}
+        {/* JSON-LD: FAQPage */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context":"https://schema.org",
             "@type":"FAQPage",
             "mainEntity":[
               {"@type":"Question","name":"What is an allergy translation card?",
-               "acceptedAnswer":{"@type":"Answer","text":"A small card that clearly explains your food allergies and cross-contamination requests in the local language, so restaurant staff can understand your needs."}},
+               "acceptedAnswer":{"@type":"Answer","text":"A small card that clearly explains your food allergies and cross-contamination requests in the local language so restaurant staff can understand your needs."}},
               {"@type":"Question","name":"Is the card free?",
                "acceptedAnswer":{"@type":"Answer","text":"Yes. This tool lets you generate and download a card for free for personal use."}},
-              {"@type":"Question","name":"Which languages are supported?",
-               "acceptedAnswer":{"@type":"Answer","text":`${SUPPORTED_LANGUAGE_COUNT} languages, including Spanish, French, German, Italian, Japanese, Chinese, Arabic, Hebrew and Portuguese, with more being added over time.`}},
               {"@type":"Question","name":"Do restaurants accept these cards?",
-               "acceptedAnswer":{"@type":"Answer","text":"Many do, and staff often appreciate the clarity. Still, always confirm verbally and ask to show the note to the chef."}},
-              {"@type":"Question","name":"Will this prevent cross-contact?",
-               "acceptedAnswer":{"@type":"Answer","text":"It helps you request it clearly, but kitchens differ. Ask for clean utensils, pans, oil, boards and surfaces."}},
-              {"@type":"Question","name":"Is this medical advice?",
-               "acceptedAnswer":{"@type":"Answer","text":"No. Carry your medications and follow your doctor's guidance."}},
-              {"@type":"Question","name":"Can I add custom notes?",
-               "acceptedAnswer":{"@type":"Answer","text":"Yes, add specific ingredients or preparation steps you need the kitchen to avoid."}}
+               "acceptedAnswer":{"@type":"Answer","text":"Many restaurants find them helpful, but acceptance is not guaranteed. Always confirm verbally and ask staff to show the note to the chef."}},
+              {"@type":"Question","name":"Does this replace medical advice or carrying epinephrine?",
+               "acceptedAnswer":{"@type":"Answer","text":"No. The card supports communication only. Always follow your doctor's advice and carry your prescribed medications."}},
+              {"@type":"Question","name":"Which languages are supported?",
+               "acceptedAnswer":{"@type":"Answer","text":"We're adding 50+ languages. Start with Spanish, Italian, French, Thai and Japanese, with more coming soon."}},
+              {"@type":"Question","name":"Can I customize allergens and notes?",
+               "acceptedAnswer":{"@type":"Answer","text":"Yes. Select your allergens and add custom notes (e.g., about cross-contact or specific ingredients)."}}
             ]
           })}
         </script>
       </Helmet>
       
       <main id="allergy-translation-card" className="container mx-auto px-4 py-6 max-w-5xl">
-        {/* Breadcrumbs for SEO — matches the BreadcrumbList JSON-LD above.
-            No "Travel Tools" hub page exists on this site, so that middle
-            level (and its dead /tools link) was removed rather than left
-            pointing at a 404. */}
+        {/* Breadcrumbs for SEO */}
         <nav aria-label="Breadcrumb" className="mb-4 text-sm text-gray-500">
           <ol className="flex space-x-2">
             <li><a href="/" className="hover:text-primary">Home</a></li>
+            <li>›</li>
+            <li><a href="/tools" className="hover:text-primary">Travel Tools</a></li>
             <li>›</li>
             <li className="text-gray-700">Allergy Translation Card Generator</li>
           </ol>
@@ -150,7 +119,7 @@ const AllergyTranslationCard = () => {
         {/* HERO */}
         <header className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-3">
-            Free <strong>Allergy Translation Card</strong> Generator - {SUPPORTED_LANGUAGE_COUNT} Languages
+            Free <strong>Allergy Translation Card</strong> Generator - 50+ Languages
           </h1>
           <p className="text-lg text-gray-600 mb-4 max-w-3xl mx-auto">
             Create printable <strong>food allergy cards</strong> in multiple languages for safe restaurant dining while traveling. 
@@ -169,7 +138,7 @@ const AllergyTranslationCard = () => {
         {/* TRUST / BENEFITS */}
         <section aria-label="Why use allergy translation cards" className="grid md:grid-cols-3 gap-6 mb-8">
           <div className="text-center">
-            <h2 className="text-xl font-semibold mb-3 text-primary">🌍 {SUPPORTED_LANGUAGE_COUNT} Languages</h2>
+            <h2 className="text-xl font-semibold mb-3 text-primary">🌍 50+ Languages</h2>
             <p className="text-gray-600">
               Generate <strong>allergy cards</strong> in Spanish, Italian, French, Thai, Japanese, German, Portuguese, Hebrew, Arabic, Chinese and more.
             </p>
@@ -230,30 +199,10 @@ const AllergyTranslationCard = () => {
           </div>
         </section>
 
-        {/* FAQ — kept in sync with the FAQPage JSON-LD above; Google's
-            structured-data guidelines require the two to match, a mismatch
-            can get a page disqualified from FAQ rich results. */}
+        {/* FAQ */}
         <section id="faq" className="mb-6">
           <h2 className="text-xl font-semibold mb-2">FAQ</h2>
           <div className="space-y-2">
-            <details className="border border-gray-200 rounded p-3">
-              <summary className="cursor-pointer font-medium">What is an allergy translation card?</summary>
-              <p className="mt-2 text-gray-600">
-                A small card that clearly explains your food allergies and cross-contamination requests in the local language, so restaurant staff can understand your needs.
-              </p>
-            </details>
-            <details className="border border-gray-200 rounded p-3">
-              <summary className="cursor-pointer font-medium">Is the card free?</summary>
-              <p className="mt-2 text-gray-600">
-                Yes. This tool lets you generate and download a card for free for personal use.
-              </p>
-            </details>
-            <details className="border border-gray-200 rounded p-3">
-              <summary className="cursor-pointer font-medium">Which languages are supported?</summary>
-              <p className="mt-2 text-gray-600">
-                {SUPPORTED_LANGUAGE_COUNT} languages, including Spanish, French, German, Italian, Japanese, Chinese, Arabic, Hebrew and Portuguese, with more being added over time.
-              </p>
-            </details>
             <details className="border border-gray-200 rounded p-3">
               <summary className="cursor-pointer font-medium">Do restaurants accept these cards?</summary>
               <p className="mt-2 text-gray-600">
@@ -327,41 +276,9 @@ const AllergyTranslationCard = () => {
               <span className="text-2xl">🇨🇳</span>
               <p className="text-sm font-medium">Chinese</p>
             </div>
-            <div className="p-3 bg-white rounded-lg shadow-sm">
-              <span className="text-2xl">🇷🇺</span>
-              <p className="text-sm font-medium">Russian</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg shadow-sm">
-              <span className="text-2xl">🇰🇷</span>
-              <p className="text-sm font-medium">Korean</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg shadow-sm">
-              <span className="text-2xl">🇳🇱</span>
-              <p className="text-sm font-medium">Dutch</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg shadow-sm">
-              <span className="text-2xl">🇹🇷</span>
-              <p className="text-sm font-medium">Turkish</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg shadow-sm">
-              <span className="text-2xl">🇵🇱</span>
-              <p className="text-sm font-medium">Polish</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg shadow-sm">
-              <span className="text-2xl">🇻🇳</span>
-              <p className="text-sm font-medium">Vietnamese</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg shadow-sm">
-              <span className="text-2xl">🇮🇳</span>
-              <p className="text-sm font-medium">Hindi</p>
-            </div>
-            <div className="p-3 bg-white rounded-lg shadow-sm">
-              <span className="text-2xl">🇬🇷</span>
-              <p className="text-sm font-medium">Greek</p>
-            </div>
           </div>
           <p className="text-center text-gray-600 mt-4">
-            Shown above: 18 of the {SUPPORTED_LANGUAGE_COUNT} languages supported. The full list, including Swedish, Danish, Finnish, Norwegian, Czech, Hungarian, Georgian, Romanian and Slovak, is available in the generator below.
+            Create your <strong>food allergy card</strong> in any of these languages for safe international travel
           </p>
         </section>
 

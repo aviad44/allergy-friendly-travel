@@ -64,7 +64,7 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
     <TooltipProvider>
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
-          <div className="flex-1 min-w-0">
+          <div className="flex-1">
             <Label htmlFor="search-allergies" className="mb-2 block">Search Allergies</Label>
             <Input
               id="search-allergies"
@@ -74,10 +74,10 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
               className="w-full"
             />
           </div>
-
+          
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="mt-6 shrink-0">
+              <Button variant="ghost" size="icon" className="mt-6">
                 <HelpCircle className="h-4 w-4 text-gray-500" />
                 <span className="sr-only">Help</span>
               </Button>
@@ -91,14 +91,7 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
         {/* Single allergies section */}
         <div className="p-4 rounded-lg border border-blue-300 bg-blue-50">
           <h3 className="text-sm font-medium mb-3 text-blue-800">Allergies</h3>
-          {/*
-            min-w-0 on the grid and on every grid item's Toggle + name span:
-            same CSS Grid "automatic minimum size = content size" default that
-            hit the hotel cards elsewhere on the site — without it, longer
-            names like "Molluscs" or "Avocado" get clipped inside their cell
-            instead of the cell shrinking to fit the viewport.
-          */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 min-w-0">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {filteredAllergies.map((allergy) => (
               <Toggle
                 key={allergy.name}
@@ -108,31 +101,31 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
                   handleToggleAllergy(allergy.name);
                 }}
                 className={cn(
-                  "flex items-center justify-start gap-2 border border-gray-200 hover:bg-white/80 h-auto py-2 px-3 transition-all min-w-0",
-                  selectedAllergies.includes(allergy.name)
-                    ? "bg-red-100 border-red-400 shadow-sm"
+                  "flex items-center justify-start gap-2 border border-gray-200 hover:bg-white/80 h-auto py-2 px-3 transition-all",
+                  selectedAllergies.includes(allergy.name) 
+                    ? "bg-red-100 border-red-400 shadow-sm" 
                     : "bg-white"
                 )}
               >
-                <div className="relative shrink-0">
+                <div className="relative">
                   {allergy.name === "Cinnamon" ? (
-                    <img
-                      src={cinnamonIcon}
-                      alt="Cinnamon stick"
+                    <img 
+                      src={cinnamonIcon} 
+                      alt="Cinnamon stick" 
                       className="w-5 h-5 object-contain"
                       loading="lazy"
                     />
                   ) : allergy.name === "Pistachio" ? (
-                    <img
-                      src={pistachioIcon}
-                      alt="Pistachio"
+                    <img 
+                      src={pistachioIcon} 
+                      alt="Pistachio" 
                       className="w-5 h-5 object-contain"
                       loading="lazy"
                     />
                   ) : allergy.name === "Cashew" ? (
-                    <img
-                      src={cashewIcon}
-                      alt="Cashew"
+                    <img 
+                      src={cashewIcon} 
+                      alt="Cashew" 
                       className="w-5 h-5 object-contain"
                       loading="lazy"
                     />
@@ -146,7 +139,7 @@ export const AllergySelector: React.FC<AllergySelectorProps> = ({
                     </div>
                   )}
                 </div>
-                <span className="text-sm truncate min-w-0">{allergy.name}</span>
+                <span className="text-sm">{allergy.name}</span>
               </Toggle>
             ))}
           </div>

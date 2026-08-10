@@ -43,24 +43,16 @@ export const Step1SelectAllergies: React.FC<Step1Props> = ({
         />
         
         <div className="mt-6 space-y-4">
-          {/*
-            flex-col on mobile, row from sm up: the input+Add row and the
-            Voice button used to sit in one unbounded "justify-between" row,
-            so on a narrow screen the input field had no bounded width to
-            shrink into and got squeezed down to a couple of characters.
-            Stacking explicitly below sm avoids depending on flex overflow
-            behavior entirely.
-          */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
               <CustomAllergyInput
                 customAllergy={customAllergy}
                 setCustomAllergy={setCustomAllergy}
                 handleAddCustomAllergy={handleAddCustomAllergy}
               />
             </div>
-            <div className="shrink-0 sm:mt-6">
-              <VoiceInput
+            <div className="ml-4">
+              <VoiceInput 
                 onTranscript={(text) => {
                   setCustomAllergy(text);
                   setTimeout(handleAddCustomAllergy, 100);

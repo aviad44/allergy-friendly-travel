@@ -7,7 +7,6 @@ import { HotelCard } from "@/components/hotels/HotelCard";
 import NotFound from "@/pages/NotFound";
 import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderReady";
 import { destinationHotelsJsonLd } from "@/utils/jsonld";
-import { AllergyCardPromo } from "@/components/AllergyCardPromo";
 
 interface Article {
   title: string;
@@ -223,10 +222,6 @@ const RestaurantDetail = () => {
 
           <div className="prose prose-blue max-w-none mb-10 border-t pt-8">
             <ReactMarkdown>{article.content_markdown || ''}</ReactMarkdown>
-          </div>
-
-          <div className="mb-10">
-            <AllergyCardPromo />
           </div>
 
           <p className="text-sm text-gray-600">

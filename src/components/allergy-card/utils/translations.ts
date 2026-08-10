@@ -254,15 +254,6 @@ export const COMPLETE_TRANSLATIONS: TranslationData = {
     allergyPrefix: "",
     crossContamination: "Contaminarea încrucișată poate provoca o reacție alergică gravă. Vă rugăm să vă asigurați că masa mea este preparată fără acești alergeni și că toate ustensilele de bucătărie și suprafețele sunt curățate temeinic înainte de prepararea mâncării mele.",
     thankYou: "Vă mulțumesc pentru asistența dumneavoastră în această importantă problemă de sănătate."
-  },
-
-  // Slovak - Slovenčina
-  sk: {
-    title: "OZNÁMENIE O POTRAVINOVEJ ALERGII",
-    mainText: "Mám vážne alergie na nasledujúce potraviny:",
-    allergyPrefix: "",
-    crossContamination: "Krížová kontaminácia môže spôsobiť vážnu alergickú reakciu. Prosím, uistite sa, že moje jedlo je pripravené bez týchto alergénov a že všetko kuchynské náčinie a povrchy sú dôkladne vyčistené pred prípravou môjho jedla.",
-    thankYou: "Ďakujem za vašu pomoc v tejto dôležitej zdravotnej záležitosti."
   }
 };
 
@@ -1077,35 +1068,5 @@ export const allergyTranslations: Record<string, Record<string, string>> = {
     "Banana": "Banană",
     "Pistachio": "Fistic",
     "Cashew": "Caju"
-  },
-  sk: {
-    "Milk": "Mlieko",
-    "Eggs": "Vajcia",
-    "Unbaked eggs": "Surové vajcia",
-    "Tree nuts": "Orechy",
-    "Peanuts": "Arašidy",
-    "Shellfish": "Kôrovce",
-    "Fish": "Ryby",
-    "Soy": "Sója",
-    "Wheat": "Pšenica",
-    "Gluten": "Lepok",
-    "Sesame": "Sezam",
-    "Celery": "Zeler",
-    "Mustard": "Horčica",
-    "Lupin": "Vlčí bôb",
-    "Sulphites": "Siričitany",
-    "Sulfites": "Siričitany",
-    "Molluscs": "Mäkkýše",
-    "Crustaceans": "Kôrovce",
-    "Peas": "Hrášok",
-    "Lentils": "Šošovica",
-    "Beans": "Fazuľa",
-    "Corn": "Kukurica",
-    "Cinnamon": "Škorica",
-    "Avocado": "Avokádo",
-    "Kiwi": "Kivi",
-    "Banana": "Banán",
-    "Pistachio": "Pistácie",
-    "Cashew": "Kešu"
   }
 };
