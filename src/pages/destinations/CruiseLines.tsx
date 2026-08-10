@@ -7,6 +7,7 @@ import { CruiseIntro } from '@/components/cruise/CruiseIntro';
 import { ComparisonTable } from '@/components/cruise/ComparisonTable';
 import { CruiseDetails } from '@/components/cruise/CruiseDetails';
 import { CruiseLine } from '@/components/cruise/types';
+import { AllergyCardPromo } from '@/components/AllergyCardPromo';
 
 const cruiseLines: CruiseLine[] = [
   {
@@ -92,6 +93,9 @@ const CruiseLines = () => {
         <CruiseIntro />
         <ComparisonTable cruiseLines={cruiseLines} />
         <CruiseDetails cruiseLines={cruiseLines} />
+        <div className="mt-10">
+          <AllergyCardPromo />
+        </div>
       </div>
     </div>
   );
