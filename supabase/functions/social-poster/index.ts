@@ -15,12 +15,33 @@ interface UnsplashPhoto {
   credit: string;
 }
 
+// Unsplash returns each photo's dominant color as a hex string — a cheap way
+// to estimate thumbnail brightness without downloading the actual image.
+// Standard perceived-luminance weighting, scaled 0 (black) to 255 (white).
+// Mirrors the same fix in content-pipeline/index.ts, which sets hero_image_url
+// at article-creation time — this only runs as a rare fallback for an
+// article that somehow has none yet, but kept consistent regardless.
+function hexBrightness(hex?: string | null): number {
+  if (!hex) return 0;
+  const clean = hex.replace('#', '');
+  if (clean.length !== 6) return 0;
+  const r = parseInt(clean.slice(0, 2), 16);
+  const g = parseInt(clean.slice(2, 4), 16);
+  const b = parseInt(clean.slice(4, 6), 16);
+  if ([r, g, b].some((n) => Number.isNaN(n))) return 0;
+  return 0.299 * r + 0.587 * g + 0.114 * b;
+}
+
+// Below this, a photo reads as visibly dark/moody in a small thumbnail —
+// "{city} skyline" searches skew toward dramatic sunset/night shots.
+const MIN_PHOTO_BRIGHTNESS = 90;
+
 // Unsplash API guidelines require: (1) attribution to photographer + Unsplash,
 // (2) a "download" tracking ping when a photo is used in production.
 async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<UnsplashPhoto | null> {
   try {
     const searchRes = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape&content_filter=high`,
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=10&orientation=landscape&content_filter=high`,
       { headers: { Authorization: `Client-ID ${accessKey}` } }
     );
     if (!searchRes.ok) {
@@ -28,8 +49,11 @@ async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<Uns
       return null;
     }
     const data = await searchRes.json();
-    const photo = data.results?.[0];
-    if (!photo) return null;
+    const results = data.results || [];
+    if (results.length === 0) return null;
+
+    const photo = results.find((p: any) => hexBrightness(p.color) >= MIN_PHOTO_BRIGHTNESS)
+      || results.reduce((best: any, p: any) => (hexBrightness(p.color) > hexBrightness(best.color) ? p : best), results[0]);
 
     try {
       await fetch(`${photo.links.download_location}&client_id=${accessKey}`);

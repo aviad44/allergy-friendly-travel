@@ -346,12 +346,33 @@ interface UnsplashPhoto {
   credit: string;
 }
 
+// Unsplash returns each photo's dominant color as a hex string (e.g.
+// "#c4c4c4") — a cheap way to estimate how bright a photo reads as a
+// thumbnail without downloading and decoding the actual image. Standard
+// perceived-luminance weighting (matches what most "is this color light or
+// dark" heuristics use), scaled 0 (black) to 255 (white).
+function hexBrightness(hex?: string | null): number {
+  if (!hex) return 0;
+  const clean = hex.replace('#', '');
+  if (clean.length !== 6) return 0;
+  const r = parseInt(clean.slice(0, 2), 16);
+  const g = parseInt(clean.slice(2, 4), 16);
+  const b = parseInt(clean.slice(4, 6), 16);
+  if ([r, g, b].some((n) => Number.isNaN(n))) return 0;
+  return 0.299 * r + 0.587 * g + 0.114 * b;
+}
+
+// Below this, a photo reads as visibly dark/moody in a small thumbnail —
+// "{city} skyline" searches skew toward dramatic sunset/night shots that
+// look great full-size but hurt click-through in a feed.
+const MIN_PHOTO_BRIGHTNESS = 90;
+
 // Unsplash API guidelines require: (1) attribution to photographer + Unsplash,
 // (2) a "download" tracking ping when a photo is used in production.
 async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<UnsplashPhoto | null> {
   try {
     const searchRes = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape&content_filter=high`,
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=10&orientation=landscape&content_filter=high`,
       { headers: { Authorization: `Client-ID ${accessKey}` } }
     );
     if (!searchRes.ok) {
@@ -359,8 +380,15 @@ async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<Uns
       return null;
     }
     const data = await searchRes.json();
-    const photo = data.results?.[0];
-    if (!photo) return null;
+    const results = data.results || [];
+    if (results.length === 0) return null;
+
+    // Take the first result bright enough to not look dark as a thumbnail,
+    // preserving Unsplash's own relevance ranking as much as possible.
+    // Only fall back to "just pick the brightest one available" if every
+    // result in this batch is dark — never fail the whole fetch over it.
+    const photo = results.find((p: any) => hexBrightness(p.color) >= MIN_PHOTO_BRIGHTNESS)
+      || results.reduce((best: any, p: any) => (hexBrightness(p.color) > hexBrightness(best.color) ? p : best), results[0]);
 
     try {
       await fetch(`${photo.links.download_location}&client_id=${accessKey}`);
@@ -415,6 +443,52 @@ async function fetchDestinationPhoto(city: string, unsplashKey?: string, pixabay
     if (photo) return photo;
   }
   return null;
+}
+
+// For restaurant guides, a real photo of food from one of the actual
+// reviewed restaurants is more compelling — and more honest, matching the
+// "real evidence only" rule the rest of the site follows — than a generic
+// city skyline. We don't currently store each restaurant's Google Place ID
+// (only our own hotel_ids/restaurant_ids), so this re-finds the place by
+// name + city via Text Search, then pulls a photo Google already has on
+// file for it. Best-effort at every step: any miss just falls through to
+// the caller's existing skyline-photo fallback, a restaurant guide should
+// never end up with no hero image at all.
+async function fetchRestaurantDishPhoto(restaurantName: string, city: string, apiKey: string): Promise<UnsplashPhoto | null> {
+  try {
+    const searchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(`${restaurantName}, ${city}`)}&key=${apiKey}`;
+    const searchRes = await fetch(searchUrl);
+    const searchData = await searchRes.json();
+    const placeId = searchData.results?.[0]?.place_id;
+    if (!placeId) {
+      console.error('Restaurant photo: no place match for', restaurantName, city);
+      return null;
+    }
+
+    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos&key=${apiKey}`;
+    const detailsRes = await fetch(detailsUrl);
+    const detailsData = await detailsRes.json();
+    const photoRef = detailsData.result?.photos?.[0]?.photo_reference;
+    if (!photoRef) {
+      console.error('Restaurant photo: no Google photos on file for', restaurantName);
+      return null;
+    }
+
+    // Google's terms require displaying the contributor attribution
+    // alongside the photo; html_attributions is a small HTML snippet
+    // (usually just a linked name) — strip the tags for the plain-text
+    // credit field the rest of the pipeline already uses.
+    const rawAttribution = detailsData.result?.photos?.[0]?.html_attributions?.[0] as string | undefined;
+    const attribution = rawAttribution?.replace(/<[^>]*>/g, '').trim();
+
+    return {
+      url: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photo_reference=${photoRef}&key=${apiKey}`,
+      credit: attribution ? `Photo via Google (${attribution})` : 'Photo via Google',
+    };
+  } catch (err) {
+    console.error('Restaurant photo fetch error (non-fatal):', err);
+    return null;
+  }
 }
 
 // Pinterest is the highest-leverage passive distribution channel for a new
@@ -1127,7 +1201,22 @@ serve(async (req) => {
 
             let heroImageUrl: string | null = null;
             let heroImageCredit: string | null = null;
-            const photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
+
+            // Prefer a real photo of food from one of the actual reviewed
+            // restaurants over a generic city skyline — try the first one
+            // linked to this article first.
+            let photo: UnsplashPhoto | null = null;
+            const { data: firstRestaurant } = await supabase
+              .from('restaurants')
+              .select('name')
+              .eq('id', restaurantIds[0])
+              .maybeSingle();
+            if (firstRestaurant?.name) {
+              photo = await fetchRestaurantDishPhoto(firstRestaurant.name, destination.city, apiKey);
+            }
+            if (!photo) {
+              photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
+            }
             if (photo) {
               heroImageUrl = photo.url;
               heroImageCredit = photo.credit;
