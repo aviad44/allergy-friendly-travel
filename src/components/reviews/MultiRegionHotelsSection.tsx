@@ -3,6 +3,7 @@ import { HotelCard } from "@/components/hotels/HotelCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { trackHotelBookingClick } from "@/utils/googleAnalytics";
 
 interface RegionConfig {
   key: string;
@@ -131,6 +132,7 @@ export const MultiRegionHotelsSection = ({
                         href={hotel.bookingUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => trackHotelBookingClick(hotel.name, hotel.bookingUrl)}
                         className="inline-flex items-center gap-1 text-primary hover:underline font-medium"
                       >
                         Visit Official Website

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, MapPin } from 'lucide-react';
+import { trackHotelBookingClick } from '@/utils/googleAnalytics';
 
 interface BookingActionsProps {
   url?: string;
@@ -16,7 +17,7 @@ export const BookingActions: React.FC<BookingActionsProps> = ({ url, name, locat
     <div className="pt-4 flex flex-col sm:flex-row gap-3 border-t">
       <Button 
         className="bg-teal-600 hover:bg-teal-700 text-white flex-1"
-        onClick={() => window.open(url, "_blank")}
+        onClick={() => { trackHotelBookingClick(name, url); window.open(url, "_blank"); }}
       >
         Book Now
         <ExternalLink className="ml-2 h-4 w-4" />

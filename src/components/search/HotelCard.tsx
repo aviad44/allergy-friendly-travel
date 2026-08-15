@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ExternalLink, MapPin, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { HotelInfo } from '@/types/search';
+import { trackHotelBookingClick } from '@/utils/googleAnalytics';
 
 interface HotelCardProps {
   hotel: HotelInfo;
@@ -181,7 +182,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
           {/* Action buttons - MORE COMPACT */}
           <div className="flex flex-wrap gap-2 mt-auto pt-2 border-t">
             {hotel.url && (
-              <Button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-xs h-8" onClick={() => window.open(hotel.url, "_blank")}>
+              <Button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-xs h-8" onClick={() => { trackHotelBookingClick(hotel.name, hotel.url); window.open(hotel.url, "_blank"); }}>
                 Book Now
                 <ExternalLink className="h-3 w-3 ml-1.5" />
               </Button>

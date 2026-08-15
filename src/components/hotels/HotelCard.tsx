@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Star, ExternalLink, Check, Bed, Home } from "lucide-react";
 import { useState } from "react";
+import { trackHotelBookingClick } from "@/utils/googleAnalytics";
 
 export interface HotelCardProps {
   name: string;
@@ -122,10 +123,11 @@ export const HotelCard = ({
           className="w-full sm:w-auto transition-all duration-300 hover:scale-105 bg-primary/90 hover:bg-primary text-sm h-9"
           disabled={!bookingUrl || bookingUrl === '#'}
         >
-          <a 
-            href={getCleanUrl(bookingUrl)} 
-            target="_blank" 
+          <a
+            href={getCleanUrl(bookingUrl)}
+            target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackHotelBookingClick(cleanName, bookingUrl)}
             className="flex items-center justify-center gap-1"
           >
             Visit Website
