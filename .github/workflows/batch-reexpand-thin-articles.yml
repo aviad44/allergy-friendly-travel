@@ -1,16 +1,31 @@
 name: Batch Re-expand Low-Hotel-Count Articles
 
-# One-off maintenance workflow (no schedule) — re-runs the (now-expanded,
-# 60-candidate) hotel discovery for every published article that currently
-# has only 1-2 hotels, lowest count first, to see whether the wider Google
-# Places search surfaces more real evidence for these destinations.
+# Re-runs discovery for every published article that currently has too few
+# real hotels/restaurants (under 3), lowest count first — a free way to grow
+# thin articles over time, since it's the exact same single Google Places
+# query per city the daily content-pipeline run already pays for, just
+# re-checked periodically instead of once. New allergy-mentioning reviews
+# do get posted to Google over weeks/months, so a plain re-run genuinely can
+# turn up evidence it missed the first time — just slower than paying for
+# extra search queries per run (see git history around 2026-08-18 for that
+# tradeoff and why this cheaper path was chosen instead).
 #
 # Re-running a city that already has an article is safe: content-pipeline's
-# existingArticle merge path adds any newly found hotels to the SAME
-# article's hotel_ids instead of creating a duplicate — a no-op if nothing
-# new turns up.
+# existingArticle merge path adds any newly found hotels/restaurants to the
+# SAME article's ids instead of creating a duplicate — a no-op if nothing
+# new turns up, so this never risks a duplicate article or a wasted run.
+#
+# The destination list below is a snapshot (queried 2026-08-18) of every
+# published article with under 3 hotels/restaurants — it will drift out of
+# date as thin articles get topped up or new ones appear from the daily
+# rotation. Re-query and refresh this list periodically; it's a plain SQL
+# query against seo_articles, not something this workflow can do for itself.
 
 on:
+  schedule:
+    # Monthly (1st at 07:00 UTC) — Google's review index doesn't turn over
+    # fast enough for a tighter cadence to be worth the extra runs.
+    - cron: "0 7 1 * *"
   workflow_dispatch: {}
 
 jobs:
@@ -29,43 +44,41 @@ jobs:
           SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
           SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
 
-          # city;country pairs, lowest hotel count first. The city string
-          # must match exactly what's already stored on the hotel rows
-          # (a couple have a trailing space) so the edge function's
-          # merge-by-city lookup finds the existing article instead of
-          # missing it and trying to start a new one.
+          # city;country;contentType — lowest count first (queried directly
+          # from hotels/restaurants via each article's linked ids, so this
+          # matches the city string actually stored on those rows, not a
+          # guess). Snapshot as of 2026-08-18: 0 restaurant articles were
+          # thin at that time, only hotel ones — kept as its own column so
+          # future thin restaurant articles slot in the same way.
           DESTINATIONS=(
-            "Bali;Indonesia"
-            "Slovakia;Slovakia"
-            "Budapest;Hungary"
-            "Cancun;Mexico"
-            "Dubai;UAE"
-            "Seoul;South Korea"
-            "Bangkok;Thailand"
-            "Majorca ;Spain"
-            "Kyoto;Japan"
-            "Prague;Czech Republic"
-            "Salou;Spain"
-            "Seville;Spain"
-            "Vancouver;Canada"
-            "Berlin;Germany"
-            "Copenhagen;Denmark"
-            "Jamaica ;Jamaica"
-            "Los Angeles;USA"
-            "Montreal;Canada"
-            "Osaka;Japan"
-            "Zurich;Switzerland"
+            "Belgrade;Serbia;hotel"
+            "Vancouver;Canada;hotel"
+            "Lyon;France;hotel"
+            "Seoul;South Korea;hotel"
+            "Istanbul;Turkey;hotel"
+            "Brussels;Belgium;hotel"
+            "Dubrovnik;Croatia;hotel"
+            "Bucharest;Romania;hotel"
+            "Krakow;Poland;hotel"
+            "Bilbao;Spain;hotel"
+            "Los Angeles;USA;hotel"
+            "Montreal;Canada;hotel"
+            "Kyoto;Japan;hotel"
+            "Zurich;Switzerland;hotel"
+            "Seville;Spain;hotel"
+            "Antwerp;Belgium;hotel"
+            "Bratislava;Slovakia;hotel"
           )
 
           echo "## Batch Re-expand Results" >> "$GITHUB_STEP_SUMMARY"
 
           for entry in "${DESTINATIONS[@]}"; do
-            CITY="${entry%;*}"
-            COUNTRY="${entry#*;}"
+            IFS=';' read -r CITY COUNTRY CONTENT_TYPE <<< "$entry"
 
-            REQUEST_BODY=$(jq -n --arg city "$CITY" --arg country "$COUNTRY" '{city: $city, country: $country, contentType: "hotel"}')
+            REQUEST_BODY=$(jq -n --arg city "$CITY" --arg country "$COUNTRY" --arg contentType "$CONTENT_TYPE" \
+              '{city: $city, country: $country, contentType: $contentType}')
 
-            echo "Running: $CITY, $COUNTRY"
+            echo "Running: $CITY, $COUNTRY ($CONTENT_TYPE)"
             RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/content-pipeline" \
               -H "Content-Type: application/json" \
               -H "apikey: $SUPABASE_ANON_KEY" \
@@ -76,7 +89,7 @@ jobs:
             HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
             BODY=$(echo "$RESPONSE" | sed '$d')
 
-            echo "- **$CITY, $COUNTRY** (HTTP $HTTP_CODE): \`$BODY\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "- **$CITY, $COUNTRY** ($CONTENT_TYPE, HTTP $HTTP_CODE): \`$BODY\`" >> "$GITHUB_STEP_SUMMARY"
 
             # Be polite to Google's API between back-to-back discovery runs.
             sleep 3
