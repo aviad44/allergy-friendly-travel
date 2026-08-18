@@ -224,6 +224,20 @@ function normalize(text: string): string {
   return text.toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+// Rare but real gpt-4o-mini glitch: a hyphenated compound word occasionally
+// comes back corrupted mid-generation — e.g. "Food-Allergy Friendly" turns
+// into "Food-A allergy Friendly" ("Allergy" broken into a stray one-letter
+// word "A" plus a lowercase "allergy" fragment left over). Seen live on a
+// published Belgrade article. Splitting on both spaces and hyphens and
+// flagging any resulting one-letter token other than the legitimate
+// standalone words "a"/"i" catches this without needing a dictionary, and
+// without false-positiving on ordinary titles.
+function looksMalformedTitle(title: unknown): boolean {
+  if (typeof title !== 'string' || title.trim().length === 0) return true;
+  const tokens = title.split(/[\s-]+/).filter(Boolean);
+  return tokens.some((t) => t.length === 1 && !/^[ai]$/i.test(t));
+}
+
 function findTerms(text: string, terms: string[]): string[] {
   const matches: string[] = [];
   for (const term of terms) {
@@ -362,40 +376,80 @@ function hexBrightness(hex?: string | null): number {
   return 0.299 * r + 0.587 * g + 0.114 * b;
 }
 
-// Below this, a photo reads as visibly dark/moody in a small thumbnail —
-// "{city} skyline" searches skew toward dramatic sunset/night shots that
-// look great full-size but hurt click-through in a feed.
-const MIN_PHOTO_BRIGHTNESS = 90;
+// How colorful vs. flat-grey a photo's dominant color is (max channel minus
+// min channel, 0-255). Brightness alone isn't enough to catch a dull photo —
+// verified live against a real Belgrade search: the hazy overcast rooftop
+// shot that actually got published had brightness 217 (well above any
+// reasonable threshold) but a completely flat, zero-saturation dominant
+// color, which is exactly why it read as grey and unappealing.
+function hexSaturation(hex?: string | null): number {
+  if (!hex) return 0;
+  const clean = hex.replace('#', '');
+  if (clean.length !== 6) return 0;
+  const r = parseInt(clean.slice(0, 2), 16);
+  const g = parseInt(clean.slice(2, 4), 16);
+  const b = parseInt(clean.slice(4, 6), 16);
+  if ([r, g, b].some((n) => Number.isNaN(n))) return 0;
+  return Math.max(r, g, b) - Math.min(r, g, b);
+}
 
-// Unsplash API guidelines require: (1) attribution to photographer + Unsplash,
-// (2) a "download" tracking ping when a photo is used in production.
+// Catches "moody" shots by what Unsplash's own alt text says, not just pixel
+// averages — a warm sunset photo can average out to a perfectly "bright,
+// colorful" dominant color despite visibly being a sunset (verified live: a
+// real "sun is setting over a city" result scored higher than several
+// genuine daytime photos on brightness+saturation alone). Description text
+// catches what the color heuristic misses.
+function isMoodyPhoto(desc?: string | null): boolean {
+  if (!desc) return false;
+  return /sunset|sunrise|dusk|night|dark|silhouette|twilight|storm|foggy|fog|overcast|gloomy/i.test(desc);
+}
+
+function photoScore(p: any): number {
+  return hexBrightness(p.color) + hexSaturation(p.color);
+}
+
+// Picks the single most clear/bright/colorful photo out of a batch of
+// Unsplash search results: prefers non-moody shots (see isMoodyPhoto), then
+// the brightest + most colorful one among those. Falls back to the best of
+// the full (moody) batch only if every single result was flagged — a
+// destination guide should never end up with no hero image at all.
+function pickBestPhoto(results: any[]): any | null {
+  if (results.length === 0) return null;
+  const clean = results.filter((p) => !isMoodyPhoto(p.alt_description));
+  const pool = clean.length > 0 ? clean : results;
+  return pool.reduce((best, p) => (photoScore(p) > photoScore(best) ? p : best), pool[0]);
+}
+
+async function fetchUnsplashCandidates(query: string, accessKey: string): Promise<any[]> {
+  const searchRes = await fetch(
+    `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=10&orientation=landscape&content_filter=high`,
+    { headers: { Authorization: `Client-ID ${accessKey}` } }
+  );
+  if (!searchRes.ok) {
+    console.error('Unsplash search failed:', searchRes.status, await searchRes.text());
+    return [];
+  }
+  const data = await searchRes.json();
+  return data.results || [];
+}
+
+// Unsplash API guidelines require a "download" tracking ping when a photo is
+// used in production, on top of the photographer + Unsplash attribution
+// already carried in the returned credit string.
+async function confirmUnsplashDownload(photo: any, accessKey: string) {
+  try {
+    await fetch(`${photo.links.download_location}&client_id=${accessKey}`);
+  } catch (err) {
+    console.error('Unsplash download ping failed (non-fatal):', err);
+  }
+}
+
 async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<UnsplashPhoto | null> {
   try {
-    const searchRes = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=10&orientation=landscape&content_filter=high`,
-      { headers: { Authorization: `Client-ID ${accessKey}` } }
-    );
-    if (!searchRes.ok) {
-      console.error('Unsplash search failed:', searchRes.status, await searchRes.text());
-      return null;
-    }
-    const data = await searchRes.json();
-    const results = data.results || [];
-    if (results.length === 0) return null;
-
-    // Take the first result bright enough to not look dark as a thumbnail,
-    // preserving Unsplash's own relevance ranking as much as possible.
-    // Only fall back to "just pick the brightest one available" if every
-    // result in this batch is dark — never fail the whole fetch over it.
-    const photo = results.find((p: any) => hexBrightness(p.color) >= MIN_PHOTO_BRIGHTNESS)
-      || results.reduce((best: any, p: any) => (hexBrightness(p.color) > hexBrightness(best.color) ? p : best), results[0]);
-
-    try {
-      await fetch(`${photo.links.download_location}&client_id=${accessKey}`);
-    } catch (err) {
-      console.error('Unsplash download ping failed (non-fatal):', err);
-    }
-
+    const results = await fetchUnsplashCandidates(query, accessKey);
+    const photo = pickBestPhoto(results);
+    if (!photo) return null;
+    await confirmUnsplashDownload(photo, accessKey);
     return {
       url: photo.urls.regular,
       credit: `Photo by ${photo.user.name} on Unsplash (${photo.links.html})`,
@@ -432,14 +486,39 @@ async function fetchPixabayPhoto(query: string, apiKey: string): Promise<Unsplas
 // mediocre/irrelevant photo that's more narrowly "on topic" (e.g. a random
 // plate of food) — skyline/landmark queries are what both providers do best,
 // and Pixabay only gets tried if Unsplash has nothing.
+//
+// Queries both "{city} skyline" and plain "{city}" and merges the results
+// before picking: a single "skyline" search can be thin for some cities and
+// skew heavily toward dusk/sunset shots (verified live for Krakow — all 3
+// results were sunset-themed), while a plain city-name search tends to
+// surface daytime street/landmark photos "skyline" alone misses.
 async function fetchDestinationPhoto(city: string, unsplashKey?: string, pixabayKey?: string): Promise<UnsplashPhoto | null> {
-  const query = `${city} skyline`;
   if (unsplashKey) {
-    const photo = await fetchUnsplashPhoto(query, unsplashKey);
-    if (photo) return photo;
+    try {
+      const [skylineResults, cityResults] = await Promise.all([
+        fetchUnsplashCandidates(`${city} skyline`, unsplashKey),
+        fetchUnsplashCandidates(city, unsplashKey),
+      ]);
+      const seen = new Set<string>();
+      const merged = [...skylineResults, ...cityResults].filter((p: any) => {
+        if (!p?.id || seen.has(p.id)) return false;
+        seen.add(p.id);
+        return true;
+      });
+      const photo = pickBestPhoto(merged);
+      if (photo) {
+        await confirmUnsplashDownload(photo, unsplashKey);
+        return {
+          url: photo.urls.regular,
+          credit: `Photo by ${photo.user.name} on Unsplash (${photo.links.html})`,
+        };
+      }
+    } catch (err) {
+      console.error('Unsplash destination photo error:', err);
+    }
   }
   if (pixabayKey) {
-    const photo = await fetchPixabayPhoto(query, pixabayKey);
+    const photo = await fetchPixabayPhoto(`${city} skyline`, pixabayKey);
     if (photo) return photo;
   }
   return null;
@@ -780,30 +859,54 @@ Write a JSON object with this exact shape, no markdown fences:
   "hotels_mentioned": ["every hotel name you named anywhere in content_markdown, including the conclusion — must be an exact or near-exact match to names from the allowed list above"]
 }`;
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: { "Authorization": `Bearer ${openaiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      response_format: { type: "json_object" },
-      messages: [{ role: "user", content: prompt }],
-    }),
-  });
+  // Up to 2 attempts: gpt-4o-mini occasionally corrupts the title (see
+  // looksMalformedTitle) — worth one free regeneration before falling back
+  // to a deterministic title further down, since a retry usually produces a
+  // clean one and the rest of the article is unaffected either way.
+  let article: any = null;
+  let errorDetail: string | null = null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${openaiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        response_format: { type: "json_object" },
+        messages: [{ role: "user", content: prompt }],
+      }),
+    });
 
-  if (!res.ok) {
-    const bodyText = await res.text();
-    console.error('OpenAI API error:', res.status, bodyText);
-    return { article: null, errorDetail: `OpenAI API ${res.status}: ${bodyText.slice(0, 300)}` };
+    if (!res.ok) {
+      const bodyText = await res.text();
+      console.error('OpenAI API error:', res.status, bodyText);
+      errorDetail = `OpenAI API ${res.status}: ${bodyText.slice(0, 300)}`;
+      article = null;
+      break;
+    }
+
+    const data = await res.json();
+    const raw = data.choices?.[0]?.message?.content || "";
+    try {
+      article = JSON.parse(raw.replace(/```json\s*/g, '').replace(/```\s*/g, ''));
+      errorDetail = null;
+    } catch (e) {
+      console.error('Failed to parse article JSON:', e, raw.slice(0, 300));
+      errorDetail = `JSON parse failed: ${String(e)}. Raw: ${raw.slice(0, 300)}`;
+      article = null;
+      break;
+    }
+
+    if (!looksMalformedTitle(article?.title)) break;
+    console.log(`Regenerating article — malformed-looking title on attempt ${attempt + 1}: "${article?.title}"`);
   }
 
-  const data = await res.json();
-  const raw = data.choices?.[0]?.message?.content || "";
-  let article: any;
-  try {
-    article = JSON.parse(raw.replace(/```json\s*/g, '').replace(/```\s*/g, ''));
-  } catch (e) {
-    console.error('Failed to parse article JSON:', e, raw.slice(0, 300));
-    return { article: null, errorDetail: `JSON parse failed: ${String(e)}. Raw: ${raw.slice(0, 300)}` };
+  if (!article) {
+    return { article: null, errorDetail: errorDetail || 'Unknown error generating article' };
+  }
+
+  if (looksMalformedTitle(article.title)) {
+    console.log(`Title still malformed after retry, applying a safe fallback. Was: "${article.title}"`);
+    article.title = `${destination.city}: A Food-Allergy-Friendly Travel Guide`;
   }
 
   // Safety net: the model self-reports every hotel name it used (including in the
@@ -863,30 +966,54 @@ Write a JSON object with this exact shape, no markdown fences:
   "restaurants_mentioned": ["every restaurant name you named anywhere in content_markdown, including the conclusion — must be an exact or near-exact match to names from the allowed list above"]
 }`;
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: { "Authorization": `Bearer ${openaiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      response_format: { type: "json_object" },
-      messages: [{ role: "user", content: prompt }],
-    }),
-  });
+  // Up to 2 attempts: gpt-4o-mini occasionally corrupts the title (see
+  // looksMalformedTitle) — worth one free regeneration before falling back
+  // to a deterministic title further down, since a retry usually produces a
+  // clean one and the rest of the article is unaffected either way.
+  let article: any = null;
+  let errorDetail: string | null = null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${openaiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        response_format: { type: "json_object" },
+        messages: [{ role: "user", content: prompt }],
+      }),
+    });
 
-  if (!res.ok) {
-    const bodyText = await res.text();
-    console.error('OpenAI API error:', res.status, bodyText);
-    return { article: null, errorDetail: `OpenAI API ${res.status}: ${bodyText.slice(0, 300)}` };
+    if (!res.ok) {
+      const bodyText = await res.text();
+      console.error('OpenAI API error:', res.status, bodyText);
+      errorDetail = `OpenAI API ${res.status}: ${bodyText.slice(0, 300)}`;
+      article = null;
+      break;
+    }
+
+    const data = await res.json();
+    const raw = data.choices?.[0]?.message?.content || "";
+    try {
+      article = JSON.parse(raw.replace(/```json\s*/g, '').replace(/```\s*/g, ''));
+      errorDetail = null;
+    } catch (e) {
+      console.error('Failed to parse article JSON:', e, raw.slice(0, 300));
+      errorDetail = `JSON parse failed: ${String(e)}. Raw: ${raw.slice(0, 300)}`;
+      article = null;
+      break;
+    }
+
+    if (!looksMalformedTitle(article?.title)) break;
+    console.log(`Regenerating restaurant article — malformed-looking title on attempt ${attempt + 1}: "${article?.title}"`);
   }
 
-  const data = await res.json();
-  const raw = data.choices?.[0]?.message?.content || "";
-  let article: any;
-  try {
-    article = JSON.parse(raw.replace(/```json\s*/g, '').replace(/```\s*/g, ''));
-  } catch (e) {
-    console.error('Failed to parse article JSON:', e, raw.slice(0, 300));
-    return { article: null, errorDetail: `JSON parse failed: ${String(e)}. Raw: ${raw.slice(0, 300)}` };
+  if (!article) {
+    return { article: null, errorDetail: errorDetail || 'Unknown error generating article' };
+  }
+
+  if (looksMalformedTitle(article.title)) {
+    console.log(`Title still malformed after retry, applying a safe fallback. Was: "${article.title}"`);
+    article.title = `${destination.city}: A Food-Allergy-Friendly Restaurant Guide`;
   }
 
   const normalizeName = (s: string) => s.toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();

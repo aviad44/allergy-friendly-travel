@@ -32,35 +32,71 @@ function hexBrightness(hex?: string | null): number {
   return 0.299 * r + 0.587 * g + 0.114 * b;
 }
 
-// Below this, a photo reads as visibly dark/moody in a small thumbnail —
-// "{city} skyline" searches skew toward dramatic sunset/night shots.
-const MIN_PHOTO_BRIGHTNESS = 90;
+// How colorful vs. flat-grey a photo's dominant color is (max channel minus
+// min channel, 0-255). Brightness alone isn't enough to catch a dull photo —
+// a hazy/overcast shot can average out to a numerically "bright" color while
+// still reading as flat grey. Mirrors content-pipeline/index.ts.
+function hexSaturation(hex?: string | null): number {
+  if (!hex) return 0;
+  const clean = hex.replace('#', '');
+  if (clean.length !== 6) return 0;
+  const r = parseInt(clean.slice(0, 2), 16);
+  const g = parseInt(clean.slice(2, 4), 16);
+  const b = parseInt(clean.slice(4, 6), 16);
+  if ([r, g, b].some((n) => Number.isNaN(n))) return 0;
+  return Math.max(r, g, b) - Math.min(r, g, b);
+}
 
-// Unsplash API guidelines require: (1) attribution to photographer + Unsplash,
-// (2) a "download" tracking ping when a photo is used in production.
+// Catches "moody" shots by what Unsplash's own alt text says, not just pixel
+// averages — a warm sunset photo can average out to a perfectly "bright,
+// colorful" dominant color despite visibly being a sunset. Mirrors
+// content-pipeline/index.ts.
+function isMoodyPhoto(desc?: string | null): boolean {
+  if (!desc) return false;
+  return /sunset|sunrise|dusk|night|dark|silhouette|twilight|storm|foggy|fog|overcast|gloomy/i.test(desc);
+}
+
+function photoScore(p: any): number {
+  return hexBrightness(p.color) + hexSaturation(p.color);
+}
+
+function pickBestPhoto(results: any[]): any | null {
+  if (results.length === 0) return null;
+  const clean = results.filter((p) => !isMoodyPhoto(p.alt_description));
+  const pool = clean.length > 0 ? clean : results;
+  return pool.reduce((best, p) => (photoScore(p) > photoScore(best) ? p : best), pool[0]);
+}
+
+async function fetchUnsplashCandidates(query: string, accessKey: string): Promise<any[]> {
+  const searchRes = await fetch(
+    `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=10&orientation=landscape&content_filter=high`,
+    { headers: { Authorization: `Client-ID ${accessKey}` } }
+  );
+  if (!searchRes.ok) {
+    console.error('Unsplash search failed:', searchRes.status, await searchRes.text());
+    return [];
+  }
+  const data = await searchRes.json();
+  return data.results || [];
+}
+
+// Unsplash API guidelines require a "download" tracking ping when a photo is
+// used in production, on top of the photographer + Unsplash attribution
+// already carried in the returned credit string.
+async function confirmUnsplashDownload(photo: any, accessKey: string) {
+  try {
+    await fetch(`${photo.links.download_location}&client_id=${accessKey}`);
+  } catch (err) {
+    console.error('Unsplash download ping failed (non-fatal):', err);
+  }
+}
+
 async function fetchUnsplashPhoto(query: string, accessKey: string): Promise<UnsplashPhoto | null> {
   try {
-    const searchRes = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=10&orientation=landscape&content_filter=high`,
-      { headers: { Authorization: `Client-ID ${accessKey}` } }
-    );
-    if (!searchRes.ok) {
-      console.error('Unsplash search failed:', searchRes.status, await searchRes.text());
-      return null;
-    }
-    const data = await searchRes.json();
-    const results = data.results || [];
-    if (results.length === 0) return null;
-
-    const photo = results.find((p: any) => hexBrightness(p.color) >= MIN_PHOTO_BRIGHTNESS)
-      || results.reduce((best: any, p: any) => (hexBrightness(p.color) > hexBrightness(best.color) ? p : best), results[0]);
-
-    try {
-      await fetch(`${photo.links.download_location}&client_id=${accessKey}`);
-    } catch (err) {
-      console.error('Unsplash download ping failed (non-fatal):', err);
-    }
-
+    const results = await fetchUnsplashCandidates(query, accessKey);
+    const photo = pickBestPhoto(results);
+    if (!photo) return null;
+    await confirmUnsplashDownload(photo, accessKey);
     return {
       url: photo.urls.regular,
       credit: `Photo by ${photo.user.name} on Unsplash (${photo.links.html})`,
@@ -97,14 +133,39 @@ async function fetchPixabayPhoto(query: string, apiKey: string): Promise<Unsplas
 // mediocre/irrelevant photo that's more narrowly "on topic" (e.g. a random
 // plate of food) — skyline/landmark queries are what both providers do best,
 // and Pixabay only gets tried if Unsplash has nothing.
+//
+// Queries both "{city} skyline" and plain "{city}" and merges the results
+// before picking, same as content-pipeline/index.ts — a single "skyline"
+// search can be thin for some cities and skew heavily toward dusk/sunset
+// shots, while a plain city-name search tends to surface daytime
+// street/landmark photos "skyline" alone misses.
 async function fetchDestinationPhoto(city: string, unsplashKey?: string, pixabayKey?: string): Promise<UnsplashPhoto | null> {
-  const query = `${city} skyline`;
   if (unsplashKey) {
-    const photo = await fetchUnsplashPhoto(query, unsplashKey);
-    if (photo) return photo;
+    try {
+      const [skylineResults, cityResults] = await Promise.all([
+        fetchUnsplashCandidates(`${city} skyline`, unsplashKey),
+        fetchUnsplashCandidates(city, unsplashKey),
+      ]);
+      const seen = new Set<string>();
+      const merged = [...skylineResults, ...cityResults].filter((p: any) => {
+        if (!p?.id || seen.has(p.id)) return false;
+        seen.add(p.id);
+        return true;
+      });
+      const photo = pickBestPhoto(merged);
+      if (photo) {
+        await confirmUnsplashDownload(photo, unsplashKey);
+        return {
+          url: photo.urls.regular,
+          credit: `Photo by ${photo.user.name} on Unsplash (${photo.links.html})`,
+        };
+      }
+    } catch (err) {
+      console.error('Unsplash destination photo error:', err);
+    }
   }
   if (pixabayKey) {
-    const photo = await fetchPixabayPhoto(query, pixabayKey);
+    const photo = await fetchPixabayPhoto(`${city} skyline`, pixabayKey);
     if (photo) return photo;
   }
   return null;
