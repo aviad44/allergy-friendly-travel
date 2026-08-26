@@ -13,6 +13,7 @@ import { AlertCircle, ExternalLink } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RestaurantInfo } from "@/types/restaurant";
 import { trackSiteSearch } from "@/utils/metaPixel";
+import { MoreOptionsOnGoogleMaps } from "@/components/MoreOptionsOnGoogleMaps";
 
 // Hotel results display component
 interface HotelResultsProps {
@@ -24,9 +25,12 @@ interface HotelResultsProps {
 const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => {
   if (!hotels || hotels.length === 0) {
     return (
-      <div className="text-center py-8">
-        <div className="text-gray-500 text-lg mb-2">⚠️ No safe options found for your filters.</div>
-        <p className="text-sm text-gray-400">Try adjusting your search criteria</p>
+      <div className="text-center py-8 space-y-4">
+        <div>
+          <div className="text-gray-500 text-lg mb-2">⚠️ No safe options found for your filters.</div>
+          <p className="text-sm text-gray-400">Try adjusting your search criteria</p>
+        </div>
+        {destination && <MoreOptionsOnGoogleMaps city={destination} kind="hotels" />}
       </div>
     );
   }
@@ -144,6 +148,8 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
           </div>
         </div>
       ))}
+
+      {destination && <MoreOptionsOnGoogleMaps city={destination} kind="hotels" />}
     </div>
   );
 };
