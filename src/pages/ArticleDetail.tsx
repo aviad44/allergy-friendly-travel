@@ -9,6 +9,7 @@ import NotFound from "@/pages/NotFound";
 import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderReady";
 import { destinationHotelsJsonLd } from "@/utils/jsonld";
 import { AllergyCardPromo } from "@/components/AllergyCardPromo";
+import { MoreOptionsOnGoogleMaps } from "@/components/MoreOptionsOnGoogleMaps";
 
 interface Article {
   title: string;
@@ -219,6 +220,7 @@ const ArticleDetail = () => {
                 hotels={hotels}
                 destinationName={destinationCity || article.title}
               />
+              {destinationCity && <MoreOptionsOnGoogleMaps city={destinationCity} kind="hotels" />}
             </div>
           )}
 
