@@ -203,32 +203,23 @@ function findBestSnippet(reviews: any[]): ReviewSnippet | null {
 // ==========================================
 // QUERY BUILDING
 // ==========================================
-const allergyPhraseMap: Record<string, string> = {
-  'celiac': 'celiac friendly', 'celiac disease': 'celiac friendly',
-  'gluten': 'gluten free', 'peanuts': 'peanut allergy friendly',
-  'peanut': 'peanut allergy friendly', 'tree nuts': 'tree nut allergy friendly',
-  'nuts': 'nut allergy friendly', 'dairy': 'dairy free',
-  'lactose': 'lactose free', 'eggs': 'egg free', 'egg': 'egg free',
-  'soy': 'soy free', 'fish': 'fish allergy friendly',
-  'shellfish': 'shellfish allergy friendly', 'sesame': 'sesame free',
-  'vegan': 'vegan', 'vegetarian': 'vegetarian',
-};
-
-const allergyPriority = [
-  'celiac disease', 'celiac', 'gluten', 'peanuts', 'peanut',
-  'tree nuts', 'nuts', 'dairy', 'lactose', 'eggs', 'egg',
-  'soy', 'fish', 'shellfish', 'sesame', 'vegan', 'vegetarian'
-];
-
-function getPrimaryPhrase(allergies: string[]): string {
-  const lower = allergies.map(a => a.toLowerCase().trim());
-  for (const p of allergyPriority) {
-    if (lower.some(a => a.includes(p) || p.includes(a))) {
-      return allergyPhraseMap[p];
-    }
-  }
-  return 'allergy friendly';
-}
+// Previously this built an allergen-specific Google query — e.g. "dairy free
+// hotels in Amsterdam" for a Dairy filter, "peanut allergy friendly hotels in
+// Tirana" for Nuts. That narrow phrasing is a much worse Google Text Search
+// query than a generic one: for a real, hotel-dense city like Amsterdam it
+// returned candidates so far off-target that none of the 8 checked had any
+// food-allergy review at all — verified live (search_cache showed a
+// zero-result "dairy free hotels in Amsterdam" query sitting there for 18
+// days). A hotel's real value here isn't "has a review about my exact
+// allergen" — it's "has real evidence staff take food allergies seriously at
+// all" (room service flexibility, breakfast buffet awareness, etc. isn't
+// allergen-specific the way restaurant kitchen cross-contamination risk is).
+// So the query is now always the same generic phrase regardless of which
+// allergy the visitor selected, matching content-pipeline's daily discovery
+// query — classifyAndExtract below still only counts a hotel if a review
+// shows *some* real food-allergy evidence, it just no longer requires that
+// evidence to name the visitor's specific allergen.
+const GENERIC_QUERY_PHRASE = 'allergy friendly';
 
 // ==========================================
 // GOOGLE PLACES API — hotels (type=lodging)
@@ -263,18 +254,16 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 // ==========================================
 // SEARCH-LEVEL CACHE (30-day TTL) — reuses search_cache table with mode='hotels_fast'
 // ==========================================
-// Keyed on the *primary phrase* actually used in the Google query, not the
-// raw allergy list the user picked — two different allergy selections that
-// both resolve to the same primaryPhrase (e.g. Peanuts alone vs Peanuts +
-// Tree Nuts + Sesame, both "peanut allergy friendly") produce the identical
-// Google query and result set, so treating them as separate cache entries
-// was pure waste. classifyAndExtract scans for any allergy evidence
-// generically, not filtered to the user's specific list, so this is safe —
-// the result set was already fully determined by (destination, primaryPhrase).
-function buildCacheKey(destination: string, primaryPhrase: string): { dest: string; allg: string } {
+// Keyed on destination only now — the query no longer varies by allergy (see
+// GENERIC_QUERY_PHRASE above), so every allergy selection for the same city
+// shares one cache entry instead of one per (city, allergen) combo. A nice
+// side effect: far fewer cache misses overall, since a search for any one
+// allergy in a city now warms the cache for every other allergy in that city
+// too.
+function buildCacheKey(destination: string): { dest: string; allg: string } {
   return {
     dest: destination.toLowerCase().trim(),
-    allg: primaryPhrase.toLowerCase().trim(),
+    allg: GENERIC_QUERY_PHRASE,
   };
 }
 
@@ -446,12 +435,15 @@ serve(async (req) => {
     const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
     const allergiesArray = Array.isArray(allergies) ? allergies : [];
-    const primaryPhrase = getPrimaryPhrase(allergiesArray);
-    const queryPhrase = `${primaryPhrase} hotels in ${destination}`;
+    // The visitor's selected allergy still travels through (logged, and
+    // tagged onto hotel_allergy_info in persistEvidence below) — it just no
+    // longer narrows the Google query or the cache key. See
+    // GENERIC_QUERY_PHRASE above for why.
+    const queryPhrase = `${GENERIC_QUERY_PHRASE} hotels in ${destination}`;
     const fallbackUrl = `https://www.google.com/maps/search/${encodeURIComponent(queryPhrase)}`;
 
     // ---- STEP 1: Search-level cache ----
-    const { dest: cDest, allg: cAllg } = buildCacheKey(destination, primaryPhrase);
+    const { dest: cDest, allg: cAllg } = buildCacheKey(destination);
 
     if (supabase) {
       const cached = await getCachedSearch(supabase, cDest, cAllg);
