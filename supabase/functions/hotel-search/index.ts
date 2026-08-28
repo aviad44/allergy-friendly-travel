@@ -9,10 +9,21 @@ const corsHeaders = {
 
 // ==========================================
 // FAST MODE CONFIG — Cost-optimized
-// Mirrors restaurants-search: 1 Text Search call + up to 8 Place Details
+// 1 Text Search call + up to maxDetailsToFetch Place Details.
 // ==========================================
+// maxDetailsToFetch was 8 — but Text Search returns up to 20 candidates per
+// page, and most Google hotel reviews never mention food allergies at all,
+// so checking only the first 8 candidates routinely produced 0-2 real
+// results even for hotel-dense cities (Seoul, Toronto, Miami, Berlin, ...
+// verified live via search_log: results_returned was 0-2 in the large
+// majority of fresh searches). Raised to 20 — the full first Text Search
+// page — so a real allergy-friendly hotel further down the candidate list
+// still gets checked instead of being cut off before it's ever looked at.
+// This roughly 2.5x's the Place Details cost per cache-missed search
+// (accepted cost/results trade-off); the 30-day search-level cache still
+// keeps repeat searches free.
 const FAST_MODE = {
-  maxDetailsToFetch: 8,
+  maxDetailsToFetch: 20,
   targetResults: 8,
   maxReviewsToScan: 5,
   cacheTtlDays: 30,
