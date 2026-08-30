@@ -55,6 +55,13 @@
     <meta name="author" content="Allergy Free Travel" />
     <meta name="keywords" content="allergy-friendly travel, food allergy hotels, gluten-free accommodation, dairy-free travel, nut-free hotels, allergen-free vacation, safe travel with allergies" />
 
+    <!-- Pinterest domain verification (Business Hub -> claim website), so
+         pins linking to this site show the site's own branding instead of
+         nothing, and site-wide Pinterest Analytics becomes available. Must
+         live in the static shell (not injected by React) since Pinterest's
+         verifier doesn't execute JS. -->
+    <meta name="p:domain_verify" content="858e1936fed90edfc21e8725f80dac38"/>
+
     <!--
       Per-page description, canonical, og:*, twitter:*, robots, and JSON-LD
       are all set dynamically per route by MetaManager (react-helmet-async) —
