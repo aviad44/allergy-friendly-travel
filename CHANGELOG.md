@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-08-30 (5)
+- Live hotel/restaurant search now enriches the single top-ranked result of every fresh search with a real Tripadvisor rating + review excerpt, via the same `tripadvisor-reviews` function guide pages use — deliberately scoped to just the top result (not the whole list): measured from `search_cache`, enriching every result would mean ~400 distinct new places/month site-wide, vs. roughly one lookup per unique destination search when scoped to the top result. Raised the shared Tripadvisor budget ceiling from ₪25 to ₪50/month to cover both consumers (guide pages + this).
+- `SearchResults.tsx`/`RestaurantCard.tsx` now render that Tripadvisor rating + review excerpt (visually distinguished from the existing Google-sourced quote) whenever it's present on a result.
+
 ## 2026-08-30 (4)
 - Removed fabricated guest-quote testimonials (attributed to invented named guests) from `TopHotelsSection`'s hardcoded London/Barcelona/Abu Dhabi hotel blocks — these are real, well-known hotels, so they now get the same real Tripadvisor lookup as every other card instead of an invented review.
 

@@ -98,6 +98,41 @@ export const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         </div>
       )}
 
+      {/* Real Tripadvisor rating/review — only ever present on one card per
+          search (the top-ranked result); everything above is Google-sourced. */}
+      {restaurant.tripadvisorRating && (
+        <div className="bg-muted/50 rounded-md p-3 my-3 border-l-4 border-emerald-500">
+          <a
+            href={restaurant.tripadvisorUrl || undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-sm hover:underline w-fit"
+          >
+            <Star className="h-3.5 w-3.5 fill-emerald-500 text-emerald-500" />
+            <span className="font-medium text-foreground">{restaurant.tripadvisorRating.toFixed(1)} on Tripadvisor</span>
+            {restaurant.tripadvisorReviewCount && (
+              <span className="text-xs text-muted-foreground">({restaurant.tripadvisorReviewCount.toLocaleString()} reviews)</span>
+            )}
+          </a>
+          {restaurant.tripadvisorReview?.text && (
+            <div className="mt-2 flex gap-2">
+              <Quote className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="text-sm text-foreground/90 leading-relaxed">{restaurant.tripadvisorReview.text}</p>
+                <a
+                  href={restaurant.tripadvisorReview.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-muted-foreground hover:underline"
+                >
+                  — {restaurant.tripadvisorReview.author}, Tripadvisor
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Contact info - shown after lazy load */}
       {contactInfo && (
         <div className="bg-muted/50 rounded-md p-3 my-3 space-y-2">

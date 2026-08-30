@@ -121,6 +121,38 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
             </div>
           )}
 
+          {/* Real Tripadvisor rating/review — only ever present on one hotel
+              per search (the top-ranked result); everything above is
+              Google-sourced. */}
+          {hotel.tripadvisorRating && (
+            <div className="mb-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r p-3">
+              <a
+                href={hotel.tripadvisorUrl || undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm hover:underline w-fit"
+              >
+                <span className="font-medium text-gray-800">⭐ {hotel.tripadvisorRating.toFixed(1)} on Tripadvisor</span>
+                {hotel.tripadvisorReviewCount && (
+                  <span className="text-xs text-gray-500">({hotel.tripadvisorReviewCount.toLocaleString()} reviews)</span>
+                )}
+              </a>
+              {hotel.tripadvisorReview?.text && (
+                <blockquote className="mt-2">
+                  <p className="text-sm text-gray-700 italic">"{hotel.tripadvisorReview.text}"</p>
+                  <a
+                    href={hotel.tripadvisorReview.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-gray-500 mt-1 block hover:underline"
+                  >
+                    – {hotel.tripadvisorReview.author}, Tripadvisor
+                  </a>
+                </blockquote>
+              )}
+            </div>
+          )}
+
           <div className="border-t pt-4 flex flex-wrap gap-3">
             {hotel.websiteUrl && (
               <a
