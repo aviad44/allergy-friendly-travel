@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { SITE_AUTHOR } from "@/constants/author";
 
 interface StructuredDataProps {
   type: 'website' | 'article' | 'travelGuide' | 'localBusiness';
@@ -67,7 +68,8 @@ export const StructuredData = ({
         "@type": "Article",
         "author": {
           "@type": "Person",
-          "name": author || "Allergy-Free Travel Team"
+          "name": author || SITE_AUTHOR.name,
+          "url": SITE_AUTHOR.url
         },
         "datePublished": publishedDate || new Date().toISOString(),
         "mainEntityOfPage": {
@@ -98,7 +100,8 @@ export const StructuredData = ({
         },
         "author": {
           "@type": "Person",
-          "name": author || "Allergy-Free Travel Team"
+          "name": author || SITE_AUTHOR.name,
+          "url": SITE_AUTHOR.url
         }
       };
       break;
