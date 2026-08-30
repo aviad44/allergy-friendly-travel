@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-08-30 (4)
+- Removed fabricated guest-quote testimonials (attributed to invented named guests) from `TopHotelsSection`'s hardcoded London/Barcelona/Abu Dhabi hotel blocks — these are real, well-known hotels, so they now get the same real Tripadvisor lookup as every other card instead of an invented review.
+
 ## 2026-08-30 (3)
 - Hotel and restaurant guide pages now show real Tripadvisor ratings and a genuine review excerpt (with a link back), via a new `tripadvisor-reviews` Edge Function on Tripadvisor's Terra API. Cached permanently per place, gated by a hard monthly ILS budget ceiling enforced in our own code (separate from, and independent of, the Google Places one). Verified live end-to-end before shipping.
 - Fixed `HotelCard`'s guest-review fallback text, which previously claimed reviews were "sourced from TripAdvisor, Booking.com, and Google Reviews" unconditionally, whether or not any were shown.
