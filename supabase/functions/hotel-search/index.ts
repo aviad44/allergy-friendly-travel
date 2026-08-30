@@ -474,6 +474,46 @@ interface HotelResult {
   reviewSnippet: ReviewSnippet | null;
   confidenceLevel: 'high' | 'medium' | 'low';
   placeId: string;
+  tripadvisorRating?: number | null;
+  tripadvisorReviewCount?: number | null;
+  tripadvisorUrl?: string | null;
+  tripadvisorReview?: { text: string; author: string; url: string } | null;
+}
+
+// Enriches only the single top-ranked result with a real Tripadvisor
+// rating + review excerpt (via the tripadvisor-reviews function, which
+// owns its own cache and hard budget ceiling). Deliberately scoped to
+// just the top result, not the whole list: live search traffic surfaces
+// ~400 distinct new places/month site-wide (measured from search_cache),
+// which at 3 Tripadvisor API calls each would burn through a budget many
+// times the size of the one guide pages use — enriching only the top
+// result keeps this to roughly one lookup per unique destination search
+// instead of one per result shown.
+async function enrichTopResultWithTripadvisor(
+  results: HotelResult[],
+  city: string,
+  category: 'hotel' | 'restaurant',
+  supabaseUrl: string,
+): Promise<void> {
+  if (results.length === 0) return;
+  const top = results[0];
+  try {
+    const res = await fetch(`${supabaseUrl}/functions/v1/tripadvisor-reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: top.name, city, category }),
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data?.available) {
+      top.tripadvisorRating = data.rating ?? null;
+      top.tripadvisorReviewCount = data.reviewCount ?? null;
+      top.tripadvisorUrl = data.tripadvisorUrl ?? null;
+      top.tripadvisorReview = data.reviews?.[0] ?? null;
+    }
+  } catch (err) {
+    console.error('Tripadvisor enrichment failed (non-fatal):', err);
+  }
 }
 
 // ==========================================
@@ -616,6 +656,10 @@ serve(async (req) => {
       if (sb !== sa) return sb - sa;
       return (b.rating || 0) - (a.rating || 0);
     });
+
+    if (supabaseUrl) {
+      await enrichTopResultWithTripadvisor(results, destination, 'hotel', supabaseUrl);
+    }
 
     const dur = Date.now() - startTime;
 

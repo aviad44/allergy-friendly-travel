@@ -30,7 +30,15 @@ const corsHeaders = {
 // has posted.
 const TRIPADVISOR_COST_PER_CALL_ILS = 0.056;
 const CALLS_PER_NEW_PLACE = 3; // search + details + reviews — counted conservatively as 3 billable calls
-const MONTHLY_BUDGET_ILS = 25; // separate, small budget — independent from the Google Places ₪100 ceiling
+// ₪50/month total, independent from the Google Places ₪100 ceiling — sized
+// for two consumers sharing this same cache+budget: the slow-growing guide
+// page catalog (small), plus hotel-search/restaurants-search enriching only
+// the single top result per live search (measured from search_cache:
+// ~400 distinct new places/month site-wide if every result were enriched,
+// vs. roughly one lookup per unique destination search when scoped to the
+// top result only — real Tripadvisor pricing is $0.015/entity, list price,
+// not yet calibrated against an actual invoice).
+const MONTHLY_BUDGET_ILS = 50;
 const BUDGET_SAFETY_MARGIN = 0.9;
 
 type Category = 'hotel' | 'restaurant';
