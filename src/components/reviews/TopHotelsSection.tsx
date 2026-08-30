@@ -1,6 +1,6 @@
 
 import { Hotel } from "@/types/definitions";
-import { HotelCard } from "@/components/hotels/HotelCard";
+import { TripadvisorEnrichedHotelCard as HotelCard } from "@/components/hotels/TripadvisorEnrichedHotelCard";
 import { Star } from "lucide-react";
 
 interface TopHotelsSectionProps {
@@ -35,7 +35,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
       <div className="grid gap-6 sm:gap-8 md:gap-10 min-w-0">
         {isLondon ? (
           <>
-            <HotelCard 
+            <HotelCard category="hotel" city={destinationName}
               name="1. The Athenaeum Hotel & Residences ★★★★★"
               address="116 Piccadilly, London W1J 7BJ, UK"
               features={["⭐ 5-star luxury", "🍽️ Allergy-aware dining", "👨‍🍳 Staff trained in food allergies"]}
@@ -44,7 +44,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
               bookingUrl="https://www.athenaeumhotel.com/"
             />
             
-            <HotelCard 
+            <HotelCard category="hotel" city={destinationName}
               name="2. The Langham, London ★★★★★"
               address="1C Portland Pl, London W1B 1JA, UK"
               features={["⭐ 5-star luxury", "🍰 Dedicated gluten-free afternoon tea", "🍽️ Kitchen trained to prevent cross-contamination"]}
@@ -53,7 +53,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
               bookingUrl="https://www.langhamhotels.com/en/the-langham/london/"
             />
             
-            <HotelCard 
+            <HotelCard category="hotel" city={destinationName}
               name="3. The Ritz London ★★★★★"
               address="150 Piccadilly, London W1J 9BR, UK"
               features={["⭐ 5-star luxury", "🍽️ Bespoke meal preparation", "📋 Dedicated gluten-free menu"]}
@@ -62,7 +62,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
               bookingUrl="https://www.theritzlondon.com/"
             />
             
-            <HotelCard 
+            <HotelCard category="hotel" city={destinationName}
               name="4. One Aldwych ★★★★★"
               address="1 Aldwych, London WC2B 4BZ, UK"
               features={["⭐ 5-star luxury", "🌱 Fully vegan and gluten-free menus", "👨‍🍳 Kitchen trained in allergy protocols"]}
@@ -75,6 +75,8 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
           hotels.map((hotel, index) => (
             <div key={hotel.id || index} className="min-w-0">
               <HotelCard
+                category="hotel"
+                city={destinationName}
                 name={hotel.name}
                 address={hotel.address || hotel.location}
                 features={hotel.features || hotel.amenities}
@@ -89,7 +91,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
           // Default static hotel data for Barcelona
           destinationName === "Barcelona" ? (
             <>
-              <HotelCard 
+              <HotelCard category="hotel" city={destinationName}
                 name="1. Hotel Arts Barcelona ★★★★★"
                 address="Carrer de la Marina, 19-21, 08005 Barcelona, Spain"
                 features={["⭐ 5-star luxury", "🍽️ Extensive allergy menus", "👨‍🍳 Dedicated allergy-trained chefs"]}
@@ -98,7 +100,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
                 bookingUrl="https://www.hotelartsbarcelona.com/"
               />
               
-              <HotelCard 
+              <HotelCard category="hotel" city={destinationName}
                 name="2. Mandarin Oriental Barcelona ★★★★★"
                 address="Passeig de Gràcia, 38-40, 08007 Barcelona, Spain"
                 features={["⭐ 5-star luxury", "🍽️ Personalized allergy-friendly meals", "🧪 Kitchen protocols to prevent cross-contamination"]}
@@ -111,7 +113,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
           // Default static hotel data for Abu Dhabi
           destinationName === "Abu Dhabi" ? (
             <>
-              <HotelCard 
+              <HotelCard category="hotel" city={destinationName}
                 name="1. Emirates Palace Mandarin Oriental ★★★★★"
                 address="West Corniche Road, Abu Dhabi, United Arab Emirates"
                 features={["⭐ 5-star luxury", "🍽️ Allergy-aware culinary team", "📋 Special dietary menus"]}
@@ -120,7 +122,7 @@ export const TopHotelsSection = ({ hotels, destinationName, isLondon = false }: 
                 bookingUrl="https://www.mandarinoriental.com/abu-dhabi/emirates-palace"
               />
               
-              <HotelCard 
+              <HotelCard category="hotel" city={destinationName}
                 name="2. Rosewood Abu Dhabi ★★★★★"
                 address="Al Maryah Island, Abu Dhabi, United Arab Emirates"
                 features={["⭐ 5-star luxury", "👨‍🍳 Specialized allergy chefs", "🌱 Wide range of allergy-friendly options"]}
