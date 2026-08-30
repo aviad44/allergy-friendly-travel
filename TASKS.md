@@ -53,6 +53,16 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - DoD: No <img> missing alt; lazy loading enabled where non-critical.
   - DONE: Audited every <img> in src/**; alt text was already complete and non-empty everywhere. Added explicit loading="eager"/"lazy" to the ~9 images that had neither (heroes/banners → eager, cards/icons/previews → lazy).
 
+- [x] E-E-A-T: real named author instead of a generic org voice
+  - RATIONALE: Content covers severe/life-threatening food allergies — Google's quality guidance weighs a real, consistent named author much more heavily here than for typical topics. Guide pages (the bulk of the site's content) attributed everything to "Allergy-Free Travel" as an Organization, with no visible byline or date shown to actual readers, even though a real founder identity already existed on /about.
+  - HOW-TO: src/constants/author.ts as the single source of truth; src/components/ArticleByline.tsx renders a visible "Written by ... — Updated on ..." line; JSON-LD `author` on ArticleDetail.tsx/RestaurantDetail.tsx switched from Organization to Person (publisher stays Organization).
+  - DoD: Guide pages show a real visible byline + last-updated date; JSON-LD author is a Person linking to /about.
+
+- [x] Stop indexing /search-results as content
+  - RATIONALE: Every (destination, allergies) combination is a distinct, crawlable, internally-linked URL with a templated title and no noindex — an unbounded set of near-duplicate thin pages, and a plausible contributor to pages Search Console reports as discovered-but-not-indexed. It's a live search view, not canonical content.
+  - HOW-TO: `<MetaManager dynamicData={{ robots: "noindex, follow" }} />` in SearchResults.tsx.
+  - DoD: /search-results responses carry a noindex robots meta tag.
+
 ---
 
 ## Performance
@@ -96,10 +106,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Ensure robust validation with react-hook-form/zod; escape dynamic HTML; avoid dangerouslySetInnerHTML.
   - DoD: No lint warnings; manual test with special chars shows safe handling.
 
-- [ ] CORS and rate limiting for Netlify/Supabase functions
+- [x] CORS and rate limiting for Netlify/Supabase functions
   - RATIONALE: Prevent abuse and data leaks.
   - HOW-TO: Review netlify/functions/** and supabase/functions/**; add CORS headers and simple rate limits where applicable.
   - DoD: Functions return correct CORS headers; burst traffic limited.
+  - DONE (partial): hotel-search and restaurants-search are public (verify_jwt=false, CORS '*') and trigger real billed Google Places calls on every cache miss with zero request-level rate limiting — a handful of varied destination strings bypasses the cache entirely. Added a shared hard monthly ₪100 budget ceiling (computed from search_log, calibrated against the real Google Cloud Billing console rather than public pricing pages) that blocks live Google calls once crossed, failing closed if unverifiable. This caps worst-case monthly spend but is not per-IP/session throttling — a burst of requests within a month still executes until the shared ceiling trips. True per-IP/session rate limiting is still open.
 
 - [ ] Security headers
   - RATIONALE: Browser-level protections.

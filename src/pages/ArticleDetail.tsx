@@ -10,6 +10,8 @@ import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderRead
 import { destinationHotelsJsonLd } from "@/utils/jsonld";
 import { AllergyCardPromo } from "@/components/AllergyCardPromo";
 import { MoreOptionsOnGoogleMaps } from "@/components/MoreOptionsOnGoogleMaps";
+import { ArticleByline } from "@/components/ArticleByline";
+import { SITE_AUTHOR } from "@/constants/author";
 
 interface Article {
   title: string;
@@ -166,7 +168,7 @@ const ArticleDetail = () => {
     datePublished: article.published_at || undefined,
     dateModified: article.updated_at || article.published_at || undefined,
     mainEntityOfPage: articleUrl,
-    author: { "@type": "Organization", name: "Allergy-Free Travel" },
+    author: { "@type": "Person", name: SITE_AUTHOR.name, url: SITE_AUTHOR.url },
     publisher: { "@type": "Organization", name: "Allergy-Free Travel" },
   };
   // Same real-evidence-only Review/AggregateRating builder used on restaurant
@@ -194,7 +196,9 @@ const ArticleDetail = () => {
         </Link>
 
         <article className="bg-white">
-          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-6 text-blue-800">{article.title}</h1>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-3 text-blue-800">{article.title}</h1>
+
+          <ArticleByline publishedAt={article.published_at} updatedAt={article.updated_at} />
 
           {article.hero_image_url && (
             <figure className="mb-8">

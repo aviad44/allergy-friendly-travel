@@ -223,8 +223,11 @@ const SearchResults = () => {
         }
         
         console.log('✅ Hotel search results:', data);
-        
-        if (data && data.results && data.results.length > 0) {
+
+        if (data && data.budgetLimitReached) {
+          setHotelError("We've reached this month's search budget — live hotel search is paused until next month. Please try again later, or search a destination we've already covered.");
+          console.log('🛑 Monthly search budget reached');
+        } else if (data && data.results && data.results.length > 0) {
           setHotels(data.results);
           console.log(`🏨 Found ${data.results.length} hotels`);
         } else {
@@ -274,7 +277,13 @@ const SearchResults = () => {
         setFallbackUrl(data.fallbackUrl || `https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
         return;
       }
-      
+
+      if (data.budgetLimitReached) {
+        setRestaurantError("We've reached this month's search budget — live restaurant search is paused until next month. Please try again later, or search a destination we've already covered.");
+        setFallbackUrl(data.fallbackUrl || `https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
+        return;
+      }
+
       console.log('✅ Restaurant search results:', data);
       
       setRestaurants(data.places || []);
@@ -315,7 +324,7 @@ const SearchResults = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-6 max-w-6xl">
         <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-          <MetaManager />
+          <MetaManager dynamicData={{ robots: "noindex, follow" }} />
           <h1 className="sr-only">
             Allergy-Friendly Hotels in {destination || "Your Destination"}
           </h1>

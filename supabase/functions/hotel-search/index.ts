@@ -9,10 +9,21 @@ const corsHeaders = {
 
 // ==========================================
 // FAST MODE CONFIG — Cost-optimized
-// Mirrors restaurants-search: 1 Text Search call + up to 8 Place Details
+// 1 Text Search call + up to maxDetailsToFetch Place Details.
 // ==========================================
+// maxDetailsToFetch was 8 — but Text Search returns up to 20 candidates per
+// page, and most Google hotel reviews never mention food allergies at all,
+// so checking only the first 8 candidates routinely produced 0-2 real
+// results even for hotel-dense cities (Seoul, Toronto, Miami, Berlin, ...
+// verified live via search_log: results_returned was 0-2 in the large
+// majority of fresh searches). Raised to 20 — the full first Text Search
+// page — so a real allergy-friendly hotel further down the candidate list
+// still gets checked instead of being cut off before it's ever looked at.
+// This roughly 2.5x's the Place Details cost per cache-missed search
+// (accepted cost/results trade-off); the 30-day search-level cache still
+// keeps repeat searches free.
 const FAST_MODE = {
-  maxDetailsToFetch: 8,
+  maxDetailsToFetch: 20,
   targetResults: 8,
   maxReviewsToScan: 5,
   cacheTtlDays: 30,
@@ -252,6 +263,68 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 }
 
 // ==========================================
+// MONTHLY BUDGET GUARD — hard ₪100/month ceiling, shared with restaurants-search
+// ==========================================
+// Both hotel-search and restaurants-search are public, unauthenticated
+// (verify_jwt=false, CORS '*') endpoints that trigger real billed Google
+// Places calls on every cache miss, with no rate limiting — a handful of
+// varied destination strings is enough to run up real spend. This ties both
+// functions to one shared calendar-month ceiling, computed straight from
+// search_log (the same table logSearch() below writes to, so there's no
+// separate counter to drift out of sync).
+//
+// Cost model: calibrated directly against the real Google Cloud Billing
+// console (not guessed from public pricing pages) — those describe the
+// *new* tiered Places API (places.googleapis.com), but this function calls
+// the *legacy* endpoints (maps.googleapis.com/maps/api/place/...), which
+// bill differently and, it turns out, quite a bit cheaper. The billing
+// console showed ₪130 total for ~3,558 fresh-search Google calls (hotels +
+// restaurants combined) under the pre-fix maxDetailsToFetch=8 regime — a
+// blended ₪0.0342/call, not the ~₪0.11-0.13/call the old two-tier USD
+// estimate implied. Using one blended per-call rate (no text-search vs.
+// details split) since the billing console doesn't break cost down that
+// finely either. A cache hit logs google_calls_count=0 and costs nothing,
+// so it's excluded. Re-calibrate this constant if a future invoice shows
+// it drifting.
+//
+// This is deliberately conservative in two ways: it trips at 90% of the
+// ₪100 target, not 100%, and it fails *closed* (blocks the search) if the
+// budget can't be verified — e.g. search_log is unreachable, or Supabase
+// itself isn't configured — rather than letting Google calls run
+// unaccounted for.
+const MONTHLY_BUDGET_ILS = 100;
+const BUDGET_SAFETY_MARGIN = 0.9;
+const COST_PER_CALL_ILS = 0.0342; // calibrated from real billing, see comment above
+
+async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
+  try {
+    const monthStart = new Date();
+    monthStart.setUTCDate(1);
+    monthStart.setUTCHours(0, 0, 0, 0);
+
+    const { data, error } = await supabase
+      .from('search_log')
+      .select('google_calls_count')
+      .in('mode', ['hotels_fast', 'fast'])
+      .eq('cache_hit', false)
+      .gte('created_at', monthStart.toISOString());
+
+    if (error || !data) {
+      console.log('⚠️ Budget check query failed, failing closed:', error?.message);
+      return true;
+    }
+
+    const totalCalls = data.reduce((sum: number, row: any) => sum + (row.google_calls_count || 0), 0);
+    const costIls = totalCalls * COST_PER_CALL_ILS;
+
+    return costIls >= MONTHLY_BUDGET_ILS * BUDGET_SAFETY_MARGIN;
+  } catch (err) {
+    console.log('⚠️ Budget check threw, failing closed:', err);
+    return true;
+  }
+}
+
+// ==========================================
 // SEARCH-LEVEL CACHE (30-day TTL) — reuses search_cache table with mode='hotels_fast'
 // ==========================================
 // Keyed on destination only now — the query no longer varies by allergy (see
@@ -458,6 +531,17 @@ serve(async (req) => {
           fallbackUrl,
         }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
+    }
+
+    // ---- STEP 1.5: Hard monthly budget ceiling ----
+    // No Supabase means no way to verify or track spend at all — fail
+    // closed rather than let Google calls run unaccounted for (see
+    // isMonthlyBudgetExceeded's comment above).
+    if (!supabase || await isMonthlyBudgetExceeded(supabase)) {
+      console.log(`🛑 [${searchId}] Monthly Google API budget reached — skipping live search`);
+      return new Response(JSON.stringify({
+        results: [], total: 0, fallbackUrl, budgetLimitReached: true,
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     // ---- STEP 2: Single Text Search call ----
