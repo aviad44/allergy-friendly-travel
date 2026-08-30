@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2026-08-30
+## 2026-08-30 (2)
+- Pinterest automation reaches Facebook/Instagram-level maturity: `posted_to_pinterest_at` tracking + success logging on the existing on-publish pin, plus a new daily `pinterest-poster` backlog sweep (oldest-first, small batches) that Facebook/Instagram's equivalent deliberately skips — Pinterest content has long-tail search value unlike a social feed.
+- The monthly search-budget guard (see below) now shows visitors the same calm "no results found" copy used for a genuine empty search, instead of a message naming an internal cost control.
+
+## 2026-08-30 (1)
 - Fixed hotel search returning too few results (often just 1) for hotel-dense cities: raised the Place Details candidate cap from 8 to 20 so more real hotels get checked per search before falling back.
 - E-E-A-T: guide pages (hotel + restaurant articles) now attribute content to a real named author (visible byline + JSON-LD Person) instead of a generic organization voice, matching the founder identity already on /about.
 - Added a hard monthly Google API budget ceiling (₪100, calibrated against real billing) shared by hotel-search and restaurants-search — both are public, unauthenticated, unthrottled endpoints that trigger real billed Google Places calls on every cache miss.

@@ -58,6 +58,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: src/constants/author.ts as the single source of truth; src/components/ArticleByline.tsx renders a visible "Written by ... — Updated on ..." line; JSON-LD `author` on ArticleDetail.tsx/RestaurantDetail.tsx switched from Organization to Person (publisher stays Organization).
   - DoD: Guide pages show a real visible byline + last-updated date; JSON-LD author is a Person linking to /about.
 
+- [x] Pinterest distribution: backlog sweep + observability
+  - RATIONALE: content-pipeline already pinned each article the moment it was first published, but fire-and-forget with zero success/failure visibility and no retry — and every article published before Pinterest was wired up was never pinned at all. Pinterest content has long-tail search value (unlike Facebook/Instagram's feed, which is why social-poster deliberately never touches backlog), so it's worth working through it.
+  - HOW-TO: `posted_to_pinterest_at` column on `seo_articles`; `publishToPinterest` (content-pipeline) now marks it + logs success explicitly; new `pinterest-poster` Edge Function + daily GitHub Action sweeps the backlog oldest-first in small batches.
+  - DoD: New articles get pinned and tracked on publish; the daily sweep gradually clears already-published articles that predate the integration. Blocked on Pinterest's own Trial-vs-Standard app access — pin creation in production requires Standard access, applied for separately.
+
 - [x] Stop indexing /search-results as content
   - RATIONALE: Every (destination, allergies) combination is a distinct, crawlable, internally-linked URL with a templated title and no noindex — an unbounded set of near-duplicate thin pages, and a plausible contributor to pages Search Console reports as discovered-but-not-indexed. It's a live search view, not canonical content.
   - HOW-TO: `<MetaManager dynamicData={{ robots: "noindex, follow" }} />` in SearchResults.tsx.
