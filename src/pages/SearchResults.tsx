@@ -224,15 +224,17 @@ const SearchResults = () => {
         
         console.log('✅ Hotel search results:', data);
 
-        if (data && data.budgetLimitReached) {
-          setHotelError("We've reached this month's search budget — live hotel search is paused until next month. Please try again later, or search a destination we've already covered.");
-          console.log('🛑 Monthly search budget reached');
-        } else if (data && data.results && data.results.length > 0) {
+        if (data && data.results && data.results.length > 0) {
           setHotels(data.results);
           console.log(`🏨 Found ${data.results.length} hotels`);
         } else {
+          // Same calm, generic copy whether this is a genuine no-match search
+          // or the monthly budget guard paused live search (data.budgetLimitReached)
+          // — visitors don't need to know about internal cost controls, and a
+          // "we've hit our budget" message reads as broken/alarming rather
+          // than as an ordinary empty result.
           setHotelError('No allergy-friendly hotels found for your search criteria.');
-          console.log('⚠️ No hotels found in response');
+          console.log(data?.budgetLimitReached ? '🛑 Monthly search budget reached (shown to user as a normal empty result)' : '⚠️ No hotels found in response');
         }
       } catch (error) {
         console.error('💥 Search error:', error);
@@ -278,13 +280,13 @@ const SearchResults = () => {
         return;
       }
 
-      if (data.budgetLimitReached) {
-        setRestaurantError("We've reached this month's search budget — live restaurant search is paused until next month. Please try again later, or search a destination we've already covered.");
-        setFallbackUrl(data.fallbackUrl || `https://www.google.com/maps/search/allergy+friendly+restaurants+in+${encodeURIComponent(destination)}`);
-        return;
-      }
-
       console.log('✅ Restaurant search results:', data);
+      if (data.budgetLimitReached) {
+        // Same calm handling as the hotel search side: an empty result list
+        // with no special error, rather than surfacing internal cost
+        // controls to visitors as an alarming "we're out of budget" message.
+        console.log('🛑 Monthly search budget reached (shown to user as a normal empty result)');
+      }
       
       setRestaurants(data.places || []);
       setQueryPhrase(data.queryPhrase || 'allergy friendly');
