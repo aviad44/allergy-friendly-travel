@@ -13,15 +13,24 @@ export interface HotelCardProps {
   quote?: string;
   bookingUrl: string;
   imageUrl?: string;
+  /** Real Tripadvisor rating/review data (see TripadvisorEnrichedHotelCard) — omitted when not found. */
+  tripadvisorRating?: number;
+  tripadvisorReviewCount?: number;
+  tripadvisorUrl?: string;
+  tripadvisorQuote?: { text: string; author: string; url: string };
 }
 
-export const HotelCard = ({ 
-  name, 
-  address, 
-  features, 
-  description, 
-  quote, 
-  bookingUrl
+export const HotelCard = ({
+  name,
+  address,
+  features,
+  description,
+  quote,
+  bookingUrl,
+  tripadvisorRating,
+  tripadvisorReviewCount,
+  tripadvisorUrl,
+  tripadvisorQuote,
 }: HotelCardProps) => {
   // Debug log for individual hotel data rendering
   console.log("Rendering HotelCard:", { name, address });
@@ -105,14 +114,39 @@ export const HotelCard = ({
           <p className="text-xs text-muted-foreground line-clamp-2">{description}</p>
         )}
 
+        {tripadvisorRating && (
+          <a
+            href={tripadvisorUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-xs hover:underline w-fit"
+          >
+            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 shrink-0" />
+            <span className="font-medium text-primary/90">{tripadvisorRating.toFixed(1)} on Tripadvisor</span>
+            {tripadvisorReviewCount && (
+              <span className="text-muted-foreground">({tripadvisorReviewCount.toLocaleString()} reviews)</span>
+            )}
+          </a>
+        )}
+
         {quote ? (
           <blockquote className="bg-primary/5 rounded-lg p-3 relative mt-1 border-l-2 border-primary/30">
             <p className="text-xs text-primary/90 relative z-10 italic line-clamp-3">"{quote}"</p>
           </blockquote>
+        ) : tripadvisorQuote ? (
+          <blockquote className="bg-primary/5 rounded-lg p-3 relative mt-1 border-l-2 border-primary/30">
+            <p className="text-xs text-primary/90 relative z-10 italic line-clamp-3">"{tripadvisorQuote.text}"</p>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              — {tripadvisorQuote.author},{" "}
+              <a href={tripadvisorQuote.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                Tripadvisor
+              </a>
+            </p>
+          </blockquote>
         ) : (
           <div className="bg-primary/5 rounded-lg p-3 relative mt-1">
             <p className="text-xs text-primary/80 relative z-10">
-              Verified guest reviews are sourced from TripAdvisor, Booking.com, and Google Reviews.
+              Guest review data isn't available for this property yet.
             </p>
           </div>
         )}

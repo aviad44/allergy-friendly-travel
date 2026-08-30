@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 import { MetaManager } from "@/components/MetaManager";
-import { HotelCard } from "@/components/hotels/HotelCard";
+import { TripadvisorEnrichedHotelCard } from "@/components/hotels/TripadvisorEnrichedHotelCard";
 import NotFound from "@/pages/NotFound";
 import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderReady";
 import { destinationHotelsJsonLd } from "@/utils/jsonld";
@@ -213,13 +213,15 @@ const RestaurantDetail = () => {
               </h2>
               <div className="grid gap-6 sm:gap-8 md:gap-10">
                 {restaurants.map((restaurant) => (
-                  <HotelCard
+                  <TripadvisorEnrichedHotelCard
                     key={restaurant.id}
                     name={restaurant.name}
                     address={restaurant.address || ''}
                     features={restaurant.features}
                     quote={restaurant.quote}
                     bookingUrl={restaurant.bookingUrl || '#'}
+                    city={destinationCity || undefined}
+                    category="restaurant"
                   />
                 ))}
               </div>

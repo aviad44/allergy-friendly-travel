@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-08-30 (3)
+- Hotel and restaurant guide pages now show real Tripadvisor ratings and a genuine review excerpt (with a link back), via a new `tripadvisor-reviews` Edge Function on Tripadvisor's Terra API. Cached permanently per place, gated by a hard monthly ILS budget ceiling enforced in our own code (separate from, and independent of, the Google Places one). Verified live end-to-end before shipping.
+- Fixed `HotelCard`'s guest-review fallback text, which previously claimed reviews were "sourced from TripAdvisor, Booking.com, and Google Reviews" unconditionally, whether or not any were shown.
+
 ## 2026-08-30 (2)
 - Pinterest automation reaches Facebook/Instagram-level maturity: `posted_to_pinterest_at` tracking + success logging on the existing on-publish pin, plus a new daily `pinterest-poster` backlog sweep (oldest-first, small batches) that Facebook/Instagram's equivalent deliberately skips — Pinterest content has long-tail search value unlike a social feed.
 - The monthly search-budget guard (see below) now shows visitors the same calm "no results found" copy used for a genuine empty search, instead of a message naming an internal cost control.
