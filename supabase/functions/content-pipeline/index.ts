@@ -650,7 +650,18 @@ async function publishToPinterest(
     });
     if (!res.ok) {
       console.error('Pinterest pin creation failed (non-fatal):', res.status, await res.text());
+      return;
     }
+    // Track success (was previously silent even on success, indistinguishable
+    // in logs from PINTEREST_* secrets just not being configured — see the
+    // pinterest-poster backlog sweep, which also relies on this column to
+    // know an article doesn't need retrying).
+    const { error: markErr } = await supabase
+      .from('seo_articles')
+      .update({ posted_to_pinterest_at: new Date().toISOString() })
+      .eq('slug', params.slug);
+    if (markErr) console.error('Pinterest: pinned but failed to mark posted_to_pinterest_at (non-fatal):', markErr.message);
+    console.log(`✅ Pinterest: pinned "${params.slug}"`);
   } catch (err) {
     console.error('Pinterest publish error (non-fatal):', err);
   }
