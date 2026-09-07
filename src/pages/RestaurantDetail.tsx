@@ -144,7 +144,9 @@ const RestaurantDetail = () => {
     return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading…</div>;
   }
 
-  const articleUrl = `https://www.allergy-free-travel.com/restaurants/${article.slug}`;
+  // Trailing slash: matches the URL this route actually resolves to without
+  // a redirect (see buildCanonical in utils/seo.ts for why).
+  const articleUrl = `https://www.allergy-free-travel.com/restaurants/${article.slug}/`;
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",

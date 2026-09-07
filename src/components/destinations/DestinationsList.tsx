@@ -110,7 +110,7 @@ export const DestinationsList = () => {
       country: destination.country,
       description: destination.description,
       image: resolveStaticImage(destination.id, destination.name),
-      path: `/destinations/${destination.id}`,
+      path: `/destinations/${destination.id}/`,
       seasonKey: destination.id,
     })),
     ...autoArticles.map((article) => ({
@@ -119,7 +119,7 @@ export const DestinationsList = () => {
       country: article.country,
       description: article.description,
       image: article.image,
-      path: `/destinations/${article.slug}`,
+      path: `/destinations/${article.slug}/`,
       seasonKey: article.name,
     })),
   ].sort((a, b) => getSeasonTier(a.seasonKey) - getSeasonTier(b.seasonKey));

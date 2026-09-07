@@ -23,6 +23,10 @@ const MAIN_PAGES: SitemapLink[] = [
   { title: 'Terms of Use', path: '/terms' },
 ];
 
+// Every non-root path on this site resolves (without a redirect) only with
+// a trailing slash — see buildCanonical in utils/seo.ts for why.
+const withSlash = (path: string) => (path === '/' ? path : `${path}/`);
+
 const SitemapSection = ({ title, links }: { title: string; links: SitemapLink[] }) => (
   <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
     <h2 className="font-display text-xl font-semibold mb-4 text-blue-700">{title}</h2>
@@ -30,7 +34,7 @@ const SitemapSection = ({ title, links }: { title: string; links: SitemapLink[] 
       {links.map((link) => (
         <li key={link.path} className="transition-colors">
           <Link
-            to={link.path}
+            to={withSlash(link.path)}
             className="text-blue-600 hover:text-blue-800 hover:underline flex items-center"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
