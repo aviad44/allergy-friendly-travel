@@ -30,9 +30,17 @@ export function buildCanonical(input: string): string {
 
     paramsToRemove.forEach((p) => url.searchParams.delete(p));
 
-    // Enforce trailing slash policy: only root has trailing slash
-    if (url.pathname !== '/' && url.pathname.endsWith('/')) {
-      url.pathname = url.pathname.replace(/\/$/, '');
+    // Enforce trailing slash policy: every path gets one (root already has
+    // it). This matches what the static host actually serves: the build's
+    // prerender step writes dist/<route>/index.html for every route, and
+    // the host 301-redirects a no-slash request to the trailing-slash form
+    // — verified live across the site (/about, /destinations/toronto, every
+    // destination/restaurant guide). A canonical tag that itself points to
+    // a URL which immediately redirects is a real, confirmed cause of pages
+    // showing up excluded in Search Console. Previously this stripped the
+    // trailing slash instead — the opposite of what the host does.
+    if (!url.pathname.endsWith('/')) {
+      url.pathname = `${url.pathname}/`;
     }
 
     // Return without hash
@@ -42,6 +50,6 @@ export function buildCanonical(input: string): string {
     // Fallback: attempt basic normalization
     if (!input) return '';
     const cleaned = input.split('#')[0].split('?')[0];
-    return cleaned.endsWith('/') && cleaned !== '/' ? cleaned.slice(0, -1) : cleaned;
+    return cleaned.endsWith('/') ? cleaned : `${cleaned}/`;
   }
 }

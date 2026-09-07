@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-09-07
+- Fixed the real cause of guide pages showing up excluded in Search Console: `buildCanonical()` was stripping trailing slashes from every canonical URL, while the host actually 301-redirects every non-root path to *add* one — so every canonical tag site-wide pointed at a URL that immediately redirected. Fixed the shared canonical builder plus every other place that builds these URLs directly (sitemap.xml, JSON-LD, article/related-article links).
+
 ## 2026-08-30 (5)
 - Live hotel/restaurant search now enriches the single top-ranked result of every fresh search with a real Tripadvisor rating + review excerpt, via the same `tripadvisor-reviews` function guide pages use — deliberately scoped to just the top result (not the whole list): measured from `search_cache`, enriching every result would mean ~400 distinct new places/month site-wide, vs. roughly one lookup per unique destination search when scoped to the top result. Raised the shared Tripadvisor budget ceiling from ₪25 to ₪50/month to cover both consumers (guide pages + this).
 - `SearchResults.tsx`/`RestaurantCard.tsx` now render that Tripadvisor rating + review excerpt (visually distinguished from the existing Google-sourced quote) whenever it's present on a result.

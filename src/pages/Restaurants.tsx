@@ -61,7 +61,7 @@ const Restaurants = () => {
           {articles.map((article) => (
             <Link
               key={article.slug}
-              to={`/restaurants/${article.slug}`}
+              to={`/restaurants/${article.slug}/`}
               className="block bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             >
               {article.hero_image_url && (

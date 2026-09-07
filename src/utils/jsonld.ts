@@ -40,7 +40,9 @@ export function breadcrumbJsonLd({ baseUrl, pathname }: BreadcrumbInput) {
       '@type': 'ListItem',
       position: idx + 2,
       name,
-      item: `${baseUrl}${currentPath}`,
+      // Trailing slash: matches the URL every non-root path on this site
+      // actually resolves to (see buildCanonical in utils/seo.ts).
+      item: `${baseUrl}${currentPath}/`,
     });
   });
 
@@ -61,7 +63,7 @@ export function hotelJsonLd({ baseUrl, destId, image }: HotelInput) {
   const name = destId
     .replace(/-/g, ' ')
     .replace(/\b\w/g, (m) => m.toUpperCase());
-  const url = `${baseUrl}/destinations/${destId}`;
+  const url = `${baseUrl}/destinations/${destId}/`;
   return {
     '@context': 'https://schema.org',
     '@type': 'LodgingBusiness',

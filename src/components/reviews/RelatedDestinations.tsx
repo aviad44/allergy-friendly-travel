@@ -79,7 +79,7 @@ export const RelatedDestinations = ({ currentDestination, textAlignment = "text-
           return (
             <Link 
               key={destination.id} 
-              to={`/destinations/${destination.id}`}
+              to={`/destinations/${destination.id}/`}
               className="group block"
             >
               <Card className="overflow-hidden h-full transition-all hover:shadow-md">

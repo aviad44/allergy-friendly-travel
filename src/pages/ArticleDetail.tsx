@@ -158,7 +158,9 @@ const ArticleDetail = () => {
     return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading…</div>;
   }
 
-  const articleUrl = `https://www.allergy-free-travel.com/destinations/${article.slug}`;
+  // Trailing slash: matches the URL this route actually resolves to without
+  // a redirect (see buildCanonical in utils/seo.ts for why).
+  const articleUrl = `https://www.allergy-free-travel.com/destinations/${article.slug}/`;
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -242,7 +244,7 @@ const ArticleDetail = () => {
               <ul className="space-y-2">
                 {relatedArticles.map((a) => (
                   <li key={a.slug}>
-                    <Link to={`/destinations/${a.slug}`} className="text-blue-600 hover:text-blue-800">
+                    <Link to={`/destinations/${a.slug}/`} className="text-blue-600 hover:text-blue-800">
                       {a.title}
                     </Link>
                   </li>

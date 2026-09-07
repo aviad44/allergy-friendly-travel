@@ -54,13 +54,23 @@ function urlEntry(loc, lastmod, changefreq, priority) {
   return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
 }
 
+// Every non-root path on this site 301-redirects to add a trailing slash
+// (the prerender step writes dist/<route>/index.html for every route, and
+// the host redirects the no-slash request) — verified live. Submitting the
+// no-slash form here means Google crawls straight into that redirect on
+// every single URL in the sitemap; this makes the sitemap match what the
+// host actually serves without a hop.
+function withSlash(path) {
+  return path === '/' ? path : `${path}/`;
+}
+
 exports.STATIC_PATHS = STATIC_PATHS;
 exports.BASE_URL = BASE_URL;
 
 exports.handler = async () => {
   const today = new Date().toISOString().split('T')[0];
   const entries = STATIC_PATHS.map((p) =>
-    urlEntry(`${BASE_URL}${p.path}`, today, p.changefreq, p.priority)
+    urlEntry(`${BASE_URL}${withSlash(p.path)}`, today, p.changefreq, p.priority)
   );
 
   try {
@@ -84,7 +94,7 @@ exports.handler = async () => {
       for (const article of articles || []) {
         const lastmod = (article.updated_at || article.published_at || today).split('T')[0];
         const base = article.content_type === 'restaurant' ? 'restaurants' : 'destinations';
-        entries.push(urlEntry(`${BASE_URL}/${base}/${article.slug}`, lastmod, 'weekly', '0.7'));
+        entries.push(urlEntry(`${BASE_URL}/${base}/${article.slug}/`, lastmod, 'weekly', '0.7'));
       }
     }
   } catch (err) {
