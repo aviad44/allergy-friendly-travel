@@ -41,6 +41,7 @@ function expectedCanonical(indexFilePath) {
 }
 
 async function main() {
+  console.log('[verify-seo] Starting…');
   if (!existsSync(DIST)) {
     console.error('[verify-seo] dist/ not found — run `npm run build && npm run prerender` first');
     process.exit(1);
@@ -52,7 +53,11 @@ async function main() {
 
   for (const file of files) {
     const html = await readFile(file, 'utf8');
-    const match = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/);
+    // react-helmet-async renders its own attributes first —
+    // <link data-rh="true" rel="canonical" href="..."> — so rel and href
+    // are matched independently rather than assuming rel comes first.
+    const match = html.match(/<link[^>]*\brel="canonical"[^>]*\bhref="([^"]+)"[^>]*>/)
+      || html.match(/<link[^>]*\bhref="([^"]+)"[^>]*\brel="canonical"[^>]*>/);
     const expected = expectedCanonical(file);
 
     if (!match) {
@@ -81,4 +86,10 @@ async function main() {
   console.log(`[verify-seo] OK — checked ${files.length} pages, all canonical URLs match their real location.`);
 }
 
-main();
+main().catch((err) => {
+  // An unhandled crash here (bad fs entry, unexpected file, etc.) should
+  // never silently kill the build with no explanation — print the real
+  // stack so a future failure is diagnosable from the build log alone.
+  console.error('[verify-seo] Unexpected error:', err);
+  process.exit(1);
+});
