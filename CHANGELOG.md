@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-09-08
+- Added `scripts/verify-seo.mjs`, wired into the Netlify build after prerender: fails the build if any page's canonical URL doesn't match the URL it actually lives at (the exact bug fixed yesterday) — a regression guard so this class of indexing issue gets caught before it ships, not weeks later in Search Console.
+- The guard immediately found a real, previously-missed instance on its first real run: `/allergy-translation-card` builds its own `<Helmet>` directly (bypassing `buildCanonical`) and had the same missing-trailing-slash bug in its canonical, `og:url`, hreflang alternates, and JSON-LD `url`/breadcrumb-item URLs. Fixed all of them.
+
 ## 2026-09-07
 - Fixed the real cause of guide pages showing up excluded in Search Console: `buildCanonical()` was stripping trailing slashes from every canonical URL, while the host actually 301-redirects every non-root path to *add* one — so every canonical tag site-wide pointed at a URL that immediately redirected. Fixed the shared canonical builder plus every other place that builds these URLs directly (sitemap.xml, JSON-LD, article/related-article links).
 
