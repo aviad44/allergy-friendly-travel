@@ -570,6 +570,34 @@ async function fetchRestaurantDishPhoto(restaurantName: string, city: string, ap
   }
 }
 
+// String(err) on a plain object (not a real Error — e.g. a parsed API error
+// body, or anything thrown as {message, code}) yields the useless literal
+// "[object Object]", which is exactly what hid a real content_generation
+// failure in pipeline_log for a full day (2026-09-12). This keeps whatever's
+// actually diagnosable: an Error's message, or a JSON dump of anything else.
+function describeError(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return String(err);
+  }
+}
+
+// Google Places Photos are licensed for showing a specific place's own photo
+// in the context of Places API results (e.g. this article's on-site hero
+// image, credited inline) — not for exporting to an unrelated third party
+// (Pinterest) as standalone marketing content, and Google's terms require
+// the contributor attribution to appear "alongside the photo", which a
+// Pinterest pin's fields never carried. Unsplash/Pixabay's licenses
+// explicitly permit this kind of redistribution, so anything sent off-site
+// always goes through one of those instead, regardless of the article's own
+// hero image.
+function isGooglePlacesPhotoUrl(url?: string | null): boolean {
+  if (!url) return false;
+  return /maps\.googleapis\.com\/maps\/api\/place\/photo/i.test(url);
+}
+
 // Pinterest is the highest-leverage passive distribution channel for a new
 // travel-content domain: its own search surfaces content on relevance signals
 // much faster than Google trusts a young domain. This is a fire-and-forget
@@ -1152,7 +1180,7 @@ serve(async (req) => {
         }).eq('id', discoveryLog.id);
       } catch (err) {
         await supabase.from('pipeline_log').update({
-          status: 'error', error_message: String(err), finished_at: new Date().toISOString(),
+          status: 'error', error_message: describeError(err), finished_at: new Date().toISOString(),
         }).eq('id', discoveryLog.id);
         throw err;
       }
@@ -1278,7 +1306,7 @@ serve(async (req) => {
         }
       } catch (err) {
         await supabase.from('pipeline_log').update({
-          status: 'error', error_message: String(err), finished_at: new Date().toISOString(),
+          status: 'error', error_message: describeError(err), finished_at: new Date().toISOString(),
         }).eq('id', contentLog.id);
       }
       }
@@ -1381,13 +1409,24 @@ serve(async (req) => {
             if (insertErr) throw insertErr;
             articleResult = { slug: article.slug, title: article.title };
 
+            // Pinterest needs an off-site-safe image (see isGooglePlacesPhotoUrl
+            // above) — when the on-site hero photo came from Google, fetch a
+            // separate Unsplash/Pixabay destination photo just for the pin
+            // instead of reusing it. The article's own hero_image_url/credit
+            // (already saved above) is left untouched either way.
+            let pinterestImageUrl = heroImageUrl;
+            if (isGooglePlacesPhotoUrl(heroImageUrl)) {
+              const fallbackPhoto = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
+              pinterestImageUrl = fallbackPhoto?.url ?? null;
+            }
+
             if (pinterestClientId && pinterestClientSecret && pinterestBoardId) {
               await publishToPinterest(supabase, pinterestClientId, pinterestClientSecret, pinterestBoardId, {
                 title: article.title,
                 description: article.meta_description,
                 slug: article.slug,
                 basePath: 'restaurants',
-                imageUrl: heroImageUrl,
+                imageUrl: pinterestImageUrl,
               });
             }
 
@@ -1401,7 +1440,7 @@ serve(async (req) => {
           }
         } catch (err) {
           await supabase.from('pipeline_log').update({
-            status: 'error', error_message: String(err), finished_at: new Date().toISOString(),
+            status: 'error', error_message: describeError(err), finished_at: new Date().toISOString(),
           }).eq('id', contentLog.id);
         }
       }
@@ -1418,7 +1457,7 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Pipeline error:', error);
-    return new Response(JSON.stringify({ error: 'Pipeline run failed', message: String(error) }),
+    return new Response(JSON.stringify({ error: 'Pipeline run failed', message: describeError(error) }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 });
