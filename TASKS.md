@@ -83,6 +83,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: `<MetaManager dynamicData={{ robots: "noindex, follow" }} />` in SearchResults.tsx.
   - DoD: /search-results responses carry a noindex robots meta tag.
 
+- [x] Real Google Search Console data instead of user-pasted screenshots
+  - RATIONALE: Every prior SEO investigation on this project (the canonical-slash bug included) depended on the user manually checking Search Console and pasting a screenshot — a real, documented gap (see CLAUDE.md's "Known gaps"). Automating this closes the loop and surfaces concrete opportunities (low-CTR pages, near-page-1 rankings, unindexed pages) without waiting on that.
+  - HOW-TO: New `gsc-report` Edge Function (weekly `gsc-report.yml`), authenticating via a Google service-account JWT (`npm:google-auth-library`), scoped `webmasters.readonly`. Pulls Search Analytics (page-level, trailing 7-day window ending 3 days ago to respect GSC's own processing delay) into a new `seo_search_console_snapshots` table, plus a read-only URL Inspection spot-check of the homepage + 3 newest articles. Report-only: never edits `seo_articles`, never calls the Indexing API (restricted by Google's terms to JobPosting/BroadcastEvent content — using it for regular guide pages would repeat the exact terms-of-service mistake just fixed for Google Places Photos elsewhere in this pass).
+  - DoD: Function deployed; requires the user to create a Google Cloud service account, grant it read access on the Search Console property, and add its key as the `GOOGLE_SEARCH_CONSOLE_CREDENTIALS` Supabase secret before it can run successfully (no tool available here can do that part). Once configured, `pipeline_log` will show `run_type = 'gsc_report'` rows.
+
 ---
 
 ## Performance
