@@ -4,7 +4,13 @@
   # headless browser and writes the fully-rendered HTML into dist/<route>/,
   # so Netlify serves real content to everyone (bots included) as a plain
   # static file — no third-party rendering service in the request path.
-  command = "npm run build && npm run prerender"
+  # verify-seo then checks every prerendered page's canonical tag against
+  # the URL that page actually lives at (host serving convention: trailing
+  # slash, see src/utils/seo.ts) and FAILS THE BUILD on any mismatch —
+  # added after a canonical/trailing-slash bug shipped silently for months
+  # and only surfaced as pages disappearing from Search Console. This is
+  # the guardrail that would have caught it on day one instead.
+  command = "npm run build && npm run prerender && npm run verify-seo"
   publish = "dist"
 
 # Redirect code files and internal folders to 404

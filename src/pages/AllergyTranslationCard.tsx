@@ -30,7 +30,7 @@ const AllergyTranslationCard = () => {
         <title>{`Free Allergy Translation Card Generator | ${SUPPORTED_LANGUAGE_COUNT} Languages | Food Allergy Travel Cards`}</title>
         <meta name="description" content={`Create free allergy translation cards instantly. Download printable food allergy cards in ${SUPPORTED_LANGUAGE_COUNT} languages for safe restaurant dining while traveling. No registration required.`} />
         <meta name="keywords" content="allergy translation card, food allergy card, allergy travel card, dining card, restaurant allergy card, travel with allergies, food allergy translation, allergy communication card, gluten free card, dairy free card" />
-        <link rel="canonical" href="https://www.allergy-free-travel.com/allergy-translation-card" />
+        <link rel="canonical" href="https://www.allergy-free-travel.com/allergy-translation-card/" />
         <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
         <meta name="author" content="Allergy-Free Travel" />
         <meta name="geo.region" content="US" />
@@ -40,7 +40,7 @@ const AllergyTranslationCard = () => {
         <meta property="og:type" content="website" />
         <meta property="og:title" content={`Free Allergy Translation Card Generator | ${SUPPORTED_LANGUAGE_COUNT} Languages`} />
         <meta property="og:description" content={`Create free printable allergy translation cards in ${SUPPORTED_LANGUAGE_COUNT} languages. Essential tool for travelers with food allergies. Download instantly.`} />
-        <meta property="og:url" content="https://www.allergy-free-travel.com/allergy-translation-card" />
+        <meta property="og:url" content="https://www.allergy-free-travel.com/allergy-translation-card/" />
         <meta property="og:image" content="https://www.allergy-free-travel.com/assets/og/allergy-translation-card.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -59,8 +59,8 @@ const AllergyTranslationCard = () => {
             a 404. Broken hreflang doesn't just fail silently, Search Console
             flags it as an error and it undermines confidence in the rest of
             the page's signals. */}
-        <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card" hrefLang="x-default" />
-        <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card" hrefLang="en" />
+        <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card/" hrefLang="x-default" />
+        <link rel="alternate" href="https://www.allergy-free-travel.com/allergy-translation-card/" hrefLang="en" />
 
         {/* JSON-LD: WebApplication */}
         <script type="application/ld+json">
@@ -69,7 +69,7 @@ const AllergyTranslationCard = () => {
             "@type": "WebApplication",
             "name": "Free Allergy Translation Card Generator",
             "alternateName": ["Food Allergy Card Generator", "Allergy Dining Card", "Travel Allergy Card"],
-            "url": "https://www.allergy-free-travel.com/allergy-translation-card",
+            "url": "https://www.allergy-free-travel.com/allergy-translation-card/",
             "description": `Free online tool to create printable allergy translation cards in ${SUPPORTED_LANGUAGE_COUNT} languages for safe restaurant dining while traveling`,
             "applicationCategory": "HealthApplication",
             "applicationSubCategory": "Food Allergy Management",
@@ -107,7 +107,7 @@ const AllergyTranslationCard = () => {
             "@type": "BreadcrumbList",
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.allergy-free-travel.com/" },
-              { "@type": "ListItem", "position": 2, "name": "Allergy Translation Card Generator", "item": "https://www.allergy-free-travel.com/allergy-translation-card" }
+              { "@type": "ListItem", "position": 2, "name": "Allergy Translation Card Generator", "item": "https://www.allergy-free-travel.com/allergy-translation-card/" }
             ]
           })}
         </script>
