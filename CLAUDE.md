@@ -94,6 +94,17 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   the user pastes — don't assume the credential is configured.
 - **No Pinterest dashboard access** — can't check Standard-access approval
   status programmatically; ask the user.
+- **LinkedIn posting has never actually run** — `linkedin-poster` (weekly,
+  Mondays) requires `LINKEDIN_ORGANIZATION_ID` and `LINKEDIN_ACCESS_TOKEN`
+  Supabase secrets that were never configured; every one of its 6 scheduled
+  runs since 2026-08-10 has failed immediately with `HTTP 500:
+  "LINKEDIN_ORGANIZATION_ID / LINKEDIN_ACCESS_TOKEN not configured"` (check
+  the workflow's run history, or `pipeline_log` for a `run_type =
+  'linkedin_post'` row — there are none yet). Needs the user to create a
+  LinkedIn Developer app tied to the company Page, get Marketing Developer
+  Platform access approved (not instant — a LinkedIn-side review), complete
+  an OAuth flow for an org-level access token with the `w_organization_social`
+  scope, and add both secrets. Not something any tool here can do.
 - This sandbox's `npm run build` fails on a pre-existing, sandbox-only
   issue (missing `@lovable.dev/mcp-js`) unrelated to any real code change —
   confirmed via `git stash` repeatedly. Real validation happens on
