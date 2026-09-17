@@ -14,7 +14,7 @@ const FEATURED_DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
     description: "Discover allergy-friendly luxury in the City of Light",
     commonAllergies: ["Gluten", "Dairy", "Nuts"],
-    href: "/destinations/paris",
+    href: "/destinations/paris/",
     destId: "paris"
   },
   {
@@ -24,7 +24,7 @@ const FEATURED_DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80",
     description: "Experience safe dining in Britain's capital",
     commonAllergies: ["Dairy", "Seafood"],
-    href: "/destinations/london",
+    href: "/destinations/london/",
     destId: "london"
   },
   {
@@ -34,7 +34,7 @@ const FEATURED_DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80",
     description: "Explore allergy-friendly dining in the Big Apple",
     commonAllergies: ["Gluten", "Nuts"],
-    href: "/destinations/new-york",
+    href: "/destinations/new-york/",
     destId: "new-york"
   },
   {
@@ -44,7 +44,7 @@ const FEATURED_DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80",
     description: "Family and couple-friendly allergy-aware destinations",
     commonAllergies: ["Gluten", "Dairy"],
-    href: "/destinations/portugal",
+    href: "/destinations/portugal/",
     destId: "portugal"
   },
   {
@@ -54,7 +54,7 @@ const FEATURED_DESTINATIONS = [
     image: "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png", // Updated Cyprus image with beachfront resort
     description: "Mediterranean cuisine adapted for your needs",
     commonAllergies: ["Gluten", "Nuts"],
-    href: "/destinations/cyprus",
+    href: "/destinations/cyprus/",
     destId: "cyprus"
   },
   {
@@ -64,7 +64,7 @@ const FEATURED_DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
     description: "Allergy-friendly tapas and Mediterranean delights",
     commonAllergies: ["Gluten", "Shellfish"],
-    href: "/destinations/barcelona",
+    href: "/destinations/barcelona/",
     destId: "barcelona"
   },
   {
@@ -74,7 +74,7 @@ const FEATURED_DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80",
     description: "Traditional Greek cuisine with allergy awareness",
     commonAllergies: ["Dairy", "Nuts"],
-    href: "/destinations/crete",
+    href: "/destinations/crete/",
     destId: "crete"
   },
   {
@@ -84,7 +84,7 @@ const FEATURED_DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=800&q=80",
     description: "Luxurious stays with world-class allergy care",
     commonAllergies: ["Gluten", "Dairy"],
-    href: "/destinations/abu-dhabi",
+    href: "/destinations/abu-dhabi/",
     destId: "abu-dhabi"
   },
   {
@@ -94,7 +94,7 @@ const FEATURED_DESTINATIONS = [
     image: "https://www.allergy-free-travel.com/lovable-uploads/italy-restaurant-hero.jpg",
     description: "Top destination for celiacs & gluten-sensitive travelers",
     commonAllergies: ["Gluten", "Dairy"],
-    href: "/destinations/italy",
+    href: "/destinations/italy/",
     destId: "italy"
   }
 ];
@@ -222,7 +222,7 @@ export const FeaturedDestinations = () => {
         })}
       </div>
       <div className="flex justify-center">
-        <Link to="/destinations">
+        <Link to="/destinations/">
           <Button variant="secondary" size="lg" className="gap-2 group hover:bg-blue-600 hover:text-white transition-colors duration-300 shadow-md border border-gray-200">
             More Destinations
             <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform duration-300" />

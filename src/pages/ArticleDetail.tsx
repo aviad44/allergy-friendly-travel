@@ -193,7 +193,7 @@ const ArticleDetail = () => {
       />
 
       <div className="container mx-auto px-4 py-12 max-w-3xl">
-        <Link to="/destinations" className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-6 inline-block">
+        <Link to="/destinations/" className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-6 inline-block">
           &larr; All destinations
         </Link>
 
@@ -255,7 +255,7 @@ const ArticleDetail = () => {
 
           <p className="text-sm text-gray-600">
             Looking for a specific destination?{" "}
-            <Link to="/destinations" className="text-blue-600 hover:text-blue-800 font-medium">
+            <Link to="/destinations/" className="text-blue-600 hover:text-blue-800 font-medium">
               Browse all destination guides →
             </Link>
           </p>

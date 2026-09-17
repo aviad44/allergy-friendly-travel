@@ -25,7 +25,7 @@ export function ArticleByline({ publishedAt, updatedAt }: ArticleBylineProps) {
   return (
     <p className="text-sm text-muted-foreground mb-6 -mt-2">
       Written by{' '}
-      <Link to="/about" className="font-medium text-blue-700 hover:text-blue-800 underline">
+      <Link to="/about/" className="font-medium text-blue-700 hover:text-blue-800 underline">
         {SITE_AUTHOR.name}
       </Link>
       , {SITE_AUTHOR.jobTitle.toLowerCase()} of Allergy-Free Travel

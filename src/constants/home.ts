@@ -4,11 +4,11 @@ export const HOME_CONTENT = {
     menu: {
       label: "Open main menu",
       items: [
-        { title: "Destinations", href: "/destinations", icon: "MapPin" },
-        { title: "Traveler Reviews", href: "/reviews", icon: "Star" },
-        { title: "Contact Us", href: "/contact", icon: "Shield" },
-        { title: "About Us", href: "/about", icon: "Info" },
-        { title: "FAQ", href: "/faq", icon: "HelpCircle" }
+        { title: "Destinations", href: "/destinations/", icon: "MapPin" },
+        { title: "Traveler Reviews", href: "/reviews/", icon: "Star" },
+        { title: "Contact Us", href: "/contact/", icon: "Shield" },
+        { title: "About Us", href: "/about/", icon: "Info" },
+        { title: "FAQ", href: "/faq/", icon: "HelpCircle" }
       ]
     }
   },

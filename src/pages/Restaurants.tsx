@@ -84,7 +84,7 @@ const Restaurants = () => {
 
         <p className="mt-10 text-sm text-gray-600">
           Looking for a place to stay?{" "}
-          <Link to="/destinations" className="text-blue-600 hover:text-blue-800 font-medium">
+          <Link to="/destinations/" className="text-blue-600 hover:text-blue-800 font-medium">
             Browse all destination guides →
           </Link>
         </p>
