@@ -52,27 +52,59 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   `restaurants-search` (Google Places, budget-gated), `tripadvisor-reviews`
   (Tripadvisor Terra API, cached permanently per place, budget-gated),
   `content-pipeline` (daily article generation + FB/IG/Pinterest posting on
-  publish), `social-poster` (FB/IG daily — newest article only, no
-  backlog), `pinterest-poster` (daily backlog sweep — Pinterest is
-  deliberately different from FB/IG here). **Currently blocked**: Pinterest
-  real pin creation needs Standard API access (Trial tier blocks
+  publish), `social-poster` (FB/IG daily — oldest still-incomplete article
+  within a 30-day recency window, picked *independently per platform* so
+  one platform's backlog can't starve the other's, see 2026-09-13 and
+  2026-09-17 in CHANGELOG.md), `pinterest-poster` (daily backlog sweep —
+  Pinterest is deliberately different from FB/IG here), `gsc-report`
+  (weekly, Search Console reporting — see below). **Currently blocked**:
+  Pinterest real pin creation needs Standard API access (Trial tier blocks
   production pins) — pending the user submitting Pinterest's app-review
   form with a demo video.
+- **Social posts never redistribute Google Places Photos.** They're
+  licensed for on-site display in the context of Places API results (with
+  the contributor attribution shown on-page), not for export to
+  Facebook/Instagram/Pinterest as standalone marketing content —
+  `isGooglePlacesPhotoUrl()` in `social-poster`/`pinterest-poster`/
+  `content-pipeline` always substitutes a fresh Unsplash/Pixabay photo for
+  anything sent off-site instead, without touching the article's own
+  on-site hero image. Same reasoning extends to the Indexing API note
+  below — don't build around a use that isn't what a Google API's terms
+  actually permit.
 - **Secrets**: Supabase Edge Function secrets (dashboard → Edge Functions →
   Secrets) — `GOOGLE_MAPS_API_KEY`, `TRIPADVISOR_API_KEY`,
-  `PINTEREST_CLIENT_ID`/`SECRET`/`BOARD_ID`, `CRON_SHARED_SECRET`. No MCP
-  tool can set these directly — ask the user to add them via the dashboard.
+  `PINTEREST_CLIENT_ID`/`SECRET`/`BOARD_ID`, `CRON_SHARED_SECRET`,
+  `GOOGLE_SEARCH_CONSOLE_CREDENTIALS` (service-account JSON key — see
+  `gsc-report` below). No MCP tool can set these directly — ask the user to
+  add them via the dashboard.
 - **Governance docs**: `TASKS.md` (checkbox tasks, each with
   RATIONALE/HOW-TO/DoD), `CHANGELOG.md` (dated entries) — update both
   alongside any real change, per `.github/pull_request_template.md`.
 
 ## Known gaps / things Claude cannot check on its own
 
-- **No Google Search Console API access** — GSC data only arrives via
-  screenshots the user pastes. Don't claim to have checked GSC unless the
-  user just shared it.
+- **Google Search Console API access exists as of 2026-09-14** (the
+  `gsc-report` function above) but only works once the user has: (1)
+  created a Google Cloud service account, (2) added its `client_email` as
+  a read-only user on the Search Console property, and (3) put the
+  service-account JSON key in the `GOOGLE_SEARCH_CONSOLE_CREDENTIALS`
+  Supabase secret. Until confirmed working end-to-end (check
+  `pipeline_log` for a `run_type = 'gsc_report'` row with
+  `status = 'success'`), treat GSC as still only reachable via screenshots
+  the user pastes — don't assume the credential is configured.
 - **No Pinterest dashboard access** — can't check Standard-access approval
   status programmatically; ask the user.
+- **LinkedIn posting has never actually run** — `linkedin-poster` (weekly,
+  Mondays) requires `LINKEDIN_ORGANIZATION_ID` and `LINKEDIN_ACCESS_TOKEN`
+  Supabase secrets that were never configured; every one of its 6 scheduled
+  runs since 2026-08-10 has failed immediately with `HTTP 500:
+  "LINKEDIN_ORGANIZATION_ID / LINKEDIN_ACCESS_TOKEN not configured"` (check
+  the workflow's run history, or `pipeline_log` for a `run_type =
+  'linkedin_post'` row — there are none yet). Needs the user to create a
+  LinkedIn Developer app tied to the company Page, get Marketing Developer
+  Platform access approved (not instant — a LinkedIn-side review), complete
+  an OAuth flow for an org-level access token with the `w_organization_social`
+  scope, and add both secrets. Not something any tool here can do.
 - This sandbox's `npm run build` fails on a pre-existing, sandbox-only
   issue (missing `@lovable.dev/mcp-js`) unrelated to any real code change —
   confirmed via `git stash` repeatedly. Real validation happens on
@@ -86,9 +118,17 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
 
 ## Recurring automation
 
-A weekly Routine (self-bound to the session that set it up, not a fresh
-session per firing) checks Supabase security/performance advisors, this
-month's Google/Tripadvisor budget usage, a live spot-check of a few
-canonical URLs, and recent `pipeline_log` failures — report-only, no
-autonomous deploys or spend changes. See `list_triggers` for its current
-schedule.
+Two report-only Routines exist (each self-bound to the session that set it
+up, not a fresh session per firing — see `list_triggers` for current
+schedules and which session each fires into):
+- **Weekly site health check** — Supabase security/performance advisors,
+  this month's Google/Tripadvisor budget usage, a live spot-check of a few
+  canonical URLs, recent `pipeline_log` failures.
+- **Daily Facebook/Instagram post check** — added 2026-09-13 after a
+  3-day silent posting gap turned out to be `social-poster`'s old
+  always-newest selection permanently orphaning older unposted articles
+  (see CHANGELOG.md). Reports which article (if any) posted that day and
+  tracks the backlog it's working through.
+
+Neither does autonomous deploys, spend changes, or unrequested code
+changes.

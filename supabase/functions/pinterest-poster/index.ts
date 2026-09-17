@@ -24,6 +24,23 @@ const corsHeaders = {
 // issue.
 const BATCH_SIZE = 3;
 
+// Google Places Photos (restaurant guides' hero image, when Unsplash/Pixabay
+// didn't have to be used) are licensed for showing a specific place's own
+// photo in the context of Places API results — not for exporting to an
+// unrelated third party (Pinterest) as standalone marketing content, and
+// Google's terms require the contributor attribution to appear "alongside
+// the photo", which a pin's title/description never carried. Unsplash/
+// Pixabay's licenses explicitly permit this kind of redistribution, so this
+// sweep simply skips an article whose only image is Google-sourced (see the
+// query filter below) rather than pinning something we can't legally
+// redistribute. Unlike social-poster, this doesn't fetch a substitute photo
+// for the pin — a reasonable future improvement, not done here to keep this
+// fix scoped to "never pin a non-social-safe image".
+function isGooglePlacesPhotoUrl(url?: string | null): boolean {
+  if (!url) return false;
+  return /maps\.googleapis\.com\/maps\/api\/place\/photo/i.test(url);
+}
+
 async function refreshAccessToken(supabase: any, clientId: string, clientSecret: string): Promise<string | null> {
   const { data: authRow, error: authErr } = await supabase
     .from('pinterest_auth')
@@ -121,14 +138,16 @@ serve(async (req) => {
     .eq('status', 'published')
     .is('posted_to_pinterest_at', null)
     .not('hero_image_url', 'is', null) // Pinterest requires an image
+    .not('hero_image_url', 'ilike', '%maps.googleapis.com/maps/api/place/photo%') // never a non-social-safe image (see isGooglePlacesPhotoUrl)
     .order('published_at', { ascending: true }) // oldest first — working through the backlog
     .limit(BATCH_SIZE);
 
   if (fetchErr) {
+    const message = fetchErr.message || JSON.stringify(fetchErr);
     await supabase.from('pipeline_log').insert({
-      run_type: 'pinterest_post', status: 'error', error_message: String(fetchErr), finished_at: new Date().toISOString(),
+      run_type: 'pinterest_post', status: 'error', error_message: message, finished_at: new Date().toISOString(),
     });
-    return new Response(JSON.stringify({ error: 'pinterest-poster failed', message: String(fetchErr) }),
+    return new Response(JSON.stringify({ error: 'pinterest-poster failed', message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 
@@ -153,6 +172,15 @@ serve(async (req) => {
   const results: Array<{ slug: string; ok: boolean; detail?: string }> = [];
 
   for (const article of articles) {
+    // Defense in depth: the query above already excludes these, but skip
+    // again here in case that filter is ever loosened or bypassed — this
+    // sweep must never pin a non-social-safe image (see the note above).
+    if (isGooglePlacesPhotoUrl(article.hero_image_url)) {
+      console.log(`Pinterest: skipping "${article.slug}" — hero image is a Google Places Photo, not social-safe`);
+      results.push({ slug: article.slug, ok: false, detail: 'Skipped: Google Places Photo is not licensed for Pinterest redistribution' });
+      continue;
+    }
+
     const basePath = article.content_type === 'restaurant' ? 'restaurants' : 'destinations';
     const link = `https://www.allergy-free-travel.com/${basePath}/${article.slug}`;
 

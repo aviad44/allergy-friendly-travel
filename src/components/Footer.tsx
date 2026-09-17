@@ -37,8 +37,8 @@ export const Footer = () => {
                 </li>
               ))}
               <li>
-                <Link 
-                  to="/allergy-translation-card" 
+                <Link
+                  to="/allergy-translation-card/"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   Allergy Translation Card
@@ -46,50 +46,50 @@ export const Footer = () => {
               </li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="text-base font-semibold mb-4">Popular Destinations</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/destinations/paris" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/destinations/paris/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Paris, France
                 </Link>
               </li>
               <li>
-                <Link to="/destinations/london" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/destinations/london/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   London, UK
                 </Link>
               </li>
               <li>
-                <Link to="/destinations/abu-dhabi" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/destinations/abu-dhabi/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Abu Dhabi, UAE
                 </Link>
               </li>
               <li>
-                <Link to="/destinations/cyprus" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/destinations/cyprus/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Cyprus
                 </Link>
               </li>
               <li>
-                <Link to="/destinations/thailand" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/destinations/thailand/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Thailand
                 </Link>
               </li>
             </ul>
           </div>
         </div>
-        
+
         <Separator className="my-6" />
-        
+
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex gap-4 items-center">
-            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+            <Link to="/privacy/" className="text-xs text-muted-foreground hover:text-primary transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+            <Link to="/terms/" className="text-xs text-muted-foreground hover:text-primary transition-colors">
               Terms of Use
             </Link>
-            <Link to="/sitemap" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+            <Link to="/sitemap/" className="text-xs text-muted-foreground hover:text-primary transition-colors">
               Sitemap
             </Link>
             <a 

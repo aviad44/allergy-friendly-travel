@@ -181,7 +181,7 @@ const RestaurantDetail = () => {
       />
 
       <div className="container mx-auto px-4 py-12 max-w-3xl">
-        <Link to="/restaurants" className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-6 inline-block">
+        <Link to="/restaurants/" className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-6 inline-block">
           &larr; All restaurant guides
         </Link>
 
@@ -241,7 +241,7 @@ const RestaurantDetail = () => {
 
           <p className="text-sm text-gray-600">
             Looking for a place to stay?{" "}
-            <Link to="/destinations" className="text-blue-600 hover:text-blue-800 font-medium">
+            <Link to="/destinations/" className="text-blue-600 hover:text-blue-800 font-medium">
               Browse all destination guides →
             </Link>
           </p>

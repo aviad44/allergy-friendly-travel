@@ -41,7 +41,7 @@ export function ServicesSection() {
         
         <div className="flex justify-center mt-8">
           <Button variant="outline" asChild>
-            <a href="/reviews">
+            <a href="/reviews/">
               See Traveler Reviews <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </Button>

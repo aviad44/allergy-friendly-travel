@@ -175,6 +175,20 @@ function buildCaption(title: string, metaDescription: string, articleUrl: string
   return `${title}\n\n${metaDescription}\n\nFull guide (link in profile / below): ${articleUrl}\n\n#AllergyFriendlyTravel #FoodAllergy #GlutenFreeTravel #CeliacTravel #TravelSafe`;
 }
 
+// Google Places Photos are licensed for showing a specific place's own photo
+// in the context of Places API results (e.g. a restaurant guide's own hero
+// image, credited inline on the page) — not for exporting to an unrelated
+// third party (Facebook/Instagram) as standalone marketing content, and
+// Google's terms require the contributor attribution to appear "alongside
+// the photo", which this poster's captions never carried for these.
+// Unsplash/Pixabay's licenses explicitly permit this kind of redistribution,
+// so social posts always use one of those instead, regardless of what the
+// article's own hero image is (see the imageUrl resolution below).
+function isGooglePlacesPhotoUrl(url?: string | null): boolean {
+  if (!url) return false;
+  return /maps\.googleapis\.com\/maps\/api\/place\/photo/i.test(url);
+}
+
 interface PlaceMatch {
   id: string;
   name: string;
@@ -281,31 +295,65 @@ serve(async (req) => {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // One post per day, newest article first — by design. This intentionally
+  // From recently-published articles only — by design. This intentionally
   // does not try to work through the backlog of older unposted articles
   // (there's a real one: most of the ~35 published articles predate this
   // automation and were never posted, and that's fine, it's a young
-  // automation). Ordering by published_at descending means each daily run
-  // picks whatever was most recently published, so social stays roughly in
-  // sync with the freshest content instead of slowly crawling forward
-  // through months of old backlog.
-  const BATCH_SIZE = 1;
+  // automation).
+  //
+  // Within that recent window, pick the OLDEST still-incomplete article for
+  // *each platform independently* (not one shared "oldest incomplete on
+  // either platform" pick) — this used to be a single query, which meant a
+  // long backlog of articles missing only Instagram (many older guides that
+  // had already posted fine to Facebook, from before Instagram catch-up
+  // existed) crowded out newer articles missing Facebook specifically for a
+  // week or more: at one shared pick per day, every day's "oldest
+  // incomplete" happened to only need Instagram, so Facebook's own backlog
+  // never got touched (confirmed live 2026-09-17: Facebook's last real post
+  // was 2026-09-13 while Instagram kept posting daily in the meantime).
+  // Querying per platform guarantees every run makes progress on *both*
+  // backlogs, not whichever one happens to be older. (The two picks are
+  // usually different articles, but can be the same one if it's missing
+  // both — deduped below.) Oldest-first within the recency window still
+  // keeps retrying a stuck recent article every day until it either
+  // succeeds or ages out of the window, same as before.
+  const RECENCY_WINDOW_DAYS = 30;
+  const recencyCutoff = new Date(Date.now() - RECENCY_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const ARTICLE_COLUMNS = 'id, title, meta_description, slug, content_type, hotel_ids, restaurant_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at, published_at';
 
-  const { data: articles, error: fetchErr } = await supabase
+  const { data: fbCandidates, error: fbFetchErr } = await supabase
     .from('seo_articles')
-    .select('id, title, meta_description, slug, content_type, hotel_ids, restaurant_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at')
+    .select(ARTICLE_COLUMNS)
     .eq('status', 'published')
-    .or('posted_to_facebook_at.is.null,posted_to_instagram_at.is.null')
-    .order('published_at', { ascending: false })
-    .limit(BATCH_SIZE);
+    .is('posted_to_facebook_at', null)
+    .gte('published_at', recencyCutoff)
+    .order('published_at', { ascending: true })
+    .limit(1);
 
+  const { data: igCandidates, error: igFetchErr } = await supabase
+    .from('seo_articles')
+    .select(ARTICLE_COLUMNS)
+    .eq('status', 'published')
+    .is('posted_to_instagram_at', null)
+    .gte('published_at', recencyCutoff)
+    .order('published_at', { ascending: true })
+    .limit(1);
+
+  const fetchErr = fbFetchErr || igFetchErr;
   if (fetchErr) {
+    const message = fetchErr.message || JSON.stringify(fetchErr);
     await supabase.from('pipeline_log').insert({
-      run_type: 'social_post', status: 'error', error_message: String(fetchErr), finished_at: new Date().toISOString(),
+      run_type: 'social_post', status: 'error', error_message: message, finished_at: new Date().toISOString(),
     });
-    return new Response(JSON.stringify({ error: 'social-poster failed', message: String(fetchErr) }),
+    return new Response(JSON.stringify({ error: 'social-poster failed', message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
+
+  const articlesById = new Map<string, NonNullable<typeof fbCandidates>[number]>();
+  for (const a of [...(fbCandidates || []), ...(igCandidates || [])]) {
+    articlesById.set(a.id, a);
+  }
+  const articles = Array.from(articlesById.values());
 
   if (!articles || articles.length === 0) {
     await supabase.from('pipeline_log').insert({
@@ -358,10 +406,16 @@ serve(async (req) => {
       }
     }
 
-    // Resolve a real image: reuse one already fetched for this article, else search Unsplash
-    // by the destination city (falls back to the article title if none is linked).
-    let imageUrl = article.hero_image_url as string | null;
-    let imageCredit = article.hero_image_credit as string | null;
+    // Resolve a real image: reuse the article's own hero image if it's
+    // already social-safe (Unsplash/Pixabay), else search Unsplash by the
+    // destination city (falls back to the article title if none is linked).
+    // A Google Places Photo hero image (restaurant guides only) is never
+    // reused here — see isGooglePlacesPhotoUrl above — so this always
+    // re-fetches a fresh Unsplash/Pixabay photo for the post in that case,
+    // without touching the article's own on-site hero_image_url/credit.
+    const heroIsSocialSafe = !isGooglePlacesPhotoUrl(article.hero_image_url as string | null);
+    let imageUrl = heroIsSocialSafe ? (article.hero_image_url as string | null) : null;
+    let imageCredit = heroIsSocialSafe ? (article.hero_image_credit as string | null) : null;
 
     if (!imageUrl) {
       const photo = city
@@ -370,9 +424,14 @@ serve(async (req) => {
       if (photo) {
         imageUrl = photo.url;
         imageCredit = photo.credit;
-        await supabase.from('seo_articles').update({
-          hero_image_url: imageUrl, hero_image_credit: imageCredit,
-        }).eq('id', article.id);
+        // Only persist this back onto the article when it had no hero image
+        // at all yet — never overwrite a legitimate Google Places hero image
+        // used on-site with this social-only Unsplash/Pixabay substitute.
+        if (!article.hero_image_url) {
+          await supabase.from('seo_articles').update({
+            hero_image_url: imageUrl, hero_image_credit: imageCredit,
+          }).eq('id', article.id);
+        }
       }
     }
 
@@ -434,10 +493,20 @@ serve(async (req) => {
       errors.push('Instagram: INSTAGRAM_BUSINESS_ACCOUNT_ID not configured');
     }
 
+    // Flag an article that's been sitting unposted on some platform for 2+
+    // days — with oldest-first selection above it'll keep being retried
+    // daily either way, but a run's own success/error status doesn't by
+    // itself show *how long* this specific article has been stuck (exactly
+    // what let the Seoul Facebook failure go unnoticed for two days). The
+    // ⚠️ prefix makes it grep-able in the job summary without new schema.
+    const ageMs = Date.now() - new Date(article.published_at as string).getTime();
+    const stuckForDays = Math.floor(ageMs / (24 * 60 * 60 * 1000));
+    const stuckPrefix = errors.length > 0 && stuckForDays >= 2 ? `⚠️ STUCK ${stuckForDays}d — ` : '';
+
     const anySuccess = Object.keys(results).length > 0;
     await supabase.from('pipeline_log').update({
       status: anySuccess ? 'success' : 'error',
-      error_message: errors.length > 0 ? errors.join(' | ') : null,
+      error_message: errors.length > 0 ? `${stuckPrefix}${errors.join(' | ')}` : null,
       finished_at: new Date().toISOString(),
     }).eq('id', logRow.id);
 
@@ -446,14 +515,16 @@ serve(async (req) => {
       imageCredit,
       results,
       errors,
+      stuckForDays: errors.length > 0 ? stuckForDays : undefined,
     });
 
     } catch (error) {
+      const message = error instanceof Error ? error.message : JSON.stringify(error);
       await supabase.from('pipeline_log').update({
-        status: 'error', error_message: String(error), finished_at: new Date().toISOString(),
+        status: 'error', error_message: message, finished_at: new Date().toISOString(),
       }).eq('id', logRow.id);
       console.error('social-poster error for', article.slug, ':', error);
-      summaries.push({ article: { slug: article.slug, title: article.title }, error: String(error) });
+      summaries.push({ article: { slug: article.slug, title: article.title }, error: message });
       // Keep going — one article failing shouldn't stop the rest of the batch.
     }
   }

@@ -51,8 +51,10 @@ jobs:
 
       - name: Write job summary
         if: always()
+        env:
+          BODY: ${{ steps.call.outputs.body }}
         run: |
           echo "## LinkedIn Poster Run" >> "$GITHUB_STEP_SUMMARY"
           echo '```json' >> "$GITHUB_STEP_SUMMARY"
-          echo '${{ steps.call.outputs.body }}' >> "$GITHUB_STEP_SUMMARY"
+          echo "$BODY" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"

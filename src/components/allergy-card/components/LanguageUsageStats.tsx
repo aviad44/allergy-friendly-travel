@@ -90,7 +90,7 @@ export const LanguageUsageStats: React.FC = () => {
         <CardContent className="space-y-4">
           <p className="text-muted-foreground">
             Translation statistics will appear here once users start translating allergy cards. 
-            Go to the <a href="/allergy-translation-card" className="text-primary hover:underline">Allergy Translation Card page</a> and try translating some allergies to different languages.
+            Go to the <a href="/allergy-translation-card/" className="text-primary hover:underline">Allergy Translation Card page</a> and try translating some allergies to different languages.
           </p>
           <Button onClick={addSampleData} variant="outline">
             Add Sample Data (For Testing)

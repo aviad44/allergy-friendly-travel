@@ -213,7 +213,7 @@ export default function HotelChains() {
               <p className="mb-4">Whether you're traveling for business or pleasure, these hotel chains provide safe, allergy-aware options worldwide. Always call ahead to confirm allergen handling procedures and alert staff upon arrival.</p>
               <p className="mb-2"><strong>Want personalized allergy-friendly hotel suggestions?</strong></p>
               <div className="bg-white p-4 rounded-lg shadow-sm">
-                <Link to="/direct-chat" className="flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 font-medium">
+                <Link to="/direct-chat/" className="flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 font-medium">
                   <span>Try our Allergy-Friendly Hotel Finder</span>
                   <ExternalLink className="h-4 w-4" />
                 </Link>
@@ -247,7 +247,7 @@ export default function HotelChains() {
               </h3>
               <p className="italic mb-4">Use our tool to find personalized allergy-friendly hotels around the world.</p>
               <div className="flex items-center gap-2">
-                <Link to="/direct-chat">
+                <Link to="/direct-chat/">
                   <Button className="bg-blue-600 hover:bg-blue-700">
                     Search Allergy-Friendly Hotels
                   </Button>
