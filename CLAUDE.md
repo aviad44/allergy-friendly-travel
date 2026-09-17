@@ -53,8 +53,9 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   (Tripadvisor Terra API, cached permanently per place, budget-gated),
   `content-pipeline` (daily article generation + FB/IG/Pinterest posting on
   publish), `social-poster` (FB/IG daily — oldest still-incomplete article
-  within a 30-day recency window, see 2026-09-13 in CHANGELOG.md for why
-  it's not "always newest"), `pinterest-poster` (daily backlog sweep —
+  within a 30-day recency window, picked *independently per platform* so
+  one platform's backlog can't starve the other's, see 2026-09-13 and
+  2026-09-17 in CHANGELOG.md), `pinterest-poster` (daily backlog sweep —
   Pinterest is deliberately different from FB/IG here), `gsc-report`
   (weekly, Search Console reporting — see below). **Currently blocked**:
   Pinterest real pin creation needs Standard API access (Trial tier blocks

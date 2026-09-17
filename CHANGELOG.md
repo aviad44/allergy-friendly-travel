@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-09-17
+- Fixed the real cause of Facebook going quiet since 09-13 while Instagram kept posting daily: `social-poster` picked one shared "oldest incomplete on either platform" article per day, and a backlog of 6 older articles (Montreal through Bangkok) that already had Facebook but were only missing Instagram happened to occupy every single day's pick since 09-13 — so Facebook's own gap (Seoul, then Dubai/Rio/Sydney/Lima, none of which had been attempted at all) never got touched. Changed to two independent oldest-first picks per run, one per platform, so neither platform's backlog can starve the other.
+- Found and fixed an unrelated bug while investigating: `social-poster.yml`, `pinterest-poster.yml`, `content-pipeline.yml`, `gsc-report.yml`, `linkedin-poster.yml`, and `backfill-hero-image.yml` all wrote the Edge Function's JSON response into the job summary via `echo '${{ steps.call.outputs.body }}'` — a title or caption containing an apostrophe (e.g. "Vancouver's Best Restaurants") breaks out of the single-quoted string and crashes that step, marking the whole run as failed in the GitHub Actions UI even though the actual post/pin/article already succeeded before that step ran. Fixed by passing the body through an `env:` variable instead of interpolating it directly into the shell script.
+
 ## 2026-09-15
 - Investigated a user report that Facebook showed no posts newer than Los Angeles (09-13) despite Miami/Boston/Seattle recording `posted_to_facebook_at` weeks earlier. Queried the Facebook Page directly via the Graph API (new `fb-diagnose` function, locked behind the usual shared-secret gate) rather than trusting our own DB: all of them are real, published posts on the correct Page, with working permalinks, dated correctly (Miami 08-20, Seattle 08-22, Boston 08-24, etc.) — Los Angeles genuinely is the newest post chronologically, the older ones just aren't at the top of the feed. No bug found; `fb-diagnose` kept (re-locked) as a reusable "trust but verify against the real Facebook Page" tool for next time.
 

@@ -295,35 +295,51 @@ serve(async (req) => {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // One post per day, from recently-published articles only — by design.
-  // This intentionally does not try to work through the backlog of older
-  // unposted articles (there's a real one: most of the ~35 published
-  // articles predate this automation and were never posted, and that's
-  // fine, it's a young automation).
+  // From recently-published articles only — by design. This intentionally
+  // does not try to work through the backlog of older unposted articles
+  // (there's a real one: most of the ~35 published articles predate this
+  // automation and were never posted, and that's fine, it's a young
+  // automation).
   //
-  // Within that recent window, pick the OLDEST still-incomplete article
-  // first (not the newest) — this used to be newest-first, which meant an
-  // article that failed on one platform got silently abandoned forever the
-  // moment a newer article was published (confirmed live 2026-09-11/12: a
-  // Seoul restaurant guide failed on Facebook two days running with a real
-  // Meta-side error, and would have stopped being retried at all the moment
-  // the next day's article went out). Oldest-first within the recency
-  // window keeps retrying a stuck recent article every day until it either
-  // succeeds or ages out of the window — while the window itself still
-  // keeps this from crawling into the months-old pre-automation backlog.
-  const BATCH_SIZE = 1;
+  // Within that recent window, pick the OLDEST still-incomplete article for
+  // *each platform independently* (not one shared "oldest incomplete on
+  // either platform" pick) — this used to be a single query, which meant a
+  // long backlog of articles missing only Instagram (many older guides that
+  // had already posted fine to Facebook, from before Instagram catch-up
+  // existed) crowded out newer articles missing Facebook specifically for a
+  // week or more: at one shared pick per day, every day's "oldest
+  // incomplete" happened to only need Instagram, so Facebook's own backlog
+  // never got touched (confirmed live 2026-09-17: Facebook's last real post
+  // was 2026-09-13 while Instagram kept posting daily in the meantime).
+  // Querying per platform guarantees every run makes progress on *both*
+  // backlogs, not whichever one happens to be older. (The two picks are
+  // usually different articles, but can be the same one if it's missing
+  // both — deduped below.) Oldest-first within the recency window still
+  // keeps retrying a stuck recent article every day until it either
+  // succeeds or ages out of the window, same as before.
   const RECENCY_WINDOW_DAYS = 30;
   const recencyCutoff = new Date(Date.now() - RECENCY_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const ARTICLE_COLUMNS = 'id, title, meta_description, slug, content_type, hotel_ids, restaurant_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at, published_at';
 
-  const { data: articles, error: fetchErr } = await supabase
+  const { data: fbCandidates, error: fbFetchErr } = await supabase
     .from('seo_articles')
-    .select('id, title, meta_description, slug, content_type, hotel_ids, restaurant_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at, published_at')
+    .select(ARTICLE_COLUMNS)
     .eq('status', 'published')
-    .or('posted_to_facebook_at.is.null,posted_to_instagram_at.is.null')
+    .is('posted_to_facebook_at', null)
     .gte('published_at', recencyCutoff)
     .order('published_at', { ascending: true })
-    .limit(BATCH_SIZE);
+    .limit(1);
 
+  const { data: igCandidates, error: igFetchErr } = await supabase
+    .from('seo_articles')
+    .select(ARTICLE_COLUMNS)
+    .eq('status', 'published')
+    .is('posted_to_instagram_at', null)
+    .gte('published_at', recencyCutoff)
+    .order('published_at', { ascending: true })
+    .limit(1);
+
+  const fetchErr = fbFetchErr || igFetchErr;
   if (fetchErr) {
     const message = fetchErr.message || JSON.stringify(fetchErr);
     await supabase.from('pipeline_log').insert({
@@ -332,6 +348,12 @@ serve(async (req) => {
     return new Response(JSON.stringify({ error: 'social-poster failed', message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
+
+  const articlesById = new Map<string, NonNullable<typeof fbCandidates>[number]>();
+  for (const a of [...(fbCandidates || []), ...(igCandidates || [])]) {
+    articlesById.set(a.id, a);
+  }
+  const articles = Array.from(articlesById.values());
 
   if (!articles || articles.length === 0) {
     await supabase.from('pipeline_log').insert({

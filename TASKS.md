@@ -166,6 +166,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Use .github/pull_request_template.md.
   - DoD: All PRs include the checklist.
 
+- [x] Fix `social-poster` starving Facebook behind an Instagram-only backlog
+  - RATIONALE: User reported Facebook hadn't posted since 2026-09-13 (Los Angeles) despite Instagram posting daily. Root cause: the daily job picked a single "oldest incomplete on either platform" article per run — a backlog of 6 older articles that already had Facebook but were only missing Instagram (from before Instagram catch-up existed) meant every day's pick happened to only need Instagram, so Facebook's own gap (Seoul, then Dubai/Rio/Sydney/Lima) never got attempted at all. At one pick/day it would have taken another ~6 days before Facebook was even retried.
+  - HOW-TO: `supabase/functions/social-poster/index.ts` now runs two independent oldest-first queries — one for articles missing Facebook, one for articles missing Instagram — and processes the (deduped) union each run, so both platforms' backlogs make progress every day regardless of which one happens to be older. Also fixed an unrelated but real bug found while investigating: the "Write job summary" step in `social-poster.yml`, `pinterest-poster.yml`, `content-pipeline.yml`, `gsc-report.yml`, `linkedin-poster.yml`, and `backfill-hero-image.yml` all interpolated `${{ steps.call.outputs.body }}` directly inside a single-quoted `echo`, which breaks (shell syntax error) whenever a title/caption contains an apostrophe (e.g. "Vancouver's") — the run then shows as a red ❌ in GitHub Actions even though the actual post already succeeded. Fixed by passing the body through an `env:` var instead.
+  - DoD: Deployed; verified via a real `workflow_dispatch` run that the edge function's response now processes 2 distinct articles in one run (one missing-Facebook pick, one missing-Instagram pick) and that the job summary step no longer crashes on an apostrophe.
+
 ---
 
 ## UX
