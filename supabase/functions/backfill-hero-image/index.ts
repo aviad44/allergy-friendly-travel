@@ -9,7 +9,14 @@ const corsHeaders = {
 
 // One-off maintenance function: backfills hero_image_url/hero_image_credit
 // on published articles that predate the image-fetching feature in
-// content-pipeline. Uses the exact same Unsplash search + attribution logic.
+// content-pipeline, plus any article stuck with a broken
+// maps.googleapis.com/.../place/photo URL — content-pipeline briefly (until
+// 2026-09-22) stored those raw Google Places photo URLs directly as
+// hero_image_url for restaurant articles; they aren't meant to be hotlinked
+// long-term like that and every one of them renders as a broken image
+// (confirmed live: 400/403 or a tiny HTML error page instead of a photo).
+// Uses the exact same Unsplash search + attribution logic either way.
+const BROKEN_GOOGLE_PHOTO_PATTERN = 'maps.googleapis.com/maps/api/place/photo%';
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
@@ -37,9 +44,9 @@ serve(async (req) => {
   try {
     const { data: articles, error } = await supabase
       .from('seo_articles')
-      .select('id, slug, hotel_ids')
+      .select('id, slug, hotel_ids, restaurant_ids')
       .eq('status', 'published')
-      .is('hero_image_url', null);
+      .or(`hero_image_url.is.null,hero_image_url.ilike.%${BROKEN_GOOGLE_PHOTO_PATTERN}`);
 
     if (error) throw error;
 
@@ -54,6 +61,13 @@ serve(async (req) => {
           .eq('id', article.hotel_ids[0])
           .single();
         if (hotel?.city) city = hotel.city;
+      } else if (article.restaurant_ids && article.restaurant_ids.length > 0) {
+        const { data: restaurant } = await supabase
+          .from('restaurants')
+          .select('city')
+          .eq('id', article.restaurant_ids[0])
+          .single();
+        if (restaurant?.city) city = restaurant.city;
       }
 
       const searchRes = await fetch(

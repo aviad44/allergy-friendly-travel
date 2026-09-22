@@ -524,52 +524,6 @@ async function fetchDestinationPhoto(city: string, unsplashKey?: string, pixabay
   return null;
 }
 
-// For restaurant guides, a real photo of food from one of the actual
-// reviewed restaurants is more compelling — and more honest, matching the
-// "real evidence only" rule the rest of the site follows — than a generic
-// city skyline. We don't currently store each restaurant's Google Place ID
-// (only our own hotel_ids/restaurant_ids), so this re-finds the place by
-// name + city via Text Search, then pulls a photo Google already has on
-// file for it. Best-effort at every step: any miss just falls through to
-// the caller's existing skyline-photo fallback, a restaurant guide should
-// never end up with no hero image at all.
-async function fetchRestaurantDishPhoto(restaurantName: string, city: string, apiKey: string): Promise<UnsplashPhoto | null> {
-  try {
-    const searchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(`${restaurantName}, ${city}`)}&key=${apiKey}`;
-    const searchRes = await fetch(searchUrl);
-    const searchData = await searchRes.json();
-    const placeId = searchData.results?.[0]?.place_id;
-    if (!placeId) {
-      console.error('Restaurant photo: no place match for', restaurantName, city);
-      return null;
-    }
-
-    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos&key=${apiKey}`;
-    const detailsRes = await fetch(detailsUrl);
-    const detailsData = await detailsRes.json();
-    const photoRef = detailsData.result?.photos?.[0]?.photo_reference;
-    if (!photoRef) {
-      console.error('Restaurant photo: no Google photos on file for', restaurantName);
-      return null;
-    }
-
-    // Google's terms require displaying the contributor attribution
-    // alongside the photo; html_attributions is a small HTML snippet
-    // (usually just a linked name) — strip the tags for the plain-text
-    // credit field the rest of the pipeline already uses.
-    const rawAttribution = detailsData.result?.photos?.[0]?.html_attributions?.[0] as string | undefined;
-    const attribution = rawAttribution?.replace(/<[^>]*>/g, '').trim();
-
-    return {
-      url: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photo_reference=${photoRef}&key=${apiKey}`,
-      credit: attribution ? `Photo via Google (${attribution})` : 'Photo via Google',
-    };
-  } catch (err) {
-    console.error('Restaurant photo fetch error (non-fatal):', err);
-    return null;
-  }
-}
-
 // String(err) on a plain object (not a real Error — e.g. a parsed API error
 // body, or anything thrown as {message, code}) yields the useless literal
 // "[object Object]", which is exactly what hid a real content_generation
@@ -584,19 +538,6 @@ function describeError(err: unknown): string {
   }
 }
 
-// Google Places Photos are licensed for showing a specific place's own photo
-// in the context of Places API results (e.g. this article's on-site hero
-// image, credited inline) — not for exporting to an unrelated third party
-// (Pinterest) as standalone marketing content, and Google's terms require
-// the contributor attribution to appear "alongside the photo", which a
-// Pinterest pin's fields never carried. Unsplash/Pixabay's licenses
-// explicitly permit this kind of redistribution, so anything sent off-site
-// always goes through one of those instead, regardless of the article's own
-// hero image.
-function isGooglePlacesPhotoUrl(url?: string | null): boolean {
-  if (!url) return false;
-  return /maps\.googleapis\.com\/maps\/api\/place\/photo/i.test(url);
-}
 
 // Pinterest is the highest-leverage passive distribution channel for a new
 // travel-content domain: its own search surfaces content on relevance signals
@@ -1368,21 +1309,23 @@ serve(async (req) => {
             let heroImageUrl: string | null = null;
             let heroImageCredit: string | null = null;
 
-            // Prefer a real photo of food from one of the actual reviewed
-            // restaurants over a generic city skyline — try the first one
-            // linked to this article first.
-            let photo: UnsplashPhoto | null = null;
-            const { data: firstRestaurant } = await supabase
-              .from('restaurants')
-              .select('name')
-              .eq('id', restaurantIds[0])
-              .maybeSingle();
-            if (firstRestaurant?.name) {
-              photo = await fetchRestaurantDishPhoto(firstRestaurant.name, destination.city, apiKey);
-            }
-            if (!photo) {
-              photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
-            }
+            // Previously tried a real photo of food from one of the actual
+            // reviewed restaurants first (fetchRestaurantDishPhoto, via
+            // Google Places Text Search + Photo). Removed 2026-09-22: that
+            // function returned a raw maps.googleapis.com/.../photo URL with
+            // the live GOOGLE_MAPS_API_KEY embedded in it, stored directly as
+            // hero_image_url and rendered as a public <img src> — Google
+            // Places photo URLs aren't meant to be hotlinked long-term this
+            // way, so every one of the 17 restaurant articles that got a
+            // Google photo this way ended up with a broken image (400/403,
+            // or a tiny HTML error page instead of a real photo), and the API
+            // key was left exposed in the public seo_articles table/page
+            // source. Unsplash/Pixabay (fetchDestinationPhoto) is the same
+            // proven-reliable source every hotel article already uses with a
+            // 100% success rate — see TASKS.md for a possible future
+            // reintroduction of the real-dish-photo idea via a proper
+            // server-side download + Supabase Storage upload.
+            const photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
             if (photo) {
               heroImageUrl = photo.url;
               heroImageCredit = photo.credit;
@@ -1409,24 +1352,18 @@ serve(async (req) => {
             if (insertErr) throw insertErr;
             articleResult = { slug: article.slug, title: article.title };
 
-            // Pinterest needs an off-site-safe image (see isGooglePlacesPhotoUrl
-            // above) — when the on-site hero photo came from Google, fetch a
-            // separate Unsplash/Pixabay destination photo just for the pin
-            // instead of reusing it. The article's own hero_image_url/credit
-            // (already saved above) is left untouched either way.
-            let pinterestImageUrl = heroImageUrl;
-            if (isGooglePlacesPhotoUrl(heroImageUrl)) {
-              const fallbackPhoto = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
-              pinterestImageUrl = fallbackPhoto?.url ?? null;
-            }
-
+            // heroImageUrl is always Unsplash/Pixabay now (see above), so
+            // it's already off-site-safe for Pinterest with no substitution
+            // needed (unlike social-poster/pinterest-poster's own daily
+            // sweeps, which still guard against older rows pre-dating this
+            // fix via their own isGooglePlacesPhotoUrl checks).
             if (pinterestClientId && pinterestClientSecret && pinterestBoardId) {
               await publishToPinterest(supabase, pinterestClientId, pinterestClientSecret, pinterestBoardId, {
                 title: article.title,
                 description: article.meta_description,
                 slug: article.slug,
                 basePath: 'restaurants',
-                imageUrl: pinterestImageUrl,
+                imageUrl: heroImageUrl,
               });
             }
 
