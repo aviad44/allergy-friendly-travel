@@ -1,3 +1,4 @@
+import type { RegionSlug } from '@/utils/regions';
 
 export interface Destination {
   id: DestinationId;
@@ -6,6 +7,10 @@ export interface Destination {
   description: string;
   subtitle: string;
   image?: string;
+  // Optional: which region hub (see utils/regions.ts) this destination is
+  // grouped under. Absent is valid — it just means the destination doesn't
+  // show up in a region hub yet, not an error.
+  region?: RegionSlug;
 }
 
 export interface Hotel {

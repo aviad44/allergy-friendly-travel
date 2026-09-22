@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { MetaManager } from "@/components/MetaManager";
+import { RegionQuickLinks } from "@/components/destinations/RegionQuickLinks";
 import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderReady";
 
 interface RestaurantArticleSummary {
@@ -47,9 +48,13 @@ const Restaurants = () => {
         <h1 className="font-display text-3xl sm:text-4xl font-bold mb-3 text-blue-800">
           Allergy-Friendly Restaurant Guides
         </h1>
-        <p className="text-gray-600 mb-10">
+        <p className="text-gray-600 mb-6">
           Every guide below is built from real Google reviews that mention food allergies — no invented restaurants or quotes.
         </p>
+
+        <div className="mb-6">
+          <RegionQuickLinks basePath="/restaurants/region" />
+        </div>
 
         {isLoading && <p className="text-gray-500">Loading guides…</p>}
 
