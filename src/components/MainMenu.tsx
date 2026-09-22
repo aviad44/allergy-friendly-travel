@@ -14,37 +14,37 @@ const menuItems = [
   {
     title: "Destinations",
     icon: MapPin,
-    href: "/destinations"
+    href: "/destinations/"
   },
   {
     title: "Restaurants",
     icon: UtensilsCrossed,
-    href: "/restaurants"
+    href: "/restaurants/"
   },
   {
     title: "Allergy Card",
     icon: Shield,
-    href: "/allergy-translation-card"
+    href: "/allergy-translation-card/"
   },
   {
     title: "Traveler Reviews",
     icon: Star,
-    href: "/reviews"
+    href: "/reviews/"
   },
   {
     title: "FAQ",
     icon: HelpCircle,
-    href: "/faq"
+    href: "/faq/"
   },
   {
     title: "Contact",
     icon: MessageCircle,
-    href: "/contact"
+    href: "/contact/"
   },
   {
     title: "About Us",
     icon: Info,
-    href: "/about"
+    href: "/about/"
   }
 ];
 

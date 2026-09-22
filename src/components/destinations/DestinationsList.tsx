@@ -40,7 +40,10 @@ const CRITICAL_IMAGE_MAP: Record<string, string> = {
   'gluten-free-europe': "/lovable-uploads/f28f531e-9914-4d6c-9971-afd6d989b8e5.png" // Gluten-free Europe image
 };
 
-function resolveStaticImage(destinationId: string, destinationName: string): string {
+// Exported so region-hub pages (src/pages/destinations/RegionHub.tsx) can
+// render the same static-destination images instead of duplicating this
+// resolution logic — the function body itself is unchanged.
+export function resolveStaticImage(destinationId: string, destinationName: string): string {
   if (destinationId in CRITICAL_IMAGE_MAP) return CRITICAL_IMAGE_MAP[destinationId];
   const imageKey = destinationId as keyof typeof DESTINATION_IMAGES;
   if (DESTINATION_IMAGES[imageKey]) return DESTINATION_IMAGES[imageKey];

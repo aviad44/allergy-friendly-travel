@@ -5,6 +5,7 @@ import { MetaManager } from "@/components/MetaManager";
 import { destinations } from '@/data/destinations-list';
 import { supabase } from '@/integrations/supabase/client';
 import { markPrerenderNotReady, markPrerenderReady } from '@/utils/prerenderReady';
+import { REGIONS } from '@/utils/regions';
 
 interface SitemapLink {
   title: string;
@@ -89,6 +90,11 @@ const Sitemap = () => {
     ...restaurantArticles,
   ];
 
+  const regionLinks: SitemapLink[] = REGIONS.flatMap((r) => [
+    { title: `${r.label} Hotels`, path: `/destinations/region/${r.slug}` },
+    { title: `${r.label} Restaurants`, path: `/restaurants/region/${r.slug}` },
+  ]);
+
   return (
     <>
       <MetaManager />
@@ -98,6 +104,7 @@ const Sitemap = () => {
 
         <div className="grid gap-8 md:grid-cols-2">
           <SitemapSection title="Main Pages" links={MAIN_PAGES} />
+          <SitemapSection title="Regions" links={regionLinks} />
           <SitemapSection title="Destinations" links={destinationLinks} />
           <SitemapSection title="Restaurants" links={restaurantLinks} />
         </div>

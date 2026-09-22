@@ -15,7 +15,7 @@ export const ShareExperienceSection = ({ destinationName, isLondon = false }: Sh
         Share Your Experience!
       </h2>
       <p className="text-sm sm:text-base text-muted-foreground">
-        Have you stayed in an allergy-friendly hotel in {destinationName}? <Link to="/reviews" className="text-primary hover:underline">Help others by leaving a review!</Link>
+        Have you stayed in an allergy-friendly hotel in {destinationName}? <Link to="/reviews/" className="text-primary hover:underline">Help others by leaving a review!</Link>
       </p>
       {isLondon && (
         <div className="mt-4 bg-white p-4 rounded-lg shadow-sm">
