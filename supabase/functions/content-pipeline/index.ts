@@ -404,19 +404,33 @@ function isMoodyPhoto(desc?: string | null): boolean {
   return /sunset|sunrise|dusk|night|dark|silhouette|twilight|storm|foggy|fog|overcast|gloomy/i.test(desc);
 }
 
+// A distant drone/aerial panorama reads as generic and unexciting for a
+// social post thumbnail — it can score well on brightness+saturation (a
+// clear-sky aerial shot isn't "moody") while still looking flat and
+// unsales-y compared to a closer street/landmark shot with visible detail.
+// Flagged by description text rather than pixel data, same approach as
+// isMoodyPhoto — there's no reliable pixel signal for "shot from a drone".
+function isDistantAerialShot(desc?: string | null): boolean {
+  if (!desc) return false;
+  return /aerial|drone|bird'?s[- ]eye|from above|overhead view|panoram|wide shot|cityscape/i.test(desc);
+}
+
 function photoScore(p: any): number {
   return hexBrightness(p.color) + hexSaturation(p.color);
 }
 
 // Picks the single most clear/bright/colorful photo out of a batch of
-// Unsplash search results: prefers non-moody shots (see isMoodyPhoto), then
-// the brightest + most colorful one among those. Falls back to the best of
-// the full (moody) batch only if every single result was flagged — a
-// destination guide should never end up with no hero image at all.
+// Unsplash search results: prefers shots that are neither moody (see
+// isMoodyPhoto) nor a distant aerial/drone panorama (see
+// isDistantAerialShot), then the brightest + most colorful one among those.
+// Falls back to progressively looser pools (moody-but-not-aerial, then the
+// full batch) only if a stricter pool comes up empty — a destination guide
+// should never end up with no hero image at all.
 function pickBestPhoto(results: any[]): any | null {
   if (results.length === 0) return null;
-  const clean = results.filter((p) => !isMoodyPhoto(p.alt_description));
-  const pool = clean.length > 0 ? clean : results;
+  const ideal = results.filter((p) => !isMoodyPhoto(p.alt_description) && !isDistantAerialShot(p.alt_description));
+  const nonAerial = results.filter((p) => !isDistantAerialShot(p.alt_description));
+  const pool = ideal.length > 0 ? ideal : nonAerial.length > 0 ? nonAerial : results;
   return pool.reduce((best, p) => (photoScore(p) > photoScore(best) ? p : best), pool[0]);
 }
 
@@ -487,20 +501,25 @@ async function fetchPixabayPhoto(query: string, apiKey: string): Promise<Unsplas
 // plate of food) — skyline/landmark queries are what both providers do best,
 // and Pixabay only gets tried if Unsplash has nothing.
 //
-// Queries both "{city} skyline" and plain "{city}" and merges the results
-// before picking: a single "skyline" search can be thin for some cities and
-// skew heavily toward dusk/sunset shots (verified live for Krakow — all 3
-// results were sunset-themed), while a plain city-name search tends to
-// surface daytime street/landmark photos "skyline" alone misses.
+// Queries "{city} skyline", "{city} landmark", and plain "{city}", merging
+// all three before picking: a single "skyline" search can be thin for some
+// cities and skew heavily toward dusk/sunset or distant-drone shots (verified
+// live for Krakow — all 3 "skyline" results were sunset-themed; Santiago and
+// Bogota's picks were technically bright/colorful but read as generic,
+// unsales-y aerial panoramas), while "landmark" and the plain city-name
+// query tend to surface closer, more inviting street/building photos that
+// "skyline" alone misses — pickBestPhoto's isDistantAerialShot filter then
+// steers away from whatever aerial shots still show up in the mix.
 async function fetchDestinationPhoto(city: string, unsplashKey?: string, pixabayKey?: string): Promise<UnsplashPhoto | null> {
   if (unsplashKey) {
     try {
-      const [skylineResults, cityResults] = await Promise.all([
+      const [skylineResults, landmarkResults, cityResults] = await Promise.all([
         fetchUnsplashCandidates(`${city} skyline`, unsplashKey),
+        fetchUnsplashCandidates(`${city} landmark`, unsplashKey),
         fetchUnsplashCandidates(city, unsplashKey),
       ]);
       const seen = new Set<string>();
-      const merged = [...skylineResults, ...cityResults].filter((p: any) => {
+      const merged = [...skylineResults, ...landmarkResults, ...cityResults].filter((p: any) => {
         if (!p?.id || seen.has(p.id)) return false;
         seen.add(p.id);
         return true;
