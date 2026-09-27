@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-09-27
+- Added a GA4 event (`translation_card_language_selected`) fired on every real translation on the Allergy Translation Card page, so which target languages people actually use is finally a real, aggregate, cross-visitor number instead of unavailable. Found in the process: the page already had a `trackLanguageUsage` call, but it only writes to `localStorage` (`src/utils/languageTracker.ts`) — per-browser only, never reaches us, and the unrouted `LanguageStats.tsx` admin view built on top of it even ships an "Add Sample Data (For Testing)" button that writes fabricated counts into that same storage. That page isn't linked from anywhere in `App.tsx` so it's never been shown to a real visitor, but it's worth cleaning up or removing given the project's zero-fabrication policy — flagged, not touched, pending a decision.
+
 ## 2026-09-22
 - Added geographic region hubs (`/destinations/region/<region>/`, `/restaurants/region/<region>/` — Europe, North America, South America, Asia, Middle East, Oceania, Worldwide Guides) so the ~29 hand-authored destination pages and the daily-growing set of content-pipeline articles (~75+ combined, ~40 countries) aren't just one long flat grid anymore. Purely additive: every existing `/destinations/<slug>/` and `/restaurants/<slug>/` URL, route, and component is untouched — the new pages sit on top via a `region` field added to `destinations-list.ts` and a country→region lookup (`src/utils/regions.ts`) applied to the live `seo_articles` data. New `/region/` path segment can't collide with any existing or future single-segment slug. `/destinations/` and `/restaurants/` each gained a small "Browse by Region" link row above their existing, unmodified listings. New URLs wired into `STATIC_PATHS` (`netlify/functions/sitemap.cjs`) so prerendering and `sitemap.xml` pick them up automatically.
 

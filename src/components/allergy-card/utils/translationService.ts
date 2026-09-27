@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { COMPLETE_TRANSLATIONS, allergyTranslations, TranslationData } from './translations';
 import { getAllergyIcon } from './allergyIcons';
 import { trackLanguageUsage } from '@/utils/languageTracker';
+import { trackGAEvent } from '@/utils/googleAnalytics';
 import { supabase } from '@/integrations/supabase/client';
 
 // Set up types for the translation request and response
@@ -188,12 +189,18 @@ export const translateText = async (
       
       // Track language usage
       trackLanguageUsage(targetLanguage, getLanguageNameFromCode(targetLanguage));
-      
+      // GA4 mirror of the above — this is the aggregate, cross-visitor signal
+      // (the localStorage tracker above only ever reflects one person's own browser).
+      trackGAEvent('translation_card_language_selected', {
+        language_code: targetLanguage,
+        language_name: getLanguageNameFromCode(targetLanguage),
+      });
+
       toast.success(`Text translated to ${getLanguageNameFromCode(targetLanguage)} successfully!`, {
         duration: 3000,
         id: "translation-success"
       });
-      
+
       return { translatedText };
     }
 
@@ -205,6 +212,10 @@ export const translateText = async (
       });
       if (!error && data?.translatedText) {
         trackLanguageUsage(targetLanguage, getLanguageNameFromCode(targetLanguage));
+        trackGAEvent('translation_card_language_selected', {
+          language_code: targetLanguage,
+          language_name: getLanguageNameFromCode(targetLanguage),
+        });
         toast.success(`Text translated to ${getLanguageNameFromCode(targetLanguage)} successfully!`, {
           duration: 3000,
           id: "translation-success"
