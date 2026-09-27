@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-09-27
+- Added a GA4 event (`translation_card_language_selected`) fired on every real translation on the Allergy Translation Card page, so which target languages people actually use is finally a real, aggregate, cross-visitor number instead of unavailable.
+- Removed the pre-existing `trackLanguageUsage`/`LanguageStats.tsx` machinery it replaces: that tracker only ever wrote to `localStorage` (per-browser, never aggregated, couldn't answer "what's popular" across visitors), and its unrouted admin view (never linked from `App.tsx`, never shown to a real visitor) shipped an "Add Sample Data (For Testing)" button that wrote fabricated counts into the same storage — a real, if dormant, violation of this project's zero-fabrication policy. Deleted `src/pages/LanguageStats.tsx`, `src/components/allergy-card/components/LanguageUsageStats.tsx`, `src/utils/languageTracker.ts`, the now-dead `/language-stats` entry in `MetaManager.tsx`, and the `trackLanguageUsage` calls in `translationService.ts`.
+
 ## 2026-09-22
 - Added geographic region hubs (`/destinations/region/<region>/`, `/restaurants/region/<region>/` — Europe, North America, South America, Asia, Middle East, Oceania, Worldwide Guides) so the ~29 hand-authored destination pages and the daily-growing set of content-pipeline articles (~75+ combined, ~40 countries) aren't just one long flat grid anymore. Purely additive: every existing `/destinations/<slug>/` and `/restaurants/<slug>/` URL, route, and component is untouched — the new pages sit on top via a `region` field added to `destinations-list.ts` and a country→region lookup (`src/utils/regions.ts`) applied to the live `seo_articles` data. New `/region/` path segment can't collide with any existing or future single-segment slug. `/destinations/` and `/restaurants/` each gained a small "Browse by Region" link row above their existing, unmodified listings. New URLs wired into `STATIC_PATHS` (`netlify/functions/sitemap.cjs`) so prerendering and `sitemap.xml` pick them up automatically.
 
