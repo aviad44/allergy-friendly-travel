@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { MapPin, Star, ExternalLink, Check, Bed, Home } from "lucide-react";
 import { useState } from "react";
 import { trackHotelBookingClick } from "@/utils/googleAnalytics";
+import { withBookingAffiliate, outboundRel, isBookingUrl } from "@/utils/bookingAffiliate";
 
 export interface HotelCardProps {
   name: string;
@@ -158,13 +159,13 @@ export const HotelCard = ({
           disabled={!bookingUrl || bookingUrl === '#'}
         >
           <a
-            href={getCleanUrl(bookingUrl)}
+            href={withBookingAffiliate(getCleanUrl(bookingUrl), "guide")}
             target="_blank"
-            rel="noopener noreferrer"
+            rel={outboundRel(bookingUrl)}
             onClick={() => trackHotelBookingClick(cleanName, bookingUrl)}
             className="flex items-center justify-center gap-1"
           >
-            Visit Website
+            {isBookingUrl(getCleanUrl(bookingUrl)) ? "Check Availability on Booking.com" : "Visit Website"}
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
         </Button>

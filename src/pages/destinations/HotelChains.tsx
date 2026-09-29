@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 import { DESTINATION_OG_IMAGES } from "@/utils/socialSharing";
 import { MetaManager } from "@/components/MetaManager";
+import { withBookingAffiliate, outboundRel } from "@/utils/bookingAffiliate";
+import { trackHotelBookingClick } from "@/utils/googleAnalytics";
 
 export default function HotelChains() {
   const imageUrl = DESTINATION_OG_IMAGES['hotel-chains'];
@@ -73,7 +75,7 @@ export default function HotelChains() {
                       Hyatt Allergy Policy <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/searchresults.html?ss=Hyatt" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href={withBookingAffiliate("https://www.booking.com/searchresults.html?ss=Hyatt", "hotel-chains")} target="_blank" rel={outboundRel("https://www.booking.com/searchresults.html?ss=Hyatt")} onClick={() => trackHotelBookingClick("Hyatt", "https://www.booking.com/searchresults.html?ss=Hyatt")} className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Hyatt <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -98,7 +100,7 @@ export default function HotelChains() {
                       Marriott Cleanliness & Allergy Info <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/searchresults.html?ss=Marriott" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href={withBookingAffiliate("https://www.booking.com/searchresults.html?ss=Marriott", "hotel-chains")} target="_blank" rel={outboundRel("https://www.booking.com/searchresults.html?ss=Marriott")} onClick={() => trackHotelBookingClick("Marriott", "https://www.booking.com/searchresults.html?ss=Marriott")} className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Marriott <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -122,7 +124,7 @@ export default function HotelChains() {
                       Four Seasons Wellness Dining <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/searchresults.html?ss=Four%20Seasons" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href={withBookingAffiliate("https://www.booking.com/searchresults.html?ss=Four%20Seasons", "hotel-chains")} target="_blank" rel={outboundRel("https://www.booking.com/searchresults.html?ss=Four%20Seasons")} onClick={() => trackHotelBookingClick("Four Seasons", "https://www.booking.com/searchresults.html?ss=Four%20Seasons")} className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Four Seasons <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -147,7 +149,7 @@ export default function HotelChains() {
                       Hilton CleanStay Program <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/searchresults.html?ss=Hilton" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href={withBookingAffiliate("https://www.booking.com/searchresults.html?ss=Hilton", "hotel-chains")} target="_blank" rel={outboundRel("https://www.booking.com/searchresults.html?ss=Hilton")} onClick={() => trackHotelBookingClick("Hilton", "https://www.booking.com/searchresults.html?ss=Hilton")} className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Hilton <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -172,7 +174,7 @@ export default function HotelChains() {
                       Accor ALLSAFE Program <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/searchresults.html?ss=Accor" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href={withBookingAffiliate("https://www.booking.com/searchresults.html?ss=Accor", "hotel-chains")} target="_blank" rel={outboundRel("https://www.booking.com/searchresults.html?ss=Accor")} onClick={() => trackHotelBookingClick("Accor", "https://www.booking.com/searchresults.html?ss=Accor")} className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book Accor <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>
@@ -197,7 +199,7 @@ export default function HotelChains() {
                       IHG Clean Promise <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <span className="text-gray-400">|</span>
-                    <a href="https://www.booking.com/searchresults.html?ss=IHG" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <a href={withBookingAffiliate("https://www.booking.com/searchresults.html?ss=IHG", "hotel-chains")} target="_blank" rel={outboundRel("https://www.booking.com/searchresults.html?ss=IHG")} onClick={() => trackHotelBookingClick("IHG", "https://www.booking.com/searchresults.html?ss=IHG")} className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
                       Book IHG <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                   </div>

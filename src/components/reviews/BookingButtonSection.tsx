@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, MapPin } from "lucide-react";
 import { Hotel } from "@/types/definitions";
 import { trackHotelBookingClick } from "@/utils/googleAnalytics";
+import { withBookingAffiliate } from "@/utils/bookingAffiliate";
 
 interface BookingButtonSectionProps {
   hotel?: Hotel;
@@ -22,7 +23,7 @@ export const BookingButtonSection = ({ hotel }: BookingButtonSectionProps) => {
         <div className="flex flex-col sm:flex-row gap-3">
           <Button 
             className="bg-teal-600 hover:bg-teal-700 text-white flex-1 gap-2"
-            onClick={() => { trackHotelBookingClick(hotel.name, hotel.bookingUrl); window.open(hotel.bookingUrl, "_blank"); }}
+            onClick={() => { trackHotelBookingClick(hotel.name, hotel.bookingUrl); if (hotel.bookingUrl) window.open(withBookingAffiliate(hotel.bookingUrl, "book-section"), "_blank"); }}
           >
             Book Now
             <ExternalLink className="h-4 w-4" />
