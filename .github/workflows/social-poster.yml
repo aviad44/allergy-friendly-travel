@@ -13,7 +13,12 @@ name: Social Poster (Facebook + Instagram)
 on:
   schedule:
     - cron: "0 15 * * *"   # daily at 15:00 UTC
-  workflow_dispatch: {}       # allow manual trigger from the GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: 'Optional: comma-separated article slugs to post right now (skips the oldest-first backlog pick for the still-missing platform(s) only, e.g. to clear one flagged article out of turn).'
+        required: false
+        default: ''
 
 jobs:
   run-social-poster:
@@ -28,16 +33,23 @@ jobs:
         id: call
         env:
           CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+          SLUGS_INPUT: ${{ inputs.slugs }}
         run: |
           SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
           SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          if [ -n "$SLUGS_INPUT" ]; then
+            BODY_JSON=$(python3 -c "import json,os; print(json.dumps({'slugs': [s.strip() for s in os.environ['SLUGS_INPUT'].split(',') if s.strip()]}))")
+          else
+            BODY_JSON='{}'
+          fi
 
           RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/social-poster" \
             -H "Content-Type: application/json" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
             -H "x-cron-secret: $CRON_SHARED_SECRET" \
-            -d '{}')
+            -d "$BODY_JSON")
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
           BODY=$(echo "$RESPONSE" | sed '$d')
