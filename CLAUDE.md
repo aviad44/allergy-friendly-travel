@@ -57,7 +57,10 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   one platform's backlog can't starve the other's, see 2026-09-13 and
   2026-09-17 in CHANGELOG.md), `pinterest-poster` (daily backlog sweep —
   Pinterest is deliberately different from FB/IG here), `gsc-report`
-  (weekly, Search Console reporting — see below). **Currently blocked**:
+  (weekly, Search Console reporting — see below), `ga4-report` (weekly,
+  GA4 `hotel_booking_click` reporting by hotel/page — same shape and same
+  "blocked on user's Google Cloud setup" status as `gsc-report`, see
+  below). **Currently blocked**:
   Pinterest real pin creation needs Standard API access (Trial tier blocks
   production pins) — pending the user submitting Pinterest's app-review
   form with a demo video.
@@ -75,8 +78,13 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   Secrets) — `GOOGLE_MAPS_API_KEY`, `TRIPADVISOR_API_KEY`,
   `PINTEREST_CLIENT_ID`/`SECRET`/`BOARD_ID`, `CRON_SHARED_SECRET`,
   `GOOGLE_SEARCH_CONSOLE_CREDENTIALS` (service-account JSON key — see
-  `gsc-report` below). No MCP tool can set these directly — ask the user to
-  add them via the dashboard.
+  `gsc-report` below), `GOOGLE_ANALYTICS_CREDENTIALS` (service-account JSON
+  key for `ga4-report` — the same service account as
+  `GOOGLE_SEARCH_CONSOLE_CREDENTIALS` can be reused, just also enable the
+  Analytics Data API on it and add it as a Viewer on the GA4 property),
+  `GA4_PROPERTY_ID` (the GA4 property's numeric ID, GA4 Admin → Property
+  Settings). No MCP tool can set these directly — ask the user to add them
+  via the dashboard.
 - **Governance docs**: `TASKS.md` (checkbox tasks, each with
   RATIONALE/HOW-TO/DoD), `CHANGELOG.md` (dated entries) — update both
   alongside any real change, per `.github/pull_request_template.md`.
@@ -92,6 +100,15 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   `pipeline_log` for a `run_type = 'gsc_report'` row with
   `status = 'success'`), treat GSC as still only reachable via screenshots
   the user pastes — don't assume the credential is configured.
+- **GA4 hotel-booking-click reporting exists as of 2026-09-29** (the
+  `ga4-report` function above) but only works once the user has: (1)
+  enabled the Google Analytics Data API on a service account (reusing the
+  GSC one is fine), (2) added it as a Viewer on the GA4 property, and (3)
+  set the `GOOGLE_ANALYTICS_CREDENTIALS` and `GA4_PROPERTY_ID` Supabase
+  secrets. Until confirmed working end-to-end (check `pipeline_log` for a
+  `run_type = 'ga4_report'` row with `status = 'success'`), don't assume
+  it's configured — as of 2026-09-29 it has never run (0 rows), same as
+  `gsc-report`.
 - **No Pinterest dashboard access** — can't check Standard-access approval
   status programmatically; ask the user.
 - **LinkedIn posting has never actually run** — `linkedin-poster` (weekly,
