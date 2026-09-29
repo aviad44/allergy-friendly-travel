@@ -1341,9 +1341,11 @@ serve(async (req) => {
             // key was left exposed in the public seo_articles table/page
             // source. Unsplash/Pixabay (fetchDestinationPhoto) is the same
             // proven-reliable source every hotel article already uses with a
-            // 100% success rate — see TASKS.md for a possible future
-            // reintroduction of the real-dish-photo idea via a proper
-            // server-side download + Supabase Storage upload.
+            // 100% success rate. A real photo of a reviewed restaurant is now
+            // shown on-site by fetching it live per view (article-hero-photo,
+            // 2026-09-29) — not by downloading it into Supabase Storage,
+            // which Google's Places terms don't allow. hero_image_url stays
+            // Unsplash/Pixabay: it's the og:image and the social-post image.
             const photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
             if (photo) {
               heroImageUrl = photo.url;
