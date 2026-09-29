@@ -295,6 +295,21 @@ serve(async (req) => {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
+  // Optional manual override: post specific articles by slug right now,
+  // regardless of the oldest-first/recency-window picks below — e.g. to
+  // clear one backlog article the user flagged instead of waiting for its
+  // turn in the daily queue. Same shape as backfill-hero-image's `slugs`
+  // override. Still safe to call on an article that's already posted on
+  // one platform: the per-platform "already posted" check further down
+  // skips it there and only posts the still-missing platform.
+  let targetSlugs: string[] | null = null;
+  try {
+    const body = await req.json();
+    if (Array.isArray(body?.slugs) && body.slugs.length > 0) targetSlugs = body.slugs;
+  } catch {
+    // no/invalid JSON body — fall through to the default oldest-first picks
+  }
+
   // From recently-published articles only — by design. This intentionally
   // does not try to work through the backlog of older unposted articles
   // (there's a real one: most of the ~35 published articles predate this
@@ -321,39 +336,59 @@ serve(async (req) => {
   const recencyCutoff = new Date(Date.now() - RECENCY_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
   const ARTICLE_COLUMNS = 'id, title, meta_description, slug, content_type, hotel_ids, restaurant_ids, hero_image_url, hero_image_credit, posted_to_facebook_at, posted_to_instagram_at, published_at';
 
-  const { data: fbCandidates, error: fbFetchErr } = await supabase
-    .from('seo_articles')
-    .select(ARTICLE_COLUMNS)
-    .eq('status', 'published')
-    .is('posted_to_facebook_at', null)
-    .gte('published_at', recencyCutoff)
-    .order('published_at', { ascending: true })
-    .limit(1);
+  let articles: any[] = [];
 
-  const { data: igCandidates, error: igFetchErr } = await supabase
-    .from('seo_articles')
-    .select(ARTICLE_COLUMNS)
-    .eq('status', 'published')
-    .is('posted_to_instagram_at', null)
-    .gte('published_at', recencyCutoff)
-    .order('published_at', { ascending: true })
-    .limit(1);
+  if (targetSlugs) {
+    const { data: targeted, error: targetedErr } = await supabase
+      .from('seo_articles')
+      .select(ARTICLE_COLUMNS)
+      .eq('status', 'published')
+      .in('slug', targetSlugs);
 
-  const fetchErr = fbFetchErr || igFetchErr;
-  if (fetchErr) {
-    const message = fetchErr.message || JSON.stringify(fetchErr);
-    await supabase.from('pipeline_log').insert({
-      run_type: 'social_post', status: 'error', error_message: message, finished_at: new Date().toISOString(),
-    });
-    return new Response(JSON.stringify({ error: 'social-poster failed', message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    if (targetedErr) {
+      const message = targetedErr.message || JSON.stringify(targetedErr);
+      await supabase.from('pipeline_log').insert({
+        run_type: 'social_post', status: 'error', error_message: message, finished_at: new Date().toISOString(),
+      });
+      return new Response(JSON.stringify({ error: 'social-poster failed', message }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+    articles = targeted || [];
+  } else {
+    const { data: fbCandidates, error: fbFetchErr } = await supabase
+      .from('seo_articles')
+      .select(ARTICLE_COLUMNS)
+      .eq('status', 'published')
+      .is('posted_to_facebook_at', null)
+      .gte('published_at', recencyCutoff)
+      .order('published_at', { ascending: true })
+      .limit(1);
+
+    const { data: igCandidates, error: igFetchErr } = await supabase
+      .from('seo_articles')
+      .select(ARTICLE_COLUMNS)
+      .eq('status', 'published')
+      .is('posted_to_instagram_at', null)
+      .gte('published_at', recencyCutoff)
+      .order('published_at', { ascending: true })
+      .limit(1);
+
+    const fetchErr = fbFetchErr || igFetchErr;
+    if (fetchErr) {
+      const message = fetchErr.message || JSON.stringify(fetchErr);
+      await supabase.from('pipeline_log').insert({
+        run_type: 'social_post', status: 'error', error_message: message, finished_at: new Date().toISOString(),
+      });
+      return new Response(JSON.stringify({ error: 'social-poster failed', message }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    const articlesById = new Map<string, NonNullable<typeof fbCandidates>[number]>();
+    for (const a of [...(fbCandidates || []), ...(igCandidates || [])]) {
+      articlesById.set(a.id, a);
+    }
+    articles = Array.from(articlesById.values());
   }
-
-  const articlesById = new Map<string, NonNullable<typeof fbCandidates>[number]>();
-  for (const a of [...(fbCandidates || []), ...(igCandidates || [])]) {
-    articlesById.set(a.id, a);
-  }
-  const articles = Array.from(articlesById.values());
 
   if (!articles || articles.length === 0) {
     await supabase.from('pipeline_log').insert({
