@@ -109,6 +109,21 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   `run_type = 'ga4_report'` row with `status = 'success'`), don't assume
   it's configured — as of 2026-09-29 it has never run (0 rows), same as
   `gsc-report`.
+  - UPDATE 2026-09-29: user finished the secrets; a manual test run
+    confirmed auth works (both functions got real Google API errors, not
+    "not configured"). Two config steps remained: (1) GSC 403'd with "User
+    does not have sufficient permission for site" — the service account's
+    `client_email` still needs adding as a user on the Search Console
+    property (Settings → Users and permissions). (2) GA4 400'd with
+    "Field customEvent:hotel_name is not a valid dimension" — the GA4 Data
+    API only exposes event parameters that are registered as Custom
+    Dimensions first (unlike GA4's Explore UI, which can use unregistered
+    parameters ad hoc). Needs GA4 Admin → Custom definitions → Custom
+    dimensions → Create: scope "Event", parameter name `hotel_name`
+    (exact, case-sensitive). Registering it should make the *already
+    collected* historical event data queryable too, not just new events
+    going forward — but allow ~24-48h for GA4 to propagate a newly
+    registered dimension before assuming it's still broken.
 - **No Pinterest dashboard access** — can't check Standard-access approval
   status programmatically; ask the user.
 - **LinkedIn posting has never actually run** — `linkedin-poster` (weekly,
