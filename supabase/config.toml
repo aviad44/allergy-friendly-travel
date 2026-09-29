@@ -44,3 +44,6 @@ verify_jwt = false
 
 [functions.get-restaurant-contact]
 verify_jwt = false
+
+[functions.article-hero-photo]
+verify_jwt = false

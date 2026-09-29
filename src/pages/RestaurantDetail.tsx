@@ -57,6 +57,24 @@ interface RestaurantCard {
   bookingUrl?: string;
 }
 
+// Live Google Places photo of one of the reviewed restaurants (see
+// supabase/functions/article-hero-photo for why it's fetched fresh on every
+// view instead of stored). On-site only — og:image keeps hero_image_url.
+interface LiveHeroPhoto {
+  url: string;
+  attributions: { name: string; uri: string | null }[];
+  restaurantName: string;
+  mapsUrl: string;
+}
+
+// Skip the billed live-photo call for crawlers and the build's own headless
+// prerender (so the static HTML never bakes in a short-lived Google URL) —
+// they get the article's regular hero image.
+const isAutomatedVisitor = () =>
+  typeof navigator === 'undefined' ||
+  navigator.webdriver ||
+  /bot|crawl|spider|slurp|headless|lighthouse|facebookexternalhit|preview/i.test(navigator.userAgent);
+
 const RestaurantDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<Article | null>(null);
@@ -64,6 +82,27 @@ const RestaurantDetail = () => {
   const [destinationCity, setDestinationCity] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [livePhoto, setLivePhoto] = useState<LiveHeroPhoto | null>(null);
+
+  useEffect(() => {
+    setLivePhoto(null);
+    if (!slug || isAutomatedVisitor()) return;
+    let cancelled = false;
+    supabase.functions
+      .invoke(`article-hero-photo?slug=${encodeURIComponent(slug)}`, { method: 'GET' })
+      .then(({ data }) => {
+        const photo: LiveHeroPhoto | undefined = data?.photo;
+        if (!photo?.url || cancelled) return;
+        // Swap in only once the image has actually loaded, so a slow or
+        // failed Google photo never replaces a working hero with a blank.
+        const img = new Image();
+        img.referrerPolicy = 'no-referrer';
+        img.onload = () => { if (!cancelled) setLivePhoto(photo); };
+        img.src = photo.url;
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [slug]);
 
   useEffect(() => {
     if (!slug) return;
@@ -190,7 +229,34 @@ const RestaurantDetail = () => {
 
           <ArticleByline publishedAt={article.published_at} updatedAt={article.updated_at} />
 
-          {article.hero_image_url && (
+          {livePhoto ? (
+            <figure className="mb-8">
+              <img
+                src={livePhoto.url}
+                alt={`${livePhoto.restaurantName}${destinationCity ? `, ${destinationCity}` : ''}`}
+                referrerPolicy="no-referrer"
+                className="w-full h-64 sm:h-80 object-cover rounded-lg"
+              />
+              <figcaption className="text-xs text-gray-400 mt-1">
+                {livePhoto.restaurantName}
+                {livePhoto.attributions.length > 0 && (
+                  <>
+                    {' '}&middot; Photo by{' '}
+                    {livePhoto.attributions.map((a, i) => (
+                      <span key={i}>
+                        {i > 0 && ', '}
+                        {a.uri ? (
+                          <a href={a.uri} target="_blank" rel="noopener noreferrer nofollow" className="underline">{a.name}</a>
+                        ) : a.name}
+                      </span>
+                    ))}
+                  </>
+                )}
+                {' '}&middot;{' '}
+                <a href={livePhoto.mapsUrl} target="_blank" rel="noopener noreferrer nofollow" className="underline">Google Maps</a>
+              </figcaption>
+            </figure>
+          ) : article.hero_image_url && (
             <figure className="mb-8">
               <img
                 src={article.hero_image_url}

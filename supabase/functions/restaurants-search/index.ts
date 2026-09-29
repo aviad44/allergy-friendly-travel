@@ -299,7 +299,9 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
     const { data, error } = await supabase
       .from('search_log')
       .select('google_calls_count')
-      .in('mode', ['hotels_fast', 'fast'])
+      // 'article_photo' = article-hero-photo's live Google photo calls, which
+      // share this ₪100 ceiling (on top of their own ₪30 sub-ceiling).
+      .in('mode', ['hotels_fast', 'fast', 'article_photo'])
       .eq('cache_hit', false)
       .gte('created_at', monthStart.toISOString());
 

@@ -71,7 +71,11 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   `isGooglePlacesPhotoUrl()` in `social-poster`/`pinterest-poster`/
   `content-pipeline` always substitutes a fresh Unsplash/Pixabay photo for
   anything sent off-site instead, without touching the article's own
-  on-site hero image. Same reasoning extends to the Indexing API note
+  on-site hero image. Restaurant guide pages *do* show a live Google photo
+  of a reviewed restaurant on-site (`article-hero-photo`, fetched fresh per
+  view, with contributor + "Google Maps" attribution, ₪30/month sub-ceiling
+  inside the ₪100 Google ceiling) — never store Places photos (not even in
+  Supabase Storage); only `restaurants.google_place_id` may be persisted. Same reasoning extends to the Indexing API note
   below — don't build around a use that isn't what a Google API's terms
   actually permit.
 - **Secrets**: Supabase Edge Function secrets (dashboard → Edge Functions →
