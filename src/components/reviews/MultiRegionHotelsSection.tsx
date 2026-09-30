@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { trackHotelBookingClick } from "@/utils/googleAnalytics";
+import { withBookingAffiliate, outboundRel, isBookingUrl } from "@/utils/bookingAffiliate";
 
 interface RegionConfig {
   key: string;
@@ -129,13 +130,13 @@ export const MultiRegionHotelsSection = ({
 
                     {hotel.bookingUrl && (
                       <a
-                        href={hotel.bookingUrl}
+                        href={withBookingAffiliate(hotel.bookingUrl, "region-guide")}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel={outboundRel(hotel.bookingUrl)}
                         onClick={() => trackHotelBookingClick(hotel.name, hotel.bookingUrl)}
                         className="inline-flex items-center gap-1 text-primary hover:underline font-medium"
                       >
-                        Visit Official Website
+                        {isBookingUrl(hotel.bookingUrl) ? "Check Availability on Booking.com" : "Visit Official Website"}
                         <ExternalLink className="h-4 w-4" />
                       </a>
                     )}
