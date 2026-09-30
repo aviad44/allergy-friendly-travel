@@ -59,6 +59,7 @@ export const TripadvisorEnrichedHotelCard = ({ city, category, ...cardProps }: T
   return (
     <HotelCard
       {...cardProps}
+      category={category}
       tripadvisorRating={ta?.rating}
       tripadvisorReviewCount={ta?.reviewCount}
       tripadvisorUrl={ta?.tripadvisorUrl}
