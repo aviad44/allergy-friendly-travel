@@ -41,10 +41,6 @@ export const CruiseDetails: React.FC<CruiseDetailsProps> = ({ cruiseLines }) => 
                 <li key={i} className="text-muted-foreground">{feature}</li>
               ))}
             </ul>
-            
-            <div className="text-sm text-muted-foreground bg-primary/5 rounded-lg p-3">
-              Verified guest reviews are sourced from TripAdvisor, Booking.com, and Google Reviews.
-            </div>
           </div>
           {index < cruiseLines.length - 1 && <Separator className="mt-10" />}
         </div>
