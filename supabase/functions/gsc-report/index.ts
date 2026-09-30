@@ -10,11 +10,18 @@ const corsHeaders = {
 const SITE_URL = 'https://www.allergy-free-travel.com';
 
 // Search Console addresses a site as either a Domain property (sc-domain:…)
-// or a URL-prefix property. This project's property is the URL-prefix form,
-// matching the exact prefix buildCanonical() in src/utils/seo.ts settled on
-// (trailing slash, see CLAUDE.md) — Search Console is strict about this
-// matching the verified property exactly, or every call 403s.
-const GSC_SITE_URL = `${SITE_URL}/`;
+// or a URL-prefix property. This was originally written assuming a
+// URL-prefix property matching buildCanonical()'s exact prefix (see
+// CLAUDE.md) — wrong: live testing 2026-09-30 confirmed via a Search
+// Console screenshot that the actual registered/verified property here is
+// a Domain property ("allergy-free-travel.com", no scheme/www), and the
+// service account was added as a user on *that* property. Search Console
+// is strict about the site identifier matching the verified property
+// exactly, or every call 403s ("User does not have sufficient permission
+// for site") — which is exactly what every prior run hit. The Domain
+// property identifier is a fixed `sc-domain:` + bare domain, no trailing
+// slash, unrelated to buildCanonical()'s URL shape.
+const GSC_PROPERTY_ID = 'sc-domain:allergy-free-travel.com';
 
 interface AnalyticsRow {
   keys: string[];
@@ -69,7 +76,7 @@ async function getAccessToken(credentialsJson: string): Promise<string> {
 
 async function fetchSearchAnalytics(accessToken: string, startDate: string, endDate: string): Promise<AnalyticsRow[]> {
   const res = await fetch(
-    `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(GSC_SITE_URL)}/searchAnalytics/query`,
+    `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(GSC_PROPERTY_ID)}/searchAnalytics/query`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
@@ -93,7 +100,7 @@ async function inspectUrl(accessToken: string, url: string): Promise<{ url: stri
     const res = await fetch('https://searchconsole.googleapis.com/v1/urlInspection/index:inspect', {
       method: 'POST',
       headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ inspectionUrl: url, siteUrl: GSC_SITE_URL }),
+      body: JSON.stringify({ inspectionUrl: url, siteUrl: GSC_PROPERTY_ID }),
     });
     if (!res.ok) {
       const text = await res.text();
@@ -198,7 +205,7 @@ serve(async (req) => {
       .limit(3);
 
     const inspectionTargets = [
-      GSC_SITE_URL,
+      `${SITE_URL}/`,
       ...(recentArticles || []).map((a: { slug: string; content_type: string }) =>
         `${SITE_URL}/${a.content_type === 'restaurant' ? 'restaurants' : 'destinations'}/${a.slug}/`
       ),

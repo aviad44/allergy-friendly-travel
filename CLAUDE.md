@@ -91,39 +91,41 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
 
 ## Known gaps / things Claude cannot check on its own
 
-- **Google Search Console API access exists as of 2026-09-14** (the
-  `gsc-report` function above) but only works once the user has: (1)
-  created a Google Cloud service account, (2) added its `client_email` as
-  a read-only user on the Search Console property, and (3) put the
-  service-account JSON key in the `GOOGLE_SEARCH_CONSOLE_CREDENTIALS`
-  Supabase secret. Until confirmed working end-to-end (check
-  `pipeline_log` for a `run_type = 'gsc_report'` row with
-  `status = 'success'`), treat GSC as still only reachable via screenshots
-  the user pastes — don't assume the credential is configured.
-- **GA4 hotel-booking-click reporting exists as of 2026-09-29** (the
-  `ga4-report` function above) but only works once the user has: (1)
-  enabled the Google Analytics Data API on a service account (reusing the
-  GSC one is fine), (2) added it as a Viewer on the GA4 property, and (3)
-  set the `GOOGLE_ANALYTICS_CREDENTIALS` and `GA4_PROPERTY_ID` Supabase
-  secrets. Until confirmed working end-to-end (check `pipeline_log` for a
-  `run_type = 'ga4_report'` row with `status = 'success'`), don't assume
-  it's configured — as of 2026-09-29 it has never run (0 rows), same as
-  `gsc-report`.
-  - UPDATE 2026-09-29: user finished the secrets; a manual test run
-    confirmed auth works (both functions got real Google API errors, not
-    "not configured"). Two config steps remained: (1) GSC 403'd with "User
-    does not have sufficient permission for site" — the service account's
-    `client_email` still needs adding as a user on the Search Console
-    property (Settings → Users and permissions). (2) GA4 400'd with
-    "Field customEvent:hotel_name is not a valid dimension" — the GA4 Data
-    API only exposes event parameters that are registered as Custom
-    Dimensions first (unlike GA4's Explore UI, which can use unregistered
-    parameters ad hoc). Needs GA4 Admin → Custom definitions → Custom
-    dimensions → Create: scope "Event", parameter name `hotel_name`
-    (exact, case-sensitive). Registering it should make the *already
-    collected* historical event data queryable too, not just new events
-    going forward — but allow ~24-48h for GA4 to propagate a newly
-    registered dimension before assuming it's still broken.
+- **Google Search Console reporting (`gsc-report`) and GA4 hotel-booking-
+  click reporting (`ga4-report`) are both confirmed working end-to-end as
+  of 2026-09-30** — `pipeline_log` shows real `success` rows for both
+  (`run_type = 'gsc_report'` / `'ga4_report'`), not just "not configured"
+  or auth errors. Getting here surfaced two real bugs/gotchas worth
+  knowing if either ever regresses:
+  - **GSC's site identifier was wrong in code, not a user setup mistake.**
+    The Search Console property actually registered/verified for this
+    site is a **Domain property** (`sc-domain:allergy-free-travel.com`),
+    not the URL-prefix form (`https://www.allergy-free-travel.com/`) the
+    code originally assumed (confirmed via a live Search Console
+    screenshot showing the service account listed as a user on the
+    bare-domain property). Fixed in `gsc-report/index.ts`:
+    `GSC_PROPERTY_ID = 'sc-domain:allergy-free-travel.com'` is now the
+    identifier used in both the Search Analytics and URL Inspection API
+    calls, kept separate from `SITE_URL` (still the real
+    `https://www.allergy-free-travel.com` used to build actual page URLs
+    to inspect). If this ever 403s again with "User does not have
+    sufficient permission for site", re-check which property type is
+    actually verified in Search Console before assuming the user setup
+    regressed.
+  - **A newly-registered GA4 Custom Dimension does NOT apply retroactively
+    to already-collected events** — corrected from an earlier, wrong note
+    here that claimed it would. Confirmed live 2026-09-30: after
+    registering `hotel_name` as an Event-scoped Custom Dimension, the
+    first successful `ga4-report` run showed `(not set)` for every one of
+    59 historical `hotel_booking_click` events (all predating the
+    dimension's creation) — only new events from the registration point
+    forward will carry a real hotel-name value. The `pagePath` breakdown
+    (a standard, non-custom dimension) worked immediately and isn't
+    affected by this.
+  - Both secrets (`GOOGLE_SEARCH_CONSOLE_CREDENTIALS`,
+    `GOOGLE_ANALYTICS_CREDENTIALS`, `GA4_PROPERTY_ID`) reuse the same
+    service account, which now has both APIs enabled and is a user/Viewer
+    on both properties.
 - **No Pinterest dashboard access** — can't check Standard-access approval
   status programmatically; ask the user.
 - **LinkedIn posting has never actually run** — `linkedin-poster` (weekly,
