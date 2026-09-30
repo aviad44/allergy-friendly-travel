@@ -19,7 +19,21 @@ export interface HotelCardProps {
   tripadvisorReviewCount?: number;
   tripadvisorUrl?: string;
   tripadvisorQuote?: { text: string; author: string; url: string };
+  /** Restaurants reuse this card but link to their own website — Booking.com doesn't list restaurants. */
+  category?: 'hotel' | 'restaurant';
 }
+
+// A restaurant's website as a clickable URL (adds https:// if missing), or
+// '' when there's no usable URL — the card then shows no link button.
+const toHttpUrl = (url?: string): string => {
+  const trimmed = (url || '').trim();
+  if (!trimmed || trimmed === '#') return '';
+  try {
+    return new URL(/^https?:\/\//.test(trimmed) ? trimmed : `https://${trimmed}`).toString();
+  } catch {
+    return '';
+  }
+};
 
 export const HotelCard = ({
   name,
@@ -32,6 +46,7 @@ export const HotelCard = ({
   tripadvisorReviewCount,
   tripadvisorUrl,
   tripadvisorQuote,
+  category = 'hotel',
 }: HotelCardProps) => {
   // Debug log for individual hotel data rendering
   console.log("Rendering HotelCard:", { name, address });
@@ -45,8 +60,10 @@ export const HotelCard = ({
   // Extract star rating from name if available
   const starRating = name.includes('★') ? name.split('★').length - 1 : 0;
   const cleanName = name.replace(/★+$/, '').trim();
-  // Always Booking.com (never the hotel's own site), so the exit can earn commission.
-  const bookingTarget = bookingUrlForHotel(cleanName, address, bookingUrl);
+  // Hotels always exit to Booking.com (never the hotel's own site), so the
+  // click can earn commission. Restaurants keep their own website link.
+  const isRestaurant = category === 'restaurant';
+  const linkTarget = isRestaurant ? toHttpUrl(bookingUrl) : bookingUrlForHotel(cleanName, address, bookingUrl);
 
   // Determine icon based on hotel name/type
   const isResort = name.toLowerCase().includes('resort') || name.toLowerCase().includes('palace');
@@ -138,21 +155,23 @@ export const HotelCard = ({
         )}
       </CardContent>
       <CardFooter className="pt-0 pb-4 px-4">
-        <Button 
-          asChild 
-          className="w-full sm:w-auto transition-all duration-300 hover:scale-105 bg-primary/90 hover:bg-primary text-sm h-9"
-        >
-          <a
-            href={withBookingAffiliate(bookingTarget, "guide")}
-            target="_blank"
-            rel={outboundRel(bookingTarget)}
-            onClick={() => trackHotelBookingClick(cleanName, bookingTarget)}
-            className="flex items-center justify-center gap-1"
+        {linkTarget && (
+          <Button 
+            asChild 
+            className="w-full sm:w-auto transition-all duration-300 hover:scale-105 bg-primary/90 hover:bg-primary text-sm h-9"
           >
-            Check Availability on Booking.com
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
-        </Button>
+            <a
+              href={isRestaurant ? linkTarget : withBookingAffiliate(linkTarget, "guide")}
+              target="_blank"
+              rel={outboundRel(linkTarget)}
+              onClick={() => trackHotelBookingClick(cleanName, linkTarget)}
+              className="flex items-center justify-center gap-1"
+            >
+              {isRestaurant ? "Visit Website" : "Check Availability on Booking.com"}
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );
