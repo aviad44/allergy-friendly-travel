@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-09-30
+- Booking.com affiliate: switched `bookingAffiliate.ts` from Booking's direct `aid=` format to a network deep-link template (`BOOKING_DEEPLINK_TEMPLATE`, with `{url}` and `{sid}`). Booking moved small publishers onto networks in 2025, and the user applied to the Booking.com EMEA program via CJ Affiliate (pending review). The template is still empty, so the site behaves exactly as before until it's filled in from a real CJ deep link.
+
 ## 2026-09-29
 - Booking.com affiliate plumbing: every outbound Booking.com link now goes through one helper, `src/utils/bookingAffiliate.ts` (`withBookingAffiliate()`), covering article/guide hotel cards, live search results, search detail/card buttons, the region guide section, and the Hotel Chains page. It adds `aid` (partner ID) plus a per-placement `label` (e.g. `aft-guide`, `aft-search`), marks the link `rel="sponsored"`, and shows an affiliate disclosure in the footer. It only touches real `booking.com` hosts (never a hotel's own website), and it is a no-op until `BOOKING_AFFILIATE_ID` is filled in. The user doesn't have a Booking.com affiliate account yet, so no fake ID ships. Because the tag is applied when the link renders, URLs already stored in `hotels.booking_url` and returned by `hotel-search` get tagged with no data migration.
 - Related fixes in the same pass: the live search's main "Check Availability on Booking.com" button never fired `hotel_booking_click`, so GA4 was undercounting the highest-intent click (now tracked, and so are the Hotel Chains page's 6 Booking links). Guide-page hotel cards labelled a Booking.com search link "Visit Website"; they now say "Check Availability on Booking.com" when the target is Booking. Removed the UTM params that were added to Booking URLs: those go to Booking's analytics, not ours.
