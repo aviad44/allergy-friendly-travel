@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { trackHotelBookingClick } from "@/utils/googleAnalytics";
-import { withBookingAffiliate, outboundRel, isBookingUrl } from "@/utils/bookingAffiliate";
+import { withBookingAffiliate, outboundRel, bookingUrlForHotel } from "@/utils/bookingAffiliate";
 
 interface RegionConfig {
   key: string;
@@ -111,10 +111,6 @@ export const MultiRegionHotelsSection = ({
                   <CardContent className="space-y-3">
                     <p className="text-muted-foreground">{hotel.description}</p>
                     
-                    <div className="text-sm text-muted-foreground bg-primary/5 rounded-lg p-3">
-                      Verified guest reviews are sourced from TripAdvisor, Booking.com, and Google Reviews.
-                    </div>
-
                     {hotel.allergenFriendly && hotel.allergenFriendly.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {hotel.allergenFriendly.map((tag, tagIndex) => (
@@ -128,18 +124,21 @@ export const MultiRegionHotelsSection = ({
                       </div>
                     )}
 
-                    {hotel.bookingUrl && (
-                      <a
-                        href={withBookingAffiliate(hotel.bookingUrl, "region-guide")}
-                        target="_blank"
-                        rel={outboundRel(hotel.bookingUrl)}
-                        onClick={() => trackHotelBookingClick(hotel.name, hotel.bookingUrl)}
-                        className="inline-flex items-center gap-1 text-primary hover:underline font-medium"
-                      >
-                        {isBookingUrl(hotel.bookingUrl) ? "Check Availability on Booking.com" : "Visit Official Website"}
-                        <ExternalLink className="h-4 w-4" />
-                      </a>
-                    )}
+                    {(() => {
+                      const target = bookingUrlForHotel(hotel.name, hotel.address || hotel.location, hotel.bookingUrl);
+                      return (
+                        <a
+                          href={withBookingAffiliate(target, "region-guide")}
+                          target="_blank"
+                          rel={outboundRel(target)}
+                          onClick={() => trackHotelBookingClick(hotel.name, target)}
+                          className="inline-flex items-center gap-1 text-primary hover:underline font-medium"
+                        >
+                          Check Availability on Booking.com
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
               ))}

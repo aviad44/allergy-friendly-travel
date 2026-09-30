@@ -38,10 +38,6 @@ export const CruiseIntro: React.FC = () => {
                 <Check className="h-5 w-5 text-primary" />
                 <span>Cross-contamination management</span>
               </li>
-              <li className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-primary" />
-                <span>Verified guest reviews</span>
-              </li>
             </ul>
           </div>
           <div className="bg-primary/5 p-6 rounded-lg">

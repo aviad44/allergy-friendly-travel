@@ -50,6 +50,35 @@ export function withBookingAffiliate(url: string, placement: string): string {
   }
 }
 
+// Location words for a Booking.com search, from a free-form address: drop the
+// street (first segment) and the country (last) when there are 3+ segments,
+// drop postcode/number tokens, and drop words already in the hotel name
+// ("116 Piccadilly, London W1J 7BJ, UK" + "The Ritz London" → "";
+// "Nesplein, Amsterdam Center" + "Hotel V Nesplein" → "Amsterdam Center").
+function locationWords(name: string, address?: string): string {
+  if (!address) return '';
+  const parts = address.split(',').map(p => p.trim()).filter(Boolean);
+  const kept = parts.length >= 3 ? parts.slice(1, -1) : parts;
+  const nameWords = new Set(name.toLowerCase().split(/\s+/));
+  return kept
+    .join(' ')
+    .split(/\s+/)
+    .filter(token => token && !/\d/.test(token) && !nameWords.has(token.toLowerCase()))
+    .join(' ');
+}
+
+// Every hotel exit on the site goes to Booking.com (not the hotel's own
+// website), so it can earn commission: an existing Booking.com URL is kept
+// as-is, anything else (a hotel's official site, or nothing) becomes a
+// Booking.com search for the hotel — the same `searchresults.html?ss=` shape
+// content-pipeline and hotel-search already use. Pass the result through
+// withBookingAffiliate() when rendering.
+export function bookingUrlForHotel(name: string, address?: string, existingUrl?: string | null): string {
+  if (existingUrl && isBookingUrl(existingUrl)) return existingUrl.trim();
+  const query = [name, locationWords(name, address)].filter(Boolean).join(' ');
+  return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(query)}`;
+}
+
 // rel for an outbound link: affiliate links must be marked `sponsored` for
 // Google (paid links that pass PageRank are a link-scheme violation).
 export function outboundRel(url?: string | null): string {

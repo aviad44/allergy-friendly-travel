@@ -144,16 +144,6 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
           )}
 
           <div className="border-t pt-4 flex flex-wrap gap-3">
-            {hotel.websiteUrl && (
-              <a
-                href={hotel.websiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md font-medium transition-colors"
-              >
-                Hotel Website
-              </a>
-            )}
             {hotel.bookingSearchUrl && (
               <a
                 href={withBookingAffiliate(hotel.bookingSearchUrl, "search")}

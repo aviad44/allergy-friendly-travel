@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { MapPin, Star, ExternalLink, Check, Bed, Home } from "lucide-react";
 import { useState } from "react";
 import { trackHotelBookingClick } from "@/utils/googleAnalytics";
-import { withBookingAffiliate, outboundRel, isBookingUrl } from "@/utils/bookingAffiliate";
+import { withBookingAffiliate, outboundRel, bookingUrlForHotel } from "@/utils/bookingAffiliate";
 
 export interface HotelCardProps {
   name: string;
@@ -36,23 +36,6 @@ export const HotelCard = ({
   // Debug log for individual hotel data rendering
   console.log("Rendering HotelCard:", { name, address });
   
-  const getCleanUrl = (url: string) => {
-    // Clean up URL if needed and ensure it starts with http/https
-    if (!url) return '#';
-    
-    let cleanUrl = url.trim();
-    if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
-      cleanUrl = 'https://' + cleanUrl;
-    }
-    
-    try {
-      return new URL(cleanUrl).toString();
-    } catch (e) {
-      console.error('Invalid URL:', url);
-      return '#';
-    }
-  };
-
   // Generate Google Maps URL for the hotel location
   const getGoogleMapsUrl = (hotelName: string, hotelAddress: string) => {
     const query = encodeURIComponent(`${hotelName}, ${hotelAddress}`);
@@ -62,6 +45,8 @@ export const HotelCard = ({
   // Extract star rating from name if available
   const starRating = name.includes('★') ? name.split('★').length - 1 : 0;
   const cleanName = name.replace(/★+$/, '').trim();
+  // Always Booking.com (never the hotel's own site), so the exit can earn commission.
+  const bookingTarget = bookingUrlForHotel(cleanName, address, bookingUrl);
 
   // Determine icon based on hotel name/type
   const isResort = name.toLowerCase().includes('resort') || name.toLowerCase().includes('palace');
@@ -156,16 +141,15 @@ export const HotelCard = ({
         <Button 
           asChild 
           className="w-full sm:w-auto transition-all duration-300 hover:scale-105 bg-primary/90 hover:bg-primary text-sm h-9"
-          disabled={!bookingUrl || bookingUrl === '#'}
         >
           <a
-            href={withBookingAffiliate(getCleanUrl(bookingUrl), "guide")}
+            href={withBookingAffiliate(bookingTarget, "guide")}
             target="_blank"
-            rel={outboundRel(bookingUrl)}
-            onClick={() => trackHotelBookingClick(cleanName, bookingUrl)}
+            rel={outboundRel(bookingTarget)}
+            onClick={() => trackHotelBookingClick(cleanName, bookingTarget)}
             className="flex items-center justify-center gap-1"
           >
-            {isBookingUrl(getCleanUrl(bookingUrl)) ? "Check Availability on Booking.com" : "Visit Website"}
+            Check Availability on Booking.com
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
         </Button>
