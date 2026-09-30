@@ -46,6 +46,9 @@ const Terms = () => {
           <h3 className="font-display text-xl font-semibold mb-3 text-blue-700">Links to External Websites</h3>
           <p className="mb-6">The Website may contain links to third-party websites. We are not responsible for the content, privacy practices, or services of those external sites.</p>
 
+          <h3 className="font-display text-xl font-semibold mb-3 text-blue-700">Affiliate Links</h3>
+          <p className="mb-6">Some links to Booking.com on the Website are affiliate links. If you make a booking through one of them, we may earn a commission from Booking.com, at no extra cost to you. Affiliate relationships never influence which hotels or restaurants we feature or how we evaluate them: our recommendations are based on real allergy-related evidence from guest reviews.</p>
+
           <h3 className="font-display text-xl font-semibold mb-3 text-blue-700">Changes to the Terms</h3>
           <p className="mb-6">The Website operators reserve the right to update these Terms at any time at their sole discretion. The latest update date will appear at the top of this page. Continued use of the Website after updates constitutes renewed acceptance of the updated Terms.</p>
 

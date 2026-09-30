@@ -4,19 +4,22 @@
 // and returned live by `hotel-search`, without any data migration.
 //
 // We're joining Booking.com's affiliate program through CJ Affiliate
-// (the "Booking.com EMEA" program), not Booking's direct `aid=` program —
+// (the "Booking.com MEA" program, advertiser 4347392), not Booking's direct `aid=` program —
 // Booking moved small publishers onto networks in 2025. CJ wraps the
 // destination URL inside its own tracking link, so the tracking format is a
 // template: copy a real deep link from CJ's Deep Link Generator, replace the
 // encoded destination with {url} and the sub-ID value with {sid}.
 //
-// Until the application is approved, BOOKING_DEEPLINK_TEMPLATE stays empty
-// and every link passes through unchanged (never a guessed/placeholder
-// tracking link). Activating is then a one-line change here.
+// Setting BOOKING_DEEPLINK_TEMPLATE to '' switches tracking off site-wide:
+// every link then passes through unchanged.
 //
 // Non-Booking URLs (a hotel's own website, etc.) are never touched.
 
-export const BOOKING_DEEPLINK_TEMPLATE = '';
+// Built from a real deep link generated in CJ (Booking.com MEA program,
+// advertiser 4347392; our website property PID 101893797; text link
+// 11891539 "Booking.com").
+export const BOOKING_DEEPLINK_TEMPLATE =
+  'https://www.jdoqocy.com/click-101893797-11891539?sid={sid}&url={url}';
 
 export function isBookingUrl(url?: string | null): boolean {
   if (!url) return false;

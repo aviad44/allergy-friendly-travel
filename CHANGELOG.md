@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 2026-09-30
+- Booking.com affiliate is live in code: the user was approved for CJ's Booking.com MEA program. `BOOKING_DEEPLINK_TEMPLATE` is set from a real CJ deep link (PID 101893797, link 11891539), and our generated URL matches CJ's own sample exactly. Every Booking.com exit now goes through CJ with a per-placement `sid`. The footer disclosure activates automatically, and /terms/ gained an "Affiliate Links" section.
 - Booking.com affiliate: switched `bookingAffiliate.ts` from Booking's direct `aid=` format to a network deep-link template (`BOOKING_DEEPLINK_TEMPLATE`, with `{url}` and `{sid}`). Booking moved small publishers onto networks in 2025, and the user applied to the Booking.com EMEA program via CJ Affiliate (pending review). The template is still empty, so the site behaves exactly as before until it's filled in from a real CJ deep link.
 
 ## 2026-09-29
