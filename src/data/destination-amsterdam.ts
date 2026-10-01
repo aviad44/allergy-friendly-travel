@@ -4,132 +4,132 @@ const hotels: Hotel[] = [
   {
     id: "amsterdam-marriott",
     name: "1. Amsterdam Marriott Hotel ★★★★★",
-    description: "Luxury hotel with allergy-free rooms and attentive staff in central Amsterdam near Leidseplein.",
+    description: "Luxury hotel in central Amsterdam near Leidseplein.",
     imageUrl: "/lovable-uploads/48a5bd4e-8c30-41ef-835e-981d6731b3b8.png",
     website: "https://www.marriott.com/en-us/hotels/amsnt-amsterdam-marriott-hotel/overview/",
     bookingUrl: "https://www.marriott.com/en-us/hotels/amsnt-amsterdam-marriott-hotel/overview/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Leidseplein, Amsterdam Center",
-    amenities: ["Allergy-free rooms", "Hypoallergenic bedding", "Allergen-aware kitchen", "Central location"],
+    amenities: ["Central location"],
     stars: 5,
     priceRange: "Luxury",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   },
   {
     id: "doubletree-amsterdam-central",
     name: "2. DoubleTree by Hilton Amsterdam Centraal Station ★★★★",
-    description: "Modern hotel with allergy-free bedding and hypoallergenic cleaning, conveniently located next to Central Station.",
+    description: "Modern hotel conveniently located next to Amsterdam Central Station.",
     imageUrl: "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png",
     website: "https://www.hilton.com/en/hotels/amstdgi-doubletree-amsterdam-centraal-station/",
     bookingUrl: "https://www.hilton.com/en/hotels/amstdgi-doubletree-amsterdam-centraal-station/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Central Station",
-    amenities: ["Allergy-free bedding", "Hypoallergenic cleaning", "24/7 front desk", "Near public transport"],
+    amenities: ["24/7 front desk", "Near public transport"],
     stars: 4,
     priceRange: "Mid-Range",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   },
   {
     id: "w-amsterdam",
     name: "3. W Amsterdam ★★★★★",
-    description: "Luxury design hotel with allergy-clean rooms and rooftop pool in the heart of Amsterdam.",
+    description: "Luxury design hotel with a rooftop pool in the heart of Amsterdam.",
     imageUrl: "/lovable-uploads/8232f9cd-cae4-43ee-a84b-49dc23e86eb1.png",
     website: "https://www.marriott.com/en-us/hotels/amswh-w-amsterdam/overview/",
     bookingUrl: "https://www.marriott.com/en-us/hotels/amswh-w-amsterdam/overview/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Center",
-    amenities: ["Allergy-clean rooms", "Rooftop pool", "Designer interiors", "Luxury amenities"],
+    amenities: ["Rooftop pool", "Designer interiors", "Luxury amenities"],
     stars: 5,
     priceRange: "Luxury",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   },
   {
     id: "renaissance-amsterdam",
     name: "4. Renaissance Amsterdam Hotel ★★★★",
-    description: "Historic hotel with allergy-aware staff, central location, and quiet rooms for sensitive guests.",
+    description: "Historic hotel in central Amsterdam with quiet rooms.",
     imageUrl: "/lovable-uploads/b78bfbbf-c77e-4c04-9a24-7209bdec53e3.png",
     website: "https://www.marriott.com/en-us/hotels/amsrd-renaissance-amsterdam-hotel/overview/",
     bookingUrl: "https://www.marriott.com/en-us/hotels/amsrd-renaissance-amsterdam-hotel/overview/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Center",
-    amenities: ["Allergy-aware staff", "Central location", "Quiet rooms", "Historic charm"],
+    amenities: ["Central location", "Quiet rooms", "Historic charm"],
     stars: 4,
     priceRange: "Mid-Range",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   },
   {
     id: "anantara-grand-krasnapolsky",
     name: "5. Anantara Grand Hotel Krasnapolsky Amsterdam ★★★★★",
-    description: "Historic hotel at Dam Square with allergy accommodations on request and dedicated allergen-aware dining.",
+    description: "Historic hotel at Dam Square with multiple on-site restaurants.",
     imageUrl: "/lovable-uploads/cf3c0a43-1695-413d-b297-1ba363ee2b56.png",
     website: "https://www.anantara.com/en/grand-hotel-krasnapolsky-amsterdam",
     bookingUrl: "https://www.anantara.com/en/grand-hotel-krasnapolsky-amsterdam?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Dam Square, Amsterdam Center",
-    amenities: ["Historic charm", "Allergy accommodations", "Prime location", "Multiple restaurants"],
+    amenities: ["Historic charm", "Prime location", "Multiple restaurants"],
     stars: 5,
     priceRange: "Luxury",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   },
   {
     id: "hotel-v-nesplein",
     name: "6. Hotel V Nesplein ★★★★",
-    description: "Boutique design hotel with personalized allergy services and locally-sourced allergy-friendly cuisine.",
+    description: "Boutique design hotel with locally-sourced cuisine.",
     imageUrl: "/lovable-uploads/1e92be73-4bcc-4e75-9bb4-b500ed1ecd63.png",
     website: "https://www.hotelv.nl/en/nesplein/",
     bookingUrl: "https://www.hotelv.nl/en/nesplein/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Nesplein, Amsterdam Center",
-    amenities: ["Boutique design", "Local cuisine", "Allergy-friendly menu", "Personalized service"],
+    amenities: ["Boutique design", "Local cuisine", "Personalized service"],
     stars: 4,
     priceRange: "Mid-Range",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   },
   {
     id: "pestana-amsterdam-riverside",
     name: "7. Pestana Amsterdam Riverside ★★★★",
-    description: "Waterfront hotel with comprehensive allergy management and medical-grade air filtration systems.",
+    description: "Waterfront hotel on the Amstel river.",
     imageUrl: "/lovable-uploads/4947cdd5-ba7b-4184-82a1-194a47b9a29a.png",
     website: "https://www.pestana.com/en/hotel/pestana-amsterdam-riverside",
     bookingUrl: "https://www.pestana.com/en/hotel/pestana-amsterdam-riverside?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Riverside",
-    amenities: ["Riverside location", "Medical-grade air filters", "Allergy-safe rooms", "Modern facilities"],
+    amenities: ["Riverside location", "Modern facilities"],
     stars: 4,
     priceRange: "Mid-Range",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   },
   {
     id: "lloyd-hotel",
     name: "8. Lloyd Hotel & Cultural Embassy ★★★★",
-    description: "Unique cultural hotel with flexible allergy accommodations and creative dietary solutions.",
+    description: "Unique cultural hotel in Amsterdam East with an artistic atmosphere.",
     imageUrl: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png",
     website: "https://www.lloydhotel.com/",
     bookingUrl: "https://www.lloydhotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam East",
-    amenities: ["Cultural embassy", "Flexible accommodations", "Creative cuisine", "Artistic atmosphere"],
+    amenities: ["Cultural embassy", "Artistic atmosphere"],
     stars: 4,
     priceRange: "Mid-Range",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   },
   {
     id: "ink-hotel",
     name: "9. INK Hotel Amsterdam ★★★★",
-    description: "Design hotel in former newspaper building with detailed allergen documentation and safe dining protocols.",
+    description: "Design hotel in a former newspaper building in central Amsterdam.",
     imageUrl: "/lovable-uploads/521a0582-0fd0-49a1-92e5-e0975d113512.png",
     website: "https://www.inkhotel.nl/",
     bookingUrl: "https://www.inkhotel.nl/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Center",
-    amenities: ["Design hotel", "Historic building", "Allergen documentation", "Safe dining"],
+    amenities: ["Design hotel", "Historic building"],
     stars: 4,
     priceRange: "Mid-Range",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   },
   {
     id: "waldorf-astoria",
     name: "10. Waldorf Astoria Amsterdam ★★★★★",
-    description: "Luxury canal-side hotel with world-class allergy services and Michelin-level allergen-free cuisine.",
+    description: "Luxury canal-side hotel with a two-Michelin-starred restaurant on site.",
     imageUrl: "/lovable-uploads/93d77143-5339-4fd4-a873-df1141b70120.png",
     website: "https://www.hilton.com/en/hotels/amswa-waldorf-astoria-amsterdam/",
     bookingUrl: "https://www.hilton.com/en/hotels/amswa-waldorf-astoria-amsterdam/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Herengracht Canal",
-    amenities: ["Luxury canal location", "Michelin-level cuisine", "World-class service", "Historic palace"],
+    amenities: ["Luxury canal location", "Michelin-starred restaurant", "World-class service", "Historic palace"],
     stars: 5,
     priceRange: "Luxury",
-    isPurelyAllergyFriendly: true
+    isPurelyAllergyFriendly: false
   }
 ];
 
