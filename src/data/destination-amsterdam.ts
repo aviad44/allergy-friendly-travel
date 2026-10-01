@@ -10,7 +10,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.marriott.com/en-us/hotels/amsnt-amsterdam-marriott-hotel/overview/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Leidseplein, Amsterdam Center",
     amenities: ["Allergy-free rooms", "Hypoallergenic bedding", "Allergen-aware kitchen", "Central location"],
-    allergyInfo: "Staff trained in allergen protocols, separate food preparation available, hypoallergenic bedding upon request",
     stars: 5,
     priceRange: "Luxury",
     isPurelyAllergyFriendly: true
@@ -24,7 +23,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.hilton.com/en/hotels/amstdgi-doubletree-amsterdam-centraal-station/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Central Station",
     amenities: ["Allergy-free bedding", "Hypoallergenic cleaning", "24/7 front desk", "Near public transport"],
-    allergyInfo: "Hypoallergenic room options, allergy-aware housekeeping, allergy-friendly cookies available",
     stars: 4,
     priceRange: "Mid-Range",
     isPurelyAllergyFriendly: true
@@ -38,7 +36,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.marriott.com/en-us/hotels/amswh-w-amsterdam/overview/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Center",
     amenities: ["Allergy-clean rooms", "Rooftop pool", "Designer interiors", "Luxury amenities"],
-    allergyInfo: "Premium allergy accommodations, dust-free cleaning protocols, HEPA filtration systems",
     stars: 5,
     priceRange: "Luxury",
     isPurelyAllergyFriendly: true
@@ -52,7 +49,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.marriott.com/en-us/hotels/amsrd-renaissance-amsterdam-hotel/overview/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Center",
     amenities: ["Allergy-aware staff", "Central location", "Quiet rooms", "Historic charm"],
-    allergyInfo: "Staff training on allergen management, customized meal options, clear allergen labeling",
     stars: 4,
     priceRange: "Mid-Range",
     isPurelyAllergyFriendly: true
@@ -66,7 +62,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.anantara.com/en/grand-hotel-krasnapolsky-amsterdam?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Dam Square, Amsterdam Center",
     amenities: ["Historic charm", "Allergy accommodations", "Prime location", "Multiple restaurants"],
-    allergyInfo: "Gluten-free breakfast options, staff trained in celiac protocols, restaurant recommendations",
     stars: 5,
     priceRange: "Luxury",
     isPurelyAllergyFriendly: true
@@ -80,7 +75,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.hotelv.nl/en/nesplein/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Nesplein, Amsterdam Center",
     amenities: ["Boutique design", "Local cuisine", "Allergy-friendly menu", "Personalized service"],
-    allergyInfo: "Custom meal preparation, local sourcing with full ingredient knowledge, nut allergy protocols",
     stars: 4,
     priceRange: "Mid-Range",
     isPurelyAllergyFriendly: true
@@ -94,7 +88,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.pestana.com/en/hotel/pestana-amsterdam-riverside?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Riverside",
     amenities: ["Riverside location", "Medical-grade air filters", "Allergy-safe rooms", "Modern facilities"],
-    allergyInfo: "Medical-grade HEPA filtration, environmental allergy protocols, hypoallergenic housekeeping",
     stars: 4,
     priceRange: "Mid-Range",
     isPurelyAllergyFriendly: true
@@ -108,7 +101,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.lloydhotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam East",
     amenities: ["Cultural embassy", "Flexible accommodations", "Creative cuisine", "Artistic atmosphere"],
-    allergyInfo: "Creative allergen-free cuisine, flexible meal planning, chef consultations available",
     stars: 4,
     priceRange: "Mid-Range",
     isPurelyAllergyFriendly: true
@@ -122,7 +114,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.inkhotel.nl/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Amsterdam Center",
     amenities: ["Design hotel", "Historic building", "Allergen documentation", "Safe dining"],
-    allergyInfo: "Detailed allergen documentation, menu modification capabilities, multi-allergy protocols",
     stars: 4,
     priceRange: "Mid-Range",
     isPurelyAllergyFriendly: true
@@ -136,7 +127,6 @@ const hotels: Hotel[] = [
     bookingUrl: "https://www.hilton.com/en/hotels/amswa-waldorf-astoria-amsterdam/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=amsterdam",
     location: "Herengracht Canal",
     amenities: ["Luxury canal location", "Michelin-level cuisine", "World-class service", "Historic palace"],
-    allergyInfo: "Michelin-trained allergen-free cuisine, luxury allergy protocols, comprehensive dietary management",
     stars: 5,
     priceRange: "Luxury",
     isPurelyAllergyFriendly: true
