@@ -17,7 +17,6 @@ export const cyprusContent: DestinationContent = {
         "Staff trained in allergy protocols"
       ],
       description: "Located in Larnaca, this modern hotel offers comprehensive allergy-aware breakfast options and specially trained staff.",
-      quote: "Staff was proactive about allergens at breakfast and offered safe alternatives.",
       bookingUrl: "https://www.qbiccityhotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Gluten-Free", "Dairy-Free"],
       amenities: ["WiFi", "Breakfast Included"],
@@ -37,7 +36,6 @@ export const cyprusContent: DestinationContent = {
         "Vegan alternatives available"
       ],
       description: "A stylish hotel in Larnaca with allergy-conscious cleaning practices and breakfast options for various dietary needs.",
-      quote: "Kitchen was informed of my egg and nut allergy ahead of time and adjusted my meal accordingly.",
       bookingUrl: "https://www.risehotel.com.cy/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Egg-Free", "Nut-Free", "Dairy-Free"],
       amenities: ["WiFi", "Breakfast Included", "Art Gallery"],
@@ -57,7 +55,6 @@ export const cyprusContent: DestinationContent = {
         "Beachfront location"
       ],
       description: "A luxury beachfront resort in Ayia Napa featuring an extensive buffet with clear allergy labeling and separate preparation areas.",
-      quote: "Buffet had separate allergy sections with great labeling and staff assistance.",
       bookingUrl: "https://www.nissibluresort.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Gluten-Free", "Vegan", "Multiple Allergen Options"],
       amenities: ["WiFi", "Swimming Pool", "Direct Beach Access"],
@@ -78,7 +75,6 @@ export const cyprusContent: DestinationContent = {
         "🌊 Beachfront location"
       ],
       description: "Part of the Atlantica hotel chain known for exceptional allergen management. Every dish in the dining room is clearly labeled with allergen information, making it safe and easy for guests with food allergies.",
-      quote: "Every single dish at the buffet was clearly marked with allergen symbols. I felt completely safe eating here.",
       bookingUrl: "https://www.atlanticahotels.com/cyprus/ayia-napa/atlantica-mare-village/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Comprehensive Allergen Labeling", "All Major Allergens"],
       amenities: ["WiFi", "Swimming Pool", "Beach Access", "All-Inclusive"],
@@ -98,7 +94,6 @@ export const cyprusContent: DestinationContent = {
         "👨‍👩‍👧‍👦 Family-friendly environment"
       ],
       description: "Family-friendly Atlantica resort with comprehensive allergen labeling system. All food service areas display clear allergen information for each dish, with staff trained to handle allergy concerns professionally.",
-      quote: "The Atlantica chain really understands allergies - every meal option was clearly marked and the staff double-checked everything.",
       bookingUrl: "https://www.atlanticahotels.com/cyprus/ayia-napa/atlantica-aeneas-resort/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Comprehensive Allergen Labeling", "Family-Safe Options"],
       amenities: ["WiFi", "Swimming Pool", "Kids Club", "All-Inclusive"],
@@ -118,7 +113,6 @@ export const cyprusContent: DestinationContent = {
         "🏖️ Premium beachfront location"
       ],
       description: "Beachfront Atlantica hotel in Paphos featuring the chain's signature allergen labeling system across all dining venues. Staff are well-trained in allergy protocols and cross-contamination prevention.",
-      quote: "Stayed here with severe nut allergies - every restaurant clearly showed which dishes were safe. Excellent system!",
       bookingUrl: "https://www.atlanticahotels.com/cyprus/paphos/atlantica-golden-beach/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Nut-Free Options", "Comprehensive Labeling"],
       amenities: ["WiFi", "Swimming Pool", "Multiple Restaurants", "Beach Access"],
@@ -138,7 +132,6 @@ export const cyprusContent: DestinationContent = {
         "Beach location"
       ],
       description: "This elegant beach hotel in Ayia Napa ensures all food service staff receive specialized training in handling common allergies.",
-      quote: "Staff took my dairy allergy seriously and double-checked everything with the chef.",
       bookingUrl: "https://www.alion-hotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Dairy-Free", "Gluten-Free", "Nut-Free"],
       amenities: ["WiFi", "Swimming Pool", "Beach Access"],
@@ -158,7 +151,6 @@ export const cyprusContent: DestinationContent = {
         "Personalized dietary accommodations"
       ],
       description: "A traditional mountain retreat offering personalized allergy-safe meals using local ingredients in the peaceful Troodos Mountains.",
-      quote: "Avoided sesame and dairy successfully with daily meal adjustments.",
       bookingUrl: "https://www.casalepanayiotis.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Sesame-Free", "Dairy-Free"],
       amenities: ["WiFi", "Spa", "Restaurant"],
@@ -180,7 +172,6 @@ export const cyprusContent: DestinationContent = {
         "Mountain location"
       ],
       description: "An affordable mountain hotel that accommodates common allergies with advance notice in the scenic Troodos region.",
-      quote: "They prepared my meals separately and explained ingredients clearly.",
       bookingUrl: "https://www.troodoshotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Gluten-Free", "Dairy-Free"],
       amenities: ["WiFi", "Restaurant", "Mountain Views"],

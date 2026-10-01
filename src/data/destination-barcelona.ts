@@ -17,7 +17,6 @@ export const barcelonaContent: DestinationContent = {
         "Custom meal preparation"
       ],
       description: "Located in the heart of Barcelona, this luxury hotel prioritizes guest well-being with exceptional allergy-aware dining options.",
-      quote: "Absolutely loved this hotel. From the moment I arrived, they ensured all my dietary needs were met.",
       bookingUrl: "https://www.grandhotelcentral.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
       allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
       amenities: ["WiFi", "Swimming Pool", "Room Service"],
@@ -37,7 +36,6 @@ export const barcelonaContent: DestinationContent = {
         "Allergy-friendly breakfast options"
       ],
       description: "Renowned for its exceptional service, Mercer Hotel provides tailored meals for guests with allergies in a stunning historic setting.",
-      quote: "The staff was incredibly attentive to my son's peanut allergy, making our stay stress-free.",
       bookingUrl: "https://www.mercerbarcelona.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
       allergenFriendly: ["Peanut-Free", "Gluten-Free"],
       amenities: ["WiFi", "Room Service", "Restaurant"],
@@ -57,7 +55,6 @@ export const barcelonaContent: DestinationContent = {
         "Custom dining experiences"
       ],
       description: "Overlooking the marina, Hotel Arts offers allergy-conscious dining options with stunning Mediterranean views.",
-      quote: "The staff took my allergies seriously and ensured every meal was prepared safely.",
       bookingUrl: "https://www.hotelartsbarcelona.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
       allergenFriendly: ["Gluten-Free", "Dairy-Free", "Egg-Free"],
       amenities: ["WiFi", "Swimming Pool", "Spa", "Multiple Restaurants"],
@@ -77,7 +74,6 @@ export const barcelonaContent: DestinationContent = {
         "Personalized dining experiences"
       ],
       description: "Combining Japanese-inspired luxury with dietary sensitivity, Nobu Hotel is a top pick for allergy-conscious travelers.",
-      quote: "The chef personally ensured that my meals were allergy-safe, and the service was impeccable.",
       bookingUrl: "https://barcelona.nobuhotels.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
       allergenFriendly: ["Gluten-Free", "Seafood-Free Options"],
       amenities: ["WiFi", "Room Service", "Restaurant", "Gym"],
@@ -97,7 +93,6 @@ export const barcelonaContent: DestinationContent = {
         "Staff trained in allergen management"
       ],
       description: "Situated in Sitges, a short drive from Barcelona, this hotel offers allergy-friendly menus and customized meal plans in a beautiful coastal setting.",
-      quote: "I felt completely safe dining here, thanks to their detailed approach to food allergies.",
       bookingUrl: "https://www.hotelcalipolis.com/en/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=barcelona",
       allergenFriendly: ["Gluten-Free", "Dairy-Free"],
       amenities: ["WiFi", "Swimming Pool", "Beach Access"],

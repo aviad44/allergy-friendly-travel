@@ -16,7 +16,6 @@ export const rhodesContent: DestinationContent = {
         "🏛️ Near historical sites"
       ],
       description: "This Atlantica hotel in Rhodes exemplifies the chain's commitment to allergy safety. All dishes in the dining room are clearly marked with allergen information, and staff receive extensive training in allergy management and cross-contamination prevention.",
-      quote: "Currently staying here - every single menu item shows exactly which allergens it contains. Makes dining stress-free!",
       bookingUrl: "https://www.atlanticahotels.com/greece/rhodes/atlantica-mikri-poli/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rhodes",
       allergenFriendly: ["Complete Allergen Transparency", "All Major Allergens"],
       amenities: ["WiFi", "Swimming Pool", "All-Inclusive", "Entertainment"],
@@ -36,7 +35,6 @@ export const rhodesContent: DestinationContent = {
         "🏖️ Beautiful beachfront location"
       ],
       description: "Luxury Atlantica resort in Rhodes featuring their renowned allergen management system. Every dining venue clearly displays allergen information for each dish, with dedicated staff trained in allergy protocols.",
-      quote: "The allergen labeling here is absolutely perfect - every dish clearly marked. I felt completely safe throughout my stay.",
       bookingUrl: "https://www.atlanticahotels.com/greece/rhodes/atlantica-imperial/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rhodes", 
       allergenFriendly: ["Luxury Allergen Management", "Multiple Allergen Options"],
       amenities: ["WiFi", "Swimming Pool", "Spa", "Multiple Restaurants"],
@@ -56,7 +54,6 @@ export const rhodesContent: DestinationContent = {
         "🏛️ Close to ancient Acropolis"
       ],
       description: "Traditional resort near the historic village of Lindos with staff trained in allergy awareness. The kitchen can accommodate various dietary restrictions with advance notice.",
-      quote: "They prepared special allergy-safe meals and the chef personally explained all ingredients. Very accommodating!",
       bookingUrl: "https://www.lindosvillage.gr/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rhodes",
       allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
       amenities: ["WiFi", "Swimming Pool", "Spa", "Traditional Architecture"],

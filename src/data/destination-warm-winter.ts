@@ -39,7 +39,6 @@ export const warmWinterContent: DestinationContent = {
         "Multiple dining venues"
       ],
       description: "Iconic luxury hotel perched on Madeira's cliffs, offering refined dining with attention to dietary needs and fresh Atlantic cuisine.",
-      quote: "The staff took my allergies seriously and the chef personally ensured my meals were safe.",
       bookingUrl: "https://www.belmond.com/hotels/europe/portugal/madeira/belmond-reids-palace?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Aware"],
       amenities: ["WiFi", "Spa", "Pool", "Fine Dining"],
@@ -59,7 +58,6 @@ export const warmWinterContent: DestinationContent = {
         "Fresh seafood focus"
       ],
       description: "Five-star hotel with multiple restaurants offering carefully prepared meals for guests with dietary restrictions.",
-      quote: "The buffet had clear allergen labels and the staff helped me navigate safely.",
       bookingUrl: "https://www.portobay.com/en/hotels/portugal/madeira-island/the-cliff-bay/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Allergen Labeling", "Custom Meals"],
       amenities: ["WiFi", "Spa", "Pool", "Restaurant"],
@@ -79,7 +77,6 @@ export const warmWinterContent: DestinationContent = {
         "Scenic ocean views"
       ],
       description: "Modern beachfront hotel with comprehensive all-inclusive dining that caters to various dietary needs.",
-      quote: "Great attention to my gluten intolerance at every meal.",
       bookingUrl: "https://www.melia.com/en/hotels/portugal/funchal/melia-madeira-mare?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Gluten-Free", "All-Inclusive Safe"],
       amenities: ["WiFi", "Pool", "Restaurant", "Beach Access"],
@@ -99,7 +96,6 @@ export const warmWinterContent: DestinationContent = {
         "Spa facilities"
       ],
       description: "Madeira's newest luxury resort offering exceptional service and personalized attention to dietary requirements across multiple restaurants.",
-      quote: "The concierge arranged allergy-safe dining at every restaurant in the hotel.",
       bookingUrl: "https://www.savoypalace.com/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Personalized Service", "Multiple Options"],
       amenities: ["WiFi", "Spa", "Pool", "Fine Dining", "Rooftop Bar"],
@@ -120,7 +116,6 @@ export const warmWinterContent: DestinationContent = {
         "Allergy-aware kitchen"
       ],
       description: "Premium Red Sea resort with internationally trained staff experienced in handling food allergies for global guests.",
-      quote: "The kitchen staff were briefed on my allergies and I felt completely safe.",
       bookingUrl: "https://www.steigenberger.com/en/hotels/all-hotels/egypt/hurghada/steigenberger-aldau-beach-hotel?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["International Standards", "All-Inclusive Safe"],
       amenities: ["WiFi", "Beach", "Pool", "Spa", "Water Sports"],
@@ -140,7 +135,6 @@ export const warmWinterContent: DestinationContent = {
         "Premium service"
       ],
       description: "Upscale all-inclusive resort with comprehensive allergen awareness and diverse international dining options.",
-      quote: "Staff noted my allergies at check-in and the restaurants were well prepared.",
       bookingUrl: "https://www.baronhotels.com/baron-palace-sahl-hasheesh?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Allergen Protocols", "All-Inclusive"],
       amenities: ["WiFi", "Beach", "Pool", "Spa", "Multiple Restaurants"],
@@ -160,7 +154,6 @@ export const warmWinterContent: DestinationContent = {
         "Reef access"
       ],
       description: "Family-oriented resort with attentive staff who understand food sensitivities and provide safe dining options.",
-      quote: "Traveling with allergic children was stress-free here.",
       bookingUrl: "https://www.jazhotels.com/en/egypt/hurghada/jaz-bluemarine?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Family-Friendly", "Kid-Safe Options"],
       amenities: ["WiFi", "Beach", "Pool", "Kids Club", "Water Sports"],
@@ -181,7 +174,6 @@ export const warmWinterContent: DestinationContent = {
         "Beach location"
       ],
       description: "Top-rated family resort in Lanzarote with exceptional attention to food allergies and comprehensive allergen labeling.",
-      quote: "Every restaurant had clear allergen information and the chefs were accommodating.",
       bookingUrl: "https://www.princesayaiza.com/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Allergen Labeling", "Family-Safe"],
       amenities: ["WiFi", "Beach", "Pool", "Spa", "Kids Club"],
@@ -201,7 +193,6 @@ export const warmWinterContent: DestinationContent = {
         "Tropical gardens"
       ],
       description: "Elegant Tenerife hotel surrounded by tropical gardens, offering refined cuisine with attention to dietary restrictions.",
-      quote: "The restaurant staff went above and beyond for my nut allergy.",
       bookingUrl: "https://www.hotelbotanico.com/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Nut-Free Options", "Gourmet Safe"],
       amenities: ["WiFi", "Spa", "Pool", "Gardens", "Fine Dining"],
@@ -221,7 +212,6 @@ export const warmWinterContent: DestinationContent = {
         "Tranquil atmosphere"
       ],
       description: "Sophisticated adults-only resort with personalized dining experiences and careful attention to food allergies.",
-      quote: "Perfect for a relaxing allergy-safe holiday. Staff were attentive and knowledgeable.",
       bookingUrl: "https://www.vinccihoteles.com/en/hotels/spain/tenerife/vincci-seleccion-la-plantacion-del-sur?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Personalized Dining", "Allergen-Aware"],
       amenities: ["WiFi", "Spa", "Pool", "Restaurant", "Adults-Only"],
@@ -242,7 +232,6 @@ export const warmWinterContent: DestinationContent = {
         "Mediterranean cuisine"
       ],
       description: "Stylish boutique hotel on Tel Aviv's beachfront with excellent attention to food allergies and dietary needs.",
-      quote: "The breakfast buffet had everything labeled and staff knew exactly what to recommend.",
       bookingUrl: "https://www.atlas.co.il/saul-hotel-tel-aviv?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Allergen Labeling", "Staff Training"],
       amenities: ["WiFi", "Beach Access", "Restaurant", "Central Location"],
@@ -262,7 +251,6 @@ export const warmWinterContent: DestinationContent = {
         "Contemporary amenities"
       ],
       description: "Contemporary boutique hotel with a focus on guest wellness and dietary accommodation.",
-      quote: "They handled my multiple allergies with professionalism and care.",
       bookingUrl: "https://www.atlas.co.il/vera-hotel-tel-aviv?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Multiple Allergies", "Wellness Focus"],
       amenities: ["WiFi", "Rooftop", "Restaurant", "Modern Design"],
@@ -282,7 +270,6 @@ export const warmWinterContent: DestinationContent = {
         "Charming atmosphere"
       ],
       description: "Historic boutique hotel with personalized service and genuine care for guests with food allergies.",
-      quote: "Old-world charm with modern allergy awareness. Felt very safe here.",
       bookingUrl: "https://www.atlas.co.il/savoy-sea-side-hotel-tel-aviv?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Personalized Care", "Staff Awareness"],
       amenities: ["WiFi", "Beach", "Restaurant", "Boutique"],
@@ -303,7 +290,7 @@ export const warmWinterContent: DestinationContent = {
         "Red Sea views"
       ],
       description: "Premier Red Sea resort with extensive allergy protocols and diverse dining options for all dietary needs.",
-      quote: "Dan Hotels have excellent allergy awareness. Every meal was safe and delicious.",
+      quote: "I have some food allergies and the restaurant staff were always eager to help, especially Michael and David were very kind, patient and helpful.",
       bookingUrl: "https://www.danhotels.com/eilathotels/daneilathotel?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Comprehensive Protocols", "All-Inclusive Safe"],
       amenities: ["WiFi", "Beach", "Pool", "Spa", "Multiple Restaurants"],
@@ -323,7 +310,6 @@ export const warmWinterContent: DestinationContent = {
         "Pool complex"
       ],
       description: "Family-oriented resort with dedicated attention to children's food allergies and comprehensive dining options.",
-      quote: "Traveling with allergic kids was stress-free. The kids club was aware and prepared.",
       bookingUrl: "https://www.danhotels.com/eilathotels/danpanoramaeilathotel?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Kid-Safe", "Family-Friendly"],
       amenities: ["WiFi", "Beach", "Pool", "Kids Club", "Water Sports"],
@@ -343,7 +329,6 @@ export const warmWinterContent: DestinationContent = {
         "Family activities"
       ],
       description: "All-suite family resort with comprehensive all-inclusive dining that caters to various food allergies.",
-      quote: "The all-inclusive buffet was clearly labeled and safe for my celiac daughter.",
       bookingUrl: "https://www.isrotel.com/isrotel-yam-suf?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
       allergenFriendly: ["Gluten-Free", "All-Inclusive"],
       amenities: ["WiFi", "Beach", "Pool", "Kids Club", "Diving"],

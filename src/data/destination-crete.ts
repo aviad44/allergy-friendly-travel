@@ -16,7 +16,6 @@ export const creteContent: DestinationContent = {
         "👨‍🍳 Special allergy-focused meal preparation"
       ],
       description: "Luxurious seafront resort with stunning views of Spinalonga Island. Their chefs are trained in preparing allergy-friendly meals and offer consultation for guests with dietary requirements.",
-      quote: "The resort took my gluten allergy very seriously and prepared special meals with care and attention to detail.",
       bookingUrl: "https://www.marriott.com/hotels/travel/herak-blue-palace-a-luxury-collection-resort-and-spa-crete/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=crete",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/76493476.jpg?k=3f69730363c8c2b7275039fc1448191c37098267330232e0faa8379f80ee2d78&o=&hp=1",
       rating: 4.8,
@@ -37,7 +36,6 @@ export const creteContent: DestinationContent = {
         "🏨 Allergen-free room options"
       ],
       description: "Adults-only beachfront lifestyle resort featuring wellness-focused amenities and allergy-conscious dining options, with staff trained on food allergen protocols.",
-      quote: "The staff prepared a special dairy-free menu for me throughout my stay without compromising on flavor or variety.",
       bookingUrl: "https://www.domesnoruz.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=crete",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/188380634.jpg?k=f16ebd17cf7d8a7b72224665d9b6836767f23ca680ec89d0474b320ded649e7c&o=&hp=1",
       rating: 4.7,
@@ -58,7 +56,6 @@ export const creteContent: DestinationContent = {
         "🌱 Extensive vegan and gluten-free options"
       ],
       description: "Adults-only overwater bungalow experience with an extensive cuisine selection that caters to various allergies and dietary needs, including celiac disease.",
-      quote: "They had a dedicated gluten-free section at breakfast with fresh baked goods that were delicious!",
       bookingUrl: "https://www.stellaisland.gr/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=crete",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/243816179.jpg?k=d93c84a4478bd47f950b615ea485b502f93d3a7904652445c01c9d314b9a91a7&o=&hp=1",
       rating: 4.9,
@@ -79,7 +76,6 @@ export const creteContent: DestinationContent = {
         "🧒 Children's allergy-friendly menus"
       ],
       description: "Beachfront luxury resort with spectacular views and multiple restaurants that offer comprehensive allergen-aware dining options and special children's menus for those with allergies.",
-      quote: "My son has multiple food allergies and the chef personally prepared safe meals for him every day.",
       bookingUrl: "https://www.grecotel.com/crete/amirandes/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=crete",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/266065269.jpg?k=bb69ddecf661a306203374885a36c3cc7eacc04c86c5f87d0349ae475fca0306&o=&hp=1",
       rating: 4.6,
@@ -102,7 +98,6 @@ export const creteContent: DestinationContent = {
         "🏛️ Near historical sites"
       ],
       description: "This Atlantica hotel in Rhodes exemplifies the chain's commitment to allergy safety. All dishes in the dining room are clearly marked with allergen information, and staff receive extensive training in allergy management and cross-contamination prevention.",
-      quote: "Currently staying here - every single menu item shows exactly which allergens it contains. Makes dining stress-free!",
       bookingUrl: "https://www.atlanticahotels.com/greece/rhodes/atlantica-mikri-poli/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=greece",
       allergenFriendly: ["Complete Allergen Transparency", "All Major Allergens"],
       amenities: ["WiFi", "Swimming Pool", "All-Inclusive", "Entertainment"],
@@ -122,7 +117,7 @@ export const creteContent: DestinationContent = {
         "🌊 Stunning sea views"
       ],
       description: "Atlantica's flagship property in Corfu featuring their renowned allergen labeling system across all dining venues. Every dish is clearly marked with comprehensive allergen information, ensuring safe dining for guests with food allergies.",
-      quote: "The allergen labeling system here is the best I've seen - so detailed and accurate. Perfect for my multiple food allergies.",
+      quote: "Regarding gluten free. Prior to and on arrival we advised (Eleni) that one of our party was coeliac.",
       bookingUrl: "https://www.atlanticahotels.com/greece/corfu/atlantica-grand-mediterraneo/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=greece",
       allergenFriendly: ["Multiple Allergen Management", "Comprehensive System"],
       amenities: ["WiFi", "Swimming Pool", "Multiple Restaurants", "Spa"],
@@ -142,7 +137,6 @@ export const creteContent: DestinationContent = {
         "🏖️ Private beach access"
       ],
       description: "Luxury Atlantica resort in Zakynthos maintaining the chain's exceptional allergen management standards. Features comprehensive allergen labeling across all premium dining venues with dedicated allergy management protocols.",
-      quote: "Five-star luxury with five-star allergy safety. Every meal was clearly labeled and staff went above and beyond to ensure my safety.",
       bookingUrl: "https://www.atlanticahotels.com/greece/zakynthos/atlantica-eleon-grand/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=greece",
       allergenFriendly: ["Luxury Allergen Management", "Premium Safety Standards"],
       amenities: ["WiFi", "Swimming Pool", "Private Beach", "Luxury Spa"],
