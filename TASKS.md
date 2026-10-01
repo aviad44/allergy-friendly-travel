@@ -202,6 +202,13 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ---
 
+## Content Integrity
+
+- [x] Stop showcasing negative/irrelevant reviews as top allergy evidence
+  - RATIONALE: User spotted a live hotel card quoting an actual allergic-reaction incident ("my face broke out in a terribly itchy allergic reaction") under a green "✅ Allergy-conscious reviews from real guests" badge and a 4.8/5 "Allergy score" — the shared `classifyAndExtract()` scorer (duplicated in `hotel-search`, `restaurants-search`, `content-pipeline`) scored any `WARNING_PHRASES` match ('unsafe', 'reaction', 'anaphylaxis', 'epipen'...) at 0.95 — *higher* than genuine positive safety evidence (0.9) — so an actual allergy incident, or even an unrelated complaint that only matched on the bare word "unsafe" (staff harassment, a "sketchy neighborhood" comment), could become a place's top-billed, maximum-scored quote.
+  - HOW-TO: `if (hasWarning) return null;` in `classifyAndExtract()` in all three functions — a warning signal is now excluded from evidence entirely rather than scored as the best case. Deployed to Supabase (hotel-search v76, restaurants-search v80, content-pipeline v44).
+  - DoD: Live-tested (Bangkok hotel search returns only genuine positive snippets, no warning-phrase matches). Found and cleaned up 21 hotels + 7 restaurants already corrupted by the bug (`allergy_score` exactly 4.8 with a warning-phrase snippet as their only evidence) — deleted the bad source rows and nulled their `allergy_score`; `HotelCard` already falls back gracefully with no evidence shown.
+
 ## UX
 
 - [ ] Keyboard navigability and focus visibility

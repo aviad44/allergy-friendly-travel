@@ -135,22 +135,34 @@ function classifyAndExtract(reviewText: string, author: string, relativeTime: st
   const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
   const hasDietary = dietaryIndicators.some(d => norm.includes(d));
 
+  // A review that trips WARNING_PHRASES ('unsafe', 'reaction', 'allergic
+  // reaction', 'anaphylaxis', 'epipen'...) is never used as showcased
+  // evidence, full stop — regardless of what else it says. Previously these
+  // instead scored *highest* of any category (0.95, above genuine positive
+  // safety evidence at 0.9) once paired with any dietary term, so a review
+  // describing an actual allergic-reaction incident could become a
+  // restaurant's top-billed "Allergy score: 4.8/5" quote. Confirmed live
+  // 2026-10-01: 7 restaurants were showing exactly this, same bug as
+  // hotel-search. A warning signal is never positive proof.
+  if (hasWarning) return null;
+
   // Generic allergy words only count as strong evidence when paired with
-  // food context; a generic 'unsafe'/'reaction' warning only counts when
-  // paired with a dietary term.
+  // food context — same "don't match out of context" principle as the
+  // hasWarning exclusion above.
   const hasFoodAllergyEvidence = hasStrict || (hasGenericAllergy && (hasWeak || hasDietary || hasSafety || hasFoodContext));
-  const isRelevant = hasFoodAllergyEvidence || (hasWarning && (hasWeak || hasDietary)) || (hasWeak && (hasSafety || hasWarning)) || (hasDietary && hasPositive);
+  const isRelevant = hasFoodAllergyEvidence || (hasWeak && hasSafety) || (hasDietary && hasPositive);
 
   if (!isRelevant) return null;
 
   let score = 0;
-  if (hasWarning) score = 0.95;
-  else if (hasFoodAllergyEvidence && hasSafety) score = 0.9;
+  if (hasFoodAllergyEvidence && hasSafety) score = 0.9;
   else if (hasFoodAllergyEvidence) score = 0.75;
   else if (hasWeak && hasSafety) score = 0.6;
   else if (hasDietary && hasPositive) score = 0.4;
 
-  const allMatched = [...strictMatches, ...weakMatches, ...safetyMatches, ...warningMatches, ...(hasFoodAllergyEvidence ? genericAllergyMatches : [])];
+  // warningMatches never reaches here (the hasWarning check above already
+  // returned null), so it's deliberately left out of allMatched.
+  const allMatched = [...strictMatches, ...weakMatches, ...safetyMatches, ...(hasFoodAllergyEvidence ? genericAllergyMatches : [])];
 
   // Extract only sentences with allergy terms
   const sentences = reviewText.split(/(?<=[.!?])\s+/);
@@ -299,7 +311,9 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
     const { data, error } = await supabase
       .from('search_log')
       .select('google_calls_count')
-      .in('mode', ['hotels_fast', 'fast'])
+      // 'article_photo' = article-hero-photo's live Google photo calls, which
+      // share this ₪100 ceiling (on top of their own ₪30 sub-ceiling).
+      .in('mode', ['hotels_fast', 'fast', 'article_photo'])
       .eq('cache_hit', false)
       .gte('created_at', monthStart.toISOString());
 
