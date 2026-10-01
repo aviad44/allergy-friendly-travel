@@ -98,6 +98,32 @@ const WARNING_PHRASES = [
 const GENERIC_ALLERGY_TERMS = ['allergy', 'allergies', 'allergic', 'allergen', 'allergens'];
 const FOOD_CONTEXT_TERMS = ['food', 'meal', 'meals', 'eat', 'eating', 'ate', 'menu', 'kitchen', 'diet', 'dish', 'dishes', 'cook', 'cooked', 'chef', 'restaurant', 'dining', 'breakfast', 'lunch', 'dinner', 'buffet', 'snack'];
 
+// Negation/absence markers — a sentence saying a hotel does NOT have
+// something ("No gluten free options", "doesn't have vegan options",
+// "disappointing... no vegan options available") matches the exact same
+// STRICT_TERMS/WEAK_TERMS keywords as a genuinely positive sentence, so
+// without this check it scored identically — sometimes higher. Confirmed
+// live 2026-10-01 on 6+ already-published hotels across 4 cities, 2 of them
+// the article's *only* hotel (Vilnius, Rio de Janeiro).
+const NEGATION_MARKERS = [
+  'no ', 'not ', 'lack of', 'lacking', 'lacks', 'missing',
+  'limited', 'disappointing', 'nothing for', 'none of', 'barely any', 'hardly any',
+  'doesn t', 'didn t', 'don t', 'wasn t', 'isn t', 'aren t', 'weren t', 'haven t', 'hasn t', 'won t',
+];
+// Bare 'without ' deliberately excluded from NEGATION_MARKERS above — it's
+// ambiguous (WEAK_TERMS' own 'without nuts'/'without dairy' entries are
+// positive, meaning "prepared without nuts"; a blanket match would silently
+// make those WEAK_TERMS entries unreachable, since every match would
+// immediately negate itself). Likewise 'no '/'not ' are real negation
+// signals most of the time, but not when paired with a double-negative like
+// "no problem" or "without any problem" — confirmed live 2026-10-01: Hotel
+// Plesnik's genuinely positive "accommodated our allergies... without any
+// problem" would otherwise be wrongly excluded.
+const DOUBLE_NEGATIVE_POSITIVES = [
+  'no problem', 'no issue', 'no trouble', 'no worries', 'no complaints', 'no difficulty',
+  'without any problem', 'without issue', 'without difficulty', 'without trouble', 'without a problem', 'without any issue',
+];
+
 // ==========================================
 // TEXT HELPERS
 // ==========================================
@@ -128,69 +154,75 @@ interface ReviewSnippet {
   matchedTerms: string[];
 }
 
+// Matching happens per sentence, not across the whole review — two real
+// bugs this fixes versus the old whole-text approach: (1) negation ("No
+// gluten free options") used to score identically to a positive match on
+// the same keywords; (2) a SAFETY_TERMS word like "careful" in one sentence
+// ("I'd be careful booking...") could combine with "allergies" in a totally
+// unrelated sentence about dust/bedding to score a non-food complaint as
+// strong allergy evidence. Same "don't match out of context" principle as
+// the hasWarning exclusion, just one level deeper. Confirmed live
+// 2026-10-01 on 6+ already-published hotels.
 function classifyAndExtract(reviewText: string, author: string, relativeTime: string): ReviewSnippet | null {
-  const norm = normalize(reviewText);
-
-  const strictMatches = findTerms(norm, STRICT_TERMS);
-  const weakMatches = findTerms(norm, WEAK_TERMS);
-  const safetyMatches = findTerms(norm, SAFETY_TERMS);
-  const warningMatches = findTerms(norm, WARNING_PHRASES);
-  const genericAllergyMatches = findTerms(norm, GENERIC_ALLERGY_TERMS);
-  const foodContextMatches = findTerms(norm, FOOD_CONTEXT_TERMS);
-
-  const hasStrict = strictMatches.length > 0;
-  const hasWeak = weakMatches.length > 0;
-  const hasSafety = safetyMatches.length > 0;
-  const hasWarning = warningMatches.length > 0;
-  const hasGenericAllergy = genericAllergyMatches.length > 0;
-  const hasFoodContext = foodContextMatches.length > 0;
-
   const positiveWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
-  const hasPositive = positiveWords.some(w => norm.includes(w));
   const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
-  const hasDietary = dietaryIndicators.some(d => norm.includes(d));
-
-  // A review that trips WARNING_PHRASES ('unsafe', 'reaction', 'allergic
-  // reaction', 'anaphylaxis', 'epipen'...) is never used as showcased
-  // evidence, full stop — regardless of what else it says. Previously these
-  // instead scored *highest* of any category (0.95, above genuine positive
-  // safety evidence at 0.9) once paired with any dietary term, so a review
-  // describing an actual allergic-reaction incident could become a hotel's
-  // top-billed "Allergy score: 4.8/5" quote. Confirmed live 2026-10-01: 21
-  // hotels were showing exactly this — some genuinely about food-allergy
-  // incidents, most just generic "unsafe neighborhood"/"felt unsafe"
-  // complaints with no allergy connection at all. A warning signal is
-  // never positive proof.
-  if (hasWarning) return null;
-
-  // Generic allergy words only count as strong evidence when paired with
-  // food context — same "don't match out of context" principle as the
-  // hasWarning exclusion above.
-  const hasFoodAllergyEvidence = hasStrict || (hasGenericAllergy && (hasWeak || hasDietary || hasSafety || hasFoodContext));
-  const isRelevant = hasFoodAllergyEvidence || (hasWeak && hasSafety) || (hasDietary && hasPositive);
-
-  if (!isRelevant) return null;
-
-  let score = 0;
-  if (hasFoodAllergyEvidence && hasSafety) score = 0.9;
-  else if (hasFoodAllergyEvidence) score = 0.75;
-  else if (hasWeak && hasSafety) score = 0.6;
-  else if (hasDietary && hasPositive) score = 0.4;
-
-  // warningMatches never reaches here (the hasWarning check above already
-  // returned null), so it's deliberately left out of allMatched.
-  const allMatched = [...strictMatches, ...weakMatches, ...safetyMatches, ...(hasFoodAllergyEvidence ? genericAllergyMatches : [])];
 
   const sentences = reviewText.split(/(?<=[.!?])\s+/);
-  const relevant: string[] = [];
+  let bestScore = 0;
+  const matchedSentences: string[] = [];
+  const allMatchedSet = new Set<string>();
+
   for (const s of sentences) {
     const normS = normalize(s);
-    if (allMatched.some(t => normS.includes(normalize(t)))) {
-      relevant.push(s.trim());
-    }
+
+    const sStrict = findTerms(normS, STRICT_TERMS);
+    const sWeak = findTerms(normS, WEAK_TERMS);
+    const sSafety = findTerms(normS, SAFETY_TERMS);
+    const sWarning = findTerms(normS, WARNING_PHRASES);
+    const sGeneric = findTerms(normS, GENERIC_ALLERGY_TERMS);
+    const sFoodCtx = findTerms(normS, FOOD_CONTEXT_TERMS);
+
+    // A warning signal anywhere in a sentence disqualifies that sentence,
+    // same as before — never positive proof.
+    if (sWarning.length > 0) continue;
+
+    const hasAnyAllergyTerm = sStrict.length > 0 || sWeak.length > 0 || sGeneric.length > 0;
+    if (!hasAnyAllergyTerm) continue;
+
+    // Negated ("no gluten free options") or a disguised complaint
+    // ("I'd recommend they include a vegan option" — no literal "no"/"not",
+    // but still means the hotel doesn't currently have it) — never counted.
+    const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
+    const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
+    const isNegated = !isDoubleNegativePositive && NEGATION_MARKERS.some(m => normS.includes(m));
+    if (isSuggestionComplaint || isNegated) continue;
+
+    const hasStrictS = sStrict.length > 0;
+    const hasWeakS = sWeak.length > 0;
+    const hasSafetyS = sSafety.length > 0;
+    const hasGenericS = sGeneric.length > 0;
+    const hasFoodCtxS = sFoodCtx.length > 0;
+    const hasDietaryS = dietaryIndicators.some(d => normS.includes(d));
+    const hasPositiveS = positiveWords.some(w => normS.includes(w));
+
+    const hasFoodAllergyEvidenceS = hasStrictS || (hasGenericS && (hasWeakS || hasDietaryS || hasSafetyS || hasFoodCtxS));
+    const isRelevantS = hasFoodAllergyEvidenceS || (hasWeakS && hasSafetyS) || (hasDietaryS && hasPositiveS);
+    if (!isRelevantS) continue;
+
+    let scoreS = 0;
+    if (hasFoodAllergyEvidenceS && hasSafetyS) scoreS = 0.9;
+    else if (hasFoodAllergyEvidenceS) scoreS = 0.75;
+    else if (hasWeakS && hasSafetyS) scoreS = 0.6;
+    else if (hasDietaryS && hasPositiveS) scoreS = 0.4;
+
+    bestScore = Math.max(bestScore, scoreS);
+    matchedSentences.push(s.trim());
+    [...sStrict, ...sWeak, ...sSafety, ...(hasFoodAllergyEvidenceS ? sGeneric : [])].forEach(t => allMatchedSet.add(t));
   }
 
-  let snippetText = relevant.length > 0 ? relevant.join(' ') : reviewText;
+  if (matchedSentences.length === 0) return null;
+
+  let snippetText = matchedSentences.join(' ');
   if (snippetText.length > 250) snippetText = snippetText.substring(0, 247) + '...';
 
   return {
@@ -198,8 +230,8 @@ function classifyAndExtract(reviewText: string, author: string, relativeTime: st
     author,
     relativeTime,
     hasAllergyMention: true,
-    score,
-    matchedTerms: [...new Set(allMatched)].slice(0, 6),
+    score: bestScore,
+    matchedTerms: [...allMatchedSet].slice(0, 6),
   };
 }
 
