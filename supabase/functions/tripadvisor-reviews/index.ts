@@ -123,6 +123,23 @@ const WARNING_PHRASES = [
 const GENERIC_ALLERGY_TERMS = ['allergy', 'allergies', 'allergic', 'allergen', 'allergens'];
 const FOOD_CONTEXT_TERMS = ['food', 'meal', 'meals', 'eat', 'eating', 'ate', 'menu', 'kitchen', 'diet', 'dish', 'dishes', 'cook', 'cooked', 'chef', 'restaurant', 'dining', 'breakfast', 'lunch', 'dinner', 'buffet', 'snack'];
 
+// Negation/absence markers + double-negative-positive allowlist — ported
+// 2026-10-01 from hotel-search/restaurants-search/content-pipeline (see
+// CHANGELOG, same date): whole-text matching let a negated sentence ("No
+// gluten free options") score the same as a genuine positive, and let a
+// safety word in one sentence pair with an unrelated sentence's "allergy"
+// mention. This was the one review-evidence path still running the old,
+// pre-fix classifier when the other three were fixed.
+const NEGATION_MARKERS = [
+  'no ', 'not ', 'lack of', 'lacking', 'lacks', 'missing',
+  'limited', 'disappointing', 'nothing for', 'none of', 'barely any', 'hardly any',
+  'doesn t', 'didn t', 'don t', 'wasn t', 'isn t', 'aren t', 'weren t', 'haven t', 'hasn t', 'won t',
+];
+const DOUBLE_NEGATIVE_POSITIVES = [
+  'no problem', 'no issue', 'no trouble', 'no worries', 'no complaints', 'no difficulty',
+  'without any problem', 'without issue', 'without difficulty', 'without trouble', 'without a problem', 'without any issue',
+];
+
 function normalizeText(text: string): string {
   return text.toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
 }
@@ -138,54 +155,68 @@ function findTerms(text: string, terms: string[]): string[] {
   return matches;
 }
 
-// Mirrors hotel-search/restaurants-search's classifyAndExtract scoring and
-// hasWarning exclusion exactly, adapted for Tripadvisor's review shape.
-// Returns null when the review isn't genuinely about food allergies/dietary
-// needs — never shown as a quote in that case.
+// Per-sentence matching (fixed 2026-10-01, ported from
+// hotel-search/restaurants-search/content-pipeline) — see CHANGELOG for
+// the full rationale. Returns null when the review isn't genuinely about
+// food allergies/dietary needs — never shown as a quote in that case.
 function classifyTripadvisorReview(text: string): { score: number; snippet: string } | null {
   if (!text) return null;
-  const norm = normalizeText(text);
-
-  const strictMatches = findTerms(norm, STRICT_TERMS);
-  const weakMatches = findTerms(norm, WEAK_TERMS);
-  const safetyMatches = findTerms(norm, SAFETY_TERMS);
-  const warningMatches = findTerms(norm, WARNING_PHRASES);
-  const genericAllergyMatches = findTerms(norm, GENERIC_ALLERGY_TERMS);
-  const foodContextMatches = findTerms(norm, FOOD_CONTEXT_TERMS);
-
-  const hasStrict = strictMatches.length > 0;
-  const hasWeak = weakMatches.length > 0;
-  const hasSafety = safetyMatches.length > 0;
-  const hasWarning = warningMatches.length > 0;
-  const hasGenericAllergy = genericAllergyMatches.length > 0;
-  const hasFoodContext = foodContextMatches.length > 0;
 
   const positiveWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
-  const hasPositive = positiveWords.some(w => norm.includes(w));
   const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
-  const hasDietary = dietaryIndicators.some(d => norm.includes(d));
 
-  // A review flagging an actual allergic reaction/safety incident is never
-  // shown as positive evidence, same as every other review-evidence path.
-  if (hasWarning) return null;
-
-  const hasFoodAllergyEvidence = hasStrict || (hasGenericAllergy && (hasWeak || hasDietary || hasSafety || hasFoodContext));
-  const isRelevant = hasFoodAllergyEvidence || (hasWeak && hasSafety) || (hasDietary && hasPositive);
-  if (!isRelevant) return null;
-
-  let score = 0;
-  if (hasFoodAllergyEvidence && hasSafety) score = 0.9;
-  else if (hasFoodAllergyEvidence) score = 0.75;
-  else if (hasWeak && hasSafety) score = 0.6;
-  else if (hasDietary && hasPositive) score = 0.4;
-
-  const allMatched = [...strictMatches, ...weakMatches, ...safetyMatches, ...(hasFoodAllergyEvidence ? genericAllergyMatches : [])];
   const sentences = text.split(/(?<=[.!?])\s+/);
-  const relevant = sentences.filter(s => allMatched.some(t => normalizeText(s).includes(normalizeText(t))));
-  let snippet = relevant.length > 0 ? relevant.join(' ') : text;
+  let bestScore = 0;
+  const matchedSentences: string[] = [];
+
+  for (const s of sentences) {
+    const normS = normalizeText(s);
+
+    const sStrict = findTerms(normS, STRICT_TERMS);
+    const sWeak = findTerms(normS, WEAK_TERMS);
+    const sSafety = findTerms(normS, SAFETY_TERMS);
+    const sWarning = findTerms(normS, WARNING_PHRASES);
+    const sGeneric = findTerms(normS, GENERIC_ALLERGY_TERMS);
+    const sFoodCtx = findTerms(normS, FOOD_CONTEXT_TERMS);
+
+    if (sWarning.length > 0) continue;
+
+    const hasAnyAllergyTerm = sStrict.length > 0 || sWeak.length > 0 || sGeneric.length > 0;
+    if (!hasAnyAllergyTerm) continue;
+
+    const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
+    const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
+    const isNegated = !isDoubleNegativePositive && NEGATION_MARKERS.some(m => normS.includes(m));
+    if (isSuggestionComplaint || isNegated) continue;
+
+    const hasStrictS = sStrict.length > 0;
+    const hasWeakS = sWeak.length > 0;
+    const hasSafetyS = sSafety.length > 0;
+    const hasGenericS = sGeneric.length > 0;
+    const hasFoodCtxS = sFoodCtx.length > 0;
+    const hasDietaryS = dietaryIndicators.some(d => normS.includes(d));
+    const hasPositiveS = positiveWords.some(w => normS.includes(w));
+
+    const hasFoodAllergyEvidenceS = hasStrictS || (hasGenericS && (hasWeakS || hasDietaryS || hasSafetyS || hasFoodCtxS));
+    const isRelevantS = hasFoodAllergyEvidenceS || (hasWeakS && hasSafetyS) || (hasDietaryS && hasPositiveS);
+    if (!isRelevantS) continue;
+
+    let scoreS = 0;
+    if (hasFoodAllergyEvidenceS && hasSafetyS) scoreS = 0.9;
+    else if (hasFoodAllergyEvidenceS) scoreS = 0.75;
+    else if (hasWeakS && hasSafetyS) scoreS = 0.6;
+    else if (hasDietaryS && hasPositiveS) scoreS = 0.4;
+
+    bestScore = Math.max(bestScore, scoreS);
+    matchedSentences.push(s.trim());
+  }
+
+  if (matchedSentences.length === 0) return null;
+
+  let snippet = matchedSentences.join(' ');
   if (snippet.length > 250) snippet = snippet.substring(0, 247) + '...';
 
-  return { score, snippet };
+  return { score: bestScore, snippet };
 }
 
 // Filters a Tripadvisor reviews array down to only the allergy-relevant
