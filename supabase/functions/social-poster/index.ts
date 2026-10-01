@@ -238,6 +238,33 @@ async function postToFacebook(pageId: string, pageToken: string, imageUrl: strin
   return { ok: true, detail: JSON.stringify(resBody) };
 }
 
+// Instagram's media container is created asynchronously — Meta fetches and
+// processes the image_url in the background, and publishing before that
+// finishes fails with "Media ID is not available" (OAuthException code
+// 9007, subcode 2207027). Confirmed live 2026-09-30: this had been silently
+// blocking food-allergies-bangkok-restaurants-guide's Instagram post for 23
+// days straight, since the old code published immediately after create with
+// no wait. Poll the container's own status_code until it's FINISHED (or
+// ERROR/EXPIRED) before publishing, same pattern Meta's own docs recommend.
+async function waitForMediaReady(containerId: string, pageToken: string): Promise<{ ready: boolean; detail: string }> {
+  const maxAttempts = 10;
+  const delayMs = 2000;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const res = await fetch(`https://graph.facebook.com/${GRAPH_API_VERSION}/${containerId}?fields=status_code&access_token=${pageToken}`);
+    const body = await res.json();
+    if (!res.ok) {
+      return { ready: false, detail: `status check: ${JSON.stringify(body).slice(0, 300)}` };
+    }
+    if (body.status_code === 'FINISHED') return { ready: true, detail: 'FINISHED' };
+    if (body.status_code === 'ERROR' || body.status_code === 'EXPIRED') {
+      return { ready: false, detail: `container ${body.status_code}: ${JSON.stringify(body).slice(0, 300)}` };
+    }
+    // IN_PROGRESS (or PUBLISHED from a prior attempt) — wait and re-check.
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
+  }
+  return { ready: false, detail: `still not FINISHED after ${maxAttempts * delayMs / 1000}s` };
+}
+
 async function postToInstagram(igUserId: string, pageToken: string, imageUrl: string, caption: string, placeId?: string | null): Promise<{ ok: boolean; detail: string }> {
   const mediaRequest: Record<string, string> = { image_url: imageUrl, caption, access_token: pageToken };
   if (placeId) mediaRequest.location_id = placeId;
@@ -250,6 +277,12 @@ async function postToInstagram(igUserId: string, pageToken: string, imageUrl: st
   if (!createRes.ok || !createBody.id) {
     console.error('Instagram media create failed:', createBody);
     return { ok: false, detail: `create: ${JSON.stringify(createBody).slice(0, 300)}` };
+  }
+
+  const readiness = await waitForMediaReady(createBody.id, pageToken);
+  if (!readiness.ready) {
+    console.error('Instagram media never became ready:', readiness.detail);
+    return { ok: false, detail: `not ready: ${readiness.detail}` };
   }
 
   const publishRes = await fetch(`https://graph.facebook.com/${GRAPH_API_VERSION}/${igUserId}/media_publish`, {
