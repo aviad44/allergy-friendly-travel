@@ -11,7 +11,6 @@ const hotels: Hotel[] = [
       "Staff trained in allergy protocols"
     ],
     description: "Allergy-free rooms and gluten-friendly breakfast.",
-    quote: "Excellent allergy awareness",
     bookingUrl: "https://www.allergy-free-travel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=hotel_rival"
   },
   {
@@ -24,7 +23,6 @@ const hotels: Hotel[] = [
       "Staff trained in allergy safety"
     ],
     description: "Dedicated gluten-free menu and trained staff.",
-    quote: "Reliable gluten-free options",
     bookingUrl: "https://www.allergy-free-travel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=downtown_camper_scandic"
   },
   {
@@ -37,7 +35,6 @@ const hotels: Hotel[] = [
       "Safe gluten-free buffet items"
     ],
     description: "Gluten-free buffet items and informed staff.",
-    quote: "Friendly and informed staff",
     bookingUrl: "https://www.allergy-free-travel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=radisson_blu_waterfront"
   }
 ];

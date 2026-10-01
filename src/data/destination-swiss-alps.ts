@@ -16,7 +16,6 @@ export const swissAlpsContent: DestinationContent = {
         "👨‍🍳 Chef consultations for allergies"
       ],
       description: "A car-free mountain resort with ski-in/ski-out access and exceptional allergy-aware dining options.",
-      quote: "The chef personally ensured our dietary needs were met. Exceptional service!",
       bookingUrl: "https://www.riffelalp.com/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/13865824.jpg?k=0be2ed5e902615a30f5feafa9640c421e55852ac2a79e473e636deeb2a181e56&o=&hp=1",
       rating: 4.8,
@@ -31,7 +30,7 @@ export const swissAlpsContent: DestinationContent = {
         "💧 Allergy-friendly family spa"
       ],
       description: "A design wellness hotel in Engadin Valley offering pre-arrival allergy coordination.",
-      quote: "They prepared everything perfectly for my son's celiac diet.",
+      quote: "From the moment we arrived, the staff were exceptionally friendly and went above and beyond to accommodate our dietary requirements, ensuring every meal was perfect.",
       bookingUrl: "https://www.giardinohotels.ch/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/296012790.jpg?k=551b3b7d69da4713fcab249c13a3cc8a85df65cd89a23870ec402157b1e72c19&o=&hp=1",
       rating: 4.7,
@@ -46,7 +45,6 @@ export const swissAlpsContent: DestinationContent = {
         "🎭 Allergy-friendly bedding"
       ],
       description: "A boutique hotel ideal for couples seeking comfort and allergy care in Zermatt.",
-      quote: "They understood my nut allergy completely and offered sealed plates and utensils.",
       bookingUrl: "https://www.backstagehotel.ch/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/120450196.jpg?k=e95aaa41e32b3259d75a13f9ed84d77dd71c268123e7eaff293d001c32430083&o=&hp=1",
       rating: 4.5,
@@ -61,7 +59,7 @@ export const swissAlpsContent: DestinationContent = {
         "🌄 Surrounded by waterfalls and trails"
       ],
       description: "A chalet-style mountain hotel great for nature lovers and allergy-conscious hikers.",
-      quote: "They remembered my allergies every morning and adjusted my meals accordingly.",
+      quote: "The options were quite average with a very limited selection, and there was virtually nothing tailored for vegetarians. It would be a huge upgrade if management included at least one proper vegetarian/vegan hot dish in the spread.",
       bookingUrl: "https://www.silberhorn.com/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/39615603.jpg?k=89d8d3e11e91750c5aee682a643ebcfbcc7f971b122366bf72e89bb01a0f7420&o=&hp=1",
       rating: 4.4,

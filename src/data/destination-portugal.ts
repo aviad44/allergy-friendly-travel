@@ -13,7 +13,6 @@ export const portugalContent: DestinationContent = {
         "👨‍🍳 Chef consultations for allergies"
       ],
       description: "This upscale hotel in Lisbon's financial district offers dedicated allergy-friendly dining options and personalized meal planning for guests with food sensitivities.",
-      quote: "The chef personally discussed my celiac requirements and prepared amazing Portuguese dishes without gluten. Incredible service!",
       bookingUrl: "https://www.corinthia.com/lisbon/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/92180698.jpg?k=c787ea99fac65b027f3684366982e534717cce7798e75c99219b4b5c4423870e&o=&hp=1",
       rating: 4.7,
@@ -28,7 +27,7 @@ export const portugalContent: DestinationContent = {
         "🏖️ Family-friendly with allergy options"
       ],
       description: "Spectacular cliff-top resort in the Algarve with multiple restaurants that accommodate various dietary restrictions including gluten, dairy, and nut allergies.",
-      quote: "They prepared special dairy-free options for my children and were extremely careful about cross-contamination.",
+      quote: "The resort does an excellent job catering for gluten free, on the whole. Cafe Corda, the Burger van and Zest all offer significant gf options.",
       bookingUrl: "https://www.pinecliffs.com/en/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/186319149.jpg?k=84a9de9ef52ef9fe00f358d11a36f77526e83555f1adc29f9c7775b24df3ec11&o=&hp=1",
       rating: 4.8,
@@ -43,7 +42,6 @@ export const portugalContent: DestinationContent = {
         "🍷 Wine pairings for gluten-free dishes"
       ],
       description: "Luxury wine hotel in Porto with a Michelin-starred restaurant that excels in catering to dietary restrictions without compromising on gourmet quality.",
-      quote: "Their Michelin-starred restaurant created an entire tasting menu that was gluten and dairy-free. A culinary revelation!",
       bookingUrl: "https://www.the-yeatman-hotel.com/en/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/135180478.jpg?k=0fed0833d64cb30af0597d5ec43afd63ff639fe6d5558f0eb4e5146f5ab52899&o=&hp=1",
       rating: 4.9,
@@ -58,7 +56,6 @@ export const portugalContent: DestinationContent = {
         "🍽️ In-room kitchens for allergy control"
       ],
       description: "Family-focused apartment hotel in Lisbon's historic center with in-room kitchens allowing families complete control over meal preparation for allergies.",
-      quote: "Having a full kitchen let us safely prepare meals for our son with multiple food allergies while still enjoying a central location.",
       bookingUrl: "https://www.martinhal.com/chiado/",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/73371172.jpg?k=3a06eca27d79da696eb57faa9e34207030c103993acf62755984299125a9af54&o=&hp=1",
       rating: 4.6,

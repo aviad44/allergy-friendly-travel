@@ -23,7 +23,6 @@ export const madridContent: DestinationContent = {
         "Central Madrid location"
       ],
       description: "Boutique hotel near Gran Vía offering allergy-free rooms and hypoallergenic features with exceptional service standards.",
-      quote: "The service and the room was very clean and comfortable. The staff were the best.",
       bookingUrl: "https://www.vinccicentrum.com/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Dust Mite-Free", "Hypoallergenic"],
       amenities: ["WiFi", "Central Location", "24/7 Reception"],
@@ -43,7 +42,6 @@ export const madridContent: DestinationContent = {
         "Personalized allergy consultation"
       ],
       description: "In the heart of Madrid, next to Puerta del Sol, offering allergy-aware service with detailed guest consultation.",
-      quote: "The staff asked me detailed questions about my allergy and made me feel safe.",
       bookingUrl: "https://www.hotelregina.com/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Multiple Allergies", "Custom Meal Planning"],
       amenities: ["WiFi", "Historic Location", "Concierge Service"],
@@ -63,7 +61,6 @@ export const madridContent: DestinationContent = {
         "Transport hub convenience"
       ],
       description: "Stylish hotel opposite Atocha station with comprehensive allergy-friendly options and well-prepared staff.",
-      quote: "Great experience with gluten-free requests. They were well‑prepared.",
       bookingUrl: "https://www.onlyyouhotels.com/atocha/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Gluten-Free", "Custom Dietary Needs"],
       amenities: ["WiFi", "Restaurant", "Transport Access"],
@@ -83,7 +80,7 @@ export const madridContent: DestinationContent = {
         "Contemporary accommodations"
       ],
       description: "Modern hotel with comprehensive allergy-free rooms and strict non-smoking policies for sensitive guests.",
-      quote: "I'm allergic to dust mites and nuts. My room was spotless and I felt safe eating breakfast.",
+      quote: "It was fine, although the vegetarian options were fairly limited.",
       bookingUrl: "https://all.accor.com/hotel/3172/index.en.shtml?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Dust Mite-Free", "Nut-Free", "Non-Smoking"],
       amenities: ["WiFi", "Restaurant", "Fitness Center"],
@@ -103,7 +100,6 @@ export const madridContent: DestinationContent = {
         "Emergency protocol awareness"
       ],
       description: "Located near Barajas Airport with round-the-clock allergy-aware staff and comprehensive food services.",
-      quote: "Staff spoke English and took my nut allergy seriously, even at 1 a.m.",
       bookingUrl: "https://www.ihg.com/crowneplaza/hotels/us/en/madrid/madap/hoteldetail?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Nut-Free", "24/7 Support"],
       amenities: ["WiFi", "Airport Shuttle", "Restaurant"],
@@ -123,7 +119,6 @@ export const madridContent: DestinationContent = {
         "Premium accommodations"
       ],
       description: "Luxury option with comprehensive allergy-conscious dining and specialized bedding options for sensitive guests.",
-      quote: "Wonderful staff and gluten-free options made my stay safe.",
       bookingUrl: "https://www.marriott.com/hotels/travel/madwi-the-westin-madrid-cuzco/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Gluten-Free", "Luxury Allergen Care"],
       amenities: ["WiFi", "Spa", "Fine Dining", "Premium Service"],
@@ -143,7 +138,6 @@ export const madridContent: DestinationContent = {
         "Gran Vía location"
       ],
       description: "Boutique hotel with allergy-sensitive staff and personalized chef consultations for safe dining experiences.",
-      quote: "Beautiful room, and the chef personally discussed my dairy allergy.",
       bookingUrl: "https://www.dearhotelmadrid.com/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Dairy-Free", "Personal Chef Service"],
       amenities: ["WiFi", "Restaurant", "Boutique Experience"],
@@ -163,7 +157,6 @@ export const madridContent: DestinationContent = {
         "Historic area access"
       ],
       description: "Centrally located near Plaza Mayor with comprehensive allergen-aware dining and detailed documentation.",
-      quote: "The staff had a printed allergen list and gave me peace of mind.",
       bookingUrl: "https://www.hoteles-catalonia.com/en/hotel/madrid/catalonia-plaza-mayor/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Comprehensive Allergen Lists", "Documentation"],
       amenities: ["WiFi", "Restaurant", "Historic Location"],
@@ -183,7 +176,6 @@ export const madridContent: DestinationContent = {
         "Personalized dining approach"
       ],
       description: "Boutique hotel with kitchen staff specifically trained in allergen safety and menu adaptation services.",
-      quote: "Not only did they understand my egg allergy, they adapted the menu for me.",
       bookingUrl: "https://www.coolrooms.es/palacio-de-atocha/?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Egg-Free", "Menu Adaptation"],
       amenities: ["WiFi", "Restaurant", "Custom Dining"],
@@ -203,7 +195,6 @@ export const madridContent: DestinationContent = {
         "Proven track record"
       ],
       description: "Trusted by allergy travelers worldwide, offering central location with comprehensive allergy-free room options.",
-      quote: "I was able to successfully eat at this hotel. The chef went over every ingredient.",
       bookingUrl: "https://www.radissonhotels.com/en-us/hotels/radisson-blu-madrid-prado?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
       allergenFriendly: ["Ingredient Transparency", "Chef Consultation"],
       amenities: ["WiFi", "Restaurant", "Central Location"],
