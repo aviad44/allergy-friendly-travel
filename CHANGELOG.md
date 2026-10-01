@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-01
+- Fixed `social-poster`'s Instagram posting: `food-allergies-bangkok-restaurants-guide` had been stuck 23 days straight, failing daily with "Media ID is not available" (OAuthException 9007/2207027). Root cause: Instagram's media container is created asynchronously (Meta fetches/processes the image in the background), and the old code called `media_publish` immediately after `media` create with no wait — publishing before the container finished processing. Added `waitForMediaReady()`, which polls the container's `status_code` (up to 10× 2s) until `FINISHED` before publishing. Deployed directly to Supabase; verified live — Bangkok's Instagram post went through on the next manual run (14s total, including the wait).
+
 ## 2026-09-30
 - Fixed a regression from the Booking-only change (#30): restaurant article pages reuse `HotelCard` (via `TripadvisorEnrichedHotelCard`, `category="restaurant"`), so their "Visit Website" button had turned into a Booking.com search for the *restaurant's* name on all 39 /restaurants/ pages. Caught by a full-sitemap link audit (143 pages). `HotelCard` now takes `category`: restaurants link to their own website again (no affiliate wrapping), and hotels stay Booking-only. The same audit confirmed 0 untagged booking.com links and 0 hotel-website links across all 143 pages. The only other external domains are restaurant/bakery sites (Athens, Warm Winter Destinations), the hotel-chain allergy-policy pages, and the celiac.org / foodallergy.org resources.
 - Removed unbacked review-source claims (the no-fabrication policy): `MultiRegionHotelsSection` and `CruiseDetails` always printed "Verified guest reviews are sourced from TripAdvisor, Booking.com, and Google Reviews", and `CruiseIntro` listed "Verified guest reviews" as a feature. None of these components shows any reviews. This is the same fix `HotelCard` already got on 2026-09-29.
