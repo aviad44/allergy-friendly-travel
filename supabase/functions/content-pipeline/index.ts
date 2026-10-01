@@ -279,27 +279,39 @@ function classifyAndExtract(reviewText: string): ReviewSnippet | null {
   const dietaryIndicators = ['gluten', 'dairy free', 'lactose'];
   const hasDietary = dietaryIndicators.some(d => norm.includes(d));
 
-  // hasWarning alone used to be enough ('unsafe', 'reaction', 'not safe' —
-  // meant to catch allergy-reaction safety concerns), but those words are
-  // generic enough to match completely unrelated complaints (a real review
-  // about staff harassment matched on "unsafe" and got a 0.95 allergy score
-  // purely from that). Now requires a warning phrase to co-occur with an
-  // actual dietary/allergen term, so an out-of-context "unsafe" no longer
-  // qualifies on its own.
+  // A review that trips WARNING_PHRASES ('unsafe', 'reaction', 'allergic
+  // reaction', 'anaphylaxis', 'epipen'...) is never used as showcased
+  // evidence, full stop — regardless of what else it says. This used to
+  // instead require co-occurrence with a dietary term before counting as
+  // relevant (a prior fix for out-of-context "unsafe" matching unrelated
+  // complaints like staff harassment), but co-occurrence wasn't enough:
+  // scoring these the *highest* of any category (0.95, above even genuine
+  // positive safety evidence at 0.9) meant a review describing an actual
+  // allergic reaction — "our daughter had a severe allergic reaction, and
+  // we ended up spending several days in the hospital" — could become a
+  // hotel's top-billed "Allergy score: 4.8/5" quote. Confirmed live
+  // 2026-10-01: 21 hotels and 7 restaurants were showing exactly this,
+  // several genuinely about food-allergy incidents, most just generic
+  // "unsafe neighborhood"/"felt unsafe" complaints with no allergy
+  // connection at all. A warning signal is never positive proof.
+  if (hasWarning) return null;
+
   // Generic allergy words only count as strong evidence when paired with
-  // food context — same principle as the hasWarning fix above.
+  // food context — same "don't match out of context" principle as the
+  // hasWarning exclusion above.
   const hasFoodAllergyEvidence = hasStrict || (hasGenericAllergy && (hasWeak || hasDietary || hasSafety || hasFoodContext));
-  const isRelevant = hasFoodAllergyEvidence || (hasWarning && (hasWeak || hasDietary)) || (hasWeak && (hasSafety || hasWarning)) || (hasDietary && hasPositive);
+  const isRelevant = hasFoodAllergyEvidence || (hasWeak && hasSafety) || (hasDietary && hasPositive);
   if (!isRelevant) return null;
 
   let score = 0;
-  if (hasWarning) score = 0.95;
-  else if (hasFoodAllergyEvidence && hasSafety) score = 0.9;
+  if (hasFoodAllergyEvidence && hasSafety) score = 0.9;
   else if (hasFoodAllergyEvidence) score = 0.75;
   else if (hasWeak && hasSafety) score = 0.6;
   else if (hasDietary && hasPositive) score = 0.4;
 
-  const allMatched = [...new Set([...strictMatches, ...weakMatches, ...safetyMatches, ...warningMatches, ...(hasFoodAllergyEvidence ? genericAllergyMatches : [])])];
+  // warningMatches never reaches here (the hasWarning check above already
+  // returned null), so it's deliberately left out of allMatched.
+  const allMatched = [...new Set([...strictMatches, ...weakMatches, ...safetyMatches, ...(hasFoodAllergyEvidence ? genericAllergyMatches : [])])];
 
   const sentences = reviewText.split(/(?<=[.!?])\s+/);
   const relevant: string[] = [];
