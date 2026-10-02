@@ -348,7 +348,11 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
       .select('google_calls_count')
       // 'article_photo' = article-hero-photo's live Google photo calls, which
       // share this ₪100 ceiling (on top of their own ₪30 sub-ceiling).
-      .in('mode', ['hotels_fast', 'fast', 'article_photo'])
+      // 'content_pipeline' added 2026-10-02 — that function was making real
+      // billed Google Places calls daily with zero budget visibility until
+      // it was wired into this same shared ceiling (see its own copy of
+      // this guard for the full writeup).
+      .in('mode', ['hotels_fast', 'fast', 'article_photo', 'content_pipeline'])
       .eq('cache_hit', false)
       .gte('created_at', monthStart.toISOString());
 

@@ -716,11 +716,96 @@ async function publishToPinterest(
 // backlog sweep.
 
 // ==========================================
+// MONTHLY BUDGET GUARD — shared ₪100/month ceiling with hotel-search/
+// restaurants-search/discover-city
+// ==========================================
+// Added 2026-10-02: this function was making real billed Google Places calls
+// every day (1 Text Search + up to 60 Place Details per discovery attempt,
+// up to 5 attempts/run if a city keeps yielding zero) without ever checking
+// the shared ceiling or logging to search_log — meaning its spend was
+// completely invisible to the budget accounting every other Google-calling
+// function respects, and could keep running even after the shared ceiling
+// was already exhausted elsewhere. Same cost model/constants as
+// hotel-search's copy of this guard (see its comment for the full
+// calibration writeup); logs under mode 'content_pipeline' specifically so
+// it's attributable, and hotel-search/restaurants-search/discover-city's own
+// isMonthlyBudgetExceeded() checks now include this mode too, so the
+// ceiling is genuinely shared both ways.
+const MONTHLY_BUDGET_ILS = 100;
+const BUDGET_SAFETY_MARGIN = 0.9;
+const COST_PER_CALL_ILS = 0.0342;
+
+async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
+  try {
+    const monthStart = new Date();
+    monthStart.setUTCDate(1);
+    monthStart.setUTCHours(0, 0, 0, 0);
+
+    const { data, error } = await supabase
+      .from('search_log')
+      .select('google_calls_count')
+      .in('mode', ['hotels_fast', 'fast', 'article_photo', 'content_pipeline'])
+      .eq('cache_hit', false)
+      .gte('created_at', monthStart.toISOString());
+
+    if (error || !data) {
+      console.log('⚠️ Budget check query failed, failing closed:', error?.message);
+      return true;
+    }
+
+    const totalCalls = data.reduce((sum: number, row: any) => sum + (row.google_calls_count || 0), 0);
+    const costIls = totalCalls * COST_PER_CALL_ILS;
+
+    return costIls >= MONTHLY_BUDGET_ILS * BUDGET_SAFETY_MARGIN;
+  } catch (err) {
+    console.log('⚠️ Budget check threw, failing closed:', err);
+    return true;
+  }
+}
+
+// ==========================================
+// Three differently-phrased queries whose results are merged and
+// deduplicated by place_id before scoring (ported from discover-city,
+// 2026-10-02) — a single "allergy friendly hotels/restaurants in X" query
+// skews heavily toward mainstream chains with generic reviews; running 3
+// variants surfaces a meaningfully different, more specialty-skewed pool
+// (small boutique hotels/restaurants that brand themselves around dietary
+// accommodation) for barely more cost — each extra query is one cheap Text
+// Search call, while the expensive part (Place Details) stays capped at 60
+// TOTAL across the merged pool, not 60 per query.
+// ==========================================
+function buildQueries(city: string, isRestaurant: boolean): string[] {
+  return isRestaurant
+    ? [
+        `allergy friendly restaurants in ${city}`,
+        `gluten free restaurant ${city}`,
+        `celiac friendly restaurant ${city}`,
+      ]
+    : [
+        `allergy friendly hotels in ${city}`,
+        `gluten free hotel ${city}`,
+        `celiac friendly hotel ${city}`,
+      ];
+}
+
+// ==========================================
 // STEP 1: Discover real hotels + real allergy evidence for a destination
 // ==========================================
 async function discoverHotels(supabase: any, apiKey: string, destination: { city: string; country: string }) {
-  const query = `allergy friendly hotels in ${destination.city}`;
-  const candidates = await textSearch(query, apiKey);
+  const queries = buildQueries(destination.city, false);
+  const seenPlaceIds = new Set<string>();
+  const candidates: any[] = [];
+  let googleCalls = 0;
+  for (const q of queries) {
+    const results = await textSearch(q, apiKey);
+    googleCalls++; // textSearch's own pagination calls aren't separately counted here, matching discover-city's accounting
+    for (const r of results) {
+      if (r.place_id && !seenPlaceIds.has(r.place_id)) {
+        seenPlaceIds.add(r.place_id);
+        candidates.push(r);
+      }
+    }
+  }
 
   const discovered: { hotelId: string; name: string; allergens: string[] }[] = [];
   let detailsFetched = 0;
@@ -729,6 +814,7 @@ async function discoverHotels(supabase: any, apiKey: string, destination: { city
     if (detailsFetched >= 60) break;
     const details = await fetchDetails(candidate.place_id, apiKey);
     detailsFetched++;
+    googleCalls++;
     const reviews = details?.reviews || [];
 
     let best: ReviewSnippet | null = null;
@@ -790,7 +876,7 @@ async function discoverHotels(supabase: any, apiKey: string, destination: { city
     discovered.push({ hotelId: hotelRow.id, name: candidate.name, allergens: best.allergens });
   }
 
-  return { candidatesFound: candidates.length, discovered };
+  return { candidatesFound: candidates.length, discovered, googleCalls };
 }
 
 // Same real-evidence-only discovery as discoverHotels, pointed at
@@ -799,8 +885,20 @@ async function discoverHotels(supabase: any, apiKey: string, destination: { city
 // (cuisine_type vs stars/hotel_chain), and keeping them separate is easier
 // to follow than a shared function branching on every table/column name.
 async function discoverRestaurants(supabase: any, apiKey: string, destination: { city: string; country: string }) {
-  const query = `allergy friendly restaurants in ${destination.city}`;
-  const candidates = await textSearch(query, apiKey, 'restaurant');
+  const queries = buildQueries(destination.city, true);
+  const seenPlaceIds = new Set<string>();
+  const candidates: any[] = [];
+  let googleCalls = 0;
+  for (const q of queries) {
+    const results = await textSearch(q, apiKey, 'restaurant');
+    googleCalls++;
+    for (const r of results) {
+      if (r.place_id && !seenPlaceIds.has(r.place_id)) {
+        seenPlaceIds.add(r.place_id);
+        candidates.push(r);
+      }
+    }
+  }
 
   const discovered: { restaurantId: string; name: string; allergens: string[] }[] = [];
   let detailsFetched = 0;
@@ -809,6 +907,7 @@ async function discoverRestaurants(supabase: any, apiKey: string, destination: {
     if (detailsFetched >= 60) break;
     const details = await fetchDetails(candidate.place_id, apiKey);
     detailsFetched++;
+    googleCalls++;
     const reviews = details?.reviews || [];
 
     let best: ReviewSnippet | null = null;
@@ -869,7 +968,7 @@ async function discoverRestaurants(supabase: any, apiKey: string, destination: {
     discovered.push({ restaurantId: restaurantRow.id, name: candidate.name, allergens: best.allergens });
   }
 
-  return { candidatesFound: candidates.length, discovered };
+  return { candidatesFound: candidates.length, discovered, googleCalls };
 }
 
 // ==========================================
@@ -1160,6 +1259,20 @@ serve(async (req) => {
       baseCount = count || 0;
     }
 
+    // Hard monthly budget ceiling, checked once before any live Google call
+    // this run would make — same shared ₪100/month ceiling as
+    // hotel-search/restaurants-search/discover-city (see
+    // isMonthlyBudgetExceeded's comment above). Fails closed: if the budget
+    // can't be verified, no discovery runs rather than letting Google calls
+    // go unaccounted for.
+    if (await isMonthlyBudgetExceeded(supabase)) {
+      console.log('🛑 Monthly Google API budget reached — skipping discovery entirely this run');
+      return new Response(JSON.stringify({
+        error: 'Monthly Google API budget reached, skipping discovery',
+        budgetLimitReached: true,
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
     // A single city with zero allergy-relevant reviews on a given day
     // shouldn't mean skipping this run's article entirely — try the next
     // city in rotation instead, up to a bounded number of attempts (manual
@@ -1191,6 +1304,20 @@ serve(async (req) => {
           hotels_added: discovery.discovered.length,
           finished_at: new Date().toISOString(),
         }).eq('id', discoveryLog.id);
+        // Logged under its own mode so the shared budget guard (here and in
+        // hotel-search/restaurants-search/discover-city) can actually see
+        // this run's real spend — previously this function made real billed
+        // Google calls with zero visibility in search_log at all.
+        await supabase.from('search_log').insert({
+          search_id: `content-pipeline-${Date.now()}`,
+          destination: destination!.city,
+          allergies: [],
+          mode: 'content_pipeline',
+          google_calls_count: discovery.googleCalls,
+          results_returned: discovery.discovered.length,
+          cache_hit: false,
+          duration_ms: 0,
+        });
       } catch (err) {
         await supabase.from('pipeline_log').update({
           status: 'error', error_message: describeError(err), finished_at: new Date().toISOString(),
@@ -1199,6 +1326,10 @@ serve(async (req) => {
       }
 
       if (discovery.discovered.length >= 1) break;
+      if (await isMonthlyBudgetExceeded(supabase)) {
+        console.log('🛑 Monthly Google API budget reached mid-retry — stopping further attempts this run');
+        break;
+      }
     }
     discovery = discovery!;
 
