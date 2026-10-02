@@ -292,6 +292,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Use skeletons/spinners and toasts; informative errors.
   - DoD: All async views show acceptable loading states.
 
+- [x] Maximize daily `content-pipeline` output (more real evidence per automated run)
+  - RATIONALE: User asked, after a walkthrough of how the daily pipeline works, for each day's run to come away with as much real evidence (reviews, hotels/restaurants) as possible — confirmed keeping the existing OpenAI-generation format rather than switching to Claude, since the bugs found this engagement all live in the deterministic discovery/classifier code, not the generation step.
+  - HOW-TO: Three additive levers, all in `content-pipeline/index.ts`: (1) ported `discover-city-tripadvisor`'s approach in as `discoverHotelsTripadvisor`/`discoverRestaurantsTripadvisor`, run automatically for the same city right after Google discovery each run and merged by id (shared `slugifyHotel()` means a place found via both providers upserts into the same row, no duplication) — shares the existing ₪75/month Tripadvisor ceiling, non-fatal if the key's missing or the budget's exhausted; (2) `GOOGLE_DETAILS_CAP` raised 60→90; (3) restructured the single discover-then-act flow into a loop that discovers-and-acts per destination and keeps going until it reaches `TARGET_SUCCESSFUL_CITIES = 2` (not just the first city that finds anything), `MAX_ATTEMPTS` bumped 5→8 for slack, manual-override calls unaffected (still single-shot).
+  - DoD: Deployed `content-pipeline` v54, verified byte-for-byte identical to the local source via fetch-and-diff. Caught and corrected a deploy mistake before it reached production: an initial call sent placeholder content with `verify_jwt` defaulted to `true` (would have broken the GitHub Action's anon-key auth flow) — caught via the same fetch-and-diff check, fixed by redeploying with the real source and `verify_jwt: false` explicit. Smoke-tested without the cron secret and got the expected `401 {"error":"Unauthorized"}` from the function's own code (not a gateway-level JWT error), confirming the auth guard survived intact. Validated pre-deploy via `ts.transpileModule` (zero diagnostics) plus a full manual re-read, since this sandbox's `tsc --noEmit -p .` doesn't cover `supabase/functions/*`.
+
 ---
 
 ## Weekly Rollout Plan

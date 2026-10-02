@@ -767,6 +767,175 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
 }
 
 // ==========================================
+// TRIPADVISOR — second, independent discovery source for the same city
+// ==========================================
+// Added 2026-10-02 (user: maximize real evidence per daily run). Previously
+// Tripadvisor-based discovery only existed as the manually-run
+// discover-city-tripadvisor one-off tool; this ports the same approach
+// (Tripadvisor's own /locations/search candidate pool, same classifyAndExtract
+// already defined above, same slugifyHotel so a hotel found via both Google
+// and Tripadvisor upserts into the same row instead of creating a duplicate)
+// so every automatic daily run draws from both providers for the one city it
+// processes, not just Google. Shares the exact same ₪75/month ceiling as
+// tripadvisor-reviews/discover-city-tripadvisor (reads the same
+// tripadvisor_cache table) — genuinely shared both ways, same as the Google
+// ceiling above. Non-fatal if TRIPADVISOR_API_KEY is missing or this budget
+// is already exhausted: the run simply continues with Google-only results,
+// it never blocks or fails the whole pipeline run.
+const TA_MONTHLY_BUDGET_ILS = 75;
+const TA_CALLS_PER_NEW_PLACE = 3;
+const TA_COST_PER_CALL_ILS = 0.056;
+
+async function isTripadvisorBudgetExceeded(supabase: any): Promise<boolean> {
+  try {
+    const monthStart = new Date();
+    monthStart.setUTCDate(1);
+    monthStart.setUTCHours(0, 0, 0, 0);
+    const { count, error } = await supabase
+      .from('tripadvisor_cache')
+      .select('id', { count: 'exact', head: true })
+      .gte('fetched_at', monthStart.toISOString());
+    if (error) {
+      console.log('⚠️ Tripadvisor budget check failed, failing closed:', error.message);
+      return true;
+    }
+    const costIls = (count ?? 0) * TA_CALLS_PER_NEW_PLACE * TA_COST_PER_CALL_ILS;
+    return costIls >= TA_MONTHLY_BUDGET_ILS * BUDGET_SAFETY_MARGIN;
+  } catch (err) {
+    console.log('⚠️ Tripadvisor budget check threw, failing closed:', err);
+    return true;
+  }
+}
+
+async function taFetch(path: string, apiKey: string): Promise<any | null> {
+  const res = await fetch(`https://terra.tripadvisor.com/api${path}`, {
+    headers: { 'X-API-Key': apiKey },
+  });
+  if (!res.ok) {
+    console.error(`Tripadvisor ${path} failed:`, res.status, await res.text());
+    return null;
+  }
+  return res.json();
+}
+
+// Caps at 20 candidates — same conservative default discover-city-tripadvisor
+// uses, since the Tripadvisor budget is much tighter (₪75/month vs Google's
+// ₪250) and this is a supplementary source, not the primary one.
+const TA_MAX_CANDIDATES = 20;
+
+async function discoverHotelsTripadvisor(supabase: any, taApiKey: string, destination: { city: string; country: string }) {
+  return discoverTripadvisor(supabase, taApiKey, destination, false);
+}
+
+async function discoverRestaurantsTripadvisor(supabase: any, taApiKey: string, destination: { city: string; country: string }) {
+  return discoverTripadvisor(supabase, taApiKey, destination, true);
+}
+
+async function discoverTripadvisor(supabase: any, taApiKey: string, destination: { city: string; country: string }, isRestaurant: boolean) {
+  const taCategory = isRestaurant ? 'RESTAURANT' : 'HOTEL';
+  // Plain city name, not "hotels in X" — Tripadvisor's /locations/search does
+  // a fuzzy name match rather than full-text search like Google's Text
+  // Search (confirmed live 2026-10-01 in discover-city-tripadvisor: "hotels
+  // in Vilnius" -> 0 results, "Vilnius" -> 127 results).
+  const searchResult = await taFetch(`/locations/search?query=${encodeURIComponent(destination.city)}&category=${taCategory}`, taApiKey);
+  const candidates: any[] = searchResult?.data ?? [];
+
+  const discovered: { hotelId?: string; restaurantId?: string; name: string; allergens: string[] }[] = [];
+
+  for (const candidate of candidates.slice(0, TA_MAX_CANDIDATES)) {
+    if (await isTripadvisorBudgetExceeded(supabase)) break;
+
+    const locationId = candidate?.location?.id;
+    // Name comes back as an array of {language, value, primary} entries, not
+    // a flat `name` string — same gotcha discover-city-tripadvisor hit live.
+    const nameEntries: any[] = candidate?.location?.names ?? [];
+    const name: string | undefined = nameEntries.find((n) => n.primary)?.value ?? nameEntries[0]?.value;
+    if (!locationId || !name) continue;
+
+    const [details, reviewsRes] = await Promise.all([
+      taFetch(`/locations/${locationId}?locale=en-US`, taApiKey),
+      taFetch(`/locations/${locationId}/reviews?locale=en-US`, taApiKey),
+    ]);
+
+    const rawReviews = (reviewsRes?.data ?? []).slice(0, 15);
+    let best: ReviewSnippet | null = null;
+    for (const r of rawReviews) {
+      const text = r.text?.find((t: any) => t.primary)?.value ?? r.text?.[0]?.value ?? '';
+      const snip = classifyAndExtract(text);
+      if (snip && (!best || snip.score > best.score)) best = snip;
+    }
+
+    // Cache this place regardless of match, same as tripadvisor-reviews, so
+    // budget accounting stays accurate and re-discovery doesn't re-bill it.
+    const placeKey = `${name}|${destination.city}`.toLowerCase().trim().replace(/\s+/g, ' ');
+    await supabase.from('tripadvisor_cache').upsert({
+      place_key: placeKey, name, category: isRestaurant ? 'restaurant' : 'hotel', found: true,
+      tripadvisor_location_id: locationId,
+      rating: details?.traveler_ratings?.overall?.rating ?? null,
+      review_count: details?.traveler_ratings?.overall?.count ?? null,
+      tripadvisor_url: details?.urls?.tripadvisor?.main ?? null,
+      reviews: rawReviews.map((r: any) => ({
+        rating: r.rating,
+        text: r.text?.find((t: any) => t.primary)?.value ?? r.text?.[0]?.value ?? '',
+        author: r.user?.username ?? 'Tripadvisor traveler',
+        url: r.url,
+      })),
+    }, { onConflict: 'place_key' });
+
+    if (!best) continue;
+
+    // Same slugifyHotel() as the Google path, so a hotel/restaurant found via
+    // both providers upserts into the same row instead of creating a
+    // duplicate entry for the same real-world place.
+    const slug = slugifyHotel(name, destination.city);
+    const allergyScore = Math.min(5, Math.max(1, Math.round(best.score * 5 * 10) / 10));
+    const table = isRestaurant ? 'restaurants' : 'hotels';
+    const idCol = isRestaurant ? 'restaurant_id' : 'hotel_id';
+    const sourceTable = isRestaurant ? 'restaurant_sources' : 'hotel_sources';
+    const infoTable = isRestaurant ? 'restaurant_allergy_info' : 'hotel_allergy_info';
+
+    const upsertPayload: Record<string, unknown> = {
+      name, slug, city: destination.city, country: destination.country,
+      address: details?.addresses?.[0]?.formatted ?? null,
+      allergy_score: allergyScore,
+      verified: false, active: true,
+      updated_at: new Date().toISOString(),
+    };
+    if (!isRestaurant) {
+      upsertPayload.booking_url = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(`${name} ${destination.city}`)}`;
+    }
+
+    const { data: row, error: upsertErr } = await supabase
+      .from(table).upsert(upsertPayload, { onConflict: 'slug' }).select('id').single();
+    if (upsertErr || !row) continue;
+
+    await supabase.from(sourceTable).insert({
+      [idCol]: row.id,
+      source_type: 'tripadvisor',
+      source_url: details?.urls?.tripadvisor?.main ?? null,
+      title: name,
+      snippet: best.text,
+      allergy_score: allergyScore,
+      raw_text: best.text,
+      ai_summary: null,
+    });
+
+    for (const allergen of best.allergens) {
+      await supabase.from(infoTable).upsert({
+        [idCol]: row.id, allergen_type: allergen, support_level: 'on_request',
+        notes: best.text, source_url: details?.urls?.tripadvisor?.main ?? null,
+      }, { onConflict: `${idCol},allergen_type` });
+    }
+
+    discovered.push(isRestaurant
+      ? { restaurantId: row.id, name, allergens: best.allergens }
+      : { hotelId: row.id, name, allergens: best.allergens });
+  }
+
+  return { candidatesFound: candidates.length, discovered };
+}
+
+// ==========================================
 // Three differently-phrased queries whose results are merged and
 // deduplicated by place_id before scoring (ported from discover-city,
 // 2026-10-02) — a single "allergy friendly hotels/restaurants in X" query
@@ -777,6 +946,13 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
 // Search call, while the expensive part (Place Details) stays capped at 60
 // TOTAL across the merged pool, not 60 per query.
 // ==========================================
+// Raised 60→90 2026-10-02 (user: maximize real evidence per daily run) —
+// scans more candidates per city for barely more cost (30 extra Place
+// Details calls ≈ ₪1.03 at COST_PER_CALL_ILS, trivial against the ₪250
+// monthly ceiling) for a meaningfully better chance of finding genuine
+// allergy evidence in a larger candidate pool.
+const GOOGLE_DETAILS_CAP = 90;
+
 function buildQueries(city: string, isRestaurant: boolean): string[] {
   return isRestaurant
     ? [
@@ -813,8 +989,8 @@ async function discoverHotels(supabase: any, apiKey: string, destination: { city
   const discovered: { hotelId: string; name: string; allergens: string[] }[] = [];
   let detailsFetched = 0;
 
-  for (const candidate of candidates.slice(0, 60)) {
-    if (detailsFetched >= 60) break;
+  for (const candidate of candidates.slice(0, GOOGLE_DETAILS_CAP)) {
+    if (detailsFetched >= GOOGLE_DETAILS_CAP) break;
     const details = await fetchDetails(candidate.place_id, apiKey);
     detailsFetched++;
     googleCalls++;
@@ -906,8 +1082,8 @@ async function discoverRestaurants(supabase: any, apiKey: string, destination: {
   const discovered: { restaurantId: string; name: string; allergens: string[] }[] = [];
   let detailsFetched = 0;
 
-  for (const candidate of candidates.slice(0, 60)) {
-    if (detailsFetched >= 60) break;
+  for (const candidate of candidates.slice(0, GOOGLE_DETAILS_CAP)) {
+    if (detailsFetched >= GOOGLE_DETAILS_CAP) break;
     const details = await fetchDetails(candidate.place_id, apiKey);
     detailsFetched++;
     googleCalls++;
@@ -1280,15 +1456,36 @@ serve(async (req) => {
     // shouldn't mean skipping this run's article entirely — try the next
     // city in rotation instead, up to a bounded number of attempts (manual
     // overrides stay single-shot: the caller asked for that one city).
-    const MAX_ATTEMPTS = manualOverride ? 1 : 5;
-    const attemptedDestinations: string[] = [];
-    let discovery: Awaited<ReturnType<typeof discoverHotels>> | Awaited<ReturnType<typeof discoverRestaurants>> | undefined;
+    // Bumped 5→8 2026-10-02 alongside TARGET_SUCCESSFUL_CITIES below, so
+    // there's enough slack to reach 2 successful cities even if a couple in
+    // the rotation yield nothing.
+    const MAX_ATTEMPTS = manualOverride ? 1 : 8;
+    // Try to come away with more than one city's worth of fresh real
+    // evidence per run instead of stopping the moment the first city in
+    // rotation finds anything at all — user asked to maximize daily output.
+    // Kept modest (not unbounded) so the shared Google budget doesn't
+    // exhaust itself in the first week of the month; manual overrides stay
+    // single-shot (the caller asked for exactly one city).
+    const TARGET_SUCCESSFUL_CITIES = manualOverride ? 1 : 2;
+    const taApiKey = Deno.env.get('TRIPADVISOR_API_KEY');
 
-    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    // Never publish a brand-new article for a city with fewer than this many
+    // hotels/restaurants that have real, currently-valid allergy evidence —
+    // user directive 2026-10-01, after a negation-detection classifier bug
+    // left dozens of articles stuck at 1-2 "hotels" for weeks (see
+    // CHANGELOG). Growing an already-published article by merging in newly
+    // discovered hotels/restaurants is still fine at any count — this gate
+    // only blocks *creating* a new thin article in the first place.
+    const MIN_FOR_NEW_ARTICLE = 3;
+
+    const attemptedDestinations: string[] = [];
+    const results: any[] = [];
+
+    for (let attempt = 0; attempt < MAX_ATTEMPTS && results.length < TARGET_SUCCESSFUL_CITIES; attempt++) {
       if (!manualOverride) {
         destination = DESTINATIONS[(baseCount + attempt) % DESTINATIONS.length];
       }
-      console.log(`Pipeline run — ${contentType} — destination: ${destination!.city}, ${destination!.country} (attempt ${attempt + 1}/${MAX_ATTEMPTS})`);
+      console.log(`Pipeline run — ${contentType} — destination: ${destination!.city}, ${destination!.country} (attempt ${attempt + 1}/${MAX_ATTEMPTS}, ${results.length}/${TARGET_SUCCESSFUL_CITIES} cities so far)`);
       attemptedDestinations.push(`${destination!.city}, ${destination!.country}`);
 
       const { data: discoveryLog } = await supabase
@@ -1297,6 +1494,7 @@ serve(async (req) => {
         .select('id')
         .single();
 
+      let discovery: Awaited<ReturnType<typeof discoverHotels>> | Awaited<ReturnType<typeof discoverRestaurants>>;
       try {
         discovery = contentType === 'hotel'
           ? await discoverHotels(supabase, apiKey, destination!)
@@ -1328,26 +1526,41 @@ serve(async (req) => {
         throw err;
       }
 
-      if (discovery.discovered.length >= 1) break;
-      if (await isMonthlyBudgetExceeded(supabase)) {
-        console.log('🛑 Monthly Google API budget reached mid-retry — stopping further attempts this run');
-        break;
+      // Second, independent discovery source for the same city — additive
+      // only, merged by id (shared slugifyHotel() means the same real-world
+      // place found via both providers already upserts into the same row,
+      // so this can't double-count). Never blocks or fails the run: a
+      // missing key, an exhausted Tripadvisor budget, or a request failure
+      // all just mean continuing with Google-only results for this city.
+      if (taApiKey && !(await isTripadvisorBudgetExceeded(supabase))) {
+        try {
+          const taResult = contentType === 'hotel'
+            ? await discoverHotelsTripadvisor(supabase, taApiKey, destination!)
+            : await discoverRestaurantsTripadvisor(supabase, taApiKey, destination!);
+          const idOf = (d: any) => contentType === 'hotel' ? d.hotelId : d.restaurantId;
+          const seenIds = new Set(discovery.discovered.map(idOf));
+          const merged = [...discovery.discovered];
+          for (const d of taResult.discovered) {
+            const id = idOf(d);
+            if (id && !seenIds.has(id)) { merged.push(d); seenIds.add(id); }
+          }
+          discovery = { ...discovery, discovered: merged, candidatesFound: discovery.candidatesFound + taResult.candidatesFound };
+        } catch (err) {
+          console.log('Tripadvisor discovery failed, continuing with Google-only results:', describeError(err));
+        }
       }
-    }
-    discovery = discovery!;
 
-    let articleResult: any = null;
+      if (discovery.discovered.length === 0) {
+        if (await isMonthlyBudgetExceeded(supabase)) {
+          console.log('🛑 Monthly Google API budget reached mid-retry — stopping further attempts this run');
+          break;
+        }
+        continue;
+      }
 
-    // Never publish a brand-new article for a city with fewer than this many
-    // hotels/restaurants that have real, currently-valid allergy evidence —
-    // user directive 2026-10-01, after a negation-detection classifier bug
-    // left dozens of articles stuck at 1-2 "hotels" for weeks (see
-    // CHANGELOG). Growing an already-published article by merging in newly
-    // discovered hotels/restaurants is still fine at any count — this gate
-    // only blocks *creating* a new thin article in the first place.
-    const MIN_FOR_NEW_ARTICLE = 3;
+      let thisArticleResult: any = null;
 
-    if (contentType === 'hotel' && discovery.discovered.length >= 1) {
+      if (contentType === 'hotel') {
       const newHotelIds = (discovery.discovered as { hotelId: string }[]).map(d => d.hotelId);
 
       // Does a published article already cover this destination? Detected by
@@ -1400,7 +1613,7 @@ serve(async (req) => {
             finished_at: new Date().toISOString(),
           });
 
-          if (!updateErr) articleResult = { slug: existingArticle.slug, title: existingArticle.title, updated: true, hotelsAdded: addedCount };
+          if (!updateErr) thisArticleResult = { slug: existingArticle.slug, title: existingArticle.title, updated: true, hotelsAdded: addedCount };
         } else {
           console.log(`No new hotels for existing article "${existingArticle.slug}" — all ${newHotelIds.length} discovered hotel(s) already linked.`);
         }
@@ -1457,7 +1670,7 @@ serve(async (req) => {
           }, { onConflict: 'slug' });
 
           if (insertErr) throw insertErr;
-          articleResult = { slug: article.slug, title: article.title };
+          thisArticleResult = { slug: article.slug, title: article.title };
 
           if (pinterestClientId && pinterestClientSecret && pinterestBoardId) {
             await publishToPinterest(supabase, pinterestClientId, pinterestClientSecret, pinterestBoardId, {
@@ -1483,7 +1696,14 @@ serve(async (req) => {
         }).eq('id', contentLog.id);
       }
       }
-    } else if (contentType === 'restaurant' && discovery.discovered.length >= 1) {
+
+      results.push({
+        destination: `${destination!.city}, ${destination!.country}`,
+        hotelsFound: discovery.candidatesFound,
+        hotelsWithEvidence: discovery.discovered.length,
+        article: thisArticleResult,
+      });
+    } else if (contentType === 'restaurant') {
       const newRestaurantIds = (discovery.discovered as { restaurantId: string }[]).map(d => d.restaurantId);
 
       const { data: cityRestaurants } = await supabase.from('restaurants').select('id, allergy_score').eq('city', destination.city);
@@ -1521,7 +1741,7 @@ serve(async (req) => {
             finished_at: new Date().toISOString(),
           });
 
-          if (!updateErr) articleResult = { slug: existingArticle.slug, title: existingArticle.title, updated: true, restaurantsAdded: addedCount };
+          if (!updateErr) thisArticleResult = { slug: existingArticle.slug, title: existingArticle.title, updated: true, restaurantsAdded: addedCount };
         } else {
           console.log(`No new restaurants for existing article "${existingArticle.slug}" — all ${newRestaurantIds.length} discovered restaurant(s) already linked.`);
         }
@@ -1585,7 +1805,7 @@ serve(async (req) => {
             }, { onConflict: 'slug' });
 
             if (insertErr) throw insertErr;
-            articleResult = { slug: article.slug, title: article.title };
+            thisArticleResult = { slug: article.slug, title: article.title };
 
             // heroImageUrl is always Unsplash/Pixabay now (see above), so
             // it's already off-site-safe for Pinterest with no substitution
@@ -1616,15 +1836,26 @@ serve(async (req) => {
           }).eq('id', contentLog.id);
         }
       }
+
+      results.push({
+        destination: `${destination!.city}, ${destination!.country}`,
+        hotelsFound: discovery.candidatesFound,
+        hotelsWithEvidence: discovery.discovered.length,
+        article: thisArticleResult,
+      });
+    }
+
+      if (results.length < TARGET_SUCCESSFUL_CITIES && await isMonthlyBudgetExceeded(supabase)) {
+        console.log('🛑 Monthly Google API budget reached — stopping further attempts this run');
+        break;
+      }
     }
 
     return new Response(JSON.stringify({
       contentType,
-      destination: `${destination!.city}, ${destination!.country}`,
       attemptedDestinations,
-      hotelsFound: discovery.candidatesFound,
-      hotelsWithEvidence: discovery.discovered.length,
-      article: articleResult,
+      citiesProcessed: results.length,
+      processed: results,
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (error) {
