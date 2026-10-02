@@ -342,6 +342,7 @@ export const warmWinterContent: DestinationContent = {
       name: "Anastasia Cafe",
       address: "54 Frishman Street, Tel Aviv, Israel",
       description: "100% vegan cafe with extensive allergy awareness. Popular for gluten-free and nut-free options in a trendy Tel Aviv setting.",
+      guestReview: "The menu is completely vegan and also offers gluten free options.",
       allergyInfo: "Vegan, Gluten-Free, Nut-Free Options",
       websiteUrl: "https://www.facebook.com/AnastasiaTelaviv/",
       isPurelyAllergyFriendly: true
@@ -350,6 +351,7 @@ export const warmWinterContent: DestinationContent = {
       name: "Gluteria",
       address: "2 Mohiliver Street, Tel Aviv, Israel",
       description: "Dedicated gluten-free bakery and cafe. 100% gluten-free facility, perfect for celiacs and gluten-sensitive travelers.",
+      guestReview: "They have so many options and is a true haven for people who are gluten free.",
       allergyInfo: "100% Gluten-Free Facility",
       websiteUrl: "https://www.gluteria.co.il/",
       isPurelyAllergyFriendly: true

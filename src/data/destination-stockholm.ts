@@ -63,6 +63,7 @@ const restaurants: Restaurant[] = [
       "Dairy-free",
       "Nut-free options"
     ],
+    guestReview: "The staff was helpful to tell us about which bowls are gluten free.",
     isPurelyAllergyFriendly: false,
     websiteUrl: "#"
   },
@@ -102,6 +103,7 @@ const restaurants: Restaurant[] = [
       "Sweet and savory options",
       "Dedicated preparation"
     ],
+    guestReview: "The best part: the entire menu is gluten free, and they even offer gluten-free beer, which makes it such a rare and wonderful find.",
     isPurelyAllergyFriendly: false,
     websiteUrl: "#"
   },

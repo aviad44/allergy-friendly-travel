@@ -75,6 +75,7 @@ export const cyprusContent: DestinationContent = {
         "🌊 Beachfront location"
       ],
       description: "Part of the Atlantica hotel chain known for exceptional allergen management. Every dish in the dining room is clearly labeled with allergen information, making it safe and easy for guests with food allergies.",
+      quote: "One member of our party required a gluten-free meal, and we were so impressed by the care and attention given. There were so many gluten-free options available, making it a enjoyable and stress-free meal.",
       bookingUrl: "https://www.atlanticahotels.com/cyprus/ayia-napa/atlantica-mare-village/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=cyprus",
       allergenFriendly: ["Comprehensive Allergen Labeling", "All Major Allergens"],
       amenities: ["WiFi", "Swimming Pool", "Beach Access", "All-Inclusive"],

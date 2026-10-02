@@ -59,6 +59,7 @@ export const italyContent: DestinationContent = {
         "Top ratings from celiac community",
         "Located near Vatican attractions"
       ],
+      guestReview: "I have celiac and this entire place is gluten free! Some of the best gluten free food I've had in my life.",
       allergyInfo: "Completely gluten-free restaurant - no risk of cross-contamination",
       isPurelyAllergyFriendly: true,
       websiteUrl: "https://lauradolcitravels.com/gluten-free-rome-best-restaurants/"

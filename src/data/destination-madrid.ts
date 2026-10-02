@@ -242,6 +242,7 @@ export const madridContent: DestinationContent = {
       name: "Celicioso",
       address: "Calle Hortaleza, 3, Madrid",
       description: "100% gluten-free restaurant and bakery offering safe dining for celiac travelers.",
+      guestReview: "Great gluten-free selection of pastries, salads, and sandwiches.",
       allergyInfo: "Gluten-Free, Celiac-Safe"
     },
     {
