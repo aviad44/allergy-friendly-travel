@@ -254,8 +254,13 @@ serve(async (req) => {
 
     const isRestaurant = category === 'restaurant';
     const taCategory = isRestaurant ? 'RESTAURANT' : 'HOTEL';
-    const searchQuery = `hotels in ${city}`;
-    const searchResult = await taFetch(`/locations/search?query=${encodeURIComponent(isRestaurant ? `restaurants in ${city}` : searchQuery)}&category=${taCategory}`, apiKey);
+    // Plain city name, not "hotels in X" — Tripadvisor's /locations/search
+    // does a fuzzy name match rather than full-text search like Google's
+    // Text Search, so a natural-language query returns zero results
+    // (confirmed live 2026-10-01: "hotels in Vilnius" -> 0 results,
+    // "Vilnius" -> 127 results). The `category` param already scopes to
+    // hotels/restaurants.
+    const searchResult = await taFetch(`/locations/search?query=${encodeURIComponent(city)}&category=${taCategory}`, apiKey);
     const candidates: any[] = searchResult?.data ?? [];
 
     const cap = Math.min(maxCandidates ?? 20, 40);
@@ -266,7 +271,13 @@ serve(async (req) => {
       if (await isMonthlyBudgetExceeded(supabase)) break;
 
       const locationId = candidate?.location?.id;
-      const name = candidate?.location?.name;
+      // Location name comes back as an array of {language, value, primary}
+      // entries, not a flat `name` string (confirmed live 2026-10-01 — the
+      // original version of this silently extracted `undefined` for every
+      // candidate, which is why the very first live run found 0 discovered
+      // despite 127 real candidates).
+      const nameEntries: any[] = candidate?.location?.names ?? [];
+      const name: string | undefined = nameEntries.find((n) => n.primary)?.value ?? nameEntries[0]?.value;
       if (!locationId || !name) continue;
 
       const [details, reviewsRes] = await Promise.all([
@@ -312,7 +323,9 @@ serve(async (req) => {
 
       const upsertPayload: Record<string, unknown> = {
         name, slug, city, country,
-        address: details?.address?.address_string ?? null,
+        // `addresses` is an array (same shape as `names`), not a singular
+        // `address` object — same class of bug as the name extraction above.
+        address: details?.addresses?.[0]?.formatted ?? null,
         allergy_score: allergyScore,
         verified: false, active: true,
         updated_at: new Date().toISOString(),
