@@ -747,7 +747,7 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
     const { data, error } = await supabase
       .from('search_log')
       .select('google_calls_count')
-      .in('mode', ['hotels_fast', 'fast', 'article_photo', 'content_pipeline'])
+      .in('mode', ['hotels_fast', 'fast', 'article_photo', 'content_pipeline', 'quote_verify'])
       .eq('cache_hit', false)
       .gte('created_at', monthStart.toISOString());
 

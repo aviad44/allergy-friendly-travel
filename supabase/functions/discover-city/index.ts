@@ -266,7 +266,7 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
       .select('google_calls_count')
       // 'content_pipeline' added 2026-10-02 — that function now shares this
       // same ceiling too (see its own copy of this guard for the writeup).
-      .in('mode', ['hotels_fast', 'fast', 'article_photo', 'content_pipeline'])
+      .in('mode', ['hotels_fast', 'fast', 'article_photo', 'content_pipeline', 'quote_verify'])
       .eq('cache_hit', false)
       .gte('created_at', monthStart.toISOString());
     if (error || !data) return true;

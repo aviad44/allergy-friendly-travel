@@ -355,7 +355,7 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
       // billed Google Places calls daily with zero budget visibility until
       // it was wired into this same shared ceiling (see its own copy of
       // this guard for the full writeup).
-      .in('mode', ['hotels_fast', 'fast', 'article_photo', 'content_pipeline'])
+      .in('mode', ['hotels_fast', 'fast', 'article_photo', 'content_pipeline', 'quote_verify'])
       .eq('cache_hit', false)
       .gte('created_at', monthStart.toISOString());
 
