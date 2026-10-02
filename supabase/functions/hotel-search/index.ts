@@ -317,7 +317,7 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 }
 
 // ==========================================
-// MONTHLY BUDGET GUARD — hard ₪100/month ceiling, shared with restaurants-search
+// MONTHLY BUDGET GUARD — hard monthly ceiling, shared with restaurants-search
 // ==========================================
 // Both hotel-search and restaurants-search are public, unauthenticated
 // (verify_jwt=false, CORS '*') endpoints that trigger real billed Google
@@ -342,11 +342,22 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 // it drifting.
 //
 // This is deliberately conservative in two ways: it trips at 90% of the
-// ₪100 target, not 100%, and it fails *closed* (blocks the search) if the
+// target, not 100%, and it fails *closed* (blocks the search) if the
 // budget can't be verified — e.g. search_log is unreachable, or Supabase
 // itself isn't configured — rather than letting Google calls run
 // unaccounted for.
-const MONTHLY_BUDGET_ILS = 100;
+//
+// Raised ₪100→₪250/month 2026-10-02 with explicit user authorization
+// ("מבחינתי אני מוכן להגדיל את התקציב ככל שיידרש") after this month's
+// ceiling tripped from a legitimate, user-requested comprehensive sweep
+// (below-3-hotel article discovery + a 144-hotel real-evidence
+// verification pass on the static destination-*.ts pages) — not a
+// miscalibration. Estimated real need for the rest of October: ~₪200-250
+// total (verification pass ~₪10-20, remaining city sweep ~₪25-35, daily
+// content-pipeline for the rest of the month ~₪15-25, real site traffic
+// ~₪5-10, plus margin). Re-evaluate at month-end whether to keep this
+// level or return to ₪100 baseline.
+const MONTHLY_BUDGET_ILS = 250;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342; // calibrated from real billing, see comment above
 

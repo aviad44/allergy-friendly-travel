@@ -249,8 +249,10 @@ function slugify(name: string, city: string): string {
   return `${name}-${city}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
-// Same shared ₪100/month ceiling as hotel-search/restaurants-search/content-pipeline.
-const MONTHLY_BUDGET_ILS = 100;
+// Same shared ceiling as hotel-search/restaurants-search/content-pipeline.
+// Raised ₪100→₪250/month 2026-10-02 with explicit user authorization — see
+// hotel-search/index.ts's copy of this constant for the full writeup.
+const MONTHLY_BUDGET_ILS = 250;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342;
 

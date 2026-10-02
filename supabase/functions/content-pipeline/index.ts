@@ -716,7 +716,7 @@ async function publishToPinterest(
 // backlog sweep.
 
 // ==========================================
-// MONTHLY BUDGET GUARD — shared ₪100/month ceiling with hotel-search/
+// MONTHLY BUDGET GUARD — shared Google budget ceiling with hotel-search/
 // restaurants-search/discover-city
 // ==========================================
 // Added 2026-10-02: this function was making real billed Google Places calls
@@ -731,7 +731,10 @@ async function publishToPinterest(
 // it's attributable, and hotel-search/restaurants-search/discover-city's own
 // isMonthlyBudgetExceeded() checks now include this mode too, so the
 // ceiling is genuinely shared both ways.
-const MONTHLY_BUDGET_ILS = 100;
+//
+// Raised ₪100→₪250/month 2026-10-02 with explicit user authorization — see
+// hotel-search/index.ts's copy of this constant for the full writeup.
+const MONTHLY_BUDGET_ILS = 250;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342;
 

@@ -224,10 +224,13 @@ function slugify(name: string, city: string): string {
 }
 
 // Shares the exact same budget accounting as tripadvisor-reviews (same
-// table, same formula) — one shared ₪50/month ceiling across both tools.
+// table, same formula) — one shared ceiling across both tools, raised
+// ₪50→₪75/month 2026-10-02 with explicit user authorization (see
+// hotel-search/index.ts's copy of the Google equivalent for the full
+// writeup).
 const TRIPADVISOR_COST_PER_CALL_ILS = 0.056;
 const CALLS_PER_NEW_PLACE = 3;
-const MONTHLY_BUDGET_ILS = 50;
+const MONTHLY_BUDGET_ILS = 75;
 const BUDGET_SAFETY_MARGIN = 0.9;
 
 async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {

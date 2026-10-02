@@ -330,10 +330,13 @@ async function fetchReviews(placeId: string, apiKey: string): Promise<any | null
 // calls the *legacy* endpoints, priced differently). Re-calibrate if a
 // future invoice shows it drifting.
 //
-// Deliberately conservative: trips at 90% of the ₪100 target, and fails
+// Deliberately conservative: trips at 90% of the target, and fails
 // *closed* (blocks the search) if the budget can't be verified, rather than
 // letting Google calls run unaccounted for.
-const MONTHLY_BUDGET_ILS = 100;
+//
+// Raised ₪100→₪250/month 2026-10-02 with explicit user authorization — see
+// hotel-search/index.ts's copy of this constant for the full writeup.
+const MONTHLY_BUDGET_ILS = 250;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342; // calibrated from real billing, see comment above
 

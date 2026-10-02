@@ -42,7 +42,11 @@ const CALLS_PER_NEW_PLACE = 3; // search + details + reviews — counted conserv
 // vs. roughly one lookup per unique destination search when scoped to the
 // top result only — real Tripadvisor pricing is $0.015/entity, list price,
 // not yet calibrated against an actual invoice).
-const MONTHLY_BUDGET_ILS = 50;
+//
+// Raised ₪50→₪75/month 2026-10-02 with explicit user authorization,
+// alongside the Google ceiling raise (see hotel-search/index.ts's copy of
+// that constant for the full writeup) — same comprehensive-sweep rationale.
+const MONTHLY_BUDGET_ILS = 75;
 const BUDGET_SAFETY_MARGIN = 0.9;
 
 type Category = 'hotel' | 'restaurant';
