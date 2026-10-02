@@ -18,6 +18,11 @@ https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:s
 /destinations/calgary-food-allergies-guide/* /destinations/region/north-america/ 301
 /destinations/navigating-food-allergies-rio-de-janeiro-hotels/* /destinations/region/south-america/ 301
 
+# Article unpublished 2026-10-02 (dropped to zero valid hotels after this
+# date's sweep manually excluded its only review as hedge/caution language,
+# not genuine accommodation evidence — see CHANGELOG).
+/destinations/food-allergy-friendly-hotels-santiago/* /destinations/region/south-america/ 301
+
 # NOTE: All bot handling is now in edge-functions/optimize-static-assets.js
 # This file contains only non-bot related redirects
 
