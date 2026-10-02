@@ -236,6 +236,15 @@ const DOUBLE_NEGATIVE_POSITIVES = [
   'without any problem', 'without issue', 'without difficulty', 'without trouble', 'without a problem', 'without any issue',
 ];
 
+// Contractions without an apostrophe ("dont", "cant", "wont"...) survive
+// normalize() as a single word, not split into "don t"/"can t" the way
+// NEGATION_MARKERS' apostrophe'd forms expect — confirmed live 2026-10-01:
+// "they dont even have one version of a lactose free... milk" slipped
+// through as a false positive because of this gap. Word-boundary regex
+// (not a plain substring, since "cant" is also a real substring of
+// "Cantonese"/"cantina") catches the informal spelling too.
+const CONTRACTION_NEGATION_REGEX = /\b(dont|cant|wont|isnt|arent|wasnt|werent|hasnt|hadnt|doesnt|didnt|couldnt|wouldnt|shouldnt)\b/;
+
 const ALLERGEN_LABELS: Record<string, string> = {
   'gluten free': 'gluten', 'glutenfree': 'gluten', 'gluten-free': 'gluten', 'gluten': 'gluten', 'celiac': 'gluten', 'coeliac': 'gluten', 'celiac disease': 'gluten',
   'dairy free': 'dairy', 'dairyfree': 'dairy', 'dairy-free': 'dairy', 'dairy': 'dairy', 'lactose': 'dairy', 'lactose free': 'dairy', 'lactose intolerant': 'dairy', 'milk free': 'dairy', 'milk allergy': 'dairy',
@@ -322,7 +331,7 @@ function classifyAndExtract(reviewText: string): ReviewSnippet | null {
     // ("I'd recommend they include a vegan option") — never counted.
     const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
     const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
-    const isNegated = !isDoubleNegativePositive && NEGATION_MARKERS.some(m => normS.includes(m));
+    const isNegated = !isDoubleNegativePositive && (NEGATION_MARKERS.some(m => normS.includes(m)) || CONTRACTION_NEGATION_REGEX.test(normS));
     if (isSuggestionComplaint || isNegated) continue;
 
     const hasStrictS = sStrict.length > 0;
@@ -1195,6 +1204,15 @@ serve(async (req) => {
 
     let articleResult: any = null;
 
+    // Never publish a brand-new article for a city with fewer than this many
+    // hotels/restaurants that have real, currently-valid allergy evidence —
+    // user directive 2026-10-01, after a negation-detection classifier bug
+    // left dozens of articles stuck at 1-2 "hotels" for weeks (see
+    // CHANGELOG). Growing an already-published article by merging in newly
+    // discovered hotels/restaurants is still fine at any count — this gate
+    // only blocks *creating* a new thin article in the first place.
+    const MIN_FOR_NEW_ARTICLE = 3;
+
     if (contentType === 'hotel' && discovery.discovered.length >= 1) {
       const newHotelIds = (discovery.discovered as { hotelId: string }[]).map(d => d.hotelId);
 
@@ -1202,8 +1220,13 @@ serve(async (req) => {
       // checking whether any published article's hotel_ids overlaps with any
       // hotel we've ever recorded for this city — not just this run's finds,
       // since a previous run may have discovered a different subset.
-      const { data: cityHotels } = await supabase.from('hotels').select('id').eq('city', destination.city);
+      const { data: cityHotels } = await supabase.from('hotels').select('id, allergy_score').eq('city', destination.city);
       const cityHotelIds = (cityHotels || []).map((h: any) => h.id);
+      // Only hotels with a real, currently-valid score count toward the new-
+      // article minimum — a hotel whose only evidence failed re-verification
+      // (allergy_score nulled) must not silently pad a new article back up
+      // to the threshold.
+      const cityValidHotelIds = (cityHotels || []).filter((h: any) => h.allergy_score !== null).map((h: any) => h.id);
 
       let existingArticle: { id: string; slug: string; title: string; hotel_ids: string[] } | null = null;
       if (cityHotelIds.length > 0) {
@@ -1247,6 +1270,14 @@ serve(async (req) => {
         } else {
           console.log(`No new hotels for existing article "${existingArticle.slug}" — all ${newHotelIds.length} discovered hotel(s) already linked.`);
         }
+      } else if (cityValidHotelIds.length < MIN_FOR_NEW_ARTICLE) {
+        // Real evidence exists (this run found at least 1), but not enough
+        // to clear the minimum for a brand-new article yet — leave it in
+        // the hotels/hotel_sources tables for a future run (this city's own
+        // next rotation turn, or a fresh discover-city pass) to pick up
+        // and combine with. Never publish a thin 1-2-hotel article hoping
+        // to backfill it later.
+        console.log(`Below the ${MIN_FOR_NEW_ARTICLE}-hotel minimum for a new article in ${destination.city} — have ${cityValidHotelIds.length} real hotel(s) so far, holding off.`);
       } else if (openaiKey) {
       const { data: contentLog } = await supabase
         .from('pipeline_log')
@@ -1255,7 +1286,11 @@ serve(async (req) => {
         .single();
 
       try {
-        const hotelIds = newHotelIds;
+        // Combines this run's fresh finds with any real hotels already
+        // recorded for this city from earlier runs, so a city that cleared
+        // the minimum cumulatively (not in a single pass) still gets every
+        // valid hotel in its first published version, not just today's.
+        const hotelIds = cityValidHotelIds;
         const { article, errorDetail } = await generateArticle(openaiKey, destination, hotelIds, supabase);
 
         if (article?.slug && article?.content_markdown) {
@@ -1317,8 +1352,9 @@ serve(async (req) => {
     } else if (contentType === 'restaurant' && discovery.discovered.length >= 1) {
       const newRestaurantIds = (discovery.discovered as { restaurantId: string }[]).map(d => d.restaurantId);
 
-      const { data: cityRestaurants } = await supabase.from('restaurants').select('id').eq('city', destination.city);
+      const { data: cityRestaurants } = await supabase.from('restaurants').select('id, allergy_score').eq('city', destination.city);
       const cityRestaurantIds = (cityRestaurants || []).map((r: any) => r.id);
+      const cityValidRestaurantIds = (cityRestaurants || []).filter((r: any) => r.allergy_score !== null).map((r: any) => r.id);
 
       let existingArticle: { id: string; slug: string; title: string; restaurant_ids: string[] } | null = null;
       if (cityRestaurantIds.length > 0) {
@@ -1355,6 +1391,8 @@ serve(async (req) => {
         } else {
           console.log(`No new restaurants for existing article "${existingArticle.slug}" — all ${newRestaurantIds.length} discovered restaurant(s) already linked.`);
         }
+      } else if (cityValidRestaurantIds.length < MIN_FOR_NEW_ARTICLE) {
+        console.log(`Below the ${MIN_FOR_NEW_ARTICLE}-restaurant minimum for a new article in ${destination.city} — have ${cityValidRestaurantIds.length} real restaurant(s) so far, holding off.`);
       } else if (openaiKey) {
         const { data: contentLog } = await supabase
           .from('pipeline_log')
@@ -1363,7 +1401,7 @@ serve(async (req) => {
           .single();
 
         try {
-          const restaurantIds = newRestaurantIds;
+          const restaurantIds = cityValidRestaurantIds;
           const { article, errorDetail } = await generateRestaurantArticle(openaiKey, destination, restaurantIds, supabase);
 
           if (article?.slug && article?.content_markdown) {

@@ -124,6 +124,15 @@ const DOUBLE_NEGATIVE_POSITIVES = [
   'without any problem', 'without issue', 'without difficulty', 'without trouble', 'without a problem', 'without any issue',
 ];
 
+// Contractions without an apostrophe ("dont", "cant", "wont"...) survive
+// normalize() as a single word, not split into "don t"/"can t" the way
+// NEGATION_MARKERS' apostrophe'd forms expect — confirmed live 2026-10-01:
+// "they dont even have one version of a lactose free... milk" slipped
+// through as a false positive because of this gap. Word-boundary regex
+// (not a plain substring, since "cant" is also a real substring of
+// "Cantonese"/"cantina") catches the informal spelling too.
+const CONTRACTION_NEGATION_REGEX = /\b(dont|cant|wont|isnt|arent|wasnt|werent|hasnt|hadnt|doesnt|didnt|couldnt|wouldnt|shouldnt)\b/;
+
 // ==========================================
 // TEXT HELPERS
 // ==========================================
@@ -194,7 +203,7 @@ function classifyAndExtract(reviewText: string, author: string, relativeTime: st
     // but still means the hotel doesn't currently have it) — never counted.
     const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
     const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
-    const isNegated = !isDoubleNegativePositive && NEGATION_MARKERS.some(m => normS.includes(m));
+    const isNegated = !isDoubleNegativePositive && (NEGATION_MARKERS.some(m => normS.includes(m)) || CONTRACTION_NEGATION_REGEX.test(normS));
     if (isSuggestionComplaint || isNegated) continue;
 
     const hasStrictS = sStrict.length > 0;

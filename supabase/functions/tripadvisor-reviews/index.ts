@@ -140,6 +140,15 @@ const DOUBLE_NEGATIVE_POSITIVES = [
   'without any problem', 'without issue', 'without difficulty', 'without trouble', 'without a problem', 'without any issue',
 ];
 
+// Contractions without an apostrophe ("dont", "cant", "wont"...) survive
+// normalize() as a single word, not split into "don t"/"can t" the way
+// NEGATION_MARKERS' apostrophe'd forms expect — confirmed live 2026-10-01:
+// "they dont even have one version of a lactose free... milk" slipped
+// through as a false positive because of this gap. Word-boundary regex
+// (not a plain substring, since "cant" is also a real substring of
+// "Cantonese"/"cantina") catches the informal spelling too.
+const CONTRACTION_NEGATION_REGEX = /\b(dont|cant|wont|isnt|arent|wasnt|werent|hasnt|hadnt|doesnt|didnt|couldnt|wouldnt|shouldnt)\b/;
+
 function normalizeText(text: string): string {
   return text.toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
 }
@@ -186,7 +195,7 @@ function classifyTripadvisorReview(text: string): { score: number; snippet: stri
 
     const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
     const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
-    const isNegated = !isDoubleNegativePositive && NEGATION_MARKERS.some(m => normS.includes(m));
+    const isNegated = !isDoubleNegativePositive && (NEGATION_MARKERS.some(m => normS.includes(m)) || CONTRACTION_NEGATION_REGEX.test(normS));
     if (isSuggestionComplaint || isNegated) continue;
 
     const hasStrictS = sStrict.length > 0;
@@ -344,13 +353,18 @@ serve(async (req) => {
     const rating = details?.traveler_ratings?.overall?.rating ?? null;
     const reviewCount = details?.traveler_ratings?.overall?.count ?? null;
     const tripadvisorUrl = details?.urls?.tripadvisor?.main ?? null;
-    // Not sliced to a small number before filtering — the single reviews
-    // call already returns whatever page Tripadvisor gives us (typically
-    // up to 10-15) at no extra cost, and most of them won't be about food
-    // allergies, so keeping more raw candidates materially improves the
-    // odds of finding one that actually is. The cache stores all of them
-    // (raw, unfiltered) so a better future classifier can re-filter without
-    // a re-fetch; only the filtered, best-first subset is ever returned.
+    // Live-verified 2026-10-01 (explicit size=20 request against a
+    // 1,112-review hotel still returned total_elements: 3): this account's
+    // Terra API tier caps /locations/{id}/reviews at exactly 3 reviews per
+    // location regardless of any requested page size — contradicts an
+    // earlier, unverified assumption here that it "typically returns up to
+    // 10-15". That makes Tripadvisor a weaker per-place review source than
+    // Google (5 reviews/place), not a stronger one as originally hoped — see
+    // CHANGELOG/TASKS. The .slice(0, 15) below is therefore a no-op in
+    // practice today, kept only so a future tier upgrade is picked up
+    // automatically without a code change. The cache stores all returned
+    // reviews (raw, unfiltered) so a better future classifier can re-filter
+    // without a re-fetch; only the filtered, best-first subset is returned.
     const reviews = (reviewsRes?.data ?? []).slice(0, 15).map((r: any) => ({
       rating: r.rating,
       text: r.text?.find((t: any) => t.primary)?.value ?? r.text?.[0]?.value ?? '',

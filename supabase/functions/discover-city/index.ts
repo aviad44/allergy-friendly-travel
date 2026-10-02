@@ -2,31 +2,43 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // ==========================================
-// ONE-OFF TOOL — 2026-10-01
+// ONE-OFF TOOL — 2026-10-01, Christmas-markets pilot
 // ==========================================
-// Tripadvisor-based counterpart to discover-city (which uses Google
-// Places). Google's Place Details caps at 5 visible reviews per place and
-// "allergy friendly hotels in X" text search tends to surface mainstream
-// chain hotels whose top-5 reviews are generic ("amazing stay") rather
-// than allergy-specific — confirmed live 2026-10-01 against Nashville,
-// which has 2 already-verified real hotels that don't even appear in a
-// fresh 52-candidate Google search for that exact query. This is a second,
-// independent discovery path using its own candidate set (Tripadvisor's
-// own location search) and the exact same (now-fixed) per-sentence
-// classifier as tripadvisor-reviews/hotel-search/restaurants-search/
-// content-pipeline. Live-verified 2026-10-01, though: this account's Terra
-// API tier caps /locations/{id}/reviews at exactly 3 reviews per location
-// regardless of requested size (not the "up to 15" originally assumed here
-// — see tripadvisor-reviews/index.ts and CHANGELOG/TASKS for the full
-// finding), so in practice this tool's real edge over discover-city is its
-// different candidate pool, not deeper review coverage per place — a minor,
-// supplementary source rather than the fix for Google's low hit rate it was
-// first hoped to be. Shares the SAME ₪50/month Tripadvisor budget ceiling
-// as tripadvisor-reviews (reads the same tripadvisor_cache row count), and
-// writes to the same hotels/hotel_sources/hotel_allergy_info tables as
-// discover-city, with source_type 'tripadvisor' instead of 'google' so
-// provenance is traceable. Safe to delete/retire once this round of
+// Standalone city-discovery tool, used to seed real hotel evidence for
+// cities not yet in the daily content-pipeline rotation's DB. Reuses the
+// exact, already-fixed discoverHotels()/classifyAndExtract() logic from
+// content-pipeline/index.ts verbatim (per-sentence matching + negation
+// detection, fixed 2026-10-01 — see CHANGELOG) -- same classification,
+// same hotels/hotel_sources/hotel_allergy_info persistence -- just
+// triggered on demand for one city instead of the daily rotation.
+// Deliberately NOT a change to content-pipeline itself, so it can't
+// regress the live daily job. Safe to delete/retire once this round of
 // article work is done.
+//
+// Candidate scan depth raised 30->60 (2026-10-01, same round): the
+// original 30-candidate cap missed real, already-verified hotels (e.g.
+// Nashville's Union Station and Fairfield by Marriott, both with genuine
+// positive evidence from an earlier deeper scan) because Google's
+// relevance ranking for "allergy friendly hotels in X" doesn't reliably
+// put the best-evidenced hotel in the top 30 -- now matches
+// content-pipeline's own discoverHotels() cap exactly.
+//
+// Multi-query search added 2026-10-01 (same round, user directive): a
+// single "allergy friendly hotels in X" query mostly surfaces mainstream
+// chain hotels (Hilton, Marriott, Hyatt) whose visible reviews are
+// generic — confirmed live against 6 cities including Nashville, which
+// has 2 confirmed-real hotels that don't even appear in a fresh 52-result
+// search for that exact query. Running 3 differently-phrased queries and
+// merging/deduplicating their candidates by place_id surfaces a
+// meaningfully different, more specialty-skewed pool (small boutique
+// hotels and B&Bs that actively brand themselves around dietary
+// accommodation, which chains don't) — verified live: a bare "gluten
+// free hotel X" / "celiac friendly hotel X" query returns different
+// top results than the original phrasing for the same city. Each query
+// still costs just 1 extra Text Search call (negligible); the expensive
+// part (Place Details, up to 60 calls) stays capped at 60 TOTAL across
+// the merged candidate pool, not 60 per query, so overall cost per city
+// is barely higher than the single-query version.
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -52,10 +64,6 @@ const STRICT_TERMS = [
   'peanut allergy', 'nut allergy', 'tree nut allergy',
   'milk allergy', 'egg allergy', 'soy allergy',
   'fish allergy', 'seafood allergy', 'shellfish allergy',
-  'senza glutine', 'senza lattosio', 'senza noci', 'senza uova',
-  'sin gluten', 'sin lactosa', 'sin nueces',
-  'sans gluten', 'sans lactose', 'sans noix',
-  'glutenfrei', 'laktosefrei', 'nussfrei',
   'dietary needs', 'dietary requirements', 'special dietary',
   'gf menu', 'gf options', 'df options', 'nf options',
   'room service allergy', 'breakfast allergy', 'buffet allergy',
@@ -143,8 +151,11 @@ interface ReviewSnippet {
   allergens: string[];
 }
 
-// Per-sentence matching, same fixed logic as hotel-search/restaurants-search/
-// content-pipeline/tripadvisor-reviews (2026-10-01).
+// Per-sentence matching (fixed 2026-10-01, ported verbatim from
+// content-pipeline/hotel-search/restaurants-search) — see CHANGELOG for
+// the full rationale: whole-text matching let negated sentences ("No
+// gluten free options") score as positive, and let a safety word in one
+// sentence pair with an allergy word in an unrelated sentence.
 function classifyAndExtract(reviewText: string): ReviewSnippet | null {
   const positiveWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
   const dietaryIndicators = ['gluten', 'dairy free', 'lactose'];
@@ -208,52 +219,89 @@ function classifyAndExtract(reviewText: string): ReviewSnippet | null {
   return { text: snippetText, score: bestScore, matchedTerms: allMatched.slice(0, 6), allergens };
 }
 
-async function taFetch(path: string, apiKey: string): Promise<any | null> {
-  const res = await fetch(`https://terra.tripadvisor.com/api${path}`, {
-    headers: { 'X-API-Key': apiKey },
-  });
-  if (!res.ok) {
-    console.error(`Tripadvisor ${path} failed:`, res.status, await res.text());
-    return null;
+async function textSearch(query: string, apiKey: string, placeType: string): Promise<any[]> {
+  const baseUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&type=${placeType}&language=en&key=${apiKey}`;
+  let results: any[] = [];
+  let nextPageToken: string | undefined;
+
+  for (let page = 0; page < 3; page++) {
+    const url = nextPageToken ? `${baseUrl}&pagetoken=${nextPageToken}` : baseUrl;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') break;
+    results = results.concat(data.results || []);
+    nextPageToken = data.next_page_token;
+    if (!nextPageToken) break;
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
-  return res.json();
+  return results;
+}
+
+async function fetchDetails(placeId: string, apiKey: string): Promise<any | null> {
+  const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,url,website&language=en&key=${apiKey}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if (data.status !== 'OK' || !data.result) return null;
+  return data.result;
 }
 
 function slugify(name: string, city: string): string {
   return `${name}-${city}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
-// Shares the exact same budget accounting as tripadvisor-reviews (same
-// table, same formula) — one shared ₪50/month ceiling across both tools.
-const TRIPADVISOR_COST_PER_CALL_ILS = 0.056;
-const CALLS_PER_NEW_PLACE = 3;
-const MONTHLY_BUDGET_ILS = 50;
+// Same shared ₪100/month ceiling as hotel-search/restaurants-search/content-pipeline.
+const MONTHLY_BUDGET_ILS = 100;
 const BUDGET_SAFETY_MARGIN = 0.9;
+const COST_PER_CALL_ILS = 0.0342;
 
 async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
-  const monthStart = new Date();
-  monthStart.setUTCDate(1);
-  monthStart.setUTCHours(0, 0, 0, 0);
-  const { count, error } = await supabase
-    .from('tripadvisor_cache')
-    .select('id', { count: 'exact', head: true })
-    .gte('fetched_at', monthStart.toISOString());
-  if (error) return true;
-  const costIls = (count ?? 0) * CALLS_PER_NEW_PLACE * TRIPADVISOR_COST_PER_CALL_ILS;
-  return costIls >= MONTHLY_BUDGET_ILS * BUDGET_SAFETY_MARGIN;
+  try {
+    const monthStart = new Date();
+    monthStart.setUTCDate(1);
+    monthStart.setUTCHours(0, 0, 0, 0);
+    const { data, error } = await supabase
+      .from('search_log')
+      .select('google_calls_count')
+      .in('mode', ['hotels_fast', 'fast', 'article_photo'])
+      .eq('cache_hit', false)
+      .gte('created_at', monthStart.toISOString());
+    if (error || !data) return true;
+    const totalCalls = data.reduce((sum: number, row: any) => sum + (row.google_calls_count || 0), 0);
+    return totalCalls * COST_PER_CALL_ILS >= MONTHLY_BUDGET_ILS * BUDGET_SAFETY_MARGIN;
+  } catch {
+    return true;
+  }
+}
+
+// Three differently-phrased queries whose results are merged and
+// deduplicated by place_id before scoring — see the top-of-file comment
+// for why: the original single "allergy friendly hotels/restaurants in X"
+// phrasing skews heavily toward mainstream chains with generic reviews.
+function buildQueries(city: string, isRestaurant: boolean): string[] {
+  return isRestaurant
+    ? [
+        `allergy friendly restaurants in ${city}`,
+        `gluten free restaurant ${city}`,
+        `celiac friendly restaurant ${city}`,
+      ]
+    : [
+        `allergy friendly hotels in ${city}`,
+        `gluten free hotel ${city}`,
+        `celiac friendly hotel ${city}`,
+      ];
 }
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
-    const { city, country, category, maxCandidates } = await req.json();
+    const { city, country, category } = await req.json();
     if (!city || !country) {
       return new Response(JSON.stringify({ error: 'city and country are required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const apiKey = Deno.env.get('TRIPADVISOR_API_KEY');
+    const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     if (!apiKey || !supabaseUrl || !supabaseKey) {
@@ -263,73 +311,46 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     if (await isMonthlyBudgetExceeded(supabase)) {
-      return new Response(JSON.stringify({ error: 'Tripadvisor monthly budget reached, skipping' }),
+      return new Response(JSON.stringify({ error: 'Monthly budget reached, skipping' }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     const isRestaurant = category === 'restaurant';
-    const taCategory = isRestaurant ? 'RESTAURANT' : 'HOTEL';
-    // Plain city name, not "hotels in X" — Tripadvisor's /locations/search
-    // does a fuzzy name match rather than full-text search like Google's
-    // Text Search, so a natural-language query returns zero results
-    // (confirmed live 2026-10-01: "hotels in Vilnius" -> 0 results,
-    // "Vilnius" -> 127 results). The `category` param already scopes to
-    // hotels/restaurants.
-    const searchResult = await taFetch(`/locations/search?query=${encodeURIComponent(city)}&category=${taCategory}`, apiKey);
-    const candidates: any[] = searchResult?.data ?? [];
+    const placeType = isRestaurant ? 'restaurant' : 'lodging';
+    const queries = buildQueries(city, isRestaurant);
 
-    const cap = Math.min(maxCandidates ?? 20, 40);
+    const seenPlaceIds = new Set<string>();
+    const candidates: any[] = [];
+    let googleCalls = 0;
+    for (const q of queries) {
+      const results = await textSearch(q, apiKey, placeType);
+      googleCalls++; // textSearch's own pagination calls aren't separately counted here, matching the original single-query accounting
+      for (const r of results) {
+        if (r.place_id && !seenPlaceIds.has(r.place_id)) {
+          seenPlaceIds.add(r.place_id);
+          candidates.push(r);
+        }
+      }
+    }
+
     const discovered: { id: string; name: string; score: number; text: string; allergens: string[] }[] = [];
-    let placesChecked = 0;
+    let detailsFetched = 0;
 
-    for (const candidate of candidates.slice(0, cap)) {
-      if (await isMonthlyBudgetExceeded(supabase)) break;
+    for (const candidate of candidates.slice(0, 60)) {
+      if (detailsFetched >= 60) break;
+      const details = await fetchDetails(candidate.place_id, apiKey);
+      detailsFetched++;
+      googleCalls++;
+      const reviews = details?.reviews || [];
 
-      const locationId = candidate?.location?.id;
-      // Location name comes back as an array of {language, value, primary}
-      // entries, not a flat `name` string (confirmed live 2026-10-01 — the
-      // original version of this silently extracted `undefined` for every
-      // candidate, which is why the very first live run found 0 discovered
-      // despite 127 real candidates).
-      const nameEntries: any[] = candidate?.location?.names ?? [];
-      const name: string | undefined = nameEntries.find((n) => n.primary)?.value ?? nameEntries[0]?.value;
-      if (!locationId || !name) continue;
-
-      const [details, reviewsRes] = await Promise.all([
-        taFetch(`/locations/${locationId}?locale=en-US`, apiKey),
-        taFetch(`/locations/${locationId}/reviews?locale=en-US`, apiKey),
-      ]);
-      placesChecked++;
-
-      const rawReviews = (reviewsRes?.data ?? []).slice(0, 15);
       let best: ReviewSnippet | null = null;
-      for (const r of rawReviews) {
-        const text = r.text?.find((t: any) => t.primary)?.value ?? r.text?.[0]?.value ?? '';
-        const snip = classifyAndExtract(text);
+      for (const review of reviews.slice(0, 5)) {
+        const snip = classifyAndExtract(review.text || '');
         if (snip && (!best || snip.score > best.score)) best = snip;
       }
-
-      // Cache this place regardless of match, same as tripadvisor-reviews,
-      // so budget accounting stays accurate and re-discovery doesn't
-      // re-bill the same place.
-      const placeKey = `${name}|${city}`.toLowerCase().trim().replace(/\s+/g, ' ');
-      await supabase.from('tripadvisor_cache').upsert({
-        place_key: placeKey, name, category: isRestaurant ? 'restaurant' : 'hotel', found: true,
-        tripadvisor_location_id: locationId,
-        rating: details?.traveler_ratings?.overall?.rating ?? null,
-        review_count: details?.traveler_ratings?.overall?.count ?? null,
-        tripadvisor_url: details?.urls?.tripadvisor?.main ?? null,
-        reviews: rawReviews.map((r: any) => ({
-          rating: r.rating,
-          text: r.text?.find((t: any) => t.primary)?.value ?? r.text?.[0]?.value ?? '',
-          author: r.user?.username ?? 'Tripadvisor traveler',
-          url: r.url,
-        })),
-      }, { onConflict: 'place_key' });
-
       if (!best) continue;
 
-      const slug = slugify(name, city);
+      const slug = slugify(candidate.name, city);
       const allergyScore = Math.min(5, Math.max(1, Math.round(best.score * 5 * 10) / 10));
       const table = isRestaurant ? 'restaurants' : 'hotels';
       const idCol = isRestaurant ? 'restaurant_id' : 'hotel_id';
@@ -337,27 +358,35 @@ serve(async (req) => {
       const infoTable = isRestaurant ? 'restaurant_allergy_info' : 'hotel_allergy_info';
 
       const upsertPayload: Record<string, unknown> = {
-        name, slug, city, country,
-        // `addresses` is an array (same shape as `names`), not a singular
-        // `address` object — same class of bug as the name extraction above.
-        address: details?.addresses?.[0]?.formatted ?? null,
+        name: candidate.name,
+        slug,
+        city,
+        country,
+        address: candidate.formatted_address || null,
+        website_url: details?.website || null,
+        latitude: candidate.geometry?.location?.lat ?? null,
+        longitude: candidate.geometry?.location?.lng ?? null,
         allergy_score: allergyScore,
-        verified: false, active: true,
+        verified: false,
+        active: true,
         updated_at: new Date().toISOString(),
       };
       if (!isRestaurant) {
-        upsertPayload.booking_url = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(`${name} ${city}`)}`;
+        upsertPayload.booking_url = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(`${candidate.name} ${city}`)}`;
       }
 
       const { data: row, error: upsertErr } = await supabase
-        .from(table).upsert(upsertPayload, { onConflict: 'slug' }).select('id').single();
+        .from(table)
+        .upsert(upsertPayload, { onConflict: 'slug' })
+        .select('id')
+        .single();
       if (upsertErr || !row) continue;
 
       await supabase.from(sourceTable).insert({
         [idCol]: row.id,
-        source_type: 'tripadvisor',
-        source_url: details?.urls?.tripadvisor?.main ?? null,
-        title: name,
+        source_type: 'google',
+        source_url: details?.url || `https://www.google.com/maps/place/?q=place_id:${candidate.place_id}`,
+        title: candidate.name,
         snippet: best.text,
         allergy_score: allergyScore,
         raw_text: best.text,
@@ -366,17 +395,26 @@ serve(async (req) => {
 
       for (const allergen of best.allergens) {
         await supabase.from(infoTable).upsert({
-          [idCol]: row.id, allergen_type: allergen, support_level: 'on_request',
-          notes: best.text, source_url: details?.urls?.tripadvisor?.main ?? null,
+          [idCol]: row.id,
+          allergen_type: allergen,
+          support_level: 'on_request',
+          notes: best.text,
+          source_url: details?.url || null,
         }, { onConflict: `${idCol},allergen_type` });
       }
 
-      discovered.push({ id: row.id, name, score: allergyScore, text: best.text, allergens: best.allergens });
+      discovered.push({ id: row.id, name: candidate.name, score: allergyScore, text: best.text, allergens: best.allergens });
     }
+
+    await supabase.from('search_log').insert({
+      search_id: `discover-city-${Date.now()}`, destination: city, allergies: [],
+      mode: 'hotels_fast', google_calls_count: googleCalls,
+      results_returned: discovered.length, cache_hit: false, duration_ms: 0,
+    });
 
     return new Response(JSON.stringify({
       city, country, category: isRestaurant ? 'restaurant' : 'hotel',
-      candidatesFound: candidates.length, placesChecked, discovered,
+      queriesUsed: queries, candidatesFound: candidates.length, detailsFetched, discovered,
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (error) {

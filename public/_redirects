@@ -10,6 +10,14 @@ https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:s
 /destinations/abudhabi /destinations/abu-dhabi 301
 /destinations/newyork /destinations/new-york 301
 
+# Articles unpublished 2026-10-01 (zero valid hotels after classifier
+# cleanup — see CHANGELOG) — redirect to the relevant region hub instead of
+# leaving a 404, so the page's crawl/link equity lands somewhere topically
+# relevant rather than a dead end.
+/destinations/food-allergy-travel-vilnius/* /destinations/region/europe/ 301
+/destinations/calgary-food-allergies-guide/* /destinations/region/north-america/ 301
+/destinations/navigating-food-allergies-rio-de-janeiro-hotels/* /destinations/region/south-america/ 301
+
 # NOTE: All bot handling is now in edge-functions/optimize-static-assets.js
 # This file contains only non-bot related redirects
 
