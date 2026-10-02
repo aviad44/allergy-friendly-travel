@@ -12,35 +12,10 @@ export const destinations: Destination[] = [
     region: 'worldwide'
   },
   {
-    id: 'amsterdam',
-    name: 'Amsterdam',
-    country: 'Netherlands',
-    description: 'Top 10 Allergy-Friendly Hotels in Amsterdam',
-    subtitle: 'Safe Accommodations for Food Allergies',
-    image: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=1200&q=80',
-    region: 'europe'
-  },
-  {
     id: 'london',
     name: 'London',
     country: 'United Kingdom',
     description: 'Best Allergy-Friendly Hotels in London',
-    subtitle: 'Safe Accommodations for Food Allergies',
-    region: 'europe'
-  },
-  {
-    id: 'paris',
-    name: 'Paris',
-    country: 'France',
-    description: 'Best Allergy-Friendly Hotels in Paris',
-    subtitle: 'Safe Accommodations for Food Allergies',
-    region: 'europe'
-  },
-  {
-    id: 'barcelona',
-    name: 'Barcelona',
-    country: 'Spain',
-    description: 'Best Allergy-Friendly Hotels in Barcelona',
     subtitle: 'Safe Accommodations for Food Allergies',
     region: 'europe'
   },
@@ -50,14 +25,6 @@ export const destinations: Destination[] = [
     country: 'Cyprus',
     description: 'Best Allergy-Friendly Hotels in Cyprus',
     subtitle: 'Safe Accommodations for Food Allergies',
-    region: 'europe'
-  },
-  {
-    id: 'tuscany',
-    name: 'Tuscany',
-    country: 'Italy',
-    description: 'Allergy-Friendly 6-Day Tuscany Itinerary',
-    subtitle: 'Safe Accommodations and Restaurants in Tuscany',
     region: 'europe'
   },
   {
@@ -83,22 +50,6 @@ export const destinations: Destination[] = [
     description: 'Best Allergy-Friendly Hotels in Crete',
     subtitle: 'Safe Accommodations for Food Allergies',
     region: 'europe'
-  },
-  {
-    id: 'tokyo',
-    name: 'Tokyo',
-    country: 'Japan',
-    description: 'Best Allergy-Friendly Hotels in Tokyo',
-    subtitle: 'Safe Accommodations for Food Allergies',
-    region: 'asia'
-  },
-  {
-    id: 'thailand',
-    name: 'Thailand',
-    country: 'Thailand',
-    description: 'Best Allergy-Friendly Hotels in Thailand',
-    subtitle: 'Safe Accommodations for Food Allergies',
-    region: 'asia'
   },
   {
     id: 'hotel-chains',
@@ -133,53 +84,12 @@ export const destinations: Destination[] = [
     region: 'europe'
   },
   {
-    id: 'koh-samui',
-    name: 'Koh Samui',
-    country: 'Thailand',
-    description: 'Four Seasons Koh Samui – The "White Lotus" Resort',
-    subtitle: 'Allergy-Friendly White Lotus Filming Location',
-    region: 'asia'
-  },
-  {
-    id: 'turkey',
-    name: 'Turkey',
-    country: 'Turkey',
-    description: 'Best Allergy-Friendly Hotels in Turkey',
-    subtitle: 'Safe All-Inclusive Resorts for Food Allergies',
-    region: 'europe'
-  },
-  {
     id: 'cruise-lines',
     name: 'Cruise Lines',
     country: 'Worldwide',
     description: 'Best Allergy-Friendly Cruise Lines',
     subtitle: 'Safe Cruising for Food Allergies',
     region: 'worldwide'
-  },
-  {
-    id: 'toronto',
-    name: 'Toronto',
-    country: 'Canada',
-    description: 'Best Allergy-Friendly Hotels in Toronto',
-    subtitle: 'Safe Accommodations for Food Allergies',
-    region: 'north-america'
-  },
-  {
-    id: 'ayia-napa',
-    name: 'Ayia Napa',
-    country: 'Cyprus',
-    description: 'Best Allergy-Friendly Hotels in Ayia Napa',
-    subtitle: 'Safe Beach Accommodations for Food Allergies',
-    region: 'europe'
-  },
-  {
-    id: 'gluten-free-europe',
-    name: 'Gluten-Free Europe',
-    country: 'Europe',
-    description: 'Top 5 Gluten-Free Travel Destinations in Europe',
-    subtitle: 'Where to Travel in Europe If You\'re Gluten-Free or Have Celiac Disease',
-    image: '/lovable-uploads/european-restaurant-diners.jpg',
-    region: 'europe'
   },
   {
     id: 'athens',

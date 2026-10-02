@@ -27,7 +27,6 @@ export const usePerformanceOptimization = () => {
     if ('requestIdleCallback' in window) {
       requestIdleCallback(() => {
         const importantRoutes = [
-          '/destinations/paris',
           '/destinations/london',
           '/destinations/rome'
         ];

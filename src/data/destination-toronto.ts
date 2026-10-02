@@ -4,62 +4,6 @@ import { DestinationContent } from '@/types/definitions';
 export const torontoContent: DestinationContent = {
   intro: "Toronto is widely regarded as one of the most multicultural and inclusive cities in North America—and that extends to how it handles food allergies and dietary restrictions. Whether you're traveling with celiac disease, a peanut allergy, or a dairy sensitivity, you'll find plenty of hotels and restaurants that offer safe, customized experiences.",
   hotels: [
-    {
-      name: "Fairmont Royal York",
-      address: "100 Front St W, Toronto, ON M5J 1E3, Canada",
-      features: [
-        "⭐ 5-star luxury",
-        "🍽️ Personalized allergy protocols",
-        "👨‍🍳 Custom meals from executive chef"
-      ],
-      description: "Historic luxury hotel offering personalized allergy notes at check-in, custom meals from executive chef upon request, gluten-free and dairy-free items at all dining outlets, and hypoallergenic rooms available.",
-      bookingUrl: "https://www.fairmont.com/royal-york-toronto/",
-      rating: 5,
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/268797492.jpg?k=1c57b55dc0bc1d69987afbe898862c91bea9248f403c1ea5b520e0d3e77330ce&o=&hp=1",
-      location: "Downtown Toronto"
-    },
-    {
-      name: "Chelsea Hotel Toronto",
-      address: "33 Gerrard St W, Toronto, ON M5G 1Z4, Canada",
-      features: [
-        "⭐ 4-star hotel",
-        "👨‍👩‍👧‍👦 Family-friendly",
-        "🍽️ Allergy-aware dining"
-      ],
-      description: "Family-oriented hotel with comprehensive allergy protocols, including staff training on cross-contamination prevention, nut-free desserts, and soy-free options available.",
-      bookingUrl: "https://www.chelseatoronto.com/",
-      rating: 4,
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/90203473.jpg?k=e2e730e5b8649d5783f3c5c480e629b22ef30eaeedce76ba482f462f3b13e933&o=&hp=1",
-      location: "Downtown Toronto"
-    },
-    {
-      name: "The Hazelton Hotel",
-      address: "118 Yorkville Ave, Toronto, ON M5R 1C2, Canada",
-      features: [
-        "⭐ 5-star boutique",
-        "👨‍🍳 Direct chef interaction",
-        "🥗 Allergen-aware amenities"
-      ],
-      description: "Boutique luxury hotel offering small, curated dining with direct chef interaction, comprehensive allergy notes system, and organic allergen-aware amenities.",
-      bookingUrl: "https://www.thehazeltonhotel.com/",
-      rating: 5,
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/133383393.jpg?k=2074fce7a998d4c58c64fe06b05981aa27c2e8dc1ac985f7d3ce4ee30a077060&o=&hp=1",
-      location: "Yorkville"
-    },
-    {
-      name: "Hotel X Toronto",
-      address: "111 Princes' Blvd, Toronto, ON M6K 3C3, Canada",
-      features: [
-        "⭐ 5-star luxury",
-        "🍽️ Dedicated vegan restaurant",
-        "🧪 Allergy testing protocols"
-      ],
-      description: "Modern luxury hotel with state-of-the-art allergy protocols including a dedicated vegan restaurant and staff trained in allergy management.",
-      bookingUrl: "https://www.hotelxtoronto.com/",
-      rating: 4.5,
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/337428105.jpg?k=961c2a2278e6238204bbf608f9300a2b8785758e5ef5a8f8886dab1c3760b8f1&o=&hp=1",
-      location: "Exhibition Place"
-    }
   ],
   faqs: [
     {

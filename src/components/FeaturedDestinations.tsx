@@ -8,16 +8,6 @@ import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 const FEATURED_DESTINATIONS = [
   {
-    id: 1,
-    name: "Paris",
-    country: "France",
-    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
-    description: "Discover allergy-friendly luxury in the City of Light",
-    commonAllergies: ["Gluten", "Dairy", "Nuts"],
-    href: "/destinations/paris/",
-    destId: "paris"
-  },
-  {
     id: 2,
     name: "London",
     country: "United Kingdom",
@@ -56,16 +46,6 @@ const FEATURED_DESTINATIONS = [
     commonAllergies: ["Gluten", "Nuts"],
     href: "/destinations/cyprus/",
     destId: "cyprus"
-  },
-  {
-    id: 6,
-    name: "Barcelona",
-    country: "Spain",
-    image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
-    description: "Allergy-friendly tapas and Mediterranean delights",
-    commonAllergies: ["Gluten", "Shellfish"],
-    href: "/destinations/barcelona/",
-    destId: "barcelona"
   },
   {
     id: 7,

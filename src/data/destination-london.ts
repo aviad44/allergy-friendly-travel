@@ -5,18 +5,6 @@ export const londonContent: DestinationContent = {
   intro: "London offers many allergy-friendly hotels and restaurants, making it a welcoming destination for travelers with dietary restrictions. From luxury accommodations to budget-friendly options, you'll find establishments that take food allergies seriously and provide safe dining experiences throughout your stay in this vibrant capital city.",
   hotels: [
     {
-      name: "The Langham London ★★★★★",
-      address: "1C Portland Place, London",
-      features: [
-        "Allergy-trained kitchen staff",
-        "Gluten-free afternoon tea",
-        "Dairy-free options available",
-        "Personalized menu preparation"
-      ],
-      description: "This luxury hotel in Marylebone offers exceptional allergy-awareness programs and custom menus for guests with dietary restrictions.",
-      bookingUrl: "https://www.langhamhotels.com/en/the-langham/london/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=london"
-    },
-    {
       name: "Hilton London Bankside ★★★★",
       address: "2-8 Great Suffolk Street, London",
       features: [
@@ -29,18 +17,6 @@ export const londonContent: DestinationContent = {
       quote: "The people working in the restaurant are so friendly and accommodating, and there are plenty of options for all dietary needs.",
       bookingUrl: "https://www.hilton.com/en/hotels/lonsbhi-hilton-london-bankside/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=london"
     },
-    {
-      name: "Claridge's ★★★★★",
-      address: "Brook Street, Mayfair, London",
-      features: [
-        "Gluten-free bread and pastries",
-        "Allergy-specific menu options",
-        "Kitchen accommodates multiple restrictions",
-        "Staff trained in allergen handling"
-      ],
-      description: "This iconic luxury hotel offers exceptional service for guests with dietary restrictions, with detailed allergen information available.",
-      bookingUrl: "https://www.claridges.co.uk/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=london"
-    }
   ],
   faqs: [
     {

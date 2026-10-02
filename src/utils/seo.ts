@@ -34,7 +34,7 @@ export function buildCanonical(input: string): string {
     // it). This matches what the static host actually serves: the build's
     // prerender step writes dist/<route>/index.html for every route, and
     // the host 301-redirects a no-slash request to the trailing-slash form
-    // — verified live across the site (/about, /destinations/toronto, every
+    // — verified live across the site (/about, /destinations/rome, every
     // destination/restaurant guide). A canonical tag that itself points to
     // a URL which immediately redirects is a real, confirmed cause of pages
     // showing up excluded in Search Console. Previously this stripped the

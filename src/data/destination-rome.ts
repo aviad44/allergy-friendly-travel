@@ -6,20 +6,6 @@ export const romeContent: DestinationContent = {
   intro: "Discover Rome's most accommodating hotels for travelers with food allergies and dietary restrictions. From gluten-free breakfast options to dedicated allergy-aware kitchens, these hotels ensure a safe and enjoyable stay in the Eternal City.",
   hotels: [
     {
-      name: "Hotel Artemide",
-      address: "Via Nazionale, 22, 00184 Roma RM, Italy",
-      features: [
-        "⭐ 4-star luxury accommodation",
-        "🍽️ Specialized allergy menus",
-        "👨‍🍳 Staff trained in allergy awareness"
-      ],
-      description: "Located in the heart of Rome, this luxury hotel ensures a safe experience for guests with dietary restrictions.",
-      rating: 4.8,
-      bookingUrl: "https://www.hotelartemide.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/153715169.jpg?k=b5e897619e4c21c3e34c692731ae0e1e06b5a7790760c9db69f71d61444dc9c6&o=&hp=1",
-      location: "City Center",
-    },
-    {
       name: "Singer Palace Hotel Roma",
       address: "Via Alessandro Specchi, 10, 00186 Roma RM, Italy",
       features: [
@@ -33,34 +19,6 @@ export const romeContent: DestinationContent = {
       bookingUrl: "https://www.singerpalacehotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/287246400.jpg?k=cf56e30c9523ced9876d2c8348bd3b2e68329545781f9133d968b923e1f30075&o=&hp=1",
       location: "Historic Center",
-    },
-    {
-      name: "Hotel Damaso",
-      address: "Piazza della Cancelleria, 62, 00186 Roma RM, Italy",
-      features: [
-        "⭐ 3-star hotel with rooftop terrace",
-        "🍽️ Allergen-free menu options",
-        "🗣️ Multi-lingual allergy cards available"
-      ],
-      description: "Near Piazza Navona, a convenient and allergy-conscious choice.",
-      rating: 4.6,
-      bookingUrl: "https://www.hoteldamaso.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/149068523.jpg?k=c98b7b744991e91a3f24e235c072ddbb3ab2d027742aecbd0b44d11bcbbcc0d7&o=&hp=1",
-      location: "Near Piazza Navona",
-    },
-    {
-      name: "Hotel Archimede",
-      address: "Via dei Mille, 19, 00185 Roma RM, Italy",
-      features: [
-        "⭐ 3-star hotel near Termini",
-        "🥜 Nut-free environment available",
-        "📝 Allergy documentation upon request"
-      ],
-      description: "Close to Termini station with allergy-aware staff.",
-      rating: 4.3,
-      bookingUrl: "https://www.hotelarchimederoma.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/16472585.jpg?k=e7c8e89f92c15fce001ee66757042e1c4143a569347e219320af769bf5406f35&o=&hp=1",
-      location: "Near Termini Station",
     },
     {
       name: "Relais Borgo Gentile",

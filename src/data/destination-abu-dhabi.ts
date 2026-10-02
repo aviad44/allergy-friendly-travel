@@ -18,19 +18,6 @@ export const abuDhabiContent: DestinationContent = {
       isPurelyAllergyFriendly: false,
       stars: 5
     },
-    {
-      id: "park-hyatt-abu-dhabi",
-      name: "Park Hyatt Abu Dhabi ★★★★★",
-      location: "Saadiyat Island, Abu Dhabi, UAE",
-      address: "Saadiyat Island, Abu Dhabi, United Arab Emirates",
-      features: ["⭐ 5-star beach resort", "🍽️ Dedicated allergen kitchens", "📋 Digital allergen tracking"],
-      description: "Park Hyatt maintains dedicated allergen-free kitchen areas and implements digital tracking of guest allergies across all their dining venues.",
-      bookingUrl: "https://www.hyatt.com/en-US/hotel/united-arab-emirates/park-hyatt-abu-dhabi-hotel-and-villas/abuph?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=abu_dhabi",
-      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Seafood-Free"],
-      amenities: ["WiFi", "Private Beach", "Swimming Pools", "Spa", "Multiple Restaurants"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    }
   ],
   faqs: [
     {

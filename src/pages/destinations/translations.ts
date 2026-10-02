@@ -62,141 +62,93 @@ export const getTranslatedDestinationArticles = (language: string) => {
   const baseDestinations = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=80",
-      href: "/destinations/paris",
-      tags: ["Gluten-Free", "Dairy-Free", "Nut-Free"]
-    },
-    {
-      id: 2,
       image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=2000&q=80",
       href: "/destinations/london",
       tags: ["Gluten-Free", "Vegan"]
     },
     {
-      id: 3,
+      id: 2,
       image: "/lovable-uploads/d510c45b-659c-4c57-83e1-3ee75291a972.png",
       href: "/destinations/cyprus",
       tags: ["Dairy-Free", "Gluten-Free"]
     },
     {
-      id: 4,
+      id: 3,
       image: "/lovable-uploads/8ccb76ca-0fc3-4c23-bc71-ce722e2fb441.png",
       href: "/destinations/crete",
       tags: ["Gluten-Free", "Mediterranean"]
     },
     {
-      id: 5,
+      id: 4,
       image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=2000&q=80",
       href: "/destinations/abu-dhabi",
       tags: ["Luxury", "Family-Friendly", "Allergy-Safe"]
-    },
-    {
-      id: 6,
-      image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=2000&q=80",
-      href: "/destinations/barcelona",
-      tags: ["Gluten-Free", "Shellfish-Free"]
-    },
-    {
-      id: 7,
-      image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=2000&q=80",
-      href: "/destinations/thailand",
-      tags: ["Gluten-Free", "Peanut-Free", "Seafood-Free"]
     }
   ];
 
   const titles = {
     en: [
-      "Paris Guide",
       "London Guide",
       "Cyprus Guide",
       "Crete Guide",
-      "Abu Dhabi Guide",
-      "Barcelona Guide",
-      "Thailand Guide"
+      "Abu Dhabi Guide"
     ],
     fr: [
-      "Guide de Paris",
       "Guide de Londres",
       "Guide de Chypre",
       "Guide de Crète",
-      "Guide d'Abu Dhabi",
-      "Guide de Barcelone",
-      "Guide de Thaïlande"
+      "Guide d'Abu Dhabi"
     ],
     es: [
-      "Guía de París",
       "Guía de Londres",
       "Guía de Chipre",
       "Guía de Creta",
-      "Guía de Abu Dhabi",
-      "Guía de Barcelona",
-      "Guía de Tailandia"
+      "Guía de Abu Dhabi"
     ],
     de: [
-      "Paris Reiseführer",
       "London Reiseführer",
       "Zypern Reiseführer",
       "Kreta Reiseführer",
-      "Abu Dhabi Reiseführer",
-      "Barcelona Reiseführer",
-      "Thailand Reiseführer"
+      "Abu Dhabi Reiseführer"
     ],
     he: [
-      "מדריך פריז",
       "מדריך לונדון",
       "מדריך קפריסין",
       "מדריך כרתים",
-      "מדריך אבו דאבי",
-      "מדריך ברצלונה",
-      "מדריך תאילנד"
+      "מדריך אבו דאבי"
     ]
   };
 
   const descriptions = {
     en: [
-      "A Comprehensive Guide to Allergy-Friendly Hotels and Dining in the City of Light",
       "Explore allergy-friendly accommodations in the heart of England",
       "Find the best allergy-friendly hotels and dining options across the island",
       "Experience Greek hospitality with peace of mind",
-      "Luxury stays with world-class allergy accommodations in the UAE capital",
-      "Allergy-friendly tapas and Mediterranean delights in the Catalan capital",
-      "The ultimate guide to allergy-friendly hotels and dining across Thailand"
+      "Luxury stays with world-class allergy accommodations in the UAE capital"
     ],
     fr: [
-      "Un guide complet des hôtels et restaurants adaptés aux allergies dans la Ville Lumière",
       "Explorez des hébergements adaptés aux allergies au cœur de l'Angleterre",
       "Trouvez les meilleurs hôtels et options de restauration adaptés aux allergies sur l'île",
       "Profitez de l'hospitalité grecque en toute tranquillité",
-      "Séjours de luxe avec des aménagements de classe mondiale pour les allergies dans la capitale des Émirats arabes unis",
-      "Tapas adaptées aux allergies et délices méditerranéens dans la capitale catalane",
-      "Le guide ultime des hôtels et restaurants adaptés aux allergies en Thaïlande"
+      "Séjours de luxe avec des aménagements de classe mondiale pour les allergies dans la capitale des Émirats arabes unis"
     ],
     es: [
-      "Una guía completa de hoteles y restaurantes aptos para alérgicos en la Ciudad de la Luz",
       "Explora alojamientos aptos para alérgicos en el corazón de Inglaterra",
       "Encuentra los mejores hoteles y opciones gastronómicas aptas para alérgicos en toda la isla",
       "Disfruta de la hospitalidad griega con tranquilidad",
-      "Estancias de lujo con adaptaciones para alergias de clase mundial en la capital de los EAU",
-      "Tapas aptas para alérgicos y delicias mediterráneas en la capital catalana",
-      "La guía definitiva de hoteles y restaurantes aptos para alérgicos en Tailandia"
+      "Estancias de lujo con adaptaciones para alergias de clase mundial en la capital de los EAU"
     ],
     de: [
-      "Ein umfassender Führer zu allergikerfreundlichen Hotels und Restaurants in der Stadt des Lichts",
       "Entdecken Sie allergikerfreundliche Unterkünfte im Herzen Englands",
       "Finden Sie die besten allergikerfreundlichen Hotels und Restaurants auf der Insel",
       "Erleben Sie griechische Gastfreundschaft mit einem ruhigen Gewissen",
-      "Luxuriöse Aufenthalte mit erstklassigen Allergieunterkünften in der Hauptstadt der VAE",
-      "Allergikerfreundliche Tapas und mediterrane Köstlichkeiten in der katalanischen Hauptstadt",
-      "Der ultimative Führer zu allergikerfreundlichen Hotels und Restaurants in Thailand"
+      "Luxuriöse Aufenthalte mit erstklassigen Allergieunterkünften in der Hauptstadt der VAE"
     ],
     he: [
-      "מדריך מקיף למלונות ומסעדות ידידותיים לאלרגיה בעיר האורות",
       "גלה מקומות לינה ידידותיים לאלרגיה בלב אנגליה",
       "מצא את המלונות והמסעדות הטובים ביותר המתאימים לאלרגיה ברחבי האי",
       "חווה את האירוח היווני בשקט נפשי",
-      "שהייה יוקרתית עם התאמות אלרגיה ברמה עולמית בבירת איחוד האמירויות",
-      "טאפאס ידידותיים לאלרגיה ומטעמים ים-תיכוניים בבירה הקטלונית",
-      "המדריך המושלם למלונות ומסעדות ידידותיים לאלרגיה ברחבי תאילנד"
+      "שהייה יוקרתית עם התאמות אלרגיה ברמה עולמית בבירת איחוד האמירויות"
     ]
   };
 

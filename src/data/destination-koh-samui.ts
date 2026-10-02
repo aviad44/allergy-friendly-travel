@@ -4,47 +4,6 @@ import { DestinationContent } from '@/types/definitions';
 export const kohSamuiContent: DestinationContent = {
   intro: "Dreaming of the lush tropical setting from The White Lotus Season 3? You're not alone. And if you or a family member has food allergies, you'll be thrilled to learn that the actual filming location – the Four Seasons Resort Koh Samui in Thailand – is not only luxurious, but also well-equipped to handle food allergies with exceptional care.",
   hotels: [
-    {
-      name: "Four Seasons Resort Koh Samui",
-      address: "219 Moo 5, Angthong, Koh Samui, Surat Thani 84140, Thailand",
-      features: [
-        "Dedicated allergen-free food preparation",
-        "Pre-arrival dietary consultations",
-        "Custom meals for allergies",
-        "Private chef services available",
-        "Clearly labeled menus",
-        "Trained staff for allergy protocols"
-      ],
-      description: "Luxury resort offering exceptional allergy-friendly dining options and stunning ocean views. Famous as the filming location for White Lotus Season 3.",
-      bookingUrl: "https://www.fourseasons.com/kohsamui/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/347289712.jpg?k=5681cdaf3aad02b2c2440eecb8b974e8a2577a6015937577c3551b901f95b265&o=&hp=1"
-    },
-    {
-      name: "Santiburi Koh Samui",
-      address: "12/12 Moo 1, Mae Nam, Koh Samui, Surat Thani 84330, Thailand",
-      features: [
-        "Full dietary profiling before arrival",
-        "In-house nutritionist",
-        "Personalized meal preparation",
-        "Separate cooking areas for allergies"
-      ],
-      description: "A luxury beachfront retreat with villas surrounded by tropical gardens, offering comprehensive allergy management and personalized dining experiences.",
-      bookingUrl: "https://www.santiburisamui.com/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/259356089.jpg?k=3e0f02f4bccd313145dca3748f7af1dea71cee6fd50c2d6207bea8d3cc2b5ce0&o=&hp=1"
-    },
-    {
-      name: "Anantara Bophut Koh Samui Resort",
-      address: "99/9 Bophut Bay, Koh Samui, Surat Thani 84320, Thailand",
-      features: [
-        "Spice Spoons cooking school with allergy options",
-        "Customized dietary menus",
-        "Allergy cards in multiple languages",
-        "Wellness cuisine program"
-      ],
-      description: "A beachfront resort combining Thai-inspired luxury with exceptional allergy-aware dining and personalized culinary experiences.",
-      bookingUrl: "https://www.anantara.com/en/bophut-koh-samui",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/331963356.jpg?k=f9211d1a72e6e1e7151ff73287a18f774e3d2d52598e713112fde7efb68b9bc9&o=&hp=1"
-    }
   ],
   faqs: [
     {

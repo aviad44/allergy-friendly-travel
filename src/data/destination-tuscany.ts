@@ -1,61 +1,6 @@
 import { DestinationContent, Hotel, FAQ } from '@/types/definitions';
 
 const hotels: Hotel[] = [
-  {
-    name: "Hotel Brunelleschi",
-    features: [
-      "Gluten-free certified by AIC",
-      "Staff trained in allergy protocols",
-      "Central historic location"
-    ],
-    image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/267064911.jpg?k=a08bb7f46dba23c5f115105b2a2f60ad2adfa62aef09f2358e8071297d4c504d&o=&hp=1",
-    rating: 4.8,
-    location: "Florence",
-    address: "Piazza Santa Elisabetta, 3, 50122 Firenze FI, Italy",
-    bookingUrl: "https://www.hotelbrunelleschi.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
-    description: "A historic hotel in the center of Florence with exceptional allergy protocols and trained staff."
-  },
-  {
-    name: "Agriturismo Le Cetinelle",
-    features: [
-      "Homemade allergy-safe food",
-      "Kitchen modifications available",
-      "Stunning rural views"
-    ],
-    rating: 4.7,
-    location: "Chianti Wine Country",
-    address: "Str. delle Cetinelle, 53017 Radda in Chianti SI, Italy",
-    bookingUrl: "https://www.lecetinelle.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
-    description: "A beautiful agriturismo in the heart of Chianti offering personalized allergy accommodations."
-  },
-  {
-    name: "Hotel Garden",
-    features: [
-      "Vegan and dairy-free menu options",
-      "New gluten-free kids' menu (2025)",
-      "Family-friendly accommodations"
-    ],
-    image: "https://www.gardenhotel.it/wp-content/uploads/2019/03/esterno-hotel-5.jpg",
-    rating: 4.6,
-    location: "Siena",
-    address: "Via Custoza, 2, 53100 Siena SI, Italy",
-    bookingUrl: "https://www.gardenhotel.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
-    description: "A charming hotel in Siena with beautiful gardens and dedicated allergen-free dining options."
-  },
-  {
-    name: "Hotel Ilaria",
-    features: [
-      "Allergy-aware breakfast",
-      "Digital menu with allergen filters",
-      "Central location in Lucca"
-    ],
-    image: "https://www.hotelilaria.com/wp-content/uploads/2017/07/hotel-ilaria-facciata.jpg",
-    rating: 4.5,
-    location: "Lucca",
-    address: "Via del Fosso, 26, 55100 Lucca LU, Italy",
-    bookingUrl: "https://www.hotelilaria.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
-    description: "A boutique hotel in the heart of Lucca with modern amenities and allergy-conscious dining."
-  }
 ];
 
 const faqs: FAQ[] = [
