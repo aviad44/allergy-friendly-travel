@@ -18,11 +18,6 @@ export const glutenFreeEuropeContent: DestinationContent = {
       bookingUrl: "https://www.hotelartemide.it/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/153715169.jpg?k=b5e897619e4c21c3e34c692731ae0e1e06b5a7790760c9db69f71d61444dc9c6&o=&hp=1",
       location: "Rome, Italy",
-      reviews: [{ 
-        text: "The staff was incredibly accommodating with my celiac disease. They provided special meal options tailored just for me throughout my stay.",
-        author: "Sarah L.",
-        rating: 4.8
-      }]
     },
     {
       name: "Barcelona, Spain - Hotel Praktik Bakery",
@@ -37,11 +32,6 @@ export const glutenFreeEuropeContent: DestinationContent = {
       bookingUrl: "https://www.hotelpraktikbakery.com/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/81248660.jpg?k=60b6c4b5bfc9636423eb26497a508ceaf66f9adde4a61afe54e91cd50d965dd9&o=&hp=1",
       location: "Barcelona, Spain",
-      reviews: [{ 
-        text: "Waking up to the smell of fresh gluten-free bread was incredible. I've never felt so well-catered for as a celiac traveler!",
-        author: "Michael P.",
-        rating: 4.6
-      }]
     },
     {
       name: "Paris, France - Hôtel Le Six",
@@ -56,11 +46,6 @@ export const glutenFreeEuropeContent: DestinationContent = {
       bookingUrl: "https://www.hotel-le-six.com/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/10139693.jpg?k=c4318e361a18c5ef276f74957d2c7da2cc5b3f292a47e2554b7a88a0c0608619&o=&hp=1",
       location: "Paris, France",
-      reviews: [{ 
-        text: "The hotel staff went above and beyond to ensure my gluten-free needs were met, even calling restaurants to check their gluten-free options before making reservations.",
-        author: "Emma R.",
-        rating: 4.7
-      }]
     },
     {
       name: "Munich, Germany - Hotel Laimer Hof",
@@ -75,11 +60,6 @@ export const glutenFreeEuropeContent: DestinationContent = {
       bookingUrl: "https://www.laimerhof.de/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/13991143.jpg?k=13fae7152c0a986357e9dc7c7590873c0c321adc94fd968686100bc803bcc8f0&o=&hp=1",
       location: "Munich, Germany",
-      reviews: [{ 
-        text: "The owners personally helped me navigate Munich's gluten-free dining scene and prepared a special breakfast for me each morning.",
-        author: "David K.",
-        rating: 4.9
-      }]
     },
     {
       name: "Amsterdam, Netherlands - Hotel Estheréa",
@@ -94,11 +74,6 @@ export const glutenFreeEuropeContent: DestinationContent = {
       bookingUrl: "https://www.hotelestherea.nl/?utm_source=allergy-free-travel.com&utm_medium=article&utm_campaign=glutenfree_europe",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/13598436.jpg?k=28d35a32c1c83027f3f922d5708c48e1a1743e4a54f57de29c63c3091b1feb1b&o=&hp=1",
       location: "Amsterdam, Netherlands",
-      reviews: [{ 
-        text: "They had clearly marked gluten-free items at breakfast and a binder full of celiac-safe restaurant recommendations throughout Amsterdam.",
-        author: "Jennifer P.",
-        rating: 4.8
-      }]
     }
   ],
   faqs: [

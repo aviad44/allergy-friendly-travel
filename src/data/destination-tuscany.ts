@@ -10,13 +10,6 @@ const hotels: Hotel[] = [
     ],
     image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/267064911.jpg?k=a08bb7f46dba23c5f115105b2a2f60ad2adfa62aef09f2358e8071297d4c504d&o=&hp=1",
     rating: 4.8,
-    reviews: [
-      {
-        text: "They confirmed my nut and dairy allergies before check-in. Every morning I had a personalized, safe breakfast.",
-        author: "Lior R., Israel",
-        rating: 5
-      }
-    ],
     location: "Florence",
     address: "Piazza Santa Elisabetta, 3, 50122 Firenze FI, Italy",
     bookingUrl: "https://www.hotelbrunelleschi.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
@@ -30,13 +23,6 @@ const hotels: Hotel[] = [
       "Stunning rural views"
     ],
     rating: 4.7,
-    reviews: [
-      {
-        text: "They removed peanut oil from the kitchen after I mentioned my allergy. Incredible service!",
-        author: "Noam L., Israel",
-        rating: 5
-      }
-    ],
     location: "Chianti Wine Country",
     address: "Str. delle Cetinelle, 53017 Radda in Chianti SI, Italy",
     bookingUrl: "https://www.lecetinelle.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
@@ -51,13 +37,6 @@ const hotels: Hotel[] = [
     ],
     image: "https://www.gardenhotel.it/wp-content/uploads/2019/03/esterno-hotel-5.jpg",
     rating: 4.6,
-    reviews: [
-      {
-        text: "I have celiac and lactose intolerance. They made me gluten-free pasta and were super friendly.",
-        author: "Marta V., Spain",
-        rating: 4.5
-      }
-    ],
     location: "Siena",
     address: "Via Custoza, 2, 53100 Siena SI, Italy",
     bookingUrl: "https://www.gardenhotel.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
@@ -72,13 +51,6 @@ const hotels: Hotel[] = [
     ],
     image: "https://www.hotelilaria.com/wp-content/uploads/2017/07/hotel-ilaria-facciata.jpg",
     rating: 4.5,
-    reviews: [
-      {
-        text: "They provided egg-free options and really listened to my needs.",
-        author: "Alex S., UK",
-        rating: 4.5
-      }
-    ],
     location: "Lucca",
     address: "Via del Fosso, 26, 55100 Lucca LU, Italy",
     bookingUrl: "https://www.hotelilaria.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=tuscany",
@@ -112,7 +84,7 @@ const faqs: FAQ[] = [
 export const tuscanyContent: DestinationContent = {
   intro: [
     "Tuscany is a food lover's paradise, and with proper planning, it can be enjoyed safely by travelers with dietary restrictions. This updated 6-day itinerary covers Florence, Chianti, Siena, Lucca, Pisa, and San Gimignano — with allergy-friendly accommodation and dining options throughout.",
-    "From gluten-free certified restaurants to hotels with dedicated allergy protocols, our guide helps you navigate Tuscany's culinary landscape with confidence. We've also included recent guest reviews from travelers with various food allergies to help you plan your perfect Italian getaway."
+    "From gluten-free certified restaurants to hotels with dedicated allergy protocols, our guide helps you navigate Tuscany's culinary landscape with confidence."
   ],
   hotels,
   faqs,
