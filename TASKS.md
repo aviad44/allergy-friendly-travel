@@ -108,6 +108,16 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - CAVEAT: CJ requires a commission within 6 months of account reactivation (by ~2027-03-30) or the account goes dormant again. Commission is paid on completed stays, so expect a lag of weeks to months between a click and it showing as payable.
   - DoD: After deploy, a live Booking.com link from an article, a search result and the Hotel Chains page each go through `jdoqocy.com/click-101893797-11891539` with the right `sid`. A test click appears in CJ's reports (Reports → clicks, which can take up to about a day).
 
+- [x] Gluten-free/celiac hub page
+  - RATIONALE: User asked for content ideas aimed at the site's majority celiac/gluten-sensitive audience that could convert visits to bookings. Checked the DB before brainstorming: 210 hotels + 382 restaurants already have real `allergen_type='gluten'` evidence, but only 8/106 published articles mention gluten in their title/slug — the gap is findability, not content volume.
+  - HOW-TO: `src/pages/GlutenFree.tsx` (route `/gluten-free`) queries `hotel_allergy_info`/`restaurant_allergy_info` for gluten rows, cross-references against published `seo_articles`' `hotel_ids`/`restaurant_ids`, and lists the matching articles grouped by Hotels/Restaurants — same live-fetch pattern as `RegionHub.tsx`. Linked from the Destinations index page and the Footer; added to `sitemap.cjs`.
+  - DoD: Done. `npx tsc --noEmit -p .` clean. Self-updating (no manual curation needed as new gluten-evidenced places are added).
+
+- [ ] Remove fabricated "Featured Destinations" from Categories.tsx
+  - RATIONALE: Found 2026-10-03 while linking the new gluten-free hub from somewhere relevant — `src/pages/Categories.tsx` ("Our Services" page) has a hardcoded `destinationArticles` array with 4 entirely invented hotel entries ("Luxury Retreat in Swiss Alps," "Beachfront Paradise in Maldives," "Urban Sanctuary in Tokyo," "Mountain Lodge in Colorado") — no real hotel names, no sourcing, generic stock Unsplash photos. Same class of policy violation as `TopHotelsSection.tsx`'s fabricated London/Barcelona/Abu-Dhabi block (removed earlier today), but this one IS live — `/categories` is a routed page.
+  - HOW-TO: Either remove the "Featured Destinations" section entirely, or replace it with a live query similar to `GlutenFree.tsx`/`RegionHub.tsx` (e.g. the 4 most recently published articles) so it shows real content instead of placeholders.
+  - DoD: Not started. No fabricated/placeholder destination content remains on `/categories`.
+
 - [x] Delete confirmed-dead Booking/search component subtree
   - RATIONALE: Found 2026-10-03 while auditing the Booking.com affiliate chain — `src/components/search/hotel-list/*`, `src/components/search/hotel-details/*`, and the unused duplicate `src/components/search/HotelCard.tsx` implement the affiliate-link wrapping correctly but are not imported from any routed page (verified by grepping every file name in the subtree against the rest of `src`).
   - HOW-TO: `git rm -r src/components/search/hotel-list src/components/search/hotel-details src/components/search/HotelCard.tsx` — first attempt blocked by this session's harness ("Irreversible Local Destruction"), user then explicitly authorized it and the same command succeeded.
