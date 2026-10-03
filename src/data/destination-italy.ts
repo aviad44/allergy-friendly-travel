@@ -7,32 +7,6 @@ export const italyContent: DestinationContent = {
   ],
   
   hotels: [
-    {
-      name: "Hotel Ponte Sisto",
-      location: "Rome (near Termini station)",
-      description: "Hotel with excellent gluten-free breakfast options and understanding staff",
-      features: [
-        "Schär gluten-free items on breakfast buffet",
-        "Staff trained on celiac needs",
-        "No extra charge for gluten-free options"
-      ],
-      allergyInfo: "Pre-packaged gluten-free options available upon request",
-      isPurelyAllergyFriendly: true,
-      websiteUrl: "https://www.spokin.com/celiac-safe-gluten-free-rome-italy-travel-guide"
-    },
-    {
-      name: "Hotel Villa Franca",
-      location: "Positano, Amalfi Coast",
-      description: "Luxury hotel with dedicated gluten-free kitchen protocols",
-      features: [
-        "Separate kitchen for gluten-free preparation",
-        "Gluten-free options clearly marked",
-        "Staff very helpful with dietary needs"
-      ],
-      allergyInfo: "Dedicated gluten-free preparation area to prevent cross-contamination",
-      isPurelyAllergyFriendly: true,
-      websiteUrl: "https://www.spokin.com/italy-celiac-safe-travel-itinerary"
-    }
   ],
 
   restaurants: [
@@ -59,6 +33,7 @@ export const italyContent: DestinationContent = {
         "Top ratings from celiac community",
         "Located near Vatican attractions"
       ],
+      guestReview: "I have celiac and this entire place is gluten free! Some of the best gluten free food I've had in my life.",
       allergyInfo: "Completely gluten-free restaurant - no risk of cross-contamination",
       isPurelyAllergyFriendly: true,
       websiteUrl: "https://lauradolcitravels.com/gluten-free-rome-best-restaurants/"

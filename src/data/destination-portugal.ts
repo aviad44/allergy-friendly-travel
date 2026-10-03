@@ -5,20 +5,6 @@ export const portugalContent: DestinationContent = {
   intro: "Portugal offers a blend of historic charm and modern allergy awareness, making it an increasingly popular destination for travelers with dietary restrictions.",
   hotels: [
     {
-      name: "Corinthia Hotel Lisbon ★★★★★",
-      address: "Av. Columbano Bordalo Pinheiro 105, 1099-031 Lisboa, Portugal",
-      features: [
-        "⭐ 5-star luxury hotel",
-        "🍽️ Extensive allergy protocols",
-        "👨‍🍳 Chef consultations for allergies"
-      ],
-      description: "This upscale hotel in Lisbon's financial district offers dedicated allergy-friendly dining options and personalized meal planning for guests with food sensitivities.",
-      bookingUrl: "https://www.corinthia.com/lisbon/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/92180698.jpg?k=c787ea99fac65b027f3684366982e534717cce7798e75c99219b4b5c4423870e&o=&hp=1",
-      rating: 4.7,
-      location: "Lisbon"
-    },
-    {
       name: "Pine Cliffs Resort, a Luxury Collection ★★★★★",
       address: "Praia da Falésia, Albufeira, 8200-593, Portugal",
       features: [
@@ -33,34 +19,6 @@ export const portugalContent: DestinationContent = {
       rating: 4.8,
       location: "Algarve"
     },
-    {
-      name: "The Yeatman Hotel ★★★★★",
-      address: "Rua do Choupelo, 4400-088 Vila Nova de Gaia, Portugal",
-      features: [
-        "⭐ 5-star wine hotel",
-        "🍽️ Michelin-starred restaurant with allergy menus",
-        "🍷 Wine pairings for gluten-free dishes"
-      ],
-      description: "Luxury wine hotel in Porto with a Michelin-starred restaurant that excels in catering to dietary restrictions without compromising on gourmet quality.",
-      bookingUrl: "https://www.the-yeatman-hotel.com/en/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/135180478.jpg?k=0fed0833d64cb30af0597d5ec43afd63ff639fe6d5558f0eb4e5146f5ab52899&o=&hp=1",
-      rating: 4.9,
-      location: "Porto"
-    },
-    {
-      name: "Martinhal Lisbon Chiado Family Suites ★★★★",
-      address: "Rua das Flores 44, 1200-195 Lisboa, Portugal",
-      features: [
-        "⭐ 4-star family suites",
-        "🧒 Kid-friendly allergy options",
-        "🍽️ In-room kitchens for allergy control"
-      ],
-      description: "Family-focused apartment hotel in Lisbon's historic center with in-room kitchens allowing families complete control over meal preparation for allergies.",
-      bookingUrl: "https://www.martinhal.com/chiado/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/73371172.jpg?k=3a06eca27d79da696eb57faa9e34207030c103993acf62755984299125a9af54&o=&hp=1",
-      rating: 4.6,
-      location: "Lisbon"
-    }
   ],
   faqs: [
     {

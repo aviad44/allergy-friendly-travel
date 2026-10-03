@@ -8,16 +8,6 @@ import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 const FEATURED_DESTINATIONS = [
   {
-    id: 1,
-    name: "Paris",
-    country: "France",
-    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
-    description: "Discover allergy-friendly luxury in the City of Light",
-    commonAllergies: ["Gluten", "Dairy", "Nuts"],
-    href: "/destinations/paris/",
-    destId: "paris"
-  },
-  {
     id: 2,
     name: "London",
     country: "United Kingdom",
@@ -29,13 +19,13 @@ const FEATURED_DESTINATIONS = [
   },
   {
     id: 3,
-    name: "New York",
-    country: "United States",
-    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80",
-    description: "Explore allergy-friendly dining in the Big Apple",
-    commonAllergies: ["Gluten", "Nuts"],
-    href: "/destinations/new-york/",
-    destId: "new-york"
+    name: "Swiss Alps",
+    country: "Switzerland",
+    image: "https://images.unsplash.com/photo-1527004760525-b4b99e5a0c6a?auto=format&fit=crop&w=800&q=80",
+    description: "Allergy-aware mountain hospitality across Switzerland",
+    commonAllergies: ["Gluten", "Dairy"],
+    href: "/destinations/swiss-alps/",
+    destId: "swiss-alps"
   },
   {
     id: 4,
@@ -56,16 +46,6 @@ const FEATURED_DESTINATIONS = [
     commonAllergies: ["Gluten", "Nuts"],
     href: "/destinations/cyprus/",
     destId: "cyprus"
-  },
-  {
-    id: 6,
-    name: "Barcelona",
-    country: "Spain",
-    image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=800&q=80",
-    description: "Allergy-friendly tapas and Mediterranean delights",
-    commonAllergies: ["Gluten", "Shellfish"],
-    href: "/destinations/barcelona/",
-    destId: "barcelona"
   },
   {
     id: 7,
@@ -89,13 +69,13 @@ const FEATURED_DESTINATIONS = [
   },
   {
     id: 9,
-    name: "Italy",
+    name: "Rome",
     country: "Italy",
     image: "https://www.allergy-free-travel.com/lovable-uploads/italy-restaurant-hero.jpg",
     description: "Top destination for celiacs & gluten-sensitive travelers",
     commonAllergies: ["Gluten", "Dairy"],
-    href: "/destinations/italy/",
-    destId: "italy"
+    href: "/restaurants/gluten-free-eating-in-rome/",
+    destId: "rome-restaurants"
   }
 ];
 

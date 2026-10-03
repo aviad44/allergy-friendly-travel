@@ -5,32 +5,6 @@ export const newYorkContent: DestinationContent = {
   intro: "New York City's best accommodations for allergy-conscious travelers.",
   hotels: [
     {
-      id: "the-langham-new-york",
-      name: "1. The Langham, New York ★★★★★",
-      location: "New York, NY, USA",
-      address: "400 Fifth Avenue, New York, NY 10018, USA",
-      features: ["⭐ 5-star luxury", "🍽️ Dedicated allergen protocols", "👨‍🍳 Chef consultation program"],
-      description: "The Langham offers a chef consultation program for guests with allergies and maintains strict allergen protocols throughout their kitchen operations.",
-      bookingUrl: "https://www.langhamhotels.com/en/the-langham/new-york/",
-      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Free"],
-      amenities: ["WiFi", "Room Service", "Restaurant", "Spa", "Fitness Center"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "the-mark-hotel",
-      name: "2. The Mark Hotel ★★★★★",
-      location: "New York, NY, USA",
-      address: "25 E 77th St, New York, NY 10075, USA",
-      features: ["⭐ 5-star luxury", "🍽️ Allergen-free room service", "📋 Comprehensive allergen menus"],
-      description: "The Mark provides comprehensive allergen menus for all dining options and offers specialized allergen-free room service for guests with dietary restrictions.",
-      bookingUrl: "https://www.themarkhotel.com/",
-      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Seafood-Free"],
-      amenities: ["WiFi", "Room Service", "Restaurant", "Spa", "Pet-Friendly"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
       id: "1-hotel-central-park",
       name: "3. 1 Hotel Central Park ★★★★★",
       location: "New York, NY, USA",
@@ -44,19 +18,6 @@ export const newYorkContent: DestinationContent = {
       isPurelyAllergyFriendly: false,
       stars: 5
     },
-    {
-      id: "the-beekman",
-      name: "4. The Beekman ★★★★★",
-      location: "New York, NY, USA",
-      address: "123 Nassau St, New York, NY 10038, USA",
-      features: ["⭐ 5-star historic luxury", "🍽️ Allergy-trained culinary team", "📱 Digital allergy tracking"],
-      description: "The Beekman's culinary team is specially trained in allergen management, and they use digital systems to track guest allergies across all dining experiences.",
-      bookingUrl: "https://www.thebeekman.com/",
-      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Egg-Free"],
-      amenities: ["WiFi", "Room Service", "Restaurant", "Bar", "Fitness Center"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    }
   ],
   faqs: [
     {

@@ -25,257 +25,6 @@ export const warmWinterContent: DestinationContent = {
   },
   longDescription: '',
   hotels: [
-    // Madeira Hotels
-    {
-      id: "reids-palace-madeira",
-      name: "Reid's Palace, A Belmond Hotel",
-      location: "Madeira, Portugal",
-      address: "Estrada Monumental 139, 9000-098 Funchal, Portugal",
-      features: [
-        "Luxury cliff-top hotel with Atlantic views",
-        "Allergy-conscious dining options",
-        "Fresh local ingredients",
-        "Staff trained in dietary requirements",
-        "Multiple dining venues"
-      ],
-      description: "Iconic luxury hotel perched on Madeira's cliffs, offering refined dining with attention to dietary needs and fresh Atlantic cuisine.",
-      bookingUrl: "https://www.belmond.com/hotels/europe/portugal/madeira/belmond-reids-palace?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Gluten-Free", "Dairy-Free", "Nut-Aware"],
-      amenities: ["WiFi", "Spa", "Pool", "Fine Dining"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "cliff-bay-madeira",
-      name: "Hotel The Cliff Bay (PortoBay)",
-      location: "Madeira, Portugal",
-      address: "Estrada Monumental 147, 9004-532 Funchal, Portugal",
-      features: [
-        "Award-winning dining",
-        "Allergy menu options available",
-        "Ocean-view restaurants",
-        "Experienced culinary team",
-        "Fresh seafood focus"
-      ],
-      description: "Five-star hotel with multiple restaurants offering carefully prepared meals for guests with dietary restrictions.",
-      bookingUrl: "https://www.portobay.com/en/hotels/portugal/madeira-island/the-cliff-bay/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Allergen Labeling", "Custom Meals"],
-      amenities: ["WiFi", "Spa", "Pool", "Restaurant"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "melia-madeira-mare",
-      name: "Meliá Madeira Mare",
-      location: "Madeira, Portugal",
-      address: "Rua Leichlingen 2, 9004-538 Funchal, Portugal",
-      features: [
-        "Beachfront location",
-        "All-inclusive options",
-        "Allergy-aware buffet service",
-        "Modern accommodations",
-        "Scenic ocean views"
-      ],
-      description: "Modern beachfront hotel with comprehensive all-inclusive dining that caters to various dietary needs.",
-      bookingUrl: "https://www.melia.com/en/hotels/portugal/funchal/melia-madeira-mare?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Gluten-Free", "All-Inclusive Safe"],
-      amenities: ["WiFi", "Pool", "Restaurant", "Beach Access"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "savoy-palace-madeira",
-      name: "Savoy Palace",
-      location: "Madeira, Portugal",
-      address: "Avenida do Infante 25, 9004-542 Funchal, Portugal",
-      features: [
-        "Ultra-luxury resort",
-        "Multiple dining venues",
-        "Personalized dietary service",
-        "Rooftop infinity pool",
-        "Spa facilities"
-      ],
-      description: "Madeira's newest luxury resort offering exceptional service and personalized attention to dietary requirements across multiple restaurants.",
-      bookingUrl: "https://www.savoypalace.com/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Personalized Service", "Multiple Options"],
-      amenities: ["WiFi", "Spa", "Pool", "Fine Dining", "Rooftop Bar"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    // Hurghada Hotels
-    {
-      id: "steigenberger-aldau",
-      name: "Steigenberger ALDAU Beach Hotel",
-      location: "Hurghada, Egypt",
-      address: "Yussif Afifi Road, Hurghada, Red Sea Governorate, Egypt",
-      features: [
-        "Red Sea beachfront",
-        "All-inclusive dining",
-        "International staff training",
-        "Multiple restaurants",
-        "Allergy-aware kitchen"
-      ],
-      description: "Premium Red Sea resort with internationally trained staff experienced in handling food allergies for global guests.",
-      bookingUrl: "https://www.steigenberger.com/en/hotels/all-hotels/egypt/hurghada/steigenberger-aldau-beach-hotel?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["International Standards", "All-Inclusive Safe"],
-      amenities: ["WiFi", "Beach", "Pool", "Spa", "Water Sports"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "baron-palace-hurghada",
-      name: "Baron Palace Sahl Hasheesh",
-      location: "Hurghada, Egypt",
-      address: "Sahl Hasheesh Road, Hurghada, Red Sea Governorate, Egypt",
-      features: [
-        "Luxury all-inclusive resort",
-        "Dedicated allergy protocols",
-        "International cuisine",
-        "Private beach",
-        "Premium service"
-      ],
-      description: "Upscale all-inclusive resort with comprehensive allergen awareness and diverse international dining options.",
-      bookingUrl: "https://www.baronhotels.com/baron-palace-sahl-hasheesh?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Allergen Protocols", "All-Inclusive"],
-      amenities: ["WiFi", "Beach", "Pool", "Spa", "Multiple Restaurants"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "jaz-bluemarine-hurghada",
-      name: "JAZ Bluemarine",
-      location: "Hurghada, Egypt",
-      address: "Hurghada-Safaga Road, Hurghada, Red Sea Governorate, Egypt",
-      features: [
-        "Family-friendly resort",
-        "All-inclusive dining",
-        "Buffet with allergen info",
-        "Kids allergy awareness",
-        "Reef access"
-      ],
-      description: "Family-oriented resort with attentive staff who understand food sensitivities and provide safe dining options.",
-      bookingUrl: "https://www.jazhotels.com/en/egypt/hurghada/jaz-bluemarine?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Family-Friendly", "Kid-Safe Options"],
-      amenities: ["WiFi", "Beach", "Pool", "Kids Club", "Water Sports"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    // Canary Islands Hotels
-    {
-      id: "princesa-yaiza-lanzarote",
-      name: "Princesa Yaiza Suite Hotel Resort",
-      location: "Lanzarote, Canary Islands, Spain",
-      address: "Avenida Papagayo 22, 35580 Playa Blanca, Lanzarote, Spain",
-      features: [
-        "Award-winning family resort",
-        "Multiple dining venues",
-        "Allergen menu labeling",
-        "Kids allergy programs",
-        "Beach location"
-      ],
-      description: "Top-rated family resort in Lanzarote with exceptional attention to food allergies and comprehensive allergen labeling.",
-      bookingUrl: "https://www.princesayaiza.com/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Allergen Labeling", "Family-Safe"],
-      amenities: ["WiFi", "Beach", "Pool", "Spa", "Kids Club"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "botanico-tenerife",
-      name: "Hotel Botanico & The Oriental Spa Garden",
-      location: "Tenerife, Canary Islands, Spain",
-      address: "Calle Richard J. Yeoward 1, 38400 Puerto de la Cruz, Tenerife, Spain",
-      features: [
-        "Luxury botanical setting",
-        "Gourmet dining options",
-        "Personalized dietary service",
-        "Award-winning spa",
-        "Tropical gardens"
-      ],
-      description: "Elegant Tenerife hotel surrounded by tropical gardens, offering refined cuisine with attention to dietary restrictions.",
-      bookingUrl: "https://www.hotelbotanico.com/?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Nut-Free Options", "Gourmet Safe"],
-      amenities: ["WiFi", "Spa", "Pool", "Gardens", "Fine Dining"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "vincci-plantacion-tenerife",
-      name: "Vincci Selección La Plantación del Sur",
-      location: "Tenerife, Canary Islands, Spain",
-      address: "Roque Nublo 1, 38670 Costa Adeje, Tenerife, Spain",
-      features: [
-        "Adults-only luxury",
-        "Personalized service",
-        "Allergen-aware dining",
-        "Ocean views",
-        "Tranquil atmosphere"
-      ],
-      description: "Sophisticated adults-only resort with personalized dining experiences and careful attention to food allergies.",
-      bookingUrl: "https://www.vinccihoteles.com/en/hotels/spain/tenerife/vincci-seleccion-la-plantacion-del-sur?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Personalized Dining", "Allergen-Aware"],
-      amenities: ["WiFi", "Spa", "Pool", "Restaurant", "Adults-Only"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    // Tel Aviv Hotels
-    {
-      id: "saul-hotel-tel-aviv",
-      name: "The Saul Hotel",
-      location: "Tel Aviv, Israel",
-      address: "17 HaYarkon Street, Tel Aviv, Israel",
-      features: [
-        "Beachfront boutique hotel",
-        "Allergy-conscious breakfast",
-        "Central location",
-        "Staff allergen training",
-        "Mediterranean cuisine"
-      ],
-      description: "Stylish boutique hotel on Tel Aviv's beachfront with excellent attention to food allergies and dietary needs.",
-      bookingUrl: "https://www.atlas.co.il/saul-hotel-tel-aviv?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Allergen Labeling", "Staff Training"],
-      amenities: ["WiFi", "Beach Access", "Restaurant", "Central Location"],
-      isPurelyAllergyFriendly: false,
-      stars: 4
-    },
-    {
-      id: "vera-hotel-tel-aviv",
-      name: "The Vera",
-      location: "Tel Aviv, Israel",
-      address: "39 Ben Yehuda Street, Tel Aviv, Israel",
-      features: [
-        "Modern boutique design",
-        "Allergy-friendly dining",
-        "Central city location",
-        "Beach proximity",
-        "Contemporary amenities"
-      ],
-      description: "Contemporary boutique hotel with a focus on guest wellness and dietary accommodation.",
-      bookingUrl: "https://www.atlas.co.il/vera-hotel-tel-aviv?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Multiple Allergies", "Wellness Focus"],
-      amenities: ["WiFi", "Rooftop", "Restaurant", "Modern Design"],
-      isPurelyAllergyFriendly: false,
-      stars: 4
-    },
-    {
-      id: "savoy-seaside-tel-aviv",
-      name: "Savoy Seaside Hotel",
-      location: "Tel Aviv, Israel",
-      address: "5 Geula Street, Tel Aviv, Israel",
-      features: [
-        "Historic boutique hotel",
-        "Personalized service",
-        "Allergy-aware staff",
-        "Beach location",
-        "Charming atmosphere"
-      ],
-      description: "Historic boutique hotel with personalized service and genuine care for guests with food allergies.",
-      bookingUrl: "https://www.atlas.co.il/savoy-sea-side-hotel-tel-aviv?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Personalized Care", "Staff Awareness"],
-      amenities: ["WiFi", "Beach", "Restaurant", "Boutique"],
-      isPurelyAllergyFriendly: false,
-      stars: 3
-    },
     // Eilat Hotels
     {
       id: "dan-eilat",
@@ -297,44 +46,6 @@ export const warmWinterContent: DestinationContent = {
       isPurelyAllergyFriendly: false,
       stars: 5
     },
-    {
-      id: "dan-panorama-eilat",
-      name: "Dan Panorama Eilat",
-      location: "Eilat, Israel",
-      address: "North Beach, Eilat, Israel",
-      features: [
-        "Family-friendly resort",
-        "Kids allergy programs",
-        "All-inclusive dining",
-        "Beach activities",
-        "Pool complex"
-      ],
-      description: "Family-oriented resort with dedicated attention to children's food allergies and comprehensive dining options.",
-      bookingUrl: "https://www.danhotels.com/eilathotels/danpanoramaeilathotel?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Kid-Safe", "Family-Friendly"],
-      amenities: ["WiFi", "Beach", "Pool", "Kids Club", "Water Sports"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "isrotel-yam-suf",
-      name: "Isrotel Yam Suf",
-      location: "Eilat, Israel",
-      address: "Coral Beach, Eilat, Israel",
-      features: [
-        "All-suite resort",
-        "All-inclusive dining",
-        "Allergen-aware kitchen",
-        "Coral reef access",
-        "Family activities"
-      ],
-      description: "All-suite family resort with comprehensive all-inclusive dining that caters to various food allergies.",
-      bookingUrl: "https://www.isrotel.com/isrotel-yam-suf?utm_source=Allergy-free-travel.com&utm_medium=article&utm_campaign=warm_winter",
-      allergenFriendly: ["Gluten-Free", "All-Inclusive"],
-      amenities: ["WiFi", "Beach", "Pool", "Kids Club", "Diving"],
-      isPurelyAllergyFriendly: false,
-      stars: 4
-    }
   ],
   restaurants: [
     // Tel Aviv Restaurants
@@ -342,6 +53,7 @@ export const warmWinterContent: DestinationContent = {
       name: "Anastasia Cafe",
       address: "54 Frishman Street, Tel Aviv, Israel",
       description: "100% vegan cafe with extensive allergy awareness. Popular for gluten-free and nut-free options in a trendy Tel Aviv setting.",
+      guestReview: "The menu is completely vegan and also offers gluten free options.",
       allergyInfo: "Vegan, Gluten-Free, Nut-Free Options",
       websiteUrl: "https://www.facebook.com/AnastasiaTelaviv/",
       isPurelyAllergyFriendly: true
@@ -350,26 +62,11 @@ export const warmWinterContent: DestinationContent = {
       name: "Gluteria",
       address: "2 Mohiliver Street, Tel Aviv, Israel",
       description: "Dedicated gluten-free bakery and cafe. 100% gluten-free facility, perfect for celiacs and gluten-sensitive travelers.",
+      guestReview: "They have so many options and is a true haven for people who are gluten free.",
       allergyInfo: "100% Gluten-Free Facility",
       websiteUrl: "https://www.gluteria.co.il/",
       isPurelyAllergyFriendly: true
     },
-    {
-      name: "Meshek Barzilay",
-      address: "6 Ahad Ha'Am Street, Tel Aviv, Israel",
-      description: "Organic vegetarian restaurant with excellent allergy awareness. Offers vegan, gluten-free, and allergen-aware dining.",
-      allergyInfo: "Vegetarian, Vegan, Gluten-Free, Organic",
-      websiteUrl: "https://www.meshekbarzilay.co.il/",
-      isPurelyAllergyFriendly: false
-    },
-    {
-      name: "Cafe Optimi",
-      address: "12 Maskit Street, Herzliya, Israel",
-      description: "Health-focused cafe with comprehensive allergen menu. Known for accommodating multiple food allergies and dietary restrictions.",
-      allergyInfo: "Multiple Allergy Friendly, Health-Focused",
-      websiteUrl: "https://www.facebook.com/cafeoptimi/",
-      isPurelyAllergyFriendly: false
-    }
   ],
   travelTips: [
     {

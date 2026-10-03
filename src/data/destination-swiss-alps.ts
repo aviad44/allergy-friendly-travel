@@ -8,20 +8,6 @@ export const swissAlpsContent: DestinationContent = {
   intro: "Experience the majestic Swiss Alps with peace of mind, offering allergy-aware accommodations across stunning mountain regions.",
   hotels: [
     {
-      name: "Riffelalp Resort 2222m",
-      address: "Riffelalp 2222m, 3920 Zermatt, Switzerland",
-      features: [
-        "⭐ 5-star family-friendly resort",
-        "🍽️ Dedicated gluten-free breakfast",
-        "👨‍🍳 Chef consultations for allergies"
-      ],
-      description: "A car-free mountain resort with ski-in/ski-out access and exceptional allergy-aware dining options.",
-      bookingUrl: "https://www.riffelalp.com/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/13865824.jpg?k=0be2ed5e902615a30f5feafa9640c421e55852ac2a79e473e636deeb2a181e56&o=&hp=1",
-      rating: 4.8,
-      location: "Zermatt"
-    },
-    {
       name: "Giardino Mountain",
       address: "Via dal Bagn 54, 7513 Silvaplana-Champfèr, Switzerland",
       features: [
@@ -35,20 +21,6 @@ export const swissAlpsContent: DestinationContent = {
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/296012790.jpg?k=551b3b7d69da4713fcab249c13a3cc8a85df65cd89a23870ec402157b1e72c19&o=&hp=1",
       rating: 4.7,
       location: "Engadin Valley"
-    },
-    {
-      name: "Backstage Boutique Hotel",
-      address: "Hofmattstrasse 4, 3920 Zermatt, Switzerland",
-      features: [
-        "⭐ 4-star artistic design hotel",
-        "🧑‍🍳 Fine dining trained on allergens",
-        "🎭 Allergy-friendly bedding"
-      ],
-      description: "A boutique hotel ideal for couples seeking comfort and allergy care in Zermatt.",
-      bookingUrl: "https://www.backstagehotel.ch/",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/120450196.jpg?k=e95aaa41e32b3259d75a13f9ed84d77dd71c268123e7eaff293d001c32430083&o=&hp=1",
-      rating: 4.5,
-      location: "Zermatt"
     },
     {
       name: "Hotel Silberhorn",

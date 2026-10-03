@@ -4,32 +4,6 @@ import { DestinationContent } from '@/types/definitions';
 export const ayiaNapaContent: DestinationContent = {
   intro: "Discover allergy-friendly accommodations in Cyprus's beautiful coastal town.",
   hotels: [
-    {
-      id: "adams-beach-hotel",
-      name: "Adams Beach Hotel & Spa ★★★★★",
-      location: "Ayia Napa, Cyprus",
-      address: "Nissi Avenue, Ayia Napa 5340, Cyprus",
-      features: ["⭐ 5-star beachfront resort", "🍽️ Allergy-aware dining options", "👨‍🍳 Chef consultation available"],
-      description: "This luxurious beachfront resort offers dedicated allergy-aware dining options and the ability to consult with chefs about specific dietary needs.",
-      bookingUrl: "https://www.adams.com.cy/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=ayia_napa",
-      allergenFriendly: ["Gluten-Free", "Dairy-Free"],
-      amenities: ["WiFi", "Beach Access", "Multiple Pools", "Spa"],
-      isPurelyAllergyFriendly: false,
-      stars: 5
-    },
-    {
-      id: "nissi-beach-resort",
-      name: "Nissi Beach Resort ★★★★☆",
-      location: "Ayia Napa, Cyprus",
-      address: "Nissi Avenue, Ayia Napa 5340, Cyprus",
-      features: ["⭐ 4-star beachfront resort", "🍽️ Allergen labeling", "🥗 Special dietary menus"],
-      description: "Nissi Beach Resort offers clear allergen labeling and special dietary menus for guests with food allergies or intolerances.",
-      bookingUrl: "https://www.nissi-beach.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=ayia_napa",
-      allergenFriendly: ["Gluten-Free", "Nut-Free"],
-      amenities: ["WiFi", "Beach Access", "Swimming Pool", "Restaurant"],
-      isPurelyAllergyFriendly: false,
-      stars: 4
-    }
   ],
   faqs: [
     {
