@@ -11,30 +11,23 @@ export const madridContent: DestinationContent = {
   `,
   hotels: [
     {
-      id: "novotel-las-ventas",
-      name: "Novotel Madrid City Las Ventas",
+      id: "hotel-catalonia-las-cortes",
+      name: "Hotel Catalonia Las Cortes",
       location: "Madrid, Spain",
-      address: "Calle Albacete, 1, 28027 Madrid, Spain",
+      address: "C. del Prado, 6, Centro, 28014 Madrid, Spain",
       features: [
-        "Modern hotel with allergy-free rooms",
-        "Non-smoking policies throughout",
-        "Dust mite and allergen protocols", 
-        "Safe breakfast options",
-        "Contemporary accommodations"
+        "Central Madrid location near the Prado"
       ],
-      description: "Modern hotel with comprehensive allergy-free rooms and strict non-smoking policies for sensitive guests.",
-      quote: "It was fine, although the vegetarian options were fairly limited.",
-      bookingUrl: "https://all.accor.com/hotel/3172/index.en.shtml?utm_source=Allergy-free-travel.com&utm_medium=chatbot&utm_campaign=hotel_recommendation",
-      allergenFriendly: ["Dust Mite-Free", "Nut-Free", "Non-Smoking"],
-      amenities: ["WiFi", "Restaurant", "Fitness Center"],
-      isPurelyAllergyFriendly: true,
-      stars: 4
+      description: "Centrally located hotel near the Prado museum.",
+      quote: "I am lactose intolerant and my friends are vegetarians and we all had lots of options.",
+      bookingUrl: "https://www.booking.com/searchresults.html?ss=Hotel%20Catalonia%20Las%20Cortes%20Madrid",
+      isPurelyAllergyFriendly: false,
     },
   ],
   faqs: [
     {
       question: "Do Madrid hotels accommodate food allergies effectively?",
-      answer: "Yes, Madrid hotels have excellent allergy accommodation standards. Many properties like Vincci Centrum and Hotel Regina have specialized protocols, trained staff, and detailed allergen documentation to ensure guest safety."
+      answer: "Some Madrid hotels accommodate dietary restrictions well, though real guest reports confirming this are still limited — check the specific hotel's reviews below before booking."
     },
     {
       question: "How should I communicate my allergies in Madrid?",
@@ -65,14 +58,5 @@ export const madridContent: DestinationContent = {
       ["Call a doctor", "Llame a un médico", "YAH-meh ah oon MEH-dee-ko"],
       ["I have an EpiPen", "Tengo un EpiPen", "TEN-go oon EpiPen"]
     ]
-  },
-  restaurants: [
-    {
-      name: "Celicioso",
-      address: "Calle Hortaleza, 3, Madrid",
-      description: "100% gluten-free restaurant and bakery offering safe dining for celiac travelers.",
-      guestReview: "Great gluten-free selection of pastries, salads, and sandwiches.",
-      allergyInfo: "Gluten-Free, Celiac-Safe"
-    },
-  ]
+  }
 };

@@ -20,7 +20,6 @@ import Index from '@/pages/Index';
 const DestinationsIndex = lazy(() => import('@/pages/destinations'));
 const London = lazy(() => import('@/pages/destinations/London'));
 const Cyprus = lazy(() => import('@/pages/destinations/Cyprus'));
-const Rome = lazy(() => import('@/pages/destinations/Rome'));
 const AbuDhabi = lazy(() => import('@/pages/destinations/AbuDhabi'));
 const Crete = lazy(() => import('@/pages/destinations/Crete'));
 const HotelChains = lazy(() => import('@/pages/destinations/HotelChains'));
@@ -100,7 +99,6 @@ const AppContent = () => {
             <Route path="/destinations" element={<DestinationsIndex />} />
             <Route path="/destinations/london" element={<London />} />
             <Route path="/destinations/cyprus" element={<Cyprus />} />
-            <Route path="/destinations/rome" element={<Rome />} />
             <Route path="/destinations/abu-dhabi" element={<AbuDhabi />} />
             <Route path="/destinations/abudhabi" element={<AbuDhabi />} />
             <Route path="/destinations/crete" element={<Crete />} />
