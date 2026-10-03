@@ -81,6 +81,11 @@ export const Footer = () => {
                   Madrid, Spain
                 </Link>
               </li>
+              <li>
+                <Link to="/gluten-free/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Gluten-Free &amp; Celiac Guide
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

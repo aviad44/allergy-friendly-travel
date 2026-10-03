@@ -42,6 +42,7 @@ const Restaurants = lazy(() => import('@/pages/Restaurants'));
 const RestaurantDetail = lazy(() => import('@/pages/RestaurantDetail'));
 const DestinationRegionHub = lazy(() => import('@/pages/destinations/RegionHub'));
 const RestaurantRegionHub = lazy(() => import('@/pages/restaurants/RegionHub'));
+const GlutenFree = lazy(() => import('@/pages/GlutenFree'));
 // import MenuScanner from "./pages/MenuScanner"; // Temporarily disabled
 
 const RouteLoader = () => (
@@ -108,6 +109,7 @@ const AppContent = () => {
             <Route path="/destinations/flying-with-epipens" element={<FlyingWithEpipens />} />
             <Route path="/destinations/flying-with-epipens-north-america" element={<FlyingWithEpipensNorthAmerica />} />
             <Route path="/destinations/region/:region" element={<DestinationRegionHub />} />
+            <Route path="/gluten-free" element={<GlutenFree />} />
             {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}
             {/* Catch-all for auto-generated hotel-guide slugs not covered by a
                 static page above (React Router ranks literal segments above

@@ -14,6 +14,7 @@ const STATIC_PATHS = [
   { path: '/reviews', changefreq: 'weekly', priority: '0.8' },
   { path: '/destinations', changefreq: 'daily', priority: '0.9' },
   { path: '/restaurants', changefreq: 'daily', priority: '0.9' },
+  { path: '/gluten-free', changefreq: 'weekly', priority: '0.8' },
   { path: '/allergy-translation-card', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/london', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/cyprus', changefreq: 'monthly', priority: '0.8' },
