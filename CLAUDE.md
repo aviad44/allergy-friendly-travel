@@ -139,10 +139,23 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   Platform access approved (not instant — a LinkedIn-side review), complete
   an OAuth flow for an org-level access token with the `w_organization_social`
   scope, and add both secrets. Not something any tool here can do.
-- This sandbox's `npm run build` fails on a pre-existing, sandbox-only
-  issue (missing `@lovable.dev/mcp-js`) unrelated to any real code change —
-  confirmed via `git stash` repeatedly. Real validation happens on
-  Netlify's own build (watch the PR's CI).
+- **This sandbox's `npm run build` failing is not always a sandbox-only
+  issue — verify against the real Netlify build log before assuming it
+  is.** Previously documented here as "pre-existing, sandbox-only,
+  unrelated to any real code change," which was wrong: on 2026-10-03 the
+  real Netlify Deploy Preview on PR #37 turned out to be failing on the
+  exact same root cause for ~2 days across ~15 commits (`@lovable.dev/
+  mcp-js`'s Vite plugin refusing to build because `supabase/functions/
+  mcp/index.ts` — stubbed to 410 on 2026-10-01 to retire a fabricated-
+  content-serving endpoint — diverged from what the plugin expected to
+  find there). The CI check was red the whole time; it just hadn't been
+  checked before attempting a merge. If `npm run build` fails locally,
+  don't assume it's sandbox-only — ask the user to paste the actual
+  Netlify build log (`app.netlify.com` is blocked by this environment's
+  egress proxy, and there's no GitHub Actions job that mirrors it) and
+  check whether the same error shows up there before dismissing it. Real
+  validation happens on Netlify's own build (watch the PR's CI) — "the
+  sandbox can't build it" is not evidence that production can.
 - Direct `WebFetch`/`curl` to the site's own domain, Supabase, and most
   third-party dashboards (Netlify, Pinterest, etc.) are blocked by this
   environment's egress proxy. Workaround used throughout this project: the
