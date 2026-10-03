@@ -336,6 +336,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: New `PostCardSearchCTA.tsx`, placed at the end of `Step4Download.tsx` (the generator's final step) — a destination `Autocomplete` (reusing the homepage `SearchBar`'s own `destinationSuggestions`) that navigates to `/search-results?destination=...&allergies=...&mode=hotels`, with `allergies` pre-filled from the exact allergies the user just selected for their card. Deliberately not added to `AllergyTranslationCard.tsx`'s page-level "RELATED RESOURCES" section too: `SearchResults.tsx` redirects to the homepage if `allergies` is empty, and there's no allergy context available at the page level outside the generator's own step state.
   - DoD: `npx tsc --noEmit` clean. Only reachable once `selectedAllergies` is non-empty (guaranteed by the generator's own step-1 validation), so the search link is never broken.
 
+- [x] Fix the dead "Finish" button on the allergy card download step
+  - RATIONALE: User reported clicking "Finish" on the card generator's final step does nothing.
+  - HOW-TO: `AllergyCardGenerator.tsx`'s Next/Finish button always called the shared `handleNext()`, but `useAllergyCardSteps.tsx`'s `handleNext()` only acts `if (step < Step.Download)` — on the Download step itself it was a silent no-op. Wired the button, on the Download step, to call the same `handleDownloadPDF` already used by the step's own "Download PDF" button, and relabeled it "Finish & Download PDF".
+  - DoD: `npx tsc --noEmit` clean.
+
 - [x] Fix stuck "Generating PDF..." / "Generating PNG image..." toast on the allergy card download step
   - RATIONALE: User reported (with a live screenshot from production) generating a card and the loading toast never clearing, with no confirmation the download happened.
   - HOW-TO: `downloadAsPDF()`/`downloadAsPNG()` in `cardGeneration.ts` called `toast.loading(...)` without capturing its id, then fired a separate `toast.success`/`toast.error` instead of updating that same toast — sonner's `loading` toast has no auto-dismiss timer, so it stayed on screen forever. Fixed by capturing the loading toast's id and passing it to the follow-up `toast.success`/`toast.error` call, matching the pattern already correct elsewhere in `useAllergyCardSteps.tsx`.
