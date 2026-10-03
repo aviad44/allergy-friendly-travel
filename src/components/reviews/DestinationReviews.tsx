@@ -150,10 +150,9 @@ export const DestinationReviews = ({ destinationId }: DestinationPageProps) => {
                 destinationName={destination.name}
               />
             ) : (destinationId === 'airlines') ? null : (
-              <TopHotelsSection 
+              <TopHotelsSection
                 hotels={content?.hotels || []}
                 destinationName={destination.name}
-                isLondon={isLondon}
               />
             )}
 
