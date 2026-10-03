@@ -124,6 +124,23 @@ const routeMeta: Record<string, RouteMeta> = {
       "Explore global hotel chains offering allergy-friendly, celiac-safe food policies for travelers with dietary needs.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
+  // Dedicated overrides (not hotel/restaurant guides, so the generic
+  // destination template's appended "Reviews for food-allergy travelers"
+  // was both inaccurate and read as an odd non-sequitur in the SERP
+  // snippet — a likely contributor to 0 clicks despite good average
+  // Search Console position, per the 2026-10-03 GSC audit).
+  "/destinations/flying-with-epipens": {
+    title: "Flying with EpiPens in Europe: Airport & Airline Rules",
+    description:
+      "A practical guide to flying with EpiPens and allergy medication across Europe — airport security, airline policies, and what to carry on board.",
+    image: DEFAULT_SOCIAL_IMAGE,
+  },
+  "/destinations/flying-with-epipens-north-america": {
+    title: "Flying with EpiPens in North America: TSA & Airline Rules",
+    description:
+      "A practical guide to flying with EpiPens through TSA and CATSA security in North America — airline policies and what to carry on board.",
+    image: DEFAULT_SOCIAL_IMAGE,
+  },
   "/search-results": {
     title: "Search Results | Allergy-Free Travel",
     description: "Personalized results for your allergy-friendly hotel search.",
@@ -154,6 +171,20 @@ const computed: RouteMeta = useMemo(() => {
   const key = routeKey === "auto" || !routeKey ? path : routeKey;
   // Prefer exact match, then fallback to base path (e.g., /destinations)
   const base = routeMeta[key] || routeMeta[key.split("/").slice(0, 2).join("/")] || routeMeta["/"];
+
+  // An exact routeMeta[path] entry always wins over the generic
+  // destination-template guess below — added 2026-10-03 after finding that
+  // isDestination's branch previously intercepted *every* /destinations/*
+  // path unconditionally, silently discarding any dedicated routeMeta entry
+  // for that exact path (e.g. /destinations/hotel-chains's own entry above
+  // was dead code). That generic template always appends a hardcoded
+  // "Reviews for food-allergy travelers." suffix, which is actively wrong
+  // for non-review topic pages (flying-with-epipens, hotel-chains) and was
+  // flagged in a Search Console audit as a likely cause of 0 clicks despite
+  // a good average ranking position.
+  if (routeMeta[path]) {
+    return { ...routeMeta[path], ...(dynamicData || {}) };
+  }
 
   // Destination-specific overrides — built from the same description/subtitle
   // data the on-page H1 uses, so the <title>/meta description actually match
