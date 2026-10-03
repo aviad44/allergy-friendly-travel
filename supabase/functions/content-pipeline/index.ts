@@ -776,13 +776,15 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
 // already defined above, same slugifyHotel so a hotel found via both Google
 // and Tripadvisor upserts into the same row instead of creating a duplicate)
 // so every automatic daily run draws from both providers for the one city it
-// processes, not just Google. Shares the exact same ₪75/month ceiling as
+// processes, not just Google. Shares the exact same ₪100/month ceiling as
 // tripadvisor-reviews/discover-city-tripadvisor (reads the same
 // tripadvisor_cache table) — genuinely shared both ways, same as the Google
-// ceiling above. Non-fatal if TRIPADVISOR_API_KEY is missing or this budget
-// is already exhausted: the run simply continues with Google-only results,
-// it never blocks or fails the whole pipeline run.
-const TA_MONTHLY_BUDGET_ILS = 75;
+// ceiling above. Raised ₪75→₪100/month 2026-10-03, explicit user
+// authorization, after the ₪75 ceiling blocked a requested re-run for New
+// York. Non-fatal if TRIPADVISOR_API_KEY is missing or this budget is
+// already exhausted: the run simply continues with Google-only results, it
+// never blocks or fails the whole pipeline run.
+const TA_MONTHLY_BUDGET_ILS = 100;
 const TA_CALLS_PER_NEW_PLACE = 3;
 const TA_COST_PER_CALL_ILS = 0.056;
 
