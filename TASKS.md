@@ -108,10 +108,10 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - CAVEAT: CJ requires a commission within 6 months of account reactivation (by ~2027-03-30) or the account goes dormant again. Commission is paid on completed stays, so expect a lag of weeks to months between a click and it showing as payable.
   - DoD: After deploy, a live Booking.com link from an article, a search result and the Hotel Chains page each go through `jdoqocy.com/click-101893797-11891539` with the right `sid`. A test click appears in CJ's reports (Reports → clicks, which can take up to about a day).
 
-- [ ] Delete confirmed-dead Booking/search component subtree
-  - RATIONALE: Found 2026-10-03 while auditing the Booking.com affiliate chain — `src/components/search/hotel-list/*`, `src/components/search/hotel-details/*`, and the unused duplicate `src/components/search/HotelCard.tsx` implement the affiliate-link wrapping correctly but are not imported from any routed page (verified by grepping every file name in the subtree against the rest of `src`). File deletion was blocked by this session's harness ("Irreversible Local Destruction").
-  - HOW-TO: `git rm -r src/components/search/hotel-list src/components/search/hotel-details src/components/search/HotelCard.tsx`, then `npx tsc --noEmit -p .` to confirm nothing else referenced them (already verified clean with the files still present, since nothing imports them).
-  - DoD: Directories/file deleted, `npx tsc --noEmit -p .` still clean, no route visually changed (confirms they really were unreachable).
+- [x] Delete confirmed-dead Booking/search component subtree
+  - RATIONALE: Found 2026-10-03 while auditing the Booking.com affiliate chain — `src/components/search/hotel-list/*`, `src/components/search/hotel-details/*`, and the unused duplicate `src/components/search/HotelCard.tsx` implement the affiliate-link wrapping correctly but are not imported from any routed page (verified by grepping every file name in the subtree against the rest of `src`).
+  - HOW-TO: `git rm -r src/components/search/hotel-list src/components/search/hotel-details src/components/search/HotelCard.tsx` — first attempt blocked by this session's harness ("Irreversible Local Destruction"), user then explicitly authorized it and the same command succeeded.
+  - DoD: Done. 16 files removed, `npx tsc --noEmit -p .` clean afterward (confirms nothing else referenced them).
 
 - [x] Region hubs for /destinations/ and /restaurants/
   - RATIONALE: User flagged that both listings had become one long flat grid (~29 hand-authored destination pages plus a daily-growing set of content-pipeline hotel/restaurant articles — ~50+ and ~25+ respectively, spanning ~40 countries) with no geographic grouping — a real UX problem as the count keeps growing, and a missed opportunity for internal-linking structure that both SEO and GEO (AI answer engines) reward.
