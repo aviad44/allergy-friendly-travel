@@ -223,6 +223,25 @@ function slugify(name: string, city: string): string {
   return `${name}-${city}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
+// Tripadvisor's bare-city-name search (see the /locations/search comment
+// above) does a fuzzy NAME match with no city/region filter, so a listing
+// can come back for "Vancouver" even though it's actually ~500km up the
+// coast — confirmed live 2026-10-03: "King Pacific Lodge" matched a
+// Vancouver hotel search and was saved with city="Vancouver", but its own
+// returned address is "Milbanke Sound, Bella Bella V7E 0B5 Canada", nowhere
+// near Vancouver. The Terra API's location details give no structured
+// city/region field to filter on, only this free-text `formatted` address
+// string, so this checks whether any significant word of the target city
+// actually appears in it before the candidate is accepted.
+function cityMatchesAddress(city: string, addressFormatted: string | null): boolean {
+  if (!addressFormatted) return true; // can't verify — don't block discovery over a missing field
+  const strip = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s]/g, ' ');
+  const addrWords = strip(addressFormatted);
+  const cityWords = strip(city).split(/\s+/).filter((w) => w.length >= 3);
+  if (cityWords.length === 0) return true;
+  return cityWords.some((w) => new RegExp(`\\b${w}\\b`).test(addrWords));
+}
+
 // Shares the exact same budget accounting as tripadvisor-reviews (same
 // table, same formula) — one shared ceiling across both tools, raised
 // ₪50→₪75/month 2026-10-02 with explicit user authorization (see
@@ -332,6 +351,14 @@ serve(async (req) => {
 
       if (!best) continue;
 
+      // `addresses` is an array (same shape as `names`), not a singular
+      // `address` object — same class of bug as the name extraction above.
+      const addressFormatted: string | null = details?.addresses?.find((a: any) => a?.formatted)?.formatted ?? details?.addresses?.[0]?.formatted ?? null;
+      if (!cityMatchesAddress(city, addressFormatted)) {
+        console.warn(`[discover-city-tripadvisor] geo-mismatch: "${name}" address "${addressFormatted}" doesn't mention "${city}" — skipping`);
+        continue;
+      }
+
       const slug = slugify(name, city);
       const allergyScore = Math.min(5, Math.max(1, Math.round(best.score * 5 * 10) / 10));
       const table = isRestaurant ? 'restaurants' : 'hotels';
@@ -341,9 +368,7 @@ serve(async (req) => {
 
       const upsertPayload: Record<string, unknown> = {
         name, slug, city, country,
-        // `addresses` is an array (same shape as `names`), not a singular
-        // `address` object — same class of bug as the name extraction above.
-        address: details?.addresses?.[0]?.formatted ?? null,
+        address: addressFormatted,
         allergy_score: allergyScore,
         verified: false, active: true,
         updated_at: new Date().toISOString(),

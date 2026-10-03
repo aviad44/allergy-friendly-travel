@@ -823,6 +823,29 @@ async function taFetch(path: string, apiKey: string): Promise<any | null> {
 // ₪250) and this is a supplementary source, not the primary one.
 const TA_MAX_CANDIDATES = 20;
 
+// Tripadvisor's bare-city-name search (see the /locations/search comment
+// below) does a fuzzy NAME match with no city/region filter, so a listing
+// can come back for "Vancouver" even though it's actually ~500km up the
+// coast — confirmed live 2026-10-03 in discover-city-tripadvisor (the
+// standalone tool sharing this exact same discovery logic): "King Pacific
+// Lodge" matched a Vancouver hotel search and was saved with
+// city="Vancouver", but its own returned address is "Milbanke Sound, Bella
+// Bella V7E 0B5 Canada", nowhere near Vancouver. Since this function runs
+// unattended every day, the same gap here was silently feeding geo-mismatched
+// hotels/restaurants into real articles, not just a one-off manual run. The
+// Terra API's location details give no structured city/region field to
+// filter on, only this free-text `formatted` address string, so this checks
+// whether any significant word of the target city actually appears in it
+// before the candidate is accepted.
+function cityMatchesAddress(city: string, addressFormatted: string | null): boolean {
+  if (!addressFormatted) return true; // can't verify — don't block discovery over a missing field
+  const strip = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s]/g, ' ');
+  const addrWords = strip(addressFormatted);
+  const cityWords = strip(city).split(/\s+/).filter((w) => w.length >= 3);
+  if (cityWords.length === 0) return true;
+  return cityWords.some((w) => new RegExp(`\\b${w}\\b`).test(addrWords));
+}
+
 async function discoverHotelsTripadvisor(supabase: any, taApiKey: string, destination: { city: string; country: string }) {
   return discoverTripadvisor(supabase, taApiKey, destination, false);
 }
@@ -884,6 +907,14 @@ async function discoverTripadvisor(supabase: any, taApiKey: string, destination:
 
     if (!best) continue;
 
+    // `addresses` is an array (same shape as `names`), not a singular
+    // `address` object — same class of bug as the name extraction above.
+    const addressFormatted: string | null = details?.addresses?.find((a: any) => a?.formatted)?.formatted ?? details?.addresses?.[0]?.formatted ?? null;
+    if (!cityMatchesAddress(destination.city, addressFormatted)) {
+      console.log(`⚠️ Tripadvisor geo-mismatch: "${name}" address "${addressFormatted}" doesn't mention "${destination.city}" — skipping`);
+      continue;
+    }
+
     // Same slugifyHotel() as the Google path, so a hotel/restaurant found via
     // both providers upserts into the same row instead of creating a
     // duplicate entry for the same real-world place.
@@ -896,7 +927,7 @@ async function discoverTripadvisor(supabase: any, taApiKey: string, destination:
 
     const upsertPayload: Record<string, unknown> = {
       name, slug, city: destination.city, country: destination.country,
-      address: details?.addresses?.[0]?.formatted ?? null,
+      address: addressFormatted,
       allergy_score: allergyScore,
       verified: false, active: true,
       updated_at: new Date().toISOString(),
