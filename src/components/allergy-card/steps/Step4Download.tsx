@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SharingOptions } from '../components/SharingOptions';
+import { PostCardSearchCTA } from '../components/PostCardSearchCTA';
 
 interface Step4Props {
   generatedCard: string | null;
@@ -184,6 +185,8 @@ export const Step4Download: React.FC<Step4Props> = ({
           Remember to save multiple copies and keep them accessible during your travels.
         </p>
       </div>
+
+      <PostCardSearchCTA selectedAllergies={selectedAllergies} />
     </div>
   );
 };
