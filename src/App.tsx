@@ -18,14 +18,7 @@ import { DefaultMetaTags } from "@/components/DefaultMetaTags";
 import Index from '@/pages/Index';
 
 const DestinationsIndex = lazy(() => import('@/pages/destinations'));
-const London = lazy(() => import('@/pages/destinations/London'));
-const Cyprus = lazy(() => import('@/pages/destinations/Cyprus'));
-const AbuDhabi = lazy(() => import('@/pages/destinations/AbuDhabi'));
-const Crete = lazy(() => import('@/pages/destinations/Crete'));
 const HotelChains = lazy(() => import('@/pages/destinations/HotelChains'));
-const NewYork = lazy(() => import('@/pages/destinations/NewYork'));
-const Portugal = lazy(() => import('@/pages/destinations/Portugal'));
-const SwissAlps = lazy(() => import('@/pages/destinations/SwissAlps'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const AboutUs = lazy(() => import('@/pages/AboutUs'));
 const Categories = lazy(() => import('@/pages/Categories'));
@@ -39,15 +32,11 @@ const Terms = lazy(() => import('@/pages/Terms'));
 const AllergyTranslationCard = lazy(() => import('@/pages/AllergyTranslationCard'));
 const Privacy = lazy(() => import('@/pages/Privacy'));
 const CruiseLines = lazy(() => import('@/pages/destinations/CruiseLines'));
-const AthensGlutenFree = lazy(() => import('./pages/destinations/Athens'));
 const Eilat = lazy(() => import('./pages/destinations/Eilat'));
 const Airlines = lazy(() => import('./pages/destinations/Airlines'));
-const Italy = lazy(() => import('./pages/destinations/Italy'));
-const Stockholm = lazy(() => import('./pages/destinations/Stockholm'));
 const Madrid = lazy(() => import('./pages/destinations/Madrid'));
 const FlyingWithEpipens = lazy(() => import('./pages/destinations/FlyingWithEpipens'));
 const FlyingWithEpipensNorthAmerica = lazy(() => import('./pages/destinations/FlyingWithEpipensNorthAmerica'));
-const WarmWinterDestinations = lazy(() => import('./pages/destinations/WarmWinterDestinations'));
 const ArticleDetail = lazy(() => import('@/pages/ArticleDetail'));
 const Restaurants = lazy(() => import('@/pages/Restaurants'));
 const RestaurantDetail = lazy(() => import('@/pages/RestaurantDetail'));
@@ -97,16 +86,7 @@ const AppContent = () => {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Index />} />
             <Route path="/destinations" element={<DestinationsIndex />} />
-            <Route path="/destinations/london" element={<London />} />
-            <Route path="/destinations/cyprus" element={<Cyprus />} />
-            <Route path="/destinations/abu-dhabi" element={<AbuDhabi />} />
-            <Route path="/destinations/abudhabi" element={<AbuDhabi />} />
-            <Route path="/destinations/crete" element={<Crete />} />
-            <Route path="/destinations/newyork" element={<NewYork />} />
-            <Route path="/destinations/new-york" element={<NewYork />} />
             <Route path="/destinations/hotel-chains" element={<HotelChains />} />
-            <Route path="/destinations/portugal" element={<Portugal />} />
-            <Route path="/destinations/swiss-alps" element={<SwissAlps />} />
             <Route path="/search-results" element={<SearchResults />} />
             <Route path="/restaurants" element={<Restaurants />} />
             <Route path="/restaurants/region/:region" element={<RestaurantRegionHub />} />
@@ -122,15 +102,11 @@ const AppContent = () => {
             <Route path="/allergy-translation-card" element={<AllergyTranslationCard />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/destinations/cruise-lines" element={<CruiseLines />} />
-            <Route path="/destinations/athens" element={<AthensGlutenFree />} />
             <Route path="/destinations/eilat" element={<Eilat />} />
             <Route path="/destinations/airlines" element={<Airlines />} />
-            <Route path="/destinations/italy" element={<Italy />} />
-            <Route path="/destinations/stockholm" element={<Stockholm />} />
             <Route path="/destinations/madrid" element={<Madrid />} />
             <Route path="/destinations/flying-with-epipens" element={<FlyingWithEpipens />} />
             <Route path="/destinations/flying-with-epipens-north-america" element={<FlyingWithEpipensNorthAmerica />} />
-            <Route path="/destinations/warm-winter-destinations" element={<WarmWinterDestinations />} />
             <Route path="/destinations/region/:region" element={<DestinationRegionHub />} />
             {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}
             {/* Catch-all for auto-generated hotel-guide slugs not covered by a

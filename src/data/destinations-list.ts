@@ -3,15 +3,6 @@ import { Destination } from '@/types/definitions';
 
 export const destinations: Destination[] = [
   {
-    id: 'warm-winter-destinations',
-    name: 'Warm Winter Destinations',
-    country: 'Multiple',
-    description: 'Warm Winter & Christmas Getaways for Food-Allergic Travelers',
-    subtitle: 'Best Sunny Destinations: Madeira, Hurghada, Canary Islands & Israel',
-    image: '/lovable-uploads/warm-winter-hero.jpg',
-    region: 'worldwide'
-  },
-  {
     id: 'london',
     name: 'London',
     country: 'United Kingdom',
@@ -60,14 +51,6 @@ export const destinations: Destination[] = [
     region: 'worldwide'
   },
   {
-    id: 'new-york',
-    name: 'New York',
-    country: 'United States',
-    description: 'Best Allergy-Friendly Hotels in New York',
-    subtitle: 'Safe Accommodations for Food Allergies',
-    region: 'north-america'
-  },
-  {
     id: 'portugal',
     name: 'Portugal',
     country: 'Portugal',
@@ -92,14 +75,6 @@ export const destinations: Destination[] = [
     region: 'worldwide'
   },
   {
-    id: 'athens',
-    name: 'Athens',
-    country: 'Greece',
-    description: 'Top 10 Gluten-Free Restaurants in Athens for Celiacs',
-    subtitle: 'Safe & Delicious Dining Options for Celiacs in the Greek Capital',
-    region: 'europe'
-  },
-  {
     id: 'eilat',
     name: 'Eilat',
     country: 'Israel',
@@ -114,23 +89,6 @@ export const destinations: Destination[] = [
     description: 'Best Airlines for Food Allergy Sufferers',
     subtitle: 'Safe Flying Tips & Allergy-Friendly Airline Rankings',
     region: 'worldwide'
-  },
-  {
-    id: 'italy',
-    name: 'Italy',
-    country: 'Italy',
-    description: 'Discover Italy: Top Destination for Celiacs & Gluten‑Sensitive Travelers',
-    subtitle: 'Exceptional Gluten-Free Dining Across Rome, Florence, Milan & Naples',
-    region: 'europe'
-  },
-  {
-    id: 'stockholm',
-    name: 'Stockholm',
-    country: 'Sweden',
-    description: 'Allergy-Friendly Hotels & Gluten-Free Restaurants in Stockholm',
-    subtitle: 'Safe Accommodations and Dining for Food Allergies in Sweden\'s Capital',
-    image: '/lovable-uploads/stockholm-hero.jpg',
-    region: 'europe'
   },
   {
     id: 'madrid',

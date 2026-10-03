@@ -19,13 +19,13 @@ const FEATURED_DESTINATIONS = [
   },
   {
     id: 3,
-    name: "New York",
-    country: "United States",
-    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80",
-    description: "Explore allergy-friendly dining in the Big Apple",
-    commonAllergies: ["Gluten", "Nuts"],
-    href: "/destinations/new-york/",
-    destId: "new-york"
+    name: "Swiss Alps",
+    country: "Switzerland",
+    image: "https://images.unsplash.com/photo-1527004760525-b4b99e5a0c6a?auto=format&fit=crop&w=800&q=80",
+    description: "Allergy-aware mountain hospitality across Switzerland",
+    commonAllergies: ["Gluten", "Dairy"],
+    href: "/destinations/swiss-alps/",
+    destId: "swiss-alps"
   },
   {
     id: 4,
@@ -69,13 +69,13 @@ const FEATURED_DESTINATIONS = [
   },
   {
     id: 9,
-    name: "Italy",
+    name: "Rome",
     country: "Italy",
     image: "https://www.allergy-free-travel.com/lovable-uploads/italy-restaurant-hero.jpg",
     description: "Top destination for celiacs & gluten-sensitive travelers",
     commonAllergies: ["Gluten", "Dairy"],
-    href: "/destinations/italy/",
-    destId: "italy"
+    href: "/restaurants/gluten-free-eating-in-rome/",
+    destId: "rome-restaurants"
   }
 ];
 

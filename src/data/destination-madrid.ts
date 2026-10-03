@@ -8,6 +8,8 @@ export const madridContent: DestinationContent = {
     <p>From the boutique charm of hotels near Gran Vía to the luxury of international chains, Madrid's accommodations understand the importance of allergy safety. Many establishments provide detailed ingredient lists, work closely with guests to customize meals, and maintain strict protocols to prevent cross-contamination.</p>
     
     <p>The Spanish capital's central location also makes it an ideal base for exploring allergy-friendly dining throughout the region, with most hotels providing valuable local restaurant recommendations that cater to specific dietary needs.</p>
+
+    <p>Looking for somewhere to eat? See our <a href="/restaurants/gluten-free-dining-madrid-food-allergies/">guide to gluten-free and allergy-friendly restaurants in Madrid</a>.</p>
   `,
   hotels: [
     {
