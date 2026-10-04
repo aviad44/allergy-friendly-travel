@@ -98,6 +98,41 @@ const WARNING_PHRASES = [
 const GENERIC_ALLERGY_TERMS = ['allergy', 'allergies', 'allergic', 'allergen', 'allergens'];
 const FOOD_CONTEXT_TERMS = ['food', 'meal', 'meals', 'eat', 'eating', 'ate', 'menu', 'kitchen', 'diet', 'dish', 'dishes', 'cook', 'cooked', 'chef', 'restaurant', 'dining', 'breakfast', 'lunch', 'dinner', 'buffet', 'snack'];
 
+// Negation/absence markers — a sentence saying a hotel does NOT have
+// something ("No gluten free options", "doesn't have vegan options",
+// "disappointing... no vegan options available") matches the exact same
+// STRICT_TERMS/WEAK_TERMS keywords as a genuinely positive sentence, so
+// without this check it scored identically — sometimes higher. Confirmed
+// live 2026-10-01 on 6+ already-published hotels across 4 cities, 2 of them
+// the article's *only* hotel (Vilnius, Rio de Janeiro).
+const NEGATION_MARKERS = [
+  'no ', 'not ', 'lack of', 'lacking', 'lacks', 'missing',
+  'limited', 'disappointing', 'nothing for', 'none of', 'barely any', 'hardly any',
+  'doesn t', 'didn t', 'don t', 'wasn t', 'isn t', 'aren t', 'weren t', 'haven t', 'hasn t', 'won t',
+];
+// Bare 'without ' deliberately excluded from NEGATION_MARKERS above — it's
+// ambiguous (WEAK_TERMS' own 'without nuts'/'without dairy' entries are
+// positive, meaning "prepared without nuts"; a blanket match would silently
+// make those WEAK_TERMS entries unreachable, since every match would
+// immediately negate itself). Likewise 'no '/'not ' are real negation
+// signals most of the time, but not when paired with a double-negative like
+// "no problem" or "without any problem" — confirmed live 2026-10-01: Hotel
+// Plesnik's genuinely positive "accommodated our allergies... without any
+// problem" would otherwise be wrongly excluded.
+const DOUBLE_NEGATIVE_POSITIVES = [
+  'no problem', 'no issue', 'no trouble', 'no worries', 'no complaints', 'no difficulty',
+  'without any problem', 'without issue', 'without difficulty', 'without trouble', 'without a problem', 'without any issue',
+];
+
+// Contractions without an apostrophe ("dont", "cant", "wont"...) survive
+// normalize() as a single word, not split into "don t"/"can t" the way
+// NEGATION_MARKERS' apostrophe'd forms expect — confirmed live 2026-10-01:
+// "they dont even have one version of a lactose free... milk" slipped
+// through as a false positive because of this gap. Word-boundary regex
+// (not a plain substring, since "cant" is also a real substring of
+// "Cantonese"/"cantina") catches the informal spelling too.
+const CONTRACTION_NEGATION_REGEX = /\b(dont|cant|wont|isnt|arent|wasnt|werent|hasnt|hadnt|doesnt|didnt|couldnt|wouldnt|shouldnt)\b/;
+
 // ==========================================
 // TEXT HELPERS
 // ==========================================
@@ -128,56 +163,75 @@ interface ReviewSnippet {
   matchedTerms: string[];
 }
 
+// Matching happens per sentence, not across the whole review — two real
+// bugs this fixes versus the old whole-text approach: (1) negation ("No
+// gluten free options") used to score identically to a positive match on
+// the same keywords; (2) a SAFETY_TERMS word like "careful" in one sentence
+// ("I'd be careful booking...") could combine with "allergies" in a totally
+// unrelated sentence about dust/bedding to score a non-food complaint as
+// strong allergy evidence. Same "don't match out of context" principle as
+// the hasWarning exclusion, just one level deeper. Confirmed live
+// 2026-10-01 on 6+ already-published hotels.
 function classifyAndExtract(reviewText: string, author: string, relativeTime: string): ReviewSnippet | null {
-  const norm = normalize(reviewText);
-
-  const strictMatches = findTerms(norm, STRICT_TERMS);
-  const weakMatches = findTerms(norm, WEAK_TERMS);
-  const safetyMatches = findTerms(norm, SAFETY_TERMS);
-  const warningMatches = findTerms(norm, WARNING_PHRASES);
-  const genericAllergyMatches = findTerms(norm, GENERIC_ALLERGY_TERMS);
-  const foodContextMatches = findTerms(norm, FOOD_CONTEXT_TERMS);
-
-  const hasStrict = strictMatches.length > 0;
-  const hasWeak = weakMatches.length > 0;
-  const hasSafety = safetyMatches.length > 0;
-  const hasWarning = warningMatches.length > 0;
-  const hasGenericAllergy = genericAllergyMatches.length > 0;
-  const hasFoodContext = foodContextMatches.length > 0;
-
   const positiveWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
-  const hasPositive = positiveWords.some(w => norm.includes(w));
   const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
-  const hasDietary = dietaryIndicators.some(d => norm.includes(d));
-
-  // Generic allergy words only count as strong evidence when paired with
-  // food context; a generic 'unsafe'/'reaction' warning only counts when
-  // paired with a dietary term (a harassment complaint that happens to say
-  // "unsafe" isn't allergy evidence on its own).
-  const hasFoodAllergyEvidence = hasStrict || (hasGenericAllergy && (hasWeak || hasDietary || hasSafety || hasFoodContext));
-  const isRelevant = hasFoodAllergyEvidence || (hasWarning && (hasWeak || hasDietary)) || (hasWeak && (hasSafety || hasWarning)) || (hasDietary && hasPositive);
-
-  if (!isRelevant) return null;
-
-  let score = 0;
-  if (hasWarning) score = 0.95;
-  else if (hasFoodAllergyEvidence && hasSafety) score = 0.9;
-  else if (hasFoodAllergyEvidence) score = 0.75;
-  else if (hasWeak && hasSafety) score = 0.6;
-  else if (hasDietary && hasPositive) score = 0.4;
-
-  const allMatched = [...strictMatches, ...weakMatches, ...safetyMatches, ...warningMatches, ...(hasFoodAllergyEvidence ? genericAllergyMatches : [])];
 
   const sentences = reviewText.split(/(?<=[.!?])\s+/);
-  const relevant: string[] = [];
+  let bestScore = 0;
+  const matchedSentences: string[] = [];
+  const allMatchedSet = new Set<string>();
+
   for (const s of sentences) {
     const normS = normalize(s);
-    if (allMatched.some(t => normS.includes(normalize(t)))) {
-      relevant.push(s.trim());
-    }
+
+    const sStrict = findTerms(normS, STRICT_TERMS);
+    const sWeak = findTerms(normS, WEAK_TERMS);
+    const sSafety = findTerms(normS, SAFETY_TERMS);
+    const sWarning = findTerms(normS, WARNING_PHRASES);
+    const sGeneric = findTerms(normS, GENERIC_ALLERGY_TERMS);
+    const sFoodCtx = findTerms(normS, FOOD_CONTEXT_TERMS);
+
+    // A warning signal anywhere in a sentence disqualifies that sentence,
+    // same as before — never positive proof.
+    if (sWarning.length > 0) continue;
+
+    const hasAnyAllergyTerm = sStrict.length > 0 || sWeak.length > 0 || sGeneric.length > 0;
+    if (!hasAnyAllergyTerm) continue;
+
+    // Negated ("no gluten free options") or a disguised complaint
+    // ("I'd recommend they include a vegan option" — no literal "no"/"not",
+    // but still means the hotel doesn't currently have it) — never counted.
+    const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
+    const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
+    const isNegated = !isDoubleNegativePositive && (NEGATION_MARKERS.some(m => normS.includes(m)) || CONTRACTION_NEGATION_REGEX.test(normS));
+    if (isSuggestionComplaint || isNegated) continue;
+
+    const hasStrictS = sStrict.length > 0;
+    const hasWeakS = sWeak.length > 0;
+    const hasSafetyS = sSafety.length > 0;
+    const hasGenericS = sGeneric.length > 0;
+    const hasFoodCtxS = sFoodCtx.length > 0;
+    const hasDietaryS = dietaryIndicators.some(d => normS.includes(d));
+    const hasPositiveS = positiveWords.some(w => normS.includes(w));
+
+    const hasFoodAllergyEvidenceS = hasStrictS || (hasGenericS && (hasWeakS || hasDietaryS || hasSafetyS || hasFoodCtxS));
+    const isRelevantS = hasFoodAllergyEvidenceS || (hasWeakS && hasSafetyS) || (hasDietaryS && hasPositiveS);
+    if (!isRelevantS) continue;
+
+    let scoreS = 0;
+    if (hasFoodAllergyEvidenceS && hasSafetyS) scoreS = 0.9;
+    else if (hasFoodAllergyEvidenceS) scoreS = 0.75;
+    else if (hasWeakS && hasSafetyS) scoreS = 0.6;
+    else if (hasDietaryS && hasPositiveS) scoreS = 0.4;
+
+    bestScore = Math.max(bestScore, scoreS);
+    matchedSentences.push(s.trim());
+    [...sStrict, ...sWeak, ...sSafety, ...(hasFoodAllergyEvidenceS ? sGeneric : [])].forEach(t => allMatchedSet.add(t));
   }
 
-  let snippetText = relevant.length > 0 ? relevant.join(' ') : reviewText;
+  if (matchedSentences.length === 0) return null;
+
+  let snippetText = matchedSentences.join(' ');
   if (snippetText.length > 250) snippetText = snippetText.substring(0, 247) + '...';
 
   return {
@@ -185,8 +239,8 @@ function classifyAndExtract(reviewText: string, author: string, relativeTime: st
     author,
     relativeTime,
     hasAllergyMention: true,
-    score,
-    matchedTerms: [...new Set(allMatched)].slice(0, 6),
+    score: bestScore,
+    matchedTerms: [...allMatchedSet].slice(0, 6),
   };
 }
 
@@ -263,7 +317,7 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 }
 
 // ==========================================
-// MONTHLY BUDGET GUARD — hard ₪100/month ceiling, shared with restaurants-search
+// MONTHLY BUDGET GUARD — hard monthly ceiling, shared with restaurants-search
 // ==========================================
 // Both hotel-search and restaurants-search are public, unauthenticated
 // (verify_jwt=false, CORS '*') endpoints that trigger real billed Google
@@ -288,11 +342,22 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 // it drifting.
 //
 // This is deliberately conservative in two ways: it trips at 90% of the
-// ₪100 target, not 100%, and it fails *closed* (blocks the search) if the
+// target, not 100%, and it fails *closed* (blocks the search) if the
 // budget can't be verified — e.g. search_log is unreachable, or Supabase
 // itself isn't configured — rather than letting Google calls run
 // unaccounted for.
-const MONTHLY_BUDGET_ILS = 100;
+//
+// Raised ₪100→₪250/month 2026-10-02 with explicit user authorization
+// ("מבחינתי אני מוכן להגדיל את התקציב ככל שיידרש") after this month's
+// ceiling tripped from a legitimate, user-requested comprehensive sweep
+// (below-3-hotel article discovery + a 144-hotel real-evidence
+// verification pass on the static destination-*.ts pages) — not a
+// miscalibration. Estimated real need for the rest of October: ~₪200-250
+// total (verification pass ~₪10-20, remaining city sweep ~₪25-35, daily
+// content-pipeline for the rest of the month ~₪15-25, real site traffic
+// ~₪5-10, plus margin). Re-evaluate at month-end whether to keep this
+// level or return to ₪100 baseline.
+const MONTHLY_BUDGET_ILS = 250;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342; // calibrated from real billing, see comment above
 
@@ -305,7 +370,13 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
     const { data, error } = await supabase
       .from('search_log')
       .select('google_calls_count')
-      .in('mode', ['hotels_fast', 'fast'])
+      // 'article_photo' = article-hero-photo's live Google photo calls, which
+      // share this ₪100 ceiling (on top of their own ₪30 sub-ceiling).
+      // 'content_pipeline' added 2026-10-02 — that function was making real
+      // billed Google Places calls daily with zero budget visibility until
+      // it was wired into this same shared ceiling (see its own copy of
+      // this guard for the full writeup).
+      .in('mode', ['hotels_fast', 'fast', 'article_photo', 'content_pipeline', 'quote_verify'])
       .eq('cache_hit', false)
       .gte('created_at', monthStart.toISOString());
 

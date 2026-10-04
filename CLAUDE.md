@@ -57,7 +57,10 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   one platform's backlog can't starve the other's, see 2026-09-13 and
   2026-09-17 in CHANGELOG.md), `pinterest-poster` (daily backlog sweep —
   Pinterest is deliberately different from FB/IG here), `gsc-report`
-  (weekly, Search Console reporting — see below). **Currently blocked**:
+  (weekly, Search Console reporting — see below), `ga4-report` (weekly,
+  GA4 `hotel_booking_click` reporting by hotel/page — same shape and same
+  "blocked on user's Google Cloud setup" status as `gsc-report`, see
+  below). **Currently blocked**:
   Pinterest real pin creation needs Standard API access (Trial tier blocks
   production pins) — pending the user submitting Pinterest's app-review
   form with a demo video.
@@ -75,23 +78,54 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   Secrets) — `GOOGLE_MAPS_API_KEY`, `TRIPADVISOR_API_KEY`,
   `PINTEREST_CLIENT_ID`/`SECRET`/`BOARD_ID`, `CRON_SHARED_SECRET`,
   `GOOGLE_SEARCH_CONSOLE_CREDENTIALS` (service-account JSON key — see
-  `gsc-report` below). No MCP tool can set these directly — ask the user to
-  add them via the dashboard.
+  `gsc-report` below), `GOOGLE_ANALYTICS_CREDENTIALS` (service-account JSON
+  key for `ga4-report` — the same service account as
+  `GOOGLE_SEARCH_CONSOLE_CREDENTIALS` can be reused, just also enable the
+  Analytics Data API on it and add it as a Viewer on the GA4 property),
+  `GA4_PROPERTY_ID` (the GA4 property's numeric ID, GA4 Admin → Property
+  Settings). No MCP tool can set these directly — ask the user to add them
+  via the dashboard.
 - **Governance docs**: `TASKS.md` (checkbox tasks, each with
   RATIONALE/HOW-TO/DoD), `CHANGELOG.md` (dated entries) — update both
   alongside any real change, per `.github/pull_request_template.md`.
 
 ## Known gaps / things Claude cannot check on its own
 
-- **Google Search Console API access exists as of 2026-09-14** (the
-  `gsc-report` function above) but only works once the user has: (1)
-  created a Google Cloud service account, (2) added its `client_email` as
-  a read-only user on the Search Console property, and (3) put the
-  service-account JSON key in the `GOOGLE_SEARCH_CONSOLE_CREDENTIALS`
-  Supabase secret. Until confirmed working end-to-end (check
-  `pipeline_log` for a `run_type = 'gsc_report'` row with
-  `status = 'success'`), treat GSC as still only reachable via screenshots
-  the user pastes — don't assume the credential is configured.
+- **Google Search Console reporting (`gsc-report`) and GA4 hotel-booking-
+  click reporting (`ga4-report`) are both confirmed working end-to-end as
+  of 2026-09-30** — `pipeline_log` shows real `success` rows for both
+  (`run_type = 'gsc_report'` / `'ga4_report'`), not just "not configured"
+  or auth errors. Getting here surfaced two real bugs/gotchas worth
+  knowing if either ever regresses:
+  - **GSC's site identifier was wrong in code, not a user setup mistake.**
+    The Search Console property actually registered/verified for this
+    site is a **Domain property** (`sc-domain:allergy-free-travel.com`),
+    not the URL-prefix form (`https://www.allergy-free-travel.com/`) the
+    code originally assumed (confirmed via a live Search Console
+    screenshot showing the service account listed as a user on the
+    bare-domain property). Fixed in `gsc-report/index.ts`:
+    `GSC_PROPERTY_ID = 'sc-domain:allergy-free-travel.com'` is now the
+    identifier used in both the Search Analytics and URL Inspection API
+    calls, kept separate from `SITE_URL` (still the real
+    `https://www.allergy-free-travel.com` used to build actual page URLs
+    to inspect). If this ever 403s again with "User does not have
+    sufficient permission for site", re-check which property type is
+    actually verified in Search Console before assuming the user setup
+    regressed.
+  - **A newly-registered GA4 Custom Dimension does NOT apply retroactively
+    to already-collected events** — corrected from an earlier, wrong note
+    here that claimed it would. Confirmed live 2026-09-30: after
+    registering `hotel_name` as an Event-scoped Custom Dimension, the
+    first successful `ga4-report` run showed `(not set)` for every one of
+    59 historical `hotel_booking_click` events (all predating the
+    dimension's creation) — only new events from the registration point
+    forward will carry a real hotel-name value. The `pagePath` breakdown
+    (a standard, non-custom dimension) worked immediately and isn't
+    affected by this.
+  - Both secrets (`GOOGLE_SEARCH_CONSOLE_CREDENTIALS`,
+    `GOOGLE_ANALYTICS_CREDENTIALS`, `GA4_PROPERTY_ID`) reuse the same
+    service account, which now has both APIs enabled and is a user/Viewer
+    on both properties.
 - **No Pinterest dashboard access** — can't check Standard-access approval
   status programmatically; ask the user.
 - **LinkedIn posting has never actually run** — `linkedin-poster` (weekly,
@@ -105,10 +139,23 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   Platform access approved (not instant — a LinkedIn-side review), complete
   an OAuth flow for an org-level access token with the `w_organization_social`
   scope, and add both secrets. Not something any tool here can do.
-- This sandbox's `npm run build` fails on a pre-existing, sandbox-only
-  issue (missing `@lovable.dev/mcp-js`) unrelated to any real code change —
-  confirmed via `git stash` repeatedly. Real validation happens on
-  Netlify's own build (watch the PR's CI).
+- **This sandbox's `npm run build` failing is not always a sandbox-only
+  issue — verify against the real Netlify build log before assuming it
+  is.** Previously documented here as "pre-existing, sandbox-only,
+  unrelated to any real code change," which was wrong: on 2026-10-03 the
+  real Netlify Deploy Preview on PR #37 turned out to be failing on the
+  exact same root cause for ~2 days across ~15 commits (`@lovable.dev/
+  mcp-js`'s Vite plugin refusing to build because `supabase/functions/
+  mcp/index.ts` — stubbed to 410 on 2026-10-01 to retire a fabricated-
+  content-serving endpoint — diverged from what the plugin expected to
+  find there). The CI check was red the whole time; it just hadn't been
+  checked before attempting a merge. If `npm run build` fails locally,
+  don't assume it's sandbox-only — ask the user to paste the actual
+  Netlify build log (`app.netlify.com` is blocked by this environment's
+  egress proxy, and there's no GitHub Actions job that mirrors it) and
+  check whether the same error shows up there before dismissing it. Real
+  validation happens on Netlify's own build (watch the PR's CI) — "the
+  sandbox can't build it" is not evidence that production can.
 - Direct `WebFetch`/`curl` to the site's own domain, Supabase, and most
   third-party dashboards (Netlify, Pinterest, etc.) are blocked by this
   environment's egress proxy. Workaround used throughout this project: the

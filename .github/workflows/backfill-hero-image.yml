@@ -8,7 +8,12 @@ name: Backfill Hero Images
 # articles directly via SQL (e.g. a manual content backfill).
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: 'Optional: comma-separated article slugs to re-pick a photo for (e.g. a technically-not-broken but unsales-y shot), instead of the default broken/missing scan.'
+        required: false
+        default: ''
 
 jobs:
   run-backfill:
@@ -23,16 +28,23 @@ jobs:
         id: call
         env:
           CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+          SLUGS_INPUT: ${{ inputs.slugs }}
         run: |
           SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
           SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          if [ -n "$SLUGS_INPUT" ]; then
+            BODY_JSON=$(python3 -c "import json,os; print(json.dumps({'slugs': [s.strip() for s in os.environ['SLUGS_INPUT'].split(',') if s.strip()]}))")
+          else
+            BODY_JSON='{}'
+          fi
 
           RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/backfill-hero-image" \
             -H "Content-Type: application/json" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
             -H "x-cron-secret: $CRON_SHARED_SECRET" \
-            -d '{}')
+            -d "$BODY_JSON")
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
           BODY=$(echo "$RESPONSE" | sed '$d')

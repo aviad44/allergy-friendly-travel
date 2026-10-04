@@ -7,34 +7,6 @@ export const italyContent: DestinationContent = {
   ],
   
   hotels: [
-    {
-      name: "Hotel Ponte Sisto",
-      location: "Rome (near Termini station)",
-      description: "Hotel with excellent gluten-free breakfast options and understanding staff",
-      features: [
-        "Schär gluten-free items on breakfast buffet",
-        "Staff trained on celiac needs",
-        "No extra charge for gluten-free options"
-      ],
-      guestReview: "Decent selection of Schär gluten‑free items on the breakfast buffet … staff were friendly and understood celiac needs.",
-      allergyInfo: "Pre-packaged gluten-free options available upon request",
-      isPurelyAllergyFriendly: true,
-      websiteUrl: "https://www.spokin.com/celiac-safe-gluten-free-rome-italy-travel-guide"
-    },
-    {
-      name: "Hotel Villa Franca",
-      location: "Positano, Amalfi Coast",
-      description: "Luxury hotel with dedicated gluten-free kitchen protocols",
-      features: [
-        "Separate kitchen for gluten-free preparation",
-        "Gluten-free options clearly marked",
-        "Staff very helpful with dietary needs"
-      ],
-      guestReview: "Staff very helpful… gluten‑free options clearly marked, separate kitchen.",
-      allergyInfo: "Dedicated gluten-free preparation area to prevent cross-contamination",
-      isPurelyAllergyFriendly: true,
-      websiteUrl: "https://www.spokin.com/italy-celiac-safe-travel-itinerary"
-    }
   ],
 
   restaurants: [
@@ -47,7 +19,7 @@ export const italyContent: DestinationContent = {
         "Full gluten-free menu available",
         "Strict safety procedures for celiac guests"
       ],
-      guestReview: "Best gluten‑free pasta ever – reviewers highlight the full GF menu and strict safety procedures.",
+      guestReview: "This restaurant is perfect for those with allergies. The waiters will ask if you have any allergies before placing your order and they'll place a little flag on your food signifying it's gluten-free in our case. The majority of the menu is gluten-free and we tried the pizza which was delicious.",
       allergyInfo: "AIC-certified with dedicated gluten-free preparation protocols",
       isPurelyAllergyFriendly: true,
       websiteUrl: "https://www.romeloft.com/highlight/gluten-free-restaurants-rome/"
@@ -61,6 +33,7 @@ export const italyContent: DestinationContent = {
         "Top ratings from celiac community",
         "Located near Vatican attractions"
       ],
+      guestReview: "I have celiac and this entire place is gluten free! Some of the best gluten free food I've had in my life.",
       allergyInfo: "Completely gluten-free restaurant - no risk of cross-contamination",
       isPurelyAllergyFriendly: true,
       websiteUrl: "https://lauradolcitravels.com/gluten-free-rome-best-restaurants/"
@@ -74,7 +47,7 @@ export const italyContent: DestinationContent = {
         "GF flags for easy identification",
         "Prime location near Trevi Fountain"
       ],
-      guestReview: "Separate kitchen and GF flags—easy and safe dining near the fountain.",
+      guestReview: "Staff immediately welcomed us and asked for any allergies which is very reassuring. I have Coeliac disease and upon telling them this they provided me with special cutlery, cup, napkin and table mat to notify staff. They assured me that they have a completely separate kitchen to prepare gluten free food.",
       allergyInfo: "Dedicated gluten-free kitchen prevents cross-contamination",
       isPurelyAllergyFriendly: true
     },
@@ -87,7 +60,7 @@ export const italyContent: DestinationContent = {
         "Food clearly marked with GF flags",
         "Multiple locations in Rome"
       ],
-      guestReview: "Did not get sick once… food always marked with GF flag.",
+      guestReview: "They have two separate kitchens, one that cooks just GF and the other cooks standard. My MIL felt comfortable eating here knowing that extra care was taken for those with GF diets. All meals are also lactose free.",
       allergyInfo: "Proven track record of safe gluten-free dining",
       isPurelyAllergyFriendly: true,
       websiteUrl: "https://www.reddit.com/r/Celiac/comments/1irpk66/gluten_free_in_rome/"
@@ -101,7 +74,7 @@ export const italyContent: DestinationContent = {
         "Fresh pizza and pastries",
         "Grocery items available"
       ],
-      guestReview: "Celiac heaven… pizza, pastries, grocery—all safe.",
+      guestReview: "The best gluten free selection of good I've literally ever seen.",
       allergyInfo: "Completely gluten-free establishment with full bakery and grocery selection",
       isPurelyAllergyFriendly: true,
       websiteUrl: "https://lauradolcitravels.com/gluten-free-rome-best-restaurants/"

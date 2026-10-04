@@ -10,9 +10,13 @@ const corsHeaders = {
 // TRIPADVISOR REVIEWS ENRICHMENT
 // ==========================================
 // Looks up a hotel/restaurant on Tripadvisor's Terra API (the Content API's
-// replacement as of Aug 2026) and returns its real rating + up to 3 real
-// reviews with links back to Tripadvisor — genuine third-party content for
-// detail pages, not a paraphrase of it.
+// replacement as of Aug 2026) and returns its real rating + any of its
+// reviews that are genuinely about food allergies/dietary needs (filtered
+// via the same classifier hotel-search/restaurants-search/content-pipeline
+// use — see filterAllergyRelevantReviews below), with links back to
+// Tripadvisor — genuine third-party content for detail pages, not a
+// paraphrase of it, and never a generic review passed off as allergy
+// evidence just because it's the only one Tripadvisor returned.
 //
 // Cached PERMANENTLY per place once found (no refresh): ratings/reviews
 // don't shift meaningfully day to day, and every lookup is a billed
@@ -38,10 +42,211 @@ const CALLS_PER_NEW_PLACE = 3; // search + details + reviews — counted conserv
 // vs. roughly one lookup per unique destination search when scoped to the
 // top result only — real Tripadvisor pricing is $0.015/entity, list price,
 // not yet calibrated against an actual invoice).
-const MONTHLY_BUDGET_ILS = 50;
+//
+// Raised ₪50→₪75/month 2026-10-02 with explicit user authorization,
+// alongside the Google ceiling raise (see hotel-search/index.ts's copy of
+// that constant for the full writeup) — same comprehensive-sweep rationale.
+// Raised ₪75→₪100/month 2026-10-03, explicit user authorization, after the
+// ₪75 ceiling was hit (404 places, ~₪67.87) and blocked a requested re-run
+// of discover-city-tripadvisor for New York.
+const MONTHLY_BUDGET_ILS = 100;
 const BUDGET_SAFETY_MARGIN = 0.9;
 
 type Category = 'hotel' | 'restaurant';
+
+// ==========================================
+// ALLERGY RELEVANCE FILTER (same matcher as hotel-search/restaurants-search/
+// content-pipeline, kept in sync) — applied to Tripadvisor's reviews before
+// any of them are shown as a "quote" on a hotel/restaurant card.
+// ==========================================
+// Tripadvisor's API returns its own top/most-recent reviews for a place —
+// there is no way to ask it for allergy-relevant ones specifically, and most
+// reviews are about location, cleanliness or value, not food allergies. This
+// function previously returned the top 3 reviews unfiltered, and the caller
+// (TripadvisorEnrichedHotelCard) used reviews[0] as-is — so a hotel with no
+// real allergy-specific review on Tripadvisor would still show a generic
+// quote ("Nice room, large enough for two people...") right under an
+// allergy-feature badge, implying relevance it didn't have. Found live
+// 2026-10-01 (Amsterdam, among others). Same "never fabricate/misrepresent
+// relevance" principle as every other review-evidence fix in this project —
+// this is the one review-evidence path that had never been run through it.
+const STRICT_TERMS = [
+  'food allergy', 'severe allergy', 'multiple allergies',
+  'allergy aware', 'allergy conscious', 'allergy safe', 'allergy friendly',
+  'allergen free', 'allergen menu', 'allergen info', 'allergen list',
+  'gluten free', 'glutenfree', 'gluten-free',
+  'dairy free', 'dairyfree', 'dairy-free', 'milk free',
+  'lactose free', 'lactosefree', 'lactose-free',
+  'nut free', 'nutfree', 'nut-free', 'peanut free', 'peanutfree', 'peanut-free',
+  'egg free', 'eggfree', 'egg-free',
+  'soy free', 'soyfree', 'soy-free',
+  'sesame free', 'sesame-free',
+  'wheat free', 'wheat-free',
+  'celiac', 'coeliac', 'celiac disease',
+  'lactose intolerant', 'gluten intolerant',
+  'food sensitivities', 'food sensitivity', 'intolerance', 'intolerant',
+  'peanut allergy', 'nut allergy', 'tree nut allergy',
+  'milk allergy', 'egg allergy', 'soy allergy',
+  'fish allergy', 'seafood allergy', 'shellfish allergy',
+  'senza glutine', 'senza lattosio', 'senza noci', 'senza uova',
+  'sin gluten', 'sin lactosa', 'sin nueces',
+  'sans gluten', 'sans lactose', 'sans noix',
+  'glutenfrei', 'laktosefrei', 'nussfrei',
+  'dietary needs', 'dietary requirements', 'special dietary',
+  'gf menu', 'gf options', 'df options', 'nf options',
+  'room service allergy', 'breakfast allergy', 'buffet allergy',
+];
+
+const WEAK_TERMS = [
+  'gluten', 'dairy', 'lactose', 'wheat',
+  'peanut', 'peanuts', 'tree nut', 'nuts', 'almond', 'hazelnut', 'walnut',
+  'pecan', 'cashew', 'pistachio', 'macadamia',
+  'soy', 'soya', 'sesame',
+  'shellfish', 'shrimp', 'crab', 'lobster',
+  'vegan', 'vegetarian', 'plant based', 'plant-based',
+  'no eggs', 'no dairy', 'no nuts', 'no shellfish', 'no seafood',
+  'without nuts', 'without dairy',
+  'special diet', 'dietary', 'food restrictions',
+  'gf', 'df', 'vg',
+];
+
+const SAFETY_TERMS = [
+  'cross contamination', 'cross contact',
+  'traces', 'may contain', 'contains traces',
+  'shared kitchen', 'shared fryer',
+  'allergen menu', 'allergen information', 'allergen list',
+  'dietary restrictions', 'dietary requirement', 'special diet',
+  'accommodated my allergy', 'can accommodate', 'accommodating', 'very accommodating',
+  'informed staff', 'knowledgeable staff', 'staff understood', 'took it seriously',
+  'safe to eat', 'felt safe', 'felt comfortable', 'cautious', 'careful',
+  'allergy protocol', 'allergy friendly kitchen', 'chef spoke to us', 'chef came to our table',
+];
+
+const WARNING_PHRASES = [
+  'not safe', 'unsafe', 'reaction', 'allergic reaction',
+  'epipen', 'epi pen', 'anaphylaxis', 'anaphylactic',
+];
+
+const GENERIC_ALLERGY_TERMS = ['allergy', 'allergies', 'allergic', 'allergen', 'allergens'];
+const FOOD_CONTEXT_TERMS = ['food', 'meal', 'meals', 'eat', 'eating', 'ate', 'menu', 'kitchen', 'diet', 'dish', 'dishes', 'cook', 'cooked', 'chef', 'restaurant', 'dining', 'breakfast', 'lunch', 'dinner', 'buffet', 'snack'];
+
+// Negation/absence markers + double-negative-positive allowlist — ported
+// 2026-10-01 from hotel-search/restaurants-search/content-pipeline (see
+// CHANGELOG, same date): whole-text matching let a negated sentence ("No
+// gluten free options") score the same as a genuine positive, and let a
+// safety word in one sentence pair with an unrelated sentence's "allergy"
+// mention. This was the one review-evidence path still running the old,
+// pre-fix classifier when the other three were fixed.
+const NEGATION_MARKERS = [
+  'no ', 'not ', 'lack of', 'lacking', 'lacks', 'missing',
+  'limited', 'disappointing', 'nothing for', 'none of', 'barely any', 'hardly any',
+  'doesn t', 'didn t', 'don t', 'wasn t', 'isn t', 'aren t', 'weren t', 'haven t', 'hasn t', 'won t',
+];
+const DOUBLE_NEGATIVE_POSITIVES = [
+  'no problem', 'no issue', 'no trouble', 'no worries', 'no complaints', 'no difficulty',
+  'without any problem', 'without issue', 'without difficulty', 'without trouble', 'without a problem', 'without any issue',
+];
+
+// Contractions without an apostrophe ("dont", "cant", "wont"...) survive
+// normalize() as a single word, not split into "don t"/"can t" the way
+// NEGATION_MARKERS' apostrophe'd forms expect — confirmed live 2026-10-01:
+// "they dont even have one version of a lactose free... milk" slipped
+// through as a false positive because of this gap. Word-boundary regex
+// (not a plain substring, since "cant" is also a real substring of
+// "Cantonese"/"cantina") catches the informal spelling too.
+const CONTRACTION_NEGATION_REGEX = /\b(dont|cant|wont|isnt|arent|wasnt|werent|hasnt|hadnt|doesnt|didnt|couldnt|wouldnt|shouldnt)\b/;
+
+function normalizeText(text: string): string {
+  return text.toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function findTerms(text: string, terms: string[]): string[] {
+  const matches: string[] = [];
+  for (const term of terms) {
+    const pattern = normalizeText(term).replace(/\s+/g, '\\s+');
+    if (new RegExp(`\\b${pattern}\\b`, 'i').test(text)) {
+      matches.push(term);
+    }
+  }
+  return matches;
+}
+
+// Per-sentence matching (fixed 2026-10-01, ported from
+// hotel-search/restaurants-search/content-pipeline) — see CHANGELOG for
+// the full rationale. Returns null when the review isn't genuinely about
+// food allergies/dietary needs — never shown as a quote in that case.
+function classifyTripadvisorReview(text: string): { score: number; snippet: string } | null {
+  if (!text) return null;
+
+  const positiveWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
+  const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
+
+  const sentences = text.split(/(?<=[.!?])\s+/);
+  let bestScore = 0;
+  const matchedSentences: string[] = [];
+
+  for (const s of sentences) {
+    const normS = normalizeText(s);
+
+    const sStrict = findTerms(normS, STRICT_TERMS);
+    const sWeak = findTerms(normS, WEAK_TERMS);
+    const sSafety = findTerms(normS, SAFETY_TERMS);
+    const sWarning = findTerms(normS, WARNING_PHRASES);
+    const sGeneric = findTerms(normS, GENERIC_ALLERGY_TERMS);
+    const sFoodCtx = findTerms(normS, FOOD_CONTEXT_TERMS);
+
+    if (sWarning.length > 0) continue;
+
+    const hasAnyAllergyTerm = sStrict.length > 0 || sWeak.length > 0 || sGeneric.length > 0;
+    if (!hasAnyAllergyTerm) continue;
+
+    const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
+    const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
+    const isNegated = !isDoubleNegativePositive && (NEGATION_MARKERS.some(m => normS.includes(m)) || CONTRACTION_NEGATION_REGEX.test(normS));
+    if (isSuggestionComplaint || isNegated) continue;
+
+    const hasStrictS = sStrict.length > 0;
+    const hasWeakS = sWeak.length > 0;
+    const hasSafetyS = sSafety.length > 0;
+    const hasGenericS = sGeneric.length > 0;
+    const hasFoodCtxS = sFoodCtx.length > 0;
+    const hasDietaryS = dietaryIndicators.some(d => normS.includes(d));
+    const hasPositiveS = positiveWords.some(w => normS.includes(w));
+
+    const hasFoodAllergyEvidenceS = hasStrictS || (hasGenericS && (hasWeakS || hasDietaryS || hasSafetyS || hasFoodCtxS));
+    const isRelevantS = hasFoodAllergyEvidenceS || (hasWeakS && hasSafetyS) || (hasDietaryS && hasPositiveS);
+    if (!isRelevantS) continue;
+
+    let scoreS = 0;
+    if (hasFoodAllergyEvidenceS && hasSafetyS) scoreS = 0.9;
+    else if (hasFoodAllergyEvidenceS) scoreS = 0.75;
+    else if (hasWeakS && hasSafetyS) scoreS = 0.6;
+    else if (hasDietaryS && hasPositiveS) scoreS = 0.4;
+
+    bestScore = Math.max(bestScore, scoreS);
+    matchedSentences.push(s.trim());
+  }
+
+  if (matchedSentences.length === 0) return null;
+
+  let snippet = matchedSentences.join(' ');
+  if (snippet.length > 250) snippet = snippet.substring(0, 247) + '...';
+
+  return { score: bestScore, snippet };
+}
+
+// Filters a Tripadvisor reviews array down to only the allergy-relevant
+// ones, replaces each kept review's text with its extracted snippet, and
+// sorts best-first. Applied at serve time (both on a fresh fetch and on a
+// cache hit) so already-cached, pre-filter rows self-heal with no re-fetch
+// and no added Tripadvisor API cost.
+function filterAllergyRelevantReviews(reviews: any[]): any[] {
+  return (reviews || [])
+    .map((r) => ({ review: r, classified: classifyTripadvisorReview(r.text || '') }))
+    .filter((r): r is { review: any; classified: { score: number; snippet: string } } => r.classified !== null)
+    .sort((a, b) => b.classified.score - a.classified.score)
+    .map(({ review, classified }) => ({ ...review, text: classified.snippet }));
+}
 
 function normalizeKey(name: string, city: string): string {
   return `${name}|${city}`.toLowerCase().trim().replace(/\s+/g, ' ');
@@ -115,7 +320,9 @@ serve(async (req) => {
         rating: cached.rating,
         reviewCount: cached.review_count,
         tripadvisorUrl: cached.tripadvisor_url,
-        reviews: cached.reviews,
+        // Re-filtered at serve time, not just at insert time — so hotels
+        // cached before this filter existed self-heal with no re-fetch.
+        reviews: filterAllergyRelevantReviews(cached.reviews),
       }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
@@ -127,8 +334,16 @@ serve(async (req) => {
     }
 
     // 3. Live lookup: name search -> details + reviews for the top match.
+    // `city` was accepted as a parameter but never actually used in the
+    // search query — name-only search let Tripadvisor's fuzzy matching
+    // return a same-named but wrong property (confirmed live 2026-10-01:
+    // "Hotel Elisabeth" in Kitzbühel, Austria matched to an unrelated
+    // "Hotel Garni Elisabeth" in Zell am Ziller). Including the city in the
+    // query is the same fix hotel-search/restaurants-search already apply
+    // to their own place searches.
     const taCategory = category === 'hotel' ? 'HOTEL' : 'RESTAURANT';
-    const searchResult = await taFetch(`/locations/search?query=${encodeURIComponent(name)}&category=${taCategory}`, apiKey);
+    const searchQuery = city ? `${name} ${city}` : name;
+    const searchResult = await taFetch(`/locations/search?query=${encodeURIComponent(searchQuery)}&category=${taCategory}`, apiKey);
     const locationId = searchResult?.data?.[0]?.location?.id;
 
     if (!locationId) {
@@ -145,7 +360,19 @@ serve(async (req) => {
     const rating = details?.traveler_ratings?.overall?.rating ?? null;
     const reviewCount = details?.traveler_ratings?.overall?.count ?? null;
     const tripadvisorUrl = details?.urls?.tripadvisor?.main ?? null;
-    const reviews = (reviewsRes?.data ?? []).slice(0, 3).map((r: any) => ({
+    // Live-verified 2026-10-01 (explicit size=20 request against a
+    // 1,112-review hotel still returned total_elements: 3): this account's
+    // Terra API tier caps /locations/{id}/reviews at exactly 3 reviews per
+    // location regardless of any requested page size — contradicts an
+    // earlier, unverified assumption here that it "typically returns up to
+    // 10-15". That makes Tripadvisor a weaker per-place review source than
+    // Google (5 reviews/place), not a stronger one as originally hoped — see
+    // CHANGELOG/TASKS. The .slice(0, 15) below is therefore a no-op in
+    // practice today, kept only so a future tier upgrade is picked up
+    // automatically without a code change. The cache stores all returned
+    // reviews (raw, unfiltered) so a better future classifier can re-filter
+    // without a re-fetch; only the filtered, best-first subset is returned.
+    const reviews = (reviewsRes?.data ?? []).slice(0, 15).map((r: any) => ({
       rating: r.rating,
       text: r.text?.find((t: any) => t.primary)?.value ?? r.text?.[0]?.value ?? '',
       title: r.title?.find((t: any) => t.primary)?.value ?? r.title?.[0]?.value ?? '',
@@ -161,8 +388,10 @@ serve(async (req) => {
     });
 
     console.log(`✅ Tripadvisor: cached "${name}" (${locationId})`);
-    return new Response(JSON.stringify({ available: true, rating, reviewCount, tripadvisorUrl, reviews }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({
+      available: true, rating, reviewCount, tripadvisorUrl,
+      reviews: filterAllergyRelevantReviews(reviews),
+    }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (err) {
     console.error('tripadvisor-reviews error:', err);

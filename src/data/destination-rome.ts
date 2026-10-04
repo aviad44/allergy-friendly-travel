@@ -6,26 +6,6 @@ export const romeContent: DestinationContent = {
   intro: "Discover Rome's most accommodating hotels for travelers with food allergies and dietary restrictions. From gluten-free breakfast options to dedicated allergy-aware kitchens, these hotels ensure a safe and enjoyable stay in the Eternal City.",
   hotels: [
     {
-      name: "Hotel Artemide",
-      address: "Via Nazionale, 22, 00184 Roma RM, Italy",
-      features: [
-        "⭐ 4-star luxury accommodation",
-        "🍽️ Specialized allergy menus",
-        "👨‍🍳 Staff trained in allergy awareness"
-      ],
-      description: "Located in the heart of Rome, this luxury hotel ensures a safe experience for guests with dietary restrictions.",
-      quote: "The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.",
-      rating: 4.8,
-      bookingUrl: "https://www.hotelartemide.it/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/153715169.jpg?k=b5e897619e4c21c3e34c692731ae0e1e06b5a7790760c9db69f71d61444dc9c6&o=&hp=1",
-      location: "City Center",
-      reviews: [{ 
-        text: "The staff was incredibly accommodating with my gluten intolerance. They provided special meal options tailored just for me.",
-        author: "Sarah L.",
-        rating: 4.8
-      }]
-    },
-    {
       name: "Singer Palace Hotel Roma",
       address: "Via Alessandro Specchi, 10, 00186 Roma RM, Italy",
       features: [
@@ -34,56 +14,11 @@ export const romeContent: DestinationContent = {
         "🥐 Gluten-free breakfast options"
       ],
       description: "This boutique hotel is highly rated for its attention to guest needs.",
-      quote: "The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.",
+      quote: "The breakfast is excellent with a wide selection of items to choose from, to include gluten free options.",
       rating: 4.9,
       bookingUrl: "https://www.singerpalacehotel.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/287246400.jpg?k=cf56e30c9523ced9876d2c8348bd3b2e68329545781f9133d968b923e1f30075&o=&hp=1",
       location: "Historic Center",
-      reviews: [{ 
-        text: "The restaurant staff asked me about my allergies at check-in and ensured I had a wonderful and safe dining experience throughout my stay.",
-        author: "Michael T.",
-        rating: 4.9
-      }]
-    },
-    {
-      name: "Hotel Damaso",
-      address: "Piazza della Cancelleria, 62, 00186 Roma RM, Italy",
-      features: [
-        "⭐ 3-star hotel with rooftop terrace",
-        "🍽️ Allergen-free menu options",
-        "🗣️ Multi-lingual allergy cards available"
-      ],
-      description: "Near Piazza Navona, a convenient and allergy-conscious choice.",
-      quote: "The chef personally explained every meal option to me, and I felt completely at ease dining here.",
-      rating: 4.6,
-      bookingUrl: "https://www.hoteldamaso.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/149068523.jpg?k=c98b7b744991e91a3f24e235c072ddbb3ab2d027742aecbd0b44d11bcbbcc0d7&o=&hp=1",
-      location: "Near Piazza Navona",
-      reviews: [{ 
-        text: "The chef personally explained every meal option to me, and I felt completely at ease dining here.",
-        author: "Emma R.",
-        rating: 4.6
-      }]
-    },
-    {
-      name: "Hotel Archimede",
-      address: "Via dei Mille, 19, 00185 Roma RM, Italy",
-      features: [
-        "⭐ 3-star hotel near Termini",
-        "🥜 Nut-free environment available",
-        "📝 Allergy documentation upon request"
-      ],
-      description: "Close to Termini station with allergy-aware staff.",
-      quote: "As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!",
-      rating: 4.3,
-      bookingUrl: "https://www.hotelarchimederoma.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
-      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/16472585.jpg?k=e7c8e89f92c15fce001ee66757042e1c4143a569347e219320af769bf5406f35&o=&hp=1",
-      location: "Near Termini Station",
-      reviews: [{ 
-        text: "As someone with nut allergies, I was reassured by how seriously they took my dietary needs. Highly recommended!",
-        author: "David K.",
-        rating: 4.3
-      }]
     },
     {
       name: "Relais Borgo Gentile",
@@ -94,16 +29,11 @@ export const romeContent: DestinationContent = {
         "🍇 Organic, allergy-safe ingredients"
       ],
       description: "A peaceful countryside retreat with excellent allergy-friendly service.",
-      quote: "From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.",
+      quote: "The staff are incredibly accommodating, friendly and accommodating. The entire stay is completely gluten free, and although my husband and I are not gluten intolerant, we had some of the best food of our life here.",
       rating: 4.7,
       bookingUrl: "https://www.relaisborgogentile.com/?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=rome",
       image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/117472948.jpg?k=fa0a7a330d951df245bea9ce270b8cab8e0cf347df4c21d5848d5f38ce39a138&o=&hp=1",
       location: "Countryside",
-      reviews: [{ 
-        text: "From gluten-free breakfast options to special allergen-free meals, this place exceeded my expectations.",
-        author: "Jennifer P.",
-        rating: 4.7
-      }]
     }
   ],
   faqs: [

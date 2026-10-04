@@ -10,6 +10,8 @@ import { SafetyNotice } from "@/components/search/SafetyNotice";
 import { LoadingState } from "@/components/search/LoadingState";
 import { RestaurantResults } from "@/components/search/RestaurantResults";
 import { AlertCircle, ExternalLink } from "lucide-react";
+import { withBookingAffiliate, outboundRel } from "@/utils/bookingAffiliate";
+import { trackHotelBookingClick } from "@/utils/googleAnalytics";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RestaurantInfo } from "@/types/restaurant";
 import { trackSiteSearch } from "@/utils/metaPixel";
@@ -34,18 +36,6 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
       </div>
     );
   }
-
-  const createBookingUrl = (url: string) => {
-    if (!url) return '#';
-    const utmParams = new URLSearchParams({
-      utm_source: 'allergy-free-travel.com',
-      utm_medium: 'hotel_search',
-      utm_campaign: 'allergy_friendly_booking',
-      utm_content: 'hotel_recommendation'
-    });
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}${utmParams.toString()}`;
-  };
 
   const confidenceLabel: Record<string, string> = {
     high: 'Strong match in real reviews',
@@ -154,21 +144,12 @@ const HotelResults = ({ hotels, destination, allergies }: HotelResultsProps) => 
           )}
 
           <div className="border-t pt-4 flex flex-wrap gap-3">
-            {hotel.websiteUrl && (
-              <a
-                href={hotel.websiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md font-medium transition-colors"
-              >
-                Hotel Website
-              </a>
-            )}
             {hotel.bookingSearchUrl && (
               <a
-                href={createBookingUrl(hotel.bookingSearchUrl)}
+                href={withBookingAffiliate(hotel.bookingSearchUrl, "search")}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel={outboundRel(hotel.bookingSearchUrl)}
+                onClick={() => trackHotelBookingClick(hotel.name, hotel.bookingSearchUrl)}
                 className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
               >
                 🏨 Check Availability on Booking.com

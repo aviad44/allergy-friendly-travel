@@ -4,66 +4,6 @@ import { DestinationContent, Restaurant, FAQ, TravelTip } from '@/types/definiti
 // Define restaurants data
 const athensRestaurants: Restaurant[] = [
   {
-    id: "gf-bistro",
-    name: "GF Bistro Athens",
-    description: "This dedicated gluten-free bistro is a dream come true for celiacs. From spanakopita to moussaka, everything is made in a completely gluten-free kitchen. Staff are trained in allergy-safe food prep.",
-    isPurelyAllergyFriendly: true,
-    features: ["100% Gluten-Free", "Celiac Safe", "Traditional Greek Cuisine"],
-    location: "Kolonaki, Athens",
-    website: "https://gfbistroathens.gr",
-    phone: "+30 21 0000 0000",
-    email: "info@gfbistroathens.gr",
-    guestReview: "I haven't eaten traditional Greek food like this since my diagnosis. No reactions, no worries."
-  },
-  {
-    id: "avocado-vegetarian",
-    name: "Avocado Vegetarian Café",
-    description: "This health-conscious restaurant has clearly labeled gluten-free dishes and offers gluten-free bread, pasta, and desserts. Staff are knowledgeable about celiac safety.",
-    isPurelyAllergyFriendly: false,
-    features: ["Labeled Gluten-Free Options", "Vegan Choices", "Health Food"],
-    location: "Syntagma Square",
-    website: "https://www.avocadoathens.com",
-    phone: "+30 21 0000 0001",
-    email: "info@avocadoathens.com",
-    guestReview: "The staff asked about celiac and confirmed all prep methods. Very trustworthy and delicious."
-  },
-  {
-    id: "tamarind-thai",
-    name: "Tamarind Thai Kitchen",
-    description: "Authentic Thai food with a separate gluten-free menu. Many dishes are made with rice noodles and coconut-based sauces.",
-    isPurelyAllergyFriendly: false,
-    features: ["Separate GF Menu", "Thai Cuisine", "Rice-Based Dishes"],
-    location: "Exarchia",
-    website: "https://www.tamarindathens.gr",
-    phone: "+30 21 0000 0002",
-    email: "info@tamarindathens.gr",
-    guestReview: "Clearly marked menu and the chef personally explained how they avoid wheat-based sauces. Safe and flavorful."
-  },
-  {
-    id: "nice-n-easy",
-    name: "Nice n Easy Organic Bistro",
-    description: "Organic eatery with gluten-free and vegan dishes. Allergens are marked on the menu and staff can adapt meals upon request.",
-    isPurelyAllergyFriendly: false,
-    features: ["Organic", "Marked Allergens", "Gluten-Free Options"],
-    location: "Kolonaki & Kifisia",
-    website: "https://www.niceneasy.gr",
-    phone: "+30 21 0000 0003",
-    email: "info@niceneasy.gr",
-    guestReview: "I had a GF burger with gluten-free bun — the staff even double-checked with the kitchen. 10/10!"
-  },
-  {
-    id: "kora-bakery",
-    name: "Kora Bakery",
-    description: "Kora offers gluten-free sourdough and pastries baked in a separate area. Ask staff about cross-contamination if highly sensitive.",
-    isPurelyAllergyFriendly: false,
-    features: ["Gluten-Free Bakery", "Separate Baking Area", "Pastries"],
-    location: "Vasilissis Sofias Ave",
-    website: "https://www.korabakery.com",
-    phone: "+30 21 0000 0004",
-    email: "info@korabakery.com",
-    guestReview: "They're honest about risks but very cautious. I had zero reaction to their gluten-free loaf."
-  },
-  {
     id: "mystic-pizza",
     name: "Mystic Pizza",
     description: "Offers a certified gluten-free pizza crust. Ask for separate prep to avoid cross-contamination.",
@@ -73,19 +13,7 @@ const athensRestaurants: Restaurant[] = [
     website: "https://www.mysticpizza.gr",
     phone: "+30 21 0000 0005",
     email: "info@mysticpizza.gr",
-    guestReview: "They made it separately and wore gloves. I was impressed!"
-  },
-  {
-    id: "lime-bistro",
-    name: "Lime Bistro",
-    description: "This cozy bistro is fully gluten-free and vegan. Great pancakes and burgers. The kitchen is small but dedicated to safety.",
-    isPurelyAllergyFriendly: true,
-    features: ["100% Gluten-Free", "Vegan", "Breakfast & Lunch"],
-    location: "Petralona",
-    website: "https://www.limebistro.gr",
-    phone: "+30 21 0000 0006",
-    email: "info@limebistro.gr",
-    guestReview: "As a celiac vegan, I felt at home. The kitchen is tiny but spotlessly safe."
+    guestReview: "The person who helped us was very kind and helpful and made sure we knew what was vegan and what changes needed to be made to do so."
   },
   {
     id: "to-bazaki",
@@ -97,7 +25,7 @@ const athensRestaurants: Restaurant[] = [
     website: "https://www.tobazaki.gr",
     phone: "+30 21 0000 0007",
     email: "info@tobazaki.gr",
-    guestReview: "The chef showed me ingredients and used foil to grill my food separately. I felt totally safe."
+    guestReview: "They also have a great selection for brunch and lunch, including vegan, vegetarian, and keto-friendly options. I really appreciate how considerate they are of different dietary restrictions and preferences."
   },
   {
     id: "vegan-beat",
@@ -109,7 +37,7 @@ const athensRestaurants: Restaurant[] = [
     website: "https://veganbeat.gr",
     phone: "+30 21 0000 0008",
     email: "info@veganbeat.gr",
-    guestReview: "Falafel wrap was wrapped in GF pita and made separately. Staff knew about celiac and took it seriously."
+    guestReview: "A cute little vegan spot in a very central location in Athens."
   },
   {
     id: "iceroll",
@@ -121,7 +49,7 @@ const athensRestaurants: Restaurant[] = [
     website: "https://www.iceroll.gr",
     phone: "+30 21 0000 0009",
     email: "info@iceroll.gr",
-    guestReview: "They washed everything before prepping my order and changed gloves. Very reassuring!"
+    guestReview: "Watching the ice rolls being made was great fun and a real treat for the kids."
   }
 ];
 

@@ -8,7 +8,69 @@ https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:s
 
 # Redirect URL normalization - ensure canonical paths
 /destinations/abudhabi /destinations/abu-dhabi 301
-/destinations/newyork /destinations/new-york 301
+
+# New York's static page (1 genuine hotel, below the usual 3-hotel minimum
+# for a standalone article) was consolidated into the existing
+# DB-driven holiday-season article, which already covers the same one
+# real hotel (The Plaza) plus genuine editorial content — see CHANGELOG
+# 2026-10-03.
+/destinations/newyork /destinations/new-york-holiday-season-allergy-friendly-hotels 301
+/destinations/new-york /destinations/new-york-holiday-season-allergy-friendly-hotels 301
+
+# Migrated from static hotel pages to DB-driven restaurant articles
+# (2026-10-03) — these pages were restaurant-only (hotels: [] in the old
+# static file), so under the new architecture their content lives under
+# /restaurants/ rather than /destinations/. See CHANGELOG.
+/destinations/athens /restaurants/athens 301
+/destinations/stockholm /restaurants/stockholm 301
+
+# Italy's static page's real content was entirely Rome gluten-free
+# restaurants (despite the page's title claiming Florence/Milan/Naples
+# coverage too, none of which ever had real listed evidence) — migrated
+# to the Rome restaurant article rather than kept as a separate thin page.
+/destinations/italy /restaurants/gluten-free-eating-in-rome 301
+
+# Warm Winter Destinations claimed coverage of Madeira, Hurghada, the
+# Canary Islands, and Israel, but only ever had real listed evidence for
+# Israel (1 hotel, 2 restaurants) — the other three regions' hotel arrays
+# were always empty, so their "verified" copy never actually rendered a
+# single hotel/restaurant card (MultiRegionHotelsSection returns null for
+# any region with zero hotels). Migrated the one real region to two much
+# richer, fully re-verified DB articles (Eilat hotels, Tel Aviv
+# restaurants, cross-linked to each other) instead of keeping this page.
+/destinations/warm-winter-destinations /destinations/traveling-to-eilat-food-allergy-friendly-guide 301
+
+# Articles unpublished 2026-10-01 (zero valid hotels after classifier
+# cleanup — see CHANGELOG) — redirect to the relevant region hub instead of
+# leaving a 404, so the page's crawl/link equity lands somewhere topically
+# relevant rather than a dead end.
+/destinations/food-allergy-travel-vilnius/* /destinations/region/europe/ 301
+/destinations/calgary-food-allergies-guide/* /destinations/region/north-america/ 301
+/destinations/navigating-food-allergies-rio-de-janeiro-hotels/* /destinations/region/south-america/ 301
+
+# Article unpublished 2026-10-02 (dropped to zero valid hotels after this
+# date's sweep manually excluded its only review as hedge/caution language,
+# not genuine accommodation evidence — see CHANGELOG).
+/destinations/food-allergy-friendly-hotels-santiago/* /destinations/region/south-america/ 301
+
+# Static destination-*.ts pages retired 2026-10-02 after the 134-hotel
+# verification pass found zero genuine hotels/restaurants left for them
+# (both Google and Tripadvisor checked — see CHANGELOG). These are
+# hardcoded React routes, not DB-backed seo_articles rows, so the route
+# itself was removed from App.tsx and these redirects replace it, same
+# region-hub pattern as the DB-article unpublishes above. Eilat was also
+# emptied by the same pass but kept live at the user's explicit request.
+/destinations/amsterdam/* /destinations/region/europe/ 301
+/destinations/ayia-napa/* /destinations/region/europe/ 301
+/destinations/barcelona/* /destinations/region/europe/ 301
+/destinations/gluten-free-europe/* /destinations/region/europe/ 301
+/destinations/paris/* /destinations/region/europe/ 301
+/destinations/turkey/* /destinations/region/europe/ 301
+/destinations/tuscany/* /destinations/region/europe/ 301
+/destinations/koh-samui/* /destinations/region/asia/ 301
+/destinations/thailand/* /destinations/region/asia/ 301
+/destinations/tokyo/* /destinations/region/asia/ 301
+/destinations/toronto/* /destinations/region/north-america/ 301
 
 # NOTE: All bot handling is now in edge-functions/optimize-static-assets.js
 # This file contains only non-bot related redirects

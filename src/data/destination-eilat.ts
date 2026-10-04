@@ -2,24 +2,6 @@
 import { DestinationContent, Hotel, FAQ, TravelTip } from '@/types/definitions';
 
 const eilatHotels: Hotel[] = [
-  {
-    id: 'u-coral-beach',
-    name: 'U Coral Beach Hotel by Fattal',
-    location: 'Eilat, Israel',
-    stars: 4,
-    address: 'Coral Beach, Eilat, Israel',
-    description: 'A family-friendly resort offering a unique allergy-friendly experience with dedicated staff who provide personalized care for guests with food allergies.',
-    allergenFriendly: ['gluten', 'dairy', 'eggs', 'sesame', 'nuts'],
-    amenities: ['pool', 'restaurant', 'bar', 'fitness center', 'spa', 'kids club', 'free wifi'],
-    features: ['Dedicated Allergy Liaison', 'Pre-arrival communication', 'Separate utensils for allergen-free cooking', 'Custom meal preparation', 'Emergency preparedness'],
-    rating: 4.7,
-    priceRange: '$$',
-    imageUrl: '/lovable-uploads/a25821a5-c6f9-44ab-96b8-648e020350b3.png', // Updated to use the specific Eilat hotel image
-    websiteUrl: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive',
-    bookingUrl: 'https://www.leonardo-hotels.com/eilat/u-coral-beach-club-eilat-ultra-all-inclusive?utm_source=allergy-free-travel.com&utm_medium=hotel_listing&utm_campaign=eilat',
-    guestReview: "My child ate in a hotel restaurant without fear. I've never seen him so calm. For the first time in years, I slept well at a hotel. Someone was thinking about us.",
-    isPurelyAllergyFriendly: true
-  }
 ];
 
 const eilatFaqs: FAQ[] = [

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { HOME_CONTENT } from "@/constants/home";
 import { Separator } from "@/components/ui/separator";
 import { Facebook } from "lucide-react";
+import { isAffiliateActive } from "@/utils/bookingAffiliate";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -21,6 +22,11 @@ export const Footer = () => {
             <p className="text-sm text-muted-foreground" itemProp="copyrightNotice">
               © {currentYear} {HOME_CONTENT.navigation.brand}. All rights reserved by <span itemProp="author" itemScope itemType="https://schema.org/Person"><span itemProp="name">Aviad Beit Halachmi</span></span>
             </p>
+            {isAffiliateActive() && (
+              <p className="text-xs text-muted-foreground mt-2">
+                Some Booking.com links on this site are affiliate links: if you book through them we may earn a commission, at no extra cost to you. It never affects which hotels we list or how we rank them.
+              </p>
+            )}
           </div>
           
           <div>
@@ -51,11 +57,6 @@ export const Footer = () => {
             <h3 className="text-base font-semibold mb-4">Popular Destinations</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/destinations/paris/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Paris, France
-                </Link>
-              </li>
-              <li>
                 <Link to="/destinations/london/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   London, UK
                 </Link>
@@ -71,8 +72,18 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/destinations/thailand/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Thailand
+                <Link to="/destinations/rome/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Rome, Italy
+                </Link>
+              </li>
+              <li>
+                <Link to="/destinations/madrid/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Madrid, Spain
+                </Link>
+              </li>
+              <li>
+                <Link to="/gluten-free/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Gluten-Free &amp; Celiac Guide
                 </Link>
               </li>
             </ul>
