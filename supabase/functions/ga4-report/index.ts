@@ -129,6 +129,46 @@ async function fetchTotalEventCount(accessToken: string, propertyId: string, sta
   return value ? parseInt(value, 10) : 0;
 }
 
+// The `pagePath` breakdown above (standard GA4 dimension, excludes query
+// string) groups every live-search booking click under a single
+// `/search-results` row — so if it's genuinely missing from the top-5 list,
+// it's low volume there, not an artifact of query-string fragmentation.
+// Added as its own query (not just inferred from byPage) so the real count
+// is explicit in every report regardless of whether it makes the top 5 —
+// user asked specifically whether SearchResults.tsx's "Check Availability"
+// clicks (same trackHotelBookingClick() call as the article pages, see
+// src/pages/SearchResults.tsx) show up at all. BEGINS_WITH rather than an
+// exact match since pagePath is still the bare path with no query string,
+// but matching by prefix keeps this correct even if that ever changes.
+async function fetchSearchResultsClickCount(accessToken: string, propertyId: string, startDate: string, endDate: string): Promise<number> {
+  const res = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dateRanges: [{ startDate, endDate }],
+        metrics: [{ name: 'eventCount' }],
+        dimensionFilter: {
+          andGroup: {
+            expressions: [
+              { filter: { fieldName: 'eventName', stringFilter: { value: HOTEL_BOOKING_CLICK_EVENT } } },
+              { filter: { fieldName: 'pagePath', stringFilter: { matchType: 'BEGINS_WITH', value: '/search-results' } } },
+            ],
+          },
+        },
+      }),
+    }
+  );
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Analytics Data API ${res.status}: ${text.slice(0, 500)}`);
+  }
+  const data = await res.json();
+  const value = data.rows?.[0]?.metricValues?.[0]?.value;
+  return value ? parseInt(value, 10) : 0;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
@@ -177,10 +217,11 @@ serve(async (req) => {
     // count too, even though both of those queries were succeeding fine on
     // their own — so every single run logged a total failure with zero
     // data captured, despite 2/3 of the report being fully available.
-    const [byHotelResult, byPageResult, totalClicksResult] = await Promise.allSettled([
+    const [byHotelResult, byPageResult, totalClicksResult, searchResultsClicksResult] = await Promise.allSettled([
       runReport(accessToken, propertyId, 'customEvent:hotel_name', startDate, endDate),
       runReport(accessToken, propertyId, 'pagePath', startDate, endDate),
       fetchTotalEventCount(accessToken, propertyId, startDate, endDate),
+      fetchSearchResultsClickCount(accessToken, propertyId, startDate, endDate),
     ]);
 
     const partialFailures: string[] = [];
@@ -203,19 +244,26 @@ serve(async (req) => {
       partialFailures.push(`total click count unavailable (${reason})`);
     }
 
+    const searchResultsClicks: number = searchResultsClicksResult.status === 'fulfilled' ? searchResultsClicksResult.value : 0;
+    if (searchResultsClicksResult.status === 'rejected') {
+      const reason = searchResultsClicksResult.reason instanceof Error ? searchResultsClicksResult.reason.message : String(searchResultsClicksResult.reason);
+      partialFailures.push(`/search-results click count unavailable (${reason})`);
+    }
+
     const topHotels = byHotel.map((r) => ({ hotel: r.dimensionValues[0].value, clicks: parseInt(r.metricValues[0].value, 10) }));
     const topPages = byPage.map((r) => ({ page: r.dimensionValues[0].value, clicks: parseInt(r.metricValues[0].value, 10) }));
 
     const summary = `${totalClicks} hotel_booking_click events in ${startDate}..${endDate}. `
       + `Top hotels: ${topHotels.slice(0, 5).map((h) => `${h.hotel} (${h.clicks})`).join(', ') || 'none'}. `
-      + `Top pages: ${topPages.slice(0, 5).map((p) => `${p.page} (${p.clicks})`).join(', ') || 'none'}.`
+      + `Top pages: ${topPages.slice(0, 5).map((p) => `${p.page} (${p.clicks})`).join(', ') || 'none'}. `
+      + `/search-results clicks: ${searchResultsClicks}.`
       + (partialFailures.length > 0 ? ` PARTIAL: ${partialFailures.join(' | ')}` : '');
 
     // Real data was captured for at least page breakdown or total count —
     // log success (with the partial-failure note in the summary) rather
     // than discarding it as a hard error just because the hotel breakdown
     // specifically isn't configured yet.
-    const hasUsableData = byPageResult.status === 'fulfilled' || totalClicksResult.status === 'fulfilled';
+    const hasUsableData = byPageResult.status === 'fulfilled' || totalClicksResult.status === 'fulfilled' || searchResultsClicksResult.status === 'fulfilled';
     const status = hasUsableData ? 'success' : 'error';
 
     await supabase.from('pipeline_log').update({
@@ -227,6 +275,7 @@ serve(async (req) => {
       totalClicks,
       topHotels,
       topPages,
+      searchResultsClicks,
       partialFailures: partialFailures.length > 0 ? partialFailures : undefined,
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 

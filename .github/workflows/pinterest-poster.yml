@@ -13,7 +13,13 @@ name: Pinterest Poster (backlog sweep)
 on:
   schedule:
     - cron: "30 15 * * *"   # daily at 15:30 UTC, offset from social-poster's 15:00
-  workflow_dispatch: {}       # allow manual trigger from the GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      sandbox_test:
+        description: 'Test Pinterest Sandbox API connectivity only (posts one clearly-labeled test pin via api-sandbox.pinterest.com; never touches the real article backlog)'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   run-pinterest-poster:
@@ -32,12 +38,17 @@ jobs:
           SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
           SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
 
+          BODY_JSON='{}'
+          if [ "${{ inputs.sandbox_test }}" = "true" ]; then
+            BODY_JSON='{"sandboxTest": true}'
+          fi
+
           RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/pinterest-poster" \
             -H "Content-Type: application/json" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
             -H "x-cron-secret: $CRON_SHARED_SECRET" \
-            -d '{}')
+            -d "$BODY_JSON")
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
           BODY=$(echo "$RESPONSE" | sed '$d')
