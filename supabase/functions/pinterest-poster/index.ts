@@ -84,8 +84,8 @@ async function refreshAccessToken(supabase: any, clientId: string, clientSecret:
   return accessToken;
 }
 
-async function createPin(accessToken: string, boardId: string, params: { title: string; description: string; link: string; imageUrl: string }): Promise<{ ok: boolean; detail: string }> {
-  const res = await fetch('https://api.pinterest.com/v5/pins', {
+async function createPin(accessToken: string, boardId: string, params: { title: string; description: string; link: string; imageUrl: string }, apiBase = 'https://api.pinterest.com'): Promise<{ ok: boolean; detail: string }> {
+  const res = await fetch(`${apiBase}/v5/pins`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -115,6 +115,25 @@ serve(async (req) => {
       { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 
+  // Diagnostic-only mode, never run on schedule (only via a manual
+  // workflow_dispatch input — see pinterest-poster.yml): Pinterest's
+  // Standard Access upgrade form requires a demo video of the app actually
+  // creating a Pin, but production pin creation is exactly what's blocked
+  // on our current Trial tier ("Apps with Trial access may not create Pins
+  // in production... use API Sandbox instead" — the same error every real
+  // run has hit). This posts one clearly-labeled test pin to Pinterest's
+  // Sandbox API instead, to confirm our existing OAuth credentials actually
+  // work there *before* recording the demo video around it. Deliberately
+  // never touches seo_articles/posted_to_pinterest_at — completely
+  // independent of the real backlog sweep below.
+  let sandboxTest = false;
+  try {
+    const body = await req.json().catch(() => ({}));
+    sandboxTest = body?.sandboxTest === true;
+  } catch {
+    // no body sent — default false, same as the normal scheduled run
+  }
+
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   const clientId = Deno.env.get('PINTEREST_CLIENT_ID');
@@ -131,6 +150,35 @@ serve(async (req) => {
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey);
+
+  if (sandboxTest) {
+    const accessToken = await refreshAccessToken(supabase, clientId, clientSecret);
+    if (!accessToken) {
+      await supabase.from('pipeline_log').insert({
+        run_type: 'pinterest_post', status: 'error',
+        error_message: 'SANDBOX TEST: could not obtain Pinterest access token', finished_at: new Date().toISOString(),
+      });
+      return new Response(JSON.stringify({ error: 'Could not obtain Pinterest access token' }),
+        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    const pinResult = await createPin(accessToken, boardId, {
+      title: 'Sandbox connectivity test',
+      description: 'Automated test pin from allergy-free-travel.com, verifying Pinterest Sandbox API access ahead of a Standard Access demo video. Safe to ignore/delete.',
+      link: 'https://www.allergy-free-travel.com/',
+      imageUrl: 'https://www.allergy-free-travel.com/assets/og/allergy-translation-card.png',
+    }, 'https://api-sandbox.pinterest.com');
+
+    await supabase.from('pipeline_log').insert({
+      run_type: 'pinterest_post',
+      status: pinResult.ok ? 'success' : 'error',
+      error_message: `SANDBOX TEST: ${pinResult.ok ? 'pin created successfully' : 'failed'} — ${pinResult.detail}`,
+      finished_at: new Date().toISOString(),
+    });
+
+    return new Response(JSON.stringify({ sandboxTest: true, ok: pinResult.ok, detail: pinResult.detail }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
 
   const { data: articles, error: fetchErr } = await supabase
     .from('seo_articles')
