@@ -165,21 +165,61 @@ serve(async (req) => {
     const accessToken = await getAccessToken(gaCredentials);
     const { startDate, endDate } = reportingWindow();
 
-    const [byHotel, byPage, totalClicks] = await Promise.all([
+    // Promise.allSettled rather than Promise.all: the three queries below
+    // are independent, and one failing shouldn't void the other two. This
+    // was a real bug, not hypothetical — the hotel_name breakdown has
+    // failed on every run since this function was created because
+    // "hotel_name" was never registered as a GA4 Custom Dimension (Admin >
+    // Custom definitions; required before the API will recognize
+    // customEvent:hotel_name as a valid dimension — a one-time dashboard
+    // step, not something any tool here can do). Under Promise.all that
+    // one failure silently discarded the page-breakdown and total-click
+    // count too, even though both of those queries were succeeding fine on
+    // their own — so every single run logged a total failure with zero
+    // data captured, despite 2/3 of the report being fully available.
+    const [byHotelResult, byPageResult, totalClicksResult] = await Promise.allSettled([
       runReport(accessToken, propertyId, 'customEvent:hotel_name', startDate, endDate),
       runReport(accessToken, propertyId, 'pagePath', startDate, endDate),
       fetchTotalEventCount(accessToken, propertyId, startDate, endDate),
     ]);
+
+    const partialFailures: string[] = [];
+
+    const byHotel: GA4Row[] = byHotelResult.status === 'fulfilled' ? byHotelResult.value : [];
+    if (byHotelResult.status === 'rejected') {
+      const reason = byHotelResult.reason instanceof Error ? byHotelResult.reason.message : String(byHotelResult.reason);
+      partialFailures.push(`hotel breakdown unavailable (${reason}) — register "hotel_name" as a GA4 Custom Dimension (Admin > Custom definitions, event scope) to enable this`);
+    }
+
+    const byPage: GA4Row[] = byPageResult.status === 'fulfilled' ? byPageResult.value : [];
+    if (byPageResult.status === 'rejected') {
+      const reason = byPageResult.reason instanceof Error ? byPageResult.reason.message : String(byPageResult.reason);
+      partialFailures.push(`page breakdown unavailable (${reason})`);
+    }
+
+    const totalClicks: number = totalClicksResult.status === 'fulfilled' ? totalClicksResult.value : 0;
+    if (totalClicksResult.status === 'rejected') {
+      const reason = totalClicksResult.reason instanceof Error ? totalClicksResult.reason.message : String(totalClicksResult.reason);
+      partialFailures.push(`total click count unavailable (${reason})`);
+    }
 
     const topHotels = byHotel.map((r) => ({ hotel: r.dimensionValues[0].value, clicks: parseInt(r.metricValues[0].value, 10) }));
     const topPages = byPage.map((r) => ({ page: r.dimensionValues[0].value, clicks: parseInt(r.metricValues[0].value, 10) }));
 
     const summary = `${totalClicks} hotel_booking_click events in ${startDate}..${endDate}. `
       + `Top hotels: ${topHotels.slice(0, 5).map((h) => `${h.hotel} (${h.clicks})`).join(', ') || 'none'}. `
-      + `Top pages: ${topPages.slice(0, 5).map((p) => `${p.page} (${p.clicks})`).join(', ') || 'none'}.`;
+      + `Top pages: ${topPages.slice(0, 5).map((p) => `${p.page} (${p.clicks})`).join(', ') || 'none'}.`
+      + (partialFailures.length > 0 ? ` PARTIAL: ${partialFailures.join(' | ')}` : '');
+
+    // Real data was captured for at least page breakdown or total count —
+    // log success (with the partial-failure note in the summary) rather
+    // than discarding it as a hard error just because the hotel breakdown
+    // specifically isn't configured yet.
+    const hasUsableData = byPageResult.status === 'fulfilled' || totalClicksResult.status === 'fulfilled';
+    const status = hasUsableData ? 'success' : 'error';
 
     await supabase.from('pipeline_log').update({
-      status: 'success', error_message: summary, finished_at: new Date().toISOString(),
+      status, error_message: summary, finished_at: new Date().toISOString(),
     }).eq('id', logRow.id);
 
     return new Response(JSON.stringify({
@@ -187,6 +227,7 @@ serve(async (req) => {
       totalClicks,
       topHotels,
       topPages,
+      partialFailures: partialFailures.length > 0 ? partialFailures : undefined,
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (err) {
