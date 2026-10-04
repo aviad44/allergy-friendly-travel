@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-04
+- Fixed `ga4-report` (every run since it was created has failed completely): it ran three independent GA4 queries — hotel-name breakdown, page breakdown, total click count — under a single `Promise.all`, so the hotel-name breakdown failing (its `hotel_name` event parameter was never registered as a GA4 Custom Dimension — a one-time dashboard step, not a code fix) silently discarded the other two queries too, even though both succeed on their own. Switched to `Promise.allSettled` so page breakdown and total click count now get captured and logged successfully, with a clear note in the summary about which part is still missing and what dashboard step unblocks it. Also added `supabase/functions/ga4-report/index.ts` to the repo — the function existed only as a live Supabase deployment with no local copy, unlike every other Edge Function in this project.
+
 ## 2026-09-27
 - Added a GA4 event (`translation_card_language_selected`) fired on every real translation on the Allergy Translation Card page, so which target languages people actually use is finally a real, aggregate, cross-visitor number instead of unavailable.
 - Removed the pre-existing `trackLanguageUsage`/`LanguageStats.tsx` machinery it replaces: that tracker only ever wrote to `localStorage` (per-browser, never aggregated, couldn't answer "what's popular" across visitors), and its unrouted admin view (never linked from `App.tsx`, never shown to a real visitor) shipped an "Add Sample Data (For Testing)" button that wrote fabricated counts into the same storage — a real, if dormant, violation of this project's zero-fabrication policy. Deleted `src/pages/LanguageStats.tsx`, `src/components/allergy-card/components/LanguageUsageStats.tsx`, `src/utils/languageTracker.ts`, the now-dead `/language-stats` entry in `MetaManager.tsx`, and the `trackLanguageUsage` calls in `translationService.ts`.
