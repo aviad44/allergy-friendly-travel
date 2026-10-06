@@ -185,6 +185,17 @@
   to = "/destinations"
   status = 301
 
+# Missing /.well-known/* files must be a real 404, not the SPA shell. The
+# catch-all below otherwise answers e.g. /.well-known/ai-catalog.json with
+# index.html (200), which crawlers/agents then try to parse — PageSpeed's
+# "Agentic Browsing" audit failed with "Malformed JSON in manifest: Unexpected
+# token '<'". Not forced, so files that do exist (security.txt) are still
+# served normally.
+[[redirects]]
+  from = "/.well-known/*"
+  to = "/404.html"
+  status = 404
+
 # Default handling for regular users - MUST come after all specific redirects
 [[redirects]]
   from = "/*"
