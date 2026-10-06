@@ -24,17 +24,15 @@
     </style>
     
     <!--
-      Preload critical resources with highest priority.
-      No hero-image preload here on purpose: this file is the one static
-      shell served for every route, but the hero image differs per route
-      (see MetaManager, which preloads the correct per-route image
-      dynamically). A hardcoded preload here previously always pointed at
-      the homepage image, wasting priority bandwidth on every other page
-      while never actually preloading what that page needed.
+      No hand-written preloads for /src/main.tsx or /src/index.css: Vite
+      already emits the real hashed entry script, its modulepreloads and the
+      CSS link at build time. The old <link rel="preload" href="/src/main.tsx">
+      was being inlined by Vite into a data: URI of the raw TypeScript source
+      (useless bytes in every page), and no hero-image preload lives here on
+      purpose — this shell is shared by every route; MetaManager preloads the
+      correct per-route image dynamically.
     -->
-    <link rel="preload" href="/src/index.css" as="style" />
-    <link rel="preload" href="/src/main.tsx" as="script" crossorigin />
-    
+
     <!-- Optimized font loading with only essential weights -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

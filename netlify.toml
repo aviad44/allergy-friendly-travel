@@ -203,16 +203,20 @@
     Content-Security-Policy = "upgrade-insecure-requests"
     Access-Control-Allow-Origin = "*"
 
-# Cache control for static assets
+# Cache control for static assets. Every .js/.css file is a Vite build
+# output with a content hash in its filename (assets/js/[name]-[hash].js,
+# see vite.config.ts) — public/ ships none — so a changed file always gets a
+# new URL and a full year is safe. 7 days was flagged by PageSpeed's "Use
+# efficient cache lifetimes" for repeat visitors.
 [[headers]]
   for = "*.js"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "*.css"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "*.webp"
