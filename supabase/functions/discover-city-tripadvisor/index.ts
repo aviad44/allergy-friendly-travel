@@ -61,13 +61,18 @@ const STRICT_TERMS = [
   'room service allergy', 'breakfast allergy', 'buffet allergy',
 ];
 
+// vegan/vegetarian/plant based/plant-based deliberately NOT included here —
+// a dietary *preference* claim ("great vegan food!") is not a food-*allergy*
+// accommodation claim, and treating it as one let hotels with zero real
+// allergy evidence pass (e.g. Hilton Lima Miraflores' "tremendous efforts to
+// meet our vegetarian food requirements" — genuine, well-reviewed, zero
+// allergy relevance). Fixed 2026-10-06, see TASKS.md #329.
 const WEAK_TERMS = [
   'gluten', 'dairy', 'lactose', 'wheat',
   'peanut', 'peanuts', 'tree nut', 'nuts', 'almond', 'hazelnut', 'walnut',
   'pecan', 'cashew', 'pistachio', 'macadamia',
   'soy', 'soya', 'sesame',
   'shellfish', 'shrimp', 'crab', 'lobster',
-  'vegan', 'vegetarian', 'plant based', 'plant-based',
   'no eggs', 'no dairy', 'no nuts', 'no shellfish', 'no seafood',
   'without nuts', 'without dairy',
   'special diet', 'dietary', 'food restrictions',
@@ -85,9 +90,30 @@ const SAFETY_TERMS = [
   'allergy protocol', 'allergy friendly kitchen', 'chef spoke to us', 'chef came to our table',
 ];
 
+// Added 'sick'/illness phrasing 2026-10-06, TASKS.md #329: a sentence can
+// name the right allergen and still describe a real safety incident, not
+// safe accommodation — "served a 100% gluten pasta and have been sick for
+// the past few days" (Olivery, Tel Aviv) named "gluten" and nothing else
+// disqualifying. Kept to multi-word phrases / specific-enough single words
+// to avoid excluding a sentence that merely mentions illness unrelatedly.
 const WARNING_PHRASES = [
   'not safe', 'unsafe', 'reaction', 'allergic reaction',
   'epipen', 'epi pen', 'anaphylaxis', 'anaphylactic',
+  'have been sick', 'got sick', 'made me sick', 'made us sick', 'fell ill',
+  'food poisoning', 'threw up', 'vomited', 'vomiting', 'severe reaction',
+  'hospitalized', 'rushed to hospital', 'emergency room',
+];
+
+// A sentence stating an expectation/belief about what *would* happen, not a
+// lived account of what actually did — "we went in with the belief that the
+// kitchen would be well equipped" (1 Hotel Mayfair) named "gluten allergy"
+// and nothing else disqualifying, but describes no actual outcome.
+// Deliberately narrow phrase list, not a blanket "would"/"should" ban —
+// those words appear constantly in genuine accounts ("they said they would
+// check with the chef, and it was perfect") that must not be lost.
+const ASPIRATIONAL_MARKERS = [
+  'the belief that', 'we believed', 'i believed', 'we assumed', 'i assumed',
+  'we were hoping', 'i was hoping', 'hoping that', 'we expected', 'i expected',
 ];
 
 const GENERIC_ALLERGY_TERMS = ['allergy', 'allergies', 'allergic', 'allergen', 'allergens'];
@@ -120,7 +146,6 @@ const ALLERGEN_LABELS: Record<string, string> = {
   'soy free': 'soy', 'soyfree': 'soy', 'soy-free': 'soy', 'soy': 'soy', 'soya': 'soy', 'soy allergy': 'soy',
   'shellfish': 'shellfish', 'shellfish allergy': 'shellfish', 'shrimp': 'shellfish', 'crab': 'shellfish', 'lobster': 'shellfish', 'seafood allergy': 'shellfish', 'fish allergy': 'shellfish',
   'sesame free': 'sesame', 'sesame-free': 'sesame', 'sesame': 'sesame',
-  'vegan': 'vegan', 'vegetarian': 'vegetarian',
 };
 
 function normalize(text: string): string {
@@ -172,7 +197,8 @@ function classifyAndExtract(reviewText: string): ReviewSnippet | null {
     const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
     const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
     const isNegated = !isDoubleNegativePositive && (NEGATION_MARKERS.some(m => normS.includes(m)) || CONTRACTION_NEGATION_REGEX.test(normS));
-    if (isSuggestionComplaint || isNegated) continue;
+    const isAspirational = ASPIRATIONAL_MARKERS.some(m => normS.includes(m));
+    if (isSuggestionComplaint || isNegated || isAspirational) continue;
 
     const hasStrictS = sStrict.length > 0;
     const hasWeakS = sWeak.length > 0;

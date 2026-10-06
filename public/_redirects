@@ -24,12 +24,6 @@ https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:s
 /destinations/athens /restaurants/athens 301
 /destinations/stockholm /restaurants/stockholm 301
 
-# Italy's static page's real content was entirely Rome gluten-free
-# restaurants (despite the page's title claiming Florence/Milan/Naples
-# coverage too, none of which ever had real listed evidence) — migrated
-# to the Rome restaurant article rather than kept as a separate thin page.
-/destinations/italy /restaurants/gluten-free-eating-in-rome 301
-
 # Warm Winter Destinations claimed coverage of Madeira, Hurghada, the
 # Canary Islands, and Israel, but only ever had real listed evidence for
 # Israel (1 hotel, 2 restaurants) — the other three regions' hotel arrays

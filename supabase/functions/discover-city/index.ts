@@ -69,13 +69,18 @@ const STRICT_TERMS = [
   'room service allergy', 'breakfast allergy', 'buffet allergy',
 ];
 
+// vegan/vegetarian/plant based/plant-based deliberately NOT included here —
+// a dietary *preference* claim ("great vegan food!") is not a food-*allergy*
+// accommodation claim, and treating it as one let hotels with zero real
+// allergy evidence pass (e.g. Hilton Lima Miraflores' "tremendous efforts to
+// meet our vegetarian food requirements" — genuine, well-reviewed, zero
+// allergy relevance). Fixed 2026-10-06, see TASKS.md #329.
 const WEAK_TERMS = [
   'gluten', 'dairy', 'lactose', 'wheat',
   'peanut', 'peanuts', 'tree nut', 'nuts', 'almond', 'hazelnut', 'walnut',
   'pecan', 'cashew', 'pistachio', 'macadamia',
   'soy', 'soya', 'sesame',
   'shellfish', 'shrimp', 'crab', 'lobster',
-  'vegan', 'vegetarian', 'plant based', 'plant-based',
   'no eggs', 'no dairy', 'no nuts', 'no shellfish', 'no seafood',
   'without nuts', 'without dairy',
   'special diet', 'dietary', 'food restrictions',
@@ -93,9 +98,30 @@ const SAFETY_TERMS = [
   'allergy protocol', 'allergy friendly kitchen', 'chef spoke to us', 'chef came to our table',
 ];
 
+// Added 'sick'/illness phrasing 2026-10-06, TASKS.md #329: a sentence can
+// name the right allergen and still describe a real safety incident, not
+// safe accommodation — "served a 100% gluten pasta and have been sick for
+// the past few days" (Olivery, Tel Aviv) named "gluten" and nothing else
+// disqualifying. Kept to multi-word phrases / specific-enough single words
+// to avoid excluding a sentence that merely mentions illness unrelatedly.
 const WARNING_PHRASES = [
   'not safe', 'unsafe', 'reaction', 'allergic reaction',
   'epipen', 'epi pen', 'anaphylaxis', 'anaphylactic',
+  'have been sick', 'got sick', 'made me sick', 'made us sick', 'fell ill',
+  'food poisoning', 'threw up', 'vomited', 'vomiting', 'severe reaction',
+  'hospitalized', 'rushed to hospital', 'emergency room',
+];
+
+// A sentence stating an expectation/belief about what *would* happen, not a
+// lived account of what actually did — "we went in with the belief that the
+// kitchen would be well equipped" (1 Hotel Mayfair) named "gluten allergy"
+// and nothing else disqualifying, but describes no actual outcome.
+// Deliberately narrow phrase list, not a blanket "would"/"should" ban —
+// those words appear constantly in genuine accounts ("they said they would
+// check with the chef, and it was perfect") that must not be lost.
+const ASPIRATIONAL_MARKERS = [
+  'the belief that', 'we believed', 'i believed', 'we assumed', 'i assumed',
+  'we were hoping', 'i was hoping', 'hoping that', 'we expected', 'i expected',
 ];
 
 const GENERIC_ALLERGY_TERMS = ['allergy', 'allergies', 'allergic', 'allergen', 'allergens'];
@@ -128,7 +154,6 @@ const ALLERGEN_LABELS: Record<string, string> = {
   'soy free': 'soy', 'soyfree': 'soy', 'soy-free': 'soy', 'soy': 'soy', 'soya': 'soy', 'soy allergy': 'soy',
   'shellfish': 'shellfish', 'shellfish allergy': 'shellfish', 'shrimp': 'shellfish', 'crab': 'shellfish', 'lobster': 'shellfish', 'seafood allergy': 'shellfish', 'fish allergy': 'shellfish',
   'sesame free': 'sesame', 'sesame-free': 'sesame', 'sesame': 'sesame',
-  'vegan': 'vegan', 'vegetarian': 'vegetarian',
 };
 
 function normalize(text: string): string {
@@ -183,7 +208,8 @@ function classifyAndExtract(reviewText: string): ReviewSnippet | null {
     const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
     const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
     const isNegated = !isDoubleNegativePositive && (NEGATION_MARKERS.some(m => normS.includes(m)) || CONTRACTION_NEGATION_REGEX.test(normS));
-    if (isSuggestionComplaint || isNegated) continue;
+    const isAspirational = ASPIRATIONAL_MARKERS.some(m => normS.includes(m));
+    if (isSuggestionComplaint || isNegated || isAspirational) continue;
 
     const hasStrictS = sStrict.length > 0;
     const hasWeakS = sWeak.length > 0;
@@ -295,11 +321,117 @@ function buildQueries(city: string, isRestaurant: boolean): string[] {
       ];
 }
 
+// Runs the actual discovery work — up to 60 sequential Google Place Details
+// calls, routinely well past the ~5s timeout of this project's usual
+// direct-SQL (Postgres http extension) invocation path. Split out so the
+// caller (GitHub Actions, which has no such constraint, or a future caller
+// that does) can choose to await it directly or fire-and-forget via
+// EdgeRuntime.waitUntil() — see the dispatcher below.
+async function runDiscovery(supabase: any, apiKey: string, city: string, country: string, isRestaurant: boolean) {
+  const placeType = isRestaurant ? 'restaurant' : 'lodging';
+  const queries = buildQueries(city, isRestaurant);
+
+  const seenPlaceIds = new Set<string>();
+  const candidates: any[] = [];
+  let googleCalls = 0;
+  for (const q of queries) {
+    const results = await textSearch(q, apiKey, placeType);
+    googleCalls++; // textSearch's own pagination calls aren't separately counted here, matching the original single-query accounting
+    for (const r of results) {
+      if (r.place_id && !seenPlaceIds.has(r.place_id)) {
+        seenPlaceIds.add(r.place_id);
+        candidates.push(r);
+      }
+    }
+  }
+
+  const discovered: { id: string; name: string; score: number; text: string; allergens: string[] }[] = [];
+  let detailsFetched = 0;
+
+  for (const candidate of candidates.slice(0, 60)) {
+    if (detailsFetched >= 60) break;
+    const details = await fetchDetails(candidate.place_id, apiKey);
+    detailsFetched++;
+    googleCalls++;
+    const reviews = details?.reviews || [];
+
+    let best: ReviewSnippet | null = null;
+    for (const review of reviews.slice(0, 5)) {
+      const snip = classifyAndExtract(review.text || '');
+      if (snip && (!best || snip.score > best.score)) best = snip;
+    }
+    if (!best) continue;
+
+    const slug = slugify(candidate.name, city);
+    const allergyScore = Math.min(5, Math.max(1, Math.round(best.score * 5 * 10) / 10));
+    const table = isRestaurant ? 'restaurants' : 'hotels';
+    const idCol = isRestaurant ? 'restaurant_id' : 'hotel_id';
+    const sourceTable = isRestaurant ? 'restaurant_sources' : 'hotel_sources';
+    const infoTable = isRestaurant ? 'restaurant_allergy_info' : 'hotel_allergy_info';
+
+    const upsertPayload: Record<string, unknown> = {
+      name: candidate.name,
+      slug,
+      city,
+      country,
+      address: candidate.formatted_address || null,
+      website_url: details?.website || null,
+      latitude: candidate.geometry?.location?.lat ?? null,
+      longitude: candidate.geometry?.location?.lng ?? null,
+      allergy_score: allergyScore,
+      verified: false,
+      active: true,
+      updated_at: new Date().toISOString(),
+    };
+    if (!isRestaurant) {
+      upsertPayload.booking_url = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(`${candidate.name} ${city}`)}`;
+    }
+
+    const { data: row, error: upsertErr } = await supabase
+      .from(table)
+      .upsert(upsertPayload, { onConflict: 'slug' })
+      .select('id')
+      .single();
+    if (upsertErr || !row) continue;
+
+    await supabase.from(sourceTable).insert({
+      [idCol]: row.id,
+      source_type: 'google',
+      source_url: details?.url || `https://www.google.com/maps/place/?q=place_id:${candidate.place_id}`,
+      title: candidate.name,
+      snippet: best.text,
+      allergy_score: allergyScore,
+      raw_text: best.text,
+      ai_summary: null,
+    });
+
+    for (const allergen of best.allergens) {
+      await supabase.from(infoTable).upsert({
+        [idCol]: row.id,
+        allergen_type: allergen,
+        support_level: 'on_request',
+        notes: best.text,
+        source_url: details?.url || null,
+      }, { onConflict: `${idCol},allergen_type` });
+    }
+
+    discovered.push({ id: row.id, name: candidate.name, score: allergyScore, text: best.text, allergens: best.allergens });
+  }
+
+  await supabase.from('search_log').insert({
+    search_id: `discover-city-${Date.now()}`, destination: city, allergies: [],
+    mode: 'hotels_fast', google_calls_count: googleCalls,
+    results_returned: discovered.length, cache_hit: false, duration_ms: 0,
+  });
+
+  return { city, country, category: isRestaurant ? 'restaurant' : 'hotel', queriesUsed: queries, candidatesFound: candidates.length, detailsFetched, discovered };
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
-    const { city, country, category } = await req.json();
+    const { city, country, category, background } = await req.json();
     if (!city || !country) {
       return new Response(JSON.stringify({ error: 'city and country are required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -320,106 +452,47 @@ serve(async (req) => {
     }
 
     const isRestaurant = category === 'restaurant';
-    const placeType = isRestaurant ? 'restaurant' : 'lodging';
-    const queries = buildQueries(city, isRestaurant);
 
-    const seenPlaceIds = new Set<string>();
-    const candidates: any[] = [];
-    let googleCalls = 0;
-    for (const q of queries) {
-      const results = await textSearch(q, apiKey, placeType);
-      googleCalls++; // textSearch's own pagination calls aren't separately counted here, matching the original single-query accounting
-      for (const r of results) {
-        if (r.place_id && !seenPlaceIds.has(r.place_id)) {
-          seenPlaceIds.add(r.place_id);
-          candidates.push(r);
+    // background=true: a caller bound by a short request timeout (this
+    // project's usual Postgres http-extension invocation path, ~5s) logs a
+    // pipeline_log row immediately, kicks off the real work via
+    // EdgeRuntime.waitUntil() so it survives after the response is sent,
+    // and polls that row afterward instead of the HTTP response body.
+    if (background) {
+      // pipeline_log.run_type has a CHECK constraint with a fixed allowed
+      // list (no 'discover_city' value) — reuse 'hotel_discovery'/
+      // 'restaurant_discovery', the semantically matching existing values.
+      const { data: logRow, error: logErr } = await supabase.from('pipeline_log').insert({
+        run_type: isRestaurant ? 'restaurant_discovery' : 'hotel_discovery', status: 'running',
+        error_message: `[discover-city] Discovering ${isRestaurant ? 'restaurants' : 'hotels'} for ${city}, ${country}...`,
+      }).select('id').single();
+      if (logErr) {
+        return new Response(JSON.stringify({ error: 'failed to create pipeline_log row', message: logErr.message }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      // @ts-ignore — EdgeRuntime is a Supabase/Deno Deploy global, not in the std lib types.
+      (globalThis as any).EdgeRuntime?.waitUntil((async () => {
+        try {
+          const result = await runDiscovery(supabase, apiKey, city, country, isRestaurant);
+          await supabase.from('pipeline_log').update({
+            status: 'success',
+            error_message: `[discover-city] Discovered ${result.discovered.length} ${isRestaurant ? 'restaurants' : 'hotels'} for ${city} (${result.candidatesFound} candidates, ${result.detailsFetched} details fetched): ${result.discovered.map((d: any) => d.name).join(', ')}`,
+            finished_at: new Date().toISOString(),
+          }).eq('id', logRow.id);
+        } catch (err) {
+          await supabase.from('pipeline_log').update({
+            status: 'error', error_message: `[discover-city] ${(err as Error).message}`, finished_at: new Date().toISOString(),
+          }).eq('id', logRow.id);
         }
-      }
+      })());
+
+      return new Response(JSON.stringify({ started: true, pipelineLogId: logRow.id }),
+        { status: 202, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const discovered: { id: string; name: string; score: number; text: string; allergens: string[] }[] = [];
-    let detailsFetched = 0;
-
-    for (const candidate of candidates.slice(0, 60)) {
-      if (detailsFetched >= 60) break;
-      const details = await fetchDetails(candidate.place_id, apiKey);
-      detailsFetched++;
-      googleCalls++;
-      const reviews = details?.reviews || [];
-
-      let best: ReviewSnippet | null = null;
-      for (const review of reviews.slice(0, 5)) {
-        const snip = classifyAndExtract(review.text || '');
-        if (snip && (!best || snip.score > best.score)) best = snip;
-      }
-      if (!best) continue;
-
-      const slug = slugify(candidate.name, city);
-      const allergyScore = Math.min(5, Math.max(1, Math.round(best.score * 5 * 10) / 10));
-      const table = isRestaurant ? 'restaurants' : 'hotels';
-      const idCol = isRestaurant ? 'restaurant_id' : 'hotel_id';
-      const sourceTable = isRestaurant ? 'restaurant_sources' : 'hotel_sources';
-      const infoTable = isRestaurant ? 'restaurant_allergy_info' : 'hotel_allergy_info';
-
-      const upsertPayload: Record<string, unknown> = {
-        name: candidate.name,
-        slug,
-        city,
-        country,
-        address: candidate.formatted_address || null,
-        website_url: details?.website || null,
-        latitude: candidate.geometry?.location?.lat ?? null,
-        longitude: candidate.geometry?.location?.lng ?? null,
-        allergy_score: allergyScore,
-        verified: false,
-        active: true,
-        updated_at: new Date().toISOString(),
-      };
-      if (!isRestaurant) {
-        upsertPayload.booking_url = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(`${candidate.name} ${city}`)}`;
-      }
-
-      const { data: row, error: upsertErr } = await supabase
-        .from(table)
-        .upsert(upsertPayload, { onConflict: 'slug' })
-        .select('id')
-        .single();
-      if (upsertErr || !row) continue;
-
-      await supabase.from(sourceTable).insert({
-        [idCol]: row.id,
-        source_type: 'google',
-        source_url: details?.url || `https://www.google.com/maps/place/?q=place_id:${candidate.place_id}`,
-        title: candidate.name,
-        snippet: best.text,
-        allergy_score: allergyScore,
-        raw_text: best.text,
-        ai_summary: null,
-      });
-
-      for (const allergen of best.allergens) {
-        await supabase.from(infoTable).upsert({
-          [idCol]: row.id,
-          allergen_type: allergen,
-          support_level: 'on_request',
-          notes: best.text,
-          source_url: details?.url || null,
-        }, { onConflict: `${idCol},allergen_type` });
-      }
-
-      discovered.push({ id: row.id, name: candidate.name, score: allergyScore, text: best.text, allergens: best.allergens });
-    }
-
-    await supabase.from('search_log').insert({
-      search_id: `discover-city-${Date.now()}`, destination: city, allergies: [],
-      mode: 'hotels_fast', google_calls_count: googleCalls,
-      results_returned: discovered.length, cache_hit: false, duration_ms: 0,
-    });
-
-    return new Response(JSON.stringify({
-      city, country, category: isRestaurant ? 'restaurant' : 'hotel',
-      queriesUsed: queries, candidatesFound: candidates.length, detailsFetched, discovered,
-    }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    const result = await runDiscovery(supabase, apiKey, city, country, isRestaurant);
+    return new Response(JSON.stringify(result), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (error) {
     return new Response(JSON.stringify({ error: 'discovery failed', message: (error as Error).message }),
