@@ -177,7 +177,7 @@ export const SearchBar = () => {
       
       {/* Search button */}
       <Button 
-        className="w-full p-3 sm:p-4 bg-[#00b397] hover:bg-[#009f84] text-white text-sm sm:text-base md:text-[1.1em] transition-colors duration-300 flex items-center justify-center gap-2 rounded-lg"
+        className="w-full p-3 sm:p-4 bg-[#008570] hover:bg-[#007b68] text-white text-sm sm:text-base md:text-[1.1em] transition-colors duration-300 flex items-center justify-center gap-2 rounded-lg"
         onClick={handleSearch} 
         disabled={isSearching}
       >
