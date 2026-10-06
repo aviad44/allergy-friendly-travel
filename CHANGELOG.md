@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-06 (follow-up)
+- **Second homepage PageSpeed pass** after #42 (live re-test: Performance 56 → 66, LCP 16.7s → 6.5s, Agentic Browsing 3/3). Checked the live HTML again:
+  - **Prerender was baking analytics into every page.** The snapshot captured the `<script>` tags that index.html's deferred loaders inject after `load` — every visitor's static HTML shipped `fbevents.js`, the Meta config script, `gtag.js`, and a Google Ads `viewthroughconversion` ping hardcoded with `url=http://127.0.0.1:4173` and the build machine's timestamp/UA, all as plain early `async` scripts (defeating the deferral, and likely sending a bogus ad hit per visit). `scripts/prerender.mjs` now blocks requests to analytics/ads hosts during prerender (no fake hits from the build server) and strips any of their script tags from the saved HTML; the real page still loads them at runtime after `load`.
+  - **620KB logo for a 40px slot.** The header logo (`62ccb787…png`) and favicon/apple-touch/manifest/tile icon (`9a760c6c…png`, byte-identical) were a 1024×1024 PNG. Added `public/icons/` (`logo-96/144.webp` ~1KB, `icon-32/150/180/192/512.png`) and pointed `SiteHeader`, `ContactHeader`, `index.html`, `DefaultMetaTags`, `manifest.json`, `browserconfig.xml` at them. Originals kept (`StructuredData` Organization logo still uses the full-size PNG, which Google wants large).
+  - `ContactHeader` brand text got the same contrast fix the main header got in #42 (`#edab69` → `#c97018`).
+
 ## 2026-10-06
 - **Homepage mobile PageSpeed pass** — user shared a PageSpeed Insights mobile report for `https://www.allergy-free-travel.com/` (Performance 56, LCP 16.7s, FCP 4.1s). Checked the live prerendered HTML (via `http_get`) rather than guessing, and fixed the causes it showed:
   - **~2MB of card images at high priority** ("Improve image delivery", est. 2,076 KiB): `FeaturedDestinations` served the Swiss Alps (1.1MB, 1824px) and Cyprus (960KB, 1920px) cards as raw PNGs into 390px slots, and the first two cards were `loading="eager" fetchPriority="high"` — on mobile they're below the 100dvh hero, so they competed with the hero/JS for bandwidth. Added pre-resized `-400w.webp`/`-800w.webp` variants (19–95KB) with a real `srcset`, made every card `loading="lazy"` at default priority, and Unsplash cards now use the 800w URL as `src` instead of 1200w. Original PNGs kept (still used by destination pages/OG images).
