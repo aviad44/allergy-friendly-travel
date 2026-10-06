@@ -79,6 +79,33 @@ const FEATURED_DESTINATIONS = [
   }
 ];
 
+// Local uploads that have pre-resized WebP card variants next to the
+// original PNG (<name>-400w.webp / <name>-800w.webp). The originals are
+// ~1MB PNGs at ~1900px wide; serving them into a 390px card was the bulk of
+// PageSpeed's "Improve image delivery" savings on the homepage.
+const LOCAL_CARD_VARIANTS = new Set([
+  "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png",
+  "/lovable-uploads/a53b2ba4-d551-4fcd-bd11-36c4643be95b.png",
+]);
+
+const getCardImage = (url: string): { src: string; srcSet?: string } => {
+  if (url.includes("unsplash.com")) {
+    const base = url.split("?")[0];
+    return {
+      src: `${base}?fm=webp&w=800&q=80&fit=crop`,
+      srcSet: `${base}?fm=webp&w=400&q=75&fit=crop 400w, ${base}?fm=webp&w=800&q=80&fit=crop 800w`,
+    };
+  }
+  if (LOCAL_CARD_VARIANTS.has(url)) {
+    const base = url.replace(/\.png$/, "");
+    return {
+      src: `${base}-800w.webp`,
+      srcSet: `${base}-400w.webp 400w, ${base}-800w.webp 800w`,
+    };
+  }
+  return { src: url };
+};
+
 export const FeaturedDestinations = () => {
   // Track image loading status for each destination
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
@@ -139,11 +166,12 @@ export const FeaturedDestinations = () => {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {FEATURED_DESTINATIONS.slice(0, 6).map((destination, index) => {
+        {FEATURED_DESTINATIONS.slice(0, 6).map((destination) => {
           // Get the image from our centralized constants if available
           const imageToUse = destination.destId && destinationImages[destination.destId] 
             ? destinationImages[destination.destId] 
             : destination.image;
+          const cardImage = getCardImage(imageToUse);
             
           return (
             <Link to={destination.href} key={destination.id}>
@@ -155,11 +183,8 @@ export const FeaturedDestinations = () => {
                   )}
                   
                   <img
-                    src={imageToUse}
-                    srcSet={imageToUse.includes('unsplash.com') ? 
-                      `${imageToUse.split('?')[0]}?fm=webp&w=400&q=75&fit=crop 400w,
-                       ${imageToUse.split('?')[0]}?fm=webp&w=800&q=80&fit=crop 800w` : ''
-                    }
+                    src={cardImage.src}
+                    srcSet={cardImage.srcSet}
                     sizes="(max-width: 768px) 400px, 390px"
                     alt={destination.name === "Cyprus" 
                       ? "Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination"
@@ -170,8 +195,7 @@ export const FeaturedDestinations = () => {
                     className={`object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105 ${loadedImages[destination.id] ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => handleImageLoaded(destination.id)}
                     onError={(e) => handleImageError(destination.id, e)}
-                    loading={index < 2 ? "eager" : "lazy"}
-                    fetchPriority={index < 2 ? "high" : "auto"}
+                    loading="lazy"
                     width="390" 
                     height="244"
                     decoding="async"

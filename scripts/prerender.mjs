@@ -96,7 +96,16 @@ async function renderRoute(browser, route, attempt = 1) {
     await page.goto(`${ORIGIN}${route}`, { waitUntil: 'load', timeout: 30000 });
     await new Promise((r) => setTimeout(r, 500)); // let React mount before the first check
     await waitForReady(page);
-    const html = await page.content();
+    // index.html loads Google Fonts non-render-blocking via
+    // media="print" onload="this.media='all'". By snapshot time that onload
+    // has already fired in headless Chrome, so page.content() serializes
+    // media="all" — turning the font CSS into a render-blocking request on
+    // every prerendered page (PageSpeed "Render blocking requests"). Restore
+    // the original async pattern in the saved HTML.
+    const html = (await page.content()).replaceAll(
+      `media="all" onload="this.media='all'"`,
+      `media="print" onload="this.media='all'"`,
+    );
 
     const outDir = route === '/' ? DIST : path.join(DIST, route);
     await mkdir(outDir, { recursive: true });
