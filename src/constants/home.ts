@@ -5,6 +5,7 @@ export const HOME_CONTENT = {
       label: "Open main menu",
       items: [
         { title: "Destinations", href: "/destinations/", icon: "MapPin" },
+        { title: "News", href: "/news/", icon: "Newspaper" },
         { title: "Traveler Reviews", href: "/reviews/", icon: "Star" },
         { title: "Contact Us", href: "/contact/", icon: "Shield" },
         { title: "About Us", href: "/about/", icon: "Info" },

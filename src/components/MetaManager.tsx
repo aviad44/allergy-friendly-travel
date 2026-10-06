@@ -146,6 +146,13 @@ const routeMeta: Record<string, RouteMeta> = {
     description: "Personalized results for your allergy-friendly hotel search.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
+  "/news": {
+    title: "Food Allergy Travel News | Allergy-Free Travel",
+    description:
+      "Fact-checked news on airline, hotel and travel policies for people with food allergies, with every claim linked to its primary source.",
+    image: DEFAULT_SOCIAL_IMAGE,
+    type: "website",
+  },
   "/restaurants": {
     title: "Allergy-Friendly Restaurant Guides | Allergy-Free Travel",
     description:

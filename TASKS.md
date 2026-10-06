@@ -19,6 +19,12 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## SEO
 
+- [x] News section (`/news/`) for fact-checked, dated travel-and-allergy news
+  - RATIONALE: Timely policy news (FAA/DOT/airline changes) is what travelers and AI answer engines search for; a dated, source-linked format builds the E-E-A-T this YMYL topic needs.
+  - HOW-TO: Add a module to `src/data/news/` (see `types.ts`), register it in `src/data/news/index.ts`, and add its path to `STATIC_PATHS` in `netlify/functions/sitemap.cjs` (drives sitemap + prerender). Every factual claim must link to a primary source listed in `sources`; bump `updatedAt` on any edit.
+  - DoD: `/news/` and each article prerender with a trailing-slash canonical (verify-seo passes), `NewsArticle` + `FAQPage` JSON-LD present, listed in the XML/HTML sitemaps and llms.txt.
+  - NOT auto-posted to social (deliberately kept out of `seo_articles`, see CHANGELOG 2026-10-06) — share manually, or extend the posters to handle a `/news/` base path first.
+
 - [x] Consolidate SEO into central MetaManager component
   - RATIONALE: Prevents duplicated tags and inconsistent SEO across routes; simplifies maintenance.
   - HOW-TO: Implement src/components/MetaManager.tsx with route-based config, canonical builder, and JSON-LD helpers; replace page-level Helmet usage.
