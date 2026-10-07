@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-06 (follow-up)
+- **Second homepage PageSpeed pass** after #42 (live re-test: Performance 56 → 66, LCP 16.7s → 6.5s, Agentic Browsing 3/3). Checked the live HTML again:
+  - **Prerender was baking analytics into every page.** The snapshot captured the `<script>` tags that index.html's deferred loaders inject after `load` — every visitor's static HTML shipped `fbevents.js`, the Meta config script, `gtag.js`, and a Google Ads `viewthroughconversion` ping hardcoded with `url=http://127.0.0.1:4173` and the build machine's timestamp/UA, all as plain early `async` scripts (defeating the deferral, and likely sending a bogus ad hit per visit). `scripts/prerender.mjs` now blocks requests to analytics/ads hosts during prerender (no fake hits from the build server) and strips any of their script tags from the saved HTML; the real page still loads them at runtime after `load`.
+  - **620KB logo for a 40px slot.** The header logo (`62ccb787…png`) and favicon/apple-touch/manifest/tile icon (`9a760c6c…png`, byte-identical) were a 1024×1024 PNG. Added `public/icons/` (`logo-96/144.webp` ~1KB, `icon-32/150/180/192/512.png`) and pointed `SiteHeader`, `ContactHeader`, `index.html`, `DefaultMetaTags`, `manifest.json`, `browserconfig.xml` at them. Originals kept (`StructuredData` Organization logo still uses the full-size PNG, which Google wants large).
+  - `ContactHeader` brand text got the same contrast fix the main header got in #42 (`#edab69` → `#c97018`).
+
 ## 2026-10-06
 - **New News section (`/news/`) + first article, `/news/airline-food-allergy-policies-2026/`** — user asked for an English "News" category for current travel-and-allergy stories, and supplied the first article to publish after verifying it. Fact-checked every claim against the primary source (FAA newsroom, the Federal Register API for the NPRM's dates/docket, Sen. Duckworth's press releases with the full text of both the Sept 2026 airline-CEO letter and the Oct 5 comment letter, each airline's own policy page, and a law-firm summary of the DOT order), read via the Postgres `http` extension since WebFetch is egress-blocked. The draft was largely accurate; corrections made before publishing:
   - It omitted that **current** FAA rules already require epinephrine (two 1:1,000 ampules or equivalent) — the proposal's real change is dropping it from the mandatory list to optional guidance ("could include"). The FAQ "Is epinephrine required on every US flight?" was rewritten around that.
