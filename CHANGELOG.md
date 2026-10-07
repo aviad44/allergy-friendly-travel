@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-07
+- **Homepage LCP: let the hero paint before React mounts.** After #43 went live, PageSpeed mobile was 60–65 with LCP ~7.4s, and its LCP breakdown showed the hero `<img>` downloaded by ~0.85s (TTFB 60ms, load delay 330ms, load 460ms) but **Element render delay 1,710ms** — painted only after React's mount, a single long main-thread task during which the browser can't paint. Disproved first, with a local Chromium experiment, that `createRoot` replacing the prerendered DOM counts as a new LCP (it doesn't for an identical same-size image), so `createRoot` stays. `src/main.tsx` now waits for the prerendered `img[fetchpriority="high"]` elements to load (capped at 1.5s) plus one painted frame before mounting. Same Chromium experiment with an image arriving at 0.8s and a 1.5s JS task: image LCP 1,848ms → 836ms. Trade-off: the prerendered page becomes interactive up to that cap later (it was already non-interactive until mount).
+
 ## 2026-10-06 (follow-up)
 - **Second homepage PageSpeed pass** after #42 (live re-test: Performance 56 → 66, LCP 16.7s → 6.5s, Agentic Browsing 3/3). Checked the live HTML again:
   - **Prerender was baking analytics into every page.** The snapshot captured the `<script>` tags that index.html's deferred loaders inject after `load` — every visitor's static HTML shipped `fbevents.js`, the Meta config script, `gtag.js`, and a Google Ads `viewthroughconversion` ping hardcoded with `url=http://127.0.0.1:4173` and the build machine's timestamp/UA, all as plain early `async` scripts (defeating the deferral, and likely sending a bogus ad hit per visit). `scripts/prerender.mjs` now blocks requests to analytics/ads hosts during prerender (no fake hits from the build server) and strips any of their script tags from the saved HTML; the real page still loads them at runtime after `load`.
