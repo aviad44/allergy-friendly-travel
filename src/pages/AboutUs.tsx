@@ -15,7 +15,7 @@ const AboutUs = () => {
         description="Learn about the mission behind Allergy-Free Travel and how it uses real guest reviews mentioning food allergies to help travelers find safe places to stay."
         url="https://www.allergy-free-travel.com/about"
         image="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80"
-        author="Aviad Beit Halachmi"
+        author="Allergy-Free Travel Team"
         publishedDate="2024-01-01T00:00:00Z"
       />
 
