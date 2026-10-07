@@ -37,7 +37,7 @@ const NewsArticlePage = () => {
     url,
     inLanguage: 'en',
     articleSection: 'News',
-    author: { '@type': 'Person', name: SITE_AUTHOR.name, url: SITE_AUTHOR.url, jobTitle: SITE_AUTHOR.jobTitle },
+    author: { '@type': 'Organization', name: SITE_AUTHOR.name, url: SITE_AUTHOR.url },
     publisher: {
       '@type': 'Organization',
       name: 'Allergy-Free Travel',
