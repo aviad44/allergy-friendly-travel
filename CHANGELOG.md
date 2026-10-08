@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-08 (gluten-first city titles)
+- **Retitled 6 existing city guides gluten-first** (Rome restaurants + Rome hotels, Osaka, Athens, Budapest restaurants, San Francisco) — the cities with both deep real gluten evidence and observed GSC impressions. Slugs unchanged (no redirects, ranking history kept); only `title` and `meta_description` changed, which feed the H1, `<title>`, meta description and Article JSON-LD. Counts are phrased "X of Y" from `hotel_allergy_info`/`restaurant_allergy_info` (`allergen_type = 'gluten'`) because each article also lists a few places without gluten-specific evidence. No body content or evidence was added.
+  - Old values for rollback are in the migration header (`20261008130000_gluten_free_city_titles.sql`). Already applied to the live DB; prerendered HTML picks the new titles up on the next Netlify build.
+  - Deliberately skipped: Kyoto restaurants (already gluten-first), Kyoto/Osaka/Budapest hotel guides (3 gluten-evidence hotels each), Turin/Bologna/Malaga/Tel Aviv (deep evidence, no observed demand yet).
+  - Found, not fixed: some `restaurants.city` values are "Italy" instead of a city, which blocks clean per-city grouping.
+
 ## 2026-10-08
 - **Restaurant link clicks now fire their own GA4 event, `restaurant_click`, instead of `hotel_booking_click`** (site owner spotted restaurant names in the `hotel_booking_click` event report). Restaurant cards reuse `HotelCard`, whose single `onClick` always called `trackHotelBookingClick`, so every "Visit Website" click on a restaurant was counted as a hotel booking click. New `trackRestaurantClick(name, url)` in `src/utils/googleAnalytics.ts` sends `restaurant_click` with `restaurant_name` + `link_url`; `HotelCard` calls it when `isRestaurant`, and `trackHotelBookingClick` otherwise. Hotels-only surfaces are unchanged.
   - **To tell them apart in GA4:** `hotel_booking_click` = a hotel's Booking.com exit; `restaurant_click` = a restaurant's own website. Register `restaurant_name` as an Event-scoped custom dimension (Admin > Custom definitions) to break `restaurant_click` down by name; it isn't retroactive, same as `hotel_name`.
