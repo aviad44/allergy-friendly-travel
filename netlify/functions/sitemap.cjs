@@ -16,6 +16,12 @@ const STATIC_PATHS = [
   { path: '/restaurants', changefreq: 'daily', priority: '0.9' },
   { path: '/gluten-free', changefreq: 'weekly', priority: '0.9' },
   { path: '/destinations/gluten-free-europe', changefreq: 'weekly', priority: '0.9' },
+  // Keep in sync with GLUTEN_FREE_COUNTRIES in src/utils/glutenFreeCountries.ts.
+  { path: '/gluten-free/italy', changefreq: 'weekly', priority: '0.8' },
+  { path: '/gluten-free/spain', changefreq: 'weekly', priority: '0.8' },
+  { path: '/gluten-free/usa', changefreq: 'weekly', priority: '0.8' },
+  { path: '/gluten-free/canada', changefreq: 'weekly', priority: '0.8' },
+  { path: '/gluten-free/germany', changefreq: 'weekly', priority: '0.8' },
   // News articles are code-defined (src/data/news/) — add each new one here
   // too, since this list is also what scripts/prerender.mjs renders.
   { path: '/news', changefreq: 'daily', priority: '0.8' },

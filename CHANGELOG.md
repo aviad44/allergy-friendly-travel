@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-08 (gluten-free country pages)
+- **New `/gluten-free/<country>/` pages for Italy, Spain, USA, Canada and Germany**, built on the same `GlutenFree.tsx` (new `country` prop) and the same real-evidence source as `/gluten-free/` — no hand-written claims. Only countries with at least 5 published gluten-evidenced guides get a page (checked 2026-10-08: Italy 6, Spain 7, USA 11, Canada 7, Germany 5), so none is a thin shell; the rest of the list in `src/utils/glutenFreeCountries.ts` is where to add more as evidence grows.
+  - Matches both spellings the DB uses ("USA" / "United States"). Each page has its own title/description, FAQPage JSON-LD (shared with the hub) and links to the other countries; the worldwide hub's country headings and a new "Gluten-free guides by country" block link into them, so they are reachable from `/gluten-free/` and the Europe page.
+  - Routes, sitemap (`STATIC_PATHS`, which also feeds prerender) updated; `/destinations/italy/` still 301s to the Rome restaurant guide.
+  - Stacked on the gluten-free hub PR (#49): it edits the same component. `tsc` clean; not run in a browser and `verify-seo` not run locally.
+
 ## 2026-10-08 (gluten-free SEO)
 - **Gluten-free hub rebuilt and `/destinations/gluten-free-europe/` restored as a DB-driven page.** GSC (45-day window, pre-redirect) showed that URL was the site's top gluten-related page (716 impressions, 16 clicks, avg position 9.5), but the 2026-10-02 empty-page cleanup had 301'd it to the Europe region hub, discarding its ranking.
   - `GlutenFree.tsx` now takes an optional `region` prop. `/gluten-free/` is worldwide; `/destinations/gluten-free-europe/` reuses it filtered to Europe via `getRegionForCountry`. Same real-evidence source as before (`allergen_type = 'gluten'` rows linked to published articles) — nothing hand-written about specific places.
