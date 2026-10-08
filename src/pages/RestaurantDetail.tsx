@@ -156,7 +156,7 @@ const RestaurantDetail = () => {
     datePublished: article.published_at || undefined,
     dateModified: article.updated_at || article.published_at || undefined,
     mainEntityOfPage: articleUrl,
-    author: { "@type": "Person", name: SITE_AUTHOR.name, url: SITE_AUTHOR.url },
+    author: { "@type": "Organization", name: SITE_AUTHOR.name, url: SITE_AUTHOR.url },
     publisher: { "@type": "Organization", name: "Allergy-Free Travel" },
   };
   // Reuses the same real-evidence-only Review/AggregateRating builder as

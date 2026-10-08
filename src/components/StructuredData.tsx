@@ -67,7 +67,7 @@ export const StructuredData = ({
         ...baseData,
         "@type": "Article",
         "author": {
-          "@type": "Person",
+          "@type": "Organization",
           "name": author || SITE_AUTHOR.name,
           "url": SITE_AUTHOR.url
         },
@@ -99,7 +99,7 @@ export const StructuredData = ({
           "audienceType": "Travelers with food allergies and dietary restrictions"
         },
         "author": {
-          "@type": "Person",
+          "@type": "Organization",
           "name": author || SITE_AUTHOR.name,
           "url": SITE_AUTHOR.url
         }

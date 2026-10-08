@@ -20,6 +20,30 @@ const PORT = process.env.PRERENDER_PORT || 4173;
 const ORIGIN = `http://127.0.0.1:${PORT}`;
 const READY_TIMEOUT_MS = 12000;
 
+// Analytics/ads hosts that index.html's deferred loaders (gtag, Meta Pixel)
+// inject <script> tags for after window 'load'. Without this, the snapshot
+// captured those injected tags — so every visitor's static HTML shipped
+// fbevents.js, gtag.js and even a Google Ads conversion ping hardcoded with
+// url=127.0.0.1:4173 and the build machine's timestamp as plain async
+// scripts, loading early instead of after 'load' (and firing a bogus ad hit
+// per visit). Requests to these hosts are blocked while prerendering (no
+// fake hits from the build server either), and any script tags they left in
+// the DOM are stripped from the saved HTML; the real page re-adds them at
+// runtime exactly as index.html intends.
+const THIRD_PARTY_HOSTS = [
+  'connect.facebook.net',
+  'www.facebook.com',
+  'www.googletagmanager.com',
+  'www.google-analytics.com',
+  'googleads.g.doubleclick.net',
+  'www.googleadservices.com',
+  'stats.g.doubleclick.net',
+];
+const THIRD_PARTY_SCRIPT_RE = new RegExp(
+  `<script\\b[^>]*\\bsrc="https?://(?:${THIRD_PARTY_HOSTS.map((h) => h.replace(/\./g, '\\.')).join('|')})[^"]*"[^>]*>\\s*</script>`,
+  'g',
+);
+
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://embuxlxugjkjgsusrmlx.supabase.co';
 const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY
   || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtYnV4bHh1Z2pramdzdXNybWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQwODAxMjgsImV4cCI6MjA0OTY1NjEyOH0.iVA1pxwT2_GUBMBCIovf45o23E84FsGu8HByFDQOscQ';
@@ -93,6 +117,13 @@ async function renderRoute(browser, route, attempt = 1) {
     // background requests indefinitely — networkidle0 would wait forever for
     // that non-content traffic to settle. Real page-content readiness is
     // covered separately by waitForReady() below (window.prerenderReady).
+    await page.setRequestInterception(true);
+    page.on('request', (req) => {
+      let host = '';
+      try { host = new URL(req.url()).hostname; } catch { /* data:/blob: etc. */ }
+      if (THIRD_PARTY_HOSTS.includes(host)) req.abort();
+      else req.continue();
+    });
     await page.goto(`${ORIGIN}${route}`, { waitUntil: 'load', timeout: 30000 });
     await new Promise((r) => setTimeout(r, 500)); // let React mount before the first check
     await waitForReady(page);
@@ -102,10 +133,12 @@ async function renderRoute(browser, route, attempt = 1) {
     // media="all" — turning the font CSS into a render-blocking request on
     // every prerendered page (PageSpeed "Render blocking requests"). Restore
     // the original async pattern in the saved HTML.
-    const html = (await page.content()).replaceAll(
-      `media="all" onload="this.media='all'"`,
-      `media="print" onload="this.media='all'"`,
-    );
+    const html = (await page.content())
+      .replaceAll(
+        `media="all" onload="this.media='all'"`,
+        `media="print" onload="this.media='all'"`,
+      )
+      .replace(THIRD_PARTY_SCRIPT_RE, '');
 
     const outDir = route === '/' ? DIST : path.join(DIST, route);
     await mkdir(outDir, { recursive: true });
