@@ -74,13 +74,18 @@ async function getAccessToken(credentialsJson: string): Promise<string> {
   return token.access_token;
 }
 
-async function fetchSearchAnalytics(accessToken: string, startDate: string, endDate: string): Promise<AnalyticsRow[]> {
+async function fetchSearchAnalytics(
+  accessToken: string,
+  startDate: string,
+  endDate: string,
+  dimension: 'page' | 'query' = 'page'
+): Promise<AnalyticsRow[]> {
   const res = await fetch(
     `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(GSC_PROPERTY_ID)}/searchAnalytics/query`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ startDate, endDate, dimensions: ['page'], rowLimit: 1000 }),
+      body: JSON.stringify({ startDate, endDate, dimensions: [dimension], rowLimit: dimension === 'query' ? 5000 : 1000 }),
     }
   );
   if (!res.ok) {
@@ -172,6 +177,40 @@ serve(async (req) => {
       if (upsertErr) throw upsertErr;
     }
 
+    // Query-level data (what people actually typed). Best-effort: a failure
+    // here must not fail the page report above, which is the original job.
+    const GLUTEN_QUERY_REGEX = /gluten|celiac|coeliac|צליאק|גלוטן/i;
+    let topGlutenQueries: { query: string; impressions: number; clicks: number; position: number }[] = [];
+    let queriesStored = 0;
+    try {
+      const queryRows = await fetchSearchAnalytics(accessToken, startDate, endDate, 'query');
+      if (queryRows.length > 0) {
+        const { error: queryUpsertErr } = await supabase
+          .from('seo_search_console_queries')
+          .upsert(
+            queryRows.map((r) => ({
+              query: r.keys[0],
+              period_start: startDate,
+              period_end: endDate,
+              clicks: r.clicks,
+              impressions: r.impressions,
+              ctr: r.ctr,
+              position: r.position,
+            })),
+            { onConflict: 'query,period_start,period_end' }
+          );
+        if (queryUpsertErr) throw queryUpsertErr;
+        queriesStored = queryRows.length;
+      }
+      topGlutenQueries = queryRows
+        .filter((r) => GLUTEN_QUERY_REGEX.test(r.keys[0]))
+        .sort((a, b) => b.impressions - a.impressions)
+        .slice(0, 20)
+        .map((r) => ({ query: r.keys[0], impressions: r.impressions, clicks: r.clicks, position: Math.round(r.position * 10) / 10 }));
+    } catch (queryErr) {
+      console.error('gsc-report query-level pull failed (page report unaffected):', queryErr);
+    }
+
     // Simple, human-checkable heuristics — not a scored/ranked model. This
     // is a starting point to make GSC data visible at all (the gap this
     // function exists to close), not the final word on what to fix first.
@@ -216,7 +255,7 @@ serve(async (req) => {
     }
     const notIndexed = indexingChecks.filter((c) => c.verdict !== 'PASS');
 
-    const summary = `Analyzed ${rows.length} pages for ${startDate}..${endDate}. `
+    const summary = `Analyzed ${rows.length} pages for ${startDate}..${endDate}; ${queriesStored} queries stored (${topGlutenQueries.length} gluten/celiac). `
       + `Opportunities — low-CTR: ${lowCtr.length}, near-page-1: ${nearPageOne.length}, zero-click: ${zeroClick.length}. `
       + `Indexing spot-check: ${indexingChecks.length - notIndexed.length}/${indexingChecks.length} PASS`
       + (notIndexed.length > 0 ? ` — not indexed: ${notIndexed.map((c) => `${c.url} (${c.verdict})`).join(', ')}` : '');
@@ -230,6 +269,8 @@ serve(async (req) => {
       pagesAnalyzed: rows.length,
       opportunities: { lowCtr, nearPageOne, zeroClick },
       indexingChecks,
+      queriesStored,
+      topGlutenQueries,
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (err) {
