@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-08 (GSC query-level data)
+- **`gsc-report` now also pulls query-level Search Console data** (what people actually typed), stored in the new `seo_search_console_queries` table and surfaced as `topGlutenQueries` (queries matching gluten/celiac/coeliac, top 20 by impressions) in the response and `pipeline_log` summary. Best-effort: a failure in the query pull is logged and never fails the existing page report.
+  - New table has RLS enabled at creation with no policies (service-role only, same as `pinterest_auth`); security advisor shows only the expected INFO "RLS enabled, no policy". Migration applied to the live DB; the **edge function itself is not deployed yet** — deploy after merge, then run `gsc-report` once to confirm rows appear.
+
 ## 2026-10-08
 - **Restaurant link clicks now fire their own GA4 event, `restaurant_click`, instead of `hotel_booking_click`** (site owner spotted restaurant names in the `hotel_booking_click` event report). Restaurant cards reuse `HotelCard`, whose single `onClick` always called `trackHotelBookingClick`, so every "Visit Website" click on a restaurant was counted as a hotel booking click. New `trackRestaurantClick(name, url)` in `src/utils/googleAnalytics.ts` sends `restaurant_click` with `restaurant_name` + `link_url`; `HotelCard` calls it when `isRestaurant`, and `trackHotelBookingClick` otherwise. Hotels-only surfaces are unchanged.
   - **To tell them apart in GA4:** `hotel_booking_click` = a hotel's Booking.com exit; `restaurant_click` = a restaurant's own website. Register `restaurant_name` as an Event-scoped custom dimension (Admin > Custom definitions) to break `restaurant_click` down by name; it isn't retroactive, same as `hotel_name`.
