@@ -5,6 +5,7 @@ import { MetaManager } from '@/components/MetaManager';
 import { DestinationCard } from '@/components/destinations/DestinationCard';
 import { supabase } from '@/integrations/supabase/client';
 import { markPrerenderNotReady, markPrerenderReady } from '@/utils/prerenderReady';
+import { getRegionForCountry, type RegionSlug } from '@/utils/regions';
 
 interface HubItem {
   id: string;
@@ -29,7 +30,9 @@ const BASE_URL = 'https://www.allergy-free-travel.com';
 // guess which of the 100+ destination guides are relevant to them. Self-
 // updating: a city gains an entry here the moment content-pipeline adds a
 // gluten-relevant hotel/restaurant to it, no manual curation.
-async function fetchGlutenFreeArticles(): Promise<{ hotels: HubItem[]; restaurants: HubItem[] }> {
+async function fetchGlutenFreeArticles(
+  region?: RegionSlug
+): Promise<{ hotels: HubItem[]; restaurants: HubItem[] }> {
   const [hotelInfoRes, restaurantInfoRes] = await Promise.all([
     supabase.from('hotel_allergy_info').select('hotel_id').eq('allergen_type', 'gluten'),
     supabase.from('restaurant_allergy_info').select('restaurant_id').eq('allergen_type', 'gluten'),
@@ -88,20 +91,65 @@ async function fetchGlutenFreeArticles(): Promise<{ hotels: HubItem[]; restauran
     path: `/${basePath}/${article.slug}/`,
   });
 
+  const inRegion = (item: HubItem) => !region || getRegionForCountry(item.country) === region;
+
   return {
-    hotels: hotelArticles.map((a) => toItem(a, hotelsById[a.hotel_ids?.[0]], 'destinations')),
-    restaurants: restaurantArticles.map((a) => toItem(a, restaurantsById[a.restaurant_ids?.[0]], 'restaurants')),
+    hotels: hotelArticles.map((a) => toItem(a, hotelsById[a.hotel_ids?.[0]], 'destinations')).filter(inRegion),
+    restaurants: restaurantArticles
+      .map((a) => toItem(a, restaurantsById[a.restaurant_ids?.[0]], 'restaurants'))
+      .filter(inRegion),
   };
 }
 
-const GlutenFree = () => {
+// Group by country (largest groups first) so the page reads as a structured
+// guide with country/city names as real text, not one flat card grid.
+function groupByCountry(items: HubItem[]): [string, HubItem[]][] {
+  const groups = new Map<string, HubItem[]>();
+  for (const item of items) {
+    const key = item.country || 'Other';
+    groups.set(key, [...(groups.get(key) ?? []), item]);
+  }
+  return [...groups.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+}
+
+// General celiac-travel guidance only — no claims about any specific property.
+const FAQ: { q: string; a: string }[] = [
+  {
+    q: 'Is a "gluten-free" menu option the same as celiac-safe?',
+    a: 'Not necessarily. A gluten-free dish can still be cooked on shared surfaces, fryers or utensils. Celiac travelers should ask how the kitchen prevents cross-contamination, not only whether a gluten-free option exists.',
+  },
+  {
+    q: 'How do you decide which hotels and restaurants are listed?',
+    a: 'A place is listed only when we found at least one real guest review (Google or Tripadvisor) that specifically mentions gluten-free or celiac accommodation. We do not write or invent reviews.',
+  },
+  {
+    q: 'What should I ask a hotel before booking as a celiac traveler?',
+    a: 'Ask whether breakfast and room service can be prepared without cross-contact, whether a kitchen or fridge is available in the room, and whether the restaurant can accommodate celiac disease specifically, ideally confirmed in writing.',
+  },
+  {
+    q: 'Can I use a translation card abroad?',
+    a: 'Yes. Our free allergy translation card explains gluten and celiac needs in the local language, which helps in restaurants where staff may not speak English.',
+  },
+];
+
+interface GlutenFreeProps {
+  region?: RegionSlug;
+}
+
+const REGION_COPY: Partial<Record<RegionSlug, { label: string; path: string }>> = {
+  europe: { label: 'Europe', path: '/destinations/gluten-free-europe/' },
+};
+
+const GlutenFree = ({ region }: GlutenFreeProps = {}) => {
+  const regionCopy = region ? REGION_COPY[region] : undefined;
+  const scope = regionCopy?.label ?? 'Worldwide';
   const [hotels, setHotels] = useState<HubItem[]>([]);
   const [restaurants, setRestaurants] = useState<HubItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     markPrerenderNotReady();
-    fetchGlutenFreeArticles()
+    fetchGlutenFreeArticles(region)
       .then(({ hotels, restaurants }) => {
         setHotels(hotels);
         setRestaurants(restaurants);
@@ -110,19 +158,30 @@ const GlutenFree = () => {
         setIsLoading(false);
         markPrerenderReady();
       });
-  }, []);
+  }, [region]);
 
-  const canonical = `${BASE_URL}/gluten-free/`;
+  const canonical = regionCopy ? `${BASE_URL}${regionCopy.path}` : `${BASE_URL}/gluten-free/`;
   const totalCount = hotels.length + restaurants.length;
 
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaManager
         dynamicData={{
-          title: 'Gluten-Free & Celiac Travel Guides | Allergy-Free Travel',
-          description: 'Hotels and restaurants worldwide with real, guest-verified evidence of gluten-free accommodation — reviewed for celiac and gluten-sensitive travelers specifically, not just general allergy claims.',
+          title: regionCopy
+            ? `Gluten-Free Hotels & Restaurants in ${scope} | Celiac Travel Guide`
+            : 'Gluten-Free Hotels & Restaurants Worldwide | Celiac Travel Guide',
+          description: `Gluten-free and celiac-friendly hotels and restaurants ${regionCopy ? `in ${scope}` : 'worldwide'}, each backed by real guest reviews that mention gluten-free or celiac accommodation. No invented claims.`,
           canonical,
           type: 'website',
+          jsonLdExtra: {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: FAQ.map(({ q, a }) => ({
+              '@type': 'Question',
+              name: q,
+              acceptedAnswer: { '@type': 'Answer', text: a },
+            })),
+          },
         }}
       />
 
@@ -132,13 +191,19 @@ const GlutenFree = () => {
             <Link to="/destinations/" className="hover:underline">All Destinations</Link> / Gluten-Free &amp; Celiac
           </p>
           <h1 className="font-display text-3xl sm:text-4xl font-bold mb-3 text-blue-800">
-            Gluten-Free &amp; Celiac Travel Guides
+            Gluten-Free Hotels &amp; Restaurants {regionCopy ? `in ${scope}` : 'Worldwide'}
           </h1>
           <p className="text-gray-600 max-w-2xl">
             Every hotel and restaurant below has at least one real, guest-written review specifically about gluten-free
             accommodation — dedicated gluten-free menus, celiac-aware kitchens, or confirmed cross-contamination
             precautions. Not a general "allergy friendly" claim — genuine gluten-specific evidence.
           </p>
+          {!isLoading && totalCount > 0 && (
+            <p className="text-gray-600 max-w-2xl mt-3">
+              Currently {hotels.length} hotel guide{hotels.length === 1 ? '' : 's'} and {restaurants.length} restaurant
+              guide{restaurants.length === 1 ? '' : 's'} {regionCopy ? `in ${scope}` : 'across the world'}, grouped by country below.
+            </p>
+          )}
         </div>
       </section>
 
@@ -147,27 +212,47 @@ const GlutenFree = () => {
           <p className="text-gray-500">New gluten-free guides are published regularly. Check back soon.</p>
         )}
 
-        {hotels.length > 0 && (
-          <div className="mb-10">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Hotels ({hotels.length})</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {hotels.map((item) => (
-                <DestinationCard key={item.id} {...item} />
+        {[
+          { title: 'Hotels', items: hotels },
+          { title: 'Restaurants', items: restaurants },
+        ].map(({ title, items }) =>
+          items.length > 0 ? (
+            <div key={title} className="mb-12">
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+                Gluten-Free {title} ({items.length})
+              </h2>
+              {groupByCountry(items).map(([country, group]) => (
+                <div key={country} className="mb-8">
+                  <h3 className="text-lg font-semibold mb-3 text-gray-700">
+                    {title} in {country} ({group.length})
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {group.map((item) => (
+                      <DestinationCard key={item.id} {...item} />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
-          </div>
+          ) : null
         )}
 
-        {restaurants.length > 0 && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Restaurants ({restaurants.length})</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {restaurants.map((item) => (
-                <DestinationCard key={item.id} {...item} />
-              ))}
+        <div className="mt-12 max-w-3xl">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800">Gluten-free travel FAQ</h2>
+          {FAQ.map(({ q, a }) => (
+            <div key={q} className="mb-5">
+              <h3 className="font-semibold text-gray-800">{q}</h3>
+              <p className="text-gray-600">{a}</p>
             </div>
-          </div>
-        )}
+          ))}
+          <p className="text-gray-600">
+            Traveling somewhere where you don&apos;t speak the language? Get our free{' '}
+            <Link to="/allergy-translation-card/" className="text-blue-700 underline">
+              allergy translation card
+            </Link>
+            .
+          </p>
+        </div>
       </section>
     </div>
   );

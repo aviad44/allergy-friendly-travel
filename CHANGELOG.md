@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-08 (gluten-free SEO)
+- **Gluten-free hub rebuilt and `/destinations/gluten-free-europe/` restored as a DB-driven page.** GSC (45-day window, pre-redirect) showed that URL was the site's top gluten-related page (716 impressions, 16 clicks, avg position 9.5), but the 2026-10-02 empty-page cleanup had 301'd it to the Europe region hub, discarding its ranking.
+  - `GlutenFree.tsx` now takes an optional `region` prop. `/gluten-free/` is worldwide; `/destinations/gluten-free-europe/` reuses it filtered to Europe via `getRegionForCountry`. Same real-evidence source as before (`allergen_type = 'gluten'` rows linked to published articles) — nothing hand-written about specific places.
+  - Added: search-style titles/descriptions, live counts, country-grouped sections (country/city names as real text), a general-guidance FAQ with `FAQPage` JSON-LD (no claims about specific properties), and a link to the translation card.
+  - Removed the `gluten-free-europe` 301 from `public/_redirects`; added the Europe route to `App.tsx` and `sitemap.cjs` (which also feeds prerender); bumped both gluten URLs to priority 0.9.
+  - Left as-is: `/destinations/italy/` still 301s to the Rome gluten-free restaurant article (real, relevant content).
+  - Not yet verified live — needs a Netlify deploy (watch `verify-seo`) and a few days of GSC data.
+
 ## 2026-10-08
 - **Restaurant link clicks now fire their own GA4 event, `restaurant_click`, instead of `hotel_booking_click`** (site owner spotted restaurant names in the `hotel_booking_click` event report). Restaurant cards reuse `HotelCard`, whose single `onClick` always called `trackHotelBookingClick`, so every "Visit Website" click on a restaurant was counted as a hotel booking click. New `trackRestaurantClick(name, url)` in `src/utils/googleAnalytics.ts` sends `restaurant_click` with `restaurant_name` + `link_url`; `HotelCard` calls it when `isRestaurant`, and `trackHotelBookingClick` otherwise. Hotels-only surfaces are unchanged.
   - **To tell them apart in GA4:** `hotel_booking_click` = a hotel's Booking.com exit; `restaurant_click` = a restaurant's own website. Register `restaurant_name` as an Event-scoped custom dimension (Admin > Custom definitions) to break `restaurant_click` down by name; it isn't retroactive, same as `hotel_name`.
