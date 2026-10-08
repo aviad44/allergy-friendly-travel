@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-08
+- **Restaurant link clicks now fire their own GA4 event, `restaurant_click`, instead of `hotel_booking_click`** (site owner spotted restaurant names in the `hotel_booking_click` event report). Restaurant cards reuse `HotelCard`, whose single `onClick` always called `trackHotelBookingClick`, so every "Visit Website" click on a restaurant was counted as a hotel booking click. New `trackRestaurantClick(name, url)` in `src/utils/googleAnalytics.ts` sends `restaurant_click` with `restaurant_name` + `link_url`; `HotelCard` calls it when `isRestaurant`, and `trackHotelBookingClick` otherwise. Hotels-only surfaces are unchanged.
+  - **To tell them apart in GA4:** `hotel_booking_click` = a hotel's Booking.com exit; `restaurant_click` = a restaurant's own website. Register `restaurant_name` as an Event-scoped custom dimension (Admin > Custom definitions) to break `restaurant_click` down by name; it isn't retroactive, same as `hotel_name`.
+  - **Historical data is not rewritten:** restaurant clicks before this change stay under `hotel_booking_click` (distinguishable by a non-booking.com `link_url`).
+  - `ga4-report` still queries only `hotel_booking_click`, so from now on it reports hotels only. Not extended to `restaurant_click` (not requested).
+
 ## 2026-10-07
 - **Article credit changed from a personal byline to "Allergy-Free Travel Team"** (site owner request). `SITE_AUTHOR` in `src/constants/author.ts` is now an Organization-style name; the visible `ArticleByline`, the article/restaurant/news/`StructuredData` JSON-LD `author` (now `Organization`, not `Person`) and the footer copyright credit all use it. The About page is intentionally unchanged.
 - **Tried and reverted: deferring React's mount until the hero image painted.** PageSpeed's LCP breakdown on the live homepage showed the hero downloaded by ~0.85s but an *Element render delay* of 1,710ms. Hypothesis was that React's mount (one long main-thread task) blocked the paint; a local Chromium experiment showed the mechanism (image LCP 1,848ms → 836ms), but on the real Deploy Preview the render delay was unchanged (1,920ms), so the hypothesis didn't hold for this page. Reverted rather than keep code that doesn't help and delays interactivity. Also ruled out (Chromium experiment): `createRoot` replacing the prerendered DOM does not register a new LCP for an identical same-size image.
