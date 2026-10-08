@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Star, ExternalLink, Check, Bed, Home } from "lucide-react";
 import { useState } from "react";
-import { trackHotelBookingClick } from "@/utils/googleAnalytics";
+import { trackHotelBookingClick, trackRestaurantClick } from "@/utils/googleAnalytics";
 import { withBookingAffiliate, outboundRel, bookingUrlForHotel } from "@/utils/bookingAffiliate";
 
 export interface HotelCardProps {
@@ -164,7 +164,7 @@ export const HotelCard = ({
               href={isRestaurant ? linkTarget : withBookingAffiliate(linkTarget, "guide")}
               target="_blank"
               rel={outboundRel(linkTarget)}
-              onClick={() => trackHotelBookingClick(cleanName, linkTarget)}
+              onClick={() => (isRestaurant ? trackRestaurantClick(cleanName, linkTarget) : trackHotelBookingClick(cleanName, linkTarget))}
               className="flex items-center justify-center gap-1"
             >
               {isRestaurant ? "Visit Website" : "Check Availability on Booking.com"}
