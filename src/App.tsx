@@ -16,6 +16,7 @@ import { DefaultMetaTags } from "@/components/DefaultMetaTags";
 // route, so lazy-loading it only added a chunk-fetch round trip before its
 // LCP hero image could even be discovered — pure cost, no bundle savings.
 import Index from '@/pages/Index';
+import { GLUTEN_FREE_COUNTRIES } from '@/utils/glutenFreeCountries';
 
 const DestinationsIndex = lazy(() => import('@/pages/destinations'));
 const HotelChains = lazy(() => import('@/pages/destinations/HotelChains'));
@@ -113,6 +114,9 @@ const AppContent = () => {
             <Route path="/destinations/region/:region" element={<DestinationRegionHub />} />
             <Route path="/gluten-free" element={<GlutenFree />} />
             <Route path="/destinations/gluten-free-europe" element={<GlutenFree region="europe" />} />
+            {GLUTEN_FREE_COUNTRIES.map((c) => (
+              <Route key={c.slug} path={`/gluten-free/${c.slug}`} element={<GlutenFree country={c} />} />
+            ))}
             <Route path="/news" element={<NewsIndex />} />
             <Route path="/news/:slug" element={<NewsArticle />} />
             {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}

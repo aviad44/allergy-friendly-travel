@@ -6,6 +6,7 @@ import { DestinationCard } from '@/components/destinations/DestinationCard';
 import { supabase } from '@/integrations/supabase/client';
 import { markPrerenderNotReady, markPrerenderReady } from '@/utils/prerenderReady';
 import { getRegionForCountry, type RegionSlug } from '@/utils/regions';
+import { GLUTEN_FREE_COUNTRIES, countryPageForName, type GlutenFreeCountry } from '@/utils/glutenFreeCountries';
 
 interface HubItem {
   id: string;
@@ -31,7 +32,8 @@ const BASE_URL = 'https://www.allergy-free-travel.com';
 // updating: a city gains an entry here the moment content-pipeline adds a
 // gluten-relevant hotel/restaurant to it, no manual curation.
 async function fetchGlutenFreeArticles(
-  region?: RegionSlug
+  region?: RegionSlug,
+  country?: GlutenFreeCountry
 ): Promise<{ hotels: HubItem[]; restaurants: HubItem[] }> {
   const [hotelInfoRes, restaurantInfoRes] = await Promise.all([
     supabase.from('hotel_allergy_info').select('hotel_id').eq('allergen_type', 'gluten'),
@@ -91,7 +93,9 @@ async function fetchGlutenFreeArticles(
     path: `/${basePath}/${article.slug}/`,
   });
 
-  const inRegion = (item: HubItem) => !region || getRegionForCountry(item.country) === region;
+  const inRegion = (item: HubItem) =>
+    (!region || getRegionForCountry(item.country) === region) &&
+    (!country || country.aliases.includes(item.country.trim().toLowerCase()));
 
   return {
     hotels: hotelArticles.map((a) => toItem(a, hotelsById[a.hotel_ids?.[0]], 'destinations')).filter(inRegion),
@@ -134,14 +138,19 @@ const FAQ: { q: string; a: string }[] = [
 
 interface GlutenFreeProps {
   region?: RegionSlug;
+  country?: GlutenFreeCountry;
 }
 
 const REGION_COPY: Partial<Record<RegionSlug, { label: string; path: string }>> = {
   europe: { label: 'Europe', path: '/destinations/gluten-free-europe/' },
 };
 
-const GlutenFree = ({ region }: GlutenFreeProps = {}) => {
-  const regionCopy = region ? REGION_COPY[region] : undefined;
+const GlutenFree = ({ region, country }: GlutenFreeProps = {}) => {
+  const regionCopy = country
+    ? { label: country.label, path: `/gluten-free/${country.slug}/` }
+    : region
+      ? REGION_COPY[region]
+      : undefined;
   const scope = regionCopy?.label ?? 'Worldwide';
   const [hotels, setHotels] = useState<HubItem[]>([]);
   const [restaurants, setRestaurants] = useState<HubItem[]>([]);
@@ -149,7 +158,7 @@ const GlutenFree = ({ region }: GlutenFreeProps = {}) => {
 
   useEffect(() => {
     markPrerenderNotReady();
-    fetchGlutenFreeArticles(region)
+    fetchGlutenFreeArticles(region, country)
       .then(({ hotels, restaurants }) => {
         setHotels(hotels);
         setRestaurants(restaurants);
@@ -158,7 +167,7 @@ const GlutenFree = ({ region }: GlutenFreeProps = {}) => {
         setIsLoading(false);
         markPrerenderReady();
       });
-  }, [region]);
+  }, [region, country]);
 
   const canonical = regionCopy ? `${BASE_URL}${regionCopy.path}` : `${BASE_URL}/gluten-free/`;
   const totalCount = hotels.length + restaurants.length;
@@ -201,7 +210,7 @@ const GlutenFree = ({ region }: GlutenFreeProps = {}) => {
           {!isLoading && totalCount > 0 && (
             <p className="text-gray-600 max-w-2xl mt-3">
               Currently {hotels.length} hotel guide{hotels.length === 1 ? '' : 's'} and {restaurants.length} restaurant
-              guide{restaurants.length === 1 ? '' : 's'} {regionCopy ? `in ${scope}` : 'across the world'}, grouped by country below.
+              guide{restaurants.length === 1 ? '' : 's'} {regionCopy ? `in ${scope}` : 'across the world'}{country ? '.' : ', grouped by country below.'}
             </p>
           )}
         </div>
@@ -221,21 +230,67 @@ const GlutenFree = ({ region }: GlutenFreeProps = {}) => {
               <h2 className="text-2xl font-semibold mb-6 text-gray-800">
                 Gluten-Free {title} ({items.length})
               </h2>
-              {groupByCountry(items).map(([country, group]) => (
-                <div key={country} className="mb-8">
-                  <h3 className="text-lg font-semibold mb-3 text-gray-700">
-                    {title} in {country} ({group.length})
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {group.map((item) => (
-                      <DestinationCard key={item.id} {...item} />
-                    ))}
-                  </div>
+              {country ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {items.map((item) => (
+                    <DestinationCard key={item.id} {...item} />
+                  ))}
                 </div>
-              ))}
+              ) : (
+                groupByCountry(items).map(([groupCountry, group]) => {
+                  const countryPage = countryPageForName(groupCountry);
+                  return (
+                    <div key={groupCountry} className="mb-8">
+                      <h3 className="text-lg font-semibold mb-3 text-gray-700">
+                        {countryPage ? (
+                          <Link to={`/gluten-free/${countryPage.slug}/`} className="hover:underline">
+                            {title} in {groupCountry} ({group.length})
+                          </Link>
+                        ) : (
+                          <>
+                            {title} in {groupCountry} ({group.length})
+                          </>
+                        )}
+                      </h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {group.map((item) => (
+                          <DestinationCard key={item.id} {...item} />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           ) : null
         )}
+
+        <nav aria-label="Gluten-free guides by country" className="mt-12 max-w-3xl">
+          <h2 className="text-2xl font-semibold mb-3 text-gray-800">Gluten-free guides by country</h2>
+          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            {country && (
+              <li>
+                <Link to="/gluten-free/" className="text-blue-700 underline">
+                  Worldwide
+                </Link>
+              </li>
+            )}
+            {GLUTEN_FREE_COUNTRIES.filter((c) => c.slug !== country?.slug).map((c) => (
+              <li key={c.slug}>
+                <Link to={`/gluten-free/${c.slug}/`} className="text-blue-700 underline">
+                  Gluten-free {c.label.replace(/^the /, '')}
+                </Link>
+              </li>
+            ))}
+            {!country && (
+              <li>
+                <Link to="/destinations/gluten-free-europe/" className="text-blue-700 underline">
+                  Gluten-free Europe
+                </Link>
+              </li>
+            )}
+          </ul>
+        </nav>
 
         <div className="mt-12 max-w-3xl">
           <h2 className="text-2xl font-semibold mb-4 text-gray-800">Gluten-free travel FAQ</h2>
