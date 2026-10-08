@@ -6,6 +6,7 @@ import { destinations } from '@/data/destinations-list';
 import { supabase } from '@/integrations/supabase/client';
 import { markPrerenderNotReady, markPrerenderReady } from '@/utils/prerenderReady';
 import { REGIONS } from '@/utils/regions';
+import { NEWS_ARTICLES } from '@/data/news';
 
 interface SitemapLink {
   title: string;
@@ -90,6 +91,11 @@ const Sitemap = () => {
     ...restaurantArticles,
   ];
 
+  const newsLinks: SitemapLink[] = [
+    { title: 'All News', path: '/news' },
+    ...NEWS_ARTICLES.map((a) => ({ title: a.title, path: `/news/${a.slug}` })),
+  ];
+
   const regionLinks: SitemapLink[] = REGIONS.flatMap((r) => [
     { title: `${r.label} Hotels`, path: `/destinations/region/${r.slug}` },
     { title: `${r.label} Restaurants`, path: `/restaurants/region/${r.slug}` },
@@ -107,6 +113,7 @@ const Sitemap = () => {
           <SitemapSection title="Regions" links={regionLinks} />
           <SitemapSection title="Destinations" links={destinationLinks} />
           <SitemapSection title="Restaurants" links={restaurantLinks} />
+          <SitemapSection title="News" links={newsLinks} />
         </div>
 
         <div className="mt-12 p-6 bg-blue-50 rounded-lg">

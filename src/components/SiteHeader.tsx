@@ -14,7 +14,8 @@ export const SiteHeader = () => {
             className="flex items-center space-x-3 text-2xl font-display font-bold text-[#c97018] hover:text-amber-700 transition-colors"
           >
             <img 
-              src="/lovable-uploads/62ccb787-f90d-46b0-9d58-812c55375c22.png" 
+              src="/icons/logo-96.webp"
+              srcSet="/icons/logo-96.webp 2x, /icons/logo-144.webp 3x"
               alt="Allergy Free Travel Logo" 
               className="h-10 w-10 object-contain" 
               width="40"
