@@ -4,13 +4,14 @@ import { Helmet } from "react-helmet-async";
 export const DefaultMetaTags = () => {
   // Make sure we always use absolute URLs
   const baseUrl = "https://www.allergy-free-travel.com";
-  const favicon = `${baseUrl}/lovable-uploads/9a760c6c-9c78-40fe-bd6f-90c7fbef6663.png`;
+  const favicon = `${baseUrl}/icons/icon-32.png`;
+  const appleTouchIcon = `${baseUrl}/icons/icon-180.png`;
   
   return (
     <Helmet defaultTitle="Allergy-Free Travel – Hotels for Food Allergies">
       {/* Favicon */}
       <link rel="icon" href={favicon} type="image/png" />
-      <link rel="apple-touch-icon" href={favicon} />
+      <link rel="apple-touch-icon" href={appleTouchIcon} />
       
       {/* Primary Meta Tags - won't override page-specific tags */}
       <meta name="viewport" content="width=device-width, initial-scale=1" />

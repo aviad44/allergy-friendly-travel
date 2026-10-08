@@ -19,6 +19,12 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## SEO
 
+- [x] News section (`/news/`) for fact-checked, dated travel-and-allergy news
+  - RATIONALE: Timely policy news (FAA/DOT/airline changes) is what travelers and AI answer engines search for; a dated, source-linked format builds the E-E-A-T this YMYL topic needs.
+  - HOW-TO: Add a module to `src/data/news/` (see `types.ts`), register it in `src/data/news/index.ts`, and add its path to `STATIC_PATHS` in `netlify/functions/sitemap.cjs` (drives sitemap + prerender). Every factual claim must link to a primary source listed in `sources`; bump `updatedAt` on any edit.
+  - DoD: `/news/` and each article prerender with a trailing-slash canonical (verify-seo passes), `NewsArticle` + `FAQPage` JSON-LD present, listed in the XML/HTML sitemaps and llms.txt.
+  - NOT auto-posted to social (deliberately kept out of `seo_articles`, see CHANGELOG 2026-10-06) — share manually, or extend the posters to handle a `/news/` base path first.
+
 - [x] Consolidate SEO into central MetaManager component
   - RATIONALE: Prevents duplicated tags and inconsistent SEO across routes; simplifies maintenance.
   - HOW-TO: Implement src/components/MetaManager.tsx with route-based config, canonical builder, and JSON-LD helpers; replace page-level Helmet usage.
@@ -107,6 +113,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - FOLLOW-UP (2026-10-03): User asked for a full audit of this chain — every live rendering path (articles, live search, Hotel Chains, Madrid/Eilat) confirmed correctly wired, no live gap. This DoD's "a search result... goes through [the link]" claim turned out to partly describe dead code (`src/components/search/hotel-list/*`, `hotel-details/*`, a second unused `HotelCard`) that correctly implements the wrapper but is never actually rendered — not a live bug, but worth being precise about next time this task is referenced. See CHANGELOG 2026-10-03 for the full trace and the fabricated-content finding (`TopHotelsSection.tsx`'s hardcoded London/Barcelona/Abu-Dhabi fallback) found and fixed along the way.
   - CAVEAT: CJ requires a commission within 6 months of account reactivation (by ~2027-03-30) or the account goes dormant again. Commission is paid on completed stays, so expect a lag of weeks to months between a click and it showing as payable.
   - DoD: After deploy, a live Booking.com link from an article, a search result and the Hotel Chains page each go through `jdoqocy.com/click-101893797-11891539` with the right `sid`. A test click appears in CJ's reports (Reports → clicks, which can take up to about a day).
+
+- [x] Separate restaurant clicks from `hotel_booking_click` in GA4
+  - RATIONALE: Site owner found restaurant names in the GA4 `hotel_booking_click` event report. Restaurant cards reuse `HotelCard`, which fired `hotel_booking_click` for every outbound click, so restaurant "Visit Website" clicks inflated the hotel booking metric and made it impossible to tell a hotel booking intent from a restaurant website visit.
+  - HOW-TO: `trackRestaurantClick` in `src/utils/googleAnalytics.ts` sends `restaurant_click` (`restaurant_name`, `link_url`). `HotelCard` calls it when `isRestaurant`, otherwise `trackHotelBookingClick`. Merged in #47.
+  - DoD: Done in code. In GA4, the user still needs to register `restaurant_name` as an Event-scoped custom dimension (Admin > Custom definitions) to see per-restaurant breakdowns. Old restaurant clicks remain under `hotel_booking_click` (non-booking.com `link_url`). `ga4-report` still covers `hotel_booking_click` only.
 
 - [x] Gluten-free/celiac hub page
   - RATIONALE: User asked for content ideas aimed at the site's majority celiac/gluten-sensitive audience that could convert visits to bookings. Checked the DB before brainstorming: 210 hotels + 382 restaurants already have real `allergen_type='gluten'` evidence, but only 8/106 published articles mention gluten in their title/slug — the gap is findability, not content volume.

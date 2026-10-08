@@ -23,6 +23,12 @@ Restaurant recommendations by city, built the same way as the hotel guides above
 
 - [All restaurant guides](https://www.allergy-free-travel.com/restaurants)
 
+## News
+Fact-checked news on airline, hotel and travel policy for people with food allergies. Every factual claim links to its primary source (regulators, legislators' published letters, airlines' own policy pages), and each article shows its publish/update date.
+
+- [All news](https://www.allergy-free-travel.com/news/)
+- [Airline food allergy policies in 2026: FAA epinephrine proposal, DOT preboarding decision, and Delta/American/Ryanair/Air Canada/Emirates policies compared](https://www.allergy-free-travel.com/news/airline-food-allergy-policies-2026/)
+
 ## Allergens and dietary needs covered
 Gluten/celiac disease, dairy/lactose intolerance, tree nuts, peanuts, eggs, soy, sesame, shellfish, and general food-allergy safety practices (cross-contamination handling, allergen menus, staff awareness). Vegan and vegetarian mentions appear only alongside genuine allergen-safety evidence, not as a substitute for it.
 
