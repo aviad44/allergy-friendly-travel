@@ -14,7 +14,8 @@ const STATIC_PATHS = [
   { path: '/reviews', changefreq: 'weekly', priority: '0.8' },
   { path: '/destinations', changefreq: 'daily', priority: '0.9' },
   { path: '/restaurants', changefreq: 'daily', priority: '0.9' },
-  { path: '/gluten-free', changefreq: 'weekly', priority: '0.8' },
+  { path: '/gluten-free', changefreq: 'weekly', priority: '0.9' },
+  { path: '/destinations/gluten-free-europe', changefreq: 'weekly', priority: '0.9' },
   // News articles are code-defined (src/data/news/) — add each new one here
   // too, since this list is also what scripts/prerender.mjs renders.
   { path: '/news', changefreq: 'daily', priority: '0.8' },

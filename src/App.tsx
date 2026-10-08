@@ -112,6 +112,7 @@ const AppContent = () => {
             <Route path="/destinations/flying-with-epipens-north-america" element={<FlyingWithEpipensNorthAmerica />} />
             <Route path="/destinations/region/:region" element={<DestinationRegionHub />} />
             <Route path="/gluten-free" element={<GlutenFree />} />
+            <Route path="/destinations/gluten-free-europe" element={<GlutenFree region="europe" />} />
             <Route path="/news" element={<NewsIndex />} />
             <Route path="/news/:slug" element={<NewsArticle />} />
             {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}

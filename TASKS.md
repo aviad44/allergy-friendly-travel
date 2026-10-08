@@ -124,6 +124,12 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: `src/pages/GlutenFree.tsx` (route `/gluten-free`) queries `hotel_allergy_info`/`restaurant_allergy_info` for gluten rows, cross-references against published `seo_articles`' `hotel_ids`/`restaurant_ids`, and lists the matching articles grouped by Hotels/Restaurants — same live-fetch pattern as `RegionHub.tsx`. Linked from the Destinations index page and the Footer; added to `sitemap.cjs`.
   - DoD: Done. `npx tsc --noEmit -p .` clean. Self-updating (no manual curation needed as new gluten-evidenced places are added).
 
+- [x] Gluten-free SEO pass: restore `gluten-free-europe`, strengthen the hub
+  - RATIONALE: GSC showed `/destinations/gluten-free-europe/` was the top gluten page (716 impressions, avg pos 9.5) but had been 301'd to the Europe hub after its entries were removed; `/gluten-free/` itself had a generic title, no text content and no FAQ.
+  - HOW-TO: `GlutenFree.tsx` takes an optional `region`; Europe route + sitemap entry restored, redirect removed, FAQPage JSON-LD and country-grouped sections added.
+  - DoD: `tsc` clean. After deploy: `verify-seo` passes, both URLs return 200 with a trailing-slash canonical, and GSC impressions for them recover over the next weeks.
+- [ ] Gluten-free follow-ups: per-city "gluten free hotels in X" articles for cities with the deepest gluten evidence; add query-level (gluten/celiac) data to `gsc-report`.
+
 - [ ] Remove fabricated "Featured Destinations" from Categories.tsx
   - RATIONALE: Found 2026-10-03 while linking the new gluten-free hub from somewhere relevant — `src/pages/Categories.tsx` ("Our Services" page) has a hardcoded `destinationArticles` array with 4 entirely invented hotel entries ("Luxury Retreat in Swiss Alps," "Beachfront Paradise in Maldives," "Urban Sanctuary in Tokyo," "Mountain Lodge in Colorado") — no real hotel names, no sourcing, generic stock Unsplash photos. Same class of policy violation as `TopHotelsSection.tsx`'s fabricated London/Barcelona/Abu-Dhabi block (removed earlier today), but this one IS live — `/categories` is a routed page.
   - HOW-TO: Either remove the "Featured Destinations" section entirely, or replace it with a live query similar to `GlutenFree.tsx`/`RegionHub.tsx` (e.g. the 4 most recently published articles) so it shows real content instead of placeholders.

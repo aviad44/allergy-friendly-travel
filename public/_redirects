@@ -63,7 +63,6 @@ https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:s
 /destinations/amsterdam/* /destinations/region/europe/ 301
 /destinations/ayia-napa/* /destinations/region/europe/ 301
 /destinations/barcelona/* /destinations/region/europe/ 301
-/destinations/gluten-free-europe/* /destinations/region/europe/ 301
 /destinations/paris/* /destinations/region/europe/ 301
 /destinations/turkey/* /destinations/region/europe/ 301
 /destinations/tuscany/* /destinations/region/europe/ 301
