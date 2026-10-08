@@ -18,7 +18,7 @@ export const getAllergyIcon = (allergyName: string): string | null => {
   if (nameLower.includes('sesame')) return '🌱';
   if (nameLower.includes('mustard')) return '🌭';
   if (nameLower.includes('celery')) return '🥬';
-  if (nameLower.includes('gluten')) return '🍞';
+  if (nameLower.includes('gluten') || nameLower.includes('celiac')) return '🍞';
   if (nameLower.includes('lupin')) return '🌿';
   
   // Specific nuts

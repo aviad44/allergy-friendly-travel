@@ -2,6 +2,7 @@
 import { toast } from "sonner";
 import { COMPLETE_TRANSLATIONS, allergyTranslations, TranslationData } from './translations';
 import { getAllergyIcon } from './allergyIcons';
+import { CELIAC_LABEL, CELIAC_PARAGRAPHS } from './celiacTranslations';
 import { trackGAEvent } from '@/utils/googleAnalytics';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -135,10 +136,24 @@ const generateTranslatedCardText = async (allergies: string[], targetLanguageCod
 
   const knownTranslations = allergyTranslations[targetLanguageCode];
 
+  // Celiac disease is an autoimmune condition, not an allergy, so it gets its
+  // own wording instead of "I have severe allergies to...". Languages without
+  // a celiac paragraph fall back to the standard card with "Gluten" listed.
+  const wantsCeliac = allergies.includes(CELIAC_LABEL);
+  const celiacParagraph = wantsCeliac ? CELIAC_PARAGRAPHS[targetLanguageCode] : undefined;
+  if (wantsCeliac && !celiacParagraph) {
+    allergies = Array.from(new Set(allergies.map((a) => (a === CELIAC_LABEL ? 'Gluten' : a))));
+    toast.info(`Dedicated celiac wording isn't available in ${getLanguageNameFromCode(targetLanguageCode)} yet, so the card lists "Gluten" instead.`, {
+      duration: 6000,
+      id: `celiac-fallback-${targetLanguageCode}`,
+    });
+  }
+  const otherAllergies = celiacParagraph ? allergies.filter((a) => a !== CELIAC_LABEL) : allergies;
+
   // Translate each allergy: use the static dictionary for our preset list
   // (fast, free), and fall back to a live translation for anything a user
   // typed in themselves that isn't in that list.
-  const formattedAllergies = (await Promise.all(allergies.map(async (allergy) => {
+  const formattedAllergies = (await Promise.all(otherAllergies.map(async (allergy) => {
     const translated = knownTranslations?.[allergy]
       || (targetLanguageCode === 'en' ? allergy : await translateCustomWord(allergy, targetLanguageCode));
     const icon = getAllergyIcon(allergy);
@@ -146,6 +161,23 @@ const generateTranslatedCardText = async (allergies: string[], targetLanguageCod
   }))).join(", ");
 
   // Construct the full translated text
+  if (celiacParagraph) {
+    trackGAEvent('translation_card_celiac', { language_code: targetLanguageCode });
+    const otherSection = otherAllergies.length > 0
+      ? `
+
+${translationData.mainText}
+${formattedAllergies}
+
+${translationData.crossContamination}`
+      : '';
+    return `⚠️ ${translationData.title} ⚠️
+
+🍞 ${celiacParagraph}${otherSection}
+
+${translationData.thankYou}`;
+  }
+
   return `⚠️ ${translationData.title} ⚠️
 
 ${translationData.mainText}

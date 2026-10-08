@@ -22,6 +22,7 @@ export const ALL_ALLERGIES = [
   { name: "Unbaked eggs", emoji: "🥚", severity: "high" },
   { name: "Wheat", emoji: "🌾", severity: "high" },
   { name: "Gluten", emoji: "🍞", severity: "high" },
+  { name: "Celiac disease", emoji: "🍞", severity: "high" },
   { name: "Soy", emoji: "🫘", severity: "medium" },
   { name: "Peas", emoji: "🫛", severity: "medium" },
   { name: "Lentils", emoji: "🫘", severity: "medium" },

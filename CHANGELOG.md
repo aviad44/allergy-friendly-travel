@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-08 (celiac option on the translation card)
+- **The allergy translation card now has a "Celiac disease" option with its own wording.** Until now a celiac traveler could only pick "Gluten", and the card then said "I have severe allergies to the following foods" — wrong for an autoimmune condition, and it undersells trace contamination. Selecting "Celiac disease" replaces that sentence with a paragraph stating the diagnosis, that gluten (wheat, barley, rye) must be avoided completely, and that trace amounts from shared utensils, fryers, boards, surfaces or flour matter. If other allergens are also selected they follow under the usual wording.
+  - **16 of 28 languages** have the celiac paragraph (en, he, es, fr, de, it, pt, nl, ja, ko, zh, ru, tr, el, pl, ar). The other 12 fall back to the standard card with "Gluten" listed, plus a toast saying dedicated celiac wording isn't available there yet, rather than shipping a weak medical translation.
+  - **These paragraphs were not checked by native speakers.** This is safety-relevant text: have a native speaker review each language before promoting the feature (keep the 28-language claim as is; this is an add-on).
+  - New GA4 event `translation_card_celiac` (`language_code`) to see whether the option is used. Code: `celiacTranslations.ts` (new), `translationService.ts`, `AllergySelector.tsx`, icon maps. `tsc` clean; not exercised in a browser.
+
 ## 2026-10-08
 - **Restaurant link clicks now fire their own GA4 event, `restaurant_click`, instead of `hotel_booking_click`** (site owner spotted restaurant names in the `hotel_booking_click` event report). Restaurant cards reuse `HotelCard`, whose single `onClick` always called `trackHotelBookingClick`, so every "Visit Website" click on a restaurant was counted as a hotel booking click. New `trackRestaurantClick(name, url)` in `src/utils/googleAnalytics.ts` sends `restaurant_click` with `restaurant_name` + `link_url`; `HotelCard` calls it when `isRestaurant`, and `trackHotelBookingClick` otherwise. Hotels-only surfaces are unchanged.
   - **To tell them apart in GA4:** `hotel_booking_click` = a hotel's Booking.com exit; `restaurant_click` = a restaurant's own website. Register `restaurant_name` as an Event-scoped custom dimension (Admin > Custom definitions) to break `restaurant_click` down by name; it isn't retroactive, same as `hotel_name`.

@@ -32,6 +32,7 @@ const allergyEmojiMap: Record<string, string> = {
   'Soy': '🫘',
   'Sesame': '🌱',
   'Gluten': '🍞',
+  'Celiac disease': '🍞',
   'Mustard': '🟡',
   'Celery': '🥬',
   'Lupin': '🌿',
