@@ -347,6 +347,21 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: User asked to replace the image. Fixed as a one-off data change (no deploy): updated `hero_image_url` to the same Unsplash photo with `fit=crop&h=1350` added, using Unsplash's existing `crop=entropy` param for a content-aware 1080×1350 (4:5) crop — verified it actually serves a real JPEG via the Postgres `http` extension before writing it. `posted_to_instagram_at` was already null, so the next `social-poster` run retries automatically.
   - DoD: Done for this one article. **Not fixed at the root** — no code here validates/crops an image's aspect ratio before sending it to Instagram, so another panoramic Unsplash/Pixabay photo could hit the same failure on a future article. A systemic fix (always request `fit=crop` with an explicit Instagram-safe height when sourcing a photo for social posting) would be a reasonable follow-up, not done here since it wasn't asked for.
 
+- [x] Add a post-generation hotel search CTA to the allergy translation card
+  - RATIONALE: User asked how to strengthen entries/dwell-time/usage via the allergy translation card page, one of the site's best-performing pages per GSC (33 clicks, 268 impressions, 12.3% CTR) — the kind of traffic that should convert into a hotel search, not dead-end at a generic links list.
+  - HOW-TO: New `PostCardSearchCTA.tsx`, placed at the end of `Step4Download.tsx` (the generator's final step) — a destination `Autocomplete` (reusing the homepage `SearchBar`'s own `destinationSuggestions`) that navigates to `/search-results?destination=...&allergies=...&mode=hotels`, with `allergies` pre-filled from the exact allergies the user just selected for their card. Deliberately not added to `AllergyTranslationCard.tsx`'s page-level "RELATED RESOURCES" section too: `SearchResults.tsx` redirects to the homepage if `allergies` is empty, and there's no allergy context available at the page level outside the generator's own step state.
+  - DoD: `npx tsc --noEmit` clean. Only reachable once `selectedAllergies` is non-empty (guaranteed by the generator's own step-1 validation), so the search link is never broken.
+
+- [x] Fix the dead "Finish" button on the allergy card download step
+  - RATIONALE: User reported clicking "Finish" on the card generator's final step does nothing.
+  - HOW-TO: `AllergyCardGenerator.tsx`'s Next/Finish button always called the shared `handleNext()`, but `useAllergyCardSteps.tsx`'s `handleNext()` only acts `if (step < Step.Download)` — on the Download step itself it was a silent no-op. Wired the button, on the Download step, to call the same `handleDownloadPDF` already used by the step's own "Download PDF" button, and relabeled it "Finish & Download PDF".
+  - DoD: `npx tsc --noEmit` clean.
+
+- [x] Fix stuck "Generating PDF..." / "Generating PNG image..." toast on the allergy card download step
+  - RATIONALE: User reported (with a live screenshot from production) generating a card and the loading toast never clearing, with no confirmation the download happened.
+  - HOW-TO: `downloadAsPDF()`/`downloadAsPNG()` in `cardGeneration.ts` called `toast.loading(...)` without capturing its id, then fired a separate `toast.success`/`toast.error` instead of updating that same toast — sonner's `loading` toast has no auto-dismiss timer, so it stayed on screen forever. Fixed by capturing the loading toast's id and passing it to the follow-up `toast.success`/`toast.error` call, matching the pattern already correct elsewhere in `useAllergyCardSteps.tsx`.
+  - DoD: `npx tsc --noEmit` clean. Couldn't start the local dev server in this sandbox to visually confirm (same pre-existing `@lovable.dev/mcp-js` module-resolution issue documented elsewhere in CLAUDE.md/CHANGELOG for `npm run build`) — real validation is the Netlify Deploy Preview on PR #39.
+
 ---
 
 ## Weekly Rollout Plan
