@@ -732,9 +732,10 @@ async function publishToPinterest(
 // isMonthlyBudgetExceeded() checks now include this mode too, so the
 // ceiling is genuinely shared both ways.
 //
-// Raised ₪100→₪250/month 2026-10-02 with explicit user authorization — see
-// hotel-search/index.ts's copy of this constant for the full writeup.
-const MONTHLY_BUDGET_ILS = 250;
+// Raised ₪100→₪250/month 2026-10-02, reverted back to ₪100 2026-10-15 —
+// both with explicit user authorization — see hotel-search/index.ts's copy
+// of this constant for the full writeup.
+const MONTHLY_BUDGET_ILS = 100;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342;
 
