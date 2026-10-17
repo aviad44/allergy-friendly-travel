@@ -352,12 +352,11 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 // ceiling tripped from a legitimate, user-requested comprehensive sweep
 // (below-3-hotel article discovery + a 144-hotel real-evidence
 // verification pass on the static destination-*.ts pages) — not a
-// miscalibration. Estimated real need for the rest of October: ~₪200-250
-// total (verification pass ~₪10-20, remaining city sweep ~₪25-35, daily
-// content-pipeline for the rest of the month ~₪15-25, real site traffic
-// ~₪5-10, plus margin). Re-evaluate at month-end whether to keep this
-// level or return to ₪100 baseline.
-const MONTHLY_BUDGET_ILS = 250;
+// miscalibration. Reverted ₪250→₪100 2026-10-15, explicit user request,
+// after that sweep work finished and the ₪250 ceiling was hit again by
+// routine daily usage (91% spent by the 15th) rather than a one-off
+// project — see CHANGELOG.
+const MONTHLY_BUDGET_ILS = 100;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342; // calibrated from real billing, see comment above
 
