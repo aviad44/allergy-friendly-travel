@@ -302,6 +302,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: No API cost — deleted the stale `reviews:` arrays outright (5 in `destination-gluten-free-europe.ts`, 5 in `destination-rome.ts`, 4 in `destination-tuscany.ts`) rather than wait for the 144-hotel verification pass above. Also fixed `destination-tuscany.ts`'s intro text, which claimed "We've also included recent guest reviews from travelers with various food allergies" — no longer true once the array was gone.
   - DoD: `npx tsc --noEmit -p .` clean; confirmed via grep that zero `reviews:` fields remain anywhere in `src/data/`.
 
+- [x] Publish a second News article while the Google/Tripadvisor budget is exhausted
+  - RATIONALE: With both API budgets exhausted for the rest of the month (see above), user asked for other real content that doesn't depend on either. The code-defined News category (`src/data/news/`) was built for exactly this — fact-checked against real public sources, no Google Places/Tripadvisor/discovery dependency at all.
+  - HOW-TO: Researched a genuinely current, not-yet-covered story (the existing `airline-food-allergy-policies-2026` article covers the FAA/DOT regulatory side; this one is Southwest's own commercial snack decision). Fact-checked every claim against real sources — Southwest's own snack menu page, Parade/AOL and TravelPulse's coverage of the October 2025 pistachio-snack announcement, Yahoo News' coverage of FARE's "deeply concerned" statement, and SnackSafely.com's report (fetched directly, confirmed real: dated 2026-02-12, by Dave Bloom, category "News Coverage") on the University of Pittsburgh softball team's boycott. New file `southwest-pistachio-snack-allergy-backlash-2026.tsx`, wired into `src/data/news/index.ts` and `netlify/functions/sitemap.cjs`'s `STATIC_PATHS` (confirmed via `scripts/prerender.mjs` that this is the single list both the sitemap and prerender read from — no second place to update). Reused the already-verified-working hero image from the existing airline article (same Unsplash photo, confirmed live via the Postgres `http` extension) rather than guess an unverified photo ID for a new one.
+  - DoD: `npx tsc --noEmit -p .` clean. See CHANGELOG 2026-10-18.
+
 ## UX
 
 - [ ] Keyboard navigability and focus visibility

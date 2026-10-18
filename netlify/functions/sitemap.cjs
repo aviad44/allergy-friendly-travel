@@ -19,6 +19,7 @@ const STATIC_PATHS = [
   // too, since this list is also what scripts/prerender.mjs renders.
   { path: '/news', changefreq: 'daily', priority: '0.8' },
   { path: '/news/airline-food-allergy-policies-2026', changefreq: 'weekly', priority: '0.8' },
+  { path: '/news/southwest-pistachio-snack-allergy-backlash-2026', changefreq: 'weekly', priority: '0.8' },
   { path: '/allergy-translation-card', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/london', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/cyprus', changefreq: 'monthly', priority: '0.8' },
