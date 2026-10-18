@@ -84,6 +84,67 @@ async function fetchUnsplashCandidates(query: string, accessKey: string): Promis
   return data.results || [];
 }
 
+// Real photo of the top-evidenced linked hotel/restaurant, sourced from its
+// own website (not Google Places) — see content-pipeline/index.ts's copy of
+// this logic for the full writeup on why this is a materially lower-risk
+// case than the Google Places hotlinking that was removed 2026-09-22. Tried
+// first; fetchCityPhoto below is the fallback when unavailable.
+async function fetchOgImage(websiteUrl: string, timeoutMs = 6000): Promise<string | null> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    const res = await fetch(websiteUrl, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; AllergyFreeTravelBot/1.0; +https://www.allergy-free-travel.com)' },
+    });
+    clearTimeout(timeout);
+    if (!res.ok) return null;
+    const html = await res.text();
+    const metaTag = (prop: string) => {
+      const re1 = new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i');
+      const re2 = new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`, 'i');
+      return html.match(re1)?.[1] || html.match(re2)?.[1] || null;
+    };
+    const raw = metaTag('og:image') || metaTag('twitter:image');
+    if (!raw) return null;
+    return new URL(raw, websiteUrl).toString();
+  } catch {
+    return null;
+  }
+}
+
+async function verifyImageLoads(url: string, timeoutMs = 6000): Promise<boolean> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+    if (!res.ok) return false;
+    return (res.headers.get('content-type') || '').startsWith('image/');
+  } catch {
+    return false;
+  }
+}
+
+async function fetchBusinessWebsitePhoto(websiteUrl: string | null, businessName: string): Promise<{ url: string; credit: string } | null> {
+  if (!websiteUrl) return null;
+  const imageUrl = await fetchOgImage(websiteUrl);
+  if (!imageUrl) return null;
+  if (!(await verifyImageLoads(imageUrl))) return null;
+  return { url: imageUrl, credit: `Photo courtesy of ${businessName}` };
+}
+
+async function pickLeadEntity(supabase: any, table: 'hotels' | 'restaurants', ids: string[]): Promise<{ name: string; website_url: string | null } | null> {
+  if (!ids || ids.length === 0) return null;
+  const { data } = await supabase
+    .from(table)
+    .select('name, website_url, allergy_score')
+    .in('id', ids)
+    .order('allergy_score', { ascending: false })
+    .limit(1);
+  return data?.[0] ?? null;
+}
+
 async function fetchCityPhoto(city: string, unsplashKey: string): Promise<{ url: string; credit: string } | null> {
   const [skylineResults, landmarkResults, cityResults] = await Promise.all([
     fetchUnsplashCandidates(`${city} skyline`, unsplashKey),
@@ -161,6 +222,8 @@ serve(async (req) => {
 
     for (const article of articles || []) {
       let city = article.slug;
+      let leadEntity: { name: string; website_url: string | null } | null = null;
+
       if (article.hotel_ids && article.hotel_ids.length > 0) {
         const { data: hotel } = await supabase
           .from('hotels')
@@ -168,6 +231,7 @@ serve(async (req) => {
           .eq('id', article.hotel_ids[0])
           .single();
         if (hotel?.city) city = hotel.city;
+        leadEntity = await pickLeadEntity(supabase, 'hotels', article.hotel_ids);
       } else if (article.restaurant_ids && article.restaurant_ids.length > 0) {
         const { data: restaurant } = await supabase
           .from('restaurants')
@@ -175,9 +239,11 @@ serve(async (req) => {
           .eq('id', article.restaurant_ids[0])
           .single();
         if (restaurant?.city) city = restaurant.city;
+        leadEntity = await pickLeadEntity(supabase, 'restaurants', article.restaurant_ids);
       }
 
-      const photo = await fetchCityPhoto(city, unsplashKey);
+      const businessPhoto = leadEntity ? await fetchBusinessWebsitePhoto(leadEntity.website_url, leadEntity.name) : null;
+      const photo = businessPhoto || await fetchCityPhoto(city, unsplashKey);
       if (!photo) {
         results.push({ slug: article.slug, error: 'No Unsplash results' });
         continue;
