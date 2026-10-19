@@ -278,7 +278,11 @@ function slugify(name: string, city: string): string {
 // Same shared ceiling as hotel-search/restaurants-search/content-pipeline.
 // Raised ₪100→₪250/month 2026-10-02 with explicit user authorization — see
 // hotel-search/index.ts's copy of this constant for the full writeup.
-const MONTHLY_BUDGET_ILS = 250;
+//
+// Raised ₪250→₪450/month 2026-10-18 with explicit user authorization — see
+// hotel-search/index.ts's copy of this constant for the full writeup (live
+// visitor search had been completely blocked for 12 days this month).
+const MONTHLY_BUDGET_ILS = 450;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342;
 

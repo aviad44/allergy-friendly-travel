@@ -756,7 +756,11 @@ async function publishToPinterest(
 //
 // Raised ₪100→₪250/month 2026-10-02 with explicit user authorization — see
 // hotel-search/index.ts's copy of this constant for the full writeup.
-const MONTHLY_BUDGET_ILS = 250;
+//
+// Raised ₪250→₪450/month 2026-10-18 with explicit user authorization — see
+// hotel-search/index.ts's copy of this constant for the full writeup (live
+// visitor search had been completely blocked for 12 days this month).
+const MONTHLY_BUDGET_ILS = 450;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342;
 
@@ -806,7 +810,12 @@ async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
 // York. Non-fatal if TRIPADVISOR_API_KEY is missing or this budget is
 // already exhausted: the run simply continues with Google-only results, it
 // never blocks or fails the whole pipeline run.
-const TA_MONTHLY_BUDGET_ILS = 100;
+//
+// Raised ₪100→₪180/month 2026-10-18 with explicit user authorization —
+// see hotel-search/index.ts's Google equivalent for the full writeup (live
+// visitor hotel-card Tripadvisor enrichment had been blocked, same as
+// Google search, for 12 days this month).
+const TA_MONTHLY_BUDGET_ILS = 180;
 const TA_CALLS_PER_NEW_PLACE = 3;
 const TA_COST_PER_CALL_ILS = 0.056;
 

@@ -250,7 +250,11 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 // — this rebuild adds it from the start rather than repeating the mistake.
 // Logs under its own mode, 'quote_verify', and the other five functions'
 // isMonthlyBudgetExceeded() checks now include this mode too.
-const MONTHLY_BUDGET_ILS = 250;
+//
+// Raised ₪250→₪450/month 2026-10-18 with explicit user authorization — see
+// hotel-search/index.ts's copy of this constant for the full writeup (live
+// visitor search had been completely blocked for 12 days this month).
+const MONTHLY_BUDGET_ILS = 450;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342;
 

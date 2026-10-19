@@ -388,7 +388,16 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 // content-pipeline for the rest of the month ~₪15-25, real site traffic
 // ~₪5-10, plus margin). Re-evaluate at month-end whether to keep this
 // level or return to ₪100 baseline.
-const MONTHLY_BUDGET_ILS = 250;
+//
+// Raised ₪250→₪450/month 2026-10-18 with explicit user authorization, after
+// weekly health-check found live visitor search had been completely dead
+// (0 Google calls served) for 12 straight days (2026-10-07 through
+// 2026-10-18) because the ₪250 ceiling had already been reached this month.
+// Sized from real search_log data: normal-day live search (hotels_fast+fast)
+// ran ~200 calls/day, spike days (2026-10-01/02) hit ~1,600/day; budgeted
+// for ~400 calls/day × 13 remaining days to 2026-11-01 reset on top of the
+// ₪228 already spent this month. Re-evaluate at next month's reset.
+const MONTHLY_BUDGET_ILS = 450;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342; // calibrated from real billing, see comment above
 
