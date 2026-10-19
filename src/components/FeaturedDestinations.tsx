@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { DESTINATION_IMAGES } from "@/constants/destinations";
 
 const FEATURED_DESTINATIONS = [
@@ -79,10 +79,67 @@ const FEATURED_DESTINATIONS = [
   }
 ];
 
+// Local uploads that have pre-resized WebP card variants next to the
+// original PNG (<name>-400w.webp / <name>-800w.webp). The originals are
+// ~1MB PNGs at ~1900px wide; serving them into a 390px card was the bulk of
+// PageSpeed's "Improve image delivery" savings on the homepage.
+const LOCAL_CARD_VARIANTS = new Set([
+  "/lovable-uploads/5a52322f-61d1-4fcb-8449-49f78b0a8bca.png",
+  "/lovable-uploads/a53b2ba4-d551-4fcd-bd11-36c4643be95b.png",
+]);
+
+const getCardImage = (url: string): { src: string; srcSet?: string } => {
+  if (url.includes("unsplash.com")) {
+    const base = url.split("?")[0];
+    return {
+      src: `${base}?fm=webp&w=800&q=80&fit=crop`,
+      srcSet: `${base}?fm=webp&w=400&q=75&fit=crop 400w, ${base}?fm=webp&w=800&q=80&fit=crop 800w`,
+    };
+  }
+  if (LOCAL_CARD_VARIANTS.has(url)) {
+    const base = url.replace(/\.png$/, "");
+    return {
+      src: `${base}-800w.webp`,
+      srcSet: `${base}-400w.webp 400w, ${base}-800w.webp 800w`,
+    };
+  }
+  return { src: url };
+};
+
 export const FeaturedDestinations = () => {
   // Track image loading status for each destination
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
   const [destinationImages, setDestinationImages] = useState<Record<string, string>>({});
+
+  // Card images get no src until the grid is near the viewport. Native
+  // loading="lazy" wasn't enough: on mobile Chrome fetches lazy images well
+  // ahead of the viewport, so all six (~635 KiB, more than half the
+  // homepage's bytes) downloaded during the first view, below the 100dvh
+  // hero, competing with it. The 100px margin also keeps the prerender
+  // snapshot (800x600 viewport, grid starts lower) free of card src
+  // attributes, so the static HTML doesn't trigger the downloads either.
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [showImages, setShowImages] = useState(false);
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el || showImages) return;
+    if (!("IntersectionObserver" in window)) {
+      setShowImages(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShowImages(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "100px 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [showImages]);
   
   // Load all destination images from the central constants
   useEffect(() => {
@@ -138,12 +195,13 @@ export const FeaturedDestinations = () => {
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {FEATURED_DESTINATIONS.slice(0, 6).map((destination, index) => {
+      <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {FEATURED_DESTINATIONS.slice(0, 6).map((destination) => {
           // Get the image from our centralized constants if available
           const imageToUse = destination.destId && destinationImages[destination.destId] 
             ? destinationImages[destination.destId] 
             : destination.image;
+          const cardImage = getCardImage(imageToUse);
             
           return (
             <Link to={destination.href} key={destination.id}>
@@ -155,11 +213,8 @@ export const FeaturedDestinations = () => {
                   )}
                   
                   <img
-                    src={imageToUse}
-                    srcSet={imageToUse.includes('unsplash.com') ? 
-                      `${imageToUse.split('?')[0]}?fm=webp&w=400&q=75&fit=crop 400w,
-                       ${imageToUse.split('?')[0]}?fm=webp&w=800&q=80&fit=crop 800w` : ''
-                    }
+                    src={showImages ? cardImage.src : undefined}
+                    srcSet={showImages ? cardImage.srcSet : undefined}
                     sizes="(max-width: 768px) 400px, 390px"
                     alt={destination.name === "Cyprus" 
                       ? "Beautiful beachfront resort in Cyprus with crystal clear turquoise waters - Allergy-friendly Mediterranean destination"
@@ -170,8 +225,7 @@ export const FeaturedDestinations = () => {
                     className={`object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 brightness-110 saturate-105 ${loadedImages[destination.id] ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => handleImageLoaded(destination.id)}
                     onError={(e) => handleImageError(destination.id, e)}
-                    loading={index < 2 ? "eager" : "lazy"}
-                    fetchPriority={index < 2 ? "high" : "auto"}
+                    loading="lazy"
                     width="390" 
                     height="244"
                     decoding="async"

@@ -19,6 +19,12 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## SEO
 
+- [x] News section (`/news/`) for fact-checked, dated travel-and-allergy news
+  - RATIONALE: Timely policy news (FAA/DOT/airline changes) is what travelers and AI answer engines search for; a dated, source-linked format builds the E-E-A-T this YMYL topic needs.
+  - HOW-TO: Add a module to `src/data/news/` (see `types.ts`), register it in `src/data/news/index.ts`, and add its path to `STATIC_PATHS` in `netlify/functions/sitemap.cjs` (drives sitemap + prerender). Every factual claim must link to a primary source listed in `sources`; bump `updatedAt` on any edit.
+  - DoD: `/news/` and each article prerender with a trailing-slash canonical (verify-seo passes), `NewsArticle` + `FAQPage` JSON-LD present, listed in the XML/HTML sitemaps and llms.txt.
+  - NOT auto-posted to social (deliberately kept out of `seo_articles`, see CHANGELOG 2026-10-06) — share manually, or extend the posters to handle a `/news/` base path first.
+
 - [x] Consolidate SEO into central MetaManager component
   - RATIONALE: Prevents duplicated tags and inconsistent SEO across routes; simplifies maintenance.
   - HOW-TO: Implement src/components/MetaManager.tsx with route-based config, canonical builder, and JSON-LD helpers; replace page-level Helmet usage.
@@ -107,6 +113,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - FOLLOW-UP (2026-10-03): User asked for a full audit of this chain — every live rendering path (articles, live search, Hotel Chains, Madrid/Eilat) confirmed correctly wired, no live gap. This DoD's "a search result... goes through [the link]" claim turned out to partly describe dead code (`src/components/search/hotel-list/*`, `hotel-details/*`, a second unused `HotelCard`) that correctly implements the wrapper but is never actually rendered — not a live bug, but worth being precise about next time this task is referenced. See CHANGELOG 2026-10-03 for the full trace and the fabricated-content finding (`TopHotelsSection.tsx`'s hardcoded London/Barcelona/Abu-Dhabi fallback) found and fixed along the way.
   - CAVEAT: CJ requires a commission within 6 months of account reactivation (by ~2027-03-30) or the account goes dormant again. Commission is paid on completed stays, so expect a lag of weeks to months between a click and it showing as payable.
   - DoD: After deploy, a live Booking.com link from an article, a search result and the Hotel Chains page each go through `jdoqocy.com/click-101893797-11891539` with the right `sid`. A test click appears in CJ's reports (Reports → clicks, which can take up to about a day).
+
+- [x] Separate restaurant clicks from `hotel_booking_click` in GA4
+  - RATIONALE: Site owner found restaurant names in the GA4 `hotel_booking_click` event report. Restaurant cards reuse `HotelCard`, which fired `hotel_booking_click` for every outbound click, so restaurant "Visit Website" clicks inflated the hotel booking metric and made it impossible to tell a hotel booking intent from a restaurant website visit.
+  - HOW-TO: `trackRestaurantClick` in `src/utils/googleAnalytics.ts` sends `restaurant_click` (`restaurant_name`, `link_url`). `HotelCard` calls it when `isRestaurant`, otherwise `trackHotelBookingClick`. Merged in #47.
+  - DoD: Done in code. In GA4, the user still needs to register `restaurant_name` as an Event-scoped custom dimension (Admin > Custom definitions) to see per-restaurant breakdowns. Old restaurant clicks remain under `hotel_booking_click` (non-booking.com `link_url`). `ga4-report` still covers `hotel_booking_click` only.
 
 - [x] Gluten-free/celiac hub page
   - RATIONALE: User asked for content ideas aimed at the site's majority celiac/gluten-sensitive audience that could convert visits to bookings. Checked the DB before brainstorming: 210 hotels + 382 restaurants already have real `allergen_type='gluten'` evidence, but only 8/106 published articles mention gluten in their title/slug — the gap is findability, not content volume.
@@ -341,6 +352,31 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - RATIONALE: Found 2026-10-19 while deploying an unrelated budget-ceiling change: `tripadvisor-reviews/index.ts` has its own independent implementation, `classifyTripadvisorReview()`, not one of the 6 files the 2026-10-06 fix above covered. It still has the pre-fix logic — local `dietaryIndicators`/weak-terms-equivalent list still includes `'vegan'`, `'vegetarian'`, `'plant based'`, `'plant-based'`; no `ASPIRATIONAL_MARKERS` at all; `WARNING_PHRASES` is still the short pre-fix list with no illness terms (`have been sick`, `food poisoning`, `hospitalized`, etc.). This function serves live visitor-facing hotel-card enrichment (`TripadvisorEnrichedHotelCard.tsx`), so the same false-positive/false-negative classes the 2026-10-06 fix addressed elsewhere are still live here.
   - HOW-TO: Port the same 3 fixes from any of the 6 already-fixed files (e.g. `hotel-search/index.ts`'s copy) into `tripadvisor-reviews`'s `classifyTripadvisorReview()` and its term lists. Validate against the existing test harness pattern before deploying, consistent with the 2026-10-06 fix's own process.
   - DoD: `tripadvisor-reviews` deployed with the same vegan/vegetarian taxonomy split, illness-language `WARNING_PHRASES`, and `ASPIRATIONAL_MARKERS` as the other 6 files; verified against local source.
+
+- [x] Fix an Instagram post stuck 7 days on an unsupported image aspect ratio
+  - RATIONALE: Caught by the daily social-poster health-check routine (2026-10-08) — `pipeline_log`'s latest `social_post` row carried an `error_message` prefixed `⚠️ STUCK 7d`, Instagram rejecting `innsbruck-christmas-markets-allergy-friendly-hotels`'s hero image with `code 36003` ("aspect ratio not supported"). `social-poster/index.ts` sends `seo_articles.hero_image_url` straight to Instagram's API with no aspect-ratio normalization, and this article's Unsplash photo (`fit=max`, no explicit height) was too panoramic.
+  - HOW-TO: User asked to replace the image. Fixed as a one-off data change (no deploy): updated `hero_image_url` to the same Unsplash photo with `fit=crop&h=1350` added, using Unsplash's existing `crop=entropy` param for a content-aware 1080×1350 (4:5) crop — verified it actually serves a real JPEG via the Postgres `http` extension before writing it. `posted_to_instagram_at` was already null, so the next `social-poster` run retries automatically.
+  - DoD: Done for this one article. **Not fixed at the root** — no code here validates/crops an image's aspect ratio before sending it to Instagram, so another panoramic Unsplash/Pixabay photo could hit the same failure on a future article. A systemic fix (always request `fit=crop` with an explicit Instagram-safe height when sourcing a photo for social posting) would be a reasonable follow-up, not done here since it wasn't asked for.
+
+- [x] Add a post-generation hotel search CTA to the allergy translation card
+  - RATIONALE: User asked how to strengthen entries/dwell-time/usage via the allergy translation card page, one of the site's best-performing pages per GSC (33 clicks, 268 impressions, 12.3% CTR) — the kind of traffic that should convert into a hotel search, not dead-end at a generic links list.
+  - HOW-TO: New `PostCardSearchCTA.tsx`, placed at the end of `Step4Download.tsx` (the generator's final step) — a destination `Autocomplete` (reusing the homepage `SearchBar`'s own `destinationSuggestions`) that navigates to `/search-results?destination=...&allergies=...&mode=hotels`, with `allergies` pre-filled from the exact allergies the user just selected for their card. Deliberately not added to `AllergyTranslationCard.tsx`'s page-level "RELATED RESOURCES" section too: `SearchResults.tsx` redirects to the homepage if `allergies` is empty, and there's no allergy context available at the page level outside the generator's own step state.
+  - DoD: `npx tsc --noEmit` clean. Only reachable once `selectedAllergies` is non-empty (guaranteed by the generator's own step-1 validation), so the search link is never broken.
+
+- [x] Fix the dead "Finish" button on the allergy card download step
+  - RATIONALE: User reported clicking "Finish" on the card generator's final step does nothing.
+  - HOW-TO: `AllergyCardGenerator.tsx`'s Next/Finish button always called the shared `handleNext()`, but `useAllergyCardSteps.tsx`'s `handleNext()` only acts `if (step < Step.Download)` — on the Download step itself it was a silent no-op. Wired the button, on the Download step, to call the same `handleDownloadPDF` already used by the step's own "Download PDF" button, and relabeled it "Finish & Download PDF".
+  - DoD: `npx tsc --noEmit` clean.
+
+- [x] Fix stuck "Generating PDF..." / "Generating PNG image..." toast on the allergy card download step
+  - RATIONALE: User reported (with a live screenshot from production) generating a card and the loading toast never clearing, with no confirmation the download happened.
+  - HOW-TO: `downloadAsPDF()`/`downloadAsPNG()` in `cardGeneration.ts` called `toast.loading(...)` without capturing its id, then fired a separate `toast.success`/`toast.error` instead of updating that same toast — sonner's `loading` toast has no auto-dismiss timer, so it stayed on screen forever. Fixed by capturing the loading toast's id and passing it to the follow-up `toast.success`/`toast.error` call, matching the pattern already correct elsewhere in `useAllergyCardSteps.tsx`.
+  - DoD: `npx tsc --noEmit` clean. Couldn't start the local dev server in this sandbox to visually confirm (same pre-existing `@lovable.dev/mcp-js` module-resolution issue documented elsewhere in CLAUDE.md/CHANGELOG for `npm run build`) — real validation is the Netlify Deploy Preview on PR #39.
+
+- [x] Fix retired-page redirects getting silently shadowed by content-pipeline resurrecting the same slug
+  - RATIONALE: Weekly Search Console audit (2026-10-12) found `/destinations/italy/` serving a brand-new article instead of 301'ing to the Rome restaurant guide per its 2026-10-03 migration, even though the `public/_redirects` rule was correct. Root cause: `content-pipeline` republished a fresh `seo_articles` row at `slug='italy'` on 2026-10-05 (2 days after the retirement), and its prerender step regenerated a real static file at the exact redirect path — Netlify lets an existing file win over a non-forced redirect.
+  - HOW-TO: Added Netlify's `!` force flag to every retirement/migration redirect in `public/_redirects`, not just Italy's, so this bug class can't recur for any of them regardless of what gets republished at that path later. Verified the other sibling "retired" URLs in the same opportunity list (athens, stockholm, turkey) still redirect correctly — this was isolated to Italy.
+  - DoD: PR opened with the `_redirects` fix. **Not fixed**: the resurrected `slug='italy'` row is still `published` in `seo_articles` (not posted to social yet) — flagged for the user to decide (unpublish as duplicate, or give it its own slug) rather than edited unilaterally. **Not fixed**: `content-pipeline`'s city/country selection still has no exclusion list for already-retired slugs, so this could happen again for a different topic — a real follow-up, out of scope for this pass.
 
 ---
 

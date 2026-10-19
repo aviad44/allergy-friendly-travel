@@ -28,7 +28,6 @@ export function ArticleByline({ publishedAt, updatedAt }: ArticleBylineProps) {
       <Link to="/about/" className="font-medium text-blue-700 hover:text-blue-800 underline">
         {SITE_AUTHOR.name}
       </Link>
-      , {SITE_AUTHOR.jobTitle.toLowerCase()} of Allergy-Free Travel
       {dateIso && <> &middot; Updated {formatDate(dateIso)}</>}
     </p>
   );

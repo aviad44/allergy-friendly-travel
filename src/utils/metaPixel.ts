@@ -1,5 +1,5 @@
 // Thin wrapper around the Meta Pixel's `fbq` global (loaded in index.html,
-// deferred until window 'load' — see the comment there for why). Guards
+// script loaded on first interaction — see the comment there). Guards
 // every call so pages never throw if the pixel hasn't finished loading yet,
 // or if an ad blocker stripped it out entirely.
 

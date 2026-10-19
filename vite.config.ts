@@ -47,17 +47,15 @@ export default defineConfig(({ mode }) => ({
           // Core vendor chunk - only essential
           'vendor': ['react', 'react-dom', 'react-router-dom'],
 
-          // Split out so it's fetched in parallel (via modulepreload) with
-          // whichever route chunk needs it, instead of being inlined into
-          // that chunk and blocking its parse/execute on the network fetch.
-          'supabase': ['@supabase/supabase-js'],
+          // No forced 'supabase' or 'ui' (radix dialog + dropdown-menu)
+          // chunks: naming them here made Rollup park shared helpers inside
+          // them, so the homepage entry chunk statically imported both and
+          // every first visit downloaded the Supabase SDK and dropdown-menu
+          // code it never runs (PageSpeed "Reduce unused JavaScript"; the
+          // live homepage modulepreloaded supabase-*.js and ui-*.js). Rollup's
+          // default splitting already puts them in shared chunks that Vite
+          // modulepreloads in parallel with whichever lazy route needs them.
 
-          // UI library chunk
-          'ui': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu'
-          ],
-          
           // Utilities chunk
           'utils': [
             '@/utils/performanceOptimizer',

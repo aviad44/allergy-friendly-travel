@@ -30,3 +30,14 @@ export function trackHotelBookingClick(hotelName: string, url?: string) {
     link_url: url,
   });
 }
+
+// Fired when someone clicks through to a restaurant's own website. Kept
+// separate from `hotel_booking_click` so restaurant clicks don't inflate the
+// hotel booking metric. In GA4, register `restaurant_name` as a custom
+// dimension (Admin > Custom definitions) to break this event down by name.
+export function trackRestaurantClick(restaurantName: string, url?: string) {
+  trackGAEvent('restaurant_click', {
+    restaurant_name: restaurantName,
+    link_url: url,
+  });
+}

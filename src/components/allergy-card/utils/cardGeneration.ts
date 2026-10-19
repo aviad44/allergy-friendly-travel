@@ -226,39 +226,39 @@ export const downloadAsPDF = async (allergies: string[], translatedText: string 
     return;
   }
 
+  const loadingToastId = toast.loading("Generating PDF...");
+
   try {
-    toast.loading("Generating PDF...");
-    
     // Create a clean card for download
     const downloadCard = createDownloadCard(allergies, translatedText);
     document.body.appendChild(downloadCard);
-    
+
     const canvas = await html2canvas(downloadCard, {
       scale: 2,
       useCORS: true,
       allowTaint: true,
       backgroundColor: "#ffffff"
     });
-    
+
     // Remove the temporary element
     document.body.removeChild(downloadCard);
-    
+
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
     });
-    
+
     const imgWidth = 210; // A4 width in mm
     const imgHeight = canvas.height * imgWidth / canvas.width;
-    
+
     pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
     pdf.save('allergy-card.pdf');
-    
-    toast.success("PDF downloaded successfully!");
+
+    toast.success("PDF downloaded successfully!", { id: loadingToastId });
   } catch (err) {
     console.error("Error generating PDF: ", err);
-    toast.error("Failed to generate PDF. Please try again.");
+    toast.error("Failed to generate PDF. Please try again.", { id: loadingToastId });
   }
 };
 
@@ -273,32 +273,32 @@ export const downloadAsPNG = async (allergies: string[], translatedText: string 
     return;
   }
 
+  const loadingToastId = toast.loading("Generating PNG image...");
+
   try {
-    toast.loading("Generating PNG image...");
-    
     // Create a clean card for download
     const downloadCard = createDownloadCard(allergies, translatedText);
     document.body.appendChild(downloadCard);
-    
+
     const canvas = await html2canvas(downloadCard, {
       scale: 2,
       useCORS: true,
       allowTaint: true,
       backgroundColor: "#ffffff"
     });
-    
+
     // Remove the temporary element
     document.body.removeChild(downloadCard);
-    
+
     const link = document.createElement('a');
     link.download = 'allergy-card.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-    
-    toast.success("PNG image downloaded successfully!");
+
+    toast.success("PNG image downloaded successfully!", { id: loadingToastId });
   } catch (err) {
     console.error("Error generating PNG: ", err);
-    toast.error("Failed to generate PNG. Please try again.");
+    toast.error("Failed to generate PNG. Please try again.", { id: loadingToastId });
   }
 };
 
