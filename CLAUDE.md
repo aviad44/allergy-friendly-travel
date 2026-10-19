@@ -62,8 +62,13 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   "blocked on user's Google Cloud setup" status as `gsc-report`, see
   below). **Currently blocked**:
   Pinterest real pin creation needs Standard API access (Trial tier blocks
-  production pins) — pending the user submitting Pinterest's app-review
-  form with a demo video.
+  production pins) — the user submitted Pinterest's Standard Access upgrade
+  form on 2026-10-05, with a demo video (screen recording of the Developer
+  Portal Sandbox token screen, then a `curl.exe` call to
+  `api-sandbox.pinterest.com/v5/pins` from PowerShell showing a real 201
+  response with a pin id). Now awaiting Pinterest's own review — no way for
+  Claude to check status programmatically, see the Pinterest dashboard
+  access note below.
 - **Social posts never redistribute Google Places Photos.** They're
   licensed for on-site display in the context of Places API results (with
   the contributor attribution shown on-page), not for export to

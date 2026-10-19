@@ -159,7 +159,6 @@ export type DestinationId =
   | 'eilat'
   | 'airlines'
   | 'amsterdam'
-  | 'italy'
   | 'stockholm'
   | 'rhodes'
   | 'madrid'

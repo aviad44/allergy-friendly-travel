@@ -1,0 +1,77 @@
+name: Discover City (one-off hotel/restaurant evidence seeding)
+
+# Manual-only. Calls the discover-city Supabase Edge Function (see its own
+# top-of-file comment — a standalone tool, same discovery/classification
+# logic as content-pipeline, triggered on demand for one city/category
+# instead of the daily rotation). Needed because discover-city's own run
+# time (up to 60 sequential Google Place Details calls) regularly exceeds
+# the ~5s timeout of this project's usual direct-SQL (Postgres http
+# extension) invocation path, so it's run from a GitHub Actions runner
+# instead, which has no such constraint.
+
+on:
+  workflow_dispatch:
+    inputs:
+      city:
+        description: "City to discover (required)"
+        type: string
+        required: true
+      country:
+        description: "Country for the city above (required)"
+        type: string
+        required: true
+      category:
+        description: "hotel or restaurant"
+        type: choice
+        options: ["hotel", "restaurant"]
+        default: "hotel"
+
+jobs:
+  run-discovery:
+    name: Discover hotels/restaurants for one city
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Call discover-city Edge Function
+        id: call
+        env:
+          CITY: ${{ github.event.inputs.city }}
+          COUNTRY: ${{ github.event.inputs.country }}
+          CATEGORY: ${{ github.event.inputs.category }}
+        run: |
+          SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
+          SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          REQUEST_BODY=$(jq -n --arg city "$CITY" --arg country "$COUNTRY" --arg category "$CATEGORY" \
+            '{city: $city, country: $country, category: $category}')
+
+          RESPONSE=$(curl -sS --max-time 180 -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/discover-city" \
+            -H "Content-Type: application/json" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -d "$REQUEST_BODY")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response: $BODY"
+          echo "body=$BODY" >> "$GITHUB_OUTPUT"
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::discover-city returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+      - name: Write job summary
+        if: always()
+        env:
+          BODY: ${{ steps.call.outputs.body }}
+        run: |
+          echo "## Discover City Run" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          echo "$BODY" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

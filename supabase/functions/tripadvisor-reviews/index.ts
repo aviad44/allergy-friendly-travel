@@ -49,7 +49,11 @@ const CALLS_PER_NEW_PLACE = 3; // search + details + reviews — counted conserv
 // Raised ₪75→₪100/month 2026-10-03, explicit user authorization, after the
 // ₪75 ceiling was hit (404 places, ~₪67.87) and blocked a requested re-run
 // of discover-city-tripadvisor for New York.
-const MONTHLY_BUDGET_ILS = 100;
+//
+// Raised ₪100→₪180/month 2026-10-18 with explicit user authorization — see
+// hotel-search/index.ts's Google equivalent for the full writeup (live
+// visitor hotel-card Tripadvisor enrichment had been blocked for 12 days).
+const MONTHLY_BUDGET_ILS = 180;
 const BUDGET_SAFETY_MARGIN = 0.9;
 
 type Category = 'hotel' | 'restaurant';
