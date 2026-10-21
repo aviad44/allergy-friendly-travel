@@ -59,13 +59,18 @@ const STRICT_TERMS = [
   'room service allergy', 'breakfast allergy', 'buffet allergy',
 ];
 
+// vegan/vegetarian/plant based/plant-based deliberately NOT included here —
+// a dietary *preference* claim ("great vegan food!") is not a food-*allergy*
+// accommodation claim, and treating it as one let hotels with zero real
+// allergy evidence pass (e.g. Hilton Lima Miraflores' "tremendous efforts to
+// meet our vegetarian food requirements" — genuine, well-reviewed, zero
+// allergy relevance). Fixed 2026-10-06, see TASKS.md #329.
 const WEAK_TERMS = [
   'gluten', 'dairy', 'lactose', 'wheat',
   'peanut', 'peanuts', 'tree nut', 'nuts', 'almond', 'hazelnut', 'walnut',
   'pecan', 'cashew', 'pistachio', 'macadamia',
   'soy', 'soya', 'sesame',
   'shellfish', 'shrimp', 'crab', 'lobster',
-  'vegan', 'vegetarian', 'plant based', 'plant-based',
   'no eggs', 'no dairy', 'no nuts', 'no shellfish', 'no seafood',
   'without nuts', 'without dairy',
   'special diet', 'dietary', 'food restrictions',
@@ -84,9 +89,30 @@ const SAFETY_TERMS = [
   'allergy protocol', 'allergy friendly kitchen', 'chef spoke to us', 'chef came to our table',
 ];
 
+// Added 'sick'/illness phrasing 2026-10-06, TASKS.md #329: a sentence can
+// name the right allergen and still describe a real safety incident, not
+// safe accommodation — "served a 100% gluten pasta and have been sick for
+// the past few days" (Olivery, Tel Aviv) named "gluten" and nothing else
+// disqualifying. Kept to multi-word phrases / specific-enough single words
+// to avoid excluding a sentence that merely mentions illness unrelatedly.
 const WARNING_PHRASES = [
   'not safe', 'unsafe', 'reaction', 'allergic reaction',
   'epipen', 'epi pen', 'anaphylaxis', 'anaphylactic',
+  'have been sick', 'got sick', 'made me sick', 'made us sick', 'fell ill',
+  'food poisoning', 'threw up', 'vomited', 'vomiting', 'severe reaction',
+  'hospitalized', 'rushed to hospital', 'emergency room',
+];
+
+// A sentence stating an expectation/belief about what *would* happen, not a
+// lived account of what actually did — "we went in with the belief that the
+// kitchen would be well equipped" (1 Hotel Mayfair) named "gluten allergy"
+// and nothing else disqualifying, but describes no actual outcome.
+// Deliberately narrow phrase list, not a blanket "would"/"should" ban —
+// those words appear constantly in genuine accounts ("they said they would
+// check with the chef, and it was perfect") that must not be lost.
+const ASPIRATIONAL_MARKERS = [
+  'the belief that', 'we believed', 'i believed', 'we assumed', 'i assumed',
+  'we were hoping', 'i was hoping', 'hoping that', 'we expected', 'i expected',
 ];
 
 // Bare 'allergy'/'allergies'/'allergic'/'allergen'/'allergens' match any kind
@@ -174,7 +200,11 @@ interface ReviewSnippet {
 // 2026-10-01 on 6+ already-published hotels.
 function classifyAndExtract(reviewText: string, author: string, relativeTime: string): ReviewSnippet | null {
   const positiveWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
-  const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
+  // vegan/vegetarian/plant based/plant-based deliberately NOT included here
+  // either — this path has no safety-language requirement, so "great vegan
+  // food!" alone would pass as allergy evidence. Fixed 2026-10-06, see
+  // TASKS.md #329 and the WEAK_TERMS comment above.
+  const dietaryIndicators = ['gluten', 'dairy free', 'lactose'];
 
   const sentences = reviewText.split(/(?<=[.!?])\s+/);
   let bestScore = 0;
@@ -204,7 +234,8 @@ function classifyAndExtract(reviewText: string, author: string, relativeTime: st
     const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
     const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
     const isNegated = !isDoubleNegativePositive && (NEGATION_MARKERS.some(m => normS.includes(m)) || CONTRACTION_NEGATION_REGEX.test(normS));
-    if (isSuggestionComplaint || isNegated) continue;
+    const isAspirational = ASPIRATIONAL_MARKERS.some(m => normS.includes(m));
+    if (isSuggestionComplaint || isNegated || isAspirational) continue;
 
     const hasStrictS = sStrict.length > 0;
     const hasWeakS = sWeak.length > 0;
@@ -357,7 +388,16 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 // content-pipeline for the rest of the month ~₪15-25, real site traffic
 // ~₪5-10, plus margin). Re-evaluate at month-end whether to keep this
 // level or return to ₪100 baseline.
-const MONTHLY_BUDGET_ILS = 250;
+//
+// Raised ₪250→₪450/month 2026-10-18 with explicit user authorization, after
+// weekly health-check found live visitor search had been completely dead
+// (0 Google calls served) for 12 straight days (2026-10-07 through
+// 2026-10-18) because the ₪250 ceiling had already been reached this month.
+// Sized from real search_log data: normal-day live search (hotels_fast+fast)
+// ran ~200 calls/day, spike days (2026-10-01/02) hit ~1,600/day; budgeted
+// for ~400 calls/day × 13 remaining days to 2026-11-01 reset on top of the
+// ₪228 already spent this month. Re-evaluate at next month's reset.
+const MONTHLY_BUDGET_ILS = 450;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342; // calibrated from real billing, see comment above
 
@@ -551,6 +591,92 @@ interface HotelResult {
   tripadvisorReview?: { text: string; author: string; url: string } | null;
 }
 
+// ==========================================
+// DB FALLBACK — reuse already-verified evidence when the live scan finds nothing
+// ==========================================
+// Added 2026-10-21 (user report: searched Athens for hotels with a Peanuts
+// filter, got 0 results). Root cause confirmed via search_log: the live
+// scan ran fine — 21 real, un-blocked Google calls — it just didn't surface
+// a hotel with matching review evidence in *this* scan's limited review
+// sample, even though hotels/hotel_sources already has 3 verified Athens
+// hotels with real evidence from earlier discovery (content-pipeline and/or
+// an earlier live search). This function was never checking that existing
+// knowledge at all — every call redid discovery from scratch against
+// Google, so a visitor could see "no results" purely because this one scan
+// got unlucky, not because no real evidence exists anywhere. Only used when
+// the live scan's results are empty — a successful live scan is always
+// preferred since it reflects the freshest reviews. Matches on city OR
+// country (destination is free text — a visitor might type a country).
+async function fetchDbFallback(supabase: any, destination: string, limit = FAST_MODE.targetResults): Promise<HotelResult[]> {
+  try {
+    const dest = destination.trim();
+    const [byCity, byCountry] = await Promise.all([
+      supabase.from('hotels')
+        .select('id, name, address, website_url, booking_url, latitude, longitude, allergy_score')
+        .ilike('city', dest).eq('active', true).not('allergy_score', 'is', null)
+        .order('allergy_score', { ascending: false }).limit(limit),
+      supabase.from('hotels')
+        .select('id, name, address, website_url, booking_url, latitude, longitude, allergy_score')
+        .ilike('country', dest).eq('active', true).not('allergy_score', 'is', null)
+        .order('allergy_score', { ascending: false }).limit(limit),
+    ]);
+
+    const seen = new Set<string>();
+    const hotelRows = [...(byCity.data || []), ...(byCountry.data || [])].filter((h: any) => {
+      if (seen.has(h.id)) return false;
+      seen.add(h.id);
+      return true;
+    }).slice(0, limit);
+
+    if (hotelRows.length === 0) return [];
+
+    const ids = hotelRows.map((h: any) => h.id);
+    const { data: sources } = await supabase
+      .from('hotel_sources')
+      .select('hotel_id, snippet, source_url, allergy_score')
+      .in('hotel_id', ids);
+
+    const bestSourceByHotel = new Map<string, any>();
+    for (const s of sources || []) {
+      const cur = bestSourceByHotel.get(s.hotel_id);
+      if (!cur || (s.allergy_score || 0) > (cur.allergy_score || 0)) bestSourceByHotel.set(s.hotel_id, s);
+    }
+
+    return hotelRows.map((h: any) => {
+      const src = bestSourceByHotel.get(h.id);
+      const score = (h.allergy_score ?? 0) / 5;
+      let confidenceLevel: 'high' | 'medium' | 'low' = 'low';
+      if (score >= 0.7) confidenceLevel = 'high';
+      else if (score >= 0.5) confidenceLevel = 'medium';
+
+      return {
+        name: h.name,
+        address: h.address || '',
+        websiteUrl: h.website_url || null,
+        rating: null,
+        totalRatings: null,
+        mapsUrl: src?.source_url || `https://www.google.com/maps/search/${encodeURIComponent(`${h.name} ${destination}`)}`,
+        bookingSearchUrl: h.booking_url || `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(`${h.name} ${destination}`)}`,
+        lat: h.latitude ?? null,
+        lng: h.longitude ?? null,
+        reviewSnippet: src ? {
+          text: src.snippet,
+          author: 'Verified guest review',
+          relativeTime: '',
+          hasAllergyMention: true,
+          score,
+          matchedTerms: [],
+        } : null,
+        confidenceLevel,
+        placeId: '',
+      } as HotelResult;
+    });
+  } catch (err) {
+    console.log('⚠️ DB fallback query error:', err);
+    return [];
+  }
+}
+
 // Enriches only the single top-ranked result with a real Tripadvisor
 // rating + review excerpt (via the tripadvisor-reviews function, which
 // owns its own cache and hard budget ceiling). Deliberately scoped to
@@ -662,20 +788,6 @@ serve(async (req) => {
 
     console.log(`📊 [${searchId}] ${candidates.length} candidates`);
 
-    if (candidates.length === 0) {
-      const dur = Date.now() - startTime;
-      if (supabase) {
-        // Cache the empty result too — a repeat of the same (destination,
-        // primaryPhrase) that genuinely has no Google candidates would
-        // otherwise re-pay for the Text Search call every single time.
-        await setCachedSearch(supabase, cDest, cAllg, { results: [], googleCallsCount: googleCalls }, 0);
-        await logSearch(supabase, searchId, destination, allergiesArray, googleCalls, 0, false, dur);
-      }
-      return new Response(JSON.stringify({
-        results: [], total: 0, fallbackUrl,
-      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-
     // ---- STEP 3: Fetch details for top candidates, early stop at target ----
     const results: HotelResult[] = [];
     let detailsFetched = 0;
@@ -721,6 +833,20 @@ serve(async (req) => {
       });
     }
 
+    // ---- STEP 3.5: DB fallback when the live scan found no real evidence ----
+    // See fetchDbFallback's comment above for the full rationale (confirmed
+    // live 2026-10-21: Athens + Peanuts). Only triggered when the live scan
+    // came back completely empty — never mixed with real live results.
+    let usedDbFallback = false;
+    if (results.length === 0 && supabase) {
+      const fallback = await fetchDbFallback(supabase, destination);
+      if (fallback.length > 0) {
+        results.push(...fallback);
+        usedDbFallback = true;
+        console.log(`♻️ [${searchId}] DB fallback: ${fallback.length} already-verified hotel(s) for "${destination}"`);
+      }
+    }
+
     results.sort((a, b) => {
       const sa = a.reviewSnippet?.score || 0;
       const sb = b.reviewSnippet?.score || 0;
@@ -741,7 +867,10 @@ serve(async (req) => {
     // single biggest source of wasted spend before this fix).
     if (supabase) {
       await setCachedSearch(supabase, cDest, cAllg, { results, googleCallsCount: googleCalls }, results.length);
-      if (results.length > 0) {
+      // DB-fallback results already exist in hotels/hotel_sources — re-running
+      // persistEvidence on them would insert duplicate hotel_sources rows on
+      // every repeat search for nothing (same place, same slug, same snippet).
+      if (results.length > 0 && !usedDbFallback) {
         await persistEvidence(supabase, destination, allergiesArray, results);
       }
       await logSearch(supabase, searchId, destination, allergiesArray, googleCalls, results.length, false, dur);
