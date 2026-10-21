@@ -596,6 +596,87 @@ async function fetchDestinationPhoto(city: string, unsplashKey?: string, pixabay
   return null;
 }
 
+// ==========================================
+// BUSINESS-WEBSITE HERO PHOTO — real photo of the actual top-evidenced
+// hotel/restaurant, sourced from the business's own site (not Google Places)
+// ==========================================
+// Reintroduced 2026-10-18 (user request, repeated feedback that the generic
+// Unsplash city-skyline hero reads as a boring long-shot with no connection
+// to the specific place the article is about). The previous attempt at a
+// real specific-place photo (fetchRestaurantDishPhoto, removed 2026-09-22)
+// hotlinked a raw Google Places photo URL — broken 65% of the time, exposed
+// the live API key, and Google's own Places API terms don't permit
+// redistributing that photo content to Facebook/Instagram/Pinterest at all
+// (see isGooglePlacesPhotoUrl() in social-poster/pinterest-poster). A photo
+// pulled from the business's own website is a different, materially lower-
+// risk case: it isn't Google Places content, so that redistribution
+// restriction doesn't apply, and it's used here as attributed, positive
+// coverage that links back to the business (same spirit as any "best
+// restaurants in X" write-up using a business's own promotional photo) —
+// still not a zero-risk blanket license, which is why it's attributed
+// ("Photo courtesy of <name>") rather than presented as our own content.
+// Falls back to fetchDestinationPhoto() below whenever the business has no
+// usable website photo, same safety net as before.
+async function fetchOgImage(websiteUrl: string, timeoutMs = 6000): Promise<string | null> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    const res = await fetch(websiteUrl, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; AllergyFreeTravelBot/1.0; +https://www.allergy-free-travel.com)' },
+    });
+    clearTimeout(timeout);
+    if (!res.ok) return null;
+    const html = await res.text();
+    const metaTag = (prop: string) => {
+      const re1 = new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`, 'i');
+      const re2 = new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`, 'i');
+      return html.match(re1)?.[1] || html.match(re2)?.[1] || null;
+    };
+    const raw = metaTag('og:image') || metaTag('twitter:image');
+    if (!raw) return null;
+    return new URL(raw, websiteUrl).toString();
+  } catch {
+    return null;
+  }
+}
+
+async function verifyImageLoads(url: string, timeoutMs = 6000): Promise<boolean> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+    if (!res.ok) return false;
+    return (res.headers.get('content-type') || '').startsWith('image/');
+  } catch {
+    return false;
+  }
+}
+
+async function fetchBusinessWebsitePhoto(websiteUrl: string | null, businessName: string): Promise<{ url: string; credit: string } | null> {
+  if (!websiteUrl) return null;
+  const imageUrl = await fetchOgImage(websiteUrl);
+  if (!imageUrl) return null;
+  if (!(await verifyImageLoads(imageUrl))) return null;
+  return { url: imageUrl, credit: `Photo courtesy of ${businessName}` };
+}
+
+// Picks the strongest-evidenced entity among an article's linked
+// hotels/restaurants to represent it — not just the first one found — so
+// the hero photo (when a business-website one is available) comes from the
+// place with the best real allergy evidence, not an arbitrary pick.
+async function pickLeadEntity(supabase: any, table: 'hotels' | 'restaurants', ids: string[]): Promise<{ name: string; website_url: string | null } | null> {
+  if (!ids || ids.length === 0) return null;
+  const { data } = await supabase
+    .from(table)
+    .select('name, website_url, allergy_score')
+    .in('id', ids)
+    .order('allergy_score', { ascending: false })
+    .limit(1);
+  return data?.[0] ?? null;
+}
+
 // String(err) on a plain object (not a real Error — e.g. a parsed API error
 // body, or anything thrown as {message, code}) yields the useless literal
 // "[object Object]", which is exactly what hid a real content_generation
@@ -732,9 +813,10 @@ async function publishToPinterest(
 // isMonthlyBudgetExceeded() checks now include this mode too, so the
 // ceiling is genuinely shared both ways.
 //
-// Raised ₪100→₪250/month 2026-10-02 with explicit user authorization — see
-// hotel-search/index.ts's copy of this constant for the full writeup.
-const MONTHLY_BUDGET_ILS = 250;
+// Raised ₪100→₪250/month 2026-10-02, reverted back to ₪100 2026-10-15 —
+// both with explicit user authorization — see hotel-search/index.ts's copy
+// of this constant for the full writeup.
+const MONTHLY_BUDGET_ILS = 100;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342;
 
@@ -1678,10 +1760,17 @@ serve(async (req) => {
 
           let heroImageUrl: string | null = null;
           let heroImageCredit: string | null = null;
-          const photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
-          if (photo) {
-            heroImageUrl = photo.url;
-            heroImageCredit = photo.credit;
+          const leadHotel = await pickLeadEntity(supabase, 'hotels', hotelIds);
+          const businessPhoto = leadHotel ? await fetchBusinessWebsitePhoto(leadHotel.website_url, leadHotel.name) : null;
+          if (businessPhoto) {
+            heroImageUrl = businessPhoto.url;
+            heroImageCredit = businessPhoto.credit;
+          } else {
+            const photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
+            if (photo) {
+              heroImageUrl = photo.url;
+              heroImageCredit = photo.credit;
+            }
           }
 
           const { error: insertErr } = await supabase.from('seo_articles').upsert({
@@ -1797,26 +1886,23 @@ serve(async (req) => {
             let heroImageUrl: string | null = null;
             let heroImageCredit: string | null = null;
 
-            // Previously tried a real photo of food from one of the actual
-            // reviewed restaurants first (fetchRestaurantDishPhoto, via
-            // Google Places Text Search + Photo). Removed 2026-09-22: that
-            // function returned a raw maps.googleapis.com/.../photo URL with
-            // the live GOOGLE_MAPS_API_KEY embedded in it, stored directly as
-            // hero_image_url and rendered as a public <img src> — Google
-            // Places photo URLs aren't meant to be hotlinked long-term this
-            // way, so every one of the 17 restaurant articles that got a
-            // Google photo this way ended up with a broken image (400/403,
-            // or a tiny HTML error page instead of a real photo), and the API
-            // key was left exposed in the public seo_articles table/page
-            // source. Unsplash/Pixabay (fetchDestinationPhoto) is the same
-            // proven-reliable source every hotel article already uses with a
-            // 100% success rate — see TASKS.md for a possible future
-            // reintroduction of the real-dish-photo idea via a proper
-            // server-side download + Supabase Storage upload.
-            const photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
-            if (photo) {
-              heroImageUrl = photo.url;
-              heroImageCredit = photo.credit;
+            // A real photo of the top-evidenced restaurant, sourced from its
+            // own website (not Google Places) — see fetchBusinessWebsitePhoto's
+            // comment above for why this is a different, materially lower-risk
+            // case than the Google Places hotlinking this replaced once
+            // already (fetchRestaurantDishPhoto, removed 2026-09-22 after 65%
+            // of its photos broke in production and exposed the live API key).
+            const leadRestaurant = await pickLeadEntity(supabase, 'restaurants', restaurantIds);
+            const businessPhoto = leadRestaurant ? await fetchBusinessWebsitePhoto(leadRestaurant.website_url, leadRestaurant.name) : null;
+            if (businessPhoto) {
+              heroImageUrl = businessPhoto.url;
+              heroImageCredit = businessPhoto.credit;
+            } else {
+              const photo = await fetchDestinationPhoto(destination.city, unsplashKey, pixabayKey);
+              if (photo) {
+                heroImageUrl = photo.url;
+                heroImageCredit = photo.credit;
+              }
             }
 
             const { error: insertErr } = await supabase.from('seo_articles').upsert({
@@ -1840,8 +1926,9 @@ serve(async (req) => {
             if (insertErr) throw insertErr;
             thisArticleResult = { slug: article.slug, title: article.title };
 
-            // heroImageUrl is always Unsplash/Pixabay now (see above), so
-            // it's already off-site-safe for Pinterest with no substitution
+            // heroImageUrl is either the restaurant's own website photo or
+            // Unsplash/Pixabay (see above) — never Google Places — so it's
+            // already off-site-safe for Pinterest with no substitution
             // needed (unlike social-poster/pinterest-poster's own daily
             // sweeps, which still guard against older rows pre-dating this
             // fix via their own isGooglePlacesPhotoUrl checks).
