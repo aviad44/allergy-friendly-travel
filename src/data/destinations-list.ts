@@ -75,14 +75,6 @@ export const destinations: Destination[] = [
     region: 'worldwide'
   },
   {
-    id: 'eilat',
-    name: 'Eilat',
-    country: 'Israel',
-    description: 'A Stress-Free Vacation: U Coral Beach Hotel in Eilat',
-    subtitle: 'Allergy-Friendly Experience at Fattal\'s Resort',
-    region: 'middle-east'
-  },
-  {
     id: 'airlines',
     name: 'Airlines',
     country: 'Worldwide',

@@ -32,7 +32,6 @@ const Terms = lazy(() => import('@/pages/Terms'));
 const AllergyTranslationCard = lazy(() => import('@/pages/AllergyTranslationCard'));
 const Privacy = lazy(() => import('@/pages/Privacy'));
 const CruiseLines = lazy(() => import('@/pages/destinations/CruiseLines'));
-const Eilat = lazy(() => import('./pages/destinations/Eilat'));
 const Airlines = lazy(() => import('./pages/destinations/Airlines'));
 const Madrid = lazy(() => import('./pages/destinations/Madrid'));
 const FlyingWithEpipens = lazy(() => import('./pages/destinations/FlyingWithEpipens'));
@@ -105,7 +104,6 @@ const AppContent = () => {
             <Route path="/allergy-translation-card" element={<AllergyTranslationCard />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/destinations/cruise-lines" element={<CruiseLines />} />
-            <Route path="/destinations/eilat" element={<Eilat />} />
             <Route path="/destinations/airlines" element={<Airlines />} />
             <Route path="/destinations/madrid" element={<Madrid />} />
             <Route path="/destinations/flying-with-epipens" element={<FlyingWithEpipens />} />

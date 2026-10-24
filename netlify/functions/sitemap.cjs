@@ -29,7 +29,6 @@ const STATIC_PATHS = [
   { path: '/destinations/portugal', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/swiss-alps', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/cruise-lines', changefreq: 'monthly', priority: '0.8' },
-  { path: '/destinations/eilat', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/hotel-chains', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/airlines', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/flying-with-epipens', changefreq: 'monthly', priority: '0.9' },
