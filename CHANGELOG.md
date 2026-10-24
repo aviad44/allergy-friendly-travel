@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-24
+- **Fixed a long-standing fabricated-content violation on `/categories`.** `src/pages/Categories.tsx`'s "Featured Destinations" section had 4 entirely invented hotel entries since before this file's issue tracking started ("Luxury Retreat in Swiss Alps," "Beachfront Paradise in Maldives," "Urban Sanctuary in Tokyo," "Mountain Lodge in Colorado") — no real hotel names, stock Unsplash photos, no sourcing. Same policy violation as the already-fixed `TopHotelsSection.tsx` fabricated London/Barcelona/Abu-Dhabi block, just never applied to this page. Replaced with a live query (same pattern as `GlutenFree.tsx`/`RegionHub.tsx`): the 4 most recently published `seo_articles`, each linking to its real article with the real title/description/hero image. `npx tsc --noEmit -p .` clean.
+
 ## 2026-10-21
 - **Live hotel/restaurant search (the homepage search box) now falls back to already-verified DB evidence when the live Google scan finds nothing — instead of telling a visitor "no results" when real evidence exists.** User reported searching Athens hotels + Peanuts on the live site and getting zero results. Investigation found two separate things, both real:
   1. **Not a budget problem.** While investigating, found `hotel-search`/`restaurants-search`/`discover-city`/`verify-quote` had already been live-deployed at `MONTHLY_BUDGET_ILS = 450` since 2026-10-18 (a prior fix in this same session, apparently from a part of the conversation not fully visible when this investigation started) — but the local git files on this branch still showed the stale pre-raise `₪250`/`₪100` values, since the git branch was cut before that deploy was ever committed. Corrected the local files to match the live-deployed `₪450` source exactly (re-fetched via `get_edge_function`) before making any further change, so this fix doesn't accidentally regress that ceiling back down.
