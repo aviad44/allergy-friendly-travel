@@ -19,6 +19,7 @@ const STATIC_PATHS = [
   // too, since this list is also what scripts/prerender.mjs renders.
   { path: '/news', changefreq: 'daily', priority: '0.8' },
   { path: '/news/airline-food-allergy-policies-2026', changefreq: 'weekly', priority: '0.8' },
+  { path: '/news/southwest-pistachio-snack-allergy-backlash-2026', changefreq: 'weekly', priority: '0.8' },
   { path: '/allergy-translation-card', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/london', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/cyprus', changefreq: 'monthly', priority: '0.8' },
@@ -28,7 +29,6 @@ const STATIC_PATHS = [
   { path: '/destinations/portugal', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/swiss-alps', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/cruise-lines', changefreq: 'monthly', priority: '0.8' },
-  { path: '/destinations/eilat', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/hotel-chains', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/airlines', changefreq: 'monthly', priority: '0.8' },
   { path: '/destinations/flying-with-epipens', changefreq: 'monthly', priority: '0.9' },
