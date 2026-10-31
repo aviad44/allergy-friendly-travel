@@ -25,11 +25,14 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   Tripadvisor review via `tripadvisor-reviews`).
 - **Hard cost ceilings, enforced in our own code, never trust a
   third-party "expected cost" UI.** Google Places (`hotel-search`,
-  `restaurants-search`): ₪100/month, calibrated from a real GCP invoice
-  (`COST_PER_CALL_ILS` in both functions). Tripadvisor (`tripadvisor-reviews`):
-  ₪50/month, list-price estimate (not yet invoice-calibrated — check
-  Tripadvisor's Billing page periodically and recalibrate
-  `TRIPADVISOR_COST_PER_CALL_ILS` the same way Google's was). Both guards
+  `restaurants-search`): ₪450/month as of the 2026-10-18 raise, calibrated from a real GCP invoice
+  (`COST_PER_CALL_ILS` in both functions — raise history is in each
+  function's own comment). Tripadvisor (`tripadvisor-reviews`,
+  `discover-city-tripadvisor`, `content-pipeline`'s TA path, one shared
+  ceiling): ₪180/month as of the same 2026-10-18 raise, list-price estimate
+  (not yet invoice-calibrated — check Tripadvisor's Billing page
+  periodically and recalibrate `TRIPADVISOR_COST_PER_CALL_ILS` the same way
+  Google's was). Both guards
   fail *closed* (block the live call) if spend can't be verified. Never
   raise a ceiling without telling the user first — this has been litigated
   extensively in this project's history.

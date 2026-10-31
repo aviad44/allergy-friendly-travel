@@ -248,10 +248,12 @@ function cityMatchesAddress(city: string, addressFormatted: string | null): bool
 // hotel-search/index.ts's copy of the Google equivalent for the full
 // writeup), then ₪75→₪100/month 2026-10-03 (also explicit user
 // authorization) after the ₪75 ceiling blocked a requested re-run for
-// New York.
+// New York. Raised ₪100→₪180/month 2026-10-18 (also explicit user
+// authorization) — see hotel-search/index.ts's Google equivalent for the
+// full writeup.
 const TRIPADVISOR_COST_PER_CALL_ILS = 0.056;
 const CALLS_PER_NEW_PLACE = 3;
-const MONTHLY_BUDGET_ILS = 100;
+const MONTHLY_BUDGET_ILS = 180;
 const BUDGET_SAFETY_MARGIN = 0.9;
 
 async function isMonthlyBudgetExceeded(supabase: any): Promise<boolean> {
