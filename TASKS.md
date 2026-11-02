@@ -385,6 +385,20 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ---
 
+## Operations & Cost
+
+- [x] Trigger Netlify rebuild even when content-pipeline times out mid-run
+  - RATIONALE: Weekly Search Console audit (2026-11-02) found `restaurants/ljubljana-food-allergy-restaurants/` served with the homepage's stale `<title>`/canonical instead of its own. Root cause: the 2026-11-01 15:31 UTC scheduled run published Ljubljana's article, then timed out on a second city (`HTTP 504 IDLE_TIMEOUT`, Supabase's 150s Edge Function limit) — the failed step made `content-pipeline.yml`'s "Trigger Netlify rebuild" step (`if: success()`) skip entirely, even though real content had already been written to `seo_articles`.
+  - HOW-TO: Changed the step's condition to `if: always()` — a rebuild after a run that wrote nothing is a harmless no-op.
+  - DoD: PR merged: https://github.com/aviad44/allergy-friendly-travel/pull/60. Checked frequency first: only 1 of the last 30 `content-pipeline` runs had hit this timeout, so it isn't the explanation for the recurring "1-2 pages NOT indexed" pattern in past weekly audits (that's normal crawl lag for brand-new pages) — just a real, low-probability gap worth closing regardless.
+
+- [x] Lower content-pipeline's GOOGLE_DETAILS_CAP 90→40 to cut Google Places spend
+  - RATIONALE: User asked to find a way to reduce Google API cost without hurting site activity. `search_log` breakdown (Nov 2026) showed `content-pipeline` discovery (mode `content_pipeline`) was 86% of ALL Google Places spend site-wide (1,377 of 1,605 calls) at ~69 calls/run, vs. only 14% from real live-visitor search (`hotels_fast`+`fast`). `GOOGLE_DETAILS_CAP` had grown 60→90 on 2026-10-02 on the premise the extra cost was "trivial" against the ceiling at the time — true in isolation, but it compounds across a daily run plus every manual-override dispatch, and the same high cap was also the proximate cause of the Netlify-rebuild timeout bug above.
+  - HOW-TO: Explicit user authorization for the new value (40). Lowered the constant in `content-pipeline/index.ts`, deployed (v61).
+  - DoD: Deployed and documented in CHANGELOG.md (2026-11-02). Live visitor search and the daily publish cadence are unaffected — a city with a low real-evidence hit rate may just need more daily attempts/days to clear `MIN_FOR_NEW_ARTICLE`, which the existing 8-attempts-per-run retry (and the next day's run) already absorbs.
+
+---
+
 ## Weekly Rollout Plan
 
 - Week 1 — Baseline & Tooling
