@@ -98,8 +98,21 @@ jobs:
       # visible to real users (the app fetches them client-side) — but the
       # static prerendered snapshot bots see (see scripts/prerender.mjs) is
       # only regenerated on deploy. Trigger one so that snapshot stays fresh.
+      #
+      # if: always() (not success()) — found 2026-11-02: a run that
+      # publishes one city then times out on a second (HTTP 504
+      # IDLE_TIMEOUT from Supabase's 150s Edge Function limit) still fails
+      # the previous step, which skipped this one under success() even
+      # though the first city's article had already been written to
+      # seo_articles. Real case: 2026-11-01 run published
+      # ljubljana-food-allergy-restaurants, then timed out on a second
+      # city — the skipped rebuild left that new route served from the
+      # stale prerendered snapshot (homepage title/canonical instead of
+      # its own), which is exactly what this step exists to prevent. A
+      # rebuild after a failed run is a harmless no-op if nothing new was
+      # actually written.
       - name: Trigger Netlify rebuild
-        if: success()
+        if: always()
         env:
           NETLIFY_BUILD_HOOK_URL: ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
         run: |
