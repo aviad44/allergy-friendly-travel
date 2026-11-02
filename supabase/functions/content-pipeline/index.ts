@@ -1068,7 +1068,25 @@ async function discoverTripadvisor(supabase: any, taApiKey: string, destination:
 // Details calls ≈ ₪1.03 at COST_PER_CALL_ILS, trivial against the ₪250
 // monthly ceiling) for a meaningfully better chance of finding genuine
 // allergy evidence in a larger candidate pool.
-const GOOGLE_DETAILS_CAP = 90;
+//
+// Lowered 90→40 2026-11-02, explicit user authorization. Real cost
+// breakdown (search_log, Nov 2026): this function's own discovery
+// (mode='content_pipeline') was 86% of ALL Google Places spend site-wide
+// — far more than live visitor search (hotels_fast+fast, 14%) — at an
+// average of ~69 calls/run (close to the old 93-call theoretical max: 3
+// queries + up to 90 details). 90 was never actually "trivial" once run
+// daily plus every manual-override dispatch; it compounds. Separately,
+// the same cap being this high was also the root cause of a real
+// indexing bug the same week (see 2026-11-02 CHANGELOG entry /
+// content-pipeline.yml): a 2-city automatic run occasionally exceeded
+// Supabase's 150s Edge Function idle timeout and got killed with a 504
+// mid-second-city, which skipped that run's Netlify rebuild entirely —
+// a smaller, faster per-city scan also reduces how often that timeout
+// is hit. Trade-off: a city with a low real-evidence hit rate may need
+// more daily attempts/days to clear MIN_FOR_NEW_ARTICLE, which the
+// automatic 8-attempts-per-run retry (and next day's run) already
+// absorbs — live search and the daily publish cadence are unaffected.
+const GOOGLE_DETAILS_CAP = 40;
 
 function buildQueries(city: string, isRestaurant: boolean): string[] {
   return isRestaurant
