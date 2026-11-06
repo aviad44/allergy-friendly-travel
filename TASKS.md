@@ -319,10 +319,15 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## UX
 
-- [x] Destination autocomplete suggests real, already-covered cities (user request — search engine improvements, part 1 of 2)
+- [x] Destination autocomplete suggests real, already-covered cities (user request — search engine improvements, part 1)
   - RATIONALE: User asked for an easier way for visitors to find a destination to search for. The homepage search box's autocomplete only ever suggested a static, hand-picked 20-city list with no connection to the ~174 real cities already covered by evidenced hotels/restaurants in the DB.
   - HOW-TO: Added `src/utils/fetchCoveredDestinations.ts` — fetches every distinct city with at least one real-evidenced (`allergy_score is not null`), active hotel or restaurant, live via existing public anon-read RLS, merged into the static list in `src/components/SearchBar.tsx` (static shows instantly, live list merges in once fetched — no blank/regressed state). Cached for the page's lifetime.
-  - DoD: `npx tsc --noEmit` clean. Confirmed public SELECT RLS already allows this (`pg_policies`). Live visitor search (`hotel-search`/`restaurants-search`) itself unchanged. **Part 2 (not started)**: a periodic report on `search_log` — top-searched destinations, zero-result searches as a demand signal for new content — user chose to start with the autocomplete first.
+  - DoD: `npx tsc --noEmit` clean. Confirmed public SELECT RLS already allows this (`pg_policies`). Live visitor search (`hotel-search`/`restaurants-search`) itself unchanged.
+
+- [x] Central "find an existing guide" search on /destinations/ and /restaurants/ (user request — search engine improvements, part 2, corrected scope)
+  - RATIONALE: Initial misread — I first assumed the ask was about the homepage's *live* search (part 1 above) and a global header search entry point. User corrected: the actual goal is finding hotels/restaurants from **already-published articles**, not a live Google Places call. Also: searching a city with both a hotel guide and a restaurant guide (e.g. Vienna, Rome, Porto — confirmed live) should show both for the visitor to pick, not just one.
+  - HOW-TO: Added `src/utils/fetchArticlesIndex.ts` (city → published-article index, built from `seo_articles` joined to `hotels`/`restaurants` via each article's first linked entity — same city convention as `DestinationsList.tsx`) and `src/components/search/ArticlesSearch.tsx` (one shared component: autocomplete + search button; 1 match navigates straight to it, 2+ matches show both labeled "Hotels in X" / "Restaurants in X", 0 matches shows a plain "no guide yet" message — never falls back to a live search). Wired into `src/pages/destinations/index.tsx` and `src/pages/Restaurants.tsx` per the user's explicit placement choice.
+  - DoD: `npx tsc --noEmit` clean. Live-confirmed multi-guide cities via SQL (Porto/Seville/Vienna/Rome/Lyon each have both). **Scope note, user-confirmed interpretation pending**: "Hotels" is used only as the result label here, not a rename of the `/destinations/` URL itself — flagged to the user as a separate, larger, SEO-sensitive change if that's actually wanted. **Not done**: the search-insights report on `search_log` (top searches, zero-result queries) — not yet requested since this correction.
 
 - [ ] Keyboard navigability and focus visibility
   - RATIONALE: Accessibility and usability.
