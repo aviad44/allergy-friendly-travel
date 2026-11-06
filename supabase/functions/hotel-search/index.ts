@@ -397,7 +397,14 @@ async function fetchDetails(placeId: string, apiKey: string): Promise<any | null
 // ran ~200 calls/day, spike days (2026-10-01/02) hit ~1,600/day; budgeted
 // for ~400 calls/day × 13 remaining days to 2026-11-01 reset on top of the
 // ₪228 already spent this month. Re-evaluate at next month's reset.
-const MONTHLY_BUDGET_ILS = 450;
+//
+// Lowered ₪450→₪150/month 2026-11-06, explicit user request ("מבקש שהתקציב
+// החודשי לא יעלה על 150 שח") — a deliberate cap, not a miscalibration. At
+// the time of this change, November's combined spend (search_log, all
+// shared modes) was ~₪71 of the old ₪450 ceiling, well under the new ₪150
+// one too, so this doesn't retroactively block anything already run this
+// month — it only lowers how much more can be spent for the rest of it.
+const MONTHLY_BUDGET_ILS = 150;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342; // calibrated from real billing, see comment above
 

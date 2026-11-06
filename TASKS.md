@@ -412,6 +412,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Explicit user authorization for the new value (40). Lowered the constant in `content-pipeline/index.ts`, deployed (v61).
   - DoD: Deployed and documented in CHANGELOG.md (2026-11-02). Live visitor search and the daily publish cadence are unaffected — a city with a low real-evidence hit rate may just need more daily attempts/days to clear `MIN_FOR_NEW_ARTICLE`, which the existing 8-attempts-per-run retry (and the next day's run) already absorbs.
 
+- [x] Lower Google Places monthly budget ceiling ₪450→₪150 (user request)
+  - RATIONALE: User asked directly for the monthly budget to not exceed ₪150 — a deliberate lower cap, not a miscalibration.
+  - HOW-TO: Updated `MONTHLY_BUDGET_ILS` in `hotel-search/index.ts` and `restaurants-search/index.ts` (the shared ceiling gating live visitor search). `content-pipeline`'s own separate ₪100 ceiling is untouched (already below the new cap).
+  - DoD: Deployed (`hotel-search` v87, `restaurants-search` v91), documented in CHANGELOG.md and CLAUDE.md. New trip threshold: ₪135 (90% of ₪150) — November's ~₪71 already spent at change time wasn't retroactively blocked.
+
 ---
 
 ## Weekly Rollout Plan

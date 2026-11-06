@@ -25,9 +25,10 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   Tripadvisor review via `tripadvisor-reviews`).
 - **Hard cost ceilings, enforced in our own code, never trust a
   third-party "expected cost" UI.** Google Places (`hotel-search`,
-  `restaurants-search`): ₪450/month as of the 2026-10-18 raise, calibrated from a real GCP invoice
-  (`COST_PER_CALL_ILS` in both functions — raise history is in each
-  function's own comment). Tripadvisor (`tripadvisor-reviews`,
+  `restaurants-search`): ₪150/month as of the 2026-11-06 user-requested
+  lower cap (down from ₪450; `COST_PER_CALL_ILS` is still calibrated from a
+  real GCP invoice — raise/lower history is in each function's own
+  comment). Tripadvisor (`tripadvisor-reviews`,
   `discover-city-tripadvisor`, `content-pipeline`'s TA path, one shared
   ceiling): ₪180/month as of the same 2026-10-18 raise, list-price estimate
   (not yet invoice-calibrated — check Tripadvisor's Billing page
