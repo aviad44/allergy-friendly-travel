@@ -319,6 +319,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## UX
 
+- [x] Destination autocomplete suggests real, already-covered cities (user request — search engine improvements, part 1 of 2)
+  - RATIONALE: User asked for an easier way for visitors to find a destination to search for. The homepage search box's autocomplete only ever suggested a static, hand-picked 20-city list with no connection to the ~174 real cities already covered by evidenced hotels/restaurants in the DB.
+  - HOW-TO: Added `src/utils/fetchCoveredDestinations.ts` — fetches every distinct city with at least one real-evidenced (`allergy_score is not null`), active hotel or restaurant, live via existing public anon-read RLS, merged into the static list in `src/components/SearchBar.tsx` (static shows instantly, live list merges in once fetched — no blank/regressed state). Cached for the page's lifetime.
+  - DoD: `npx tsc --noEmit` clean. Confirmed public SELECT RLS already allows this (`pg_policies`). Live visitor search (`hotel-search`/`restaurants-search`) itself unchanged. **Part 2 (not started)**: a periodic report on `search_log` — top-searched destinations, zero-result searches as a demand signal for new content — user chose to start with the autocomplete first.
+
 - [ ] Keyboard navigability and focus visibility
   - RATIONALE: Accessibility and usability.
   - HOW-TO: Tab through primary flows; ensure visible focus; fix traps.
