@@ -52,6 +52,15 @@ https://allergy-free-travel.netlify.app/* https://www.allergy-free-travel.com/:s
 # restaurants, cross-linked to each other) instead of keeping this page.
 /destinations/warm-winter-destinations /destinations/traveling-to-eilat-food-allergy-friendly-guide 301!
 
+# The standalone Eilat feature page (U Coral Beach / Penina Belhassan) had a
+# "Guest Testimonials" section of 3 unattributed quotes with no traceable
+# source, and a fresh re-check found zero genuine food-allergy evidence for
+# its subject hotel. Per the user's explicit decision (same standard as the
+# other 127 unverifiable entries removed 2026-09), retired rather than
+# fixed in place — redirects to the real, evidence-based Eilat article
+# created during the Warm Winter Destinations migration. See CHANGELOG.
+/destinations/eilat /destinations/traveling-to-eilat-food-allergy-friendly-guide 301!
+
 # Articles unpublished 2026-10-01 (zero valid hotels after classifier
 # cleanup — see CHANGELOG) — redirect to the relevant region hub instead of
 # leaving a 404, so the page's crawl/link equity lands somewhere topically

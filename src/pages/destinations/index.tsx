@@ -5,6 +5,7 @@ import { MetaManager } from '@/components/MetaManager';
 import { DestinationsHero } from '@/components/destinations/DestinationsHero';
 import { DestinationsList } from '@/components/destinations/DestinationsList';
 import { RegionQuickLinks } from '@/components/destinations/RegionQuickLinks';
+import { ArticlesSearch } from '@/components/search/ArticlesSearch';
 import { destinations } from '@/data/destinations-list';
 
 const DestinationsIndex = () => {
@@ -12,6 +13,9 @@ const DestinationsIndex = () => {
     <div className="min-h-screen bg-gray-50">
       <MetaManager />
       <DestinationsHero />
+      <div className="container mx-auto px-4 pt-8">
+        <ArticlesSearch />
+      </div>
       <div className="container mx-auto px-4 pt-8 flex flex-wrap items-center justify-between gap-4">
         <RegionQuickLinks basePath="/destinations/region" />
         <Link

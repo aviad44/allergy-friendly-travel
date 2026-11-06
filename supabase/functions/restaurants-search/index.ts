@@ -46,13 +46,18 @@ const STRICT_TERMS = [
   'gf menu', 'gf options', 'df options', 'nf options',
 ];
 
+// vegan/vegetarian/plant based/plant-based deliberately NOT included here —
+// a dietary *preference* claim ("great vegan food!") is not a food-*allergy*
+// accommodation claim, and treating it as one let hotels with zero real
+// allergy evidence pass (e.g. Hilton Lima Miraflores' "tremendous efforts to
+// meet our vegetarian food requirements" — genuine, well-reviewed, zero
+// allergy relevance). Fixed 2026-10-06, see TASKS.md #329.
 const WEAK_TERMS = [
   'gluten', 'dairy', 'lactose', 'wheat',
   'peanut', 'peanuts', 'tree nut', 'nuts', 'almond', 'hazelnut', 'walnut',
   'pecan', 'cashew', 'pistachio', 'macadamia',
   'soy', 'soya', 'sesame',
   'shellfish', 'shrimp', 'crab', 'lobster',
-  'vegan', 'vegetarian', 'plant based', 'plant-based',
   'no eggs', 'no dairy', 'no nuts', 'no shellfish', 'no seafood',
   'without nuts', 'without dairy',
   'special diet', 'dietary', 'food restrictions',
@@ -71,9 +76,30 @@ const SAFETY_TERMS = [
   'allergy protocol', 'allergy friendly kitchen',
 ];
 
+// Added 'sick'/illness phrasing 2026-10-06, TASKS.md #329: a sentence can
+// name the right allergen and still describe a real safety incident, not
+// safe accommodation — "served a 100% gluten pasta and have been sick for
+// the past few days" (Olivery, Tel Aviv) named "gluten" and nothing else
+// disqualifying. Kept to multi-word phrases / specific-enough single words
+// to avoid excluding a sentence that merely mentions illness unrelatedly.
 const WARNING_PHRASES = [
   'not safe', 'unsafe', 'reaction', 'allergic reaction',
   'epipen', 'epi pen', 'anaphylaxis', 'anaphylactic',
+  'have been sick', 'got sick', 'made me sick', 'made us sick', 'fell ill',
+  'food poisoning', 'threw up', 'vomited', 'vomiting', 'severe reaction',
+  'hospitalized', 'rushed to hospital', 'emergency room',
+];
+
+// A sentence stating an expectation/belief about what *would* happen, not a
+// lived account of what actually did — "we went in with the belief that the
+// kitchen would be well equipped" (1 Hotel Mayfair) named "gluten allergy"
+// and nothing else disqualifying, but describes no actual outcome.
+// Deliberately narrow phrase list, not a blanket "would"/"should" ban —
+// those words appear constantly in genuine accounts ("they said they would
+// check with the chef, and it was perfect") that must not be lost.
+const ASPIRATIONAL_MARKERS = [
+  'the belief that', 'we believed', 'i believed', 'we assumed', 'i assumed',
+  'we were hoping', 'i was hoping', 'hoping that', 'we expected', 'i expected',
 ];
 
 // Bare 'allergy'/'allergies'/'allergic'/'allergen'/'allergens' match any kind
@@ -157,7 +183,11 @@ interface ReviewSnippet {
 // context" principle as the hasWarning exclusion, just one level deeper.
 function classifyAndExtract(reviewText: string, author: string, relativeTime: string): ReviewSnippet | null {
   const positiveWords = ['great', 'excellent', 'amazing', 'delicious', 'wonderful', 'fantastic', 'recommend', 'love', 'best', 'perfect'];
-  const dietaryIndicators = ['vegan', 'vegetarian', 'plant based', 'plant-based', 'gluten', 'dairy free', 'lactose'];
+  // vegan/vegetarian/plant based/plant-based deliberately NOT included here
+  // either — this path has no safety-language requirement, so "great vegan
+  // food!" alone would pass as allergy evidence. Fixed 2026-10-06, see
+  // TASKS.md #329 and the WEAK_TERMS comment above.
+  const dietaryIndicators = ['gluten', 'dairy free', 'lactose'];
 
   const sentences = reviewText.split(/(?<=[.!?])\s+/);
   let bestScore = 0;
@@ -182,7 +212,8 @@ function classifyAndExtract(reviewText: string, author: string, relativeTime: st
     const isSuggestionComplaint = normS.includes('recommend') && normS.includes('include');
     const isDoubleNegativePositive = DOUBLE_NEGATIVE_POSITIVES.some(p => normS.includes(p));
     const isNegated = !isDoubleNegativePositive && (NEGATION_MARKERS.some(m => normS.includes(m)) || CONTRACTION_NEGATION_REGEX.test(normS));
-    if (isSuggestionComplaint || isNegated) continue;
+    const isAspirational = ASPIRATIONAL_MARKERS.some(m => normS.includes(m));
+    if (isSuggestionComplaint || isNegated || isAspirational) continue;
 
     const hasStrictS = sStrict.length > 0;
     const hasWeakS = sWeak.length > 0;
@@ -336,7 +367,11 @@ async function fetchReviews(placeId: string, apiKey: string): Promise<any | null
 //
 // Raised ₪100→₪250/month 2026-10-02 with explicit user authorization — see
 // hotel-search/index.ts's copy of this constant for the full writeup.
-const MONTHLY_BUDGET_ILS = 250;
+//
+// Raised ₪250→₪450/month 2026-10-18 with explicit user authorization — see
+// hotel-search/index.ts's copy of this constant for the full writeup (live
+// visitor search had been completely blocked for 12 days this month).
+const MONTHLY_BUDGET_ILS = 450;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342; // calibrated from real billing, see comment above
 
@@ -460,6 +495,83 @@ interface PlaceResult {
   tripadvisorReview?: { text: string; author: string; url: string } | null;
 }
 
+// ==========================================
+// DB FALLBACK — reuse already-verified evidence when the live scan finds nothing
+// ==========================================
+// Mirrors hotel-search/index.ts's fetchDbFallback — see its comment for the
+// full rationale (confirmed live 2026-10-21: a live scan can come back
+// empty purely because this one scan's limited review sample missed it,
+// even though real evidence for the same place already exists in
+// restaurants/restaurant_sources from earlier discovery). Only used when
+// the live scan's results are empty. Matches on city OR country, since
+// `destination` is free text a visitor might type as either.
+async function fetchDbFallback(supabase: any, destination: string, limit = FAST_MODE.targetResults): Promise<PlaceResult[]> {
+  try {
+    const dest = destination.trim();
+    const [byCity, byCountry] = await Promise.all([
+      supabase.from('restaurants')
+        .select('id, name, address, allergy_score')
+        .ilike('city', dest).eq('active', true).not('allergy_score', 'is', null)
+        .order('allergy_score', { ascending: false }).limit(limit),
+      supabase.from('restaurants')
+        .select('id, name, address, allergy_score')
+        .ilike('country', dest).eq('active', true).not('allergy_score', 'is', null)
+        .order('allergy_score', { ascending: false }).limit(limit),
+    ]);
+
+    const seen = new Set<string>();
+    const rows = [...(byCity.data || []), ...(byCountry.data || [])].filter((r: any) => {
+      if (seen.has(r.id)) return false;
+      seen.add(r.id);
+      return true;
+    }).slice(0, limit);
+
+    if (rows.length === 0) return [];
+
+    const ids = rows.map((r: any) => r.id);
+    const { data: sources } = await supabase
+      .from('restaurant_sources')
+      .select('restaurant_id, snippet, source_url, allergy_score')
+      .in('restaurant_id', ids);
+
+    const bestSourceByPlace = new Map<string, any>();
+    for (const s of sources || []) {
+      const cur = bestSourceByPlace.get(s.restaurant_id);
+      if (!cur || (s.allergy_score || 0) > (cur.allergy_score || 0)) bestSourceByPlace.set(s.restaurant_id, s);
+    }
+
+    return rows.map((r: any) => {
+      const src = bestSourceByPlace.get(r.id);
+      const score = (r.allergy_score ?? 0) / 5;
+      let confidenceLevel: 'high' | 'medium' | 'low' = 'low';
+      if (score >= 0.7) confidenceLevel = 'high';
+      else if (score >= 0.5) confidenceLevel = 'medium';
+
+      return {
+        name: r.name,
+        address: r.address || '',
+        rating: null,
+        totalRatings: null,
+        mapsUrl: src?.source_url || `https://www.google.com/maps/search/${encodeURIComponent(`${r.name} ${destination}`)}`,
+        reviewSnippet: src ? {
+          text: src.snippet,
+          author: 'Verified guest review',
+          relativeTime: '',
+          hasAllergyMention: true,
+          score,
+          matchedTerms: [],
+        } : null,
+        confidenceLevel,
+        evidenceStatus: 'evidence_found',
+        placeId: '',
+      } as PlaceResult;
+    });
+  } catch (err) {
+    console.log('⚠️ DB fallback query error:', err);
+    return [];
+  }
+}
+
 // Enriches only the single top-ranked result with a real Tripadvisor
 // rating + review excerpt (via the tripadvisor-reviews function, which
 // owns its own cache and hard budget ceiling). Deliberately scoped to
@@ -570,23 +682,6 @@ serve(async (req) => {
 
     console.log(`📊 [${searchId}] ${candidates.length} candidates`);
 
-    if (candidates.length === 0) {
-      const dur = Date.now() - startTime;
-      if (supabase) {
-        // Cache the empty result too — see setCachedSearch call in STEP 4
-        // below for why this matters (repeat zero-result searches were the
-        // single biggest source of wasted API spend before this fix).
-        await setCachedSearch(supabase, cDest, cAllg, { places: [], queryPhrase: primaryPhrase, googleCallsCount: googleCalls }, 0);
-        await logSearch(supabase, searchId, destination, allergiesArray, googleCalls, 0, false, dur);
-      }
-      return new Response(JSON.stringify({
-        destination, mode: 'fast', queryPhrase: primaryPhrase,
-        places: [], totalCandidates: 0, detailsFetched: 0,
-        stats: { evidenceFound: 0, totalTimeMs: dur },
-        expandSearchAvailable: true, fallbackUrl,
-      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-
     // ---- STEP 3: Fetch reviews for top candidates, early stop at 8 results ----
     const results: PlaceResult[] = [];
     let detailsFetched = 0;
@@ -629,6 +724,17 @@ serve(async (req) => {
       });
     }
 
+    // ---- STEP 3.5: DB fallback when the live scan found no real evidence ----
+    // See fetchDbFallback's comment above — same fix as hotel-search, kept
+    // consistent across both live search endpoints.
+    if (results.length === 0 && supabase) {
+      const fallback = await fetchDbFallback(supabase, destination);
+      if (fallback.length > 0) {
+        results.push(...fallback);
+        console.log(`♻️ [${searchId}] DB fallback: ${fallback.length} already-verified restaurant(s) for "${destination}"`);
+      }
+    }
+
     // Sort by confidence
     results.sort((a, b) => {
       const sa = a.reviewSnippet?.score || 0;
@@ -644,7 +750,7 @@ serve(async (req) => {
     const dur = Date.now() - startTime;
 
     // ---- STEP 4: Cache & log ----
-    // Cache regardless of result count — see the candidates.length===0 branch
+    // Cache regardless of result count — see the candidates.length===0 case
     // above for why (a zero-result search that isn't cached repeats its full
     // cost every time it's searched again, for the same "nothing found"
     // answer).

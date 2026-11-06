@@ -5,6 +5,7 @@ import { useState, useCallback, memo, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { destinationSuggestions, allergySuggestions } from "@/utils/searchSuggestions";
+import { fetchCoveredDestinations } from "@/utils/fetchCoveredDestinations";
 import { Autocomplete } from "./search/Autocomplete";
 import { MultiSelectAutocomplete } from "./search/MultiSelectAutocomplete";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -22,11 +23,12 @@ export const SearchBar = () => {
   const [allergies, setAllergies] = useState<string[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [lastSearch, setLastSearch] = useState<{destination: string, allergies: string[], mode?: SearchMode} | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>(destinationSuggestions);
   const isMobile = useIsMobile();
-  
+
   const { toast } = useToast();
   const navigate = useNavigate();
-  
+
   // Load recent searches from localStorage on component mount
   useEffect(() => {
     const recentSearch = localStorage.getItem('recentSearch');
@@ -38,6 +40,22 @@ export const SearchBar = () => {
         console.error('Error parsing recent search:', e);
       }
     }
+  }, []);
+
+  // Starts from the static list immediately (no blank/empty state while this
+  // loads), then grows it with every real destination already covered in
+  // the DB — see fetchCoveredDestinations' comment for why this is live
+  // rather than another static list.
+  useEffect(() => {
+    fetchCoveredDestinations().then((covered) => {
+      if (covered.length === 0) return;
+      const seen = new Map<string, string>();
+      for (const city of [...destinationSuggestions, ...covered]) {
+        const key = city.toLowerCase();
+        if (!seen.has(key)) seen.set(key, city);
+      }
+      setSuggestions([...seen.values()].sort((a, b) => a.localeCompare(b)));
+    });
   }, []);
   
   // Memoize handlers to prevent unnecessary re-renders
@@ -142,7 +160,7 @@ export const SearchBar = () => {
             placeholder="Enter destination"
             value={destination}
             onChange={handleDestinationChange}
-            suggestions={destinationSuggestions}
+            suggestions={suggestions}
             className="bg-white/90 backdrop-blur-sm w-full text-sm sm:text-base"
           />
         </div>
