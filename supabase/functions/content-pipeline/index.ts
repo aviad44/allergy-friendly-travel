@@ -1601,7 +1601,15 @@ serve(async (req) => {
     // Kept modest (not unbounded) so the shared Google budget doesn't
     // exhaust itself in the first week of the month; manual overrides stay
     // single-shot (the caller asked for exactly one city).
-    const TARGET_SUCCESSFUL_CITIES = manualOverride ? 1 : 2;
+    //
+    // Lowered 2→1 2026-11-07, explicit user request to slow the overall
+    // publish rate down to ~1 article/2 days (see content-pipeline.yml's
+    // matching cron change, daily→every-2-days, for the other half of
+    // that slowdown — this halves output per run, the cron change halves
+    // run frequency). Now the same value as manual overrides, so the
+    // ternary is gone — a manual override still only ever asks for one
+    // specific city anyway.
+    const TARGET_SUCCESSFUL_CITIES = 1;
     const taApiKey = Deno.env.get('TRIPADVISOR_API_KEY');
 
     // Never publish a brand-new article for a city with fewer than this many
