@@ -417,6 +417,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Updated `MONTHLY_BUDGET_ILS` in `hotel-search/index.ts` and `restaurants-search/index.ts` (the shared ceiling gating live visitor search). `content-pipeline`'s own separate ₪100 ceiling is untouched (already below the new cap).
   - DoD: Deployed (`hotel-search` v87, `restaurants-search` v91), documented in CHANGELOG.md and CLAUDE.md. New trip threshold: ₪135 (90% of ₪150) — November's ~₪71 already spent at change time wasn't retroactively blocked.
 
+- [x] Slow article publish rate to ~1 article/2 days (user request)
+  - RATIONALE: User asked directly ("תוריד את קצב פרסום הכתבות באתר לאחת ביומיים") to bring the publish rate down to one article every two days. Was daily cron + `TARGET_SUCCESSFUL_CITIES=2` per run — ~2 articles/day of the same content type (alternation picks type per run, not per city).
+  - HOW-TO: Two independent halves. `TARGET_SUCCESSFUL_CITIES` 2→1 in `content-pipeline/index.ts`. Cron `"0 9 * * *"` → `"0 9 */2 * *"` in `content-pipeline.yml` (fires odd days of the month, ~2-day cadence).
+  - DoD: `content-pipeline` deployed v62 (live immediately — city-count half of the slowdown is in effect now). Cron half committed and pushed to `claude/southwest-pistachio-news-20261018`, **not yet merged to `main`** — GitHub Actions reads scheduled cron from the default branch, so that half won't take effect until merged. No PR opened yet. Documented in CHANGELOG.md (2026-11-07).
+
 ---
 
 ## Weekly Rollout Plan
