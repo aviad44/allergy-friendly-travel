@@ -118,10 +118,17 @@ const routeMeta: Record<string, RouteMeta> = {
     description: "Discover destinations with allergy-friendly hotels and restaurants.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
+  // Rewritten 2026-11-09 (weekly GSC audit): 0 clicks across 78 impressions
+  // at an average position of 2.0-6.4 over the last 6 weeks (seo_search_
+  // console_snapshots) — the page ranks well but the old title/description
+  // read as a generic listicle with no concrete hook. Named the two chains
+  // actually covered (Four Seasons, Hyatt — src/data/destination-hotel-
+  // chains.ts) instead of an unspecific "worldwide" claim, to make the
+  // snippet both more compelling and more accurate.
   "/destinations/hotel-chains": {
-    title: "Top Allergy-Friendly Hotel Chains Worldwide",
+    title: "Four Seasons & Hyatt: Allergy-Friendly Hotel Chain Policies",
     description:
-      "Explore global hotel chains offering allergy-friendly, celiac-safe food policies for travelers with dietary needs.",
+      "Compare how Four Seasons and Hyatt handle food allergies — chef consultations, allergen menus, and global protocols for gluten-free, dairy-free, and nut-free travelers.",
     image: DEFAULT_SOCIAL_IMAGE,
   },
   // Dedicated overrides (not hotel/restaurant guides, so the generic
