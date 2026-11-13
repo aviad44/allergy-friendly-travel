@@ -41,6 +41,15 @@ const Privacy = () => {
             <li>Send occasional updates or newsletters (only if you opt in)</li>
           </ul>
 
+          <p className="mb-6">
+            <strong>Newsletter.</strong> If you subscribe to our newsletter we store your email address, the
+            date you confirmed your subscription and which signup form you used. We only email you after you
+            confirm via a link we send you (double opt-in), every email includes an unsubscribe link, and we
+            use an email delivery provider (Resend) solely to send these emails on our behalf. We never sell
+            or share your address for marketing by others. Unsubscribed addresses are kept only as an
+            opt-out record so we don't email you again; contact us to have it erased entirely.
+          </p>
+
           <h3 className="font-display text-xl font-semibold mb-3 text-blue-700">3. Use of AI (GPT-Based Tools)</h3>
           <p className="mb-6">Our website may include GPT-based chat tools to assist with hotel recommendations. While these tools use your input to generate responses, we do not store personal conversations unless explicitly submitted via a form or email.</p>
 

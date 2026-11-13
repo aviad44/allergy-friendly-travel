@@ -412,6 +412,14 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Explicit user authorization for the new value (40). Lowered the constant in `content-pipeline/index.ts`, deployed (v61).
   - DoD: Deployed and documented in CHANGELOG.md (2026-11-02). Live visitor search and the daily publish cadence are unaffected — a city with a low real-evidence hit rate may just need more daily attempts/days to clear `MIN_FOR_NEW_ARTICLE`, which the existing 8-attempts-per-run retry (and the next day's run) already absorbs.
 
+## Newsletter
+
+- [ ] Newsletter stage 1: subscriber collection with double opt-in (no sending yet)
+  - RATIONALE: User wants to start emailing visitors who sign up. Stage 1 only *collects* confirmed subscribers; the weekly send (stage 2) comes after there is a list. Built as a public endpoint that makes us email arbitrary addresses, so it is constrained like the budget guards: fails closed, hourly global cap, never reveals who is already subscribed.
+  - HOW-TO: Code is in place but **dark**: `NEWSLETTER_ENABLED` in `src/constants/newsletter.ts` is `false`, so no form renders yet. To go live: (1) apply migration `20261113120000_add_newsletter_subscribers.sql` and run `get_advisors(type: "security")`; (2) deploy the `newsletter` Edge Function; (3) verify a sending domain in Resend (the existing `send-contact-email` still sends from `onboarding@resend.dev`, which Resend only delivers to the account owner, so it is NOT a usable sender for subscribers) and add the Supabase secret `NEWSLETTER_FROM` (e.g. `Allergy Free Travel <news@allergy-free-travel.com>`), plus SPF/DKIM/DMARC; (4) end-to-end test with a real inbox (signup, confirm, unsubscribe, re-signup, resend cooldown); (5) flip `NEWSLETTER_ENABLED` to `true`.
+  - DoD: A real signup lands as `pending`, becomes `confirmed` only after the button click on `/newsletter/confirm/`, unsubscribe works from `/newsletter/unsubscribe/`, anon API cannot read `newsletter_subscribers`, security advisor clean, flag flipped and forms visible in footer + article pages.
+  - STAGE 2 (not started): weekly `newsletter-send` built from real `seo_articles` only (no invented copy); Unsplash/Pixabay images, never Google Places photos; trailing-slash links; `List-Unsubscribe` + `List-Unsubscribe-Post` headers; physical postal address in the footer (CAN-SPAM); send to the owner only for the first run.
+
 ---
 
 ## Weekly Rollout Plan

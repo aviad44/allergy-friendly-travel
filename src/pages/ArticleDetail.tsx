@@ -9,6 +9,7 @@ import NotFound from "@/pages/NotFound";
 import { markPrerenderNotReady, markPrerenderReady } from "@/utils/prerenderReady";
 import { destinationHotelsJsonLd } from "@/utils/jsonld";
 import { AllergyCardPromo } from "@/components/AllergyCardPromo";
+import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 import { MoreOptionsOnGoogleMaps } from "@/components/MoreOptionsOnGoogleMaps";
 import { ArticleByline } from "@/components/ArticleByline";
 import { SITE_AUTHOR } from "@/constants/author";
@@ -236,6 +237,10 @@ const ArticleDetail = () => {
 
           <div className="mb-10">
             <AllergyCardPromo />
+          </div>
+
+          <div className="mb-10">
+            <NewsletterSignup source="article" />
           </div>
 
           {relatedArticles.length > 0 && (

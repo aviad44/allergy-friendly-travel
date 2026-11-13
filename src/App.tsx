@@ -44,6 +44,7 @@ const RestaurantRegionHub = lazy(() => import('@/pages/restaurants/RegionHub'));
 const GlutenFree = lazy(() => import('@/pages/GlutenFree'));
 const NewsIndex = lazy(() => import('@/pages/news/NewsIndex'));
 const NewsArticle = lazy(() => import('@/pages/news/NewsArticle'));
+const NewsletterAction = lazy(() => import('@/pages/NewsletterAction'));
 // import MenuScanner from "./pages/MenuScanner"; // Temporarily disabled
 
 const RouteLoader = () => (
@@ -112,6 +113,10 @@ const AppContent = () => {
             <Route path="/gluten-free" element={<GlutenFree />} />
             <Route path="/news" element={<NewsIndex />} />
             <Route path="/news/:slug" element={<NewsArticle />} />
+            {/* Landing pages for links inside newsletter emails. noindex, and
+                deliberately not in STATIC_PATHS (sitemap/prerender). */}
+            <Route path="/newsletter/confirm" element={<NewsletterAction action="confirm" />} />
+            <Route path="/newsletter/unsubscribe" element={<NewsletterAction action="unsubscribe" />} />
             {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}
             {/* Catch-all for auto-generated hotel-guide slugs not covered by a
                 static page above (React Router ranks literal segments above
