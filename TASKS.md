@@ -412,6 +412,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Explicit user authorization for the new value (40). Lowered the constant in `content-pipeline/index.ts`, deployed (v61).
   - DoD: Deployed and documented in CHANGELOG.md (2026-11-02). Live visitor search and the daily publish cadence are unaffected — a city with a low real-evidence hit rate may just need more daily attempts/days to clear `MIN_FOR_NEW_ARTICLE`, which the existing 8-attempts-per-run retry (and the next day's run) already absorbs.
 
+- [x] Fix Instagram posts permanently failing with "aspect ratio is not supported"
+  - RATIONALE: Daily social-poster health check flagged `food-allergy-friendly-dining-lyon` as `⚠️ STUCK 15d` on Instagram specifically. Its Unsplash hero photo is an extreme 1780x3735 portrait (ratio ~0.48); the stored `hero_image_url` only constrains width, so the image sent to Instagram kept that same extreme ratio — outside Instagram's accepted 4:5–1.91:1 range (Graph API code 36003, subcode 2207009). Not Lyon-specific: any article whose Unsplash source photo is an extreme portrait/landscape hits the same permanent failure.
+  - HOW-TO: Added `toSocialSafeImageUrl()` in `supabase/functions/social-poster/index.ts` — forces a safe 4:5 crop via Imgix (`fit=crop&w=1200&h=1500&crop=entropy`) on any Unsplash-hosted image before posting to Facebook/Instagram. Pixabay URLs aren't Imgix-backed and are left untouched (its own search already requests `orientation=horizontal`).
+  - DoD: Deployed `social-poster` v27, live immediately. Documented in CHANGELOG.md (2026-11-13). Lyon's own stuck Instagram post self-heals on the next scheduled daily run (oldest-first retry), not manually re-triggered. **Not done**: `pinterest-poster`/`content-pipeline` weren't checked for the same exposure — scoped to the actual reported failure.
+
 ---
 
 ## Weekly Rollout Plan
