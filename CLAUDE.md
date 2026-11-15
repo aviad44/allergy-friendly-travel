@@ -67,6 +67,12 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   Pinterest real pin creation needs Standard API access (Trial tier blocks
   production pins) — pending the user submitting Pinterest's app-review
   form with a demo video.
+- **SEO + GEO agent** (`seo-geo-agent` Edge Function, weekly workflow, plus
+  interactive `.claude/agents/seo-geo-agent.md`): report-only audit for
+  Google/Bing/AI engines, results in `pipeline_log` (`run_type =
+  'seo_geo_audit'`). Added 2026-11-15; **check TASKS.md for whether it's
+  been deployed/activated yet.** IndexNow needs the `INDEXNOW_KEY` secret to
+  equal the key in `public/<key>.txt`.
 - **Social posts never redistribute Google Places Photos.** They're
   licensed for on-site display in the context of Places API results (with
   the contributor attribution shown on-page), not for export to

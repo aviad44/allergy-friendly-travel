@@ -19,6 +19,12 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## SEO
 
+- [ ] SEO + GEO agent (Google, Bing, AI answer engines) — code written, **not yet deployed/activated**
+  - RATIONALE: One recurring, traffic-weighted audit instead of ad-hoc checks; covers Bing (lastmod, Crawl-delay, IndexNow) and AI engines (static-HTML content, bot access, llms.txt, extractable/citable structure), which the Google-only `gsc-report` doesn't.
+  - HOW-TO: `supabase/functions/seo-geo-agent/` (pure logic in `analyze.ts`, tested offline by `node --experimental-strip-types scripts/test-seo-geo-analyze.mjs`), weekly `.github/workflows/seo-geo-agent.yml`, interactive agent `.claude/agents/seo-geo-agent.md`. Report-only; logs to `pipeline_log` (`run_type='seo_geo_audit'`); no paid APIs, no schema change.
+  - TO ACTIVATE: (1) deploy the Edge Function; (2) for IndexNow, set Supabase secret `INDEXNOW_KEY` = the key in `public/<key>.txt` and deploy the site so the file is served; (3) user: verify the site in Bing Webmaster Tools.
+  - DoD: a real `pipeline_log` `success` row for `seo_geo_audit`; first report triaged; IndexNow shows `submitted` once the key file is live.
+
 - [x] News section (`/news/`) for fact-checked, dated travel-and-allergy news
   - RATIONALE: Timely policy news (FAA/DOT/airline changes) is what travelers and AI answer engines search for; a dated, source-linked format builds the E-E-A-T this YMYL topic needs.
   - HOW-TO: Add a module to `src/data/news/` (see `types.ts`), register it in `src/data/news/index.ts`, and add its path to `STATIC_PATHS` in `netlify/functions/sitemap.cjs` (drives sitemap + prerender). Every factual claim must link to a primary source listed in `sources`; bump `updatedAt` on any edit.
