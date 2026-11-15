@@ -1,0 +1,80 @@
+name: SEO + GEO Agent
+
+# Runs weekly (Wednesdays, between the Monday gsc-report and the weekly
+# site-health Routine). Calls the seo-geo-agent Supabase Edge Function, which
+# crawls our own public site and audits it for Google, Bing, and AI answer
+# engines (ChatGPT search, Claude, Perplexity, AI Overviews, Copilot):
+# indexability, canonical/redirect hygiene, structured data, static-HTML
+# content for non-JS AI crawlers, robots.txt bot access, sitemap + llms.txt
+# correctness. Findings are ranked by real Search Console impressions.
+#
+# Report-only: no content changes, no paid API calls (cannot touch the
+# Google Places / Tripadvisor ceilings). The one outward action — IndexNow
+# pings to Bing & co. for URLs changed in the last 7 days — only happens
+# once the INDEXNOW_KEY Supabase secret is set (see CLAUDE.md); until then
+# the function reports "skipped" rather than doing anything.
+
+on:
+  schedule:
+    - cron: "17 7 * * 3"   # weekly, Wednesday 07:17 UTC
+  workflow_dispatch:
+    inputs:
+      max_pages:
+        description: "Pages to audit (5-80)"
+        default: "40"
+      submit_indexnow:
+        description: "Submit recently-changed URLs to IndexNow (needs INDEXNOW_KEY secret)"
+        type: boolean
+        default: true
+
+jobs:
+  run-seo-geo-agent:
+    name: Audit site for Google / Bing / AI engines
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Call seo-geo-agent Edge Function
+        id: call
+        env:
+          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+          MAX_PAGES: ${{ github.event.inputs.max_pages || '40' }}
+          SUBMIT_INDEXNOW: ${{ github.event.inputs.submit_indexnow || 'true' }}
+        run: |
+          SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
+          SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          RESPONSE=$(curl -sS --max-time 170 -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/seo-geo-agent" \
+            -H "Content-Type: application/json" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H "x-cron-secret: $CRON_SHARED_SECRET" \
+            -d "{\"max_pages\": $MAX_PAGES, \"submit_indexnow\": $SUBMIT_INDEXNOW}")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response: $BODY"
+          {
+            echo "body<<EOF_BODY"
+            echo "$BODY"
+            echo "EOF_BODY"
+          } >> "$GITHUB_OUTPUT"
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::seo-geo-agent returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+      - name: Write job summary
+        if: always()
+        env:
+          BODY: ${{ steps.call.outputs.body }}
+        run: |
+          echo "## SEO + GEO Agent" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          echo "$BODY" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

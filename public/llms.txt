@@ -8,20 +8,20 @@ Every hotel and restaurant listed is discovered via Google Places, then kept onl
 ## Destination guides
 Hotel recommendations by city/region, each including real guest reviews that mention specific food allergies (gluten, dairy, nuts, shellfish, etc.), practical safety tips, and links to book directly. Includes both hand-curated destination pages and new guides published regularly by an automated pipeline, grounded only in real, verified hotel reviews — no AI-invented hotels or quotes.
 
-- [All destinations](https://www.allergy-free-travel.com/destinations)
-- [Paris](https://www.allergy-free-travel.com/destinations/paris)
-- [London](https://www.allergy-free-travel.com/destinations/london)
-- [Rome](https://www.allergy-free-travel.com/destinations/rome)
-- [New York](https://www.allergy-free-travel.com/destinations/new-york)
-- [Tokyo](https://www.allergy-free-travel.com/destinations/tokyo)
-- [Top allergy-friendly hotel chains worldwide](https://www.allergy-free-travel.com/destinations/hotel-chains)
-- [Best cruise lines for food allergies](https://www.allergy-free-travel.com/destinations/cruise-lines)
-- [Flying with EpiPens: airport and airline rules](https://www.allergy-free-travel.com/destinations/flying-with-epipens)
+- [All destinations](https://www.allergy-free-travel.com/destinations/)
+- [Paris](https://www.allergy-free-travel.com/destinations/paris/)
+- [London](https://www.allergy-free-travel.com/destinations/london/)
+- [Rome](https://www.allergy-free-travel.com/destinations/rome/)
+- [New York](https://www.allergy-free-travel.com/destinations/new-york/)
+- [Tokyo](https://www.allergy-free-travel.com/destinations/tokyo/)
+- [Top allergy-friendly hotel chains worldwide](https://www.allergy-free-travel.com/destinations/hotel-chains/)
+- [Best cruise lines for food allergies](https://www.allergy-free-travel.com/destinations/cruise-lines/)
+- [Flying with EpiPens: airport and airline rules](https://www.allergy-free-travel.com/destinations/flying-with-epipens/)
 
 ## Restaurant guides
 Restaurant recommendations by city, built the same way as the hotel guides above — only from real Google reviews that specifically mention food allergies.
 
-- [All restaurant guides](https://www.allergy-free-travel.com/restaurants)
+- [All restaurant guides](https://www.allergy-free-travel.com/restaurants/)
 
 ## News
 Fact-checked news on airline, hotel and travel policy for people with food allergies. Every factual claim links to its primary source (regulators, legislators' published letters, airlines' own policy pages), and each article shows its publish/update date.
@@ -33,9 +33,9 @@ Fact-checked news on airline, hotel and travel policy for people with food aller
 Gluten/celiac disease, dairy/lactose intolerance, tree nuts, peanuts, eggs, soy, sesame, shellfish, and general food-allergy safety practices (cross-contamination handling, allergen menus, staff awareness). Vegan and vegetarian mentions appear only alongside genuine allergen-safety evidence, not as a substitute for it.
 
 ## Tools
-- [Allergy translation card generator](https://www.allergy-free-travel.com/allergy-translation-card) — create a printable card explaining your food allergies in the local language.
+- [Allergy translation card generator](https://www.allergy-free-travel.com/allergy-translation-card/) — create a printable card explaining your food allergies in the local language.
 
 ## Reference
-- [Frequently asked questions](https://www.allergy-free-travel.com/faq)
-- [About us](https://www.allergy-free-travel.com/about)
-- [Traveler reviews](https://www.allergy-free-travel.com/reviews)
+- [Frequently asked questions](https://www.allergy-free-travel.com/faq/)
+- [About us](https://www.allergy-free-travel.com/about/)
+- [Traveler reviews](https://www.allergy-free-travel.com/reviews/)
