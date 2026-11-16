@@ -319,6 +319,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## UX
 
+- [x] Show the 404 page for unknown URLs instead of a blank page
+  - RATIONALE: `NotFound` was imported in `App.tsx` but never routed, so every URL without a matching route rendered a completely blank page. Found when a visitor holding the previous deploy's cached `index.html` opened a brand-new route (`/newsletter/confirm/`) right after it shipped.
+  - HOW-TO: Added `<Route path="*" element={<NotFound />} />` as the last route inside the `MainLayout` route in `src/App.tsx`.
+  - DoD: An unknown URL shows the 404 page with `noindex, follow`; existing routes unchanged. Known limitation: still HTTP 200 (soft 404) because of the SPA rewrite; a real 404 status would need a hosting-level change.
+
 - [x] Destination autocomplete suggests real, already-covered cities (user request — search engine improvements, part 1)
   - RATIONALE: User asked for an easier way for visitors to find a destination to search for. The homepage search box's autocomplete only ever suggested a static, hand-picked 20-city list with no connection to the ~174 real cities already covered by evidenced hotels/restaurants in the DB.
   - HOW-TO: Added `src/utils/fetchCoveredDestinations.ts` — fetches every distinct city with at least one real-evidenced (`allergy_score is not null`), active hotel or restaurant, live via existing public anon-read RLS, merged into the static list in `src/components/SearchBar.tsx` (static shows instantly, live list merges in once fetched — no blank/regressed state). Cached for the page's lifetime.
