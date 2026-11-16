@@ -95,6 +95,44 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeadersFor(req) });
   }
+  // One-click unsubscribe (RFC 8058). The newsletter emails carry
+  //   List-Unsubscribe: <.../functions/v1/newsletter?action=unsubscribe&token=...>
+  //   List-Unsubscribe-Post: List-Unsubscribe=One-Click
+  // so Gmail/Apple Mail can show their own "Unsubscribe" button, which POSTs
+  // here. Because mail clients call it without our anon key, this function
+  // is deployed with verify_jwt=false; the unguessable per-subscriber token
+  // is the credential, exactly as on the unsubscribe page.
+  const reqUrl = new URL(req.url);
+  if (reqUrl.searchParams.get("action") === "unsubscribe" && reqUrl.searchParams.has("token")) {
+    const token = reqUrl.searchParams.get("token") ?? "";
+    if (!UUID_RE.test(token)) return new Response("Invalid link", { status: 400 });
+    if (req.method === "GET") {
+      // A plain GET (mail scanners prefetch links) must never unsubscribe
+      // anyone: send the visitor to the page that has the confirm button.
+      return new Response(null, {
+        status: 302,
+        headers: { Location: `${SITE_URL}/newsletter/unsubscribe/?token=${token}` },
+      });
+    }
+    if (req.method === "POST") {
+      const url = Deno.env.get("SUPABASE_URL");
+      const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (!url || !key) return new Response("Not configured", { status: 503 });
+      const db = createClient(url, key, { auth: { persistSession: false } });
+      const { data, error } = await db
+        .from("newsletter_subscribers")
+        .update({ status: "unsubscribed", unsubscribed_at: new Date().toISOString() })
+        .eq("unsubscribe_token", token)
+        .select("id");
+      if (error) {
+        console.error("newsletter one-click unsubscribe failed:", error.message);
+        return new Response("Server error", { status: 500 });
+      }
+      if (!data || data.length === 0) return new Response("Unknown link", { status: 404 });
+      return new Response("Unsubscribed", { status: 200 });
+    }
+  }
+
   if (req.method !== "POST") {
     return json(req, { ok: false, code: "method_not_allowed" }, 405);
   }

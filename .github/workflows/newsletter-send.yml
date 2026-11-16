@@ -1,0 +1,92 @@
+name: Newsletter (weekly)
+
+# Calls the newsletter-send Supabase Edge Function once a week. The function
+# builds the issue from the newest published articles that no earlier issue
+# contained (real titles/descriptions/links only), then emails every confirmed
+# subscriber via Resend. All secrets live in Supabase, not here.
+#
+# Send time: Tuesday 15:00 UTC. Research summary (see CHANGELOG 2026-11-16):
+# Tuesday has the best or near-best open rates in most studies and ~10:00
+# local is the usual best hour; 15:00 UTC is 15:00 in London and 10:00 in New
+# York in winter (one hour later everywhere in summer; the US and UK clocks
+# change on slightly different dates). It's a starting point to A/B test with
+# real click data, not a proven optimum.
+#
+# The function fails closed until the Supabase secret NEWSLETTER_LIVE_SEND is
+# set to "true" (it answers 200 {skipped: "live_send_disabled"} until then), and
+# until NEWSLETTER_POSTAL_ADDRESS is set. Setting NEWSLETTER_LIVE_SEND to
+# anything else stops all sends instantly.
+
+on:
+  schedule:
+    - cron: "0 15 * * 2"   # Tuesdays at 15:00 UTC
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'send = what the schedule does; test = email ONE preview to the address below (records nothing).'
+        type: choice
+        options:
+          - send
+          - test
+        default: send
+      dry_run:
+        description: 'Only report readiness + preview (articles, subject, recipient count); send nothing, change nothing.'
+        type: boolean
+        default: true
+      to:
+        description: 'mode=test only: the single address to send the preview to.'
+        required: false
+        default: ''
+
+jobs:
+  run-newsletter-send:
+    name: Send the weekly newsletter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Call newsletter-send Edge Function
+        id: call
+        env:
+          CRON_SHARED_SECRET: ${{ secrets.CRON_SHARED_SECRET }}
+          # Scheduled runs have no inputs: default to a real send. Manual
+          # runs default to dry_run=true so a stray click can't email anyone.
+          MODE_INPUT: ${{ inputs.mode || 'send' }}
+          DRY_RUN_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+          TO_INPUT: ${{ inputs.to }}
+        run: |
+          SUPABASE_URL=$(grep '^VITE_SUPABASE_URL=' .env | cut -d'"' -f2)
+          SUPABASE_ANON_KEY=$(grep '^VITE_SUPABASE_PUBLISHABLE_KEY=' .env | cut -d'"' -f2)
+
+          BODY_JSON=$(python3 -c "import json,os; d={'mode': os.environ['MODE_INPUT'], 'dry_run': os.environ['DRY_RUN_INPUT'] == 'true'}; to=os.environ.get('TO_INPUT','').strip(); d.update({'to': to} if to else {}); print(json.dumps(d))")
+
+          RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "$SUPABASE_URL/functions/v1/newsletter-send" \
+            -H "Content-Type: application/json" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H "x-cron-secret: $CRON_SHARED_SECRET" \
+            -d "$BODY_JSON")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response: $BODY"
+          echo "body=$BODY" >> "$GITHUB_OUTPUT"
+
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::newsletter-send returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+      - name: Write job summary
+        if: always()
+        env:
+          BODY: ${{ steps.call.outputs.body }}
+        run: |
+          echo "## Newsletter Run" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          echo "$BODY" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

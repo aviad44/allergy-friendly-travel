@@ -425,6 +425,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - DoD: A real signup lands as `pending`, becomes `confirmed` only after the button click on `/newsletter/confirm/`, unsubscribe works from `/newsletter/unsubscribe/`, anon API cannot read `newsletter_subscribers`, security advisor clean, flag flipped and forms visible in footer + article pages.
   - STAGE 2 (not started): weekly `newsletter-send` built from real `seo_articles` only (no invented copy); Unsplash/Pixabay images, never Google Places photos; trailing-slash links; `List-Unsubscribe` + `List-Unsubscribe-Post` headers; physical postal address in the footer (CAN-SPAM); send to the owner only for the first run.
 
+- [ ] Newsletter stage 2: weekly send of the newest unsent articles
+  - RATIONALE: With subscribers collecting (stage 1), send them the site's real new content once a week. Send time chosen from public email-timing studies (Tuesday, mid-morning local time; vendor data, mostly not US/UK- or travel-specific, so a starting point to A/B test, not a proven optimum): Tuesday 15:00 UTC = 15:00 London / 10:00 New York in winter (US and UK clocks shift on different dates, so +1h in summer).
+  - HOW-TO: Migration `20261116120000_add_newsletter_issues.sql` (issues + per-subscriber deliveries, RLS on, no grants), Edge Function `newsletter-send` (+ `render.ts`), workflow `.github/workflows/newsletter-send.yml`, and one-click `List-Unsubscribe` support in `newsletter`. Go-live checklist: (1) set Supabase secret `NEWSLETTER_POSTAL_ADDRESS` (needs the user's mailing address); (2) after merge, run the workflow manually with `dry_run=true` and check `blocking_problems` is empty; (3) run it with `mode=test` and a real inbox, check rendering/links/unsubscribe in Gmail; (4) only then set `NEWSLETTER_LIVE_SEND=true`; the next Tuesday run sends. Stop switch: set `NEWSLETTER_LIVE_SEND` to anything else.
+  - DoD: A real weekly issue reaches confirmed subscribers once, lists only real unsent articles, each subscriber gets at most one copy per issue even after an interrupted run, the Unsubscribe link and Gmail's one-click button both work, and `newsletter_issues` shows the sent/failed counts. Later: compare clicks (not opens, which Apple Mail privacy inflates) across send days/hours before changing the schedule.
+
 ---
 
 ## Weekly Rollout Plan
