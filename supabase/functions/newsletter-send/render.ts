@@ -154,6 +154,12 @@ export interface RenderOptions {
   postalAddress: string;
   /** e.g. "2026-11-17", used as utm_campaign. */
   campaign: string;
+  /**
+   * How the article teasers below the featured card are separated:
+   * "cards" (default): each in its own soft card with a gap, matching the
+   * featured card; "lines": one list with a clearly visible divider line.
+   */
+  listStyle?: "cards" | "lines";
 }
 
 /**
@@ -207,7 +213,7 @@ function featuredCard(a: NewsletterArticle, campaign: string): string {
        <tr><td style="padding:22px 22px 0">${badge}${locLine}${titleLink(GREEN_DARK, 20)}</td></tr>`
     : `<tr><td bgcolor="${GREEN}" style="background:${GREEN};padding:26px 22px 24px">${badge}${locLine}${titleLink("#ffffff", 22)}</td></tr>`;
 
-  return `<tr><td style="padding:24px 24px 8px">
+  return `<tr><td style="padding:24px 20px 8px">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0;background:#f6faf8;border:1px solid #dce8e3;border-radius:12px;overflow:hidden">
       ${top}
       <tr><td style="padding:${hasImage ? "12px" : "18px"} 22px 22px">
@@ -220,20 +226,39 @@ function featuredCard(a: NewsletterArticle, campaign: string): string {
   </td></tr>`;
 }
 
-function listItem(a: NewsletterArticle, campaign: string, first: boolean): string {
+function listItem(a: NewsletterArticle, campaign: string, first: boolean, style: "cards" | "lines"): string {
   const url = escapeHtml(articleUrl(a, campaign));
   const title = escapeHtml(a.title.trim());
   const desc = shortDescription(a.meta_description, 130);
   const loc = a.location?.trim() ? escapeHtml(a.location.trim()) : "";
-  const img = isUsableImageUrl(a.hero_image_url)
-    ? `<div style="padding-bottom:14px">${image(croppedImageUrl(a.hero_image_url as string, 1104, 320), url, 12, "1px solid #f1f5f9")}</div>`
-    : "";
-  return `<tr><td style="padding:20px 24px;${first ? "" : "border-top:1px solid #eef3f1"}">
-    ${img}
-    ${loc ? `<div style="font:600 11px/1.3 ${SANS};letter-spacing:.05em;text-transform:uppercase;color:${GREEN}">${loc}</div>` : ""}
-    <div style="margin-top:4px">${oneLineTitle(url, title, 16, GREEN_DARK)}</div>
+  const hasImage = isUsableImageUrl(a.hero_image_url);
+  const text = `${loc ? `<div style="font:600 11px/1.3 ${SANS};letter-spacing:.05em;text-transform:uppercase;color:${GREEN}">${loc}</div>` : ""}
+    <div style="margin-top:4px">${oneLineTitle(url, title, 15, GREEN_DARK)}</div>
     ${desc ? `<div style="font:13px/1.6 ${SANS};color:#556963;margin-top:6px;${clampStyle(2, 13, 1.6, true)}">${escapeHtml(desc)}</div>` : ""}
-    <div style="margin-top:8px"><a href="${url}" style="font:600 12px/1 ${SANS};color:${GREEN};text-decoration:none">Explore guide &rarr;</a></div>
+    <div style="margin-top:8px"><a href="${url}" style="font:600 12px/1 ${SANS};color:${GREEN};text-decoration:none">Explore guide &rarr;</a></div>`;
+
+  if (style === "lines") {
+    const img = hasImage
+      ? `<div style="padding-bottom:14px">${image(croppedImageUrl(a.hero_image_url as string, 1104, 320), url, 12, "1px solid #f1f5f9")}</div>`
+      : "";
+    return `<tr><td style="padding:22px 20px;${first ? "" : "border-top:1px solid #cfe0d9"}">
+    ${img}
+    ${text}
+  </td></tr>`;
+  }
+
+  // "cards": same visual language as the featured card (soft background,
+  // thin green-grey border, 12px radius), photo flush with the card's top edge.
+  const top = hasImage
+    ? `<tr><td style="padding:0">${image(croppedImageUrl(a.hero_image_url as string, 1104, 320), url, 0, "0")}</td></tr>`
+    : "";
+  return `<tr><td style="padding:0 20px 14px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0;background:#f8fbfa;border:1px solid #e0eae6;border-radius:12px;overflow:hidden">
+      ${top}
+      <tr><td style="padding:14px 14px 16px">
+    ${text}
+      </td></tr>
+    </table>
   </td></tr>`;
 }
 
@@ -244,14 +269,15 @@ export function renderNewsletter(opts: RenderOptions): { html: string; text: str
   const [lead, ...rest] = articles;
 
   const sectionLabel = rest.length
-    ? `<tr><td style="padding:16px 24px 6px">
+    ? `<tr><td style="padding:16px 20px ${(opts.listStyle ?? "cards") === "cards" ? "14px" : "6px"}">
          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
            <td style="white-space:nowrap;padding-right:12px;font:bold 12px/1 ${SANS};letter-spacing:.06em;text-transform:uppercase;color:#6d827b">More New Destination Guides</td>
            <td width="100%" valign="middle" style="font-size:0;line-height:0;border-top:1px solid #eef3f1">&nbsp;</td>
          </tr></table>
        </td></tr>`
     : "";
-  const items = rest.map((a, i) => listItem(a, campaign, i === 0)).join("\n");
+  const listStyle = opts.listStyle ?? "cards";
+  const items = rest.map((a, i) => listItem(a, campaign, i === 0, listStyle)).join("\n");
 
   const unsub = escapeHtml(unsubscribeUrl);
   const address = escapeHtml(postalAddress.trim()).replace(/\r?\n/g, "<br>");
