@@ -319,6 +319,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## UX
 
+- [x] Show the 404 page for unknown URLs instead of a blank page
+  - RATIONALE: `NotFound` was imported in `App.tsx` but never routed, so every URL without a matching route rendered a completely blank page. Found when a visitor holding the previous deploy's cached `index.html` opened a brand-new route (`/newsletter/confirm/`) right after it shipped.
+  - HOW-TO: Added `<Route path="*" element={<NotFound />} />` as the last route inside the `MainLayout` route in `src/App.tsx`.
+  - DoD: An unknown URL shows the 404 page with `noindex, follow`; existing routes unchanged. Known limitation: still HTTP 200 (soft 404) because of the SPA rewrite; a real 404 status would need a hosting-level change.
+
 - [x] Destination autocomplete suggests real, already-covered cities (user request — search engine improvements, part 1)
   - RATIONALE: User asked for an easier way for visitors to find a destination to search for. The homepage search box's autocomplete only ever suggested a static, hand-picked 20-city list with no connection to the ~174 real cities already covered by evidenced hotels/restaurants in the DB.
   - HOW-TO: Added `src/utils/fetchCoveredDestinations.ts` — fetches every distinct city with at least one real-evidenced (`allergy_score is not null`), active hotel or restaurant, live via existing public anon-read RLS, merged into the static list in `src/components/SearchBar.tsx` (static shows instantly, live list merges in once fetched — no blank/regressed state). Cached for the page's lifetime.
@@ -414,9 +419,9 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
 
 ## Newsletter
 
-- [ ] Newsletter stage 1: subscriber collection with double opt-in (no sending yet)
+- [x] Newsletter stage 1: subscriber collection with double opt-in (no sending yet)
   - RATIONALE: User wants to start emailing visitors who sign up. Stage 1 only *collects* confirmed subscribers; the weekly send (stage 2) comes after there is a list. Built as a public endpoint that makes us email arbitrary addresses, so it is constrained like the budget guards: fails closed, hourly global cap, never reveals who is already subscribed.
-  - HOW-TO: Code ships **dark**: `NEWSLETTER_ENABLED` in `src/constants/newsletter.ts` is `false`, so no form renders yet. DONE 2026-11-15: migration `20261113120000_add_newsletter_subscribers.sql` applied (advisor clean apart from intentional INFO), `newsletter` Edge Function deployed, sending domain `news.allergy-free-travel.com` verified in Resend (DNS in Netlify), `NEWSLETTER_FROM` secret set, backend verified end-to-end (see CHANGELOG 2026-11-13). REMAINING: (1) merge this PR and confirm the Netlify build is green; (2) on the live site, click a real confirmation email's link through `/newsletter/confirm/` and an unsubscribe link through `/newsletter/unsubscribe/`; (3) flip `NEWSLETTER_ENABLED` to `true` in a follow-up PR and check the footer + article forms render and submit.
+  - HOW-TO: Code ships **dark**: `NEWSLETTER_ENABLED` in `src/constants/newsletter.ts` is `false`, so no form renders yet. DONE 2026-11-15: migration `20261113120000_add_newsletter_subscribers.sql` applied (advisor clean apart from intentional INFO), `newsletter` Edge Function deployed, sending domain `news.allergy-free-travel.com` verified in Resend (DNS in Netlify), `NEWSLETTER_FROM` secret set, backend verified end-to-end (see CHANGELOG 2026-11-13). DONE 2026-11-16: PR #62 merged; the live `/newsletter/confirm/` and `/newsletter/unsubscribe/` pages were clicked through with a real email (a stale cached page showed blank right after the deploy until a hard refresh); test row deleted; `NEWSLETTER_ENABLED` flipped to `true`. REMAINING: check the footer + article forms render and submit on the live site after this deploys.
   - DoD: A real signup lands as `pending`, becomes `confirmed` only after the button click on `/newsletter/confirm/`, unsubscribe works from `/newsletter/unsubscribe/`, anon API cannot read `newsletter_subscribers`, security advisor clean, flag flipped and forms visible in footer + article pages.
   - STAGE 2 (not started): weekly `newsletter-send` built from real `seo_articles` only (no invented copy); Unsplash/Pixabay images, never Google Places photos; trailing-slash links; `List-Unsubscribe` + `List-Unsubscribe-Post` headers; physical postal address in the footer (CAN-SPAM); send to the owner only for the first run.
 
