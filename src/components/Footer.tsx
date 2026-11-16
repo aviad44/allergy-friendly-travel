@@ -3,6 +3,8 @@ import { HOME_CONTENT } from "@/constants/home";
 import { Separator } from "@/components/ui/separator";
 import { Facebook } from "lucide-react";
 import { isAffiliateActive } from "@/utils/bookingAffiliate";
+import { NEWSLETTER_ENABLED } from "@/constants/newsletter";
+import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -89,6 +91,15 @@ export const Footer = () => {
             </ul>
           </div>
         </div>
+
+        {NEWSLETTER_ENABLED && (
+          <>
+            <Separator className="my-6" />
+            <div className="max-w-xl">
+              <NewsletterSignup source="footer" variant="compact" />
+            </div>
+          </>
+        )}
 
         <Separator className="my-6" />
 
