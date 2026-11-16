@@ -57,6 +57,31 @@ export function isSendableArticle(a: NewsletterArticle): boolean {
 }
 
 /**
+ * Source-tracking query string appended to EVERY link in the email that points
+ * at the site (articles, thumbnails, header/footer links), so GA4 attributes
+ * the visit to Source "newsletter" / Medium "email" / Campaign "<issue date>".
+ * (The tokenized unsubscribe page is the one exception: it's not a visit we
+ * want to measure.)
+ */
+export function trackingParams(campaign: string): string {
+  return `utm_source=newsletter&utm_medium=email&utm_campaign=${encodeURIComponent(campaign)}`;
+}
+
+/** Homepage link carrying the same tracking parameters as the article links. */
+export function siteHomeUrl(campaign: string): string {
+  return `${SITE_URL}/?${trackingParams(campaign)}`;
+}
+
+/** One-line teaser: whitespace collapsed, cut at a word boundary. */
+export function shortDescription(desc: string | null | undefined, max = 140): string {
+  const d = (desc ?? "").replace(/\s+/g, " ").trim();
+  if (!d || d.length <= max) return d;
+  const cut = d.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > 60 ? cut.slice(0, lastSpace) : cut).trimEnd()}\u2026`;
+}
+
+/**
  * Live article URL. Trailing slash is mandatory (CLAUDE.md: the host
  * 301-redirects every non-root path to the slashed form). utm_* params are
  * stripped from canonicals by buildCanonical(), so they don't create duplicate
@@ -64,7 +89,7 @@ export function isSendableArticle(a: NewsletterArticle): boolean {
  */
 export function articleUrl(a: NewsletterArticle, campaign: string): string {
   const base = a.content_type === "restaurant" ? "restaurants" : "destinations";
-  return `${SITE_URL}/${base}/${a.slug}/?utm_source=newsletter&utm_medium=email&utm_campaign=${encodeURIComponent(campaign)}`;
+  return `${SITE_URL}/${base}/${a.slug}/?${trackingParams(campaign)}`;
 }
 
 export function buildSubject(articles: NewsletterArticle[]): string {
@@ -83,25 +108,31 @@ export interface RenderOptions {
   campaign: string;
 }
 
+/**
+ * Deliberately compact: a slim header, then one row per article (small
+ * thumbnail on the left, linked title + a one-line teaser on the right), then
+ * a small footer. No photo credit line: the thumbnail and title link to the
+ * article, where the on-site page shows the photo credit.
+ */
 export function renderNewsletter(opts: RenderOptions): { html: string; text: string } {
   const { articles, unsubscribeUrl, postalAddress, campaign } = opts;
+  const home = escapeHtml(siteHomeUrl(campaign));
 
-  const blocks = articles
+  const rows = articles
     .map((a) => {
       const url = escapeHtml(articleUrl(a, campaign));
       const title = escapeHtml(a.title.trim());
-      const desc = a.meta_description?.trim() ? escapeHtml(a.meta_description.trim()) : "";
-      const image = isUsableImageUrl(a.hero_image_url)
-        ? `<a href="${url}"><img src="${escapeHtml(a.hero_image_url)}" alt="${title}" width="552" style="display:block;width:100%;max-width:552px;height:auto;border-radius:8px;border:0"></a>` +
-          (a.hero_image_credit?.trim()
-            ? `<div style="font-size:11px;color:#9ca3af;margin-top:4px">${escapeHtml(a.hero_image_credit.trim())}</div>`
-            : "")
+      const desc = shortDescription(a.meta_description);
+      // Decorative thumbnail (alt="" because the title link sits right next to it).
+      const thumb = isUsableImageUrl(a.hero_image_url)
+        ? `<td width="88" valign="top" style="width:88px;padding:0 12px 0 0"><a href="${url}"><img src="${escapeHtml(a.hero_image_url)}" alt="" width="88" style="display:block;width:88px;height:auto;border:0;border-radius:6px"></a></td>`
         : "";
-      return `<tr><td style="padding:24px 0;border-top:1px solid #e5e7eb">
-        ${image}
-        <h2 style="margin:16px 0 8px;font-size:20px;line-height:1.3"><a href="${url}" style="color:#115e59;text-decoration:none">${title}</a></h2>
-        ${desc ? `<p style="margin:0 0 12px;font-size:15px;line-height:1.5;color:#374151">${desc}</p>` : ""}
-        <a href="${url}" style="color:#0d9488;font-size:14px;font-weight:bold;text-decoration:none">Read the guide &rarr;</a>
+      return `<tr><td style="padding:12px 0;border-top:1px solid #eceff1">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>${thumb}
+          <td valign="top" style="font-size:13px;line-height:1.45;color:#6b7280">
+            <a href="${url}" style="font-size:15px;line-height:1.35;font-weight:bold;color:#115e59;text-decoration:none">${title}</a>${desc ? `<div style="margin-top:3px">${escapeHtml(desc)}</div>` : ""}
+          </td>
+        </tr></table>
       </td></tr>`;
     })
     .join("\n");
@@ -110,17 +141,13 @@ export function renderNewsletter(opts: RenderOptions): { html: string; text: str
   const address = escapeHtml(postalAddress.trim()).replace(/\r?\n/g, "<br>");
 
   const html = `<!doctype html>
-<html><body style="margin:0;background:#f9fafb;font-family:Arial,Helvetica,sans-serif;color:#1f2937">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f9fafb"><tr><td align="center" style="padding:24px 12px">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:8px;padding:24px 24px 8px">
-      <tr><td style="padding-bottom:16px">
-        <div style="font-size:22px;font-weight:bold;color:#115e59">Allergy-Free Travel</div>
-        <p style="margin:8px 0 0;font-size:15px;line-height:1.5;color:#374151">New hotel and restaurant guides for travelers with food allergies.</p>
-      </td></tr>
-      ${blocks}
-      <tr><td style="padding:24px 0 16px;border-top:1px solid #e5e7eb;font-size:12px;line-height:1.6;color:#6b7280">
-        You're receiving this because you subscribed at allergy-free-travel.com and confirmed your email address.<br>
-        <a href="${unsub}" style="color:#0d9488">Unsubscribe</a> &middot; <a href="${SITE_URL}/" style="color:#0d9488">allergy-free-travel.com</a><br><br>
+<html><body style="margin:0;background:#ffffff;font-family:Arial,Helvetica,sans-serif;color:#1f2937">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:16px 12px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px">
+      <tr><td style="padding-bottom:10px;font-size:13px;color:#6b7280"><a href="${home}" style="font-size:16px;font-weight:bold;color:#115e59;text-decoration:none">Allergy-Free Travel</a> &middot; new guides</td></tr>
+      ${rows}
+      <tr><td style="padding-top:14px;border-top:1px solid #eceff1;font-size:11px;line-height:1.6;color:#6b7280">
+        You're receiving this because you subscribed at <a href="${home}" style="color:#6b7280">allergy-free-travel.com</a> and confirmed your email address. <a href="${unsub}" style="color:#6b7280">Unsubscribe</a><br>
         ${address}
       </td></tr>
     </table>
@@ -129,13 +156,12 @@ export function renderNewsletter(opts: RenderOptions): { html: string; text: str
 
   const textBlocks = articles
     .map((a) => {
-      const desc = a.meta_description?.trim() ? `\n${a.meta_description.trim()}` : "";
-      return `${a.title.trim()}${desc}\n${articleUrl(a, campaign)}`;
+      const desc = shortDescription(a.meta_description);
+      return `${a.title.trim()}${desc ? `\n${desc}` : ""}\n${articleUrl(a, campaign)}`;
     })
     .join("\n\n");
   const text =
-    `Allergy-Free Travel\nNew hotel and restaurant guides for travelers with food allergies.\n\n` +
-    `${textBlocks}\n\n--\n` +
+    `Allergy-Free Travel - new guides\n\n${textBlocks}\n\n--\n` +
     `You're receiving this because you subscribed at allergy-free-travel.com and confirmed your email address.\n` +
     `Unsubscribe: ${unsubscribeUrl}\n\n${postalAddress.trim()}\n`;
 
