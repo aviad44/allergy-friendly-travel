@@ -44,6 +44,7 @@ const RestaurantRegionHub = lazy(() => import('@/pages/restaurants/RegionHub'));
 const GlutenFree = lazy(() => import('@/pages/GlutenFree'));
 const NewsIndex = lazy(() => import('@/pages/news/NewsIndex'));
 const NewsArticle = lazy(() => import('@/pages/news/NewsArticle'));
+const NewsletterAction = lazy(() => import('@/pages/NewsletterAction'));
 // import MenuScanner from "./pages/MenuScanner"; // Temporarily disabled
 
 const RouteLoader = () => (
@@ -112,6 +113,10 @@ const AppContent = () => {
             <Route path="/gluten-free" element={<GlutenFree />} />
             <Route path="/news" element={<NewsIndex />} />
             <Route path="/news/:slug" element={<NewsArticle />} />
+            {/* Landing pages for links inside newsletter emails. noindex, and
+                deliberately not in STATIC_PATHS (sitemap/prerender). */}
+            <Route path="/newsletter/confirm" element={<NewsletterAction action="confirm" />} />
+            <Route path="/newsletter/unsubscribe" element={<NewsletterAction action="unsubscribe" />} />
             {/* <Route path="/menu-scanner" element={<MenuScanner />} /> */}
             {/* Catch-all for auto-generated hotel-guide slugs not covered by a
                 static page above (React Router ranks literal segments above
@@ -119,6 +124,16 @@ const AppContent = () => {
                 ArticleDetail renders its own NotFound if the slug doesn't
                 exist in seo_articles. */}
             <Route path="/destinations/:slug" element={<ArticleDetail />} />
+            {/* Catch-all for any URL no route above matches. Without it React
+                Router matched nothing and rendered a completely blank page
+                (not even the header/footer) for unknown URLs, and for any
+                brand-new route requested by a visitor still holding the
+                previous deploy's cached index.html. React Router ranks "*"
+                below every other route, so nothing above is shadowed. The
+                host still answers 200 for these (SPA rewrite), so this is a
+                "soft 404": NotFound sets robots noindex to keep them out of
+                the index. */}
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </Suspense>
