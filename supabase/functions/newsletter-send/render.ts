@@ -156,6 +156,28 @@ export interface RenderOptions {
   campaign: string;
 }
 
+/**
+ * Uniform text blocks so a mixed-length issue doesn't look ragged on a phone.
+ * clampStyle(): at most `lines` lines, with an ellipsis where the client
+ * supports -webkit-line-clamp (Apple Mail, iOS, most webmail), and a hard
+ * max-height cut-off everywhere else. minHeight pads short text to the same
+ * height so neighbouring blocks line up.
+ */
+function clampStyle(lines: number, fontPx: number, lineHeight: number, minHeight = false): string {
+  const h = Math.ceil(fontPx * lineHeight * lines);
+  return `display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:${lines};overflow:hidden;max-height:${h}px${minHeight ? `;min-height:${h}px` : ""}`;
+}
+
+/**
+ * A title that always stays on ONE line and ends with "…" if it doesn't fit:
+ * a fixed-layout table cell with nowrap + text-overflow (a plain block with
+ * nowrap would stretch the card instead). Clients that ignore text-overflow
+ * (e.g. desktop Outlook) just wrap it, which degrades gracefully.
+ */
+function oneLineTitle(url: string, title: string, fontPx: number, color: string): string {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:bold ${fontPx}px/1.4 ${SANS};color:${color}"><a href="${url}" style="color:${color};text-decoration:none">${title}</a></td></tr></table>`;
+}
+
 function image(src: string, href: string, radius: number, border: string): string {
   return `<a href="${href}" style="text-decoration:none"><img src="${escapeHtml(src)}" alt="" width="100%" style="display:block;width:100%;height:auto;border:${border};border-radius:${radius}px"></a>`;
 }
@@ -163,7 +185,7 @@ function image(src: string, href: string, radius: number, border: string): strin
 function featuredCard(a: NewsletterArticle, campaign: string): string {
   const url = escapeHtml(articleUrl(a, campaign));
   const title = escapeHtml(a.title.trim());
-  const desc = shortDescription(a.meta_description, 200);
+  const desc = shortDescription(a.meta_description, 140);
   const loc = a.location?.trim() ? escapeHtml(a.location.trim()) : "";
   const hasImage = isUsableImageUrl(a.hero_image_url);
 
@@ -173,21 +195,23 @@ function featuredCard(a: NewsletterArticle, campaign: string): string {
   const locLine = loc
     ? `<div style="font:600 12px/1.3 ${SANS};letter-spacing:.06em;text-transform:uppercase;color:${hasImage ? GREEN : "#bfe3d6"};margin-top:12px">${loc}</div>`
     : "";
+  // The featured title is large, so it may take up to two lines (one line at
+  // 22px would cut most titles after ~25 characters on a phone).
   const titleLink = (color: string, size: number) =>
-    `<a href="${url}" style="font:bold ${size}px/1.3 ${SANS};color:${color};text-decoration:none">${title}</a>`;
+    `<div style="margin-top:8px;font:bold ${size}px/1.3 ${SANS};${clampStyle(2, size, 1.3)}"><a href="${url}" style="color:${color};text-decoration:none">${title}</a></div>`;
 
   // With a photo: image on top, then badge/location/title/teaser/button below.
   // Without one: a solid brand-colour block carries badge/location/title.
   const top = hasImage
     ? `<tr><td style="padding:0">${image(croppedImageUrl(a.hero_image_url as string, 1100, 384), url, 0, "0")}</td></tr>
-       <tr><td style="padding:22px 22px 0">${badge}${locLine}<div style="margin-top:8px">${titleLink(GREEN_DARK, 20)}</div></td></tr>`
-    : `<tr><td bgcolor="${GREEN}" style="background:${GREEN};padding:26px 22px 24px">${badge}${locLine}<div style="margin-top:8px">${titleLink("#ffffff", 22)}</div></td></tr>`;
+       <tr><td style="padding:22px 22px 0">${badge}${locLine}${titleLink(GREEN_DARK, 20)}</td></tr>`
+    : `<tr><td bgcolor="${GREEN}" style="background:${GREEN};padding:26px 22px 24px">${badge}${locLine}${titleLink("#ffffff", 22)}</td></tr>`;
 
   return `<tr><td style="padding:24px 24px 8px">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0;background:#f6faf8;border:1px solid #dce8e3;border-radius:12px;overflow:hidden">
       ${top}
       <tr><td style="padding:${hasImage ? "12px" : "18px"} 22px 22px">
-        ${desc ? `<div style="font:14px/1.6 ${SANS};color:#4a5d57">${escapeHtml(desc)}</div>` : ""}
+        ${desc ? `<div style="font:14px/1.6 ${SANS};color:#4a5d57;${clampStyle(3, 14, 1.6)}">${escapeHtml(desc)}</div>` : ""}
         <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:16px"><tr>
           <td bgcolor="${GREEN}" style="background:${GREEN};border-radius:8px"><a href="${url}" style="display:inline-block;padding:10px 18px;font:600 13px/1 ${SANS};color:#ffffff;text-decoration:none">Read Full Guide &rarr;</a></td>
         </tr></table>
@@ -199,7 +223,7 @@ function featuredCard(a: NewsletterArticle, campaign: string): string {
 function listItem(a: NewsletterArticle, campaign: string, first: boolean): string {
   const url = escapeHtml(articleUrl(a, campaign));
   const title = escapeHtml(a.title.trim());
-  const desc = shortDescription(a.meta_description, 160);
+  const desc = shortDescription(a.meta_description, 130);
   const loc = a.location?.trim() ? escapeHtml(a.location.trim()) : "";
   const img = isUsableImageUrl(a.hero_image_url)
     ? `<div style="padding-bottom:14px">${image(croppedImageUrl(a.hero_image_url as string, 1104, 320), url, 12, "1px solid #f1f5f9")}</div>`
@@ -207,8 +231,8 @@ function listItem(a: NewsletterArticle, campaign: string, first: boolean): strin
   return `<tr><td style="padding:20px 24px;${first ? "" : "border-top:1px solid #eef3f1"}">
     ${img}
     ${loc ? `<div style="font:600 11px/1.3 ${SANS};letter-spacing:.05em;text-transform:uppercase;color:${GREEN}">${loc}</div>` : ""}
-    <div style="margin-top:4px"><a href="${url}" style="font:bold 16px/1.35 ${SANS};color:${GREEN_DARK};text-decoration:none">${title}</a></div>
-    ${desc ? `<div style="font:13px/1.6 ${SANS};color:#556963;margin-top:6px">${escapeHtml(desc)}</div>` : ""}
+    <div style="margin-top:4px">${oneLineTitle(url, title, 16, GREEN_DARK)}</div>
+    ${desc ? `<div style="font:13px/1.6 ${SANS};color:#556963;margin-top:6px;${clampStyle(2, 13, 1.6, true)}">${escapeHtml(desc)}</div>` : ""}
     <div style="margin-top:8px"><a href="${url}" style="font:600 12px/1 ${SANS};color:${GREEN};text-decoration:none">Explore guide &rarr;</a></div>
   </td></tr>`;
 }
