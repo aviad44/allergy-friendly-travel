@@ -189,6 +189,33 @@ function isGooglePlacesPhotoUrl(url?: string | null): boolean {
   return /maps\.googleapis\.com\/maps\/api\/place\/photo/i.test(url);
 }
 
+// Instagram hard-rejects any image outside roughly a 4:5–1.91:1 aspect ratio
+// (Graph API error code 36003, subcode 2207009, "The aspect ratio is not
+// supported") — confirmed live 2026-11 on "Food Allergy Friendly Dining in
+// Lyon": its Unsplash source photo is an extreme 1780x3735 portrait (ratio
+// ~0.48), and the raw hero_image_url (w=1080, no height) just scales that
+// same extreme ratio, so every daily retry failed identically for 15+ days
+// straight. Unsplash serves images via Imgix, which supports crop-to-ratio
+// through fit=crop plus explicit w/h, so force every Unsplash URL used for a
+// social post into a safe 4:5 portrait crop (the narrowest ratio Instagram
+// still accepts, and well inside Facebook's own range too) before posting.
+// Pixabay URLs aren't Imgix-backed and can't be reshaped this way via query
+// params — left untouched; Pixabay's own search above already requests
+// orientation=horizontal, which in practice stays within range.
+function toSocialSafeImageUrl(url: string): string {
+  if (!/images\.unsplash\.com/i.test(url)) return url;
+  try {
+    const u = new URL(url);
+    u.searchParams.set('w', '1200');
+    u.searchParams.set('h', '1500'); // 4:5 — inside Instagram's accepted 0.8–1.91 range
+    u.searchParams.set('fit', 'crop');
+    if (!u.searchParams.has('crop')) u.searchParams.set('crop', 'entropy');
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 interface PlaceMatch {
   id: string;
   name: string;
@@ -510,6 +537,8 @@ serve(async (req) => {
       summaries.push({ article: { slug: article.slug, title: article.title }, error: 'No image available for this article' });
       continue;
     }
+
+    imageUrl = toSocialSafeImageUrl(imageUrl);
 
     const caption = buildCaption(article.title, article.meta_description || '', articleUrl);
 
