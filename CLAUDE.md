@@ -67,6 +67,27 @@ Supabase project id: `embuxlxugjkjgsusrmlx`.
   Pinterest real pin creation needs Standard API access (Trial tier blocks
   production pins) — pending the user submitting Pinterest's app-review
   form with a demo video.
+- **Newsletter** (`newsletter` + `newsletter-send`): visitors sign up via the
+  footer/article forms (`NEWSLETTER_ENABLED` in `src/constants/newsletter.ts`)
+  with double opt-in; `newsletter-send` emails confirmed subscribers every
+  Tuesday 15:00 UTC (`.github/workflows/newsletter-send.yml`, authenticated
+  with the same `CRON_SHARED_SECRET` as the other workflows). Content is ONLY
+  the newest unsent published `seo_articles` (real title/description/link;
+  Google Places hero photos are omitted, never sent). It fails closed: nothing
+  goes to the list unless the Supabase secret `NEWSLETTER_LIVE_SEND` is exactly
+  `true` (setting it to anything else is the instant stop switch),
+  `NEWSLETTER_POSTAL_ADDRESS` is set, and confirmed subscribers don't exceed
+  `NEWSLETTER_MAX_RECIPIENTS` (default 100 = Resend free-tier daily limit —
+  never raise it without telling the user). Other secrets: `NEWSLETTER_FROM`
+  (`Allergy Free Travel <news@news.allergy-free-travel.com>`),
+  optional `NEWSLETTER_REPLY_TO`. Sending domain `news.allergy-free-travel.com`
+  is verified in Resend via Netlify DNS (DKIM TXT `resend._domainkey.news` +
+  CNAMEs `rsend.news`/`send.news`). The root domain's mail is ImprovMX — don't
+  touch its MX/SPF. Manual runs: Actions -> "Newsletter (weekly)" -> Run
+  workflow (`dry_run` defaults to true; `mode=test` + `to` emails ONE preview).
+  `newsletter` is deployed `verify_jwt=false` (mail clients call its
+  one-click unsubscribe without our anon key; the per-subscriber token is the
+  credential). Never put subscriber emails in logs or in repo files.
 - **Social posts never redistribute Google Places Photos.** They're
   licensed for on-site display in the context of Places API results (with
   the contributor attribution shown on-page), not for export to
