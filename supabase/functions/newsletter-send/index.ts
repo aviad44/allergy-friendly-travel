@@ -49,7 +49,9 @@ const RESUME_WINDOW_MS = 24 * 60 * 60 * 1000;
 const POSTAL_PLACEHOLDER = "[Postal address not configured yet - test email only]";
 const EMAIL_RE = /^[^\s@<>"',;:()\[\]\\]+@[^\s@<>"',;:()\[\]\\]+\.[^\s@<>"',;:()\[\]\\]{2,}$/;
 const ARTICLE_COLUMNS =
-  "id, title, slug, content_type, meta_description, hero_image_url, hero_image_credit, published_at";
+  "id, title, slug, content_type, meta_description, hero_image_url, hero_image_credit, published_at, hotel_ids, restaurant_ids";
+
+type ArticleRow = NewsletterArticle & { hotel_ids: string[] | null; restaurant_ids: string[] | null };
 
 function json(body: Record<string, unknown>, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -86,6 +88,34 @@ async function fetchAll<T>(
   return out;
 }
 
+/**
+ * Adds "City, Country" to each article from the first hotel/restaurant it
+ * links to (the same convention the site uses for an article's city). A lookup
+ * failure is not fatal: the email just omits the location line.
+ */
+async function withLocations(supabase: Supabase, rows: ArticleRow[]): Promise<NewsletterArticle[]> {
+  const firstIds = (key: "restaurant_ids" | "hotel_ids") =>
+    [...new Set(rows.map((r) => r[key]?.[0]).filter((x): x is string => !!x))];
+  const restIds = firstIds("restaurant_ids");
+  const hotelIds = firstIds("hotel_ids");
+  const empty = { data: [] as { id: string; city: string | null; country: string | null }[], error: null };
+  const [rest, hotels] = await Promise.all([
+    restIds.length ? supabase.from("restaurants").select("id, city, country").in("id", restIds) : empty,
+    hotelIds.length ? supabase.from("hotels").select("id, city, country").in("id", hotelIds) : empty,
+  ]);
+  const label = new Map<string, string>();
+  for (const place of [...(rest.data ?? []), ...(hotels.data ?? [])]) {
+    const parts = [place.city, place.country].filter((x): x is string => typeof x === "string" && x.trim() !== "");
+    if (parts.length) label.set(place.id, parts.map((x) => x.trim()).join(", "));
+  }
+  return rows.map((r) => {
+    const placeId = r.content_type === "restaurant" ? r.restaurant_ids?.[0] : r.hotel_ids?.[0];
+    // deno-lint-ignore no-unused-vars
+    const { hotel_ids, restaurant_ids, ...article } = r;
+    return { ...article, location: placeId ? label.get(placeId) ?? null : null };
+  });
+}
+
 /** Newest published articles that no earlier issue contained. */
 async function pickArticles(supabase: Supabase, fallbackToNewest: boolean): Promise<NewsletterArticle[]> {
   const issues = await fetchAll<{ article_ids: string[] }>((f, t) =>
@@ -102,10 +132,10 @@ async function pickArticles(supabase: Supabase, fallbackToNewest: boolean): Prom
     .limit(80);
   if (error) throw new Error(error.message);
 
-  const sendable = ((data ?? []) as NewsletterArticle[]).filter(isSendableArticle);
+  const sendable = ((data ?? []) as ArticleRow[]).filter(isSendableArticle);
   const fresh = sendable.filter((a) => !used.has(a.id)).slice(0, MAX_ARTICLES_PER_ISSUE);
-  if (fresh.length > 0 || !fallbackToNewest) return fresh;
-  return sendable.slice(0, MAX_ARTICLES_PER_ISSUE);
+  const chosen = fresh.length > 0 || !fallbackToNewest ? fresh : sendable.slice(0, MAX_ARTICLES_PER_ISSUE);
+  return await withLocations(supabase, chosen);
 }
 
 function oneClickUnsubscribeUrl(token: string): string {
@@ -213,10 +243,11 @@ serve(async (req) => {
         .select(ARTICLE_COLUMNS)
         .in("id", latest.article_ids);
       if (error) throw new Error(error.message);
-      const byId = new Map(((data ?? []) as NewsletterArticle[]).map((a) => [a.id, a]));
-      articles = (latest.article_ids as string[]).map((id) => byId.get(id)).filter(
-        (a): a is NewsletterArticle => !!a && isSendableArticle(a),
+      const byId = new Map(((data ?? []) as ArticleRow[]).map((a) => [a.id, a]));
+      const ordered = (latest.article_ids as string[]).map((id) => byId.get(id)).filter(
+        (a): a is ArticleRow => !!a && isSendableArticle(a),
       );
+      articles = await withLocations(supabase, ordered);
     } else {
       articles = await pickArticles(supabase, false);
     }
