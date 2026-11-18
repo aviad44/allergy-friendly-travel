@@ -99,27 +99,33 @@ export function destinationHotelsJsonLd(hotels: HotelWithReviews[]) {
         : hotel.quote
           ? [{ text: hotel.quote, rating: hotel.rating }]
           : [];
-      if (reviews.length === 0 && !hotel.rating) return null;
+      if (reviews.length === 0) return null;
 
       return {
         '@context': 'https://schema.org',
         '@type': 'LodgingBusiness',
         name: hotel.name,
+        // reviewCount is the number of reviews actually present, never a floor
+        // of 1; aggregateRating is only emitted when a real rating exists.
         ...(hotel.rating ? {
           aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: hotel.rating,
-            reviewCount: Math.max(reviews.length, 1),
+            reviewCount: reviews.length,
           },
         } : {}),
-        ...(reviews.length > 0 ? {
-          review: reviews.map((r) => ({
+        // author and reviewRating are omitted when the source has none — never
+        // defaulted to a placeholder name or a made-up 5 stars.
+        review: reviews.map((r) => {
+          const author = r.author || r.author_name;
+          const rating = r.rating || hotel.rating;
+          return {
             '@type': 'Review',
-            author: { '@type': 'Person', name: r.author || r.author_name || 'Verified guest' },
-            reviewRating: { '@type': 'Rating', ratingValue: r.rating || hotel.rating || 5 },
+            ...(author ? { author: { '@type': 'Person', name: author } } : {}),
+            ...(rating ? { reviewRating: { '@type': 'Rating', ratingValue: rating } } : {}),
             reviewBody: r.text || r.comment || '',
-          })),
-        } : {}),
+          };
+        }),
       };
     })
     .filter((node): node is NonNullable<typeof node> => node !== null);
