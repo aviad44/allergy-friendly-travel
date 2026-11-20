@@ -438,6 +438,11 @@ Note: package.json scripts cannot be auto-updated here; use the commands above o
   - HOW-TO: Pulled each of the 5 hotels' real `hotel_sources` review snippets (no live Google call, already-stored evidence only) and rewrote `title`/`meta_description`/`content_markdown` in `seo_articles` directly (DB content, no deploy) to cover Iberostar Selection Cancún, Moon Palace Cancun, AVA Resort Cancun, and Villa del Palmar Cancun (Luxury + Family) — every quote traces to a real stored review, per this project's no-fabrication policy. Noted Iberostar's halal caveat from a separate real review rather than hiding it.
   - DoD: `seo_articles` row updated (`word_count` 270→470). Not yet re-checked against GSC for a CTR improvement — that's for a future weekly audit to assess once Google has re-crawled it.
 
+- [x] Fix `content-pipeline` self-blocking all discovery for 5 days on a stale budget constant — explicit user request to fix after investigation
+  - RATIONALE: Daily Google billing check showed flat monthly spend for 3 straight days; the daily "new article published" check had been silent for 5 days. Investigated and found `content-pipeline`'s own `MONTHLY_BUDGET_ILS` was stuck at a stale `100` (last touched 2026-10-15), never updated through the later ₪450 raise or the ₪150 lowering (2026-11-06) that `hotel-search`/`restaurants-search` both correctly picked up — so it self-blocked ("Monthly Google API budget reached") once November's shared spend passed its own stale ₪90 trip point, even though the real ₪150 ceiling (trip point ₪135) still had headroom. GitHub Actions showed every run as `success` the whole time, since the function returns cleanly on this path — never errors.
+  - HOW-TO: Raised `MONTHLY_BUDGET_ILS` 100→150 in `supabase/functions/content-pipeline/index.ts`, matching the other two functions — not a new raise, just syncing this copy to what was already authorized 2026-11-06.
+  - DoD: Deployed `content-pipeline` v64, live immediately; verified the deployed source matches the local file (one cosmetic unicode-escape rendering difference only). Documented in CHANGELOG.md (2026-11-20). Next scheduled daily run picks this up automatically — not manually re-triggered.
+
 ## Newsletter
 
 - [x] Newsletter stage 1: subscriber collection with double opt-in (no sending yet)

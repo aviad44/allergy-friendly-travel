@@ -813,10 +813,25 @@ async function publishToPinterest(
 // isMonthlyBudgetExceeded() checks now include this mode too, so the
 // ceiling is genuinely shared both ways.
 //
-// Raised ₪100→₪250/month 2026-10-02, reverted back to ₪100 2026-10-15 —
-// both with explicit user authorization — see hotel-search/index.ts's copy
-// of this constant for the full writeup.
-const MONTHLY_BUDGET_ILS = 100;
+// Raised ₪100→₪250/month 2026-10-02, reverted back to ₪100 2026-10-15,
+// raised ₪250→₪450 2026-10-18 — all with explicit user authorization — see
+// hotel-search/index.ts's copy of this constant for the full writeup on
+// each of those. This copy was never updated past ₪100 for either of
+// those two changes, nor for the later ₪450→₪150 lowering on 2026-11-06 —
+// found 2026-11-20 while investigating 5 days of zero new articles and flat
+// Google spend: this function's own copy of the ceiling (still ₪100, trip
+// point ₪90) started silently self-blocking discovery once November's
+// shared spend crossed ₪90 around 2026-11-15/16, even though the real,
+// current ceiling (₪150, trip point ₪135, correctly live in both
+// hotel-search and restaurants-search since 2026-11-06) still had real
+// headroom — confirmed live via `get_edge_function` showing this exact
+// function still returning `{"error":"Monthly Google API budget reached,
+// skipping discovery","budgetLimitReached":true}` on every run since
+// 2026-11-16, each completing in ~2s (immediate self-block, no real
+// discovery attempted). Synced to ₪150 now so all three functions share one
+// real ceiling again — not a new raise, just catching this copy up to the
+// value the user already authorized on 2026-11-06.
+const MONTHLY_BUDGET_ILS = 150;
 const BUDGET_SAFETY_MARGIN = 0.9;
 const COST_PER_CALL_ILS = 0.0342;
 
